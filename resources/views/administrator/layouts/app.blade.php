@@ -68,8 +68,8 @@
 							<i class="fa fa-th-list" aria-hidden="true"></i>Content Management<div class="pull-right"><span class="caret"></span></div>
 						</a>
 						<ul class="templatemo-submenu">
-							<li <?php echo ( ( Request::path() == 'administrator/navigationcategory' ) ? 'class="active"' : '' ) ?> ><a href="{{ url('/administrator/navigationcategory') }}">Navigation Category</a></li>
-							<li <?php echo ( ( Request::path() == 'administrator/navigation' ) ? 'class="active"' : '' ) ?> ><a href="{{ url('/administrator/navigation') }}">Navigation</a></li>
+							<!-- <li <?php echo ( ( Request::path() == 'administrator/navigationcategory' ) ? 'class="active"' : '' ) ?> ><a href="{{ url('/administrator/navigationcategory') }}">Navigation Category</a></li>
+							<li <?php echo ( ( Request::path() == 'administrator/navigation' ) ? 'class="active"' : '' ) ?> ><a href="{{ url('/administrator/navigation') }}">Navigation</a></li> -->
 						</ul>
 					</li>
 
