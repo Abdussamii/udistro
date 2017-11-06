@@ -2,11 +2,12 @@
 @section('title', 'Udistro | Dashboard')
 
 @section('content')
-	<div class="templatemo-content">
-		<ol class="breadcrumb">
-			<li><a href="{{ url('/administrator/dashboard') }}">Admin Panel</a></li>
-			<li class="active">Dashboard</li>
-		</ol>
-      	<h1>Dashboard</h1>
-	</div>
+	<div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+        Page content here
+    </div>
 @endsection
