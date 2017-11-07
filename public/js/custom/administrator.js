@@ -421,4 +421,147 @@ $(document).ready(function(){
     	}
     });
 
+    // CMS add page form validation
+    $('#frm_add_page').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_page').validate({
+        rules: {
+            page_name: {
+                required: true
+            },
+            page_navigation: {
+                required: true
+            },
+            page_status: {
+            	required: true,
+            }
+        },
+        messages: {
+            page_name: {
+                required: 'Please enter the page name'
+            },
+            page_navigation: {
+                required: 'Please select the navigation'
+            },
+            page_status: {
+            	required: 'Please select status',
+            }
+        }
+    });
+
+    // Save the data
+    $('#btn_add_page').click(function(){
+    	if( $('#frm_add_page').valid() )
+    	{
+    		// Check for the page content
+    		let pageContentTxt 	= tinymce.activeEditor.getContent({ format: 'text' });
+    		let pageContentHtml = tinymce.activeEditor.getContent();
+
+    		if($.trim(pageContentTxt) == '')
+    		{
+    		   	alertify.error('Please enter some page content');
+    		}
+    		else
+    		{
+				// Save the tinymce editor data to the textarea so that we can send it by using serialize() method
+    			tinyMCE.triggerSave();
+    			
+    			// Ajax call to save the page related data
+    			var $this = $(this);
+
+	    		$.ajax({
+	    			url: $('meta[name="route"]').attr('content') + '/administrator/savepage',
+	    			method: 'post',
+	    			data: {
+	    				frmData: $('#frm_add_page').serialize()
+	    			},
+	    			beforeSend: function() {
+	    				// Show the loading button
+				        $this.button('loading');
+				    },
+	    			headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    complete: function()
+				    {
+				    	// Change the button to previous
+				    	$this.button('reset');
+				    },
+				    success: function(response){
+				    	if( response.errCode == 0 )
+				    	{
+				    		alertify.success( response.errMsg );
+							
+				    		// Refresh the form and close the modal
+				    		$('#frm_add_page')[0].reset();
+
+				    		$('#modal_add_page').modal('hide');
+
+				    		// Refresh the datatable
+				    		$('#datatable_pages').DataTable().ajax.reload();
+				    	}
+				    	else
+				    	{
+				    		alertify.error( response.errMsg );
+				    	}
+				    }
+	    		});
+    		}
+    	}
+    });
+
+    // Pages list datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_pages').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchpages',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 4, 5] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false}
+        ]
+    });
+
+    // To edit the page content
+    $(document).on('click', '.edit_page_content', function(){
+    	pageId = $(this).attr('id');
+
+    	if( pageId != '' )
+    	{
+	    	// Get the page details for the selected page
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getpagedetails',
+				method: 'get',
+				data: {
+					pageId: pageId
+				},
+			    success: function(response){
+			    	// Auto-fill the form
+			    	$('#frm_add_page #page_id').val(pageId);
+			    	$('#frm_add_page #page_name').val(response.page_name);
+					$('#frm_add_page #page_navigation').val(response.navigation_id);
+					tinymce.activeEditor.setContent(response.page_content);
+			    	$('#frm_add_page input[name="page_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_add_page').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing page id');
+    	}
+    });
+
 });

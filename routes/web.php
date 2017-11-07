@@ -21,10 +21,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 */
 
-Route::get('/test', function () {
-    return view('administrator/blank');
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -72,6 +68,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 
 	// To update the navigation details
 	Route::post('/updatenavigation', 'AdminController@updateNavigation');
+
+	// To return the page details
+	Route::get('/pages', 'AdminController@pages');
+
+	// To save the page content
+	Route::post('/savepage', 'AdminController@savePage');
+
+	// To show the page list in datatable
+	Route::get('/fetchpages', 'AdminController@fetchPages');
+
+	// To get the details for the selected page
+	Route::get('/getpagedetails', 'AdminController@getPageDetails');
 
 });
 

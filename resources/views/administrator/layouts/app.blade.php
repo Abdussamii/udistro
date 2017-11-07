@@ -77,6 +77,12 @@
     <!-- Admin JS -->
     <script type="text/javascript" src="{{ URL::asset('js/custom/administrator.js') }}"></script>
 
+    <style type="text/css">
+    .error {
+    	color: red;
+    }
+    </style>
+
 </head>
 
 <body>
@@ -316,12 +322,15 @@
                         <li>
                             <a href="#"><i class="fa fa-th-list"></i> Content Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <!-- <li>
+                                <li>
                                     <a href="{{ url('/administrator/navigationcategory') }}">Navigation Category</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/administrator/navigation') }}">Navigation</a>
-                                </li> -->
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/pages') }}">Pages</a>
+                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

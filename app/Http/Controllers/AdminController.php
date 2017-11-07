@@ -18,6 +18,7 @@ use App\Permission;
 use App\CmsNavigationType;
 use App\CmsNavigationCategory;
 use App\CmsNavigation;
+use App\CmsPage;
 
 use Validator;
 use Helper;
@@ -301,6 +302,7 @@ class AdminController extends Controller
                         	WHERE ( t1.category LIKE ('%". $sSearch ."%') OR t2.type LIKE ('%". $sSearch ."%') )")
                         );
 
+        // Assign it to the datatable pagination variable
         $iTotal = count($categoryCount);
 
         $response = array(
@@ -318,7 +320,7 @@ class AdminController extends Controller
                     0 => $category->id,
                     1 => ucfirst( strtolower( $category->navigation_type ) ),
                     2 => ucfirst( strtolower( $category->category ) ),
-                    3 => ( $category->status ) ? 'Active' : 'Inactive',
+                    3 => Helper::getStatusText($category->status),
                     4 => '<a href="javascript:void(0);" id="'. $category->id .'" class="edit_navigation_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>',	// Category edit
                 );
                 $k++;
@@ -541,6 +543,7 @@ class AdminController extends Controller
                         	GROUP BY t1.id, t1.navigation_text, t1.navigation_url, t1.status")
                         );
 
+        // Assign it to the datatable pagination variable
         $iTotal = count($navigationCount);
 
         $response = array(
@@ -559,7 +562,7 @@ class AdminController extends Controller
                     1 => ucwords( strtolower( $navigation->navigation_text ) ),
                     2 => $navigation->navigation_url,
                     3 => $navigation->categories,
-                    4 => ( $navigation->status ) ? 'Active' : 'Inactive',
+                    4 => Helper::getStatusText($navigation->status),
                     5 => '<a href="javascript:void(0);" id="'. $navigation->id .'" class="edit_navigation"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>',	// Category edit
                 );
                 $k++;
@@ -698,5 +701,222 @@ class AdminController extends Controller
 		}
 
 		return response()->json($response);
+    }
+
+    /**
+     * Function to return the page details
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function pages()
+    {
+    	// Get the navigation list. every page is bind with some unique navigation link
+    	$navigations = CmsNavigation::where(['status' => '1'])->select('id', 'navigation_text')->get();
+
+        return view('administrator/pages', ['navigations' => $navigations]);
+    }
+
+    /**
+     * Function to save the page content
+     * @param void
+     * @return Array
+     */
+    public function savePage()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $pageData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'page_name'			=> $pageData['page_name'],
+		        'page_navigation' 	=> $pageData['page_navigation'],
+		        'page_content' 		=> $pageData['page_content'],
+		        'page_status' 		=> $pageData['page_status']
+		    ),
+		    array(
+		        'page_name' 		=> array('required'),
+		        'page_navigation' 	=> array('required'),
+		        'page_content' 		=> array('required'),
+		        'page_status' 		=> array('required')
+		    ),
+		    array(
+		        'page_name.required' 		=> 'Please enter the page name',
+		        'page_navigation.required' 	=> 'Please select the navigation',
+		        'page_content.required'		=> 'Please enter some page content',
+		        'page_status.required'    	=> 'Please select status',
+		    )
+		);
+
+		if ( $validation->fails() )		// Some data is not valid as per the defined rules
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else 							// The data is valid, go ahead and check the login credentials and do login
+		{
+			if( $pageData['page_id'] == '' )	// Page id is not available, add the page
+			{
+				// Check if the page is already exist, only one page can be attached with a navigation
+				$page = CmsPage::where(['navigation_id' => $pageData['page_navigation']])->first();
+
+				if( count( $page ) == 0 )	// Add the page content
+				{
+					$cmsPage = new CmsPage;
+
+					$cmsPage->navigation_id = $pageData['page_navigation'];
+					$cmsPage->page_name 	= $pageData['page_name'];
+					$cmsPage->page_content 	= $pageData['page_content'];
+					$cmsPage->status 		= $pageData['page_status'];
+					$cmsPage->created_by 	= $userId;
+
+					if( $cmsPage->save() )
+					{
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Page added successfully';
+					}
+					else
+					{
+						$response['errCode']    = 3;
+			        	$response['errMsg']     = 'Some error in adding the page';
+					}
+				}
+				else 						// Page already exist
+				{
+					$response['errCode']    = 2;
+			        $response['errMsg']     = 'A page already exist with the selected navigation';
+				}
+			}
+			else 								// Page id is available, edit the page
+			{
+				$cmsPage = CmsPage::find($pageData['page_id']);
+
+				$cmsPage->navigation_id = $pageData['page_navigation'];
+				$cmsPage->page_name 	= $pageData['page_name'];
+				$cmsPage->page_content 	= $pageData['page_content'];
+				$cmsPage->status 		= $pageData['page_status'];
+				$cmsPage->updated_by 	= $userId;
+
+				if( $cmsPage->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Page updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 3;
+		        	$response['errMsg']     = 'Some error in updating the page';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to show the page list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchPages()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+                0 => 't1.id',
+                1 => 't2.navigation_text',
+                2 => 't1.page_name',
+                4 => 't1.status',
+            );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $pages 	= DB::select(
+                    DB::raw("SELECT t1.id, t1.page_name, t1.page_content, t1.status, t2.navigation_text FROM cms_pages AS t1 
+                    	JOIN cms_navigations AS t2 ON t1.navigation_id = t2.id WHERE ( t1.page_name LIKE '%". $sSearch ."%' OR t2.navigation_text LIKE '%". $sSearch ."%' )
+                    	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
+                );
+
+        // Get the total page count
+        $pageCount = DB::select(
+                    DB::raw("SELECT t1.id FROM cms_pages AS t1 
+                    	JOIN cms_navigations AS t2 ON t1.navigation_id = t2.id WHERE ( t1.page_name LIKE '%". $sSearch ."%' OR t2.navigation_text LIKE '%". $sSearch ."%' )")
+                );
+
+        // Assign it to the datatable pagination variable
+        $iTotal = count($pageCount);
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $pages ) > 0 )
+        {
+            foreach ($pages as $page)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $page->id,
+                    1 => ucfirst( strtolower( $page->navigation_text ) ),
+                    2 => ucfirst( strtolower( $page->page_name ) ),
+                    3 => Helper::truncateString($page->page_content, 60),
+                    4 => Helper::getStatusText($page->status),
+                    5 => '<a href="javascript:void(0);" id="'. $page->id .'" class="edit_page_content"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected page
+     * @param void
+     * @return array
+     */
+    public function getPageDetails()
+    {
+    	$pageId = Input::get('pageId');
+
+    	$response = array();
+
+    	if( $pageId != '' && $pageId != 0 )
+    	{
+    		$pageDetails = CmsPage::where(['id' => $pageId])->first();
+
+    		if( count( $pageDetails ) > 0 )
+    		{
+    			$response['navigation_id'] 	= $pageDetails->navigation_id;
+    			$response['page_name'] 		= $pageDetails->page_name;
+    			$response['page_content'] 	= $pageDetails->page_content;
+    			$response['status'] 		= $pageDetails->status;
+    		}
+    	}
+
+		return response()->json($response);  	
     }
 }
