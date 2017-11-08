@@ -81,6 +81,30 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected page
 	Route::get('/getpagedetails', 'AdminController@getPageDetails');
 
+	// To return the provinces page
+	Route::get('/provinces', 'AdminController@provinces');
+
+	// To save the province details
+	Route::post('/saveprovince', 'AdminController@saveProvince');
+
+	// To show the province list in datatable
+	Route::get('/fetchprovinces', 'AdminController@fetchProvinces');
+
+	// To get the details for the selected province
+	Route::get('/getprovincedetails', 'AdminController@getProvinceDetails');
+
+	// To return the utility service categories page
+	Route::get('/utilityservicecategories', 'AdminController@utilityServiceCategories');
+
+	// To save the utility service categories details
+	Route::post('/saveutilityservicecategory', 'AdminController@saveUtilityServiceCategory');
+
+	// To show the utility service categories list in datatable
+	Route::get('/fetchutilityservicecategories', 'AdminController@fetchUtilityServiceCategories');
+
+	// To get the details for the selected utility service category
+	Route::get('/getutilityservicecategorydetails', 'AdminController@getUtilityServiceCategoryDetails');
+
 });
 
 // Logout

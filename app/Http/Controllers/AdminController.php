@@ -19,6 +19,8 @@ use App\CmsNavigationType;
 use App\CmsNavigationCategory;
 use App\CmsNavigation;
 use App\CmsPage;
+use App\Province;
+use App\UtilityServiceCategory;
 
 use Validator;
 use Helper;
@@ -40,7 +42,6 @@ class AdminController extends Controller
         {
         	return view('administrator/index');
         }
-
     }
 
     /**
@@ -756,7 +757,7 @@ class AdminController extends Controller
 		    )
 		);
 
-		if ( $validation->fails() )		// Some data is not valid as per the defined rules
+		if ( $validation->fails() )
 		{
 			$error = $validation->errors()->first();
 
@@ -766,7 +767,7 @@ class AdminController extends Controller
 		        $response['errMsg']     = $error;
 		    }
 		}
-		else 							// The data is valid, go ahead and check the login credentials and do login
+		else
 		{
 			if( $pageData['page_id'] == '' )	// Page id is not available, add the page
 			{
@@ -917,6 +918,376 @@ class AdminController extends Controller
     		}
     	}
 
-		return response()->json($response);  	
+		return response()->json($response);	
+    }
+
+    /**
+     * Function to return the provinces page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function provinces()
+    {
+        return view('administrator/province');
+    }
+
+    /**
+     * Function to save the province details
+     * @param void
+     * @return Array
+     */
+    public function saveProvince()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $provinceData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'province_name'		=> $provinceData['province_name'],
+		        'province_status'	=> $provinceData['province_status']
+		    ),
+		    array(
+		        'province_name' 	=> array('required'),
+		        'province_status' 	=> array('required')
+		    ),
+		    array(
+		        'province_name.required'	=> 'Please enter the province name',
+		        'province_status.required' 	=> 'Please select status',
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if( $provinceData['province_id'] == '' )	// Check if the province id is available or not, if not add the province
+			{
+				$province = new Province;
+
+				$province->name 		= $provinceData['province_name'];
+				$province->status 		= $provinceData['province_status'];
+				$province->updated_by 	= $userId;
+
+				if( $province->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Province added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in adding the province';
+				}
+			}
+			else 										// Check if the province id is available or not, if available update the province
+			{
+				$province = Province::find($provinceData['province_id']);
+
+				$province->name 		= $provinceData['province_name'];
+				$province->status 		= $provinceData['province_status'];
+				$province->created_by 	= $userId;
+
+				if( $province->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Province updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the province';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to show the province list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchProvinces()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $provinces = Province::where('name','like', '%'.$sSearch.'%')
+                    ->orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->select('id', 'name', 'status')
+                    ->get();
+
+        $iTotal = Province::where('name','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $provinces ) > 0 )
+        {
+            foreach ($provinces as $province)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $province->id,
+                    1 => ucfirst( strtolower( $province->name ) ),
+                    2 => Helper::getStatusText($province->status),
+                    3 => '<a href="javascript:void(0);" id="'. $province->id .'" class="edit_province"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected province
+     * @param void
+     * @return array
+     */
+    public function getProvinceDetails()
+    {
+    	$provinceId = Input::get('provinceId');
+
+    	$response = array();
+    	if( $provinceId != '' )
+    	{
+    		$province = Province::find($provinceId);
+
+    		$response['name'] 	= $province->name;
+    		$response['status'] = $province->status;
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to return service categories view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function utilityServiceCategories()
+    {
+        return view('administrator/servicecategories');
+    }
+
+    /**
+     * Function to return service categories view
+     * @param void
+     * @return array
+     */
+    public function saveUtilityServiceCategory()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $serviceCategoryData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'service_type'			=> $serviceCategoryData['service_type'],
+		        'service_description'	=> $serviceCategoryData['service_description'],
+		        'service_status'		=> $serviceCategoryData['service_status']
+		    ),
+		    array(
+		        'service_type' 			=> array('required'),
+		        'service_description' 	=> array('required'),
+		        'service_status' 		=> array('required')
+		        
+		    ),
+		    array(
+		        'service_type.required'			=> 'Please enter service type',
+		        'service_description.required'	=> 'Please enter service description',
+		        'service_status.required'		=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if( $serviceCategoryData['service_id'] == '' ) // Check if service category id is available or not. If not available, add the service category
+			{
+				$serviceCategory = new UtilityServiceCategory;
+
+				$serviceCategory->service_type 	= $serviceCategoryData['service_type'];
+				$serviceCategory->description 	= $serviceCategoryData['service_description'];
+				$serviceCategory->status 		= $serviceCategoryData['service_status'];
+				$serviceCategory->created_by 	= $userId;
+
+				if( $serviceCategory->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Service category added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in adding the service category';
+				}
+			}
+			else
+			{
+				$serviceCategory = UtilityServiceCategory::find( $serviceCategoryData['service_id'] );
+
+				$serviceCategory->service_type 	= $serviceCategoryData['service_type'];
+				$serviceCategory->description 	= $serviceCategoryData['service_description'];
+				$serviceCategory->status 		= $serviceCategoryData['service_status'];
+				$serviceCategory->created_by 	= $userId;
+
+				if( $serviceCategory->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Service category updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the service category';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function show the utility service categories list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchUtilityServiceCategories()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'service_type',
+            3 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $serviceCategories = UtilityServiceCategory::where('service_type','like', '%'.$sSearch.'%')
+		                    ->orderBy($sortBy, $sortType)
+		                    ->limit($length)
+		                    ->offset($start)
+		                    ->select('id', 'service_type', 'description', 'status')
+		                    ->get();
+
+        $iTotal = UtilityServiceCategory::where('service_type','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $serviceCategories ) > 0 )
+        {
+            foreach ($serviceCategories as $serviceCategory)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $serviceCategory->id,
+                    1 => ucfirst( strtolower( $serviceCategory->service_type ) ),
+                    2 => ucfirst( strtolower( $serviceCategory->description ) ),
+                    3 => Helper::getStatusText($serviceCategory->status),
+                    4 => '<a href="javascript:void(0);" id="'. $serviceCategory->id .'" class="edit_utility_service_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected utility service category
+     * @param void
+     * @return array
+     */
+    public function getUtilityServiceCategoryDetails()
+    {
+    	$serviceCategoryId = Input::get('serviceCategoryId');
+
+    	$response = array();
+    	if( $serviceCategoryId != '' )
+    	{
+    		$serviceCategoryDetails = UtilityServiceCategory::find($serviceCategoryId);
+
+    		if( count( $serviceCategoryDetails ) > 0 )
+    		{
+    			$response['service_type'] 	= $serviceCategoryDetails->service_type;
+    			$response['description'] 	= $serviceCategoryDetails->description;
+    			$response['status'] 		= $serviceCategoryDetails->status;
+    		}
+    	}
+
+    	return response()->json($response);
     }
 }

@@ -1,5 +1,5 @@
 @extends('administrator.layouts.app')
-@section('title', 'Udistro | Dashboard')
+@section('title', 'Udistro | Pages')
 
 @section('content')
 	<!-- TinyMCE -->
@@ -29,7 +29,7 @@
       	</div>
 
       	<div class="col-lg-12 top-buffer">
-	      	<!-- Table to show all the navigation menus -->
+	      	<!-- Table to show all the pages -->
 			<table id="datatable_pages" class="table table-striped">
 				<thead>
 					<tr>
@@ -44,7 +44,7 @@
 			</table>
 		</div>
 
-		<!-- Modal to add pages -->
+		<!-- Modal to add / edit pages -->
 		<div id="modal_add_page" class="modal fade" role="dialog">
 		  	<div class="modal-dialog" style="width:800px;">
 			    <!-- Modal content-->

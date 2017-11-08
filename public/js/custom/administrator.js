@@ -564,4 +564,270 @@ $(document).ready(function(){
     	}
     });
 
+    // To show the add province modal
+    $('#btn_modal_province').click(function(){
+    	// Set the modal title, as the same modal is used for edit also
+    	$('#modal_add_province').find('.modal-title').html('Add Province');
+    	$('#modal_add_province').modal('show');
+    });
+
+    // Add / Edit province form validation
+    $('#frm_add_province').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_province').validate({
+        rules: {
+            province_name: {
+                required: true
+            },
+            province_status: {
+            	required: true	
+            }
+        },
+        messages: {
+            province_name: {
+                required: 'Please enter the province name'
+            },
+            province_status: {
+            	required: 'Please select status'
+            }
+        }
+    });
+
+    // Save the province data
+    $('#btn_add_province').click(function(){
+		if( $('#frm_add_province').valid() )
+		{
+			// Ajax call to save the page related data
+			var $this = $(this);
+
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/saveprovince',
+				method: 'post',
+				data: {
+					frmData: $('#frm_add_province').serialize()
+				},
+				beforeSend: function() {
+					// Show the loading button
+			        $this.button('loading');
+			    },
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+						
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_province')[0].reset();
+
+			    		$('#modal_add_province').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_provinces').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+			});
+		}
+    });
+
+    // Province list datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_provinces').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchprovinces',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 2, 3] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
+    // To update the province details
+    $(document).on('click', '.edit_province', function(){
+    	var provinceId = $(this).attr('id');
+
+    	if( provinceId != '' )
+    	{
+    		// Get the province details for the selected province
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getprovincedetails',
+				method: 'get',
+				data: {
+					provinceId: provinceId
+				},
+			    success: function(response){
+			    	$('#modal_add_province').find('.modal-title').html('Edit Province');
+
+			    	// Auto-fill the form
+			    	$('#frm_add_province #province_id').val(provinceId);
+			    	$('#frm_add_province #province_name').val(response.name);
+			    	$('#frm_add_province input[name="province_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_add_province').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing province id');
+    	}
+    });
+
+    // To show the add utility service category modal
+    $('#btn_modal_utility_service_category').click(function(){
+    	// Set the modal title, as the same modal is used for edit also
+    	$('#modal_add_utility_service_category').find('.modal-title').html('Add Service');
+    	$('#modal_add_utility_service_category').modal('show');
+    });
+
+    // Add / Edit utility service categories form validation
+    $('#frm_add_utility_service_category').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_utility_service_category').validate({
+        rules: {
+            service_type: {
+                required: true
+            },
+            service_description: {
+            	required: true
+            },
+            service_status: {
+            	required: true	
+            }
+        },
+        messages: {
+            service_type: {
+                required: 'Please enter service type'
+            },
+            service_description: {
+            	required: 'Please enter service description'
+            },
+            service_status: {
+            	required: 'Please select status'
+            }
+        }
+    });
+
+    // save the utility service category data
+    $('#btn_add_utility_service_category').click(function(){
+    	if( $('#frm_add_utility_service_category').valid() )
+    	{
+    		// Ajax call to save the page related data
+			var $this = $(this);
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/saveutilityservicecategory',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_utility_service_category').serialize()
+    			},
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+						
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_utility_service_category')[0].reset();
+
+			    		$('#modal_add_utility_service_category').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_utility_service_categories').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Utility service categories list datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_utility_service_categories').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchutilityservicecategories',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 3, 4] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
+    // To edit the utility service category
+    $(document).on('click', '.edit_utility_service_category', function(){
+    	serviceCategoryId = $(this).attr('id');
+
+    	if( serviceCategoryId != '' )
+    	{
+    		// Get the details of the selected service category
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getutilityservicecategorydetails',
+				method: 'get',
+				data: {
+					serviceCategoryId: serviceCategoryId
+				},
+			    success: function(response){
+			    	$('#modal_add_utility_service_category').find('.modal-title').html('Edit Service');
+
+			    	// Auto-fill the form
+			    	$('#frm_add_utility_service_category #service_id').val(serviceCategoryId);
+			    	$('#frm_add_utility_service_category #service_type').val(response.service_type);
+			    	$('#frm_add_utility_service_category #service_description').val(response.description);
+			    	$('#frm_add_utility_service_category input[name="service_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_add_utility_service_category').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing service category id');
+    	}
+    });
+
 });

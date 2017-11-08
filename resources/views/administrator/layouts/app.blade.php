@@ -334,6 +334,18 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Utility Services<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/utilityservicecategories') }}">Utility Service Categories</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/provinces') }}">Provinces</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
