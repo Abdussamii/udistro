@@ -21,6 +21,9 @@ use App\CmsNavigation;
 use App\CmsPage;
 use App\Province;
 use App\UtilityServiceCategory;
+use App\Country;
+use App\State;
+use App\UtilityServiceType;
 
 use Validator;
 use Helper;
@@ -1289,5 +1292,230 @@ class AdminController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to return the utility service types page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function utilityServiceTypes()
+    {
+    	// Get the service category list
+    	$serviceCategories = UtilityServiceCategory::where(['status' => '1'])->orderBy('category_type', 'asc')->select('id', 'category_type')->get();
+
+    	return view('administrator/utilityServiceTypes', ['serviceCategories' => $serviceCategories]);
+    }
+
+    /**
+     * Function to save the utility service types
+     * @param void
+     * @return array
+     */
+    public function saveUtilityServiceType()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $serviceTypeData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'service_type_category'	=> $serviceTypeData['service_type_category'],
+		        'service_type'			=> $serviceTypeData['service_type'],
+		        'service_type_status'	=> $serviceTypeData['service_type_status']
+		    ),
+		    array(
+		        'service_type_category'	=> array('required'),
+		        'service_type' 			=> array('required'),
+		        'service_type_status' 	=> array('required')
+		        
+		    ),
+		    array(
+		        'service_type_category.required'=> 'Please select category',
+		        'service_type.required'			=> 'Please enter service type',
+		        'service_type_status.required'	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if( $serviceTypeData['service_type_id'] == '' ) // Check if service type id is available or not. If not available, add the service type
+			{
+			 	$serviceType = new UtilityServiceType;
+
+			 	$serviceType->utility_service_category_id = $serviceTypeData['service_type_category'];
+			 	$serviceType->service_type = $serviceTypeData['service_type'];
+			 	$serviceType->status = $serviceTypeData['service_type_status'];
+			 	$serviceType->created_by = $userId;
+
+			 	if( $serviceType->save() )
+			 	{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Service type added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in adding the service type';
+				}
+			}
+			else 											// Check if service type id is available or not. If available, edit the service type
+			{
+				$serviceType = UtilityServiceType::find($serviceTypeData['service_type_id']);
+
+			 	$serviceType->utility_service_category_id = $serviceTypeData['service_type_category'];
+			 	$serviceType->service_type = $serviceTypeData['service_type'];
+			 	$serviceType->status = $serviceTypeData['service_type_status'];
+			 	$serviceType->created_by = $userId;
+
+			 	if( $serviceType->save() )
+			 	{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Service type updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the service type';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to show the utility service type list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchUtilityServiceTypes()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+                0 => 't1.id',
+                1 => 't2.category_type',
+                2 => 't1.service_type',
+                3 => 't1.status'
+            );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $serviceTypes = DB::select(
+                        	DB::raw("SELECT t1.id, t1.service_type, t1.status, t2.category_type FROM utility_service_types t1 JOIN utility_service_categories t2 
+	                        	ON t1.utility_service_category_id = t2.id 
+	                        	WHERE t1.service_type LIKE '%". $sSearch ."%'
+	                        	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
+                        	)
+                    	);
+
+        // Get the total count without any condition to maintian the pagination
+        $serviceCount = DB::select(
+                            DB::raw("SELECT t1.id FROM utility_service_types t1 JOIN utility_service_categories t2 ON t1.utility_service_category_id = t2.id WHERE t1.service_type LIKE '%". $sSearch ."%'"
+                        	)
+                        );
+
+       	// Assign it to the datatable pagination variable
+        $iTotal = count($serviceCount);
+
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $serviceTypes ) > 0 )
+        {
+            foreach ($serviceTypes as $serviceType)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $serviceType->id,
+                    1 => ucwords( strtolower( $serviceType->category_type ) ),
+                    2 => ucwords( strtolower( $serviceType->service_type ) ),
+                    3 => Helper::getStatusText($serviceType->status),
+                    4 => '<a href="javascript:void(0);" id="'. $serviceType->id .'" class="edit_service_type"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected utility service type
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function getUtilityServiceTypeDetails()
+    {
+    	$serviceTypeId = Input::get('serviceTypeId');
+
+    	$response = array();
+    	if( $serviceTypeId != '' )
+    	{
+    		$serviceTypeDetails = UtilityServiceType::find($serviceTypeId);
+
+    		if( count( $serviceTypeDetails ) > 0 )
+    		{
+    			$response['utility_service_category_id'] = $serviceTypeDetails->utility_service_category_id;
+    			$response['service_type'] = $serviceTypeDetails->service_type;
+    			$response['status'] = $serviceTypeDetails->status;
+    		}
+    	}
+
+    	return response()->json($response);
+    }
+
+
+
+
+
+
+
+    /**
+     * Function to return the utility service page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function utilityServiceProviders()
+    {
+    	// Get the service category list
+    	$serviceCategories = UtilityServiceCategory::where(['status' => '1'])->orderBy('category_type', 'asc')->select('id', 'category_type')->get();
+
+    	// Get the country list
+    	$countries = Country::select('id', 'name')->orderBy('name', 'asc')->get();
+
+    	// Get the province list
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+        return view('administrator/utilityServiceProviders', ['serviceCategories' => $serviceCategories, 'countries' => $countries, 'provinces' => $provinces]);
     }
 }

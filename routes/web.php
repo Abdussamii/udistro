@@ -105,6 +105,23 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected utility service category
 	Route::get('/getutilityservicecategorydetails', 'AdminController@getUtilityServiceCategoryDetails');
 
+	// To return the utility service types page
+	Route::get('/utilityservicetypes', 'AdminController@utilityServiceTypes');
+
+	// To save the utility service types
+	Route::post('/saveutilityservicetype', 'AdminController@saveUtilityServiceType');
+
+	// To show the utility service type list in datatable
+	Route::get('/fetchutilityservicetypes', 'AdminController@fetchUtilityServiceTypes');
+
+	// To get the details for the selected utility service type
+	Route::get('/getutilityservicetypedetails', 'AdminController@getUtilityServiceTypeDetails');
+
+
+
+	// To return the utility service page
+	Route::get('/utilityserviceproviders', 'AdminController@utilityServiceProviders');
+
 });
 
 // Logout

@@ -341,6 +341,12 @@
                                     <a href="{{ url('/administrator/utilityservicecategories') }}">Utility Service Categories</a>
                                 </li>
                                 <li>
+                                    <a href="{{ url('/administrator/utilityservicetypes') }}">Utility Service Types</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/utilityserviceproviders') }}">Utility Service Providers</a>
+                                </li>
+                                <li>
                                     <a href="{{ url('/administrator/provinces') }}">Provinces</a>
                                 </li>
                             </ul>

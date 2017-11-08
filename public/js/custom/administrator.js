@@ -830,4 +830,151 @@ $(document).ready(function(){
     	}
     });
 
+    // To add utility service type
+    $('#btn_modal_service_type').click(function(){
+    	$('#modal_add_service_type').find('.modal-title').html('Add Service Type');
+    	$('#modal_add_service_type').modal('show');
+    });
+
+   	// Add / Edit utility service types form validation
+    $('#frm_add_service_type').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_service_type').validate({
+        rules: {
+            service_type_category: {
+                required: true
+            },
+            service_type: {
+            	required: true
+            },
+            service_status: {
+            	required: true	
+            }
+        },
+        messages: {
+            service_type_category: {
+                required: 'Please select category'
+            },
+            service_type: {
+            	required: 'Please enter service type'
+            },
+            service_status: {
+            	required: 'Please select status'	
+            }
+        }
+    });
+
+    // Save the utility service type data
+    $('#btn_add_service_type').click(function(){
+    	if( $('#frm_add_service_type').valid() )
+    	{
+    		// Ajax call to save the page related data
+			var $this = $(this);
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/saveutilityservicetype',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_service_type').serialize()
+    			},
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+						
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_service_type')[0].reset();
+
+			    		$('#modal_add_service_type').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_utility_service_types').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Utility service type list datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_utility_service_types').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchutilityservicetypes',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 3, 4] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
+    // To edit the service type
+    $(document).on('click', '.edit_service_type', function(){
+    	var serviceTypeId = $(this).attr('id');
+
+    	if( serviceTypeId != '' )
+    	{
+    		// Get the details of the selected service category
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getutilityservicetypedetails',
+				method: 'get',
+				data: {
+					serviceTypeId: serviceTypeId
+				},
+			    success: function(response){
+			    	$('#modal_add_service_type').find('.modal-title').html('Edit Service Type');
+
+			    	// Auto-fill the form
+			    	$('#frm_add_service_type #service_type_id').val(serviceTypeId);
+			    	$('#frm_add_service_type #service_type_category').val(response.utility_service_category_id);
+			    	$('#frm_add_service_type #service_type').val(response.service_type);
+			    	$('#frm_add_service_type input[name="service_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_add_service_type').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing service type id');
+    	}
+    });
+
+
+
+
+
+
+    // To add service provider
+    $('#btn_modal_service_provider').click(function(){
+    	$('#modal_add_service_provider').find('.modal-title').html('Add Service Provider');
+    	$('#modal_add_service_provider').modal('show');
+    });
+
 });
