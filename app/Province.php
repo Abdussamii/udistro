@@ -16,4 +16,12 @@ class Province extends Model
     ];
 
     public $timestamps = true;
+
+    /**
+     * Get the cities for the province.
+     */
+    public function cities()
+    {
+        return $this->hasMany('App\City')->where(['status' => '1'])->orderBy('name', 'asc');
+    }
 }

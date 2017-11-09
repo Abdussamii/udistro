@@ -24,6 +24,7 @@ use App\UtilityServiceCategory;
 use App\Country;
 use App\State;
 use App\UtilityServiceType;
+use App\UtilityServiceProvider;
 
 use Validator;
 use Helper;
@@ -1494,12 +1495,6 @@ class AdminController extends Controller
     	return response()->json($response);
     }
 
-
-
-
-
-
-
     /**
      * Function to return the utility service page
      * @param void
@@ -1517,5 +1512,344 @@ class AdminController extends Controller
     	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
 
         return view('administrator/utilityServiceProviders', ['serviceCategories' => $serviceCategories, 'countries' => $countries, 'provinces' => $provinces]);
+    }
+
+    /**
+     * Function to get the service type on the basis of selected service category
+     * @param void
+     * @return array
+     */
+    public function getCategoryServiceTypes()
+    {
+    	$categoryId = Input::get('categoryId');
+
+    	$response = array();
+    	if( $categoryId != '' )
+    	{
+    		$serviceTypes = UtilityServiceCategory::find($categoryId)->serviceTypes;
+
+    		if( count( $serviceTypes ) > 0 )
+    		{
+	    		foreach($serviceTypes as $serviceType)
+	    		{
+	    			$response[] = array(
+	    				'id' => $serviceType->id,
+	    				'service_type' => ucwords( strtolower( $serviceType->service_type ) ),
+	    			);
+	    		}
+    		}
+    	}
+
+    	return response()->json($response); 
+    }
+
+    /**
+     * Function to get the cities on the basis of selected province
+     * @param void
+     * @return array
+     */
+    public function getProvinceCities()
+    {
+    	$provinceId = Input::get('provinceId');
+
+    	$response = array();
+    	if( $provinceId != '' )
+    	{
+    		$cities = Province::find($provinceId)->cities;
+
+    		if( count( $cities ) > 0 )
+    		{
+	    		foreach($cities as $city)
+	    		{
+	    			$response[] = array(
+	    				'id' 	=> $city->id,
+	    				'city' 	=> ucwords( strtolower( $city->name ) )
+	    			);
+	    		}
+    		}
+    	}
+
+    	return response()->json($response); 
+    }
+
+    /**
+     * Function to save the utility service provider details
+     * @param void
+     * @return array
+     */
+    public function saveServiceProvider()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $serviceProviderDetails);
+
+        // Get the logged-in user id
+		$userId = Auth::id();
+
+        // Server Side Validation
+        $response =array();
+        $validation = Validator::make(
+            array(
+                'service_provider_name'		=> $serviceProviderDetails['service_provider_name'],
+                'service_provider_category'	=> $serviceProviderDetails['service_provider_category'],
+                'service_provider_country'	=> $serviceProviderDetails['service_provider_country'],
+                'service_provider_province'	=> $serviceProviderDetails['service_provider_province'],
+                'service_provider_city'		=> $serviceProviderDetails['service_provider_city'],
+                'service_provider_address'	=> $serviceProviderDetails['service_provider_address'],
+                'service_provider_status'	=> $serviceProviderDetails['service_provider_status']
+            ),
+            array(
+                'service_provider_name' 	=> array('required'),
+                'service_provider_category' => array('required'),
+                'service_provider_country' 	=> array('required'),
+                'service_provider_province' => array('required'),
+                'service_provider_city' 	=> array('required'),
+                'service_provider_address' 	=> array('required'),
+                'service_provider_status' 	=> array('required')
+                
+            ),
+            array(
+                'service_provider_name.required' 	=> 'Please enter service provider name',
+                'service_provider_category.required'=> 'Please select service category',
+                'service_provider_country.required' => 'Please select country',
+                'service_provider_province.required'=> 'Please select province',
+                'service_provider_city.required'	=> 'Please enter city name',
+                'service_provider_address.required' => 'Please enter address',
+                'service_provider_status.required' 	=> 'Please select status'
+            )
+        );
+
+        if ( $validation->fails() )
+        {
+        	$error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else
+        {
+        	// Check if atleast one option is selected or not from service_types
+        	if( isset( $serviceProviderDetails['service_types'] ) )
+        	{
+        		// Check if the service provider id is available or not.
+        		if( $serviceProviderDetails['service_provider_id'] == '' )		// Add the service provider
+        		{
+	        		$serviceProvider = new UtilityServiceProvider;
+
+	        		$serviceProvider->utility_service_category_id = $serviceProviderDetails['service_provider_category'];
+	        		$serviceProvider->company_name 	= $serviceProviderDetails['service_provider_name'];
+	        		$serviceProvider->country_id 	= $serviceProviderDetails['service_provider_country'];
+	        		$serviceProvider->province_id 	= $serviceProviderDetails['service_provider_province'];
+	        		$serviceProvider->city_id 		= $serviceProviderDetails['service_provider_city'];
+	        		$serviceProvider->address 		= $serviceProviderDetails['service_provider_address'];
+	        		$serviceProvider->status 		= $serviceProviderDetails['service_provider_status'];
+	        		$serviceProvider->created_by 	= $userId;
+
+	        		if( $serviceProvider->save() )
+				 	{
+				 		$serviceProvider->serviceTypes()->sync($serviceProviderDetails['service_types']);
+
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Service provider added successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+			        	$response['errMsg']     = 'Some error in adding the service provider';
+					}
+        		}
+        		else 															// Update the service provider
+        		{
+        			$serviceProvider = UtilityServiceProvider::find($serviceProviderDetails['service_provider_id']);
+
+	        		$serviceProvider->utility_service_category_id = $serviceProviderDetails['service_provider_category'];
+	        		$serviceProvider->company_name 	= $serviceProviderDetails['service_provider_name'];
+	        		$serviceProvider->country_id 	= $serviceProviderDetails['service_provider_country'];
+	        		$serviceProvider->province_id 	= $serviceProviderDetails['service_provider_province'];
+	        		$serviceProvider->city_id 		= $serviceProviderDetails['service_provider_city'];
+	        		$serviceProvider->address 		= $serviceProviderDetails['service_provider_address'];
+	        		$serviceProvider->status 		= $serviceProviderDetails['service_provider_status'];
+	        		$serviceProvider->updated_by 	= $userId;
+
+	        		if( $serviceProvider->save() )
+				 	{
+				 		$serviceProvider->serviceTypes()->sync($serviceProviderDetails['service_types']);
+
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Service provider updated successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+			        	$response['errMsg']     = 'Some error in updating the service provider';
+					}
+        		}
+
+        	}
+        	else
+        	{
+        		$response['errCode']    = 2;
+                $response['errMsg']     = 'Please select atleast one service type';
+        	}
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to show the utility service providers list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchServiceProviders()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+                0 => 't1.id',
+                1 => 't1.company_name',
+                2 => 't5.category_type',
+                7 => 't1.status'
+            );
+
+       	// Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $serviceProviders = DB::select(
+		                        DB::raw("SELECT t1.id, t1.company_name, t6.name as city, t1.address, t1.status, 
+		                        GROUP_CONCAT(UCASE(LEFT(t3.service_type, 1)), SUBSTRING(t3.service_type, 2) order by t3.service_type) as services,
+		                        t4.name AS province, t5.category_type
+		                        FROM utility_service_providers AS t1 
+								JOIN utility_service_provider_utility_service_type as t2 ON t1.id = t2.utility_service_provider_id 
+								JOIN utility_service_types AS t3 ON t3.id = t2.utility_service_type_id
+								JOIN provinces AS t4 ON t4.id = t1.province_id
+								JOIN utility_service_categories AS t5 ON t5.id = t1.utility_service_category_id
+								JOIN cities AS t6 ON t6.id = t1.city_id
+								WHERE t1.company_name LIKE '%". $sSearch ."%'
+								GROUP BY t1.id, t1.company_name, t6.name, t1.address, t1.status, t4.name, t5.category_type
+								ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
+		                    );
+
+        // Get the total count without any condition to maintian the pagination
+        $serviceProviderCount = DB::select(
+	                            	DB::raw("SELECT t1.id
+				                        FROM utility_service_providers AS t1 
+										JOIN utility_service_provider_utility_service_type as t2 ON t1.id = t2.utility_service_provider_id 
+										JOIN utility_service_types AS t3 ON t3.id = t2.utility_service_type_id
+										JOIN provinces AS t4 ON t4.id = t1.province_id
+										JOIN utility_service_categories AS t5 ON t5.id = t1.utility_service_category_id
+										JOIN cities AS t6 ON t6.id = t1.city_id
+										WHERE t1.company_name LIKE '%". $sSearch ."%'
+										GROUP BY t1.id, t1.company_name, t6.name, t1.address, t1.status, t4.name, t5.category_type")
+	                        	);
+
+        // Assign it to the datatable pagination variable
+        $iTotal = count($serviceProviderCount);
+
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $serviceProviders ) > 0 )
+        {
+            foreach ($serviceProviders as $serviceProvider)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $serviceProvider->id,
+                    1 => ucwords( strtolower( $serviceProvider->company_name ) ),
+                    2 => $serviceProvider->category_type,
+                    3 => $serviceProvider->services,
+                    4 => ucwords( strtolower( $serviceProvider->province ) ),
+                    5 => ucfirst( strtolower( $serviceProvider->city ) ),
+                    6 => ucfirst( strtolower( $serviceProvider->address ) ),
+                    7 => Helper::getStatusText( $serviceProvider->status ),
+                    8 => '<a href="javascript:void(0);" id="'. $serviceProvider->id .'" class="edit_service_provider"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details of the selected service provider
+     * @param void
+     * @return array
+     */
+    public function getServiceProviderDetails()
+    {
+    	$serviceProviderId = Input::get('serviceProviderId');
+
+    	$response = array();
+    	if( $serviceProviderId != '' )
+    	{
+    		$serviceProviderDetails = UtilityServiceProvider::find($serviceProviderId);
+
+    		$serviceProviderTypes 	= $serviceProviderDetails->serviceTypes;
+
+    		if( count( $serviceProviderDetails ) > 0 )
+    		{
+    			$response['category_id'] 	= $serviceProviderDetails->utility_service_category_id;
+    			$response['company_name'] 	= $serviceProviderDetails->company_name;
+    			$response['country_id'] 	= $serviceProviderDetails->country_id;
+    			$response['province_id'] 	= $serviceProviderDetails->province_id;
+    			$response['city_id'] 		= $serviceProviderDetails->city_id;
+    			$response['address'] 		= $serviceProviderDetails->address;
+    			$response['status'] 		= $serviceProviderDetails->status;
+    		}
+
+    		if( count( $serviceProviderTypes ) > 0 )
+    		{
+    			foreach ($serviceProviderTypes as $serviceProviderType)
+    			{
+    				$response['selectedServiceTypes'][] = $serviceProviderType->id;
+    			}
+    		}
+
+    		// Get the service type list, as the service type list comes on the service category selection by using ajax, so we are not able to make the service type list selected
+    		$serviceTypes = UtilityServiceCategory::find($serviceProviderDetails->utility_service_category_id)->serviceTypes;
+
+    		if( count( $serviceTypes ) > 0 )
+    		{
+	    		foreach($serviceTypes as $serviceType)
+	    		{
+	    			$response['serviceTypes'][] = array(
+	    				'id' => $serviceType->id,
+	    				'service_type' => ucwords( strtolower( $serviceType->service_type ) ),
+	    			);
+	    		}
+    		}
+
+    		// Get the cities list, as the cities list comes on the province selection by using ajax, so we are not able to make the cities list selected
+    		$cities = Province::find($serviceProviderDetails->province_id)->cities;
+
+    		if( count( $cities ) > 0 )
+    		{
+	    		foreach($cities as $city)
+	    		{
+	    			$response['cities'][] = array(
+	    				'id' 	=> $city->id,
+	    				'city' 	=> ucwords( strtolower( $city->name ) )
+	    			);
+	    		}
+    		}
+    	}
+
+    	return response()->json($response);
     }
 }

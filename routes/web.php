@@ -117,10 +117,23 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected utility service type
 	Route::get('/getutilityservicetypedetails', 'AdminController@getUtilityServiceTypeDetails');
 
-
-
 	// To return the utility service page
 	Route::get('/utilityserviceproviders', 'AdminController@utilityServiceProviders');
+
+	// To get the service type on the basis of selected service category
+	Route::get('/getcategoryservicetypes', 'AdminController@getCategoryServiceTypes');
+
+	// To get the cities on the basis of selected province
+	Route::get('/getprovincecities', 'AdminController@getProvinceCities');
+
+	// To save the utility service provider details
+	Route::post('/saveserviceprovider', 'AdminController@saveServiceProvider');
+
+	// To show the utility service providers list in datatable
+	Route::get('/fetchserviceproviders', 'AdminController@fetchServiceProviders');
+
+	// To get the details of the selected service provider
+	Route::get('/getserviceproviderdetails', 'AdminController@getServiceProviderDetails');
 
 });
 

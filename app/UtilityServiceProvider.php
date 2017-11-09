@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UtilityServiceCategory extends Model
+class UtilityServiceProvider extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,16 +12,16 @@ class UtilityServiceCategory extends Model
      * @var array
      */
     protected $fillable = [
-        'service_type', 'description', 'status'
+        'utility_service_category_id', 'company_name', 'country_id', 'province_id', 'city', 'address', 'status'
     ];
 
     public $timestamps = true;
 
     /**
-     * Get the service types for the service category.
+     * Get the service types for the service providers.
      */
     public function serviceTypes()
     {
-        return $this->hasMany('App\UtilityServiceType')->where(['status' => '1'])->orderBy('service_type', 'asc');
+        return $this->belongsToMany('App\UtilityServiceType');
     }
 }

@@ -966,15 +966,253 @@ $(document).ready(function(){
     	}
     });
 
-
-
-
-
-
     // To add service provider
     $('#btn_modal_service_provider').click(function(){
     	$('#modal_add_service_provider').find('.modal-title').html('Add Service Provider');
     	$('#modal_add_service_provider').modal('show');
+    });
+
+    // To fetch the service type based on the selection of service category
+    $('#service_provider_category').change(function(){
+    	var categoryId = $(this).val();
+
+    	// Refresh the service type dropdown
+    	$('#service_types').html('');
+
+    	if( categoryId != '' )
+    	{
+	    	// Ajax call to get the service type on the basis of selected service category
+	    	$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getcategoryservicetypes',
+				method: 'get',
+				data: {
+					categoryId: categoryId
+				},
+			    success: function(response){
+			    	var responseTypes = '';
+
+			    	for (var key in response)
+			    	{
+			    	  	responseTypes += '<option value="'+response[key].id+'">'+response[key].service_type+'</option>';
+			    	}
+
+			    	// Append the newly created options to the dropdown
+			    	$('#service_types').html(responseTypes);
+
+			    	// Referesh the multi-select
+			    	$('#service_types').multipleSelect("refresh");
+			    }
+			});
+    	}
+    });
+
+    // To get the cities list as per the province selected
+    $('#service_provider_province').change(function(){
+    	var provinceId = $(this).val();
+
+    	// Refresh the city dropdown
+    	$('#service_provider_city').html('<option value="">Select</option>');
+
+    	if( provinceId != '' )
+    	{
+	    	// Ajax call to get the cities on the basis of selected province
+	    	$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getprovincecities',
+				method: 'get',
+				data: {
+					provinceId: provinceId
+				},
+			    success: function(response){
+			    	var responseTypes = '<option value="">Select</option>';
+
+			    	for (var key in response)
+			    	{
+			    	  	responseTypes += '<option value="'+response[key].id+'">'+response[key].city+'</option>';
+			    	}
+
+			    	// Append the newly created options to the dropdown
+			    	$('#service_provider_city').html(responseTypes);
+			    }
+			});
+    	}
+    });
+
+    // Add service provider form validation
+    $('#frm_add_service_provider').submit(function(e){
+        e.preventDefault();
+    });
+
+    $('#frm_add_service_provider').validate({
+    	ignore: "not:hidden",   // for category multi-select, which is hidden
+        rules: {
+        	service_provider_name: {
+        		required: true
+        	},
+        	service_provider_category: {
+        		required: true
+        	},
+        	'service_types[]': {
+        		required: true
+        	},
+            service_provider_country: {
+                required: true
+            },
+            service_provider_province: {
+                required: true
+            },
+            service_provider_city: {
+            	required: true	
+            },
+            service_provider_address: {
+            	required: true	
+            },
+            service_provider_status: {
+            	required: true	
+            }
+        },
+        messages: {
+        	service_provider_name: {
+        		required: 'Please enter service provider name'
+        	},
+        	service_provider_category: {
+        		required: 'Please select service category'
+        	},
+        	'service_types[]': {
+        		required: 'Please select atleast one service type'
+        	},
+            service_provider_country: {
+                required: 'Please select country'
+            },
+            service_provider_province: {
+                required: 'Please select province'
+            },
+            service_provider_city: {
+            	required: 'Please select city'
+            },
+            service_provider_address: {
+            	required: 'Please enter address'
+            },
+            service_provider_status: {
+            	required: 'Please select status'	
+            }
+        }
+    });
+
+    // Save the service provider data
+    $('#btn_add_service_provider').click(function(){
+    	if( $('#frm_add_service_provider').valid() )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/saveserviceprovider',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_service_provider').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_service_provider')[0].reset();
+
+			    		$('#modal_add_service_provider').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_service_providers').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Utility service providers datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_service_providers').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchserviceproviders',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 7, 8] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false }
+        ]
+    });
+
+    // Edit the service provider details
+    $(document).on('click', '.edit_service_provider', function(){
+    	var serviceProviderId = $(this).attr('id');
+
+    	// Fetch the service provider details for the selected service provider
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/administrator/getserviceproviderdetails',
+			method: 'get',
+			data: {
+				serviceProviderId: serviceProviderId
+			},
+		    success: function(response){
+		    	$('#modal_add_service_provider').find('.modal-title').html('Edit Service Type');
+
+		    	// Auto-fill the form
+
+		    	$('#frm_add_service_provider #service_provider_id').val(serviceProviderId);
+		    	$('#frm_add_service_provider #service_provider_name').val(response.company_name);
+		    	$('#frm_add_service_provider #service_provider_category').val(response.category_id);
+				$('#frm_add_service_provider #service_provider_country').val(response.country_id);
+		    	$('#frm_add_service_provider #service_provider_province').val(response.province_id);
+		    	$('#frm_add_service_provider #service_provider_address').val(response.address);
+		    	$('#frm_add_service_provider input[name="service_provider_status"][value="'+ response.status +'"]').prop('checked', true);
+
+		    	// Append the service type list
+		    	var responseTypes = '';
+		    	for (var key in response.serviceTypes)
+		    	{
+		    	  	responseTypes += '<option value="'+response.serviceTypes[key].id+'">'+response.serviceTypes[key].service_type+'</option>';
+		    	}
+		    	$('#service_types').html(responseTypes);
+
+		    	// Make the option selected
+		    	for(var i = 0; i < response.selectedServiceTypes.length; i++)
+		    	{
+		    		$("#service_types option[value='" + response.selectedServiceTypes[i] + "']").prop("selected", true);
+		    	}
+
+		    	// Referesh the multi-select
+		    	$('#service_types').multipleSelect("refresh");
+
+		    	// Append the city list
+		    	var cities = '';
+		    	for (var key in response.cities)
+		    	{
+		    	  	cities += '<option value="'+response.cities[key].id+'">'+response.cities[key].city+'</option>';
+		    	}
+		    	$('#service_provider_city').html(cities);
+
+		    	// Make it selected
+		    	$('#service_provider_city').val(response.city_id);
+
+		    	// Show the modal
+		    	$('#modal_add_service_provider').modal('show');
+		    }
+		});
     });
 
 });
