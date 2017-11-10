@@ -346,9 +346,6 @@
                                 <li>
                                     <a href="{{ url('/administrator/utilityserviceproviders') }}">Utility Service Providers</a>
                                 </li>
-                                <li>
-                                    <a href="{{ url('/administrator/provinces') }}">Provinces</a>
-                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -357,6 +354,27 @@
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="{{ url('/administrator/companycategories') }}"> Company Categories</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-building-o" aria-hidden="true"></i> Payment Plan Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/paymentplans') }}"> Payment Plans</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i> Miscellaneous<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/provinces') }}">Provinces</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/cities') }}">Cities</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

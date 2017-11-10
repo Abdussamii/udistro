@@ -147,6 +147,23 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details of the selected company category
 	Route::get('/getcompanycategorydetails', 'AdminController@getCompanyCategoryDetails');
 
+	// To return the payment plans view
+	Route::get('/paymentplans', 'AdminController@paymentPlans');
+
+	// To save the payment plan details
+	Route::post('/savepaymentplan', 'AdminController@savePaymentPlan');
+
+	// To show the payment plans list in datatable
+	Route::get('/fetchpaymentplans', 'AdminController@fetchPaymentPlans');
+
+	// To get the details of the selected payment plan
+	Route::get('/getpaymentplandetails', 'AdminController@getPaymentPlanDetails');
+
+	// To return the cities listing view
+	Route::get('/cities', 'AdminController@cities');
+
+	
+
 });
 
 // Logout

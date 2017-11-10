@@ -1332,4 +1332,158 @@ $(document).ready(function(){
     	}
     });
 
+    // To add payment plan details
+    $('#btn_modal_payment_plan').click(function(){
+    	$('#modal_payment_plan').find('.modal-title').html('Add Plan');
+    	$('#modal_payment_plan').modal('show');
+    });
+
+    // Add payment plan form validation
+    $('#frm_add_payment_plan').submit(function(e){
+        e.preventDefault();
+    });
+
+    $('#frm_add_payment_plan').validate({
+        rules: {
+            payment_plan_name: {
+                required: true
+            },
+            payment_plan_charge: {
+                required: true,
+                number: true
+            },
+            payment_plan_validity: {
+                required: true,
+                digits: true
+            },
+            payment_plan_emails: {
+                required: true,
+                digits: true
+            },
+            payment_plan_status: {
+                required: true
+            }
+        },
+        messages: {
+            payment_plan_name: {
+                required: 'Please enter plan name'
+            },
+            payment_plan_charge: {
+                required: 'Please enter charge',
+                number: 'Please enter valid charge'
+            },
+            payment_plan_validity: {
+                required: 'Please enter validity',
+                digits: 'Please enter a valid value'
+            },
+            payment_plan_emails: {
+                required: 'Please enter number of emails',
+                digits: 'Please enter a valid value'
+            },
+            payment_plan_status: {
+                required: 'Please select status'
+            }
+        }
+    });
+
+    // Save the payment plan details
+    $('#btn_add_payment_plan').click(function(){
+    	if( $('#frm_add_payment_plan').valid() )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savepaymentplan',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_payment_plan').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_payment_plan')[0].reset();
+
+			    		$('#modal_payment_plan').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_payment_plans').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Payment plans datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_payment_plans').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchpaymentplans',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 3, 4, 5, 6] },
+            { "className": "dt-right", "targets": [2] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false }
+        ]
+    });
+
+    // To edit the payment plan details
+    $(document).on('click', '.edit_payment_plan', function(){
+    	var planId = $(this).attr('id');
+
+    	if( planId != '' )
+    	{
+    		// Get the details of selected payment plan
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getpaymentplandetails',
+				method: 'get',
+				data: {
+					planId: planId
+				},
+			    success: function(response){
+			    	$('#modal_payment_plan').find('.modal-title').html('Edit Category');
+
+			    	// Auto-fill the form
+			    	$('#frm_add_payment_plan #payment_plan_id').val(planId);
+			    	$('#frm_add_payment_plan #payment_plan_name').val(response.plan_name);
+			    	$('#frm_add_payment_plan #payment_plan_charge').val(response.plan_charge);
+			    	$('#frm_add_payment_plan #payment_plan_validity').val(response.validity_days);
+			    	$('#frm_add_payment_plan #payment_plan_emails').val(response.no_of_emails);
+			    	$('#frm_add_payment_plan input[name="payment_plan_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_payment_plan').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing category id');
+    	}
+    });
+
+
+
+    // To add city details
+    $('#btn_modal_city').click(function(){
+    	$('#modal_add_city').find('.modal-title').html('Add City');
+    	$('#modal_add_city').modal('show');
+    });
+
 });

@@ -26,6 +26,7 @@ use App\State;
 use App\UtilityServiceType;
 use App\UtilityServiceProvider;
 use App\CompanyCategory;
+use App\PaymentPlan;
 
 use Validator;
 use Helper;
@@ -2032,6 +2033,229 @@ class AdminController extends Controller
 	    		$response['id'] 		= $categoryDetails->id;
     			$response['category'] 	= $categoryDetails->category;
     			$response['status'] 	= $categoryDetails->status;
+    		}
+    	}
+
+    	return response()->json($response); 
+    }
+
+    /**
+     * Function to return the payment plans view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentPlans()
+    {
+    	return view('administrator/paymentPlans');
+    }
+
+    /**
+     * Function to save payment plan details 
+     * @param void
+     * @return array
+     */
+    public function savePaymentPlan()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $planDetails);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'payment_plan_name'		=> $planDetails['payment_plan_name'],
+		        'payment_plan_charge'	=> $planDetails['payment_plan_charge'],
+		        'payment_plan_validity'	=> $planDetails['payment_plan_validity'],
+		        'payment_plan_emails'	=> $planDetails['payment_plan_emails'],
+		        'payment_plan_status'	=> $planDetails['payment_plan_status']
+		    ),
+		    array(
+		        'payment_plan_name' 	=> array('required'),
+		        'payment_plan_charge' 	=> array('required', 'numeric'),
+		        'payment_plan_validity' => array('required', 'integer'),
+		        'payment_plan_emails' 	=> array('required', 'integer'),
+		        'payment_plan_status' 	=> array('required')
+		    ),
+		    array(
+		        'payment_plan_name.required' 	=> 'Please enter plan name',
+		        'payment_plan_charge.required' 	=> 'Please enter charge',
+		        'payment_plan_charge.numeric' 	=> 'Please enter valid charge',
+		        'payment_plan_validity.required'=> 'Please enter validity',
+		        'payment_plan_validity.integer' => 'Please enter a valid value',
+		        'payment_plan_emails.required' 	=> 'Please enter number of emails',
+		        'payment_plan_emails.integer' 	=> 'Please enter a valid value',
+		        'payment_plan_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Check if the payment plan id is available or not, If not, add it, otherwise update it
+			if( $planDetails['payment_plan_id'] == '' )
+			{
+				$paymentPlan = new PaymentPlan;
+
+				$paymentPlan->plan_name 		= $planDetails['payment_plan_name'];
+				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
+				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
+				$paymentPlan->number_of_emails 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->status 			= $planDetails['payment_plan_status'];
+				$paymentPlan->created_by 		= $userId;
+
+				if( $paymentPlan->save() )
+		        {
+		        	$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Payment plan added successfully';
+		        }
+		        else
+		        {
+		        	$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in saving payment plan';
+		        }
+			}
+			else
+			{
+				$paymentPlan = PaymentPlan::find($planDetails['payment_plan_id']);
+
+				$paymentPlan->plan_name 		= $planDetails['payment_plan_name'];
+				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
+				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
+				$paymentPlan->number_of_emails 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->status 			= $planDetails['payment_plan_status'];
+				$paymentPlan->updated_by 		= $userId;
+
+				if( $paymentPlan->save() )
+		        {
+		        	$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Payment plan updated successfully';
+		        }
+		        else
+		        {
+		        	$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating payment plan';
+		        }
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to show the payment plans list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchPaymentPlans()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'plan_name',
+            2 => 'plan_charges',
+            3 => 'validity_days',
+            4 => 'number_of_emails',
+            5 => 'status'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $paymentPlans = PaymentPlan::where('plan_name','like', '%'.$sSearch.'%')
+                    ->orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->select('id', 'plan_name', 'plan_charges', 'validity_days', 'number_of_emails', 'status')
+                    ->get();
+
+        $iTotal = PaymentPlan::where('plan_name','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $paymentPlans ) > 0 )
+        {
+            foreach ($paymentPlans as $paymentPlan)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $paymentPlan->id,
+                    1 => ucwords( strtolower( $paymentPlan->plan_name ) ),
+                    2 => $paymentPlan->plan_charges,
+                    3 => $paymentPlan->validity_days,
+                    4 => $paymentPlan->number_of_emails,
+                    5 => Helper::getStatusText($paymentPlan->status),
+                    6 => '<a href="javascript:void(0);" id="'. $paymentPlan->id .'" class="edit_payment_plan"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to return the cities listing view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function cities()
+    {
+    	// Get the province list
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+    	return view('administrator/cities', ['provinces' => $provinces]);
+    }
+
+    /**
+     * Function to get the details of the selected payment plan
+     * @param void
+     * @return array
+     */
+    public function getPaymentPlanDetails()
+    {
+    	$planId = Input::get('planId');
+
+    	$response = array();
+    	if( $planId != '' )
+    	{
+    		$planDetails = PaymentPlan::find($planId);
+
+    		if( count( $planDetails ) > 0 )
+    		{
+	    		$response['id'] 			= $planDetails->id;
+    			$response['plan_name'] 		= $planDetails->plan_name;
+    			$response['plan_charge'] 	= $planDetails->plan_charges;
+    			$response['validity_days'] 	= $planDetails->validity_days;
+    			$response['no_of_emails'] 	= $planDetails->number_of_emails;
+    			$response['status'] 		= $planDetails->status;
     		}
     	}
 
