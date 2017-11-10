@@ -135,6 +135,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details of the selected service provider
 	Route::get('/getserviceproviderdetails', 'AdminController@getServiceProviderDetails');
 
+	// To return the company categories view
+	Route::get('/companycategories', 'AdminController@companyCategories');
+
+	// To save the company category details
+	Route::post('/savecompanycategory', 'AdminController@saveCompanyCategory');
+
+	// To show the company categories list in datatable
+	Route::get('/fetchcompanycategories', 'AdminController@fetchCompanyCategories');
+
+	// To get the details of the selected company category
+	Route::get('/getcompanycategorydetails', 'AdminController@getCompanyCategoryDetails');
+
 });
 
 // Logout

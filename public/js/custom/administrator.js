@@ -1215,4 +1215,121 @@ $(document).ready(function(){
 		});
     });
 
+    // To add company category
+    $('#btn_modal_company_category').click(function(){
+    	$('#modal_add_company_category').find('.modal-title').html('Add Category');
+    	$('#modal_add_company_category').modal('show');
+    });
+
+   	// Add / Edit company category form validation
+    $('#frm_add_company_category').submit(function(e){
+        e.preventDefault();
+    });
+
+    $('#frm_add_company_category').validate({
+        rules: {
+            category_name: {
+                required: true
+            },
+            category_status: {
+            	required: true	
+            }
+        },
+        messages: {
+            category_name: {
+                required: 'Please enter category name'
+            },
+            category_status: {
+            	required: 'Please select status'	
+            }
+        }
+    });
+
+    // Save the company category details
+    $('#btn_add_company_category').click(function(){
+    	if( $('#frm_add_company_category').valid() )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savecompanycategory',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_company_category').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_company_category')[0].reset();
+
+			    		$('#modal_add_company_category').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_company_categories').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Utility service providers datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_company_categories').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanycategories',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 2, 3] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false }
+        ]
+    });
+
+    // To edit the company category
+    $(document).on('click', '.edit_company_category', function(){
+    	var categoryId = $(this).attr('id');
+
+    	if( categoryId != '' )
+    	{
+    		// Get the details of the selected service category
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getcompanycategorydetails',
+				method: 'get',
+				data: {
+					categoryId: categoryId
+				},
+			    success: function(response){
+			    	$('#modal_add_company_category').find('.modal-title').html('Edit Category');
+
+			    	// Auto-fill the form
+			    	$('#frm_add_company_category #category_id').val(categoryId);
+			    	$('#frm_add_company_category #category_name').val(response.category);
+			    	$('#frm_add_company_category input[name="category_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_add_company_category').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing category id');
+    	}
+    });
+
 });
