@@ -1478,12 +1478,128 @@ $(document).ready(function(){
     	}
     });
 
-
-
     // To add city details
     $('#btn_modal_city').click(function(){
     	$('#modal_add_city').find('.modal-title').html('Add City');
     	$('#modal_add_city').modal('show');
+    });
+
+   	// Add payment plan form validation
+   	$('#frm_add_city').submit(function(e){
+   	    e.preventDefault();
+   	});
+
+   	$('#frm_add_city').validate({
+   	    rules: {
+   	        province: {
+   	            required: true
+   	        },
+   	        city_name: {
+   	            required: true
+   	        },
+   	        city_status: {
+   	        	required: true	
+   	        }
+   	    },
+   	    messages: {
+   	        province: {
+   	            required: 'Please select province'
+   	        },
+   	        city_name: {
+   	            required: 'Please enter city name'
+   	        },
+   	        city_status: {
+   	        	required: 'Please select status'	
+   	        }
+   	    }
+   	});
+
+   	// Save the city details
+   	$('#btn_add_cities').click(function(){
+   		if( $('#frm_add_city').valid() )
+   		{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savecity',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_city').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_city')[0].reset();
+
+			    		$('#modal_add_city').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_cities').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+   		}
+   	});
+
+   	// Cities list datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_cities').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcities',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 3, 4] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false }
+        ]
+    });
+
+    // To edit the city details
+    $(document).on('click', '.edit_city', function(){
+    	var pageId = $(this).attr('id');
+
+    	if( pageId != '' )
+    	{
+    		// Get the details of selected payment plan
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getcitydetails',
+				method: 'get',
+				data: {
+					pageId: pageId
+				},
+			    success: function(response){
+			    	$('#modal_add_city').find('.modal-title').html('Edit City');
+
+			    	// Auto-fill the form
+			    	$('#frm_add_city #city_id').val(pageId);
+			    	$('#frm_add_city #province').val(response.province_id);
+			    	$('#frm_add_city #city_name').val(response.name);
+			    	$('#frm_add_city input[name="city_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_add_city').modal('show');
+			    }
+			});
+    	}
+    	else
+    	{
+    		alertify.error('Missing category id');
+    	}
     });
 
 });

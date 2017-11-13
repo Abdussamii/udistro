@@ -14,16 +14,17 @@
 
       	<div class="col-lg-12 top-buffer">
 	      	<!-- Table to show all the cities -->
-			<!-- <table id="datatable_cities" class="table table-striped">
+			<table id="datatable_cities" class="table table-striped">
 				<thead>
 					<tr>
 						<td>#</td>
 						<td>Province</td>
+						<td>City</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>
 				</thead>
-			</table> -->
+			</table>
 		</div>
 
 		<!-- Modal to add / edit cities -->
@@ -68,7 +69,7 @@
 								</div>
 								<label id="city_status-error" class="error" for="city_status"></label>
 							</div>
-							<button type="submit" id="btn_add_province" name="btn_add_province" class="btn btn-primary">Submit</button>
+							<button type="submit" id="btn_add_cities" name="btn_add_cities" class="btn btn-primary">Submit</button>
 						</form>
 					</div>
 			    </div>

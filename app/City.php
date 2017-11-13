@@ -16,4 +16,12 @@ class City extends Model
     ];
 
     public $timestamps = true;
+
+    /**
+     * Get the province associated with the city.
+     */
+    public function province()
+    {
+        return $this->belongsTo('App\Province');
+    }
 }

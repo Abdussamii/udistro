@@ -27,6 +27,7 @@ use App\UtilityServiceType;
 use App\UtilityServiceProvider;
 use App\CompanyCategory;
 use App\PaymentPlan;
+use App\City;
 
 use Validator;
 use Helper;
@@ -2256,6 +2257,185 @@ class AdminController extends Controller
     			$response['validity_days'] 	= $planDetails->validity_days;
     			$response['no_of_emails'] 	= $planDetails->number_of_emails;
     			$response['status'] 		= $planDetails->status;
+    		}
+    	}
+
+    	return response()->json($response); 
+    }
+
+    /**
+     * Function to save the city details
+     * @param void
+     * @return array
+     */
+    public function saveCity()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $cityDetails);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'province'		=> $cityDetails['province'],
+		        'city_name'		=> $cityDetails['city_name'],
+		        'city_status'	=> $cityDetails['city_status']
+		    ),
+		    array(
+		        'province' 		=> array('required'),
+		        'city_name' 	=> array('required'),
+		        'city_status' 	=> array('required')
+		    ),
+		    array(
+		        'province.required' 	=> 'Please select province',
+		        'city_name.required' 	=> 'Please enter city name',
+		        'city_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Check if city id is available or not. If available, update the data, if not add the data
+			if( $cityDetails['city_id'] == '' )		// Add the city
+			{
+				$city = new City;
+
+				$city->province_id 	= $cityDetails['province'];
+				$city->name 		= $cityDetails['city_name'];
+				$city->status 		= $cityDetails['city_status'];
+				$city->created_by 	= $userId;
+
+				if( $city->save() )
+		        {
+		        	$response['errCode']    = 0;
+		        	$response['errMsg']     = 'City added successfully';
+		        }
+		        else
+		        {
+		        	$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in saving city';
+		        }
+			}
+			else 									// Update the city
+			{
+				$city = City::find($cityDetails['city_id']);
+
+				$city->province_id 	= $cityDetails['province'];
+				$city->name 		= $cityDetails['city_name'];
+				$city->status 		= $cityDetails['city_status'];
+				$city->updated_by 	= $userId;
+
+				if( $city->save() )
+		        {
+		        	$response['errCode']    = 0;
+		        	$response['errMsg']     = 'City updated successfully';
+		        }
+		        else
+		        {
+		        	$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating city';
+		        }
+			}
+		}
+
+		return response()->json($response); 
+    }
+
+    /**
+     * Function to show the cities list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchCities()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            2 => 'name',
+            3 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $cities = City::where('name','like', '%'.$sSearch.'%')
+                    ->orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->get();
+
+        $iTotal = City::where('name','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $cities ) > 0 )
+        {
+            foreach ($cities as $city)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $city->id,
+                    1 => ucwords( strtolower( $city->province->name ) ),
+                    2 => ucwords( strtolower( $city->name ) ),
+                    3 => Helper::getStatusText( $city->status ),
+                    4 => '<a href="javascript:void(0);" id="'. $city->id .'" class="edit_city"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details of the selected city
+     * @param void
+     * @return array
+     */
+    public function getCityDetails()
+    {
+    	$pageId = Input::get('pageId');
+
+    	$response = array();
+    	if( $pageId != '' )
+    	{
+    		$cityDetails = City::find($pageId);
+
+    		if( count( $cityDetails ) > 0 )
+    		{
+	    		$response['id']			= $cityDetails->id;
+	    		$response['province_id']= $cityDetails->province_id;
+	    		$response['name']		= $cityDetails->name;
+	    		$response['status']		= $cityDetails->status;
     		}
     	}
 

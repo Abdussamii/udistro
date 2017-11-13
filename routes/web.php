@@ -162,7 +162,14 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To return the cities listing view
 	Route::get('/cities', 'AdminController@cities');
 
-	
+	// To save the city details
+	Route::post('/savecity', 'AdminController@saveCity');
+
+	// To show the cities list in datatable
+	Route::get('/fetchcities', 'AdminController@fetchCities');
+
+	// To get the details of the selected city
+	Route::get('/getcitydetails', 'AdminController@getCityDetails');
 
 });
 
