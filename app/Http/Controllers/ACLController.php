@@ -22,11 +22,17 @@ class ACLController extends Controller
 	 */
 	public function addRole()
 	{
-    	$admin = new Role();
+    	/*$admin = new Role();
         $admin->name         = 'admin';
         $admin->display_name = 'User Administrator'; // optional
         $admin->description  = 'User is allowed to manage and edit other users'; // optional
-        $admin->save();
+        $admin->save();*/
+
+        /*$user = new Role();
+        $user->name         = 'agent';
+        $user->display_name = 'agent'; // optional
+        $user->description  = 'Agent associated with a company'; // optional
+        $user->save();*/
 	}
 
     /**

@@ -135,18 +135,6 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details of the selected service provider
 	Route::get('/getserviceproviderdetails', 'AdminController@getServiceProviderDetails');
 
-	// To return the company categories view
-	Route::get('/companycategories', 'AdminController@companyCategories');
-
-	// To save the company category details
-	Route::post('/savecompanycategory', 'AdminController@saveCompanyCategory');
-
-	// To show the company categories list in datatable
-	Route::get('/fetchcompanycategories', 'AdminController@fetchCompanyCategories');
-
-	// To get the details of the selected company category
-	Route::get('/getcompanycategorydetails', 'AdminController@getCompanyCategoryDetails');
-
 	// To return the payment plans view
 	Route::get('/paymentplans', 'AdminController@paymentPlans');
 
@@ -170,6 +158,38 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 
 	// To get the details of the selected city
 	Route::get('/getcitydetails', 'AdminController@getCityDetails');
+
+
+	/* ---------- Company related functionality ---------- */
+
+	// To return the company categories view
+	Route::get('/companycategories', 'CompanyController@companyCategories');
+
+	// To save the company category details
+	Route::post('/savecompanycategory', 'CompanyController@saveCompanyCategory');
+
+	// To show the company categories list in datatable
+	Route::get('/fetchcompanycategories', 'CompanyController@fetchCompanyCategories');
+
+	// To get the details of the selected company category
+	Route::get('/getcompanycategorydetails', 'CompanyController@getCompanyCategoryDetails');
+
+	// To return the company listing view
+	Route::get('/companies', 'CompanyController@companies');
+
+	// To save the company details
+	Route::post('/savecompanydetails', 'CompanyController@saveCompanyDetails');
+
+	// To fetch the companies list and show in datatable
+	Route::get('/fetchcompanies', 'CompanyController@fetchCompanies');
+
+	// To get the details of the selected company
+	Route::get('/getcompanydetails', 'CompanyController@getCompanyDetails');
+
+	// To update the company details
+	Route::post('/updatecompanydetails', 'CompanyController@updateCompanyDetails');
+
+	/* ---------- Company related functionality ---------- */
 
 });
 

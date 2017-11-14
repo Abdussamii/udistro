@@ -355,6 +355,9 @@
                                 <li>
                                     <a href="{{ url('/administrator/companycategories') }}"> Company Categories</a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('/administrator/companies') }}"> Companies</a>
+                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

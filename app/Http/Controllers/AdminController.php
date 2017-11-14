@@ -1227,7 +1227,7 @@ class AdminController extends Controller
     	// Datatable column number to table column name mapping
         $arr = array(
             0 => 'id',
-            1 => 'service_type',
+            1 => 'category_type',
             3 => 'status',
         );
 
@@ -1238,14 +1238,14 @@ class AdminController extends Controller
         $sortBy = $arr[$col];
 
         // Get the records after applying the datatable filters
-        $serviceCategories = UtilityServiceCategory::where('service_type','like', '%'.$sSearch.'%')
+        $serviceCategories = UtilityServiceCategory::where('category_type','like', '%'.$sSearch.'%')
 		                    ->orderBy($sortBy, $sortType)
 		                    ->limit($length)
 		                    ->offset($start)
-		                    ->select('id', 'service_type', 'description', 'status')
+		                    ->select('id', 'category_type', 'description', 'status')
 		                    ->get();
 
-        $iTotal = UtilityServiceCategory::where('service_type','like', '%'.$sSearch.'%')->count();
+        $iTotal = UtilityServiceCategory::where('category_type','like', '%'.$sSearch.'%')->count();
 
         // Create the datatable response array
         $response = array(
@@ -1261,7 +1261,7 @@ class AdminController extends Controller
             {
             	$response['aaData'][$k] = array(
                     0 => $serviceCategory->id,
-                    1 => ucfirst( strtolower( $serviceCategory->service_type ) ),
+                    1 => ucfirst( strtolower( $serviceCategory->category_type ) ),
                     2 => ucfirst( strtolower( $serviceCategory->description ) ),
                     3 => Helper::getStatusText($serviceCategory->status),
                     4 => '<a href="javascript:void(0);" id="'. $serviceCategory->id .'" class="edit_utility_service_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
@@ -1854,190 +1854,6 @@ class AdminController extends Controller
     	}
 
     	return response()->json($response);
-    }
-
-    /**
-     * Function to return the company categories view
-     * @param void
-     * @return \Illuminate\Http\Response
-     */
-    public function companyCategories()
-    {
-    	return view('administrator/companyCategories');
-    }
-
-    /**
-     * Function to return the company categories view
-     * @param void
-     * @return array
-     */
-    public function saveCompanyCategory()
-    {
-    	// Get the serialized form data
-        $frmData = Input::get('frmData');
-
-        // Parse the serialize form data to an array
-        parse_str($frmData, $categoryData);
-
-        // Get the logged in user id
-        $userId = Auth::user()->id;
-
-    	// Server Side Validation
-        $response =array();
-
-		$validation = Validator::make(
-		    array(
-		        'category_name'		=> $categoryData['category_name'],
-		        'category_status'	=> $categoryData['category_status'],
-		    ),
-		    array(
-		        'category_name' 	=> array('required'),
-		        'category_status' 	=> array('required'),
-		    ),
-		    array(
-		        'category_name.required' 	=> 'Please enter category name',
-		        'category_status.required' 	=> 'Please select status',
-		    )
-		);
-
-		if ( $validation->fails() )
-		{
-			$error = $validation->errors()->first();
-
-		    if( isset( $error ) && !empty( $error ) )
-		    {
-		        $response['errCode']    = 1;
-		        $response['errMsg']     = $error;
-		    }
-		}
-		else
-		{
-			// Check if category id is available or not. If not available, insert it, othewise update it
-			if( $categoryData['category_id'] == '' )	// Add the company category
-			{
-				$companyCategory = new CompanyCategory;
-
-				$companyCategory->category 	= $categoryData['category_name'];
-				$companyCategory->status 	= $categoryData['category_status'];
-				$companyCategory->created_by= $userId;
-
-				if( $companyCategory->save() )
-				{
-					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Company category added successfully';
-				}
-				else
-				{
-					$response['errCode']    = 2;
-		        	$response['errMsg']     = 'Some error in adding company category';
-				}
-
-			}
-			else 											// Update the company category
-			{
-				$companyCategory = CompanyCategory::find($categoryData['category_id']);
-
-				$companyCategory->category 	= $categoryData['category_name'];
-				$companyCategory->status 	= $categoryData['category_status'];
-				$companyCategory->updated_by= $userId;
-
-				if( $companyCategory->save() )
-				{
-					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Company category updated successfully';
-				}
-				else
-				{
-					$response['errCode']    = 2;
-		        	$response['errMsg']     = 'Some error in updating company category';
-				}
-			}
-		}
-
-		return response()->json($response);
-    }
-
-    /**
-     * Function to show show the company categories list in datatable
-     * @param void
-     * @return array
-     */
-    public function fetchCompanyCategories()
-    {
-    	$start      = Input::get('iDisplayStart');      // Offset
-    	$length     = Input::get('iDisplayLength');     // Limit
-    	$sSearch    = Input::get('sSearch');            // Search string
-    	$col        = Input::get('iSortCol_0');         // Column number for sorting
-    	$sortType   = Input::get('sSortDir_0');         // Sort type
-
-    	// Datatable column number to table column name mapping
-        $arr = array(
-            0 => 'id',
-            1 => 'category',
-            2 => 'status',
-        );
-
-        // Map the sorting column index to the column name
-        $sortBy = $arr[$col];
-
-        // Get the records after applying the datatable filters
-        $categories = CompanyCategory::where('category','like', '%'.$sSearch.'%')
-                    ->orderBy($sortBy, $sortType)
-                    ->limit($length)
-                    ->offset($start)
-                    ->select('id', 'category', 'status')
-                    ->get();
-
-        $iTotal = CompanyCategory::where('category','like', '%'.$sSearch.'%')->count();
-
-        // Create the datatable response array
-        $response = array(
-            'iTotalRecords' => $iTotal,
-            'iTotalDisplayRecords' => $iTotal,
-            'aaData' => array()
-        );
-
-        $k=0;
-        if ( count( $categories ) > 0 )
-        {
-            foreach ($categories as $category)
-            {
-            	$response['aaData'][$k] = array(
-                    0 => $category->id,
-                    1 => ucfirst( strtolower( $category->category ) ),
-                    2 => Helper::getStatusText($category->status),
-                    3 => '<a href="javascript:void(0);" id="'. $category->id .'" class="edit_company_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
-                );
-                $k++;
-            }
-        }
-
-    	return response()->json($response);
-    }
-
-    /**
-     * Function get the details of the selected company category
-     * @param void
-     * @return array
-     */
-    public function getCompanyCategoryDetails()
-    {
-    	$categoryId = Input::get('categoryId');
-
-    	$response = array();
-    	if( $categoryId != '' )
-    	{
-    		$categoryDetails = CompanyCategory::find($categoryId);
-
-    		if( count( $categoryDetails ) > 0 )
-    		{
-	    		$response['id'] 		= $categoryDetails->id;
-    			$response['category'] 	= $categoryDetails->category;
-    			$response['status'] 	= $categoryDetails->status;
-    		}
-    	}
-
-    	return response()->json($response); 
     }
 
     /**

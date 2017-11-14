@@ -1016,24 +1016,7 @@ $(document).ready(function(){
     	if( provinceId != '' )
     	{
 	    	// Ajax call to get the cities on the basis of selected province
-	    	$.ajax({
-				url: $('meta[name="route"]').attr('content') + '/administrator/getprovincecities',
-				method: 'get',
-				data: {
-					provinceId: provinceId
-				},
-			    success: function(response){
-			    	var responseTypes = '<option value="">Select</option>';
-
-			    	for (var key in response)
-			    	{
-			    	  	responseTypes += '<option value="'+response[key].id+'">'+response[key].city+'</option>';
-			    	}
-
-			    	// Append the newly created options to the dropdown
-			    	$('#service_provider_city').html(responseTypes);
-			    }
-			});
+	    	getProvinceCities(provinceId, '#service_provider_city');
     	}
     });
 
@@ -1602,4 +1585,382 @@ $(document).ready(function(){
     	}
     });
 
+    // To add company
+    $('#btn_modal_company').click(function(){
+    	$('#modal_add_company').modal('show');
+    });
+
+    // To get the cities list as per the province selected
+    $('#frm_add_company #company_province').change(function(){
+    	var provinceId = $(this).val();
+
+    	// Refresh the city dropdown
+    	$('#frm_add_company #company_city').html('<option value="">Select</option>');
+
+    	if( provinceId != '' )
+    	{
+	    	getProvinceCities(provinceId, '#frm_add_company #company_city');
+    	}
+    });
+
+     // To add city details
+     $('#btn_modal_city').click(function(){
+     	$('#modal_add_city').find('.modal-title').html('Add City');
+     	$('#modal_add_city').modal('show');
+     });
+
+	// Add company form validation
+	$('#frm_add_company').submit(function(e){
+	    e.preventDefault();
+	});
+
+	/**
+	 * Custom validator for contains at least one lower-case letter
+	 */
+	$.validator.addMethod("atLeastOneLowercaseLetter", function (value, element) {
+	    return this.optional(element) || /[a-z]+/.test(value);
+	}, "Password must have at least one lowercase letter");
+	 
+	/**
+	 * Custom validator for contains at least one upper-case letter.
+	 */
+	$.validator.addMethod("atLeastOneUppercaseLetter", function (value, element) {
+	    return this.optional(element) || /[A-Z]+/.test(value);
+	}, "Password must have at least one uppercase letter");
+	 
+	/**
+	 * Custom validator for contains at least one number.
+	 */
+	$.validator.addMethod("atLeastOneNumber", function (value, element) {
+	    return this.optional(element) || /[0-9]+/.test(value);
+	}, "Password must have at least one number");
+	 
+	/**
+	 * Custom validator for contains at least one symbol.
+	 */
+	$.validator.addMethod("atLeastOneSymbol", function (value, element) {
+	    return this.optional(element) || /[!@#$%^&*()]+/.test(value);
+	}, "Password must have at least one symbol");
+
+	$('#frm_add_company').validate({
+	    rules: {
+	        representative_fname: {
+	            required: true
+	        },
+	        representative_email: {
+	        	required: true,
+	        	email: true
+	        },
+	        representative_password: {
+	        	required: true,
+	        	minlength: 6,
+	        	atLeastOneLowercaseLetter: true,
+	        	atLeastOneUppercaseLetter: true,
+	        	atLeastOneNumber: true,
+	        	atLeastOneSymbol: true
+	        },
+	        company_name: {
+	        	required: true
+	        },
+	        company_category: {
+	        	required: true
+	        },
+	        company_addres: {
+	        	required: true
+	        },
+	        company_province: {
+	        	required: true
+	        },
+	        company_city: {
+	        	required: true
+	        },
+	        postal_code: {
+	        	required: true
+	        },
+			company_status: {
+	        	required: true	
+	        }
+	    },
+	    messages: {
+	        representative_fname: {
+	            required: 'Please enter representative first name'
+	        },
+	        representative_email: {
+	        	required: 'Please enter representative email',
+	        	email: 'Please enter valid representative email'
+	        },
+	        representative_password: {
+	        	required: 'Please enter password',
+                minlength: 'Password must contain atleat 6 characters'
+	        },
+	        company_name: {
+	        	required: 'Please enter company name'
+	        },
+	        company_category: {
+	        	required: 'Please select company category'
+	        },
+	        company_addres: {
+	        	required: 'Please enter company address'
+	        },
+	        company_province: {
+	        	required: 'Please select province'
+	        },
+	        company_city: {
+	        	required: 'Please select city'
+	        },
+	        postal_code: {
+	        	required: 'Please enter postal code'
+	        },
+	        company_status: {
+	        	required: 'Please select status'
+	        }
+	    }
+	});
+
+	// Save the company data
+	$('#btn_add_company').click(function(){
+		if( $('#frm_add_company').valid() )
+		{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savecompanydetails',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_company').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_company')[0].reset();
+
+			    		$('#modal_add_company').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_companies').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
+	});
+
+	// Companies list datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_companies').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanies',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 9, 10] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false }
+        ]
+    });
+
+    // To edit the company details
+    $(document).on('click', '.edit_company', function(){
+    	var companyId = $(this).attr('id');
+
+    	if( companyId != '' )
+    	{
+    		// Get the details of selected company
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getcompanydetails',
+				method: 'get',
+				data: {
+					companyId: companyId
+				},
+			    success: function(response){
+			    	// Auto-fill the form
+			    	$('#frm_edit_company #company_id').val(companyId);
+			    	$('#frm_edit_company #representative_fname').val(response.fname);
+			    	$('#frm_edit_company #representative_lname').val(response.lname);
+			    	$('#frm_edit_company #representative_email').val(response.email);
+			    	$('#frm_edit_company #company_name').val(response.company_name);
+			    	$('#frm_edit_company #company_category').val(response.company_category_id);
+			    	$('#frm_edit_company #company_address').val(response.address);
+			    	$('#frm_edit_company #company_province').val(response.province_id);
+			    	
+			    	// Fill the cities
+			    	var cities = '<option value="">Select</option>';
+			    	for (var key in response.cities)
+			    	{
+			    	  	cities += '<option value="'+response.cities[key].id+'">'+response.cities[key].city+'</option>';
+			    	}
+			    	$('#frm_edit_company #company_city').html(cities);
+					
+					// Make the city selected 
+					$('#frm_edit_company #company_city').val(response.city_id);
+
+			    	$('#frm_edit_company #postal_code').val(response.postal_code);
+			    	$('#frm_edit_company input[name="company_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_edit_company').modal('show');
+			    }
+			});
+    	}
+    });
+
+    // Update company form validation
+	$('#frm_edit_company').submit(function(e){
+	    e.preventDefault();
+	});
+
+	$('#frm_edit_company').validate({
+	    rules: {
+	        representative_fname: {
+	            required: true
+	        },
+	        representative_email: {
+	        	required: true,
+	        	email: true
+	        },
+	        company_name: {
+	        	required: true
+	        },
+	        company_category: {
+	        	required: true
+	        },
+	        company_addres: {
+	        	required: true
+	        },
+	        company_province: {
+	        	required: true
+	        },
+	        company_city: {
+	        	required: true
+	        },
+	        postal_code: {
+	        	required: true
+	        },
+			company_status: {
+	        	required: true	
+	        }
+	    },
+	    messages: {
+	        representative_fname: {
+	            required: 'Please enter representative first name'
+	        },
+	        representative_email: {
+	        	required: 'Please enter representative email',
+	        	email: 'Please enter valid representative email'
+	        },
+	        company_name: {
+	        	required: 'Please enter company name'
+	        },
+	        company_category: {
+	        	required: 'Please select company category'
+	        },
+	        company_addres: {
+	        	required: 'Please enter company address'
+	        },
+	        company_province: {
+	        	required: 'Please select province'
+	        },
+	        company_city: {
+	        	required: 'Please select city'
+	        },
+	        postal_code: {
+	        	required: 'Please enter postal code'
+	        },
+	        company_status: {
+	        	required: 'Please select status'
+	        }
+	    }
+	});
+
+	// To get the cities list as per the province selected
+    $('#frm_edit_company #company_province').change(function(){
+    	var provinceId = $(this).val();
+
+    	// Refresh the city dropdown
+    	$('#frm_edit_company #company_city').html('<option value="">Select</option>');
+
+    	if( provinceId != '' )
+    	{
+	    	getProvinceCities(provinceId, '#frm_edit_company #company_city');
+    	}
+    });
+
+    // Update the company details
+	$('#btn_update_company_details').click(function(){
+		if( $('#frm_edit_company').valid() )
+		{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/updatecompanydetails',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_edit_company').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_edit_company')[0].reset();
+
+			    		$('#modal_edit_company').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_companies').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
+	});
 });
+
+/**
+ * Function to get the list of cities as options for the selected province
+ */
+function getProvinceCities(provinceId, target)
+{
+	// Ajax call to get the cities on the basis of selected province
+	$.ajax({
+		url: $('meta[name="route"]').attr('content') + '/administrator/getprovincecities',
+		method: 'get',
+		data: {
+			provinceId: provinceId
+		},
+	    success: function(response){
+	    	var responseTypes = '<option value="">Select</option>';
+
+	    	for (var key in response)
+	    	{
+	    	  	responseTypes += '<option value="'+response[key].id+'">'+response[key].city+'</option>';
+	    	}
+
+	    	// Append the newly created options to the dropdown
+	    	$(target).html(responseTypes);
+	    }
+	});
+}
