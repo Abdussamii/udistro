@@ -30,10 +30,10 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the company that owns the user.
+     * Get the company that owns the user. Company Representative, Agents are associated to the company
      */
     public function company()
     {
-        return $this->belongsTo('App\Company');
+        return $this->belongsToMany('App\Company');
     }
 }

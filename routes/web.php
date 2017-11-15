@@ -189,6 +189,21 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update the company details
 	Route::post('/updatecompanydetails', 'CompanyController@updateCompanyDetails');
 
+	// To return the company agent view
+	Route::get('/agents', 'CompanyController@agents');
+
+	// To save the agent details
+	Route::post('/saveagent', 'CompanyController@saveAgent');
+
+	// To fetch the agent list and show in datatable
+	Route::get('/fetchagents', 'CompanyController@fetchAgents');
+
+	// To get the agent details
+	Route::get('/getagentdetails', 'CompanyController@getAgentDetails');
+
+	// To update the agent details
+	Route::post('/updateagent', 'CompanyController@updateAgent');
+
 	/* ---------- Company related functionality ---------- */
 
 });

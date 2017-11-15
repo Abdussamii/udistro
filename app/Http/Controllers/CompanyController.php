@@ -622,4 +622,385 @@ class CompanyController extends Controller
 
 		return response()->json($response);
     }
+
+    /**
+     * Function to return the company agent view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function agents()
+    {
+    	// Get company list
+    	$companies = Company::where(['status' => '1'])->select('id', 'company_name')->orderBy('company_name', 'asc')->get();
+
+    	// Get province list
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+    	return view('administrator/agents', ['companies' => $companies, 'provinces' => $provinces]);
+    }
+
+    /**
+     * Function to save the agent details
+     * @param void
+     * @return array
+     */
+    public function saveAgent()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $agentData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'agent_company'		=> $agentData['agent_company'],
+		        'agent_fname'		=> $agentData['agent_fname'],
+		        'agent_lname'		=> $agentData['agent_lname'],
+		        'agent_email'		=> $agentData['agent_email'],
+		        'agent_password'	=> $agentData['agent_password'],
+		        'agent_address'		=> $agentData['agent_address'],
+		        'agent_province'	=> $agentData['agent_province'],
+		        'agent_city'		=> $agentData['agent_city'],
+		        'agent_postalcode'	=> $agentData['agent_postalcode'],
+		        'agent_status'		=> $agentData['agent_status']
+		    ),
+		    array(
+		        'agent_company' 	=> array('required'),
+		        'agent_fname' 		=> array('required'),
+		        'agent_lname' 		=> array('required'),
+		        'agent_email' 		=> array('required', 'email'),
+		        'agent_password'	=> array('required', 'min:6', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%^&]).*$/'),
+		        'agent_address'		=> array('required'),
+		        'agent_province'	=> array('required'),
+		        'agent_city' 		=> array('required'),
+		        'agent_postalcode' 	=> array('required'),
+		        'agent_status' 		=> array('required')
+		    ),
+		    array(
+		        'agent_company.required'	=> 'Please select company',
+		        'agent_fname.required' 		=> 'Please enter first name',
+		        'agent_lname.required' 		=> 'Please enter last name',
+		        'agent_email.required' 		=> 'Please enter email',
+		        'agent_email.email' 		=> 'Please enter valid email',
+		        'agent_password.required' 	=> 'Please enter password',
+		        'agent_password.min' 		=> 'Password must contain atleat 6 characters',
+		        'agent_password.regex' 		=> 'Password must contain a lower case, upper case, a number, and a special symbol in it',
+		        'agent_address.required' 	=> 'Please enter address',
+		        'agent_province.required' 	=> 'Please select province',
+		        'agent_city.required' 		=> 'Please select city',
+		        'agent_postalcode.required'	=> 'Please enter postal code',
+		        'agent_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Check if the agent already exist
+			$agent = User::where(['fname' => $agentData['agent_fname'], 'lname' => $agentData['agent_lname']])->get();
+
+			if( count( $agent ) == 0 )
+			{
+				// Add the agent as a user
+				$user = new User;
+
+				DB::beginTransaction();
+
+				$user->email 		= $agentData['agent_email'];				
+				$user->password 	= Hash::make($agentData['agent_password']);
+				$user->fname 		= $agentData['agent_fname'];
+				$user->lname 		= $agentData['agent_lname'];
+				$user->address 		= $agentData['agent_address'];
+				$user->province_id 	= $agentData['agent_province'];
+				$user->city_id 		= $agentData['agent_city'];
+				$user->postalcode 	= $agentData['agent_postalcode'];
+				$user->status 		= $agentData['agent_status'];
+				$user->created_by 	= $userId;
+
+				if( $user->save() )
+				{
+					// Map the user to role
+					$user->attachRole(3);	// 3: agent
+
+					// Map the user to company
+					$user->company()->attach($agentData['agent_company']);
+
+					DB::commit();
+
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Agent added successfully';
+		        	
+				}
+				else
+				{
+					DB::rollBack();
+
+					$response['errCode']    = 3;
+		        	$response['errMsg']     = 'Some error in adding agent';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 2;
+		        $response['errMsg']     = 'Agent with the same name already exist';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to fetch the agent list and show in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchAgents()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 't1.id',
+            1 => 't1.id',
+            2 => 't1.id',
+            8 => 't1.status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        $agents 	= DB::select(
+                        DB::raw(
+                        	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.address, t1.postalcode, t1.status, 
+                        	t3.name as province, t4.name as city, t6.company_name
+							FROM users AS t1 
+							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
+							LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
+							LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
+							LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
+							LEFT JOIN companies AS t6 ON t5.company_id = t6.id
+							WHERE t2.role_id = '3' 
+                        	and t1.fname LIKE ('%". $sSearch ."%')
+                        	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
+                        )
+                    );
+
+        $agentsCount = DB::select(
+                            DB::raw("
+	                        SELECT t1.id
+							FROM users AS t1 
+							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
+							LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
+							LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
+							LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
+							LEFT JOIN companies AS t6 ON t5.company_id = t6.id
+							WHERE t2.role_id = '3' 
+                        	and t1.fname LIKE ('%". $sSearch ."%')
+                            ")
+                        );
+
+   	    // Assign it to the datatable pagination variable
+   	    $iTotal = count($agentsCount);
+
+   	    $response = array(
+   	        'iTotalRecords' => $iTotal,
+   	        'iTotalDisplayRecords' => $iTotal,
+   	        'aaData' => array()
+   	    );
+
+   	    $k=0;
+   	    if ( count( $agents ) > 0 )
+   	    {
+   	        foreach ($agents as $agent)
+   	        {
+   	            $response['aaData'][$k] = array(
+   	                0 => $agent->id,
+   	                1 => ucwords( strtolower( $agent->company_name ) ),
+   	                2 => ucwords( strtolower( $agent->agent_name ) ),
+   	                3 => $agent->email,
+   	                4 => $agent->address,
+   	                5 => ucwords( strtolower( $agent->province) ),
+   	                6 => ucwords( strtolower( $agent->city ) ),
+   	                7 => $agent->postalcode,
+   	                8 => Helper::getStatusText($agent->status),
+   	                9 => '<a href="javascript:void(0);" id="'. $agent->id .'" class="edit_agent"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+   	            );
+   	            $k++;
+   	        }
+   	    }
+
+   		return response()->json($response);
+    }
+
+    /**
+     * Function to get the agent details
+     * @param void
+     * @return array
+     */
+    public function getAgentDetails()
+    {
+		$agentId = Input::get('agentId');
+
+		$response = array();
+		if( $agentId != '' )
+		{
+			$agentDetails = User::find($agentId);
+
+			$agentCompanyDetails = $agentDetails->company;
+
+	        $response = array(
+	        	'id' 			=> $agentDetails->id,
+	        	'email' 		=> $agentDetails->email,
+	        	'fname' 		=> $agentDetails->fname,
+	        	'lname' 		=> $agentDetails->lname,
+	        	'address' 		=> $agentDetails->address,
+	        	'province_id' 	=> $agentDetails->province_id,
+	        	'city_id' 		=> $agentDetails->city_id,
+	        	'postalcode' 	=> $agentDetails->postalcode,
+	        	'company_id' 	=> $agentCompanyDetails[0]->id,
+	        	'status' 		=> $agentDetails->status,
+	        );
+
+	        // Get the cities list for the selected province as the city list is filtered to the selected province by using the ajax
+    		$cities = City::where(['province_id' => $agentDetails->province_id])->get();
+
+    		if( count( $cities ) > 0 )
+    		{
+    			foreach ($cities as $city)
+    			{
+	    			$response['cities'][] = array(
+	    				'id' 	=> $city->id,
+	    				'city' 	=> ucwords( strtolower( $city->name ) ),
+	    			);
+    			}
+    		}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to update the agent details
+     * @param void
+     * @return array
+     */
+    public function updateAgent()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $agentData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'agent_company'		=> $agentData['agent_company'],
+		        'agent_fname'		=> $agentData['agent_fname'],
+		        'agent_lname'		=> $agentData['agent_lname'],
+		        'agent_email'		=> $agentData['agent_email'],
+		        'agent_address'		=> $agentData['agent_address'],
+		        'agent_province'	=> $agentData['agent_province'],
+		        'agent_city'		=> $agentData['agent_city'],
+		        'agent_postalcode'	=> $agentData['agent_postalcode'],
+		        'agent_status'		=> $agentData['agent_status']
+		    ),
+		    array(
+		        'agent_company' 	=> array('required'),
+		        'agent_fname' 		=> array('required'),
+		        'agent_lname' 		=> array('required'),
+		        'agent_email' 		=> array('required', 'email'),
+		        'agent_address'		=> array('required'),
+		        'agent_province'	=> array('required'),
+		        'agent_city' 		=> array('required'),
+		        'agent_postalcode' 	=> array('required'),
+		        'agent_status' 		=> array('required')
+		    ),
+		    array(
+		        'agent_company.required'	=> 'Please select company',
+		        'agent_fname.required' 		=> 'Please enter first name',
+		        'agent_lname.required' 		=> 'Please enter last name',
+		        'agent_email.required' 		=> 'Please enter email',
+		        'agent_email.email' 		=> 'Please enter valid email',
+		        'agent_address.required' 	=> 'Please enter address',
+		        'agent_province.required' 	=> 'Please select province',
+		        'agent_city.required' 		=> 'Please select city',
+		        'agent_postalcode.required'	=> 'Please enter postal code',
+		        'agent_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			$user = User::find($agentData['agent_id']);
+
+			DB::beginTransaction();
+
+			$user->email 		= $agentData['agent_email'];
+			$user->fname 		= $agentData['agent_fname'];
+			$user->lname 		= $agentData['agent_lname'];
+			$user->address 		= $agentData['agent_address'];
+			$user->province_id 	= $agentData['agent_province'];
+			$user->city_id 		= $agentData['agent_city'];
+			$user->postalcode 	= $agentData['agent_postalcode'];
+			$user->status 		= $agentData['agent_status'];
+			$user->updated_by 	= $userId;
+
+			if( $user->save() )
+			{
+				// Check if the user company mapping exist or not
+				$user->company()->sync($agentData['agent_company']);
+
+				DB::commit();
+
+				$response['errCode']    = 0;
+	        	$response['errMsg']     = 'Agent added successfully';
+	        	
+			}
+			else
+			{
+				DB::rollBack();
+
+				$response['errCode']    = 3;
+	        	$response['errMsg']     = 'Some error in adding agent';
+			}
+		}
+
+		return response()->json($response);
+    }
 }

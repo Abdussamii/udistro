@@ -125,7 +125,7 @@
 								  		</select>
 								  	</div>
 								  	<div class="col-sm-6">
-								  		<label for="company_city">Ciy</label>
+								  		<label for="company_city">City</label>
 								  		<select name="company_city" id="company_city" class="form-control">
 								  			<option value="">Select</option>
 								  		</select>
@@ -231,7 +231,7 @@
 								  		</select>
 								  	</div>
 								  	<div class="col-sm-6">
-								  		<label for="company_city">Ciy</label>
+								  		<label for="company_city">City</label>
 								  		<select name="company_city" id="company_city" class="form-control">
 								  			<option value="">Select</option>
 								  		</select>
