@@ -315,7 +315,8 @@ class CompanyController extends Controller
 			{
 				// Step I: Add the user
 				// Step II: Add the role_user to sales representative
-				// Step III: Add the company details with associating the user id
+				// Step III: Add the company
+				// Step IV: map the user to company
 
 				// Begin transaction
 				DB::beginTransaction();
@@ -338,7 +339,6 @@ class CompanyController extends Controller
 					// Add the company
 					$company = new Company;
 
-					$company->user_id 				= $user->id;
 					$company->company_name 			= $companyDetails['company_name'];	
 					$company->company_category_id 	= $companyDetails['company_category'];
 					$company->address 				= $companyDetails['company_address'];
@@ -350,6 +350,9 @@ class CompanyController extends Controller
 
 					if( $company->save() )
 					{
+						// Map the user to company
+						$user->company()->attach($company->id);
+
 						DB::commit();
 
 						$response['errCode']    = 0;
@@ -462,7 +465,14 @@ class CompanyController extends Controller
 
 			if( $company->save() )
 			{
-				$user = User::find($company->user_id);
+				$userDetails = DB::table('users as t1')
+						            ->join('company_user as t2', 't1.id', '=', 't2.user_id')
+						            ->join('role_user as t3', 't3.user_id', '=', 't1.id')
+						            ->select('t1.id')
+						            ->where('t3.role_id', '2')
+						            ->first();
+
+				$user = User::find($userDetails->id);
 
 				$user->email 		= $companyDetails['representative_email'];
 				$user->fname 		= $companyDetails['representative_fname'];
@@ -514,24 +524,32 @@ class CompanyController extends Controller
 
         $companies 	= DB::select(
                         DB::raw(
-                        	"SELECT t1.id, t1.company_name, t1.address, t1.postal_code, t1.status, t2.email, CONCAT_WS(' ', t2.fname, t2.lname) AS rep_name, t3.name AS province, t4.name AS city, t5.category 
-                        	FROM companies AS t1 LEFT JOIN users AS t2 ON t1.user_id = t2.id
-                        	LEFT JOIN provinces AS t3 ON t1.province_id = t3.id
-                        	LEFT JOIN cities AS t4 ON t1.city_id = t4.id
-                        	LEFT JOIN company_categories AS t5 ON t1.company_category_id = t5.id
-                        	WHERE t1.company_name LIKE ('%". $sSearch ."%')
+                        	"SELECT t1.id, t1.company_name, t1.address, t1.postal_code, t1.status, t3.email, t3.fname, CONCAT_WS(' ', t3.fname, t3.lname) AS rep_name, 
+							t5.category,
+							t6.name AS province, t7.name AS city 
+							FROM companies AS t1 
+							LEFT JOIN company_user AS t2 ON t1.id = t2.company_id 
+							LEFT JOIN users AS t3 ON t2.user_id = t3.id 
+							LEFT JOIN role_user AS t4 on t4.user_id = t3.id 
+							LEFT JOIN company_categories AS t5 ON t1.company_category_id = t5.id 
+							LEFT JOIN provinces AS t6 ON t1.province_id = t6.id 
+							LEFT JOIN cities AS t7 ON t1.city_id = t7.id 
+							WHERE t4.role_id = 2 AND t1.company_name LIKE ('%". $sSearch ."%')
                         	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
                         )
                     );
 
         $companiesCount = DB::select(
                             DB::raw("
-                            SELECT t1.id 
-                        	FROM companies AS t1 LEFT JOIN users AS t2 ON t1.user_id = t2.id
-                        	LEFT JOIN provinces AS t3 ON t1.province_id = t3.id
-                        	LEFT JOIN cities AS t4 ON t1.city_id = t4.id
-                        	LEFT JOIN company_categories AS t5 ON t1.company_category_id = t5.id
-                        	WHERE t1.company_name LIKE ('%". $sSearch ."%')")
+                            SELECT t1.id
+							FROM companies AS t1 
+							LEFT JOIN company_user AS t2 ON t1.id = t2.company_id 
+							LEFT JOIN users AS t3 ON t2.user_id = t3.id 
+							LEFT JOIN role_user AS t4 on t4.user_id = t3.id 
+							LEFT JOIN company_categories AS t5 ON t1.company_category_id = t5.id 
+							LEFT JOIN provinces AS t6 ON t1.province_id = t6.id 
+							LEFT JOIN cities AS t7 ON t1.city_id = t7.id 
+							WHERE t4.role_id = 2 AND t1.company_name LIKE ('%". $sSearch ."%')")
                         );
 
    	    // Assign it to the datatable pagination variable
@@ -594,10 +612,17 @@ class CompanyController extends Controller
 	    		$response['postal_code'] 		= $companyDetails->postal_code;
 	    		$response['status'] 			= $companyDetails->status;
 
-	    		// Get the companhy representative details
-	    		$companyRepDetails = User::find($companyDetails->user_id);
+	    		// Get the company representative details
+	    		// $companyRepDetails = User::find($companyDetails->user_id);
 
-	    		if( count( $companyRepDetails ) > 0 )
+	    		$companyRepDetails = DB::table('users as t1')
+						            ->join('company_user as t2', 't1.id', '=', 't2.user_id')
+						            ->join('role_user as t3', 't3.user_id', '=', 't1.id')
+						            ->select('t1.id', 't1.email', 't1.fname', 't1.lname')
+						            ->where('t3.role_id', '2')
+						            ->first();
+
+				if( count( $companyRepDetails ) > 0 )
 	    		{
 	    			$response['email'] = $companyRepDetails->email;
 	    			$response['fname'] = $companyRepDetails->fname;
