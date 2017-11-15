@@ -1345,6 +1345,12 @@ $(document).ready(function(){
             },
             payment_plan_status: {
                 required: true
+            },
+            payment_plan_type: {
+            	required: true	
+            },
+            payment_plan_discount: {
+            	number: true
             }
         },
         messages: {
@@ -1365,6 +1371,12 @@ $(document).ready(function(){
             },
             payment_plan_status: {
                 required: 'Please select status'
+            },
+            payment_plan_type: {
+            	required: 'Please select plan type'	
+            },
+            payment_plan_discount: {
+            	number: 'Please enter valid discount value'
             }
         }
     });
@@ -1412,8 +1424,8 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchpaymentplans',
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 3, 4, 5, 6] },
-            { "className": "dt-right", "targets": [2] }
+            { "className": "dt-center", "targets": [0, 6, 7, 8] },
+            { "className": "dt-right", "targets": [2, 3, 4, 5] }
         ],
         "aoColumns": [
             { 'bSortable' : true },
@@ -1421,6 +1433,8 @@ $(document).ready(function(){
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
             { 'bSortable' : true },
             { 'bSortable' : false }
         ]
@@ -1444,8 +1458,10 @@ $(document).ready(function(){
 
 			    	// Auto-fill the form
 			    	$('#frm_add_payment_plan #payment_plan_id').val(planId);
+			    	$('#frm_add_payment_plan #payment_plan_type').val(response.plan_type_id);
 			    	$('#frm_add_payment_plan #payment_plan_name').val(response.plan_name);
 			    	$('#frm_add_payment_plan #payment_plan_charge').val(response.plan_charge);
+			    	$('#frm_add_payment_plan #payment_plan_discount').val(response.discount);
 			    	$('#frm_add_payment_plan #payment_plan_validity').val(response.validity_days);
 			    	$('#frm_add_payment_plan #payment_plan_emails').val(response.no_of_emails);
 			    	$('#frm_add_payment_plan input[name="payment_plan_status"][value="'+ response.status +'"]').prop('checked', true);

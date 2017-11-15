@@ -20,8 +20,10 @@
 						<td>#</td>
 						<td>Plan Name</td>
 						<td style="text-align: center;">Charge</td>
+						<td style="text-align: center;">Discount</td>
 						<td>Validity (In Days)</td>
 						<td>Number Of Emails</td>
+						<td>Plan Type</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>
@@ -51,12 +53,31 @@
 								<input type="text" name="payment_plan_charge" id="payment_plan_charge" class="form-control" placeholder="Enter charge">
 							</div>
 							<div class="form-group">
+								<label for="payment_plan_discount">Payment Plan Discount</label>
+								<input type="text" name="payment_plan_discount" id="payment_plan_discount" class="form-control" placeholder="Enter charge">
+							</div>
+							<div class="form-group">
 								<label for="payment_plan_validity">Validity (In days)</label>
 								<input type="text" name="payment_plan_validity" id="payment_plan_validity" class="form-control" placeholder="Enter validity">
 							</div>
 							<div class="form-group">
 								<label for="payment_plan_emails">Number of emails</label>
 								<input type="text" name="payment_plan_emails" id="payment_plan_emails" class="form-control" placeholder="Enter number of emails">
+							</div>
+							<div class="form-group">
+								<label for="payment_plan_type">Plan Type</label>
+								<select name="payment_plan_type" id="payment_plan_type" class="form-control">
+									<option value="">Select</option>
+									<?php
+									if( isset( $paymentPlanTypes ) && count( $paymentPlanTypes ) > 0 )
+									{
+										foreach($paymentPlanTypes as $paymentPlanType)
+										{
+											echo '<option value="'. $paymentPlanType->id .'">'. ucwords( strtolower( $paymentPlanType->plan_type ) ) .'</option>';
+										}
+									}
+									?>
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="payment_plan_status">Status</label>

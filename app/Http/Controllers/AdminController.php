@@ -27,6 +27,7 @@ use App\UtilityServiceType;
 use App\UtilityServiceProvider;
 use App\CompanyCategory;
 use App\PaymentPlan;
+use App\PaymentPlanType;
 use App\City;
 
 use Validator;
@@ -1863,7 +1864,10 @@ class AdminController extends Controller
      */
     public function paymentPlans()
     {
-    	return view('administrator/paymentPlans');
+    	// Get the payment plan type list
+    	$paymentPlanTypes = PaymentPlanType::where(['status' => '1'])->select('id', 'plan_type')->orderBy('plan_type', 'asc')->get();
+
+    	return view('administrator/paymentPlans', ['paymentPlanTypes' => $paymentPlanTypes]);
     }
 
     /**
@@ -1891,6 +1895,8 @@ class AdminController extends Controller
 		        'payment_plan_charge'	=> $planDetails['payment_plan_charge'],
 		        'payment_plan_validity'	=> $planDetails['payment_plan_validity'],
 		        'payment_plan_emails'	=> $planDetails['payment_plan_emails'],
+		        'payment_plan_discount'	=> $planDetails['payment_plan_discount'],
+		        'payment_plan_type'		=> $planDetails['payment_plan_type'],
 		        'payment_plan_status'	=> $planDetails['payment_plan_status']
 		    ),
 		    array(
@@ -1898,6 +1904,8 @@ class AdminController extends Controller
 		        'payment_plan_charge' 	=> array('required', 'numeric'),
 		        'payment_plan_validity' => array('required', 'integer'),
 		        'payment_plan_emails' 	=> array('required', 'integer'),
+		        'payment_plan_discount' => array('numeric'),
+		        'payment_plan_type' 	=> array('required'),
 		        'payment_plan_status' 	=> array('required')
 		    ),
 		    array(
@@ -1908,6 +1916,8 @@ class AdminController extends Controller
 		        'payment_plan_validity.integer' => 'Please enter a valid value',
 		        'payment_plan_emails.required' 	=> 'Please enter number of emails',
 		        'payment_plan_emails.integer' 	=> 'Please enter a valid value',
+		        'payment_plan_discount.required'=> 'Please enter valid discount value',
+		        'payment_plan_type.required' 	=> 'Please select plan type',
 		        'payment_plan_status.required' 	=> 'Please select status'
 		    )
 		);
@@ -1933,6 +1943,8 @@ class AdminController extends Controller
 				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
 				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
 				$paymentPlan->number_of_emails 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->plan_type_id 		= $planDetails['payment_plan_type'];
+				$paymentPlan->discount 			= $planDetails['payment_plan_discount'];
 				$paymentPlan->status 			= $planDetails['payment_plan_status'];
 				$paymentPlan->created_by 		= $userId;
 
@@ -1955,6 +1967,8 @@ class AdminController extends Controller
 				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
 				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
 				$paymentPlan->number_of_emails 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->plan_type_id 		= $planDetails['payment_plan_type'];
+				$paymentPlan->discount 			= $planDetails['payment_plan_discount'];
 				$paymentPlan->status 			= $planDetails['payment_plan_status'];
 				$paymentPlan->updated_by 		= $userId;
 
@@ -1992,9 +2006,10 @@ class AdminController extends Controller
             0 => 'id',
             1 => 'plan_name',
             2 => 'plan_charges',
-            3 => 'validity_days',
-            4 => 'number_of_emails',
-            5 => 'status'
+            3 => 'discount',
+            4 => 'validity_days',
+            5 => 'number_of_emails',
+            7 => 'status'
         );
 
         // Map the sorting column index to the column name
@@ -2005,7 +2020,7 @@ class AdminController extends Controller
                     ->orderBy($sortBy, $sortType)
                     ->limit($length)
                     ->offset($start)
-                    ->select('id', 'plan_name', 'plan_charges', 'validity_days', 'number_of_emails', 'status')
+                    ->select('id', 'plan_type_id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'number_of_emails', 'status')
                     ->get();
 
         $iTotal = PaymentPlan::where('plan_name','like', '%'.$sSearch.'%')->count();
@@ -2026,10 +2041,12 @@ class AdminController extends Controller
                     0 => $paymentPlan->id,
                     1 => ucwords( strtolower( $paymentPlan->plan_name ) ),
                     2 => $paymentPlan->plan_charges,
-                    3 => $paymentPlan->validity_days,
-                    4 => $paymentPlan->number_of_emails,
-                    5 => Helper::getStatusText($paymentPlan->status),
-                    6 => '<a href="javascript:void(0);" id="'. $paymentPlan->id .'" class="edit_payment_plan"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    3 => ( $paymentPlan->discount != '' ) ? $paymentPlan->discount: 'NA',
+                    4 => $paymentPlan->validity_days,
+                    5 => $paymentPlan->number_of_emails,
+                    6 => PaymentPlan::find($paymentPlan->plan_type_id)->paymentPlanType->plan_type,
+                    7 => Helper::getStatusText($paymentPlan->status),
+                    8 => '<a href="javascript:void(0);" id="'. $paymentPlan->id .'" class="edit_payment_plan"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2068,8 +2085,10 @@ class AdminController extends Controller
     		if( count( $planDetails ) > 0 )
     		{
 	    		$response['id'] 			= $planDetails->id;
+	    		$response['plan_type_id'] 	= $planDetails->plan_type_id;
     			$response['plan_name'] 		= $planDetails->plan_name;
     			$response['plan_charge'] 	= $planDetails->plan_charges;
+	    		$response['discount'] 		= $planDetails->discount;
     			$response['validity_days'] 	= $planDetails->validity_days;
     			$response['no_of_emails'] 	= $planDetails->number_of_emails;
     			$response['status'] 		= $planDetails->status;

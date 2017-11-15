@@ -16,4 +16,14 @@ class PaymentPlan extends Model
     ];
 
     public $timestamps = true;
+
+    /**
+     * Get the payment plan type associated with the payment plan.
+     */
+    public function paymentPlanType()
+    {
+        // return $this->hasOne('App\PaymentPlanType');
+
+        return $this->hasOne('App\PaymentPlanType', 'id');
+    }
 }

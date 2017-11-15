@@ -29,6 +29,7 @@ use App\CompanyCategory;
 use App\PaymentPlan;
 use App\City;
 use App\Company;
+use App\PaymentPlanType;
 
 use Validator;
 use Helper;
