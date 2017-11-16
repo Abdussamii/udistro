@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
 });
 
 // Administrator openly access routes
@@ -207,6 +207,38 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	/* ---------- Company related functionality ---------- */
 
 });
+
+/* ---------- Agent related functionality ---------- */
+
+// Agent openly access routes
+Route::group(['prefix' => 'agent'], function() {
+	
+	// Agent login page
+	Route::get('/', 'AgentController@index');
+
+	// Function to check user credentials
+	Route::post('/login', 'AgentController@login');
+
+});
+
+// Agent protected routes
+Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
+
+	// Agent dashboard
+	Route::get('/dashboard', 'AgentController@dashboard');
+
+	// To show agent clients listing page
+	Route::get('/clients', 'AgentController@clients');
+
+	// To save the client details
+	Route::post('/saveclient', 'AgentController@saveClient');
+
+	// To fetch the clients list and show in datatable
+	Route::get('/fetchclients', 'AgentController@fetchClients');
+
+});
+
+/* ---------- Agent related functionality ---------- */
 
 // Logout
 Route::get('/logout', 'HomeController@logout');

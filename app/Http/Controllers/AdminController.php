@@ -65,7 +65,7 @@ class AdminController extends Controller
     /**
      * Function for admin login
      * @param void
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function login()
     {
@@ -115,11 +115,12 @@ class AdminController extends Controller
 		{
 			// Check for the credential and role. Only back-end user can login here
 			
-			$user = User::where('email', '=', $loginData['username'])->first();
+			// $user = User::where('email', '=', $loginData['username'])->first();
+			$user = User::where(['email' => $loginData['username'], 'status' => '1'])->first();
 
 			if( count($user)  > 0 )
 			{
-		        if( $user->hasRole(['admin', 'agent']) )	// list of allowed users
+		        if( $user->hasRole(['admin']) )	// list of allowed users
 		        {
 		            if(Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember))
 		            {
