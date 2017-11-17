@@ -236,6 +236,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To fetch the clients list and show in datatable
 	Route::get('/fetchclients', 'AgentController@fetchClients');
 
+	// To get the details of the selected client
+	Route::get('/getclientdetails', 'AgentController@getClientDetails');
+
 });
 
 /* ---------- Agent related functionality ---------- */

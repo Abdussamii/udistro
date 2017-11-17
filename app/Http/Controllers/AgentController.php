@@ -265,27 +265,67 @@ class AgentController extends Controller
 		}
 		else
 		{
-			// Save the client details
-			$agent = new AgentClient;
-
-			$agent->agent_id 		= $userId;
-			$agent->fname 			= $clientData['client_fname'];
-			$agent->lname 			= $clientData['client_mname'];
-			$agent->oname 			= $clientData['client_lname'];
-			$agent->email 			= $clientData['client_email'];
-			$agent->contact_number 	= $clientData['client_number'];
-			$agent->status 			= $clientData['client_status'];
-			$agent->created_by 		= $userId;
-
-			if( $agent->save() )
+			// Check if the client_id is available or not. If available, edit the client, otherwise add it.
+			if( $clientData['client_id'] == '' )
 			{
-				$response['errCode']    = 0;
-			    $response['errMsg']     = 'Client added successfully';
+				// Save the client details
+				$agentClient = new AgentClient;
+
+				$agentClient->agent_id 		= $userId;
+				$agentClient->fname 			= $clientData['client_fname'];
+				$agentClient->lname 			= $clientData['client_mname'];
+				$agentClient->oname 			= $clientData['client_lname'];
+				$agentClient->email 			= $clientData['client_email'];
+				$agentClient->contact_number 	= $clientData['client_number'];
+				$agentClient->status 			= $clientData['client_status'];
+				$agentClient->created_by 		= $userId;
+
+				if( $agentClient->save() )
+				{
+					$response['errCode']    = 0;
+				    $response['errMsg']     = 'Client added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 1;
+				    $response['errMsg']     = 'Some issue in adding the client';
+				}
 			}
 			else
 			{
-				$response['errCode']    = 1;
-			    $response['errMsg']     = 'Some issue in adding the client';
+				// Update the client details
+				$agentClient = AgentClient::find($clientData['client_id']);
+
+				// Check if the the client is associated with the agent or not
+
+				if( $userId == $agentClient->agent_id )
+				{
+					$agentClient->agent_id 		= $userId;
+					$agentClient->fname 			= $clientData['client_fname'];
+					$agentClient->lname 			= $clientData['client_mname'];
+					$agentClient->oname 			= $clientData['client_lname'];
+					$agentClient->email 			= $clientData['client_email'];
+					$agentClient->contact_number 	= $clientData['client_number'];
+					$agentClient->status 			= $clientData['client_status'];
+					$agentClient->updated_by 		= $userId;
+
+					if( $agentClient->save() )
+					{
+						$response['errCode']    = 0;
+					    $response['errMsg']     = 'Client added successfully';
+					}
+					else
+					{
+						$response['errCode']    = 1;
+					    $response['errMsg']     = 'Some issue in adding the client';
+					}
+				}
+				else
+				{
+					$response['errCode']    = 2;
+					$response['errMsg']     = 'You cannot update this client, as this belongs to some other agent';
+				}
+
 			}
 		}
 
@@ -351,11 +391,53 @@ class AgentController extends Controller
                     4 => $agent->email,
                     5 => $agent->contact_number,
                     6 => Helper::getStatusText($agent->status),
-                    7 => '<a href="javascript:void(0);"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" id="'. $agent->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    7 => '<a href="javascript:void(0);" data-toggle="tooltip" title="Invite Client"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" data-toggle="tooltip" title="Edit Client" id="'. $agent->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
         }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function get the details of the selected client
+     * @param void
+     * @return array
+     */
+    public function getClientDetails()
+    {
+    	$clientId = Input::get('clientId');
+
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $response = array();
+    	if( $clientId != '' )
+    	{
+    		// Get the client details
+    		$clientDetails = AgentClient::find($clientId);
+
+    		// Check if the client is associated with the agent or not
+    		if( $userId == $clientDetails->agent_id )
+    		{
+    			$response['errCode']    = 0;
+			    $response['errMsg']     = 'Success';
+			    $response['details']   	= array(
+			    	'fname' 	=> $clientDetails->fname,
+			    	'mname' 	=> $clientDetails->oname,
+			    	'lname' 	=> $clientDetails->lname,
+			    	'email' 	=> $clientDetails->email,
+			    	'contact_no'=> $clientDetails->contact_number,
+			    	'status' 	=> $clientDetails->status
+			    );
+    		}
+    		else
+    		{
+    			$response['errCode']    = 1;
+			    $response['errMsg']     = 'You cannot update this client, as this belongs to some other agent';
+    		}
+    	}
 
     	return response()->json($response);
     }
