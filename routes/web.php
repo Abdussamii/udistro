@@ -243,5 +243,18 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 /* ---------- Agent related functionality ---------- */
 
+
+/* ---------- Movers related functionality ---------- */
+
+// Agent openly access routes
+Route::group(['prefix' => 'movers'], function() {
+	
+	// Agent login page
+	Route::get('/', 'MoversController@index');
+	
+});
+
+/* ---------- Movers related functionality ---------- */
+
 // Logout
 Route::get('/logout', 'HomeController@logout');
