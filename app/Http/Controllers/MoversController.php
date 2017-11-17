@@ -7,10 +7,10 @@ use Illuminate\Routing\Controller as Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+
+use App\PaymentPlan;
 
 class MoversController extends Controller
 {
@@ -31,7 +31,8 @@ class MoversController extends Controller
      */
     public function index()
     {
-    	return view('movers/homepage');
+        $paymentPlan = PaymentPlan::get();
+    	return view('movers/index', ['paymentPlan' => $paymentPlan]);
     }
 
 }

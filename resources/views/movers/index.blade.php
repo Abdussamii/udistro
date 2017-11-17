@@ -1,20 +1,7 @@
-@extends('movers.layouts.header')
+@extends('movers.layouts.app')
 @section('title', 'Udistro')
 
 @section('content')
-	<!----------------Navbar------------->
-<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#"><img src="{{ url('/') . '/images/logo.png' }}" alt="Udistro" /></a>
-        </div>
-          <ul class="nav navbar-nav navbar-right navbar-top-link">
-            <li><a href="#"><i><img src="{{ url('/') . '/images/truck.png' }}" /></i> <span><u>For Business</u></span></a></li>
-            <li><a href="#"><button type="button" class="btn btn-blue">Login</button></a></li>
-          </ul>
-      </div>
-    </nav>
-<!------------End Navbar------------->
 <!--Video Section-->
 <section class="content-section video-section">
   <div class="video_bg">
@@ -252,18 +239,18 @@
               <div class="col-md-4">
                 <div class="panel panel-danger light-seegreen">
                   <div class="panel-heading">
-                    <h3 class="text-center">Basic</h3>
+                    <h3 class="text-center"><?=$paymentPlan[0]->plan_name?></h3>
                     <p class="text-center plan">Trial Plan</p>
                   </div>
                   <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">1-2 Email per user per month</li>
+                    <li class="list-group-item">1-<?=$paymentPlan[0]->number_of_emails?> Email per user per month</li>
                     <li class="list-group-item">Brand Emails</li>
                     <li class="list-group-item">Custom Logo</li>
                     <li class="list-group-item">Review Brand</li>
                   </ul>
                   <div class="panel-body text-center">
                     <p class="lead" style="font-size:30px">
-                    <strong><span class="dollor">$</span><span class="price-d">0.<small>00</small></span><br>
+                    <strong><span class="dollor">$</span><span class="price-d"><?=floor($paymentPlan[0]->plan_charges)?>.<small>00</small></span><br>
                     <p class="monthly">per month</p>
                     </strong>
                     </p>
@@ -274,18 +261,18 @@
               <div class="col-md-4">
                 <div class="panel panel-danger purple">
                   <div class="panel-heading">
-                    <h3 class="text-center">Standard</h3>
+                    <h3 class="text-center"><?=$paymentPlan[1]->plan_name?></h3>
                     <p class="text-center plan">Premium Plan</p>
                   </div>
                   <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">1-50 Email per user per month</li>
+                    <li class="list-group-item">1-<?=$paymentPlan[1]->number_of_emails?> Email per user per month</li>
                     <li class="list-group-item">Brand Emails</li>
                     <li class="list-group-item">Custom Logo</li>
                     <li class="list-group-item">Review Brand</li>
                   </ul>
                   <div class="panel-body text-center">
                     <p class="lead" style="font-size:30px">
-                    <strong><span class="dollor">$</span><span class="price-d">13.<small>99</small></span><br>
+                    <strong><span class="dollor">$</span><span class="price-d"><?=floor($paymentPlan[1]->plan_charges)?>.<small>00</small></span><br>
                     <p class="monthly">per month</p>
                     </strong>
                     </p>
@@ -296,18 +283,18 @@
               <div class="col-md-4">
                 <div class="panel panel-danger black">
                   <div class="panel-heading">
-                    <h3 class="text-center">Proffesional</h3>
+                    <h3 class="text-center"><?=$paymentPlan[2]->plan_name?></h3>
                     <p class="text-center plan">Premium Plan</p>
                   </div>
                   <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">1-500 Email per user per month</li>
+                    <li class="list-group-item">1-<?=$paymentPlan[2]->number_of_emails?> Email per user per month</li>
                     <li class="list-group-item">Brand Emails</li>
                     <li class="list-group-item">Custom Logo</li>
                     <li class="list-group-item">Review Brand</li>
                   </ul>
                   <div class="panel-body text-center">
                     <p class="lead" style="font-size:30px">
-                    <strong><span class="dollor">$</span><span class="price-d">49.<small>99</small></span><br>
+                    <strong><span class="dollor">$</span><span class="price-d"><?=floor($paymentPlan[2]->plan_charges)?>.<small>00</small></span><br>
                     <p class="monthly">per month</p>
                     </strong>
                     </p>
@@ -325,49 +312,4 @@
     </div>
   </div>
 </section>
-<footer class="footer-main section-pd">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="media-body client-achive-step">
-          <h2 class="media-heading">Company</h2>
-        </div>
-        <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
-          <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <div class="media-body client-achive-step">
-          <h2 class="media-heading">Important Links</h2>
-        </div>
-        <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <div class="media-body client-achive-step">
-          <h2 class="media-heading">Follow Us</h2>
-        </div>
-        <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
-          <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
 @endsection
