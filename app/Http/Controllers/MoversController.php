@@ -19,19 +19,14 @@ class MoversController extends Controller
      *
      * @return void
      */
+    private $navigationArray;
+
     public function __construct()
     {
 
-    }
-
-    /**
-     * Function to return login view
-     * @param void
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $paymentPlan = PaymentPlan::get();
+        /**
+            Footer Navigation DB Fetch 
+        */
         $bottomNavigationArray = DB::table('cms_navigation_types')
             ->join('cms_navigation_categories', 'cms_navigation_types.id', '=', 'cms_navigation_categories.navigation_type_id')
             ->join('cms_navigation_cms_navigation_category', 'cms_navigation_cms_navigation_category.cms_navigation_category_id', '=', 'cms_navigation_categories.id')
@@ -60,8 +55,19 @@ class MoversController extends Controller
             $navigationArray[$i]['navigation'][$j]['navigation_text'] = $bottomNavigation->navigation_text;
             $navigationArray[$i]['navigation'][$j]['navigation_url'] = $bottomNavigation->navigation_url;
         }
+        $this->navigationArray = $navigationArray;
+        
+    }
 
-    	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $navigationArray]);
+    /**
+     * Function to return login view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $paymentPlan = PaymentPlan::get();
+    	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->navigationArray]);
     }
 
 }
