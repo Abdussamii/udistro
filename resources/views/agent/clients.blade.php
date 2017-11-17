@@ -45,6 +45,7 @@
 							<div class="form-group">
 								<label for="client_fname">First Name</label>
 								<input type="text" name="client_fname" id="client_fname" class="form-control" placeholder="Enter first name">
+								<input type="hidden" name="client_id" id="client_id" value="">
 							</div>
 							<div class="form-group">
 								<label for="client_mname">Middle Name</label>

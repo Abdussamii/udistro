@@ -69,6 +69,12 @@ $(document).ready(function(){
 
     // To add new agent
     $('#btn_modal_client').click(function(){
+    	// Set the title
+    	$('#modal_add_client').find('.modal-title').html('Add Client');
+
+    	// Refresh the client_id value
+		$('#client_id').val('');
+
     	// Show the modal
 		$('#modal_add_client').modal('show');
     });
@@ -178,5 +184,47 @@ $(document).ready(function(){
             { 'bSortable' : true },
             { 'bSortable' : false }
         ]
+    });
+
+    // To edit the client details
+    $(document).on('click', '.edit_client', function(){
+    	var clientId = $(this).attr('id');
+
+    	if( clientId != '' )
+    	{
+    		// Get the navigation category details for the selected category
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/agent/getclientdetails',
+    			method: 'get',
+    			data: {
+    				clientId: clientId
+    			},
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		// Set the title
+				    	$('#modal_add_client').find('.modal-title').html('Edit Client');
+
+				    	// Auto-fill the form
+				    	$('#frm_add_client #client_id').val(clientId);
+
+				    	$('#frm_add_client #client_fname').val(response.details.fname);
+				    	$('#frm_add_client #client_mname').val(response.details.mname);
+				    	$('#frm_add_client #client_lname').val(response.details.lname);
+				    	$('#frm_add_client #client_email').val(response.details.email);
+				    	$('#frm_add_client #client_number').val(response.details.contact_no);
+				    	
+				    	$('#frm_add_client input[name="client_status"][value="'+ response.details.status +'"]').prop('checked', true);
+
+				    	// Show the modal
+				    	$('#modal_add_client').modal('show');
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
     });
 });

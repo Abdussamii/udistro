@@ -83,6 +83,13 @@
     }
     </style>
 
+    <script type="text/javascript">
+    $(document).ready(function(){
+    	// Initiate the tooltip for static as well as dynamic content also
+    	$('body').tooltip({selector: '[data-toggle="tooltip"]'});
+    });
+    </script>
+
 </head>
 
 <body>
