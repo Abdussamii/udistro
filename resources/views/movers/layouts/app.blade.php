@@ -46,45 +46,28 @@
         <footer class="footer-main section-pd">
           <div class="container">
             <div class="row">
+            <?php if(count($navigationArray) > 0) {
+                    foreach ($navigationArray as $categoryArray) {
+            ?>
               <div class="col-md-4">
                 <div class="media-body client-achive-step">
-                  <h2 class="media-heading">Company</h2>
+                  <h2 class="media-heading"><?=$categoryArray['category']?></h2>
                 </div>
                 <ul class="list-group custom-listgroup">
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
-                  <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
+                <?php 
+                if(count($categoryArray['navigation']) > 0) {
+                  foreach ($categoryArray['navigation'] as $linkArray) { ?>
+                  <li class="list-group-item"><a href="/<?=$linkArray['navigation_url']?>"><i class="fa fa-angle-double-right" aria-hidden="true"></i><?=$linkArray['navigation_text']?></a></li>
+                <?php 
+                  }
+                } 
+                ?>
                 </ul>
               </div>
-              <div class="col-md-4">
-                <div class="media-body client-achive-step">
-                  <h2 class="media-heading">Important Links</h2>
-                </div>
-                <ul class="list-group custom-listgroup">
-                  <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
-                </ul>
-              </div>
-              <div class="col-md-4">
-                <div class="media-body client-achive-step">
-                  <h2 class="media-heading">Follow Us</h2>
-                </div>
-                <ul class="list-group custom-listgroup">
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
-                  <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
-                </ul>
-              </div>
+            <?php
+                }
+              }
+            ?>
             </div>
           </div>
         </footer>
