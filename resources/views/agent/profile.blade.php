@@ -8,6 +8,6 @@
         </div>
     </div>
     <div class="row">
-        Page content here
+        
     </div>
 @endsection

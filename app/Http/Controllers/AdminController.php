@@ -459,15 +459,15 @@ class AdminController extends Controller
 		   				foreach ($inputData['navigation_categories'] as $key => $value)
 				   		{
 				   			$categoryNavigation[] = array(
-				   				'category_id' 	=> $value,
-				   				'navigation_id' => $navigation->id,
+				   				'cms_navigation_category_id' 	=> $value,
+				   				'cms_navigation_id' => $navigation->id,
 				   				'status' 		=> $inputData['navigation_status']
 				   			);
 				   		}
 
 				   		if( count( $categoryNavigation ) > 0 )
 				   		{
-					   		if( DB::table('category_navigation')->insert($categoryNavigation) )
+					   		if( DB::table('cms_navigation_cms_navigation_category')->insert($categoryNavigation) )
 				   			{
 				   				DB::commit();
 

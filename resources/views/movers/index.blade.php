@@ -234,6 +234,8 @@
         <div class="section-organise">
           	<h2 class="center-block title-main">Our Price!</h2>
           	<p class="discretion-pdb"> Less is more! Udistro will give you quality you’d expect at price you wouldn’t.</p>
+
+          	<!-- Payment plan here -->
           	<div class="row">
 	            <div class="col-md-10 col-md-offset-1">
 	            <?php 
