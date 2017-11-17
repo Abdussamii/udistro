@@ -6,10 +6,10 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#"><img src="images/logo.png" alt="Udistro" /></a>
+          <a class="navbar-brand" href="#"><img src="{{ url('/') . '/images/logo.png' }}" alt="Udistro" /></a>
         </div>
           <ul class="nav navbar-nav navbar-right navbar-top-link">
-            <li><a href="#"><i><img src="images/truck.png" /></i> <span><u>For Business</u></span></a></li>
+            <li><a href="#"><i><img src="{{ url('/') . '/images/truck.png' }}" /></i> <span><u>For Business</u></span></a></li>
             <li><a href="#"><button type="button" class="btn btn-blue">Login</button></a></li>
           </ul>
       </div>
@@ -28,7 +28,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <div class="logo_banner"><img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro"></div>
+          <div class="logo_banner"><img src="{{ url('/') . '/images/logo.png' }}" class="center-block img-responsive" alt="udistro"></div>
           <h1 class="title_banner">Improving relocation experience for 4 million household movers in Canada every year.</h1>
           <div class="banner_btn-group center-block">
             <button type="button" class="btn banner_btn btn-lg green_btn">I am Moving</button>
@@ -84,28 +84,28 @@
     <div class="row">
       <div class="col-md-3">
         <div class="serviceBox">
-          <div class="serviceIcon text-center"><img src="images/mail-icon.png" alt="Mail Icon"/></div>
+          <div class="serviceIcon text-center"><img src="{{ url('/') . '/images/mail-icon.png' }}" alt="Mail Icon"/></div>
           <h3 class="text-center">Forward Mail</h3>
           <p class="text-justify">Relax your mind, knowing you’re not going to miss any important mail. Mail forwarding is more dependable than your neighbors and we made it easy for you to buy online or at the post office.</p>
         </div>
       </div>
       <div class="col-md-3">
         <div class="serviceBox">
-          <div class="serviceIcon text-center"><img src="images/add_icon.png" alt="Address"/></div>
+          <div class="serviceIcon text-center"><img src="{{ url('/') . '/images/add_icon.png' }}" alt="Address"/></div>
           <h3 class="text-center">Change Address</h3>
           <p class="text-justify">Let's help you update your new address with those mailers that Canada post is not able to — especially infrequent mailers such as, Canada Revenue Agency, License Agency, etc.</p>
         </div>
       </div>
       <div class="col-md-3">
         <div class="serviceBox">
-          <div class="serviceIcon text-center"><img src="images/connect_icon.png" alt="Connect"/></div>
+          <div class="serviceIcon text-center"><img src="{{ url('/') . '/images/connect_icon.png' }}" alt="Connect"/></div>
           <h3 class="text-center">Connect Utilities</h3>
           <p class="text-justify">If you like saving time and money, you’re going to like this. We’ve have the lists of the Utility companies that serve your new area, making it convenient for you to pick up phone and call them.</p>
         </div>
       </div>
       <div class="col-md-3">
         <div class="serviceBox">
-          <div class="serviceIcon text-center"><img src="images/update_icon.png" alt="Update"/></div>
+          <div class="serviceIcon text-center"><img src="{{ url('/') . '/images/update_icon.png' }}" alt="Update"/></div>
           <h3 class="text-center">Updates Friend & Families</h3>
           <p class="text-justify">When it comes to happiness, our nearest and dearest really matter. Use this tools to share the news of your new home with friends and families. Not forgetting to drop a thank you note to your agents as well.</p>
         </div>
@@ -128,7 +128,7 @@
             <div class="stepsNumb"><span class="round-tab"> 1 </span></div>
             <div class="steps stepsOne timeline-panel">
               <div class="media">
-                <div class="media-left"> <a href="#"> <img class="media-object" src="images/step_one.png" alt="Steps One"> </a> </div>
+                <div class="media-left"> <a href="#"> <img class="media-object" src="{{ url('/') . '/images/step_one.png' }}" alt="Steps One"> </a> </div>
                 <div class="media-body">
                   <h2 class="media-heading">Set up uDistro account</h2>
                   <p class="text-justify"> Stand out in your local market. We know you're an expert at what you do but our moving application will help you get the attention you deserve. With uDistro, you are now able to help your customers move everything — even intangible things, such as utilities and mail forwarding. </p>
@@ -140,7 +140,7 @@
             <div class="stepsNumb"><span class="round-tab yellow-cd"> 2 </span></div>
             <div class="steps stepsOne timeline-panel timeline-inverted">
               <div class="media">
-                <div class="media-left pull-right"> <a href="#"> <img class="media-object" src="images/step_two.png" alt="Steps One"> </a> </div>
+                <div class="media-left pull-right"> <a href="#"> <img class="media-object" src="{{ url('/') . '/images/step_two.png' }}" alt="Steps One"> </a> </div>
                 <div class="media-body media-body-right">
                   <h2 class="media-heading yellow-cd-aft">Update your brand image</h2>
                   <p class="text-justify"> Add value in the face of disruptive technologies. Streamline moving process for your clients, by offering them a free service for their patronage. Your team can now focus on the business you do best and allow uDistro put you on top of the rankings in your industry. </p>
@@ -152,7 +152,7 @@
             <div class="stepsNumb"><span class="round-tab orange-cd"> 3 </span></div>
             <div class="steps stepsOne timeline-panel">
               <div class="media">
-                <div class="media-left"> <a href="#"> <img class="media-object" src="images/step_three.png" alt="Steps One"> </a> </div>
+                <div class="media-left"> <a href="#"> <img class="media-object" src="{{ url('/') . '/images/step_three.png' }}" alt="Steps One"> </a> </div>
                 <div class="media-body">
                   <h2 class="media-heading orange-cd-aft">Invite new Clients</h2>
                   <p class="text-justify">Start inviting new clients to use uDistro. In order to gain access to uDistro, you must invite your clients – from your real estate agent account. Once you've invited them, they simply claim the account, and start crossing items off the moving checklist! Your clients can file their official Canada post mail forwarding form in one click. </p>
@@ -164,7 +164,7 @@
             <div class="stepsNumb"><span class="round-tab pink-cd"> 2 </span></div>
             <div class="steps stepsOne timeline-panel timeline-inverted">
               <div class="media">
-                <div class="media-left pull-right"> <a href="#"> <img class="media-object" src="images/step_four.png" alt="Steps One"> </a> </div>
+                <div class="media-left pull-right"> <a href="#"> <img class="media-object" src="{{ url('/') . '/images/step_four.png' }}" alt="Steps One"> </a> </div>
                 <div class="media-body media-body-right">
                   <h2 class="media-heading pink-cd-aft">Become their Hero</h2>
                   <p class="text-justify">uDistro streamlines the moving process for your clients, while making you look real great. You simply become their hero. They cap it up by sending a digital moving e-card, branded for your company, to friends and family with their new address. What a kind referral this would be! </p>
