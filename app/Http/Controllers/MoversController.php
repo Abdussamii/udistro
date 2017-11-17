@@ -11,10 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\PaymentPlan;
-use App\CmsNavigationType;
-use App\CmsNavigationCategory;
-use App\CmsNavigation;
-use App\CmsPage;
 
 class MoversController extends Controller
 {
@@ -64,7 +60,7 @@ class MoversController extends Controller
             $navigationArray[$i]['navigation'][$j]['navigation_text'] = $bottomNavigation->navigation_text;
             $navigationArray[$i]['navigation'][$j]['navigation_url'] = $bottomNavigation->navigation_url;
         }
-        //echo '<pre>'; print_r($navigationArray); die();
+
     	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $navigationArray]);
     }
 
