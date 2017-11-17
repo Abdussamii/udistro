@@ -19,7 +19,7 @@ class MoversController extends Controller
      *
      * @return void
      */
-    private $navigationArray;
+    private $_navigationArray;
 
     public function __construct()
     {
@@ -55,7 +55,7 @@ class MoversController extends Controller
             $navigationArray[$i]['navigation'][$j]['navigation_text'] = $bottomNavigation->navigation_text;
             $navigationArray[$i]['navigation'][$j]['navigation_url'] = $bottomNavigation->navigation_url;
         }
-        $this->navigationArray = $navigationArray;
+        $this->_navigationArray = $navigationArray;
         
     }
 
@@ -67,7 +67,7 @@ class MoversController extends Controller
     public function index()
     {
         $paymentPlan = PaymentPlan::get();
-    	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->navigationArray]);
+    	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->_navigationArray]);
     }
 
 }

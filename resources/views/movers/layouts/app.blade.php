@@ -1,6 +1,3 @@
-<?php
-//echo '<pre>'; print_r($paymentPlan[0]); die();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,7 +68,7 @@
             </div>
           </div>
         </footer>
-        
+
 </body>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
