@@ -441,4 +441,14 @@ class AgentController extends Controller
 
     	return response()->json($response);
     }
+
+    /**
+     * Function to return agent profile page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function profile()
+    {
+    	return view('agent/profile');
+    }
 }

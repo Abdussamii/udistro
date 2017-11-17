@@ -232,81 +232,47 @@
     <div class="row">
       <div class="col-md-12">
         <div class="section-organise">
-          <h2 class="center-block title-main">Our Price!</h2>
-          <p class="discretion-pdb"> Less is more! Udistro will give you quality you’d expect at price you wouldn’t.</p>
-          <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-              <div class="col-md-4">
-                <div class="panel panel-danger light-seegreen">
-                  <div class="panel-heading">
-                    <h3 class="text-center"><?=$paymentPlan[0]->plan_name?></h3>
-                    <p class="text-center plan">Trial Plan</p>
-                  </div>
-                  <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">1-<?=$paymentPlan[0]->number_of_emails?> Email per user per month</li>
-                    <li class="list-group-item">Brand Emails</li>
-                    <li class="list-group-item">Custom Logo</li>
-                    <li class="list-group-item">Review Brand</li>
-                  </ul>
-                  <div class="panel-body text-center">
-                    <p class="lead" style="font-size:30px">
-                    <strong><span class="dollor">$</span><span class="price-d"><?=floor($paymentPlan[0]->plan_charges)?>.<small>00</small></span><br>
-                    <p class="monthly">per month</p>
-                    </strong>
-                    </p>
-                  </div>
-                  <div class="panel-footer"> <a class="btn btn-lg btn-default light-seegreen_btn" href="#">Purchase Now</a> </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="panel panel-danger purple">
-                  <div class="panel-heading">
-                    <h3 class="text-center"><?=$paymentPlan[1]->plan_name?></h3>
-                    <p class="text-center plan">Premium Plan</p>
-                  </div>
-                  <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">1-<?=$paymentPlan[1]->number_of_emails?> Email per user per month</li>
-                    <li class="list-group-item">Brand Emails</li>
-                    <li class="list-group-item">Custom Logo</li>
-                    <li class="list-group-item">Review Brand</li>
-                  </ul>
-                  <div class="panel-body text-center">
-                    <p class="lead" style="font-size:30px">
-                    <strong><span class="dollor">$</span><span class="price-d"><?=floor($paymentPlan[1]->plan_charges)?>.<small>00</small></span><br>
-                    <p class="monthly">per month</p>
-                    </strong>
-                    </p>
-                  </div>
-                  <div class="panel-footer"> <a class="btn btn-lg btn-default purple-btn" href="#">Purchase Now</a> </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="panel panel-danger black">
-                  <div class="panel-heading">
-                    <h3 class="text-center"><?=$paymentPlan[2]->plan_name?></h3>
-                    <p class="text-center plan">Premium Plan</p>
-                  </div>
-                  <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">1-<?=$paymentPlan[2]->number_of_emails?> Email per user per month</li>
-                    <li class="list-group-item">Brand Emails</li>
-                    <li class="list-group-item">Custom Logo</li>
-                    <li class="list-group-item">Review Brand</li>
-                  </ul>
-                  <div class="panel-body text-center">
-                    <p class="lead" style="font-size:30px">
-                    <strong><span class="dollor">$</span><span class="price-d"><?=floor($paymentPlan[2]->plan_charges)?>.<small>00</small></span><br>
-                    <p class="monthly">per month</p>
-                    </strong>
-                    </p>
-                  </div>
-                  <div class="panel-footer"> <a class="btn btn-lg btn-default black-btn" href="#">Purchase Now</a> </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="banner_btn-group center-block">
-            <button type="button" class="btn banner_btn btn-lg skyBlue_btn">More Information</button>
-          </div>
+          	<h2 class="center-block title-main">Our Price!</h2>
+          	<p class="discretion-pdb"> Less is more! Udistro will give you quality you’d expect at price you wouldn’t.</p>
+          	<div class="row">
+	            <div class="col-md-10 col-md-offset-1">
+	            <?php 
+	            if( count( $paymentPlan ) > 0 )
+	            {
+	            	foreach ($paymentPlan as $plan)
+	            	{
+	            	?>
+	            		<div class="col-md-4">
+			                <div class="panel panel-danger light-seegreen">
+			                  <div class="panel-heading">
+			                    <h3 class="text-center">{{ ucwords(strtolower($plan->plan_name)) }}</h3>
+			                    <!-- <p class="text-center plan">Trial Plan</p> -->
+			                  </div>
+			                  <ul class="list-group list-group-flush text-center">
+			                    <li class="list-group-item">1-{{ $plan->number_of_emails }} Email per user per month</li>
+			                    <li class="list-group-item">Brand Emails</li>
+			                    <li class="list-group-item">Custom Logo</li>
+			                    <li class="list-group-item">Review Brand</li>
+			                  </ul>
+			                  <div class="panel-body text-center">
+			                    <p class="lead" style="font-size:30px">
+			                    <strong><span class="dollor">$</span><span class="price-d">{{ $plan->plan_charges }}</span><br>
+			                    <p class="monthly">{{ $plan->validity_days . ' days' }}</p>
+			                    </strong>
+			                    </p>
+			                  </div>
+			                  <div class="panel-footer"> <a class="btn btn-lg btn-default light-seegreen_btn" href="javascript:void(0);">Purchase Now</a> </div>
+			                </div>
+			            </div>
+	            	<?php
+	            	}
+	            }
+	            ?>
+	            </div>
+          	</div>
+          	<div class="banner_btn-group center-block">
+            	<button type="button" class="btn banner_btn btn-lg skyBlue_btn">More Information</button>
+          	</div>
         </div>
       </div>
     </div>

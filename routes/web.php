@@ -239,6 +239,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To get the details of the selected client
 	Route::get('/getclientdetails', 'AgentController@getClientDetails');
 
+	// To show agent profile page
+	Route::get('/profile', 'AgentController@profile');
+
 });
 
 /* ---------- Agent related functionality ---------- */

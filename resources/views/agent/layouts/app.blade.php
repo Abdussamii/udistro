@@ -310,7 +310,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="{{ url('/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -327,13 +327,15 @@
                             <a href="{{ url('agent/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
+                            <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+                        </li>
+                        <li <?php echo ( ( Request::path() == 'agent/clients' ) ? 'class="active"' : '' ) ?> >
                             <a href="#"><i class="fa fa-th-list"></i> Clients Listing<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="{{ url('/agent/clients') }}">Clients</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
                         </li>
                     </ul>
                 </div>
