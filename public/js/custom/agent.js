@@ -228,7 +228,7 @@ $(document).ready(function(){
     	}
     });
 
-    // Admin profile form validation
+    // Agent profile form validation
     $('#frm_agent_profile').submit(function(e){
         e.preventDefault();
     });
@@ -277,7 +277,7 @@ $(document).ready(function(){
         }
     });
 
-    // save agent profile
+    // Update agent profile
     $('#btn_update_agent_profile').click(function(){
         // Check the validation
         if( $('#frm_agent_profile').valid() )
@@ -347,6 +347,50 @@ $(document).ready(function(){
     	else
     	{
     		alertify.error('Missing client id');
+    	}
+    });
+
+    // Agent message form validation
+    $('#frm_agent_message').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_agent_message').validate({
+        rules: {
+            agent_message: {
+                required: true
+            }
+        },
+        messages: {
+            agent_message: {
+                required: 'Please enter message'
+            }
+        }
+    });
+
+    // Update agent the message
+    $('#btn_update_agent_message').click(function(){
+    	if( $('#frm_agent_message').valid() )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/agent/updatemessage',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_agent_message').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
     	}
     });
 });

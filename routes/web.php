@@ -242,8 +242,11 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To show agent profile page
 	Route::get('/profile', 'AgentController@profile');
 
-	// To save the profile details details
+	// To save the agent profile details
 	Route::post('/saveprofiledetails', 'AgentController@saveProfileDetails');
+
+	// To update the agent message
+	Route::post('/updatemessage', 'AgentController@updateMssage');
 
 	// To fetch the client details as well as its associated message and template details to show in popup
 	Route::get('/createinvitation', 'AgentController@createInvitation');

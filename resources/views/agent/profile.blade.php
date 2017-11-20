@@ -253,12 +253,18 @@
 		<div id="message" class="tab-pane fade">
 			<h3>Message</h3>
 			<div>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				<form class="form-horizontal" role="form" name="frm_agent_message" id="frm_agent_message">
+					<div class="form-group">
+						<div class="col-lg-4">
+						  	<textarea class="form-control" rows="10" name="agent_message" id="agent_message">{{ $message->message }}</textarea>
+						</div>
+					</div>
+					<div>
+						<div class="ui-select">
+						    <button type="submit" class="btn btn-primary" name="btn_update_agent_message" id="btn_update_agent_message">Submit</button>
+					  	</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		<div id="themes" class="tab-pane fade">

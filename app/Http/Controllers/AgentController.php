@@ -483,14 +483,21 @@ class AgentController extends Controller
 				}
 			}
     	}
+
+    	// Get the message
+    	$message = Message::where(['agent_id' => $userId])->first();
+
+    	// echo '<pre>';
+    	// print_r( $message );
+    	// exit;
        	
-    	return view('agent/profile', ['agentDetails' => $agentDetails, 'cityArray' => $cityArray, 'provinces' => $provinces, 'countries' => $countries, 'companyCategories' => $companyCategories, 'companyDetails' => $companyDetails]);
+    	return view('agent/profile', ['agentDetails' => $agentDetails, 'cityArray' => $cityArray, 'provinces' => $provinces, 'countries' => $countries, 'companyCategories' => $companyCategories, 'companyDetails' => $companyDetails, 'message' => $message]);
     }
 
     /**
      * Function to save agent profile details
      * @param void
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function saveProfileDetails() 
     {
@@ -579,7 +586,7 @@ class AgentController extends Controller
 				}
 				else
 				{
-					// Add the company details also
+					// Add the company details
 					$companyDetails = new Company;
 
 					$companyDetails->company_name = $profileData['agent_company_name'];
@@ -600,6 +607,72 @@ class AgentController extends Controller
 			{
     			$response['errCode']    = 2;
 			    $response['errMsg']     = 'Some error in updating the details';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to update the agent message
+     * @param void
+     * @return array
+     */
+    public function updateMssage() 
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $messageData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response = array();
+
+		$validation = Validator::make(
+		    array(
+		        'agent_message'	=> $messageData['agent_message']
+		    ),
+		    array(
+		        'agent_message'	=> array('required')
+		    ),
+		    array(
+		        'agent_message.required' => 'Please enter message'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			$message = Message::where(['agent_id' => $userId, 'status' => '1'])->first();
+
+			$message->message 	= $messageData['agent_message'];
+			$message->updated_by= $userId;
+
+			if( $message->save() )
+			{
+				$response['errCode']    = 0;
+			    $response['errMsg']     = 'Message updated successfully';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+			    $response['errMsg']     = 'Some error in updating the message';
 			}
 		}
 
