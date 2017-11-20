@@ -449,6 +449,96 @@ class AgentController extends Controller
      */
     public function profile()
     {
-    	return view('agent/profile');
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	$profileArray = DB::table('users')
+            ->join('company_user', 'users.id', '=', 'company_user.user_id')
+            ->join('companies', 'companies.id', '=', 'company_user.company_id')
+            ->select('users.*', 'companies.company_name', 'companies.company_category_id', 'companies.address as c_address', 'companies.province_id as c_province_id', 'companies.city_id as c_city_id', 'companies.postal_code as c_postal_code')
+            ->where('users.id', '=', $userId)
+            ->where('users.status', '=', '1')
+            ->where('companies.status', '=', '1')
+            ->first();
+
+        // Get the country list
+    	$countryArray = Country::select('id', 'name')->orderBy('name', 'asc')->get();
+
+       	// Get the province list
+    	$provincesArray = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+        // Get the cities list for the selected province as the city list is filtered to the selected province by using the ajax
+		$cities = City::where(['province_id' => $profileArray->province_id])->get();
+
+		if( count( $cities ) > 0 )
+		{
+			foreach ($cities as $city)
+			{
+    			$cityArray[] = array(
+    				'id' 	=> $city->id,
+    				'city' 	=> ucwords( strtolower( $city->name ) ),
+    			);
+			}
+		}
+       	//echo '<pre>'; print_r($profileArray); die();
+    	return view('agent/profile', ['profileArray' => $profileArray, 'cityArray' => $cityArray, 'provincesArray' => $provincesArray, 'countryArray' => $countryArray]);
+    }
+
+    /**
+     * Function to save agent profile details
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function saveProfileDetails() 
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $profileData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response = array();
+
+		$validation = Validator::make(
+		    array(
+		        'agent_email'		    => $profileData['agent_email'],
+		        'agent_fname'	        => $profileData['agent_fname'],
+		        'agent_lname'		    => $profileData['agent_lname'],
+		        'agent_address'	        => $profileData['agent_address'],
+		        'agent_company_name'    => $profileData['agent_company_name'],
+		        'agent_company_address'	=> $profileData['agent_company_address'],
+		    ),
+		    array(
+		        'agent_email' 	        => array('required', 'email'),
+		        'agent_fname' 	        => array('required'),
+		        'agent_lname' 	        => array('required'),
+		        'agent_address' 	    => array('required'),
+		        'agent_company_name' 	=> array('required'),
+		        'agent_company_address' => array('required'),
+		    ),
+		    array(
+		        'agent_email.required' 	         => 'Please enter email',
+		        'agent_fname.required' 	         => 'Please enter first name',
+		        'agent_lname.required' 	         => 'Please enter last name',
+		        'agent_address.required' 	     => 'Please enter address',
+		        'agent_company_name.required' 	 => 'Please enter company name',
+		        'agent_company_address.required' => 'Please enter compant address',
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
     }
 }
