@@ -27,6 +27,7 @@ use App\PaymentPlanType;
 use App\City;
 use App\LoginAttempt;
 use App\AgentClient;
+use App\Message;
 
 use Validator;
 use Helper;
@@ -361,7 +362,7 @@ class AgentController extends Controller
         $userId = Auth::user()->id;
 
         // Get the records after applying the datatable filters
-        $agents = AgentClient::where('fname','like', '%'.$sSearch.'%')
+        $agentClients = AgentClient::where('fname','like', '%'.$sSearch.'%')
         			->where('agent_id','=', $userId)
                     ->orderBy($sortBy, $sortType)
                     ->limit($length)
@@ -379,19 +380,19 @@ class AgentController extends Controller
         );
 
         $k=0;
-        if ( count( $agents ) > 0 )
+        if ( count( $agentClients ) > 0 )
         {
-            foreach ($agents as $agent)
+            foreach ($agentClients as $agentClient)
             {
             	$response['aaData'][$k] = array(
-                    0 => $agent->id,
-                    1 => ucfirst( strtolower( $agent->fname ) ),
-                    2 => ucfirst( strtolower( $agent->oname ) ),
-                    3 => ucfirst( strtolower( $agent->lname ) ),
-                    4 => $agent->email,
-                    5 => $agent->contact_number,
-                    6 => Helper::getStatusText($agent->status),
-                    7 => '<a href="javascript:void(0);" data-toggle="tooltip" title="Invite Client"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" data-toggle="tooltip" title="Edit Client" id="'. $agent->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    0 => $agentClient->id,
+                    1 => ucfirst( strtolower( $agentClient->fname ) ),
+                    2 => ucfirst( strtolower( $agentClient->oname ) ),
+                    3 => ucfirst( strtolower( $agentClient->lname ) ),
+                    4 => $agentClient->email,
+                    5 => $agentClient->contact_number,
+                    6 => Helper::getStatusText($agentClient->status),
+                    7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title="Invite Client"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" data-toggle="tooltip" title="Edit Client" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -540,5 +541,28 @@ class AgentController extends Controller
 		        $response['errMsg']     = $error;
 		    }
 		}
+    }
+
+    /**
+     * Function fetch the client details as well as its associated message and template details to show in popup
+     * @param void
+     * @return array
+     */
+    public function createInvitation()
+    {
+    	$clientId = Input::get('clientId');
+
+    	$response = array();
+    	if( $clientId != '' )
+    	{
+    		// Get the message for the user
+    		$message = Message::where();
+
+    		// Get the Moving from & Moving to addresses
+
+    		// Get the email template listing
+    	}
+
+    	exit;
     }
 }

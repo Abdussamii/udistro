@@ -34,3 +34,5 @@
 # ALTER TABLE `users` ADD `country_id` INT NULL AFTER `postalcode`;
 
 # ALTER TABLE `companies` ADD `country_id` INT NULL AFTER `postal_code`;
+
+# ALTER TABLE `messages` ADD INDEX( `agent_id`);

@@ -315,6 +315,38 @@ $(document).ready(function(){
             });
         }
     });
+
+    // To invite the client
+    $(document).on('click', '.agent_invite_client', function(){
+    	var clientId = $(this).attr('id');
+
+    	if( clientId != '' )
+    	{
+    		// Fetch the client details as well as its associated message and template details to show in popup
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/agent/createinvitation',
+    			method: 'get',
+    			data: {
+    				clientId: clientId
+    			},
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		// Pre-fill the popup with the details
+
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    	else
+    	{
+    		alertify.error('Missing client id');
+    	}
+    });
 });
 
 /**
