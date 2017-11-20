@@ -1,0 +1,36 @@
+
+# 20-11-2017
+
+# CREATE TABLE `messages` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `agent_id` int(11) NOT NULL COMMENT 'Agent id to associate the message with the agent',
+ `message` text NOT NULL,
+ `status` enum('0','1','2') NOT NULL COMMENT '0: Inactive, 1: Active, 2: Deleted',
+ `created_at` datetime NOT NULL,
+ `created_by` int(11) NOT NULL,
+ `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ `updated_by` int(11) DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1
+
+# CREATE TABLE `email_templates` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `template_name` varchar(50) NOT NULL,
+ `template_content` text NOT NULL,
+ `status` enum('0','1','2') NOT NULL COMMENT '0: Inactive, 1: Active, 2: Deleted',
+ `created_at` datetime NOT NULL,
+ `created_by` int(11) NOT NULL,
+ `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ `updated_by` int(11) DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+# CREATE TABLE `user_email_template` (
+ `agent_id` int(11) NOT NULL,
+ `email_template_id` int(11) NOT NULL,
+ KEY `agent_id` (`agent_id`,`email_template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+# ALTER TABLE `users` ADD `country_id` INT NULL AFTER `postalcode`;
+
+# ALTER TABLE `companies` ADD `country_id` INT NULL AFTER `postal_code`;
