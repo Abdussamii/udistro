@@ -25,25 +25,25 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Email:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="" name="agent_email" id="agent_email">
+								  	<input class="form-control" type="text" value="<?=$profileArray->email?>" name="agent_email" id="agent_email">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-lg-2 control-label">First name:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="" name="agent_fname" id="agent_fname">
+								  	<input class="form-control" type="text" value="<?=$profileArray->fname?>" name="agent_fname" id="agent_fname">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Last name:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="" name="agent_lname" id="agent_lname">
+								  	<input class="form-control" type="text" value="<?=$profileArray->lname?>" name="agent_lname" id="agent_lname">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Address:</label>
 								<div class="col-lg-8">
-								  	<textarea name="" id="" class="form-control autocomplete" name="agent_address" id="agent_address">Google map address suggest API here</textarea>
+								  	<textarea name="" id="" class="form-control autocomplete" name="agent_address" id="agent_address"><?=$profileArray->address?></textarea>
 								</div>
 							</div>
 							<div class="form-group">
@@ -51,7 +51,20 @@
 								<div class="col-lg-8">
 								  	<div class="ui-select">
 									    <select id="user_time_zone" class="form-control" name="agent_province" id="agent_province">
-											
+											<option value="0">Select</option>
+											<?php
+											if( isset( $provincesArray ) &&  count( $provincesArray ) > 0 )
+											{
+												foreach ($provincesArray as $province)
+												{
+													if($profileArray->province_id == $province->id) 
+														$selected = 'selected';
+													else
+														$selected = ''; 
+													echo '<option value="'. $province->id .'" '.$selected.'>'. ucwords( strtolower( $province->name ) ) .'</option>';
+												}
+											}
+											?>
 									    </select>
 								  	</div>
 								</div>
@@ -61,7 +74,20 @@
 								<div class="col-lg-8">
 								  	<div class="ui-select">
 									    <select id="user_time_zone" class="form-control" name="agent_city" id="agent_city">
-											
+											<option value="0">Select</option>
+											<?php
+											if( isset( $cityArray ) &&  count( $cityArray ) > 0 )
+											{
+												foreach ($cityArray as $city)
+												{
+													if($profileArray->city_id == $city['id']) 
+														$selected = 'selected';
+													else
+														$selected = ''; 
+													echo '<option value="'. $city['id'] .'" '.$selected.'>'. ucwords( strtolower( $city['city'] ) ) .'</option>';
+												}
+											}
+											?>
 									    </select>
 								  	</div>
 								</div>
@@ -69,7 +95,7 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Postal Code:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="" name="agent_postalcode" id="agent_postalcode">
+								  	<input class="form-control" type="text" value="<?=$profileArray->postalcode?>" name="agent_postalcode" id="agent_postalcode">
 								</div>
 							</div>
 							<div class="form-group">
@@ -77,7 +103,20 @@
 								<div class="col-lg-8">
 								  	<div class="ui-select">
 									    <select id="user_time_zone" class="form-control" name="agent_country" id="agent_country">
-											
+											<option value="0">Select</option>
+											<?php
+											if( isset( $countryArray ) &&  count( $countryArray ) > 0 )
+											{
+												foreach ($countryArray as $country)
+												{
+													if($profileArray->country_id == $country->id) 
+														$selected = 'selected';
+													else
+														$selected = '';
+													echo '<option value="'. $country->id .'" '.$selected.'>'. ucwords( strtolower( $country->name ) ) .'</option>';
+												}
+											}
+											?>
 									    </select>
 								  	</div>
 								</div>
@@ -88,7 +127,7 @@
   							<div class="form-group">
 								<label class="col-lg-2 control-label">Company Name:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="" name="agent_company_name" id="agent_company_name">
+								  	<input class="form-control" type="text" value="<?=$profileArray->company_name?>" name="agent_company_name" id="agent_company_name">
 								</div>
 							</div>
 							<div class="form-group">
@@ -104,7 +143,7 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Address:</label>
 								<div class="col-lg-8">
-								  	<textarea name="" id="" class="form-control autocomplete" name="agent_company_address" id="agent_company_address">Google map address suggest API here</textarea>
+								  	<textarea name="" id="" class="form-control autocomplete" name="agent_company_address" id="agent_company_address"><?=$profileArray->c_address?></textarea>
 								</div>
 							</div>
 							<div class="form-group">
@@ -112,7 +151,20 @@
 								<div class="col-lg-8">
 								  	<div class="ui-select">
 									    <select id="user_time_zone" class="form-control" name="agent_company_province" id="agent_company_province">
-											
+											<option value="0">Select</option>
+											<?php
+											if( isset( $provincesArray ) &&  count( $provincesArray ) > 0 )
+											{
+												foreach ($provincesArray as $province)
+												{
+													if($profileArray->c_province_id == $province->id) 
+														$selected = 'selected';
+													else
+														$selected = ''; 
+													echo '<option value="'. $province->id .'" '.$selected.'>'. ucwords( strtolower( $province->name ) ) .'</option>';
+												}
+											}
+											?>
 									    </select>
 								  	</div>
 								</div>
@@ -122,7 +174,20 @@
 								<div class="col-lg-8">
 								  	<div class="ui-select">
 									    <select id="user_time_zone" class="form-control" name="agent_company_city" id="agent_company_city">
-											
+											<option value="0">Select</option>
+											<?php
+											if( isset( $cityArray ) &&  count( $cityArray ) > 0 )
+											{
+												foreach ($cityArray as $city)
+												{
+													if($profileArray->c_city_id == $city['id']) 
+														$selected = 'selected';
+													else
+														$selected = '';
+													echo '<option value="'. $city['id'] .'" '.$selected.'>'. ucwords( strtolower( $city['city'] ) ) .'</option>';
+												}
+											}
+											?>
 									    </select>
 								  	</div>
 								</div>
@@ -130,7 +195,7 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Postal Code:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="" name="agent_company_postalcode" id="agent_company_postalcode">
+								  	<input class="form-control" type="text" value="<?=$profileArray->postalcode?>" name="agent_company_postalcode" id="agent_company_postalcode">
 								</div>
 							</div>
 							<div class="form-group">
@@ -138,7 +203,20 @@
 								<div class="col-lg-8">
 								  	<div class="ui-select">
 									    <select id="user_time_zone" class="form-control" name="agent_company_country" id="agent_company_country">
-											
+											<option value="0">Select</option>
+											<?php
+											if( isset( $countryArray ) &&  count( $countryArray ) > 0 )
+											{
+												foreach ($countryArray as $country)
+												{
+													if($profileArray->country_id == $country->id) 
+														$selected = 'selected';
+													else
+														$selected = '';
+													echo '<option value="'. $country->id .'" '.$selected.'>'. ucwords( strtolower( $country->name ) ) .'</option>';
+												}
+											}
+											?>
 									    </select>
 								  	</div>
 								</div>

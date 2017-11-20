@@ -242,6 +242,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To show agent profile page
 	Route::get('/profile', 'AgentController@profile');
 
+	// To save the agent profile details details
+	Route::post('/saveagentprofiledetails', 'AgentController@saveAgentProfileDetails');
+
 });
 
 /* ---------- Agent related functionality ---------- */

@@ -7,29 +7,57 @@ $(document).ready(function(){
     });
     $('#frm_agent_login').validate({
         rules: {
-            username: {
+            agent_email: {
                 required: true,
                 email: true
             },
-            password: {
+            agent_fname: {
                 required: true,
-                minlength: 6
+            },
+            agent_lname: {
+                required: true,
+            },
+            agent_fname: {
+                required: true,
+            },
+            agent_address: {
+                required: true,
+            },
+            agent_company_name: {
+                required: true,
+            },
+            agent_company_address: {
+                required: true,
             }
         },
         messages: {
-            username: {
+            agent_email: {
                 required: 'Please enter email',
                 email: 'Please enter valid email'
             },
-            password: {
-                required: 'Please enter password',
-                minlength: 'Password must contain atleat 6 characters'
+            agent_fname: {
+                required: 'Please enter first name',
+            },
+            agent_lname: {
+                required: 'Please enter last name',
+            },
+            agent_address: {
+                required: 'Please enter agent address',
+            },
+            agent_email: {
+                required: 'Please enter agent email'
+            },
+            agent_company_name: {
+                required: 'Please enter agent company name'
+            },
+            agent_company_address: {
+                required: 'Please enter agent company address'
             }
         }
     });
 
     // Check the user credentials for backend login
-    $('#btn_agent_login').click(function(){
+    $('#btn_update_agent_profile').click(function(){
     	// Check the validation
     	if( $('#frm_agent_login').valid() )
     	{
@@ -228,3 +256,30 @@ $(document).ready(function(){
     	}
     });
 });
+
+
+/**
+ * Function to get the list of cities as options for the selected province
+ */
+function getProvinceCities(provinceId, target)
+{
+    // Ajax call to get the cities on the basis of selected province
+    $.ajax({
+        url: $('meta[name="route"]').attr('content') + '/administrator/getprovincecities',
+        method: 'get',
+        data: {
+            provinceId: provinceId
+        },
+        success: function(response){
+            var responseTypes = '<option value="">Select</option>';
+
+            for (var key in response)
+            {
+                responseTypes += '<option value="'+response[key].id+'">'+response[key].city+'</option>';
+            }
+
+            // Append the newly created options to the dropdown
+            $(target).html(responseTypes);
+        }
+    });
+}
