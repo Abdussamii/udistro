@@ -7,57 +7,29 @@ $(document).ready(function(){
     });
     $('#frm_agent_login').validate({
         rules: {
-            agent_email: {
+            username: {
                 required: true,
                 email: true
             },
-            agent_fname: {
+            password: {
                 required: true,
-            },
-            agent_lname: {
-                required: true,
-            },
-            agent_fname: {
-                required: true,
-            },
-            agent_address: {
-                required: true,
-            },
-            agent_company_name: {
-                required: true,
-            },
-            agent_company_address: {
-                required: true,
+                minlength: 6
             }
         },
         messages: {
-            agent_email: {
+            username: {
                 required: 'Please enter email',
                 email: 'Please enter valid email'
             },
-            agent_fname: {
-                required: 'Please enter first name',
-            },
-            agent_lname: {
-                required: 'Please enter last name',
-            },
-            agent_address: {
-                required: 'Please enter agent address',
-            },
-            agent_email: {
-                required: 'Please enter agent email'
-            },
-            agent_company_name: {
-                required: 'Please enter agent company name'
-            },
-            agent_company_address: {
-                required: 'Please enter agent company address'
+            password: {
+                required: 'Please enter password',
+                minlength: 'Password must contain atleat 6 characters'
             }
         }
     });
 
     // Check the user credentials for backend login
-    $('#btn_update_agent_profile').click(function(){
+    $('#btn_agent_login').click(function(){
     	// Check the validation
     	if( $('#frm_agent_login').valid() )
     	{
@@ -255,8 +227,95 @@ $(document).ready(function(){
     		});
     	}
     });
-});
 
+    // Admin login form validation
+    $('#frm_agent_profile').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_agent_profile').validate({
+        rules: {
+            agent_email: {
+                required: true,
+                email: true
+            },
+            agent_fname: {
+                required: true
+            },
+            agent_lname: {
+                required: true
+            },
+            agent_address: {
+                required: true
+            },
+            agent_company_name: {
+                required: true
+            },
+            agent_company_address: {
+                required: true
+            }
+        },
+        messages: {
+            agent_email: {
+                required: 'Please enter email',
+                email: 'Please enter valid email'
+            },
+            agent_fname: {
+                required: 'Please enter first name'
+            },
+            agent_lname: {
+                required: 'Please enter last name'
+            },
+            agent_address: {
+                required: 'Please enter address'
+            },
+            agent_company_name: {
+                required: 'Please enter company name'
+            },
+            agent_company_address: {
+                required: 'Please enter company address'
+            }
+        }
+    });
+
+    // Check the user credentials for backend login
+    $('#btn_update_agent_profile').click(function(){
+        // Check the validation
+        if( $('#frm_agent_profile').valid() )
+        {
+            var $this = $(this);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/saveprofiledetails',
+                method: 'post',
+                data: {
+                    frmData: $('#frm_agent_profile').serialize()
+                },
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        document.location.href = $('meta[name="route"]').attr('content') + '/agent/profile';
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+});
 
 /**
  * Function to get the list of cities as options for the selected province

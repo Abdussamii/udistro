@@ -489,32 +489,44 @@ class AgentController extends Controller
      * @param void
      * @return \Illuminate\Http\Response
      */
-    public function saveAgentProfileDetails() 
+    public function saveProfileDetails() 
     {
     	// Get the serialized form data
         $frmData = Input::get('frmData');
 
         // Parse the serialize form data to an array
-        parse_str($frmData, $categoryData);
+        parse_str($frmData, $profileData);
 
         // Get the logged in user id
         $userId = Auth::user()->id;
 
     	// Server Side Validation
-        $response =array();
+        $response = array();
 
 		$validation = Validator::make(
 		    array(
-		        'category_name'		=> $categoryData['category_name'],
-		        'category_status'	=> $categoryData['category_status'],
+		        'agent_email'		    => $profileData['agent_email'],
+		        'agent_fname'	        => $profileData['agent_fname'],
+		        'agent_lname'		    => $profileData['agent_lname'],
+		        'agent_address'	        => $profileData['agent_address'],
+		        'agent_company_name'    => $profileData['agent_company_name'],
+		        'agent_company_address'	=> $profileData['agent_company_address'],
 		    ),
 		    array(
-		        'category_name' 	=> array('required'),
-		        'category_status' 	=> array('required'),
+		        'agent_email' 	        => array('required', 'email'),
+		        'agent_fname' 	        => array('required'),
+		        'agent_lname' 	        => array('required'),
+		        'agent_address' 	    => array('required'),
+		        'agent_company_name' 	=> array('required'),
+		        'agent_company_address' => array('required'),
 		    ),
 		    array(
-		        'category_name.required' 	=> 'Please enter category name',
-		        'category_status.required' 	=> 'Please select status',
+		        'agent_email.required' 	         => 'Please enter email',
+		        'agent_fname.required' 	         => 'Please enter first name',
+		        'agent_lname.required' 	         => 'Please enter last name',
+		        'agent_address.required' 	     => 'Please enter address',
+		        'agent_company_name.required' 	 => 'Please enter company name',
+		        'agent_company_address.required' => 'Please enter compant address',
 		    )
 		);
 
@@ -528,5 +540,7 @@ class AgentController extends Controller
 		        $response['errMsg']     = $error;
 		    }
 		}
+
+		
     }
 }
