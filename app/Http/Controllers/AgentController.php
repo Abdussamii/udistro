@@ -454,8 +454,8 @@ class AgentController extends Controller
         $userId = Auth::user()->id;
 
     	$profileArray = DB::table('users')
-            ->join('company_user', 'users.id', '=', 'company_user.user_id')
-            ->join('companies', 'companies.id', '=', 'company_user.company_id')
+            ->leftJoin('company_user', 'users.id', '=', 'company_user.user_id')
+            ->leftJoin('companies', 'companies.id', '=', 'company_user.company_id')
             ->select('users.*', 'companies.company_name', 'companies.company_category_id', 'companies.address as c_address', 'companies.province_id as c_province_id', 'companies.city_id as c_city_id', 'companies.postal_code as c_postal_code')
             ->where('users.id', '=', $userId)
             ->where('users.status', '=', '1')
@@ -494,6 +494,8 @@ class AgentController extends Controller
     {
     	// Get the serialized form data
         $frmData = Input::get('frmData');
+        $agent_address = Input::get('agent_address');
+        $agent_company_address = Input::get('agent_company_address');
 
         // Parse the serialize form data to an array
         parse_str($frmData, $profileData);
@@ -509,9 +511,9 @@ class AgentController extends Controller
 		        'agent_email'		    => $profileData['agent_email'],
 		        'agent_fname'	        => $profileData['agent_fname'],
 		        'agent_lname'		    => $profileData['agent_lname'],
-		        'agent_address'	        => $profileData['agent_address'],
+		        'agent_address'	        => $agent_address,
 		        'agent_company_name'    => $profileData['agent_company_name'],
-		        'agent_company_address'	=> $profileData['agent_company_address'],
+		        'agent_company_address'	=> $agent_company_address,
 		    ),
 		    array(
 		        'agent_email' 	        => array('required', 'email'),
@@ -527,7 +529,7 @@ class AgentController extends Controller
 		        'agent_lname.required' 	         => 'Please enter last name',
 		        'agent_address.required' 	     => 'Please enter address',
 		        'agent_company_name.required' 	 => 'Please enter company name',
-		        'agent_company_address.required' => 'Please enter compant address',
+		        'agent_company_address.required' => 'Please enter company address',
 		    )
 		);
 
@@ -540,6 +542,24 @@ class AgentController extends Controller
 		        $response['errCode']    = 1;
 		        $response['errMsg']     = $error;
 		    }
+		    $response['errCode']    = 1;
+		    $response['errMsg']     = 'aaaa';
+		} else {
+
+			$user = User::find($userId);
+			$user->email        = $profileData['email'];	
+			$user->fname 	    = $profileData['fname'];
+			$user->lname 	    = $profileData['lname'];
+			$user->address 		= $agent_address;
+			$user->province_id 	= $profileData['province_id'];
+			$user->city_id 	    = $profileData['city_id'];
+			$user->postalcode 	= $profileData['postalcode'];
+			$user->updated_by 	= $userId;
+
+			if( $user->save() ) {
+				$response['errCode']    = 0;
+			    $response['errMsg']     = 'Profile details updated successfully';
+			}
 		}
     }
 

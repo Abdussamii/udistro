@@ -228,7 +228,7 @@ $(document).ready(function(){
     	}
     });
 
-    // Admin login form validation
+    // Admin profile form validation
     $('#frm_agent_profile').submit(function(e){
         e.preventDefault();
     });
@@ -277,7 +277,7 @@ $(document).ready(function(){
         }
     });
 
-    // Check the user credentials for backend login
+    // save agent profile
     $('#btn_update_agent_profile').click(function(){
         // Check the validation
         if( $('#frm_agent_profile').valid() )
@@ -288,7 +288,9 @@ $(document).ready(function(){
                 url: $('meta[name="route"]').attr('content') + '/agent/saveprofiledetails',
                 method: 'post',
                 data: {
-                    frmData: $('#frm_agent_profile').serialize()
+                    frmData: $('#frm_agent_profile').serialize(),
+                    agent_address: $('#agent_address').text(),
+                    agent_company_address: $('#agent_company_address').text()
                 },
                 beforeSend: function() {
                     // Show the loading button
@@ -305,7 +307,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        document.location.href = $('meta[name="route"]').attr('content') + '/agent/profile';
+                        alertify.success( response.errMsg );
+                        // Refresh the form and close the modal
+                        $('#frm_agent_profile')[0].reset();
+
                     }
                     else
                     {
