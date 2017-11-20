@@ -28,6 +28,7 @@ use App\City;
 use App\LoginAttempt;
 use App\AgentClient;
 use App\Message;
+use App\Company;
 
 use Validator;
 use Helper;
@@ -453,36 +454,37 @@ class AgentController extends Controller
     	// Get the logged in user id
         $userId = Auth::user()->id;
 
-    	$profileArray = DB::table('users')
-            ->leftJoin('company_user', 'users.id', '=', 'company_user.user_id')
-            ->leftJoin('companies', 'companies.id', '=', 'company_user.company_id')
-            ->select('users.*', 'companies.company_name', 'companies.company_category_id', 'companies.address as c_address', 'companies.province_id as c_province_id', 'companies.city_id as c_city_id', 'companies.postal_code as c_postal_code')
-            ->where('users.id', '=', $userId)
-            ->where('users.status', '=', '1')
-            ->where('companies.status', '=', '1')
-            ->first();
+    	$agentDetails = User::find($userId);
+
+    	$companyDetails = $agentDetails->company;
+
+    	$companyCategories = CompanyCategory::where(['status' => '1'])->get();
 
         // Get the country list
-    	$countryArray = Country::select('id', 'name')->orderBy('name', 'asc')->get();
+    	$countries = Country::select('id', 'name')->orderBy('name', 'asc')->get();
 
        	// Get the province list
-    	$provincesArray = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
 
-        // Get the cities list for the selected province as the city list is filtered to the selected province by using the ajax
-		$cities = City::where(['province_id' => $profileArray->province_id])->get();
+    	$cityArray = array();
+    	if( count( $agentDetails ) > 0 && $agentDetails->province_id != '' )
+    	{
+	        // Get the cities list for the selected province as the city list is filtered to the selected province by using the ajax
+			$cities = City::where(['province_id' => $agentDetails->province_id])->get();
 
-		if( count( $cities ) > 0 )
-		{
-			foreach ($cities as $city)
+			if( count( $cities ) > 0 )
 			{
-    			$cityArray[] = array(
-    				'id' 	=> $city->id,
-    				'city' 	=> ucwords( strtolower( $city->name ) ),
-    			);
+				foreach ($cities as $city)
+				{
+	    			$cityArray[] = array(
+	    				'id' 	=> $city->id,
+	    				'city' 	=> ucwords( strtolower( $city->name ) ),
+	    			);
+				}
 			}
-		}
-       	//echo '<pre>'; print_r($profileArray); die();
-    	return view('agent/profile', ['profileArray' => $profileArray, 'cityArray' => $cityArray, 'provincesArray' => $provincesArray, 'countryArray' => $countryArray]);
+    	}
+       	
+    	return view('agent/profile', ['agentDetails' => $agentDetails, 'cityArray' => $cityArray, 'provinces' => $provinces, 'countries' => $countries, 'companyCategories' => $companyCategories, 'companyDetails' => $companyDetails]);
     }
 
     /**
@@ -494,11 +496,12 @@ class AgentController extends Controller
     {
     	// Get the serialized form data
         $frmData = Input::get('frmData');
-        $agent_address = Input::get('agent_address');
-        $agent_company_address = Input::get('agent_company_address');
 
         // Parse the serialize form data to an array
         parse_str($frmData, $profileData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -511,9 +514,9 @@ class AgentController extends Controller
 		        'agent_email'		    => $profileData['agent_email'],
 		        'agent_fname'	        => $profileData['agent_fname'],
 		        'agent_lname'		    => $profileData['agent_lname'],
-		        'agent_address'	        => $agent_address,
+		        'agent_address'	        => $profileData['agent_address'],
 		        'agent_company_name'    => $profileData['agent_company_name'],
-		        'agent_company_address'	=> $agent_company_address,
+		        'agent_company_address'	=> $profileData['agent_company_address'],
 		    ),
 		    array(
 		        'agent_email' 	        => array('required', 'email'),
@@ -529,7 +532,7 @@ class AgentController extends Controller
 		        'agent_lname.required' 	         => 'Please enter last name',
 		        'agent_address.required' 	     => 'Please enter address',
 		        'agent_company_name.required' 	 => 'Please enter company name',
-		        'agent_company_address.required' => 'Please enter company address',
+		        'agent_company_address.required' => 'Please enter compant address',
 		    )
 		);
 
@@ -542,25 +545,65 @@ class AgentController extends Controller
 		        $response['errCode']    = 1;
 		        $response['errMsg']     = $error;
 		    }
-		    $response['errCode']    = 1;
-		    $response['errMsg']     = 'aaaa';
-		} else {
-
+		}
+		else
+		{
 			$user = User::find($userId);
-			$user->email        = $profileData['email'];	
-			$user->fname 	    = $profileData['fname'];
-			$user->lname 	    = $profileData['lname'];
-			$user->address 		= $agent_address;
-			$user->province_id 	= $profileData['province_id'];
-			$user->city_id 	    = $profileData['city_id'];
-			$user->postalcode 	= $profileData['postalcode'];
+
+			$user->email 		= $profileData['agent_email'];
+			$user->fname 		= $profileData['agent_fname'];			
+			$user->lname 		= $profileData['agent_lname'];
+			$user->address 		= $profileData['agent_address'];
+			$user->province_id 	= $profileData['agent_province'];
+			$user->city_id 		= $profileData['agent_city'];
+			$user->postalcode 	= $profileData['agent_postalcode'];
+			$user->country_id 	= $profileData['agent_country'];
 			$user->updated_by 	= $userId;
 
-			if( $user->save() ) {
+			if( $user->save() )
+			{
+				if( count( $user->company ) > 0 && isset( $user->company[0]->id ) )
+				{
+					// Update the company details also
+					$companyDetails = Company::find($user->company[0]->id);
+
+					$companyDetails->company_name = $profileData['agent_company_name'];
+					$companyDetails->company_category_id = $profileData['agent_company_category'];
+					$companyDetails->address = $profileData['agent_company_address'];
+					$companyDetails->province_id = $profileData['agent_company_province'];
+					$companyDetails->city_id = $profileData['agent_company_city'];
+					$companyDetails->postal_code = $profileData['agent_company_postalcode'];
+					$companyDetails->country_id = $profileData['agent_company_country'];
+
+					$companyDetails->save();
+				}
+				else
+				{
+					// Add the company details also
+					$companyDetails = new Company;
+
+					$companyDetails->company_name = $profileData['agent_company_name'];
+					$companyDetails->company_category_id = $profileData['agent_company_category'];
+					$companyDetails->address = $profileData['agent_company_address'];
+					$companyDetails->province_id = $profileData['agent_company_province'];
+					$companyDetails->city_id = $profileData['agent_company_city'];
+					$companyDetails->postal_code = $profileData['agent_company_postalcode'];
+					$companyDetails->country_id = $profileData['agent_company_country'];
+
+					$companyDetails->save();
+				}
+
 				$response['errCode']    = 0;
-			    $response['errMsg']     = 'Profile details updated successfully';
+			    $response['errMsg']     = 'Profile updated successfully';
+			}
+			else
+			{
+    			$response['errCode']    = 2;
+			    $response['errMsg']     = 'Some error in updating the details';
 			}
 		}
+
+		return response()->json($response);
     }
 
     /**
@@ -572,15 +615,27 @@ class AgentController extends Controller
     {
     	$clientId = Input::get('clientId');
 
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
     	$response = array();
     	if( $clientId != '' )
     	{
     		// Get the message for the user
-    		$message = Message::where();
+    		$message = Message::where(['agent_id' => $userId, 'status' => '1'])->select('message')->first();
+
+    		// Get the client details
+    		$clientDetails = AgentClient::find($clientId);
+
+    		$clientName = ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) );
+
+    		// Replace the [User Name] with the actual user name
+    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
 
     		// Get the Moving from & Moving to addresses
+    		
 
-    		// Get the email template listing
+    		// Get the email template list
     	}
 
     	exit;

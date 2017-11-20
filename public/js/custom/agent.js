@@ -307,10 +307,7 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
-                        // Refresh the form and close the modal
-                        $('#frm_agent_profile')[0].reset();
-
+                        alertify.success( response.errMsg );                        
                     }
                     else
                     {
