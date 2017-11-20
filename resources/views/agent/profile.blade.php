@@ -19,72 +19,137 @@
 			<div class="row top-buffer">
 				<!-- left column -->
 				<div class="col-md-8">
-					<form class="form-horizontal" role="form">
-						<div class="form-group">
-							<label class="col-lg-2 control-label">First name:</label>
-							<div class="col-lg-8">
-							  	<input class="form-control" type="text" value="Jane">
+					<form class="form-horizontal" role="form" name="frm_agent_profile" id="frm_agent_profile">
+						<fieldset>
+  							<legend>Personal Information:</legend>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Email:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="" name="agent_email" id="agent_email">
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Last name:</label>
-							<div class="col-lg-8">
-							  	<input class="form-control" type="text" value="Bishop">
+							<div class="form-group">
+								<label class="col-lg-2 control-label">First name:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="" name="agent_fname" id="agent_fname">
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Company:</label>
-							<div class="col-lg-8">
-							  	<input class="form-control" type="text" value="">
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Last name:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="" name="agent_lname" id="agent_lname">
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Email:</label>
-							<div class="col-lg-8">
-							  	<input class="form-control" type="text" value="janesemail@gmail.com">
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Address:</label>
+								<div class="col-lg-8">
+								  	<textarea name="" id="" class="form-control autocomplete" name="agent_address" id="agent_address">Google map address suggest API here</textarea>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Time Zone:</label>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Province:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_province" id="agent_province">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">City:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_city" id="agent_city">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Postal Code:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="" name="agent_postalcode" id="agent_postalcode">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Country:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_country" id="agent_country">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset>
+  							<legend>Company Information:</legend>
+  							<div class="form-group">
+								<label class="col-lg-2 control-label">Company Name:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="" name="agent_company_name" id="agent_company_name">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Company Category:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_company_category" id="agent_company_category">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Address:</label>
+								<div class="col-lg-8">
+								  	<textarea name="" id="" class="form-control autocomplete" name="agent_company_address" id="agent_company_address">Google map address suggest API here</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Province:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_company_province" id="agent_company_province">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">City:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_company_city" id="agent_company_city">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Postal Code:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="" name="agent_company_postalcode" id="agent_company_postalcode">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Country:</label>
+								<div class="col-lg-8">
+								  	<div class="ui-select">
+									    <select id="user_time_zone" class="form-control" name="agent_company_country" id="agent_company_country">
+											
+									    </select>
+								  	</div>
+								</div>
+							</div>
+  						</fieldset>
+  						<div class="form-group">
+							<label class="col-lg-2 control-label">&nbsp;</label>
 							<div class="col-lg-8">
 							  	<div class="ui-select">
-								    <select id="user_time_zone" class="form-control">
-										<option value="Hawaii">(GMT-10:00) Hawaii</option>
-										<option value="Alaska">(GMT-09:00) Alaska</option>
-										<option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-										<option value="Arizona">(GMT-07:00) Arizona</option>
-										<option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-										<option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
-										<option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-										<option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-								    </select>
+								    <button type="submit" class="btn btn-primary" name="btn_update_agent_profile" id="btn_update_agent_profile">Submit</button>
 							  	</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label">Username:</label>
-							<div class="col-md-8">
-							  	<input class="form-control" type="text" value="janeuser">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label">Password:</label>
-							<div class="col-md-8">
-							  	<input class="form-control" type="password" value="11111122333">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label">Confirm password:</label>
-							<div class="col-md-8">
-							  	<input class="form-control" type="password" value="11111122333">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label"></label>
-							<div class="col-md-8">
-							  	<input type="button" class="btn btn-primary" value="Save Changes">
-							  	<span></span>
-							  	<input type="reset" class="btn btn-default" value="Cancel">
 							</div>
 						</div>
 					</form>
@@ -123,4 +188,15 @@
 		<br>
 
 	</div>
+
+	<!-- Google map address auto-complete -->
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCY6SWc-U6uPnlw4_7Q05yWib74zHGlxo8&libraries=places&callback=initMap" async defer></script> -->
+	<script type="text/javascript">
+	/*function initMap() {
+	    new google.maps.places.Autocomplete(
+	    (document.getElementById('agent_company_address')), {
+	        types: ['geocode']
+	    });
+	}*/
+	</script>
 @endsection
