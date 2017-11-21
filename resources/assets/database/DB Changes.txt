@@ -36,3 +36,11 @@
 # ALTER TABLE `companies` ADD `country_id` INT NULL AFTER `postal_code`;
 
 # ALTER TABLE `messages` ADD INDEX( `agent_id`);
+
+# ALTER TABLE `email_template_user` ROW_FORMAT = COMPACT;
+
+# ALTER TABLE `email_template_user` CHANGE `agent_id` `user_id` INT(11) NOT NULL;
+
+# ALTER TABLE `users` ADD `twitter` VARCHAR(200) NULL AFTER `password`, ADD `linkedin` VARCHAR(200) NULL AFTER `twitter`, ADD `facebook` VARCHAR(200) NULL AFTER `linkedin`, ADD `website` VARCHAR(200) NULL AFTER `facebook`;
+
+# ALTER TABLE `users` ADD `image` VARCHAR(100) NULL AFTER `website`;

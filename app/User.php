@@ -36,4 +36,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Company');
     }
+
+    /**
+     * Get the agent email template.
+     */
+    public function emailTemplate()
+    {
+        return $this->belongsToMany('App\EmailTemplate');
+    }
 }

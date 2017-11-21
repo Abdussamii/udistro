@@ -251,6 +251,15 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To fetch the client details as well as its associated message and template details to show in popup
 	Route::get('/createinvitation', 'AgentController@createInvitation');
 
+	// To get the email template content
+	Route::get('/getemailtemplatecontent', 'AgentController@getEmailTemplateContent');
+
+	// To update agent email template
+	Route::post('/updateemailtemplate', 'AgentController@updateEmailTemplate');
+
+	// To update agent image
+	Route::post('/updateagentimage', 'AgentController@updateAgentImage');
+
 });
 
 /* ---------- Agent related functionality ---------- */
@@ -270,3 +279,18 @@ Route::group(['prefix' => 'movers'], function() {
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
+
+// To fetch the agent images from storage and return it
+Route::get('/images/agents/{filename}', function ($filename)
+{
+    $path = storage_path() . '/uploads/agents/' . $filename;
+
+    if(!File::exists($path)) abort(404);
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});

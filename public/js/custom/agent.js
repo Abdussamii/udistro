@@ -393,6 +393,143 @@ $(document).ready(function(){
     		});
     	}
     });
+
+    // To get the email template content and render the html
+    $('input[name="agent_email_template"]').change(function(){
+    	var templateId = $(this).val();
+
+    	// Show the spinner
+    	$('#frm_agent_email_template #email_template_preview').html('<i class="fa fa-gear fa-spin" style="font-size:48px"></i>');
+
+    	// Ajax call to get the email template content
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/agent/getemailtemplatecontent',
+			method: 'get',
+			data: {
+				templateId: templateId
+			},
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		// Replace spinner with the email template content
+		    		$('#frm_agent_email_template #email_template_preview').html(response.content);
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+    });
+
+    // Agent email template form validation
+    $('#frm_agent_email_template').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_agent_email_template').validate({
+        rules: {
+            agent_email_template: {
+                required: true
+            }
+        },
+        messages: {
+            agent_email_template: {
+                required: 'Please select email template'
+            }
+        }
+    });
+
+    // Save the selected email template by agent
+    $('#btn_update_agent_email_template').click(function(){
+    	if( $('#frm_agent_email_template').valid() )
+    	{
+			$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/agent/updateemailtemplate',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_agent_email_template').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});	
+    	}
+    });
+
+    // To check the file extension
+	$('#frm_agent_image #agent_upload_image').change(function(){
+		var ext = $(this).val().split('.').pop().toLowerCase();
+		if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+		    $(this).val('');
+		    alert('invalid file type, only images are allowed');
+		}
+	});
+
+	// Agent image form validation
+    $('#frm_agent_image').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_agent_image').validate({
+    	ignore: "not:hidden",	// As the input file is hidden
+        rules: {
+            agent_upload_image: {
+                required: true
+            }
+        },
+        messages: {
+            agent_upload_image: {
+                required: 'Please select image to upload'
+            }
+        }
+    });
+
+    // Update the image data
+    $('#btn_update_agent_image').click(function(){
+    	if( $('#frm_agent_image').valid() )
+    	{
+			// Get the image and append it to form object
+            var fileData = $('#agent_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+
+            formData.append('fileData', fileData);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/updateagentimage',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+			    	{
+			    		// Show the uploaded image
+			    		$('#agent_profile_image').attr('src', response.imgPath);
+
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+                }
+            });
+    	}
+    });
 });
 
 /**

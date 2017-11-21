@@ -11,7 +11,7 @@
     <ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#profile">Profile</a></li>
 		<li><a data-toggle="tab" href="#message">Message</a></li>
-		<li><a data-toggle="tab" href="#themes">Themes</a></li>
+		<li><a data-toggle="tab" href="#template">Email Template</a></li>
 	</ul>
 
 	<div class="tab-content">
@@ -120,6 +120,32 @@
 								  	</div>
 								</div>
 							</div>
+							<!-- Social Sites data -->
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Twitter:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="{{ $agentDetails->twitter or '' }}" name="agent_twitter" id="agent_twitter">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">LinkedIn:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="{{ $agentDetails->linkedin or '' }}" name="agent_linkedin" id="agent_linkedin">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Facebook:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="{{ $agentDetails->facebook or '' }}" name="agent_facebook" id="agent_facebook">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">Website:</label>
+								<div class="col-lg-8">
+								  	<input class="form-control" type="text" value="{{ $agentDetails->website or '' }}" name="agent_website" id="agent_website">
+								</div>
+							</div>
+							<!-- Social Sites data -->
 						</fieldset>
 						<fieldset>
   							<legend>Company Information:</legend>
@@ -243,10 +269,31 @@
 					</form>
 				</div>
 				<div class="col-md-4">
-					<div class="text-center">
-						<img src="//placehold.it/100" class="avatar img-square" alt="avatar">
-						<h6>Upload a different photo...</h6>
-					</div>
+					<form class="form-horizontal" role="form" name="frm_agent_image" id="frm_agent_image">
+						<div class="text-center">
+							<!-- <img src="{{ $agentDetails->image or url('/images/no_image.jpg') }}" id="agent_profile_image" class="avatar img-square" alt="avatar"> -->
+
+							<?php
+							if( $agentDetails->image != '' )
+							{
+								echo '<img src="'. url('/images/agents/' . $agentDetails->image) .'" id="agent_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">';
+							}
+							else
+							{
+								echo '<img src="'. url('/images/no_image.jpg') .'" id="agent_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">';
+							}
+							?>
+
+							<div class="top-buffer">
+								<!-- To upload image -->
+								<label for="agent_upload_image" class="">Select File <i class="fa fa-file-image-o" aria-hidden="true"></i></label>
+								<input type="file" id="agent_upload_image" name="agent_upload_image" accept="image/*" style="display: none">
+								<button type="submit" class="btn btn-primary" name="btn_update_agent_image" id="btn_update_agent_image">Upload</button>
+
+								<div><label id="agent_upload_image-error" class="error" for="agent_upload_image"></label></div>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -267,15 +314,47 @@
 				</form>
 			</div>
 		</div>
-		<div id="themes" class="tab-pane fade">
-			<h3>Themes</h3>
+		<div id="template" class="tab-pane fade">
+			<h3>Email Template</h3>
 			<div>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				<form class="form-horizontal" role="form" name="frm_agent_email_template" id="frm_agent_email_template">
+					<div class="form-group">
+						<div class="col-lg-4">
+						  	<!-- List of templates -->
+						  	<?php
+						  	if( isset( $templates ) && count( $templates ) > 0 )
+						  	{
+						  		foreach ($templates as $template)
+						  		{
+						  			$checked = '';
+						  			if ( isset($agentTemplate->id) && ($agentTemplate->id == $template->id) )
+						  			{
+						  				$checked = 'checked="true"';
+						  			}
+						  			echo '<div><label class="control-label"><input type="radio" name="agent_email_template" value="'. $template->id .'" '. $checked .'> '. ucwords( strtolower( $template->template_name ) ) .'</label></div>';
+						  		}
+						  	}
+						  	?>
+						  	<label id="agent_email_template-error" class="error" for="agent_email_template"></label>
+						</div>
+					</div>
+					<div>
+						<h4>Template Preview</h4>
+						<div id="email_template_preview" style="min-height: 500px; width:600px;">
+							<?php
+							if( isset( $agentTemplateContent ) && count( $agentTemplateContent ) > 0 )
+							{
+								echo $agentTemplateContent->template_content;
+							}
+							?>
+						</div>
+					</div>
+					<div class="top-buffer">
+						<div class="ui-select">
+						    <button type="submit" class="btn btn-primary" name="btn_update_agent_email_template" id="btn_update_agent_email_template">Submit</button>
+					  	</div>
+					</div>
+				</form>
 			</div>
 		</div>
 

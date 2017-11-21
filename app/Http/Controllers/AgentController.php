@@ -29,6 +29,7 @@ use App\LoginAttempt;
 use App\AgentClient;
 use App\Message;
 use App\Company;
+use App\EmailTemplate;
 
 use Validator;
 use Helper;
@@ -456,8 +457,10 @@ class AgentController extends Controller
 
     	$agentDetails = User::find($userId);
 
+    	// Get the company associated with the agent
     	$companyDetails = $agentDetails->company;
 
+    	// Get the company categories list
     	$companyCategories = CompanyCategory::where(['status' => '1'])->get();
 
         // Get the country list
@@ -487,11 +490,20 @@ class AgentController extends Controller
     	// Get the message
     	$message = Message::where(['agent_id' => $userId])->first();
 
-    	// echo '<pre>';
-    	// print_r( $message );
-    	// exit;
-       	
-    	return view('agent/profile', ['agentDetails' => $agentDetails, 'cityArray' => $cityArray, 'provinces' => $provinces, 'countries' => $countries, 'companyCategories' => $companyCategories, 'companyDetails' => $companyDetails, 'message' => $message]);
+    	// Get the email template listing
+    	$templates = EmailTemplate::where(['status' => '1'])->select('id', 'template_name')->get();
+
+    	// Get the selected email template
+    	$agentTemplate = $agentDetails->emailTemplate->first();
+
+    	$agentTemplateContent = array();
+    	if( count( $agentTemplate ) > 0 )
+    	{
+	    	// Get the selected template content
+	    	$agentTemplateContent = EmailTemplate::where(['id' => $agentTemplate->id,'status' => '1'])->select('template_content')->first();
+    	}
+
+    	return view('agent/profile', ['agentDetails' => $agentDetails, 'cityArray' => $cityArray, 'provinces' => $provinces, 'countries' => $countries, 'companyCategories' => $companyCategories, 'companyDetails' => $companyDetails, 'message' => $message, 'templates' => $templates, 'agentTemplate' => $agentTemplate, 'agentTemplateContent' => $agentTemplateContent]);
     }
 
     /**
@@ -539,7 +551,7 @@ class AgentController extends Controller
 		        'agent_lname.required' 	         => 'Please enter last name',
 		        'agent_address.required' 	     => 'Please enter address',
 		        'agent_company_name.required' 	 => 'Please enter company name',
-		        'agent_company_address.required' => 'Please enter compant address',
+		        'agent_company_address.required' => 'Please enter company address',
 		    )
 		);
 
@@ -565,6 +577,10 @@ class AgentController extends Controller
 			$user->city_id 		= $profileData['agent_city'];
 			$user->postalcode 	= $profileData['agent_postalcode'];
 			$user->country_id 	= $profileData['agent_country'];
+			$user->twitter 		= $profileData['agent_twitter'];
+			$user->linkedin 	= $profileData['agent_linkedin'];
+			$user->facebook 	= $profileData['agent_facebook'];
+			$user->website 		= $profileData['agent_website'];
 			$user->updated_by 	= $userId;
 
 			if( $user->save() )
@@ -673,6 +689,187 @@ class AgentController extends Controller
 			{
 				$response['errCode']    = 2;
 			    $response['errMsg']     = 'Some error in updating the message';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to get the email template content
+     * @param void
+     * @return array
+     */
+    public function getEmailTemplateContent() 
+    {
+    	$templateId = Input::get('templateId');
+
+    	$response = array();
+    	if( $templateId != '' )
+    	{
+    		$emailTemplate = EmailTemplate::find($templateId);
+
+    		if( count( $emailTemplate ) > 0 )
+    		{
+    			$response['errCode'] 	= 0;
+    			$response['errMsg'] 	= 'Success';
+    			$response['content'] 	= $emailTemplate->template_content;
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 1;
+    			$response['errMsg'] 	= 'Error';
+    		}
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to update agent email template
+     * @param void
+     * @return array
+     */
+    public function updateEmailTemplate()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $templateData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response = array();
+
+		$validation = Validator::make(
+		    array(
+		        'email_template' => $templateData['agent_email_template']
+		    ),
+		    array(
+		        'email_template' => array('required')
+		    ),
+		    array(
+		        'email_template.required' => 'Please select email template'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			$user = User::find($userId);
+
+			// Save the email template or update if already exist
+			$user->emailTemplate()->sync($templateData['agent_email_template']);
+
+			$response['errCode']    = 0;
+		    $response['errMsg']     = 'Template updated successfully';
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to update agent image
+     * @param void
+     * @return array
+     */
+    public function updateAgentImage(Request $request)
+    {
+    	$agentImage = $request->file('fileData');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $validation = Validator::make(
+		    array(
+		        'agentImage' => $agentImage
+		    ),
+		    array(
+		        'agentImage' => array('required')
+		    ),
+		    array(
+		        'agentImage.required' => 'Please select image to upload'
+		    )
+		);
+
+        $response = array();
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Image destination folder
+			$destinationPath = storage_path() . '/uploads/agents';
+
+			if( $agentImage->isValid() )  // If the file is valid or not
+			{
+			    $fileExt  = $agentImage->getClientOriginalExtension();
+			    $fileType = $agentImage->getMimeType();
+			    $fileSize = $agentImage->getSize();
+
+			    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+			    {
+			        // Rename the file
+			        $fileNewName = str_random(10) . '.' . $fileExt;
+
+			        if( $agentImage->move( $destinationPath, $fileNewName ) )
+			        {
+			        	// Update the image entry in table
+			        	$user = User::find($userId);
+
+			        	$user->image = $fileNewName;
+			        	$user->updated_by = $userId;
+
+			        	if( $user->save() )
+			        	{
+			        		$response['errCode']    = 0;
+		        			$response['errMsg']     = 'Image uploaded successfully';
+		        			$response['imgPath']    = url('/images/agents/' . $fileNewName);
+			        	}
+			        	else
+			        	{
+			        		$response['errCode']    = 2;
+		                	$response['errMsg']     = 'Some error in image upload';
+			        	}
+			        }
+		        	else
+		        	{
+		        		$response['errCode']    = 3;
+		                $response['errMsg']     = 'Some error in image upload';
+		        	}
+			    }
+		    	else
+		    	{
+		    		$response['errCode']    = 4;
+		            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+		    	}
+			}
+			else
+			{
+				$response['errCode']    = 5;
+		        $response['errMsg']     = 'Invalid file';
 			}
 		}
 
