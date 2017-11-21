@@ -891,23 +891,38 @@ class AgentController extends Controller
     	$response = array();
     	if( $clientId != '' )
     	{
-    		// Get the message for the user
-    		$message = Message::where(['agent_id' => $userId, 'status' => '1'])->select('message')->first();
+    		// Check if the agent basic information is available or not as this information is required to show on the email
+    		// If not, show a message to client to fill the basic information first and than invite the client
+    		// The basic information include the name, address.
 
-    		// Get the client details
-    		$clientDetails = AgentClient::find($clientId);
+    		$agentDetails = User::find($userId);
 
-    		$clientName = ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) );
+    		if( $agentDetails->fname == '' || $agentDetails->address == '' || $agentDetails->province_id == '' || $agentDetails->city_id == '' || $agentDetails->postalcode == '' || $agentDetails->country_id == '' )
+    		{
+    			$response['errCode']    = 1;
+		        $response['errMsg']     = 'Please fill the basic information including name, address and image first!';
+    		}
+    		else
+    		{
+	    		// Get the message for the user
+	    		$message = Message::where(['agent_id' => $userId, 'status' => '1'])->select('message')->first();
 
-    		// Replace the [User Name] with the actual user name
-    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
+	    		// Get the client details
+	    		$clientDetails = AgentClient::find($clientId);
 
-    		// Get the Moving from & Moving to addresses
-    		
+	    		$clientName = ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) );
 
-    		// Get the email template list
+	    		// Replace the [User Name] with the actual user name
+	    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
+
+	    		// Get the Moving from & Moving to addresses
+
+	    		// Get the selected email template
+
+    		}
+
     	}
 
-    	exit;
+    	return response()->json($response);
     }
 }

@@ -43,7 +43,8 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Address:</label>
 								<div class="col-lg-8">
-								  	<textarea class="form-control autocomplete" name="agent_address" id="agent_address">{{ $agentDetails->address or '' }}</textarea>
+								  	<!-- <textarea class="form-control autocomplete" name="agent_address" id="agent_address">{{ $agentDetails->address or '' }}</textarea> -->
+								  	<input type="text" name="agent_address" id="agent_address" class="form-control" value="{{ $agentDetails->address or '' }}">
 								</div>
 							</div>
 							<div class="form-group">
@@ -180,7 +181,8 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Address:</label>
 								<div class="col-lg-8">
-								  	<textarea class="form-control autocomplete" name="agent_company_address" id="agent_company_address">{{ $companyDetails[0]->address or '' }}</textarea>
+								  	<!-- <textarea class="form-control autocomplete" name="agent_company_address" id="agent_company_address">{{ $companyDetails[0]->address or '' }}</textarea> -->
+								  	<input type="text" name="agent_company_address" id="agent_company_address" class="form-control" value="{{ $companyDetails[0]->address or '' }}">
 								</div>
 							</div>
 							<div class="form-group">
@@ -360,16 +362,24 @@
 
 		<br>
 
+		<input id="searchTextField" type="text" size="50">
+
 	</div>
 
 	<!-- Google map address auto-complete -->
-	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCY6SWc-U6uPnlw4_7Q05yWib74zHGlxo8&libraries=places&callback=initMap" async defer></script> -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE&libraries=places&callback=initMap" async defer></script>
 	<script type="text/javascript">
-	/*function initMap() {
+	// For agent address
+	function initMap() {
+	  	new google.maps.places.Autocomplete(
+	    (document.getElementById('agent_address')), {
+	      types: ['geocode']
+	    });
+
 	    new google.maps.places.Autocomplete(
 	    (document.getElementById('agent_company_address')), {
-	        types: ['geocode']
+	      types: ['geocode']
 	    });
-	}*/
+	}
 	</script>
 @endsection
