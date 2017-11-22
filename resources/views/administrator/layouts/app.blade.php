@@ -374,6 +374,15 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> Email Template Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/emailtemplates') }}"> Email Templates</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i> Miscellaneous<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>

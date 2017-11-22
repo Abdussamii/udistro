@@ -2271,6 +2271,153 @@ $(document).ready(function(){
     		});
 		}
 	});
+
+	// To show the add email template modal
+	$('#btn_modal_email_template').click(function() {
+		$('#modal_email_template').find('.modal-title').html('Add Template');
+		$('#frm_email_template #email_template_id').val('');
+		$('#modal_email_template').modal('show');
+	});
+
+	// Add agent form validation
+	$('#frm_email_template').submit(function(e){
+	    e.preventDefault();
+	});
+
+	$('#frm_email_template').validate({
+	    rules: {
+	        email_template_name: {
+	            required: true
+	        },
+			company_status: {
+	        	required: true	
+	        }
+	    },
+	    messages: {
+	        email_template_name: {
+	            required: 'Please enter template name'
+	        },
+			company_status: {
+	        	required: 'Please select status'
+	        }
+	    }
+	});
+
+	// Save the email template
+	$('#btn_add_email_template').click(function(){
+    	if( $('#frm_email_template').valid() )
+    	{
+    		// Check for the page content
+    		let pageContentTxt 	= tinymce.activeEditor.getContent({ format: 'text' });
+    		let pageContentHtml = tinymce.activeEditor.getContent();
+
+    		if($.trim(pageContentTxt) == '')
+    		{
+    		   	alertify.error('Please enter some content');
+    		}
+    		else
+    		{
+				// Save the tinymce editor data to the textarea so that we can send it by using serialize() method
+    			tinyMCE.triggerSave();
+    			
+    			// Ajax call to save the page related data
+    			var $this = $(this);
+
+	    		$.ajax({
+	    			url: $('meta[name="route"]').attr('content') + '/administrator/saveemailtemplate',
+	    			method: 'post',
+	    			data: {
+	    				frmData: $('#frm_email_template').serialize()
+	    			},
+	    			beforeSend: function() {
+	    				// Show the loading button
+				        $this.button('loading');
+				    },
+	    			headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    complete: function()
+				    {
+				    	// Change the button to previous
+				    	$this.button('reset');
+				    },
+				    success: function(response){
+				    	if( response.errCode == 0 )
+				    	{
+				    		alertify.success( response.errMsg );
+							
+				    		// Refresh the form and close the modal
+				    		$('#frm_email_template')[0].reset();
+
+				    		$('#modal_email_template').modal('hide');
+
+				    		// Refresh the datatable
+				    		$('#datatable_email_templates').DataTable().ajax.reload();
+				    	}
+				    	else
+				    	{
+				    		alertify.error( response.errMsg );
+				    	}
+				    }
+	    		});
+    		}
+    	}
+    });
+
+    // Email template listing datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_email_templates').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchemailtemplates',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 3, 4] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false, 'width': '10%' }
+        ]
+    });
+
+    // To show/hide the email template preview in datatable
+    $(document).on('click', '.datatable_template_check_preview', function(){
+    	$(this).next('.datatable_template_preview').toggle();
+    });
+
+    // To edit the email template
+    $(document).on('click', '.edit_email_template', function(){
+    	var templateId = $(this).attr('id');
+
+    	if( templateId != '' )
+    	{
+    		// Get the details of selected email template
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getemailtemplatedetails',
+				method: 'get',
+				data: {
+					templateId: templateId
+				},
+			    success: function(response){
+			    	// Auto-fill the form
+			    	$('#frm_email_template #email_template_id').val(templateId);
+			    	$('#frm_email_template #email_template_name').val(response.template_name);
+
+			    	// Set the content in tinymce editor
+			    	tinymce.activeEditor.setContent(response.template_content);
+			    	
+			    	$('#frm_email_template input[name="email_template_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_email_template').modal('show');
+			    }
+			});
+    	}
+    });
 });
 
 /**

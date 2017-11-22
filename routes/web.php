@@ -159,6 +159,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details of the selected city
 	Route::get('/getcitydetails', 'AdminController@getCityDetails');
 
+	// To return email template listing view
+	Route::get('/emailtemplates', 'AdminController@emailTemplates');
+
+	// To save the email template details
+	Route::post('/saveemailtemplate', 'AdminController@saveEmailTemplate');
+
+	// To show the email template list in datatable
+	Route::get('/fetchemailtemplates', 'AdminController@fetchEmailTemplates');
+
+	// To get the details of selected email template
+	Route::get('/getemailtemplatedetails', 'AdminController@getEmailTemplateDetails');
+
 
 	/* ---------- Company related functionality ---------- */
 

@@ -362,8 +362,6 @@
 
 		<br>
 
-		<input id="searchTextField" type="text" size="50">
-
 	</div>
 
 	<!-- Google map address auto-complete -->
