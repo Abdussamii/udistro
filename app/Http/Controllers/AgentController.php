@@ -30,6 +30,9 @@ use App\AgentClient;
 use App\Message;
 use App\Company;
 use App\EmailTemplate;
+use App\StreetType;
+use App\AgentClientMovingFromAddress;
+use App\AgentClientMovingToAddress;
 
 use Validator;
 use Helper;
@@ -211,7 +214,19 @@ class AgentController extends Controller
      */
     public function clients()
     {
-    	return view('agent/clients');
+    	// Get the country list
+    	$countries = Country::orderBy('name', 'asc')->get();
+
+    	// Get the province list
+    	$provinces = Province::where(['status' => '1'])->select('id','abbreviation', 'name')->orderBy('name', 'asc')->get();
+
+    	// Get the cities list
+    	$cities = City::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+    	// Get the street type list
+    	$streetTypes = StreetType::where(['status' => '1'])->select('id', 'type')->orderBy('type', 'asc')->get();
+    	
+    	return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes]);
     }
 
     /**
@@ -394,7 +409,7 @@ class AgentController extends Controller
                     4 => $agentClient->email,
                     5 => $agentClient->contact_number,
                     6 => Helper::getStatusText($agentClient->status),
-                    7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title="Invite Client"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" data-toggle="tooltip" title="Edit Client" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -910,15 +925,20 @@ class AgentController extends Controller
 	    		// Get the client details
 	    		$clientDetails = AgentClient::find($clientId);
 
+	    		// From the client details, get the client name
 	    		$clientName = ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) );
 
-	    		// Replace the [User Name] with the actual user name
+	    		// Replace the [User Name] with the clinet name
 	    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
 
 	    		// Get the Moving from & Moving to addresses
+	    		$movingToAddress 	= '';
 
-	    		// Get the selected email template
+	    		$movingFromAddress 	= '';
 
+	    		$response['errCode']    = 0;
+		        $response['errMsg']     = 'Success';
+		        $response['message']    = $clientMessage;
     		}
 
     	}

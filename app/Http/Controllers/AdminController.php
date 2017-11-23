@@ -1569,7 +1569,7 @@ class AdminController extends Controller
 	    		{
 	    			$response[] = array(
 	    				'id' 	=> $city->id,
-	    				'city' 	=> ucwords( strtolower( $city->name ) )
+	    				'city' 	=> utf8_encode( ucwords( strtolower( $city->name ) ) )
 	    			);
 	    		}
     		}

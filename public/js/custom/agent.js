@@ -335,7 +335,9 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 			    	{
 			    		// Pre-fill the popup with the details
+			    		$('#frm_invite_client #client_message').val(response.message);
 
+			    		$('#modal_invite_client').modal('show');
 			    	}
 			    	else
 			    	{

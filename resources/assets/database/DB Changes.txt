@@ -44,3 +44,7 @@
 # ALTER TABLE `users` ADD `twitter` VARCHAR(200) NULL AFTER `password`, ADD `linkedin` VARCHAR(200) NULL AFTER `twitter`, ADD `facebook` VARCHAR(200) NULL AFTER `linkedin`, ADD `website` VARCHAR(200) NULL AFTER `facebook`;
 
 # ALTER TABLE `users` ADD `image` VARCHAR(100) NULL AFTER `website`;
+
+# ALTER TABLE `provinces` ADD `abbreviation` VARCHAR(10) NULL AFTER `name`;
+
+# CREATE TABLE `udistro`.`street_types` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(100) NOT NULL , `status` ENUM('0','1', '2') NOT NULL COMMENT '0: Inactive, 1: Active, 2: Deleted' , `created_at` DATETIME NOT NULL , `created_by` INT NOT NULL , `updated_at` TIMESTAMP NOT NULL , `updated_by` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
