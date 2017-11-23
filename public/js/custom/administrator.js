@@ -1816,6 +1816,7 @@ $(document).ready(function(){
 			    	$('#frm_edit_company #company_category').val(response.company_category_id);
 			    	$('#frm_edit_company #company_address').val(response.address);
 			    	$('#frm_edit_company #company_province').val(response.province_id);
+                    $('#frm_edit_company #company_profile_image').attr('src', response.image);
 			    	
 			    	// Fill the cities
 			    	var cities = '<option value="">Select</option>';
@@ -2418,6 +2419,74 @@ $(document).ready(function(){
 			});
     	}
     });
+
+    // To check the file extension
+    $('#frm_company_image #company_upload_image').change(function(){
+        var ext = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+            $(this).val('');
+            alert('invalid file type, only images are allowed');
+        }
+    });
+
+    // Agent image form validation
+    $('#frm_company_image').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_company_image').validate({
+        ignore: "not:hidden",   // As the input file is hidden
+        rules: {
+            agent_upload_image: {
+                required: true
+            }
+        },
+        messages: {
+            agent_upload_image: {
+                required: 'Please select image to upload'
+            }
+        }
+    });
+
+    // Update the image data
+    $('#btn_update_company_image').click(function(){
+        if( $('#frm_company_image').valid() )
+        {
+            var companyId = $('#company_id').val();
+            // Get the image and append it to form object
+            var fileData = $('#company_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+
+            formData.append('fileData', fileData);
+            formData.append('companyId', companyId);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/updatecompanyimage',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        // Show the uploaded image
+                        $('#company_profile_image').attr('src', response.imgPath);
+
+                        alertify.success( response.errMsg );
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
 });
 
 /**
