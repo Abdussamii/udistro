@@ -272,6 +272,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To update agent image
 	Route::post('/updateagentimage', 'AgentController@updateAgentImage');
 
+	// To save the agent invitation details
+	Route::post('/saveinvitationdetails', 'AgentController@saveInvitationDetails');
+
 });
 
 /* ---------- Agent related functionality ---------- */

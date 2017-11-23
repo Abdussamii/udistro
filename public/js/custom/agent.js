@@ -532,6 +532,134 @@ $(document).ready(function(){
             });
     	}
     });
+
+    // Invite client form validation
+    $('#frm_invite_client').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_invite_client').validate({
+        rules: {
+            client_old_address: {
+                required: true
+            },
+            client_old_unit_type: {
+                required: true
+            },
+            client_old_province: {
+                required: true
+            },
+            client_old_city: {
+                required: true
+            },
+            client_old_postalcode: {
+            	required: true
+            },
+            client_old_country: {
+                required: true
+            },
+            client_new_address: {
+                required: true
+            },
+            client_new_unit_type: {
+                required: true
+            },
+            client_new_province: {
+                required: true
+            },
+            client_new_city: {
+                required: true
+            },
+            client_new_postalcode: {
+            	required: true
+            },
+            client_new_country: {
+                required: true
+            },
+            client_moving_date: {
+                required: true
+            },
+            client_message: {
+                required: true
+            },
+            client_email_template: {
+                required: true
+            }
+        },
+        messages: {
+            client_old_address: {
+                required: 'Please enter address'
+            },
+            client_old_unit_type: {
+                required: 'Please select unit'
+            },
+            client_old_province: {
+                required: 'Please select province'
+            },
+            client_old_city: {
+                required: 'Please select city'
+            },
+            client_old_postalcode: {
+                required: 'Please enter postalcode'
+            },
+            client_old_country: {
+                required: 'Please select country'
+            },
+            client_new_address: {
+                required: 'Please enter address'
+            },
+            client_new_unit_type: {
+                required: 'Please select unit'
+            },
+            client_new_province: {
+                required: 'Please select province'
+            },
+            client_new_city: {
+                required: 'Please select city'
+            },
+            client_new_postalcode: {
+            	required: 'Please enter postalcode'
+            },
+            client_new_country: {
+                required: 'Please select country'
+            },
+            client_moving_date: {
+                required: 'Please enter moving date'
+            },
+            client_message: {
+                required: 'Please enter message'
+            },
+            client_email_template: {
+                required: 'Please select template'
+            }
+        }
+    });
+
+    // Save the client invitation data
+    $('#btn_send_invitation').click(function(){
+    	if( $('#frm_invite_client').valid() )
+    	{
+    		$.ajax({
+    		    url: $('meta[name="route"]').attr('content') + '/agent/saveinvitationdetails',
+    		    method: 'post',
+    		    data: {
+    		        frmData: $('#frm_invite_client').serialize()
+    		    },
+    		    headers: {
+    		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    		    },
+    		    success: function(response){
+    		        if( response.errCode == 0 )
+    		        {
+    		            alertify.success( response.errMsg );                        
+    		        }
+    		        else
+    		        {
+    		            alertify.error( response.errMsg );
+    		        }
+    		    }
+    		});
+    	}
+    });
 });
 
 /**

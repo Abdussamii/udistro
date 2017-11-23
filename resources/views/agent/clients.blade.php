@@ -2,6 +2,35 @@
 @section('title', 'Udistro | Clients')
 
 @section('content')
+	<!-- Jquery UI for datepicker -->
+	<script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
+	<link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.min.css') }}" />
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		// Datepicker intialize
+		$('#client_moving_date').datepicker({
+			dateFormat: 'dd-mm-yy'
+		});
+
+		// To pot a space after user enters 3 characters like (123 456)
+		$('#client_old_postalcode').keyup(function() {
+		  	var postalCode = $(this).val().split(" ").join("");
+		  	if (postalCode.length > 0) {
+		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
+		  	}
+		  	$(this).val(postalCode);
+		});
+		$('#client_new_postalcode').keyup(function() {
+		  	var postalCode = $(this).val().split(" ").join("");
+		  	if (postalCode.length > 0) {
+		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
+		  	}
+		  	$(this).val(postalCode);
+		});
+	});
+	</script>
+
 	<style>
 	/* To resolve the google map autocomplete issue */
     .pac-container {
@@ -89,7 +118,7 @@
 
 		<!-- Modal to invite client -->
 		<div id="modal_invite_client" class="modal fade" role="dialog">
-		  	<div class="modal-dialog" style="width: 1000px;">
+		  	<div class="modal-dialog">
 			    <!-- Modal content-->
 			    <div class="modal-content">
 					<div class="modal-header">
@@ -99,22 +128,27 @@
 
 					<div class="modal-body">
 						<form name="frm_invite_client" id="frm_invite_client" autocomplete="off">
-							<div class="row">
-								<div class="col-sm-6 col-md-6 col-lg-6">
-									<fieldset>
-		    							<legend>Old Address:</legend>
-										<div class="form-group">
-											<label for="client_fname">Address</label>
-											<input type="text" class="form-control" name="client_old_address" id="client_old_address">
-										</div>
+							<div>
+								<fieldset>
+									<div class="form-group">
+										<label for="client_fname">Old Address</label>
+										<input type="text" class="form-control" name="client_old_address" id="client_old_address">
+									</div>
+
+									<!-- Old address related fields -->
+									<div id="container_old_address_fields" style="display: none;">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-3">
 										  		<label for="">Unit</label>
 										  		<select class="form-control" name="client_old_unit_type" id="client_old_unit_type">
 										  			<option value="">Select</option>
 											  		<option value="appartment">Appartment</option>
 											  		<option value="basement">Basement</option>
 										  		</select>
+										  	</div>
+										  	<div class="col-sm-3">
+										  		<label for="">Unit No</label>
+										  		<input type="text" class="form-control" name="client_old_unit_no" id="client_old_unit_no">
 										  	</div>
 										  	<div class="col-sm-6">
 										  		<label for="">Street Type</label>
@@ -166,6 +200,10 @@
 										</div>
 										<div class="row">
 											<div class="col-sm-6">
+										  		<label for="client_new_country">Postal Code</label>
+										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode">
+										  	</div>
+											<div class="col-sm-6">
 										  		<label for="">Country</label>
 										  		<select class="form-control" name="client_old_country" id="client_old_country">
 										  			<option value="">Select</option>
@@ -181,23 +219,32 @@
 										  		</select>
 										  	</div>
 										</div>
-									</fieldset>
-								</div>
-								<div class="col-sm-6 col-md-6 col-lg-6">
-									<fieldset>
-		    							<legend>New Address:</legend>
-										<div class="form-group">
-											<label for="client_fname">Address</label>
-											<input type="text" class="form-control" name="client_new_address" id="client_new_address">
-										</div>
+									</div>
+
+								</fieldset>
+							</div>
+							<br>
+							<div>
+								<fieldset>
+									<div class="form-group">
+										<label for="client_fname">New Address</label>
+										<input type="text" class="form-control" name="client_new_address" id="client_new_address">
+									</div>
+
+									<!-- New address related fields -->
+									<div id="container_new_address_fields" style="display: none;">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-3">
 										  		<label for="">Unit</label>
 										  		<select class="form-control" name="client_new_unit_type" id="client_new_unit_type">
 										  			<option value="">Select</option>
 											  		<option value="appartment">Appartment</option>
 											  		<option value="basement">Basement</option>
 										  		</select>
+										  	</div>
+										  	<div class="col-sm-3">
+										  		<label for="">Unit No</label>
+										  		<input type="text" class="form-control" name="client_new_unit_no" id="client_new_unit_no">
 										  	</div>
 										  	<div class="col-sm-6">
 										  		<label for="">Street Type</label>
@@ -249,6 +296,10 @@
 										</div>
 										<div class="row">
 											<div class="col-sm-6">
+										  		<label for="client_new_country">Postal Code</label>
+										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode">
+										  	</div>
+											<div class="col-sm-6">
 										  		<label for="">Country</label>
 										  		<select class="form-control" name="client_new_country" id="client_new_country">
 										  			<option value="">Select</option>
@@ -263,21 +314,37 @@
 											  		?>
 										  		</select>
 										  	</div>
-										  	<div class="col-sm-6">
-										  		<label for="">Moving Date</label>
-										  		<input type="text" class="form-control" name="client_moving_date" id="client_moving_date">
-										  	</div>
 										</div>
-									</fieldset>
-								</div>
+									</div>
+
+								</fieldset>
 							</div>
+							<div class="">
+						  		<label for="">Moving Date</label>
+						  		<input type="text" class="form-control" name="client_moving_date" id="client_moving_date">
+						  	</div>
 							<hr>
 							<div class="form-group">
 								<label for="client_fname">Client Message</label>
-								<textarea class="form-control" name="client_message" id="client_message" rows="10"></textarea>
+								<textarea class="form-control" name="client_message" id="client_message" rows="6"></textarea>
 							</div>
-							<button type="submit" id="btn_invite_client" name="btn_invite_client" class="btn btn-primary">Send</button>
-							<button type="submit" id="btn_invite_client" name="btn_invite_client" class="btn btn-primary">Schedule</button>
+
+							<div class="form-group">
+								<label for="client_fname">Templates</label>
+								<?php
+								if( isset( $emailTemplates ) && count( $emailTemplates ) > 0 )
+								{
+									foreach ($emailTemplates as $emailTemplate)
+									{
+										echo '<div><label><input type="radio" name="client_email_template" value="'. $emailTemplate->id .'" checked="checked"> '. ucwords( strtolower( $emailTemplate->template_name ) ) .'</label></div>';
+									}
+								}
+								?>
+								<div><label id="client_email_template-error" class="error" for="client_email_template"></label></div>
+							</div>
+							
+							<button type="submit" id="btn_send_invitation" class="btn btn-primary">Send</button>
+							<button type="submit" id="btn_schedule_invitation" class="btn btn-primary">Schedule</button>
 						</form>
 					</div>
 			    </div>
@@ -287,26 +354,7 @@
     </div>
 
     <!-- Google map address auto-complete -->
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE&libraries=places&callback=initMap" async defer></script>
-    <script type="text/javascript">
-    // For agent address
-    function initMap() {
-      	new google.maps.places.Autocomplete(
-        (document.getElementById('client_old_address')), {
-          	types: ['geocode'],
-          	componentRestrictions: {country: "ca"}
-        });
-
-        new google.maps.places.Autocomplete(
-        (document.getElementById('client_new_address')), {
-          	types: ['geocode'],
-          	componentRestrictions: {country: "ca"}
-        });
-    }
-    </script>
-	-->
-
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE&libraries=places&callback=initMap" async defer></script>
 	<script type="text/javascript">
 	function initMap() {
 		// To manage the client old address
@@ -344,6 +392,9 @@
             // Set the country
             let country = addressComponent[3].trim();
             $("#client_old_country option:contains(" + country + ")").attr('selected', 'selected').change();
+
+            // Show the hidden address fields
+            $('#container_old_address_fields').show();
 	    });
 
 	    // To manage the client new address
@@ -360,7 +411,7 @@
             addressComponent = address.split(",");
             
             // Replace the complete address with the address part only
-            $clientOldAddress.val(addressComponent[0]);
+            $clientNewAddress.val(addressComponent[0]);
 
             // (4) ["104 Nelson Street West", " Brampton", " ON", " Canada"]
             // [0]: Address, [1]: City, [2]: Province, [3]: Country
@@ -381,6 +432,9 @@
             // Set the country
             let country = addressComponent[3].trim();
             $("#client_new_country option:contains(" + country + ")").attr('selected', 'selected').change();
+
+            // Show the hidden address fields
+            $('#container_new_address_fields').show();
 	    });
 	}
 	</script>

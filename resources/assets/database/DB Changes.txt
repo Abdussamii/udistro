@@ -48,3 +48,14 @@
 # ALTER TABLE `provinces` ADD `abbreviation` VARCHAR(10) NULL AFTER `name`;
 
 # CREATE TABLE `udistro`.`street_types` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(100) NOT NULL , `status` ENUM('0','1', '2') NOT NULL COMMENT '0: Inactive, 1: Active, 2: Deleted' , `created_at` DATETIME NOT NULL , `created_by` INT NOT NULL , `updated_at` TIMESTAMP NOT NULL , `updated_by` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# ALTER TABLE `agent_client_moving_from_addresses` CHANGE `unit` `unit_type` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+# ALTER TABLE `agent_client_moving_from_addresses` ADD `unit_no` INT NOT NULL AFTER `unit_type`;
+
+# ALTER TABLE `agent_client_moving_to_addresses` CHANGE `unit` `unit_type` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+# ALTER TABLE `agent_client_moving_to_addresses` ADD `unit_no` INT NOT NULL AFTER `unit_type`;
