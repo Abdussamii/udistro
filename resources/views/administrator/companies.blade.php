@@ -158,103 +158,122 @@
 		<div id="modal_edit_company" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
 			    <!-- Modal content-->
-			    <div class="modal-content">
+			    <div class="modal-content" style="width:1100px;">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Add Company</h4>
+						<h4 class="modal-title">Edit Company</h4>
 					</div>
 
 					<div class="modal-body">
-						<form name="frm_edit_company" id="frm_edit_company" autocomplete="off">
-							<legend>Representative Information</legend>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="representative_fname">First Name</label>
-								  		<input type="text" name="representative_fname" id="representative_fname" class="form-control" placeholder="First Name">
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="representative_lname">Last Name</label>
-								  		<input type="text" name="representative_lname" id="representative_lname" class="form-control" placeholder="Last Name">
-								  	</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="representative_email">Email</label>
-								  		<input type="text" name="representative_email" id="representative_email" class="form-control" placeholder="Representative Email">
-								  	</div>
-								</div>
-							</div>
+						<div class="row">
+							<div class="col-sm-9">
+								<form name="frm_edit_company" id="frm_edit_company" autocomplete="off">
+									<legend>Representative Information</legend>
+									<div class="form-group">
+										<div class="row">
+										  	<div class="col-sm-6">
+										  		<label for="representative_fname">First Name</label>
+										  		<input type="text" name="representative_fname" id="representative_fname" class="form-control" placeholder="First Name">
+										  	</div>
+										  	<div class="col-sm-6">
+										  		<label for="representative_lname">Last Name</label>
+										  		<input type="text" name="representative_lname" id="representative_lname" class="form-control" placeholder="Last Name">
+										  	</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+										  	<div class="col-sm-6">
+										  		<label for="representative_email">Email</label>
+										  		<input type="text" name="representative_email" id="representative_email" class="form-control" placeholder="Representative Email">
+										  	</div>
+										</div>
+									</div>
 
-							<legend>Company Information</legend>
-							<div class="form-group">
-								<label for="company_name">Company Name</label>
-								<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Enter company name">
-								<input type="hidden" name="company_id" id="company_id">
-							</div>
-							<div class="form-group">
-								<label for="company_category">Company Category</label>
-								<select name="company_category" id="company_category" class="form-control">
-									<option value="">Select</option>
-									<?php
-									if( isset( $companyCategories ) && count( $companyCategories ) > 0 )
-									{
-										foreach ($companyCategories as $companyCategory)
-										{
-											echo '<option value="'. $companyCategory->id .'">'. ucwords( strtolower( $companyCategory->category ) ) .'</option>';
-										}
-									}
-									?>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="company_address">Company Address</label>
-								<textarea name="company_address" id="company_address" placeholder="Enter address" class="form-control"></textarea>
-							</div>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="company_province">Province</label>
-								  		<select name="company_province" id="company_province" class="form-control">
-								  			<option value="">Select</option>
-								  			<?php
-								  			if( isset( $provinces ) && count( $provinces ) > 0 )
-								  			{
-								  				foreach ($provinces as $province)
-								  				{
-								  					echo '<option value="'. $province->id .'">'. $province->name .'</option>';
-								  				}
-								  			}
-								  			?>
-								  		</select>
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="company_city">City</label>
-								  		<select name="company_city" id="company_city" class="form-control">
-								  			<option value="">Select</option>
-								  		</select>
-								  	</div>
-								</div>
-							</div>
+									<legend>Company Information</legend>
+									<div class="form-group">
+										<label for="company_name">Company Name</label>
+										<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Enter company name">
+										<input type="hidden" name="company_id" id="company_id">
+									</div>
+									<div class="form-group">
+										<label for="company_category">Company Category</label>
+										<select name="company_category" id="company_category" class="form-control">
+											<option value="">Select</option>
+											<?php
+											if( isset( $companyCategories ) && count( $companyCategories ) > 0 )
+											{
+												foreach ($companyCategories as $companyCategory)
+												{
+													echo '<option value="'. $companyCategory->id .'">'. ucwords( strtolower( $companyCategory->category ) ) .'</option>';
+												}
+											}
+											?>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="company_address">Company Address</label>
+										<textarea name="company_address" id="company_address" placeholder="Enter address" class="form-control"></textarea>
+									</div>
+									<div class="form-group">
+										<div class="row">
+										  	<div class="col-sm-6">
+										  		<label for="company_province">Province</label>
+										  		<select name="company_province" id="company_province" class="form-control">
+										  			<option value="">Select</option>
+										  			<?php
+										  			if( isset( $provinces ) && count( $provinces ) > 0 )
+										  			{
+										  				foreach ($provinces as $province)
+										  				{
+										  					echo '<option value="'. $province->id .'">'. $province->name .'</option>';
+										  				}
+										  			}
+										  			?>
+										  		</select>
+										  	</div>
+										  	<div class="col-sm-6">
+										  		<label for="company_city">City</label>
+										  		<select name="company_city" id="company_city" class="form-control">
+										  			<option value="">Select</option>
+										  		</select>
+										  	</div>
+										</div>
+									</div>
 
-							<div class="form-group">
-								<label for="postal_code">Postal Code</label>
-								<input type="text" name="postal_code" id="postal_code" class="form-control" placeholder="Enter postal code">
+									<div class="form-group">
+										<label for="postal_code">Postal Code</label>
+										<input type="text" name="postal_code" id="postal_code" class="form-control" placeholder="Enter postal code">
+									</div>
+									<div class="form-group">
+										<label for="company_status">Status</label>
+										<div class="radio">
+										 	<label><input type="radio" name="company_status" value="1" checked="true">Active</label>
+										</div>
+										<div class="radio">
+										 	<label><input type="radio" name="company_status" value="0">Inactive</label>
+										</div>
+										<label id="company_status-error" class="error" for="company_status"></label>
+									</div>
+									<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
+								</form>
 							</div>
-							<div class="form-group">
-								<label for="company_status">Status</label>
-								<div class="radio">
-								 	<label><input type="radio" name="company_status" value="1" checked="true">Active</label>
-								</div>
-								<div class="radio">
-								 	<label><input type="radio" name="company_status" value="0">Inactive</label>
-								</div>
-								<label id="company_status-error" class="error" for="company_status"></label>
+							<div class="col-sm-3">
+								<form class="form-horizontal" role="form" name="frm_company_image" id="frm_company_image">
+									<div class="text-center">
+										<img src="" id="company_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
+										<div class="top-buffer">
+											<!-- To upload image -->
+											<label for="company_upload_image" class="">Select File <i class="fa fa-file-image-o" aria-hidden="true"></i></label>
+											<input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
+											<button type="submit" class="btn btn-primary" name="btn_update_company_image" id="btn_update_company_image">Upload</button>
+
+											<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
+										</div>
+									</div>
+								</form>
 							</div>
-							<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
-						</form>
+						</div>
 					</div>
 			    </div>
 		  	</div>

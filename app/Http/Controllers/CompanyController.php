@@ -613,6 +613,12 @@ class CompanyController extends Controller
 	    		$response['postal_code'] 		= $companyDetails->postal_code;
 	    		$response['status'] 			= $companyDetails->status;
 
+	    		if( $companyDetails->image != '' ) {
+					$response['image'] = url('/images/agents/'.$companyDetails->image);
+				} else {
+					$response['image'] = url('/images/no_image.jpg');
+				}
+
 	    		// Get the company representative details
 	    		// $companyRepDetails = User::find($companyDetails->user_id);
 
@@ -643,6 +649,100 @@ class CompanyController extends Controller
 		    			);
 	    			}
 	    		}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to update company image
+     * @param void
+     * @return array
+     */
+    public function updateCompanyImage(Request $request)
+    {
+    	$companyImage = $request->file('fileData');
+    	$companyId = $request->input('companyId');
+    	
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $validation = Validator::make(
+		    array(
+		        'companyImage' => $companyImage
+		    ),
+		    array(
+		        'companyImage' => array('required')
+		    ),
+		    array(
+		        'companyImage.required' => 'Please select image to upload'
+		    )
+		);
+
+        $response = array();
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Image destination folder
+			$destinationPath = storage_path() . '/uploads/company';
+
+			if( $companyImage->isValid() )  // If the file is valid or not
+			{
+			    $fileExt  = $companyImage->getClientOriginalExtension();
+			    $fileType = $companyImage->getMimeType();
+			    $fileSize = $companyImage->getSize();
+
+			    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+			    {
+			        // Rename the file
+			        $fileNewName = str_random(10) . '.' . $fileExt;
+
+			        if( $companyImage->move( $destinationPath, $fileNewName ) )
+			        {
+			        	// Update the image entry in table
+			        	$company = Company::find($companyId);
+
+			        	$company->image = $fileNewName;
+			        	$company->updated_by = $userId;
+
+			        	if( $user->save() )
+			        	{
+			        		$response['errCode']    = 0;
+		        			$response['errMsg']     = 'Image uploaded successfully';
+		        			$response['imgPath']    = url('/images/company/' . $fileNewName);
+			        	}
+			        	else
+			        	{
+			        		$response['errCode']    = 2;
+		                	$response['errMsg']     = 'Some error in image upload';
+			        	}
+			        }
+		        	else
+		        	{
+		        		$response['errCode']    = 3;
+		                $response['errMsg']     = 'Some error in image upload';
+		        	}
+			    }
+		    	else
+		    	{
+		    		$response['errCode']    = 4;
+		            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+		    	}
+			}
+			else
+			{
+				$response['errCode']    = 5;
+		        $response['errMsg']     = 'Invalid file';
 			}
 		}
 
