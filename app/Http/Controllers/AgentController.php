@@ -214,19 +214,22 @@ class AgentController extends Controller
      */
     public function clients()
     {
-    	// Get the country list
+    	// Get the country lists
     	$countries = Country::orderBy('name', 'asc')->get();
 
-    	// Get the province list
+    	// Get the province lists
     	$provinces = Province::where(['status' => '1'])->select('id','abbreviation', 'name')->orderBy('name', 'asc')->get();
 
-    	// Get the cities list
+    	// Get the cities lists
     	$cities = City::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
 
-    	// Get the street type list
+    	// Get the street type lists
     	$streetTypes = StreetType::where(['status' => '1'])->select('id', 'type')->orderBy('type', 'asc')->get();
+
+    	// Get the email template lists
+    	$emailTemplates = EmailTemplate::where(['status' => '1'])->select('id', 'template_name')->orderBy('template_name', 'asc')->get();
     	
-    	return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes]);
+    	return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes, 'emailTemplates' => $emailTemplates]);
     }
 
     /**
@@ -926,7 +929,7 @@ class AgentController extends Controller
 	    		$clientDetails = AgentClient::find($clientId);
 
 	    		// From the client details, get the client name
-	    		$clientName = ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) );
+	    		$clientName = trim( ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) ) );
 
 	    		// Replace the [User Name] with the clinet name
 	    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
@@ -944,5 +947,172 @@ class AgentController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to save the agent invitation details
+     * @param void
+     * @return array
+     */
+    public function saveInvitationDetails()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $inviteDetails);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'client_old_address'	=> $inviteDetails['client_old_address'],
+		        'client_old_unit_type'	=> $inviteDetails['client_old_unit_type'],
+		        'client_old_province'	=> $inviteDetails['client_old_province'],
+		        'client_old_city'		=> $inviteDetails['client_old_city'],
+		        'client_old_postalcode'	=> $inviteDetails['client_old_postalcode'],
+		        'client_old_country'	=> $inviteDetails['client_old_country'],
+		        'client_new_address'	=> $inviteDetails['client_new_address'],
+		        'client_new_unit_type'	=> $inviteDetails['client_new_unit_type'],
+		        'client_new_province'	=> $inviteDetails['client_new_province'],
+		        'client_new_city'		=> $inviteDetails['client_new_city'],
+		        'client_new_postalcode'	=> $inviteDetails['client_new_postalcode'],
+		        'client_new_country'	=> $inviteDetails['client_new_country'],
+		        'client_moving_date'	=> $inviteDetails['client_moving_date'],
+		        'client_message'		=> $inviteDetails['client_message']
+		    ),
+		    array(
+		        'client_old_address'	=> array('required'),
+		        'client_old_unit_type'	=> array('required'),
+		        'client_old_province'	=> array('required'),
+		        'client_old_city'		=> array('required'),
+		        'client_old_postalcode'	=> array('required'),
+		        'client_old_country'	=> array('required'),
+		        'client_new_address'	=> array('required'),
+		        'client_new_unit_type'	=> array('required'),
+		        'client_new_province'	=> array('required'),
+		        'client_new_city'		=> array('required'),
+		        'client_new_postalcode'	=> array('required'),
+		        'client_new_country'	=> array('required'),
+		        'client_moving_date'	=> array('required'),
+		        'client_message'		=> array('required')
+		    ),
+		    array(
+		        'client_old_address.required'	=> 'Please enter address',
+		        'client_old_unit_type.required'	=> 'Please select unit',
+		        'client_old_province.required'	=> 'Please select province',
+		        'client_old_city.required'		=> 'Please select city',
+		        'client_old_postalcode.required'=> 'Please enter postalcode',
+		        'client_old_country.required'	=> 'Please select country',
+		        'client_new_address.required'	=> 'Please enter address',
+		        'client_new_unit_type.required'	=> 'Please select unit',
+		        'client_new_province.required'	=> 'Please select province',
+		        'client_new_city.required'		=> 'Please select city',
+		        'client_new_postalcode.required'=> 'Please enter postalcode',
+		        'client_new_country.required'	=> 'Please select country',
+		        'client_moving_date.required'	=> 'Please enter moving date',
+		        'client_message.required'		=> 'Please enter message'
+		    )
+		);
+
+		if ( $validation->fails() )		// Some data is not valid as per the defined rules
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else 							// The data is valid, go ahead and check the login credentials and do login
+		{
+			// Check if the address exist.
+			$clientMovingFromAddress = AgentClientMovingFromAddress::where(['agent_client_id' => $userId])->first();
+			if( count( $clientMovingFromAddress ) == 0 )
+			{
+				$movingFromAddress = new AgentClientMovingFromAddress;
+
+				$movingFromAddress->agent_client_id = $userId;
+				$movingFromAddress->address 		= $inviteDetails['client_old_address'];
+				$movingFromAddress->unit_type 		= $inviteDetails['client_old_unit_type'];
+				$movingFromAddress->unit_no 		= $inviteDetails['client_old_unit_no'];
+				$movingFromAddress->province_id 	= $inviteDetails['client_old_province'];
+				$movingFromAddress->city_id 		= $inviteDetails['client_old_city'];
+				$movingFromAddress->street_type_id 	= $inviteDetails['client_old_street_type'];
+				$movingFromAddress->postalcode 		= $inviteDetails['client_old_postalcode'];
+				$movingFromAddress->country_id 		= $inviteDetails['client_old_country'];
+				$movingFromAddress->status 			= '1';
+				$movingFromAddress->created_by 		= $userId;
+
+				$movingFromAddress->save();
+			}
+			else
+			{
+				$movingFromAddress = AgentClientMovingFromAddress::where(['agent_client_id' => $userId])->first();
+
+				$movingFromAddress->address 		= $inviteDetails['client_old_address'];
+				$movingFromAddress->unit_type 		= $inviteDetails['client_old_unit_type'];
+				$movingFromAddress->unit_no 		= $inviteDetails['client_old_unit_no'];
+				$movingFromAddress->province_id 	= $inviteDetails['client_old_province'];
+				$movingFromAddress->city_id 		= $inviteDetails['client_old_city'];
+				$movingFromAddress->street_type_id 	= $inviteDetails['client_old_street_type'];
+				$movingFromAddress->postalcode 		= $inviteDetails['client_old_postalcode'];
+				$movingFromAddress->country_id 		= $inviteDetails['client_old_country'];
+				$movingFromAddress->status 			= '1';
+				$movingFromAddress->updated_by 		= $userId;
+
+				$movingFromAddress->save();
+			}
+
+			$clientMovingToAddress = AgentClientMovingToAddress::where(['agent_client_id' => $userId])->first();
+			if( count( $clientMovingToAddress ) == 0 )
+			{
+				$movingToAddress = new AgentClientMovingToAddress;
+
+				$movingToAddress->agent_client_id 	= $userId;
+				$movingToAddress->address 			= $inviteDetails['client_new_address'];
+				$movingToAddress->unit_type 		= $inviteDetails['client_new_unit_type'];
+				$movingToAddress->unit_no 			= $inviteDetails['client_new_unit_no'];
+				$movingToAddress->province_id 		= $inviteDetails['client_new_province'];
+				$movingToAddress->city_id 			= $inviteDetails['client_new_city'];
+				$movingToAddress->street_type_id 	= $inviteDetails['client_new_street_type'];
+				$movingToAddress->postalcode 		= $inviteDetails['client_new_postalcode'];
+				$movingToAddress->country_id 		= $inviteDetails['client_new_country'];
+				$movingToAddress->moving_date 		= date('Y-m-d', strtotime($inviteDetails['client_moving_date']));
+				$movingToAddress->status 			= '1';
+				$movingToAddress->created_by 		= $userId;
+
+				$movingToAddress->save();
+			}
+			else
+			{
+				$movingToAddress = AgentClientMovingToAddress::where(['agent_client_id' => $userId])->first();
+
+				$movingToAddress->agent_client_id 	= $userId;
+				$movingToAddress->address 			= $inviteDetails['client_new_address'];
+				$movingToAddress->unit_type 		= $inviteDetails['client_new_unit_type'];
+				$movingToAddress->unit_no 			= $inviteDetails['client_new_unit_no'];
+				$movingToAddress->province_id 		= $inviteDetails['client_new_province'];
+				$movingToAddress->city_id 			= $inviteDetails['client_new_city'];
+				$movingToAddress->street_type_id 	= $inviteDetails['client_new_street_type'];
+				$movingToAddress->postalcode 		= $inviteDetails['client_new_postalcode'];
+				$movingToAddress->country_id 		= $inviteDetails['client_new_country'];
+				$movingToAddress->moving_date 		= date('Y-m-d', strtotime($inviteDetails['client_moving_date']));
+				$movingToAddress->status 			= '1';
+				$movingToAddress->updated_by 		= $userId;
+
+				$movingToAddress->save();
+			}
+
+			$response['errCode']    = 0;
+		    $response['errMsg']     = 'Address updated successfully';
+		}
+
+		return response()->json($response);
     }
 }
