@@ -678,20 +678,13 @@ class AdminController extends Controller
 			// Check if any one of the category is selected or not
 			if( isset( $inputData['navigation_edit_categories'] ) )
 			{
-				DB::beginTransaction();
+				$cmsNavigationUpdate = 	DB::table('cms_navigations')
+											->where('id', $inputData['navigation_id'])
+											->update(['navigation_text' => $inputData['navigation_edit_text'], 'navigation_url' => $inputData['navigation_edit_url'], 'status' => $inputData['navigation_edit_status'], 'updated_by' => $userId]);
 
-				$navigation = CmsNavigation::find($inputData['navigation_id']);
-
-				$navigation->navigation_text= $inputData['navigation_edit_text'];
-				$navigation->navigation_url = $inputData['navigation_edit_url'];
-				$navigation->status 		= $inputData['navigation_edit_status'];
-				$navigation->updated_by 	= $userId;
-
-				if( $navigation->update() )
+				if($cmsNavigationUpdate)
 				{
 					// Update the navigation categories mapping also
-
-					// DB::commit();
 
 					$response['errCode']    = 0;
 			        $response['errMsg']     = 'Navigation details updated successfully';
