@@ -228,8 +228,21 @@ class AgentController extends Controller
 
     	// Get the email template lists
     	$emailTemplates = EmailTemplate::where(['status' => '1'])->select('id', 'template_name')->orderBy('template_name', 'asc')->get();
-    	
-    	return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes, 'emailTemplates' => $emailTemplates]);
+
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Get the user address (Old & New)
+    	$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $userId])->select('address', 'unit_type', 'unit_no', 'province_id', 'city_id', 'street_type_id',
+'postalcode','country_id')->first();
+    	$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $userId])->select('address', 'unit_type', 'unit_no', 'province_id', 'city_id', 'street_type_id',
+'postalcode','country_id', 'moving_date')->first();
+
+    	// Get the default selected email template, if available
+    	$user = User::find($userId);
+    	$agentEmailTemplate = $user->emailTemplate->first();
+
+		return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes, 'emailTemplates' => $emailTemplates, 'movingFromAddress' => $movingFromAddress, 'movingToAddress' => $movingToAddress, 'agentEmailTemplate' => $agentEmailTemplate]);
     }
 
     /**

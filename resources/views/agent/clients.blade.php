@@ -132,7 +132,7 @@
 								<fieldset>
 									<div class="form-group">
 										<label for="client_fname">Old Address</label>
-										<input type="text" class="form-control" name="client_old_address" id="client_old_address">
+										<input type="text" class="form-control" name="client_old_address" id="client_old_address" value="{{ $movingFromAddress->address or '' }}">
 									</div>
 
 									<!-- Old address related fields -->
@@ -140,15 +140,16 @@
 										<div class="row">
 											<div class="col-sm-3">
 										  		<label for="">Unit</label>
+										  		{{ $movingFromAddress->unit_type }}
 										  		<select class="form-control" name="client_old_unit_type" id="client_old_unit_type">
 										  			<option value="">Select</option>
-											  		<option value="appartment">Appartment</option>
-											  		<option value="basement">Basement</option>
+											  		<option value="appartment" {{ ($movingFromAddress->unit_type) == 'appartment' ? 'selected="selected"' : '' }}>Appartment</option>
+											  		<option value="basement" {{ ($movingFromAddress->unit_type) == 'basement' ? 'selected="selected"' : '' }}>Basement</option>
 										  		</select>
 										  	</div>
 										  	<div class="col-sm-3">
 										  		<label for="">Unit No</label>
-										  		<input type="text" class="form-control" name="client_old_unit_no" id="client_old_unit_no">
+										  		<input type="text" class="form-control" name="client_old_unit_no" id="client_old_unit_no" value="{{ $movingFromAddress->unit_no or '' }}">
 										  	</div>
 										  	<div class="col-sm-6">
 										  		<label for="">Street Type</label>
@@ -159,7 +160,13 @@
 											  		{
 											  			foreach ($streetTypes as $streetType)
 											  			{
-											  				echo '<option value="'. $streetType->id .'">'. $streetType->type .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingFromAddress->street_type_id ) && ( $movingFromAddress->street_type_id == $streetType->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option value="'. $streetType->id .'" '. $selected .'>'. $streetType->type .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -176,7 +183,13 @@
 											  		{
 											  			foreach ($provinces as $province)
 											  			{
-											  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingFromAddress->province_id ) && ( $movingFromAddress->province_id == $province->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'" '. $selected .'>'. $province->abbreviation . ' - ' . $province->name .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -191,7 +204,13 @@
 											  		{
 											  			foreach ($cities as $city)
 											  			{
-											  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingFromAddress->city_id ) && ( $movingFromAddress->city_id == $city->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option value="'. $city->id .'" '. $selected .'>'. $city->name .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -201,7 +220,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode">
+										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="{{ $movingFromAddress->postalcode or '' }}">
 										  	</div>
 											<div class="col-sm-6">
 										  		<label for="">Country</label>
@@ -212,7 +231,13 @@
 											  		{
 											  			foreach ($countries as $country)
 											  			{
-											  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingFromAddress->country_id ) && ( $movingFromAddress->country_id == $country->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option value="'. $country->id .'" '. $selected .'>'. $country->name .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -228,7 +253,7 @@
 								<fieldset>
 									<div class="form-group">
 										<label for="client_fname">New Address</label>
-										<input type="text" class="form-control" name="client_new_address" id="client_new_address">
+										<input type="text" class="form-control" name="client_new_address" id="client_new_address" value="{{ $movingToAddress->address or '' }}">
 									</div>
 
 									<!-- New address related fields -->
@@ -238,13 +263,13 @@
 										  		<label for="">Unit</label>
 										  		<select class="form-control" name="client_new_unit_type" id="client_new_unit_type">
 										  			<option value="">Select</option>
-											  		<option value="appartment">Appartment</option>
-											  		<option value="basement">Basement</option>
+											  		<option value="appartment" {{ ($movingToAddress->unit_type) == 'appartment' ? 'selected="selected"' : '' }}>Appartment</option>
+											  		<option value="basement" {{ ($movingToAddress->unit_type) == 'appartment' ? 'selected="selected"' : '' }}>Basement</option>
 										  		</select>
 										  	</div>
 										  	<div class="col-sm-3">
 										  		<label for="">Unit No</label>
-										  		<input type="text" class="form-control" name="client_new_unit_no" id="client_new_unit_no">
+										  		<input type="text" class="form-control" name="client_new_unit_no" id="client_new_unit_no" value="{{ $movingToAddress->unit_no or '' }}">
 										  	</div>
 										  	<div class="col-sm-6">
 										  		<label for="">Street Type</label>
@@ -255,7 +280,13 @@
 											  		{
 											  			foreach ($streetTypes as $streetType)
 											  			{
-											  				echo '<option value="'. $streetType->id .'">'. $streetType->type .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingToAddress->street_type_id ) && ( $movingToAddress->street_type_id == $streetType->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option value="'. $streetType->id .'" '. $selected .'>'. $streetType->type .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -272,7 +303,13 @@
 											  		{
 											  			foreach ($provinces as $province)
 											  			{
-											  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingToAddress->province_id ) && ( $movingToAddress->province_id == $province->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'" '. $selected .'>'. $province->abbreviation . ' - ' . $province->name .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -287,7 +324,13 @@
 											  		{
 											  			foreach ($cities as $city)
 											  			{
-											  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingToAddress->city_id ) && ( $movingToAddress->city_id == $city->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option value="'. $city->id .'" '. $selected .'>'. $city->name .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -297,7 +340,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode">
+										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="{{ $movingToAddress->postalcode }}">
 										  	</div>
 											<div class="col-sm-6">
 										  		<label for="">Country</label>
@@ -308,7 +351,13 @@
 											  		{
 											  			foreach ($countries as $country)
 											  			{
-											  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+											  				$selected = '';
+											  				if( isset( $movingToAddress->country_id ) && ( $movingToAddress->country_id == $country->id ) )
+											  				{
+											  					$selected = 'selected="selected"';
+											  				}
+
+											  				echo '<option value="'. $country->id .'" '. $selected .'>'. $country->name .'</option>';
 											  			}
 											  		}
 											  		?>
@@ -321,7 +370,7 @@
 							</div>
 							<div class="">
 						  		<label for="">Moving Date</label>
-						  		<input type="text" class="form-control" name="client_moving_date" id="client_moving_date">
+						  		<input type="text" class="form-control" name="client_moving_date" id="client_moving_date" value="{{ $movingToAddress->moving_date }}">
 						  	</div>
 							<hr>
 							<div class="form-group">
@@ -336,7 +385,13 @@
 								{
 									foreach ($emailTemplates as $emailTemplate)
 									{
-										echo '<div><label><input type="radio" name="client_email_template" value="'. $emailTemplate->id .'" checked="checked"> '. ucwords( strtolower( $emailTemplate->template_name ) ) .'</label></div>';
+										$checked = '';
+										if( ( count( $agentEmailTemplate ) > 0) && $agentEmailTemplate->id == $emailTemplate->id )
+										{
+											$checked = 'checked="checked"';
+										}
+
+										echo '<div><label><input type="radio" name="client_email_template" value="'. $emailTemplate->id .'" '. $checked .'> '. ucwords( strtolower( $emailTemplate->template_name ) ) .'</label></div>';
 									}
 								}
 								?>
