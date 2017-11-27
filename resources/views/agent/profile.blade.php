@@ -159,9 +159,9 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-lg-2 control-label">Facebook:</label>
+								<label class="col-lg-2 control-label">Skype:</label>
 								<div class="col-lg-8">
-								  	<input class="form-control" type="text" value="{{ $agentDetails->facebook or '' }}" name="agent_facebook" id="agent_facebook">
+								  	<input class="form-control" type="text" value="{{ $agentDetails->skype or '' }}" name="agent_facebook" id="agent_facebook">
 								</div>
 							</div>
 							<div class="form-group">

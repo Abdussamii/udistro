@@ -696,7 +696,7 @@ class AgentController extends Controller
         $user = User::find($userId);
         $user->twitter      = $profileData['agent_twitter'];
         $user->linkedin     = $profileData['agent_linkedin'];
-        $user->facebook     = $profileData['agent_facebook'];
+        $user->skype        = $profileData['agent_facebook'];
         $user->website      = $profileData['agent_website'];
         $user->updated_by   = $userId;
 

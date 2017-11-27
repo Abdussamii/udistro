@@ -358,10 +358,7 @@ $(document).ready(function(){
      // Agent social form validation
     $('#frm_agent_social').submit(function(e){
         e.preventDefault();
-    });
-
-    // Update agent profile
-    $('#btn_update_agent_social').click(function(){
+        
         var $this = $(this);
         $.ajax({
             url: $('meta[name="route"]').attr('content') + '/agent/savesocialdetails',
