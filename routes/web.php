@@ -260,6 +260,15 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To save the agent profile details
 	Route::post('/saveprofiledetails', 'AgentController@saveProfileDetails');
 
+	// To save the agent address details
+	Route::post('/saveaddressdetails', 'AgentController@saveAddressDetails');
+
+	// To save the agent social details
+	Route::post('/savesocialdetails', 'AgentController@saveSocialDetails');
+
+	// To save the agent company details
+	Route::post('/savecompanydetails', 'AgentController@saveCompanyDetails');
+
 	// To update the agent message
 	Route::post('/updatemessage', 'AgentController@updateMssage');
 

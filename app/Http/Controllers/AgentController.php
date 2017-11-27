@@ -564,25 +564,16 @@ class AgentController extends Controller
 		        'agent_email'		    => $profileData['agent_email'],
 		        'agent_fname'	        => $profileData['agent_fname'],
 		        'agent_lname'		    => $profileData['agent_lname'],
-		        'agent_address'	        => $profileData['agent_address'],
-		        'agent_company_name'    => $profileData['agent_company_name'],
-		        'agent_company_address'	=> $profileData['agent_company_address'],
 		    ),
 		    array(
 		        'agent_email' 	        => array('required', 'email'),
 		        'agent_fname' 	        => array('required'),
 		        'agent_lname' 	        => array('required'),
-		        'agent_address' 	    => array('required'),
-		        'agent_company_name' 	=> array('required'),
-		        'agent_company_address' => array('required'),
 		    ),
 		    array(
 		        'agent_email.required' 	         => 'Please enter email',
 		        'agent_fname.required' 	         => 'Please enter first name',
 		        'agent_lname.required' 	         => 'Please enter last name',
-		        'agent_address.required' 	     => 'Please enter address',
-		        'agent_company_name.required' 	 => 'Please enter company name',
-		        'agent_company_address.required' => 'Please enter company address',
 		    )
 		);
 
@@ -603,52 +594,13 @@ class AgentController extends Controller
 			$user->email 		= $profileData['agent_email'];
 			$user->fname 		= $profileData['agent_fname'];			
 			$user->lname 		= $profileData['agent_lname'];
-			$user->address 		= $profileData['agent_address'];
-			$user->province_id 	= $profileData['agent_province'];
-			$user->city_id 		= $profileData['agent_city'];
-			$user->postalcode 	= $profileData['agent_postalcode'];
-			$user->country_id 	= $profileData['agent_country'];
-			$user->twitter 		= $profileData['agent_twitter'];
-			$user->linkedin 	= $profileData['agent_linkedin'];
-			$user->facebook 	= $profileData['agent_facebook'];
-			$user->website 		= $profileData['agent_website'];
 			$user->updated_by 	= $userId;
 
 			if( $user->save() )
 			{
-				if( count( $user->company ) > 0 && isset( $user->company[0]->id ) )
-				{
-					// Update the company details also
-					$companyDetails = Company::find($user->company[0]->id);
-
-					$companyDetails->company_name = $profileData['agent_company_name'];
-					$companyDetails->company_category_id = $profileData['agent_company_category'];
-					$companyDetails->address = $profileData['agent_company_address'];
-					$companyDetails->province_id = $profileData['agent_company_province'];
-					$companyDetails->city_id = $profileData['agent_company_city'];
-					$companyDetails->postal_code = $profileData['agent_company_postalcode'];
-					$companyDetails->country_id = $profileData['agent_company_country'];
-
-					$companyDetails->save();
-				}
-				else
-				{
-					// Add the company details
-					$companyDetails = new Company;
-
-					$companyDetails->company_name = $profileData['agent_company_name'];
-					$companyDetails->company_category_id = $profileData['agent_company_category'];
-					$companyDetails->address = $profileData['agent_company_address'];
-					$companyDetails->province_id = $profileData['agent_company_province'];
-					$companyDetails->city_id = $profileData['agent_company_city'];
-					$companyDetails->postal_code = $profileData['agent_company_postalcode'];
-					$companyDetails->country_id = $profileData['agent_company_country'];
-
-					$companyDetails->save();
-				}
 
 				$response['errCode']    = 0;
-			    $response['errMsg']     = 'Profile updated successfully';
+			    $response['errMsg']     = 'Profile info updated successfully';
 			}
 			else
 			{
@@ -658,6 +610,208 @@ class AgentController extends Controller
 		}
 
 		return response()->json($response);
+    }
+
+    /**
+     * Function to save agent address details
+     * @param void
+     * @return array
+     */
+    public function saveAddressDetails() 
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $profileData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server Side Validation
+        $response = array();
+
+        $validation = Validator::make(
+            array(
+                'agent_address' => $profileData['agent_address'],
+            ),
+            array(
+                'agent_address' => array('required'),
+            ),
+            array(
+                'agent_address.required' => 'Please enter address',
+            )
+        );
+
+        if ( $validation->fails() )
+        {
+            $error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else
+        {
+            $user = User::find($userId);
+
+            $user->address      = $profileData['agent_address'];
+            $user->province_id  = $profileData['agent_province'];
+            $user->city_id      = $profileData['agent_city'];
+            $user->postalcode   = $profileData['agent_postalcode'];
+            $user->country_id   = $profileData['agent_country'];
+            $user->updated_by   = $userId;
+
+            if( $user->save() )
+            {
+
+                $response['errCode']    = 0;
+                $response['errMsg']     = 'Address info updated successfully';
+            }
+            else
+            {
+                $response['errCode']    = 2;
+                $response['errMsg']     = 'Some error in updating the details';
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to save agent social details
+     * @param void
+     * @return array
+     */
+    public function saveSocialDetails() 
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $profileData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server Side Validation
+        $response = array();
+
+        $user = User::find($userId);
+        $user->twitter      = $profileData['agent_twitter'];
+        $user->linkedin     = $profileData['agent_linkedin'];
+        $user->facebook     = $profileData['agent_facebook'];
+        $user->website      = $profileData['agent_website'];
+        $user->updated_by   = $userId;
+
+        if( $user->save() )
+        {
+            $response['errCode']    = 0;
+            $response['errMsg']     = 'Social info updated successfully';
+        }
+        else
+        {
+            $response['errCode']    = 2;
+            $response['errMsg']     = 'Some error in updating the details';
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to save agent company details
+     * @param void
+     * @return array
+     */
+    public function saveCompanyDetails() 
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $profileData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server Side Validation
+        $response = array();
+
+        $validation = Validator::make(
+            array(
+                'agent_company_name'    => $profileData['agent_company_name'],
+                'agent_company_address' => $profileData['agent_company_address'],
+            ),
+            array(
+                'agent_company_name'    => array('required'),
+                'agent_company_address' => array('required'),
+            ),
+            array(
+                'agent_company_name.required'    => 'Please enter company name',
+                'agent_company_address.required' => 'Please enter company address',
+            )
+        );
+
+        if ( $validation->fails() )
+        {
+            $error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else
+        {
+            $user = User::find($userId);
+            if( count( $user->company ) > 0 && isset( $user->company[0]->id ) )
+            {
+                // Update the company details also
+                $companyDetails = Company::find($user->company[0]->id);
+
+                $companyDetails->company_name = $profileData['agent_company_name'];
+                $companyDetails->company_category_id = $profileData['agent_company_category'];
+                $companyDetails->address = $profileData['agent_company_address'];
+                $companyDetails->province_id = $profileData['agent_company_province'];
+                $companyDetails->city_id = $profileData['agent_company_city'];
+                $companyDetails->postal_code = $profileData['agent_company_postalcode'];
+                $companyDetails->country_id = $profileData['agent_company_country'];
+
+                $companyDetails->save();
+            }
+            else
+            {
+                // Add the company details
+                $companyDetails = new Company;
+
+                $companyDetails->company_name = $profileData['agent_company_name'];
+                $companyDetails->company_category_id = $profileData['agent_company_category'];
+                $companyDetails->address = $profileData['agent_company_address'];
+                $companyDetails->province_id = $profileData['agent_company_province'];
+                $companyDetails->city_id = $profileData['agent_company_city'];
+                $companyDetails->postal_code = $profileData['agent_company_postalcode'];
+                $companyDetails->country_id = $profileData['agent_company_country'];
+
+                $companyDetails->save();
+            }
+
+            $response['errCode']    = 0;
+            $response['errMsg']     = 'Company info updated successfully';
+        }
+
+        return response()->json($response);
     }
 
     /**

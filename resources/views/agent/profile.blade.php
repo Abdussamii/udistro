@@ -40,10 +40,22 @@
 								  	<input class="form-control" type="text" value="{{ $agentDetails->lname or '' }}" name="agent_lname" id="agent_lname">
 								</div>
 							</div>
-							<div class="form-group">
+						</fieldset>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">&nbsp;</label>
+							<div class="col-lg-8">
+							  	<div class="ui-select">
+								    <button type="submit" class="btn btn-primary" name="btn_update_agent_profile" id="btn_update_agent_profile">Submit</button>
+							  	</div>
+							</div>
+						</div>
+					</form>
+					<form class="form-horizontal" role="form" name="frm_agent_address" id="frm_agent_address">
+						<fieldset>
+  							<legend>Address Information:</legend>
+  							<div class="form-group">
 								<label class="col-lg-2 control-label">Address:</label>
 								<div class="col-lg-8">
-								  	<!-- <textarea class="form-control autocomplete" name="agent_address" id="agent_address">{{ $agentDetails->address or '' }}</textarea> -->
 								  	<input type="text" name="agent_address" id="agent_address" class="form-control" value="{{ $agentDetails->address or '' }}">
 								</div>
 							</div>
@@ -121,7 +133,19 @@
 								  	</div>
 								</div>
 							</div>
-							<!-- Social Sites data -->
+						</fieldset>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">&nbsp;</label>
+							<div class="col-lg-8">
+							  	<div class="ui-select">
+								    <button type="submit" class="btn btn-primary" name="btn_update_agent_address" id="btn_update_agent_address">Submit</button>
+							  	</div>
+							</div>
+						</div>
+					</form>
+					<form class="form-horizontal" role="form" name="frm_agent_social" id="frm_agent_social">
+						<fieldset>
+							<legend>Social Information:</legend>
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Twitter:</label>
 								<div class="col-lg-8">
@@ -146,8 +170,17 @@
 								  	<input class="form-control" type="text" value="{{ $agentDetails->website or '' }}" name="agent_website" id="agent_website">
 								</div>
 							</div>
-							<!-- Social Sites data -->
 						</fieldset>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">&nbsp;</label>
+							<div class="col-lg-8">
+							  	<div class="ui-select">
+								    <button type="submit" class="btn btn-primary" name="btn_update_agent_social" id="btn_update_agent_social">Submit</button>
+							  	</div>
+							</div>
+						</div>
+					</form>
+					<form class="form-horizontal" role="form" name="frm_agent_company" id="frm_agent_company">
 						<fieldset>
   							<legend>Company Information:</legend>
   							<div class="form-group">
@@ -264,11 +297,11 @@
 							<label class="col-lg-2 control-label">&nbsp;</label>
 							<div class="col-lg-8">
 							  	<div class="ui-select">
-								    <button type="submit" class="btn btn-primary" name="btn_update_agent_profile" id="btn_update_agent_profile">Submit</button>
+								    <button type="submit" class="btn btn-primary" name="btn_update_agent_company" id="btn_update_agent_company">Submit</button>
 							  	</div>
 							</div>
 						</div>
-					</form>
+  					</form>
 				</div>
 				<div class="col-md-4">
 					<form class="form-horizontal" role="form" name="frm_agent_image" id="frm_agent_image">

@@ -243,15 +243,6 @@ $(document).ready(function(){
             },
             agent_lname: {
                 required: true
-            },
-            agent_address: {
-                required: true
-            },
-            agent_company_name: {
-                required: true
-            },
-            agent_company_address: {
-                required: true
             }
         },
         messages: {
@@ -264,15 +255,6 @@ $(document).ready(function(){
             },
             agent_lname: {
                 required: 'Please enter last name'
-            },
-            agent_address: {
-                required: 'Please enter address'
-            },
-            agent_company_name: {
-                required: 'Please enter company name'
-            },
-            agent_company_address: {
-                required: 'Please enter company address'
             }
         }
     });
@@ -288,8 +270,165 @@ $(document).ready(function(){
                 url: $('meta[name="route"]').attr('content') + '/agent/saveprofiledetails',
                 method: 'post',
                 data: {
-                    frmData: $('#frm_agent_profile').serialize(),
-                    agent_address: $('#agent_address').text(),
+                    frmData: $('#frm_agent_profile').serialize()
+                },
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );                        
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
+     // Agent address form validation
+    $('#frm_agent_address').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_agent_address').validate({
+        rules: {
+            agent_address: {
+                required: true
+            }
+        },
+        messages: {
+            agent_address: {
+                required: 'Please enter address'
+            }
+        }
+    });
+
+    // Update agent profile
+    $('#btn_update_agent_address').click(function(){
+        // Check the validation
+        if( $('#frm_agent_address').valid() )
+        {
+            var $this = $(this);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/saveaddressdetails',
+                method: 'post',
+                data: {
+                    frmData: $('#frm_agent_address').serialize(),
+                    agent_address: $('#agent_address').text()
+                },
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );                        
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
+     // Agent social form validation
+    $('#frm_agent_social').submit(function(e){
+        e.preventDefault();
+    });
+
+    // Update agent profile
+    $('#btn_update_agent_social').click(function(){
+        var $this = $(this);
+        $.ajax({
+            url: $('meta[name="route"]').attr('content') + '/agent/savesocialdetails',
+            method: 'post',
+            data: {
+                frmData: $('#frm_agent_social').serialize()
+            },
+            beforeSend: function() {
+                // Show the loading button
+                $this.button('loading');
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            complete: function()
+            {
+                // Change the button to previous
+                $this.button('reset');
+            },
+            success: function(response){
+                if( response.errCode == 0 )
+                {
+                    alertify.success( response.errMsg );                        
+                }
+                else
+                {
+                    alertify.error( response.errMsg );
+                }
+            }
+        });
+    });
+
+     // Agent profile form validation
+    $('#frm_agent_company').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_agent_company').validate({
+        rules: {
+            agent_company_name: {
+                required: true
+            },
+            agent_company_address: {
+                required: true
+            }
+        },
+        messages: {
+            agent_company_name: {
+                required: 'Please enter company name'
+            },
+            agent_company_address: {
+                required: 'Please enter company address'
+            }
+        }
+    });
+
+    // Update agent profile
+    $('#btn_update_agent_company').click(function(){
+        // Check the validation
+        if( $('#frm_agent_company').valid() )
+        {
+            var $this = $(this);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/savecompanydetails',
+                method: 'post',
+                data: {
+                    frmData: $('#frm_agent_company').serialize(),
                     agent_company_address: $('#agent_company_address').text()
                 },
                 beforeSend: function() {
