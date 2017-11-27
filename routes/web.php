@@ -21,9 +21,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 */
 
-Route::get('/', function () {
-    // return view('welcome');
-});
+Route::get('/', 'MoversController@index');
 
 // Administrator openly access routes
 Route::group(['prefix' => 'administrator'], function() {

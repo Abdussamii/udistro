@@ -475,6 +475,41 @@ $(document).ready(function(){
 			    	{
 			    		// Pre-fill the popup with the details
 			    		$('#frm_invite_client #client_message').val(response.message);
+			    		$('#frm_invite_client #client_id').val(clientId);
+
+			    		// fill the old address, if available
+			    		if( !$.isEmptyObject( response.oldAddress ) )
+			    		{
+			    			$('#frm_invite_client #client_old_address').val(response.oldAddress.address);
+			    			$('#frm_invite_client #client_old_unit_type').val(response.oldAddress.unit_type);
+			    			$('#frm_invite_client #client_old_unit_no').val(response.oldAddress.unit_no);
+			    			$('#frm_invite_client #client_old_street_type').val(response.oldAddress.street_type_id);
+			    			$('#frm_invite_client #client_old_province').val(response.oldAddress.province_id);
+			    			$('#frm_invite_client #client_old_city').val(response.oldAddress.city_id);
+			    			$('#frm_invite_client #client_old_postalcode').val(response.oldAddress.postalcode);
+			    			$('#frm_invite_client #client_old_country').val(response.oldAddress.country_id);
+			    		}
+
+			    		// fill the new address, if available
+			    		if( !$.isEmptyObject(response.newAddress) )
+			    		{
+			    			$('#frm_invite_client #client_new_address').val(response.newAddress.address);
+			    			$('#frm_invite_client #client_new_unit_type').val(response.newAddress.unit_type);
+			    			$('#frm_invite_client #client_new_unit_no').val(response.newAddress.unit_no);
+			    			$('#frm_invite_client #client_new_street_type').val(response.newAddress.street_type_id);
+			    			$('#frm_invite_client #client_new_province').val(response.newAddress.province_id);
+			    			$('#frm_invite_client #client_new_city').val(response.newAddress.city_id);
+			    			$('#frm_invite_client #client_new_postalcode').val(response.newAddress.postalcode);
+			    			$('#frm_invite_client #client_new_country').val(response.newAddress.country_id);
+
+			    			// Moving date
+			    			$('#frm_invite_client #client_moving_date').val(response.newAddress.moving_date);
+			    		}
+
+			    		// Set the selected template
+			    		// $('input["name=client_email_template"][value="'+ response.emailTemplate +'"]').prop('checked', true);
+
+			    		$('input:radio[name="client_email_template"][value="' + response.emailTemplate + '"]').prop('checked', true);
 
 			    		$('#modal_invite_client').modal('show');
 			    	}
@@ -722,6 +757,9 @@ $(document).ready(function(){
             },
             client_email_template: {
                 required: true
+            },
+            client_invitation_schedule_date: {
+            	required: true	
             }
         },
         messages: {
@@ -769,6 +807,9 @@ $(document).ready(function(){
             },
             client_email_template: {
                 required: 'Please select template'
+            },
+            client_invitation_schedule_date: {
+            	required: 'Please select schedule date'
             }
         }
     });
@@ -777,11 +818,15 @@ $(document).ready(function(){
     $('#btn_send_invitation').click(function(){
     	if( $('#frm_invite_client').valid() )
     	{
+    		// Check if agent want to update the default address or not
+    		var updateDefaultDetails = confirm('Want to update the default details as well?');
+
     		$.ajax({
     		    url: $('meta[name="route"]').attr('content') + '/agent/saveinvitationdetails',
     		    method: 'post',
     		    data: {
-    		        frmData: $('#frm_invite_client').serialize()
+    		        frmData: $('#frm_invite_client').serialize(),
+    		        updateDefaultDetails: updateDefaultDetails
     		    },
     		    headers: {
     		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -789,7 +834,12 @@ $(document).ready(function(){
     		    success: function(response){
     		        if( response.errCode == 0 )
     		        {
-    		            alertify.success( response.errMsg );                        
+    		            alertify.success( response.errMsg );
+
+    		        	// Refresh the form and close the modal
+			    		$('#frm_invite_client')[0].reset();
+
+			    		$('#modal_invite_client').modal('hide');
     		        }
     		        else
     		        {
@@ -798,6 +848,18 @@ $(document).ready(function(){
     		    }
     		});
     	}
+    });
+
+    // Show the datepicker to select the scheduling date
+    $('#btn_schedule_invitation').click(function(){
+    	$('#client_invitation_scheduler').show();
+    	$('#client_invitation_schedule_date').focus();
+    });
+
+    // Cancel scheduling
+    $('#cancel_shedule').click(function(){
+    	$('#client_invitation_schedule_date').val('');
+    	$('#client_invitation_scheduler').hide();
     });
 });
 
