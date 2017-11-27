@@ -1148,53 +1148,50 @@ class AgentController extends Controller
 
 					$movingToAddress->save();
 				}
+			}
+			
+			// Save the invitation details
+			$agentClientInvite = new AgentClientInvite;
 
-				$agentClientInvite = new AgentClientInvite;
-
-				$agentClientInvite->agent_id 			= $userId;
-				$agentClientInvite->client_id 			= $inviteDetails['client_id'];
-				$agentClientInvite->email_template_id 	= $inviteDetails['client_email_template'];
-				$agentClientInvite->message_content 	= $inviteDetails['client_message'];
-				$agentClientInvite->email_url 			= '';
-				if( $inviteDetails['client_invitation_schedule_date'] != '' )
-				{
-					$agentClientInvite->schedule_status 	= '1';
-					$agentClientInvite->schedule_datetime 	= date('Y-m-d', strtotime($inviteDetails['client_invitation_schedule_date']));
-				}
-				else
-				{
-					$agentClientInvite->schedule_status 	= '0';	
-				}
-				$agentClientInvite->status 				= '0';
-				$agentClientInvite->created_at	 		= date('Y-m-d H:i:s');
-				$agentClientInvite->created_by	 		= $userId;
-
-				$agentClientInvite->save();
+			$agentClientInvite->agent_id 			= $userId;
+			$agentClientInvite->client_id 			= $inviteDetails['client_id'];
+			$agentClientInvite->email_template_id 	= $inviteDetails['client_email_template'];
+			$agentClientInvite->message_content 	= $inviteDetails['client_message'];
+			$agentClientInvite->email_url 			= '';
+			if( $inviteDetails['client_invitation_schedule_date'] != '' )
+			{
+				$agentClientInvite->schedule_status 	= '1';
+				$agentClientInvite->schedule_datetime 	= date('Y-m-d', strtotime($inviteDetails['client_invitation_schedule_date']));
 			}
 			else
 			{
-				// Save the invitation details
+				$agentClientInvite->schedule_status 	= '0';	
+			}
+			$agentClientInvite->status 				= '0';
+			$agentClientInvite->created_at	 		= date('Y-m-d H:i:s');
+			$agentClientInvite->created_by	 		= $userId;
 
-				$agentClientInvite = new AgentClientInvite;
+			$agentClientInvite->save();
 
-				$agentClientInvite->agent_id 			= $userId;
-				$agentClientInvite->client_id 			= $inviteDetails['client_id'];
-				$agentClientInvite->email_template_id 	= $inviteDetails['client_email_template'];
-				$agentClientInvite->message_content 	= $inviteDetails['client_message'];
-				$agentClientInvite->email_url 			= '';
-				if( $inviteDetails['client_invitation_schedule_date'] != '' )
+			$lastInviteId = $agentClientInvite->id;
+
+			if( !is_null($lastInviteId)  )
+			{
+				// Create the email link
+				if( app()->env == 'local' )
 				{
-					$agentClientInvite->schedule_status 	= '1';
-					$agentClientInvite->schedule_datetime 	= date('Y-m-d', strtotime($inviteDetails['client_invitation_schedule_date']));
+					$emailLink = config('constants.LOCAL_APP_URL') . '/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
 				}
 				else
 				{
-					$agentClientInvite->schedule_status 	= '0';	
+					$emailLink = config('constants.SERVER_APP_URL') . '/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
 				}
-				$agentClientInvite->status 				= '0';
-				$agentClientInvite->created_at	 		= date('Y-m-d H:i:s');
-				$agentClientInvite->created_by	 		= $userId;
 
+				// Update the email link
+				$agentClientInvite = AgentClientInvite::find($lastInviteId);
+
+				$agentClientInvite->email_url = $emailLink;
+				
 				$agentClientInvite->save();
 			}
 
