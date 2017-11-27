@@ -1,10 +1,9 @@
-@extends('agent.layouts.app')
-@section('title', 'Udistro | Clients')
+<?php $__env->startSection('title', 'Udistro | Clients'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 	<!-- Jquery UI for datepicker -->
-	<script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
-	<link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.min.css') }}" />
+	<script type="text/javascript" src="<?php echo e(URL::asset('js/jquery-ui.min.js')); ?>"></script>
+	<link rel="stylesheet" href="<?php echo e(URL::asset('css/jquery-ui.min.css')); ?>" />
 
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -135,7 +134,7 @@
 								<fieldset>
 									<div class="form-group">
 										<label for="client_fname">Old Address</label>
-										<input type="text" class="form-control" name="client_old_address" id="client_old_address" value="{{ $movingFromAddress->address or '' }}">
+										<input type="text" class="form-control" name="client_old_address" id="client_old_address" value="<?php echo e(isset($movingFromAddress->address) ? $movingFromAddress->address : ''); ?>">
 										<input type="hidden" name="client_id" id="client_id">
 									</div>
 
@@ -206,7 +205,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="{{ $movingFromAddress->postalcode or '' }}">
+										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="<?php echo e(isset($movingFromAddress->postalcode) ? $movingFromAddress->postalcode : ''); ?>">
 										  	</div>
 											<div class="col-sm-6">
 										  		<label for="">Country</label>
@@ -233,7 +232,7 @@
 								<fieldset>
 									<div class="form-group">
 										<label for="client_fname">New Address</label>
-										<input type="text" class="form-control" name="client_new_address" id="client_new_address" value="{{ $movingToAddress->address or '' }}">
+										<input type="text" class="form-control" name="client_new_address" id="client_new_address" value="<?php echo e(isset($movingToAddress->address) ? $movingToAddress->address : ''); ?>">
 									</div>
 
 									<!-- New address related fields -->
@@ -302,7 +301,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="{{ $movingToAddress->postalcode or '' }}">
+										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="<?php echo e(isset($movingToAddress->postalcode) ? $movingToAddress->postalcode : ''); ?>">
 										  	</div>
 											<div class="col-sm-6">
 										  		<label for="">Country</label>
@@ -449,4 +448,5 @@
 	    });
 	}
 	</script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('agent.layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
