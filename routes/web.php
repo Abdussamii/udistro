@@ -246,11 +246,17 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To show agent clients listing page
 	Route::get('/clients', 'AgentController@clients');
 
+	// To show agent invite listing page
+	Route::get('/invites', 'AgentController@invites');
+
 	// To save the client details
 	Route::post('/saveclient', 'AgentController@saveClient');
 
 	// To fetch the clients list and show in datatable
 	Route::get('/fetchclients', 'AgentController@fetchClients');
+
+	// To fetch the clients invites and show in datatable
+	Route::get('/fetchinvites', 'AgentController@fetchInvites');
 
 	// To get the details of the selected client
 	Route::get('/getclientdetails', 'AgentController@getClientDetails');

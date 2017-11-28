@@ -329,13 +329,11 @@
                         <li>
                             <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                         </li>
-                        <li <?php echo ( ( Request::path() == 'agent/clients' ) ? 'class="active"' : '' ) ?> >
-                            <a href="#"><i class="fa fa-th-list"></i> Clients Listing<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="{{ url('/agent/clients') }}">Clients</a>
-                                </li>
-                            </ul>
+                        <li>
+                            <a href="{{ url('agent/clients') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Clients</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('agent/invites') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Invites</a>
                         </li>
                     </ul>
                 </div>

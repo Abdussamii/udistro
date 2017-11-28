@@ -186,6 +186,23 @@ $(document).ready(function(){
         ]
     });
 
+    $('#datatable_invites').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchinvites',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false }
+        ]
+    });
+
     // To edit the client details
     $(document).on('click', '.edit_client', function(){
     	var clientId = $(this).attr('id');

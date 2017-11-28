@@ -234,6 +234,17 @@ class AgentController extends Controller
     }
 
     /**
+     * Function to show agent invites listing page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function invites()
+    {
+
+		return view('agent/invites');
+    }
+
+    /**
      * Function to save the client details
      * @param void
      * @return array
@@ -414,6 +425,75 @@ class AgentController extends Controller
                     5 => $agentClient->contact_number,
                     6 => Helper::getStatusText($agentClient->status),
                     7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a> &nbsp;&nbsp; <a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to fetch the clients invites and show in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchInvites()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'fname',
+            2 => 'oname',
+            3 => 'lname',
+            6 => 'status'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the records after applying the datatable filters
+       	$invites = DB::select(
+                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id
+                        	WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
+                    );
+
+       	// Get the total count without any condition to maintian the pagination
+        $inviteCount = DB::select(
+                            DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id
+                        	WHERE (  t1.agent_id = " . $userId . ")")
+                        );
+
+        // Assign it to the datatable pagination variable
+        $iTotal = count($inviteCount);
+
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $invites ) > 0 )
+        {
+            foreach ($invites as $invite)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $invite->id,
+                    1 => ucfirst( strtolower( $invite->fname ) ),
+                    2 => ucfirst( strtolower( $invite->lname ) ),
+                    3 => ucfirst( strtolower( $invite->email ) ),
+                    4 => ucfirst( strtolower( $invite->message_content ) ),
+                    5 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="edit_navigation_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>',	// Category edit
                 );
                 $k++;
             }
