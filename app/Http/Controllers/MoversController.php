@@ -67,7 +67,12 @@ class MoversController extends Controller
     public function index()
     {
         $paymentPlan = PaymentPlan::get();
-    	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->_navigationArray]);
+        $env = env('APP_ENV');
+        $url = '';
+        if($env == 'production')
+            $url = 'public/';
+        
+    	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->_navigationArray, 'url' => $url]);
     }
 
 }

@@ -6,8 +6,8 @@
 <section class="content-section video-section">
   <div class="video_bg">
 	<video autoplay loop class="fillWidth" width="100%">
-            <source src="images/udistro-video.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
-            <source src="images/udistro-video.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            <source src="<?=$url?>images/udistro-video.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            <source src="<?=$url?>images/udistro-video.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
         </video>
         <div class="poster hidden">
             <img src="PATH_TO_JPEG" alt="">
