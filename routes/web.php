@@ -23,6 +23,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', 'MoversController@index');
 
+// To test email template view
+Route::get('/email', 'EmailController@renderEmailTemplate');
+
 // Administrator openly access routes
 Route::group(['prefix' => 'administrator'], function() {
 	

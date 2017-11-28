@@ -3,6 +3,8 @@
 
 namespace App\Helpers;
 
+use Mail;
+
 use App\LoginAttempt;
 
 class Helper
@@ -113,5 +115,19 @@ class Helper
 		}
 
 		return $respose;
+    }
+
+    /**
+     * To send invitation email to client
+     * @param array
+     * @return null
+     */
+    public static function sendClientInvitation($emailData)
+    {
+        Mail::send('emails.sendClientInvitation', ['emailData' => $emailData], function ($m) use ($emailData) {
+            $m->from('info@udistro.ca', 'Udistro');
+            
+            $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+        });
     }
 }
