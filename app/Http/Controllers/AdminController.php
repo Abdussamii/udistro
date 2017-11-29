@@ -1551,7 +1551,8 @@ class AdminController extends Controller
     {
     	$provinceId = Input::get('provinceId');
 
-    	$response = array();
+    	// $response = array();
+    	$response = '<option value="">Select</option>';
     	if( $provinceId != '' )
     	{
     		$cities = Province::find($provinceId)->cities;
@@ -1560,15 +1561,18 @@ class AdminController extends Controller
     		{
 	    		foreach($cities as $city)
 	    		{
-	    			$response[] = array(
+	    			/*$response[] = array(
 	    				'id' 	=> $city->id,
 	    				'city' 	=> utf8_encode( ucwords( strtolower( $city->name ) ) )
-	    			);
+	    			);*/
+
+	    			$response .= '<option value="'. $city->id .'">'. $city->name .'</option>';
 	    		}
     		}
     	}
 
-    	return response()->json($response); 
+    	// return response()->json($response); 	// These changes are done to deal with the unicode character encoding issue
+    	echo $response;
     }
 
     /**

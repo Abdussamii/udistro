@@ -7,6 +7,8 @@ use App\EmailTemplate;
 use App\User;
 use App\AgentClient;
 
+use Helper;
+
 class EmailController extends Controller
 {
     /**
@@ -48,10 +50,22 @@ class EmailController extends Controller
     	// Invitation url
     	$invitationURL 	= $inviteDetails->email_url;
 
-    	// echo '<pre>';
-    	// print_r($agentDetails->toArray());
-    	// exit;
+    	$emailData = array(
+    		/* Email data */
+    		'email' 		=> 'mayankpandey@virtualemployee.com',
+    		'name' 			=> 'Mayank Pandey',
+    		'subject' 		=> 'Invitation',
+    		/* Template data */
+    		'finalTemplateContent' 	=> $finalTemplateContent, 
+    		'agentDetails' 			=> $agentDetails, 
+    		'companyName' 			=> $companyName, 
+    		'clientName' 			=> $clientName, 
+    		'invitationURL' 		=> $invitationURL
+    		
+    	);
 
-    	return view('emails/sendClientInvitation', ['finalTemplateContent' => $finalTemplateContent, 'agentDetails' => $agentDetails, 'companyName' => $companyName, 'clientName' => $clientName, 'invitationURL' => $invitationURL]);
+    	Helper::sendClientInvitation($emailData);
+
+    	// return view('emails/sendClientInvitation', $emailData);
     }
 }

@@ -2502,15 +2502,15 @@ function getProvinceCities(provinceId, target)
 			provinceId: provinceId
 		},
 	    success: function(response){
-	    	var responseTypes = '<option value="">Select</option>';
+	    	/*var responseTypes = '<option value="">Select</option>';
 
 	    	for (var key in response)
 	    	{
 	    	  	responseTypes += '<option value="'+response[key].id+'">'+response[key].city+'</option>';
-	    	}
+	    	}*/
 
 	    	// Append the newly created options to the dropdown
-	    	$(target).html(responseTypes);
+	    	$(target).html(response);
 	    }
 	});
 }
