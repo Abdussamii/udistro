@@ -192,7 +192,7 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchinvites',
         "columnDefs": [
-            { "className": "dt-center", "targets": [0] }
+            { "className": "dt-center", "targets": [0, 1, 2] }
         ],
         "aoColumns": [
             { 'bSortable' : true },

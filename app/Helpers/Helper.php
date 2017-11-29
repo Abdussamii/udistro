@@ -160,10 +160,10 @@ class Helper
     public static function getTrimText($string)
     {
     	$string = strip_tags($string);
-		if (strlen($string) > 500) 
+		if (strlen($string) > 80) 
 		{
-		    $stringCut = substr($string, 0, 500);
-		    $string = substr($stringCut, 0, strrpos($stringCut, ' '));
+		    $stringCut = substr($string, 0, 80);
+		    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'...';
 		}
 		return $string;
     }
