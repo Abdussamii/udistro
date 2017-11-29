@@ -186,7 +186,7 @@ $(document).ready(function(){
         ]
     });
 
-    $('#datatable_invites').dataTable({
+    $('#datatable_invites').dataTable({ 
         "sServerMethod": "get", 
         "bProcessing": true,
         "bServerSide": true,
@@ -195,6 +195,8 @@ $(document).ready(function(){
             { "className": "dt-center", "targets": [0] }
         ],
         "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },

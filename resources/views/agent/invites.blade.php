@@ -18,6 +18,8 @@
 						<td>First Name</td>
 						<td>Last Name</td>
 						<td>Email</td>
+						<td>Email Template</td>
+						<td>Status</td>
 						<td>Content</td>
 					</tr>
 				</thead>

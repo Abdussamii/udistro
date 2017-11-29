@@ -463,14 +463,12 @@ class AgentController extends Controller
 
         // Get the records after applying the datatable filters
        	$invites = DB::select(
-                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id
-                        	WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
+                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content, t1.status, t1.schedule_status, t3.template_name FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
                     );
 
        	// Get the total count without any condition to maintian the pagination
         $inviteCount = DB::select(
-                            DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id
-                        	WHERE (  t1.agent_id = " . $userId . ")")
+                            DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content, t1.status, t1.schedule_status, t3.template_name FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE (  t1.agent_id = " . $userId . ")")
                         );
 
         // Assign it to the datatable pagination variable
@@ -492,8 +490,10 @@ class AgentController extends Controller
                     1 => ucfirst( strtolower( $invite->fname ) ),
                     2 => ucfirst( strtolower( $invite->lname ) ),
                     3 => ucfirst( strtolower( $invite->email ) ),
-                    4 => ucfirst( strtolower( $invite->message_content ) ),
-                    5 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="edit_navigation_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>',	// Category edit
+                    4 => ucfirst( strtolower( $invite->template_name ) ),
+                    5 => Helper::getInviteStatus($invite->status),
+                    6 => Helper::getTrimText($invite->message_content),
+                    7 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="edit_navigation_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>',	// Category edit
                 );
                 $k++;
             }

@@ -130,4 +130,41 @@ class Helper
             $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
         });
     }
+
+    /**
+     * To sget invite status
+     * @param array
+     * @return null
+     */
+    public static function getInviteStatus($status = 0)
+    {
+    	$statusText = 'Send';
+		
+		if( $status == '1' )
+		{
+			$statusText = 'Read';
+		}
+		else if( $status == '2' )
+		{
+			$statusText = 'Expire';
+		}
+
+		return $statusText;
+    }
+
+    /**
+     * To sget invite content text
+     * @param array
+     * @return null
+     */
+    public static function getTrimText($string)
+    {
+    	$string = strip_tags($string);
+		if (strlen($string) > 500) 
+		{
+		    $stringCut = substr($string, 0, 500);
+		    $string = substr($stringCut, 0, strrpos($stringCut, ' '));
+		}
+		return $string;
+    }
 }
