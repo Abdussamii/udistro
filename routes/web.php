@@ -317,25 +317,10 @@ Route::group(['prefix' => 'movers'], function() {
 // Logout
 Route::get('/logout', 'HomeController@logout');
 
-// To fetch the agent images from storage and return it
-Route::get('/images/province/{filename}', function ($filename)
+// To fetch the images from storage and return it
+Route::get('/images/{entity}/{filename}', function ($entity, $filename)
 {
-    $path = storage_path() . '/uploads/province/' . $filename;
-
-    if(!File::exists($path)) abort(404);
-
-    $file = File::get($path);
-    $type = File::mimeType($path);
-
-    $response = Response::make($file, 200);
-    $response->header("Content-Type", $type);
-    return $response;
-});
-
-// To fetch the agent images from storage and return it
-Route::get('/images/agents/{filename}', function ($filename)
-{
-    $path = storage_path() . '/uploads/agents/' . $filename;
+    $path = storage_path() . '/uploads/' . $entity . '/' . $filename;
 
     if(!File::exists($path)) abort(404);
 
