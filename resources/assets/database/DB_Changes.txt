@@ -64,6 +64,8 @@
 
 29-11-2017
 
-. client_activities_list
+. client_activity_lists
 
-. CREATE TABLE `udistro`.`client_activity_logs` ( `id` INT NOT NULL AUTO_INCREMENT , `client_id` INT NOT NULL , `activity_id` INT NOT NULL , `action` ENUM('0','1') NOT NULL COMMENT '0: discard, 1: done' , PRIMARY KEY (`id`)) ENGINE = InnoDB COMMENT = 'To hold the activities performed by clients ';
+. client_activity_logs
+
+. client_activity_feedbacks

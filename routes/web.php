@@ -301,11 +301,14 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 /* ---------- Movers related functionality ---------- */
 
-// Agent openly access routes
+// Movers openly access routes
 Route::group(['prefix' => 'movers'], function() {
 	
-	// Agent login page
+	// Movers home page
 	Route::get('/', 'MoversController@index');
+
+	// Movers my move page
+	Route::get('/mymove', 'MoversController@myMove');
 	
 });
 

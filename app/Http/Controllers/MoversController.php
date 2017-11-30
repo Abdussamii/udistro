@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\PaymentPlan;
+use App\AgentClientInvite;
+use App\EmailTemplate;
+use App\User;
+use App\AgentClient;
 
 class MoversController extends Controller
 {
@@ -75,4 +79,55 @@ class MoversController extends Controller
     	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->_navigationArray, 'url' => $url]);
     }
 
+
+    /**
+     * Function to return my move view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function myMove()
+    {
+    	$inviteId = 1;
+
+    	// Get the email template id & message detail
+    	$inviteDetails = AgentClientInvite::find($inviteId);
+
+    	// Get the agent related details
+    	$agentDetails = User::find($inviteDetails->agent_id);
+
+    	// Get the client relalted details
+    	$clientDetails = AgentClient::find($inviteDetails->client_id);
+
+    	// Get the company related details
+    	$companyDetails = $agentDetails->company->first();
+
+    	// Client name
+    	$clientName 	= ucwords( strtolower( trim($clientDetails->fname . ' ' . $clientDetails->lname) ) );
+
+    	$clientInitials = $this->strAcronym($clientName, $max = 2, $acronym = '');
+
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName]);
+    }
+
+    /**
+	 * Return the first letter of each word in uppercase - if it's too long.
+	 *
+	 * @param string $str
+	 * @param int $max
+	 * @param string $acronym
+	 * @return string
+	 */
+	public function strAcronym($str, $max = 12, $acronym = '')
+	{
+	    if (strlen($str) <= $max) return $str;
+
+	    $words = explode(' ', $str);
+
+	    foreach ($words as $word)
+	    {
+	        $acronym .= strtoupper(substr($word, 0, 1));
+	    }
+
+	    return $acronym;
+	}
 }
