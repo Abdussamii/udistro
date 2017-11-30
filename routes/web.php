@@ -217,6 +217,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update the agent details
 	Route::post('/updateagent', 'CompanyController@updateAgent');
 
+	// To update province image
+	Route::post('/updateprovinceimage', 'CompanyController@updateProvinceImage');
+
 	// To update company image
 	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
 
