@@ -36,11 +36,17 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
     <div class="container-fluid">
         <div class="navbar-header">
-          	<a class="navbar-brand" href="#"><img src="{{ url('/images/movers/advising-logo.png') }}" alt="Udistro" /></a>
+        	<!-- Company image -->
+          	<a class="navbar-brand" href="javascript:void(0);">
+          		<img src="{{ url('/images/movers/advising-logo.png') }}" alt="Udistro" />
+          	</a>
           	<div class="user-name-section">
-	          	<a href="#"><img src="{{ url('/images/movers/user-avtar.png') }}" class="user-avtar" alt=""></a>
+          		<!-- Agent image -->
+	          	<a href="javascript:void(0);">
+	          		<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="">
+	          	</a>
 	          	<div class="username">
-	          		<h3>{{ ucwords( strtolower( trim($agentDetails->fname . ' ' . $agentDetails->lname) ) ) }}</h3>
+	          		<h3>{{ $agentName }}</h3>
 	          	</div>
           	</div>
         </div>
@@ -52,7 +58,7 @@
 	        	<button class="btnbg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ucwords( strtolower( $clientName ) ) }}<span class="caret"></span></button>
 		        <ul class="dropdown-menu" aria-labelledby="dLabel">
 		            <li>
-			            <a href="#">
+			            <a href="javascript:void(0);">
 			            	<i class="fa fa-power-off"></i>
 			            	<span class="text">Logout</span>
 			            </a>
@@ -103,74 +109,47 @@
 </section>
 <!-- end percentage bar -->
 
-<!-- mailboxes-section -->
+<!-- activities-section -->
 
 <section class="mailboxes-section">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
-				<div class="col-xs-6 col-lg-4">
-					<div class="boxes">
-						<div class="img-icon">
-							<img src="{{ url('/images/movers/forward_mail_icon.png') }}" class="center-block" alt="">
+				<?php
+				if( isset( $activities ) && count( $activities ) > 0 )
+				{
+					foreach ($activities as $activity)
+					{
+					?>
+						<div class="col-xs-6 col-lg-4">
+							<div class="boxes">
+								<div class="img-icon">
+									<!-- If image is not available, show the default image -->
+									<img src="{{ ($activity->image_name !='' ) ? url('/images/activities/' . $activity->image_name) : url('/images/activities/image_not_found.png') }}" class="center-block" alt="">
+								</div>
+								<div class="box-title">
+								<h3>{{ ucwords( strtolower( $activity->activity ) ) }}</h3>
+								</div>
+								<div class="pophover-icon">
+									<ul class="popover-icon-group">
+										<li><a href="javascript:void(0);" title="Get started" class=""><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
+										<li><a href="javascript:void(0);" title="Do later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
+										<li><a href="javascript:void(0);" title="Discard" class=""><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
+									</ul>
+								</div>
+							</div>
 						</div>
-						<div class="box-title">
-						<h3>Forward Mail</h3>
-						</div>
-						<div class="pophover-icon">
-							<ul class="popover-icon-group">
-								<li><a href="#" title="Get-started" data-toggle="modal" data-target="#myModal"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
-								<li><a href="#" title="Get-started"><i class="fa fa-history" aria-hidden="true"></i></a></li>
-								<li><a href="#" title="Get-started"><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-lg-4">
-					<div class="boxes">
-						<div class="img-icon">
-							<img src="{{ url('/images/movers/update_address_icon.png') }}" class="center-block" alt="">
-						</div>
-					<div class="box-title">
-						<h3>Update Address</h3>
-					</div>
-						<div class="pophover-icon">
-							<ul class="popover-icon-group">
-								<li><a href="#" title="Get-started"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
-								<li><a href="#" title="Get-started"><i class="fa fa-history" aria-hidden="true"></i></a></li>
-								<li><a href="#" title="Get-started"><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-xs-6 col-lg-4">
-					<div class="boxes">
-						<div class="img-icon">
-							<img src="{{ url('/images/movers/connect_utilities_icon.png') }}" class="center-block" alt="">
-						</div>
-						<div class="box-title">
-							<h3>Connect Utilities</h3>
-						</div>
-						<div class="pophover-icon">
-							<ul class="popover-icon-group">
-								<li><a href="#" title="Get-started"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
-								<li><a href="#" title="Get-started"><i class="fa fa-history" aria-hidden="true"></i></a></li>
-								<li><a href="#" title="Get-started"><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
+					<?php
+					}
+				}
+				?>
 			</div>
 		</div>
 	</div>
 
 </section>
 
-<!--  End mailboxes-section -->
-
-
-
+<!--  End activities-section -->
 
 <div class="container">
 	<div class="review-section">
@@ -178,20 +157,20 @@
 			<div class="col-md-4">
 				<div class="user-name-review">
 					<div class="user-short-name">
-						<span>EH</span>
-						<p>Essie Howell</p>
+						<span>{{ $agentInitials }}</span>
+						<p>{{ $agentName }}</p>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-8">
 				<div class="reciew-box">
-					<h2>Special Thanks to Agent Roy</h2>
+					<h2>Special Thanks to Agent {{ $agentName }}</h2>
 					<ul class="ratingstar">
-						<li><a href="#"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
-						<li><a href="#"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
-						<li><a href="#"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
-						<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-						<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star" aria-hidden="true"></i></a></li>
 					</ul>
 					<span>( 3.2 Rating )</span>
 				</div>
@@ -202,7 +181,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="comment-area">
-					<h2>Hi Roy,</h2>
+					<h2>Hi {{ $agentName }},</h2>
 					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 				</div>
 			</div>
@@ -213,18 +192,18 @@
 					<div class="col-md-8">
 						<div class="comment-group-left">
 							<ul class="comment-group">
-								<li><a href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
-								<li><a href="#"><i class="fa">2</i>Helpful</a></li>
-								<li><a href="#"><i class="fa">5</i>Follow</a></li>
+								<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
+								<li><a href="javascript:void(0);"><i class="fa">2</i>Helpful</a></li>
+								<li><a href="javascript:void(0);"><i class="fa">5</i>Follow</a></li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="user-name-section user-pro-coment">
 							<strong>Share this with :</strong>
-							<a href="#"><img src="{{ url('/images/movers/user-avtar.png') }}" class="user-avtar" alt=""></a>
+							<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="">
 							<div class="username">
-								<h3>Roy</h3>
+								<h3>{{ $agentName }}</h3>
 							</div>
 						</div>
 					</div>
@@ -237,8 +216,6 @@
 	</div>
 </div>
 
-
-
 <footer class="footer-main section-pd">
   <div class="container">
     <div class="row">
@@ -247,12 +224,12 @@
           <h2 class="media-heading">Company</h2>
         </div>
         <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
-          <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
         </ul>
       </div>
       <div class="col-md-4">
@@ -260,12 +237,12 @@
           <h2 class="media-heading">Important Links</h2>
         </div>
         <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
         </ul>
       </div>
       <div class="col-md-4">
@@ -273,12 +250,12 @@
           <h2 class="media-heading">Follow Us</h2>
         </div>
         <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
-          <li class="list-group-item"><a href="#"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
-          <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
         </ul>
       </div>
     </div>

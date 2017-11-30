@@ -15,6 +15,7 @@ use App\AgentClientInvite;
 use App\EmailTemplate;
 use App\User;
 use App\AgentClient;
+use App\ClientActivityList;
 
 class MoversController extends Controller
 {
@@ -104,9 +105,26 @@ class MoversController extends Controller
     	// Client name
     	$clientName 	= ucwords( strtolower( trim($clientDetails->fname . ' ' . $clientDetails->lname) ) );
 
+    	// Get the initials of name and convert it to uppercase
     	$clientInitials = $this->strAcronym($clientName, $max = 2, $acronym = '');
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName]);
+    	// Agent name
+    	$agentName 		= ucwords( strtolower( trim($agentDetails->fname . ' ' . $agentDetails->lname) ) );
+
+    	// Get the initials of name and convert it to uppercase
+    	$agentInitials = $this->strAcronym($agentName, $max = 2, $acronym = '');
+
+    	// Get the list of activities
+    	$activities 	= ClientActivityList::where(['status' => '1', 'listing_event' => '1'])->select('id', 'activity', 'image_name', 'description', 'activity_class')->get();
+
+    	// Fetch the rating for the agent
+    	
+
+    	/*echo '<pre>';
+    	print_r( $agentDetails->toArray() );
+    	exit;*/
+
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities]);
     }
 
     /**
