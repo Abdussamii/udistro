@@ -44,6 +44,11 @@
 										<label for="province_name">Province Name</label>
 										<input type="text" name="province_name" id="province_name" class="form-control" placeholder="Enter province name">
 										<input type="hidden" name="province_id" id="province_id">
+										<input type="hidden" name="country_id" id="country_id" value="1">
+									</div>
+									<div class="form-group">
+										<label for="abbreviation">Abbreviation</label>
+										<input type="text" name="abbreviation" id="abbreviation" class="form-control" placeholder="Enter Abbreviation">
 									</div>
 									<div class="form-group">
 										<label for="province_status">Status</label>
@@ -55,23 +60,21 @@
 										</div>
 										<label id="province_status-error" class="error" for="province_status"></label>
 									</div>
-									<button type="submit" id="btn_add_province" name="btn_add_province" class="btn btn-primary">Submit</button>
-								</form>
-							</div>
-							<div class="col-sm-3">
-								<form class="form-horizontal hide" role="form" name="frm_province_image" id="frm_province_image">
-									<div class="text-center">
+									<div class="form-group">
+										<label for="province_status">Image</label>
 										<img src="" id="province_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
 										<div class="top-buffer">
 											<!-- To upload image -->
 											<label for="province_upload_image" class="">Select File <i class="fa fa-file-image-o" aria-hidden="true"></i></label>
 											<input type="file" id="province_upload_image" name="province_upload_image" accept="image/*" style="display: none">
-											<button type="submit" class="btn btn-primary" name="btn_update_province_image" id="btn_update_province_image">Upload</button>
-
 											<div><label id="province_upload_image-error" class="error" for="province_upload_image"></label></div>
 										</div>
 									</div>
+									<button type="submit" id="btn_add_province" name="btn_add_province" class="btn btn-primary">Submit</button>
 								</form>
+							</div>
+							<div class="col-sm-3">
+								
 							</div>
 						</div>
 					</div>

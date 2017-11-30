@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -939,13 +940,14 @@ class AdminController extends Controller
      * @param void
      * @return Array
      */
-    public function saveProvince()
+    public function saveProvince(Request $request)
     {
-    	// Get the serialized form data
-        $frmData = Input::get('frmData');
-
-        // Parse the serialize form data to an array
-        parse_str($frmData, $provinceData);
+    	$provinceImage   = $request->file('fileData');
+    	$provinceId      = $request->input('province_id');
+    	$countryId       = $request->input('country_id');
+    	$abbreviation    = $request->input('abbreviation');
+    	$provinceName    = $request->input('province_name');
+    	$provinceStatus  = $request->input('province_status');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -955,16 +957,19 @@ class AdminController extends Controller
 
 		$validation = Validator::make(
 		    array(
-		        'province_name'		=> $provinceData['province_name'],
-		        'province_status'	=> $provinceData['province_status']
+		        'province_name'		=> $provinceName,
+		        'province_status'	=> $provinceStatus,
+		        'abbreviation'		=> $abbreviation
 		    ),
 		    array(
 		        'province_name' 	=> array('required'),
-		        'province_status' 	=> array('required')
+		        'province_status' 	=> array('required'),
+		        'abbreviation' 	    => array('required')
 		    ),
 		    array(
 		        'province_name.required'	=> 'Please enter the province name',
 		        'province_status.required' 	=> 'Please select status',
+		        'abbreviation.required' 	=> 'Please enter the abbreviation'
 		    )
 		);
 
@@ -980,42 +985,98 @@ class AdminController extends Controller
 		}
 		else
 		{
-			if( $provinceData['province_id'] == '' )	// Check if the province id is available or not, if not add the province
+			if($provinceImage->getSize() > 0)
 			{
-				$province = new Province;
 
-				$province->name 		= $provinceData['province_name'];
-				$province->status 		= $provinceData['province_status'];
-				$province->updated_by 	= $userId;
-
-				if( $province->save() )
+				// Image destination folder
+				$destinationPath = storage_path() . '/uploads/province';
+				if( $provinceImage->isValid() )  // If the file is valid or not
 				{
-					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Province added successfully';
+				    $fileExt  = $provinceImage->getClientOriginalExtension();
+				    $fileType = $provinceImage->getMimeType();
+				    $fileSize = $provinceImage->getSize();
+
+				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+				    {
+				        // Rename the file
+				        $fileNewName = str_random(40) . '.' . $fileExt;
+
+				        if( $provinceImage->move( $destinationPath, $fileNewName ) )
+				        {
+				        	$response['errCode']    = 0;
+				        }
+			        	else
+			        	{
+			        		$response['errCode']    = 3;
+			                $response['errMsg']     = 'Some error in image upload';
+			        	}
+				    }
+			    	else
+			    	{
+			    		$response['errCode']    = 4;
+			            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+			    	}
 				}
 				else
 				{
-					$response['errCode']    = 2;
-		        	$response['errMsg']     = 'Some error in adding the province';
+					$response['errCode']    = 5;
+			        $response['errMsg']     = 'Invalid file';
 				}
 			}
-			else 										// Check if the province id is available or not, if available update the province
+
+			if(!$response['errCode'])
 			{
-				$province = Province::find($provinceData['province_id']);
-
-				$province->name 		= $provinceData['province_name'];
-				$province->status 		= $provinceData['province_status'];
-				$province->created_by 	= $userId;
-
-				if( $province->save() )
+				if( $provinceId == '' )	// Check if the province id is available or not, if not add the province
 				{
-					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Province updated successfully';
+					$province = new Province;
+
+					$province->name 		= $provinceName;
+					$province->status 		= $provinceStatus;
+					$province->country_id 	= $countryId;
+					$province->abbreviation = $abbreviation;
+					$province->updated_by 	= $userId;
+					$province->created_by 	= $userId;
+					if(!$response['errCode'])
+					{
+						$province->image 	= $fileNewName;
+						$response['image']  = URL::to('/').'/images/province/'.$fileNewName;
+					}
+					if( $province->save() )
+					{
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Province added successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+			        	$response['errMsg']     = 'Some error in adding the province';
+					}
 				}
-				else
+				else 										// Check if the province id is available or not, if available update the province
 				{
-					$response['errCode']    = 2;
-		        	$response['errMsg']     = 'Some error in updating the province';
+					$province = Province::find($provinceId);
+
+					$province->name 		= $provinceName;
+					$province->status 		= $provinceStatus;
+					$province->country_id 	= $countryId;
+					$province->abbreviation = $abbreviation;
+					$province->created_by 	= $userId;
+					if(!$response['errCode'])
+					{
+						$province->image 	= $fileNewName;
+						$response['image']  = URL::to('/').'/images/province/'.$fileNewName;
+					}
+
+					if( $province->save() )
+					{
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Province updated successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+			        	$response['errMsg']     = 'Some error in updating the province';
+					}
 				}
 			}
 		}
@@ -1097,6 +1158,10 @@ class AdminController extends Controller
 
     		$response['name'] 	= $province->name;
     		$response['status'] = $province->status;
+    		$response['image']  = URL::to('/').'/images/province/'.$province->image;
+    		$response['country_id']  = $province->country_id;
+    		$response['abbreviation'] = $province->abbreviation;
+
     	}
 
     	return response()->json($response);

@@ -573,6 +573,16 @@ $(document).ready(function(){
         $('#frm_province_image').addClass('hide');
     });
 
+    // To check the file extension
+    $('#frm_add_province #province_upload_image').change(function()
+    {
+        var ext = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+            $(this).val('');
+            alert('invalid file type, only images are allowed');
+        }
+    });
+
     // Add / Edit province form validation
     $('#frm_add_province').submit(function(e){
         e.preventDefault();
@@ -584,6 +594,9 @@ $(document).ready(function(){
             },
             province_status: {
             	required: true	
+            },
+            province_upload_image: {
+                required: true
             }
         },
         messages: {
@@ -591,7 +604,10 @@ $(document).ready(function(){
                 required: 'Please enter the province name'
             },
             province_status: {
-            	required: 'Please select status'
+                required: 'Please select status'
+            },
+            province_upload_image: {
+                required: 'Please select image to upload'
             }
         }
     });
@@ -602,13 +618,28 @@ $(document).ready(function(){
 		{
 			// Ajax call to save the page related data
 			var $this = $(this);
+            var provinceId     = $('#province_id').val();
+            var countryId      = $('#country_id').val();
+            var provinceName   = $('#province_name').val();
+            var abbreviation   = $('#abbreviation').val();
+            var provinceStatus = $("input[name='province_status']:checked").val();
+            var fileData       = $('#province_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('fileData', fileData);
+            formData.append('country_id', countryId);
+            formData.append('province_id', provinceId);
+            formData.append('abbreviation', abbreviation);
+            formData.append('province_name', provinceName);
+            formData.append('province_status', provinceStatus);
 
 			$.ajax({
 				url: $('meta[name="route"]').attr('content') + '/administrator/saveprovince',
 				method: 'post',
-				data: {
-					frmData: $('#frm_add_province').serialize()
-				},
+				data: formData,
+                contentType : false,
+                processData : false,
 				beforeSend: function() {
 					// Show the loading button
 			        $this.button('loading');
@@ -681,9 +712,9 @@ $(document).ready(function(){
 
 			    	// Auto-fill the form
 			    	$('#frm_add_province #province_id').val(provinceId);
-                    $('#frm_province_image').removeClass('hide');
-                    $('#frm_province_image').addClass('show');
 			    	$('#frm_add_province #province_name').val(response.name);
+                    $('#frm_add_province #abbreviation').val(response.abbreviation);
+                    $('#frm_add_province #province_profile_image').attr('src', response.image);
 			    	$('#frm_add_province input[name="province_status"][value="'+ response.status +'"]').prop('checked', true);
 
 			    	// Show the modal
@@ -2479,74 +2510,6 @@ $(document).ready(function(){
                     {
                         // Show the uploaded image
                         $('#company_profile_image').attr('src', response.imgPath);
-
-                        alertify.success( response.errMsg );
-                    }
-                    else
-                    {
-                        alertify.error( response.errMsg );
-                    }
-                }
-            });
-        }
-    });
-
-
-    // To check the file extension
-    $('#frm_province_image #province_upload_image').change(function(){
-        var ext = $(this).val().split('.').pop().toLowerCase();
-        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
-            $(this).val('');
-            alert('invalid file type, only images are allowed');
-        }
-    });
-
-    // Agent image form validation
-    $('#frm_province_image').submit(function(e){
-        e.preventDefault();
-    });
-    $('#frm_province_image').validate({
-        ignore: "not:hidden",   // As the input file is hidden
-        rules: {
-            agent_upload_image: {
-                required: true
-            }
-        },
-        messages: {
-            agent_upload_image: {
-                required: 'Please select image to upload'
-            }
-        }
-    });
-
-    // Update the image data
-    $('#btn_update_province_image').click(function(){
-        if( $('#frm_province_image').valid() )
-        {
-            var companyId = $('#province_id').val();
-            // Get the image and append it to form object
-            var fileData = $('#province_upload_image').prop('files')[0];
-
-            // Create form data object and append the values into it
-            var formData = new FormData();
-
-            formData.append('fileData', fileData);
-            formData.append('provinceId', companyId);
-
-            $.ajax({
-                url: $('meta[name="route"]').attr('content') + '/administrator/updateprovinceimage',
-                method: 'post',
-                data: formData,
-                contentType : false,
-                processData : false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response){
-                    if( response.errCode == 0 )
-                    {
-                        // Show the uploaded image
-                        $('#province_profile_image').attr('src', response.imgPath);
 
                         alertify.success( response.errMsg );
                     }

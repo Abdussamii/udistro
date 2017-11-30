@@ -217,9 +217,6 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update the agent details
 	Route::post('/updateagent', 'CompanyController@updateAgent');
 
-	// To update province image
-	Route::post('/updateprovinceimage', 'CompanyController@updateProvinceImage');
-
 	// To update company image
 	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
 
@@ -319,6 +316,21 @@ Route::group(['prefix' => 'movers'], function() {
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
+
+// To fetch the agent images from storage and return it
+Route::get('/images/province/{filename}', function ($filename)
+{
+    $path = storage_path() . '/uploads/province/' . $filename;
+
+    if(!File::exists($path)) abort(404);
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});
 
 // To fetch the agent images from storage and return it
 Route::get('/images/agents/{filename}', function ($filename)
