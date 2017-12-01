@@ -736,7 +736,7 @@ $(document).ready(function(){
             formData.append('activity_name', activityName);
             formData.append('description', description);
             formData.append('activity_id', activityId);
-            formData.append('activityStatus', activityStatus);
+            formData.append('activity_status', activityStatus);
 
             $.ajax({
                 url: $('meta[name="route"]').attr('content') + '/administrator/saveactivity',

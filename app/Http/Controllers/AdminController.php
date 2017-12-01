@@ -1144,7 +1144,7 @@ class AdminController extends Controller
 		}
 		else
 		{
-			if($provinceImage->getSize() > 0)
+			if($activityImage->getSize() > 0)
 			{
 
 				// Image destination folder
@@ -1199,7 +1199,7 @@ class AdminController extends Controller
 						$activities->image_name = $fileNewName;
 						$response['image']  = URL::to('/').'/images/activity/'.$fileNewName;
 					}
-					if( $province->save() )
+					if( $activities->save() )
 					{
 						$response['errCode']    = 0;
 			        	$response['errMsg']     = 'Activity added successfully';
@@ -1224,7 +1224,7 @@ class AdminController extends Controller
 						$response['image']  = URL::to('/').'/images/activity/'.$fileNewName;
 					}
 
-					if( $province->save() )
+					if( $activities->save() )
 					{
 						$response['errCode']    = 0;
 			        	$response['errMsg']     = 'Activity updated successfully';
