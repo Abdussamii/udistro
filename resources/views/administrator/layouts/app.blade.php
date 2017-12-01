@@ -394,6 +394,9 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="{{ url('administrator/activity') }}"><i class="fa fa-dashboard fa-fw"></i> Activity</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

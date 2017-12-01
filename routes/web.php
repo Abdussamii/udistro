@@ -94,6 +94,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected province
 	Route::get('/getprovincedetails', 'AdminController@getProvinceDetails');
 
+	// To return the activity page
+	Route::get('/activity', 'AdminController@activity');
+
+	// To save the activity details
+	Route::post('/saveactivity', 'AdminController@saveActivity');
+
+	// To show the activity list in datatable
+	Route::get('/fetchactivity', 'AdminController@fetchActivity');
+
+	// To get the details for the selected activity
+	Route::get('/getactivitydetails', 'AdminController@getActivityDetails');
+
 	// To return the utility service categories page
 	Route::get('/utilityservicecategories', 'AdminController@utilityServiceCategories');
 

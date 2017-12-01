@@ -569,8 +569,13 @@ $(document).ready(function(){
     	// Set the modal title, as the same modal is used for edit also
     	$('#modal_add_province').find('.modal-title').html('Add Province');
     	$('#modal_add_province').modal('show');
-        $('#frm_province_image').removeClass('show');
-        $('#frm_province_image').addClass('hide');
+    });
+
+    // To show the add activity modal
+    $('#btn_modal_activity').click(function(){
+        // Set the modal title, as the same modal is used for edit also
+        $('#modal_add_activity').find('.modal-title').html('Add Activity');
+        $('#modal_add_activity').modal('show');
     });
 
     // To check the file extension
@@ -674,6 +679,105 @@ $(document).ready(function(){
 		}
     });
 
+    // To check the file extension
+    $('#frm_add_activity #activity_upload_image').change(function()
+    {
+        var ext = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+            $(this).val('');
+            alert('invalid file type, only images are allowed');
+        }
+    });
+
+    // Add / Edit province form validation
+    $('#frm_add_activity').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_activity').validate({
+        rules: {
+            activity_name: {
+                required: true
+            },
+            activity_status: {
+                required: true  
+            },
+            activity_upload_image: {
+                required: true
+            }
+        },
+        messages: {
+            activity_name: {
+                required: 'Please enter the activity name'
+            },
+            activity_status: {
+                required: 'Please select status'
+            },
+            activity_upload_image: {
+                required: 'Please select image to upload'
+            }
+        }
+    });
+
+    // Save the activity data
+    $('#btn_add_activity').click(function(){
+        if( $('#frm_add_activity').valid() )
+        {
+            // Ajax call to save the page related data
+            var $this = $(this);
+            var activityId     = $('#activity_id').val();
+            var activityName   = $('#activity_name').val();
+            var description   = $('#description').val();
+            var activityStatus = $("input[name='activity_status']:checked").val();
+            var fileData       = $('#activity_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('fileData', fileData);
+            formData.append('province_id', activityId);
+            formData.append('description', description);
+            formData.append('province_name', activityName);
+            formData.append('province_status', activityStatus);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/saveactivity',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+                        
+                        // Refresh the form and close the modal
+                        $('#frm_add_activity')[0].reset();
+
+                        $('#modal_add_activity').modal('hide');
+
+                        // Refresh the datatable
+                        $('#datatable_activity').DataTable().ajax.reload();
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
     // Province list datatable
     $.fn.dataTableExt.errMode = 'ignore';
     $('#datatable_provinces').dataTable({
@@ -688,6 +792,25 @@ $(document).ready(function(){
         
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
+    $('#datatable_activity').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchactivity',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : false, "width": "10%" }
@@ -726,6 +849,40 @@ $(document).ready(function(){
     	{
     		alertify.error('Missing province id');
     	}
+    });
+
+    // To update the activity details
+    $(document).on('click', '.edit_activity', function(){
+        var activityId = $(this).attr('id');
+
+        if( activityId != '' )
+        {
+            // Get the province details for the selected province
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/getactivitydetails',
+                method: 'get',
+                data: {
+                    activityId: activityId
+                },
+                success: function(response){
+                    $('#modal_add_activity').find('.modal-title').html('Edit Activity');
+
+                    // Auto-fill the form
+                    $('#frm_add_activity #activity_id').val(activityId);
+                    $('#frm_add_activity #activity_name').val(response.name);
+                    $('#frm_add_activity #description').val(response.description);
+                    $('#frm_add_activity #activity_profile_image').attr('src', response.image);
+                    $('#frm_add_activity input[name="activity_status"][value="'+ response.status +'"]').prop('checked', true);
+
+                    // Show the modal
+                    $('#modal_add_activity').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing province id');
+        }
     });
 
     // To show the add utility service category modal

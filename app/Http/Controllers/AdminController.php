@@ -31,6 +31,7 @@ use App\PaymentPlan;
 use App\PaymentPlanType;
 use App\City;
 use App\EmailTemplate;
+use App\ClientActivityList;
 
 use Validator;
 use Helper;
@@ -936,6 +937,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to return the activity page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function activity()
+    {
+        return view('administrator/activity');
+    }
+
+    /**
      * Function to save the province details
      * @param void
      * @return Array
@@ -1085,6 +1096,152 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to save the activity details
+     * @param void
+     * @return Array
+     */
+    public function saveActivity(Request $request)
+    {
+    	$activityImage   = $request->file('fileData');
+    	$activityId      = $request->input('activity_id');
+    	$description    = $request->input('description');
+    	$activityName    = $request->input('activity_name');
+    	$activityStatus  = $request->input('activity_status');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'activity_name'		=> $activityName,
+		        'activity_status'	=> $activityStatus,
+		        'description'		=> $description
+		    ),
+		    array(
+		        'activity_name' 	=> array('required'),
+		        'activity_status' 	=> array('required'),
+		        'description' 	    => array('required')
+		    ),
+		    array(
+		        'activity_name.required'	=> 'Please enter the activity name',
+		        'activity_status.required' 	=> 'Please select status',
+		        'description.required' 	=> 'Please enter the description'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if($provinceImage->getSize() > 0)
+			{
+
+				// Image destination folder
+				$destinationPath = storage_path() . '/uploads/activity';
+				if( $activityImage->isValid() )  // If the file is valid or not
+				{
+				    $fileExt  = $activityImage->getClientOriginalExtension();
+				    $fileType = $activityImage->getMimeType();
+				    $fileSize = $activityImage->getSize();
+
+				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+				    {
+				        // Rename the file
+				        $fileNewName = str_random(40) . '.' . $fileExt;
+
+				        if( $activityImage->move( $destinationPath, $fileNewName ) )
+				        {
+				        	$response['errCode']    = 0;
+				        }
+			        	else
+			        	{
+			        		$response['errCode']    = 3;
+			                $response['errMsg']     = 'Some error in image upload';
+			        	}
+				    }
+			    	else
+			    	{
+			    		$response['errCode']    = 4;
+			            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+			    	}
+				}
+				else
+				{
+					$response['errCode']    = 5;
+			        $response['errMsg']     = 'Invalid file';
+				}
+			}
+
+			if(!$response['errCode'])
+			{
+				if( $activityId == '' )	// Check if the activity id is available or not, if not add the activity
+				{
+					$activities = new ClientActivityList;
+
+					$activities->activity 		= $activityName;
+					$activities->status 		= $activityStatus;
+					$activities->description    = $description;
+					$activities->updated_by 	= $userId;
+					$activities->created_by 	= $userId;
+					if(!$response['errCode'])
+					{
+						$activities->image_name = $fileNewName;
+						$response['image']  = URL::to('/').'/images/activity/'.$fileNewName;
+					}
+					if( $province->save() )
+					{
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Activity added successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+			        	$response['errMsg']     = 'Some error in adding the activity';
+					}
+				}
+				else 										// Check if the activity id is available or not, if available update the activity
+				{
+					$activities = ClientActivityList::find($activityId);
+
+					$activities->activity 		= $activityName;
+					$activities->status 		= $activityStatus;
+					$activities->description    = $description;
+					$activities->created_by 	= $userId;
+					if(!$response['errCode'])
+					{
+						$activities->image_name = $fileNewName;
+						$response['image']  = URL::to('/').'/images/activity/'.$fileNewName;
+					}
+
+					if( $province->save() )
+					{
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Activity updated successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+			        	$response['errMsg']     = 'Some error in updating the activity';
+					}
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
      * Function to show the province list in datatable
      * @param void
      * @return array
@@ -1143,6 +1300,63 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to show the activity list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchActivity()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $activitylist = ClientActivityList::orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->get();
+
+        $iTotal = ClientActivityList::count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $activitylist ) > 0 )
+        {
+            foreach ($activitylist as $activities)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $activities->id,
+                    1 => ucfirst( strtolower( $activities->activity ) ),
+                    2 => ucfirst( strtolower( $activities->description ) ),
+                    3 => Helper::getStatusText($activities->status),
+                    4 => '<a href="javascript:void(0);" id="'. $activities->id .'" class="edit_province"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
      * Function to get the details for the selected province
      * @param void
      * @return array
@@ -1161,6 +1375,30 @@ class AdminController extends Controller
     		$response['image']  = URL::to('/').'/images/province/'.$province->image;
     		$response['country_id']  = $province->country_id;
     		$response['abbreviation'] = $province->abbreviation;
+
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected activity
+     * @param void
+     * @return array
+     */
+    public function getActivityDetails()
+    {
+    	$activityId = Input::get('activityId');
+
+    	$response = array();
+    	if( $activityId != '' )
+    	{
+    		$activities = ClientActivityList::find($activityId);
+
+    		$response['name'] 	= $activities->activity;
+    		$response['status'] = $activities->status;
+    		$response['image']  = URL::to('/').'/images/activity/'.$activities->image_name;
+    		$response['description']  = $activities->description;
 
     	}
 
