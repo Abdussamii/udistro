@@ -16,6 +16,9 @@ use App\EmailTemplate;
 use App\User;
 use App\AgentClient;
 use App\ClientActivityList;
+use App\AgentClientRating;
+use App\AgentClientMovingToAddress;
+use App\AgentClientMovingFromAddress;
 
 class MoversController extends Controller
 {
@@ -103,28 +106,40 @@ class MoversController extends Controller
     	$companyDetails = $agentDetails->company->first();
 
     	// Client name
-    	$clientName 	= ucwords( strtolower( trim($clientDetails->fname . ' ' . $clientDetails->lname) ) );
+    	$clientName = ucwords( strtolower( trim($clientDetails->fname . ' ' . $clientDetails->lname) ) );
 
     	// Get the initials of name and convert it to uppercase
     	$clientInitials = $this->strAcronym($clientName, $max = 2, $acronym = '');
 
     	// Agent name
-    	$agentName 		= ucwords( strtolower( trim($agentDetails->fname . ' ' . $agentDetails->lname) ) );
+    	$agentName = ucwords( strtolower( trim($agentDetails->fname . ' ' . $agentDetails->lname) ) );
 
     	// Get the initials of name and convert it to uppercase
     	$agentInitials = $this->strAcronym($agentName, $max = 2, $acronym = '');
 
     	// Get the list of activities
-    	$activities 	= ClientActivityList::where(['status' => '1', 'listing_event' => '1'])->select('id', 'activity', 'image_name', 'description', 'activity_class')->get();
+    	$activities = ClientActivityList::where(['status' => '1', 'listing_event' => '1'])->select('id', 'activity', 'image_name', 'description', 'activity_class')->get();
 
     	// Fetch the rating for the agent
-    	
+    	$agentRating = AgentClientRating::where(['agent_id' => $inviteDetails->agent_id])->avg('rating');
 
-    	/*echo '<pre>';
-    	print_r( $agentDetails->toArray() );
-    	exit;*/
+    	// Get the moving from address
+    	$clientMovingFromAddress = AgentClientMovingFromAddress::where(['agent_client_id' => $clientDetails->id])->first();
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities]);
+    	// Get the moving to address
+    	$clientMovingToAddress = AgentClientMovingToAddress::where(['agent_client_id' => $clientDetails->id])->first();
+
+    	// Get the moving from province name
+    	$clientMovingFromProvince = $clientMovingFromAddress->province;
+
+    	// Get the moving to province name
+    	$clientMovingToProvince = $clientMovingToAddress->province;
+
+    	// echo '<pre>';
+    	// print_r( $clientMovingToProvince->toArray() );
+    	// exit;
+
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress]);
     }
 
     /**

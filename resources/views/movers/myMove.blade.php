@@ -29,6 +29,75 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="{{ URL::asset('js/jquery.min.js') }}"></script>
+	<script src="{{ URL::asset('js/movers/bootstrap.min.3.3.7.js') }}"></script>
+
+	<!-- Custom functionality -->
+	<script src="{{ URL::asset('js/custom/movers.js') }}"></script>
+
+	<!-- Google Map API -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE"></script>
+
+	<!-- JQuery Validation -->
+    <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+
+	<script>
+	// To show the to navigation when page is scroll down
+	$(function(){
+	    var navbar = $('.navbar');
+	    $(window).scroll(function(){
+	        if($(window).scrollTop() <= 40){
+	       		navbar.css('display', 'none');
+	        } else {
+	          navbar.css('display', 'block'); 
+	        }
+	    });
+
+	    calculateRoute('{{ $clientMovingFromAddress->address . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address . ' ' . $clientMovingToProvince->name }}');
+	});
+
+	// To create route between two addresses
+	function calculateRoute(from, to) {
+	  // Center initialized to Naples, Italy
+	  var myOptions = {
+	    zoom: 10,
+	    center: new google.maps.LatLng(56.1304, 106.3468),
+	    mapTypeId: google.maps.MapTypeId.ROADMAP
+	  };
+	  // Draw the map
+	  var mapObject = new google.maps.Map(document.getElementById("map"), myOptions);
+	  var directionsService = new google.maps.DirectionsService();
+	  var directionsRequest = {
+	    origin: from,
+	    destination: to,
+	    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+	    unitSystem: google.maps.UnitSystem.METRIC
+	  };
+	  directionsService.route(
+	    directionsRequest,
+	    function(response, status)
+	    {
+	      if (status == google.maps.DirectionsStatus.OK)
+	      {
+	        new google.maps.DirectionsRenderer({
+	          map: mapObject,
+	          directions: response
+	        });
+	      }
+	      else
+	        alert('Unable to retrieve your route');
+	    }
+	  );
+	}
+	</script>
+
+	<style type="text/css">
+	.error {
+		color: red;
+	}
+	</style>
 </head>
 
 <body>
@@ -38,12 +107,13 @@
         <div class="navbar-header">
         	<!-- Company image -->
           	<a class="navbar-brand" href="javascript:void(0);">
-          		<img src="{{ url('/images/movers/advising-logo.png') }}" alt="Udistro" />
+          		<!-- <img src="{{ url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" /> -->
+          		<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
           	</a>
           	<div class="user-name-section">
           		<!-- Agent image -->
 	          	<a href="javascript:void(0);">
-	          		<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="">
+	          		<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
 	          	</a>
 	          	<div class="username">
 	          		<h3>{{ $agentName }}</h3>
@@ -70,21 +140,23 @@
 </nav>
 <!-- End Navbar -->
 <!-- Map Section -->
-<section class="content-section map-bg" style="background:url('{{ url('/images/movers/map-bg.jpg') }}') no-repeat center center;position: relative;display: block;max-width: 100%;">
+<!-- url('/images/movers/map-bg.jpg') -->
+<section class="content-section map-bg" style="background:url('{{ ( $clientMovingToProvince->image != '' ) ? url('/images/province/' . $clientMovingToProvince->image) : url('/images/movers/map-bg.jpg') }}') no-repeat center center;position: relative;display: block;max-width: 100%;">
 	<div class="container-fluid">
       	<div class="row">
 	        <div class="col-md-4">
 	          <div class="contry-name">
-	          <h2>Winnipeg</h2>
-	          <span>Manitoba</span>
+	          <h2>{{ ucwords( strtolower( $clientMovingToProvince->abbreviation ) ) }}</h2>
+	          <span>{{ ucwords( strtolower( $clientMovingToProvince->name ) ) }}</span>
 	          </div>
 	        </div>
 	        <div class="col-md-4">
 	        
 	        </div>
 	        <div class="col-md-4">
-				<div class="map-area">
-					<img src="{{ url('/images/movers/map-circle.png') }}"  class="img-circle" alt="">
+	        	<!-- Google map here -->
+				<div class="map-area" id="map" style="overflow: hidden; border-radius: 50%; height: 330px; width: 330px;">
+					
 				</div>
 	        </div>
       	</div>
@@ -110,8 +182,8 @@
 <!-- end percentage bar -->
 
 <!-- activities-section -->
-
 <section class="mailboxes-section">
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">
@@ -125,14 +197,14 @@
 							<div class="boxes">
 								<div class="img-icon">
 									<!-- If image is not available, show the default image -->
-									<img src="{{ ($activity->image_name !='' ) ? url('/images/activities/' . $activity->image_name) : url('/images/activities/image_not_found.png') }}" class="center-block" alt="">
+									<img src="{{ ($activity->image_name !='' ) ? url('/images/activities/' . $activity->image_name) : url('/images/activity_image_not_found.png') }}" class="center-block" alt="">
 								</div>
 								<div class="box-title">
 								<h3>{{ ucwords( strtolower( $activity->activity ) ) }}</h3>
 								</div>
 								<div class="pophover-icon">
 									<ul class="popover-icon-group">
-										<li><a href="javascript:void(0);" title="Get started" class=""><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
+										<li><a href="javascript:void(0);" title="Get started" class="{{ $activity->activity_class }}"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
 										<li><a href="javascript:void(0);" title="Do later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
 										<li><a href="javascript:void(0);" title="Discard" class=""><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
 									</ul>
@@ -148,7 +220,6 @@
 	</div>
 
 </section>
-
 <!--  End activities-section -->
 
 <div class="container">
@@ -166,13 +237,14 @@
 				<div class="reciew-box">
 					<h2>Special Thanks to Agent {{ $agentName }}</h2>
 					<ul class="ratingstar">
-						<li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+						<!-- <li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li> -->
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
 					</ul>
-					<span>( 3.2 Rating )</span>
+					<span>( {{ $agentRating }} Rating )</span>
 				</div>
 			</div>
 		</div>
@@ -182,7 +254,10 @@
 			<div class="col-md-12">
 				<div class="comment-area">
 					<h2>Hi {{ $agentName }},</h2>
-					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+					<p id="agent_rating_message_container">
+						I appreciate you work and want to say thank you.
+					</p>
+					<textarea id="agent_rating_message" class="form-control" style="display: none;">I appreciate you work and want to say thank you.</textarea>
 				</div>
 			</div>
 		</div>
@@ -193,15 +268,15 @@
 						<div class="comment-group-left">
 							<ul class="comment-group">
 								<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
-								<li><a href="javascript:void(0);"><i class="fa">2</i>Helpful</a></li>
-								<li><a href="javascript:void(0);"><i class="fa">5</i>Follow</a></li>
+								<li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li>
+								<li><a href="javascript:void(0);" id="agent_rating_edit_message">Edit Message</a></li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="user-name-section user-pro-coment">
 							<strong>Share this with :</strong>
-							<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="">
+							<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
 							<div class="username">
 								<h3>{{ $agentName }}</h3>
 							</div>
@@ -225,7 +300,7 @@
         </div>
         <ul class="list-group custom-listgroup">
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
@@ -237,7 +312,7 @@
           <h2 class="media-heading">Important Links</h2>
         </div>
         <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="javascript:void(0);"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
@@ -251,7 +326,7 @@
         </div>
         <ul class="list-group custom-listgroup">
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
+          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
           <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
@@ -262,45 +337,92 @@
   </div>
 </footer>
 
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
+<!-- Forward Mail Modal -->
+<div id="forward_mail_modal" class="modal fade" role="dialog">
+  	<div class="modal-dialog modal-lg">
     <!-- Modal content-->
-    <div class="modal-content">
-      
-    <div class="modal-body text-center">
-      	<div class="close close-btn" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
-	      	<h2>The Freddys are moving!</h2>
-	      	<p><h3><strong>Hi Friends,</strong></h3><br>
-	        We're moving from the South to the Noth of the city.Stop by Saturday night for a housewarming party!With Love From</p>
-			<p><strong>David, Daniel & Debra</strong></p>
-      	</div>
-      	<div class="modal-footer">
-        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      	</div>
-    </div>
+	    <div class="modal-content">
+	    	<div class="modal-body text-center">
+	      		<div class="close close-btn" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	<h2>Mail Forward</h2>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+	      				<div>
+      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      					</div>
+      					<div>&nbsp;</div>
+		      		</div>
 
-  </div>
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step1" style="width: 500px; height: 300px;">
+		      			<div>
+      						<strong>Ensure all your mail follows you to your new address</strong>
+      					</div>
+      					<br>
+      					<div>
+      						<form name="frm_forward_mail" id="frm_forward_mail">
+      							<div><input type="radio" name="forward_mail_method" value="1"> Do it here online</div>
+      							<div><input type="radio" name="forward_mail_method" value="2"> Do it at Canada post office</div>
+      							<label id="forward_mail_method-error" class="error" for="forward_mail_method"></label>
+      						</form>
+      					</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step2" style="width: 500px; height: 300px; display: none;">
+		      			<p>
+		      				When you buy a Mail Forwarding before you moves, with your permission, Canada Post will share your updated address information with companies who have an existing relationship with you and who are subscribed to Canada post NCOA Mover Data Service. Choose the 12-month service for the most convenience and savings. 
+		      			</p>
+		      			<a href="https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh" class="btn btn-info">Click here to get started</a>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step3" style="width: 500px; height: 300px; display: none;">
+		      			<div>
+      						<strong>Search Canada post office closest to you</strong>
+      					</div>
+      					<div>
+      						<div class="col-sm-9 col-md-9 col-lg-9">
+      							<input type="text" name="" id="" class="form-control" placeholder="Search for Canada post office">
+      						</div>
+      						<div class="col-sm-3 col-md-3 col-lg-3">
+      							<input type="button" name="" id="" class="btn" value="Go">
+      						</div>
+      					</div>
+		      		</div>
+
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+		      			Review / Rating
+		      		</div>
+		      		<div class="col-sm-9 col-md-9 col-lg-9">
+		      			<div class="col-md-4">
+	      					<p>Peace of mind</p>
+	      					<p>Ensure you don't miss important email</p>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>Security</p>
+	      					<p>Keep your valuable mail private</p>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>Reliability</p>
+	      					<p>More dependable than neighbours</p>
+	      				</div>
+		      		</div>
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<a href="javascript:void(0);" id="btn_prev_forward_mail" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_forward_mail" class="btn">Next</a>
+		      		</div>
+		      	</div>
+	      	</div>
+	      	<!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div> -->
+	    </div>
+  	</div>
 </div>
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="{{ URL::asset('js/jquery.min.js') }}"></script>
-<script src="{{ URL::asset('js/movers/bootstrap.min.3.3.7.js') }}"></script>
-
-<script>
-// To show the to navigation when page is scroll down
-$(function(){
-    var navbar = $('.navbar');
-    $(window).scroll(function(){
-        if($(window).scrollTop() <= 40){
-       		navbar.css('display', 'none');
-        } else {
-          navbar.css('display', 'block'); 
-        }
-    });  
-});
-</script>
+<!-- Forward Mail Modal End -->
 
 </body>
 </html> 
