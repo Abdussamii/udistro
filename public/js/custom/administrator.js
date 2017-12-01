@@ -733,10 +733,10 @@ $(document).ready(function(){
             // Create form data object and append the values into it
             var formData = new FormData();
             formData.append('fileData', fileData);
-            formData.append('province_id', activityId);
+            formData.append('activity_name', activityName);
             formData.append('description', description);
-            formData.append('province_name', activityName);
-            formData.append('province_status', activityStatus);
+            formData.append('activity_id', activityId);
+            formData.append('activityStatus', activityStatus);
 
             $.ajax({
                 url: $('meta[name="route"]').attr('content') + '/administrator/saveactivity',
@@ -2031,6 +2031,16 @@ $(document).ready(function(){
     	}
     });
 
+    // To check the file extension
+    $('#frm_edit_company #company_upload_image').change(function()
+    {
+        var ext = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+            $(this).val('');
+            alert('invalid file type, only images are allowed');
+        }
+    });
+
     // Update company form validation
 	$('#frm_edit_company').submit(function(e){
 	    e.preventDefault();
@@ -2065,7 +2075,10 @@ $(document).ready(function(){
 	        },
 			company_status: {
 	        	required: true	
-	        }
+	        },
+            company_upload_image: {
+                required: true
+            }
 	    },
 	    messages: {
 	        representative_fname: {
@@ -2095,7 +2108,10 @@ $(document).ready(function(){
 	        },
 	        company_status: {
 	        	required: 'Please select status'
-	        }
+	        },
+            company_upload_image: {
+                required: 'Please select image to upload'
+            }
 	    }
 	});
 
@@ -2116,12 +2132,42 @@ $(document).ready(function(){
 	$('#btn_update_company_details').click(function(){
 		if( $('#frm_edit_company').valid() )
 		{
+            // Ajax call to save the page related data
+            var $this = $(this);
+            var representative_fname    = $('#representative_fname').val();
+            var representative_lname    = $('#representative_lname').val();
+            var representative_email    = $('#representative_email').val();
+            var company_name            = $('#company_name').val();
+            var company_id              = $('#company_id').val();
+            var company_category        = $("input[name='company_category']:selected").val();
+            var company_address         = $('#company_address').val();
+            var company_province        = $("input[name='company_province']:selected").val();
+            var company_city            = $("input[name='company_city']:selected").val();
+            var postal_code             = $('#postal_code').val();
+            var company_status          = $("input[name='company_status']:checked").val();
+            var fileData                = $('#company_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('fileData', fileData);
+            formData.append('representative_fname', representative_fname);
+            formData.append('representative_lname', representative_lname);
+            formData.append('representative_email', representative_email);
+            formData.append('company_name', company_name);
+            formData.append('company_id', company_id);
+            formData.append('company_category', company_category);
+            formData.append('company_address', company_address);
+            formData.append('company_province', company_province);
+            formData.append('company_city', company_city);
+            formData.append('postal_code', postal_code);
+            formData.append('company_status', company_status);
+
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/administrator/updatecompanydetails',
     			method: 'post',
-    			data: {
-    				frmData: $('#frm_edit_company').serialize()
-    			},
+    			data: formData,
+                contentType : false,
+                processData : false,
     			headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			    },
@@ -2610,73 +2656,6 @@ $(document).ready(function(){
 			    }
 			});
     	}
-    });
-
-    // To check the file extension
-    $('#frm_company_image #company_upload_image').change(function(){
-        var ext = $(this).val().split('.').pop().toLowerCase();
-        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
-            $(this).val('');
-            alert('invalid file type, only images are allowed');
-        }
-    });
-
-    // Agent image form validation
-    $('#frm_company_image').submit(function(e){
-        e.preventDefault();
-    });
-    $('#frm_company_image').validate({
-        ignore: "not:hidden",   // As the input file is hidden
-        rules: {
-            agent_upload_image: {
-                required: true
-            }
-        },
-        messages: {
-            agent_upload_image: {
-                required: 'Please select image to upload'
-            }
-        }
-    });
-
-    // Update the image data
-    $('#btn_update_company_image').click(function(){
-        if( $('#frm_company_image').valid() )
-        {
-            var companyId = $('#company_id').val();
-            // Get the image and append it to form object
-            var fileData = $('#company_upload_image').prop('files')[0];
-
-            // Create form data object and append the values into it
-            var formData = new FormData();
-
-            formData.append('fileData', fileData);
-            formData.append('companyId', companyId);
-
-            $.ajax({
-                url: $('meta[name="route"]').attr('content') + '/administrator/updatecompanyimage',
-                method: 'post',
-                data: formData,
-                contentType : false,
-                processData : false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response){
-                    if( response.errCode == 0 )
-                    {
-                        // Show the uploaded image
-                        $('#company_profile_image').attr('src', response.imgPath);
-
-                        alertify.success( response.errMsg );
-                    }
-                    else
-                    {
-                        alertify.error( response.errMsg );
-                    }
-                }
-            });
-        }
     });
 
 });

@@ -1107,7 +1107,7 @@ class AdminController extends Controller
     	$description    = $request->input('description');
     	$activityName    = $request->input('activity_name');
     	$activityStatus  = $request->input('activity_status');
-
+    	
         // Get the logged in user id
         $userId = Auth::user()->id;
 
