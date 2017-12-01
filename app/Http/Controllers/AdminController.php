@@ -1148,7 +1148,7 @@ class AdminController extends Controller
 			{
 
 				// Image destination folder
-				$destinationPath = storage_path() . '/uploads/activity';
+				$destinationPath = storage_path() . '/uploads/activities';
 				if( $activityImage->isValid() )  // If the file is valid or not
 				{
 				    $fileExt  = $activityImage->getClientOriginalExtension();
