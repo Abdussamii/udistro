@@ -576,6 +576,7 @@ $(document).ready(function(){
         // Set the modal title, as the same modal is used for edit also
         $('#modal_add_activity').find('.modal-title').html('Add Activity');
         $('#modal_add_activity').modal('show');
+        $('#frm_add_activity #activity_profile_image').attr('src', "");
     });
 
     // To check the file extension

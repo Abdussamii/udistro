@@ -1107,7 +1107,7 @@ class AdminController extends Controller
     	$description    = $request->input('description');
     	$activityName    = $request->input('activity_name');
     	$activityStatus  = $request->input('activity_status');
-    	
+
         // Get the logged in user id
         $userId = Auth::user()->id;
 
@@ -1144,7 +1144,7 @@ class AdminController extends Controller
 		}
 		else
 		{
-			if($activityImage->getSize() > 0)
+			if(!is_null($activityImage) && ($activityImage->getSize() > 0))
 			{
 
 				// Image destination folder
@@ -1162,7 +1162,7 @@ class AdminController extends Controller
 
 				        if( $activityImage->move( $destinationPath, $fileNewName ) )
 				        {
-				        	$response['errCode']    = 0;
+				        	$response['errCode']    = 1;
 				        }
 			        	else
 			        	{
@@ -1181,9 +1181,11 @@ class AdminController extends Controller
 					$response['errCode']    = 5;
 			        $response['errMsg']     = 'Invalid file';
 				}
+			} else {
+				$response['errCode']    = 2;
 			}
 
-			if(!$response['errCode'])
+			if($response['errCode'] == 1 || $response['errCode'] == 2)
 			{
 				if( $activityId == '' )	// Check if the activity id is available or not, if not add the activity
 				{
@@ -1194,7 +1196,7 @@ class AdminController extends Controller
 					$activities->description    = $description;
 					$activities->updated_by 	= $userId;
 					$activities->created_by 	= $userId;
-					if(!$response['errCode'])
+					if($response['errCode'] == 1)
 					{
 						$activities->image_name = $fileNewName;
 						$response['image']  = URL::to('/').'/images/activity/'.$fileNewName;
@@ -1218,7 +1220,7 @@ class AdminController extends Controller
 					$activities->status 		= $activityStatus;
 					$activities->description    = $description;
 					$activities->created_by 	= $userId;
-					if(!$response['errCode'])
+					if($response['errCode'] == 1)
 					{
 						$activities->image_name = $fileNewName;
 						$response['image']  = URL::to('/').'/images/activity/'.$fileNewName;
