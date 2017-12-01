@@ -1347,7 +1347,7 @@ class AdminController extends Controller
                     1 => ucfirst( strtolower( $activities->activity ) ),
                     2 => ucfirst( strtolower( $activities->description ) ),
                     3 => Helper::getStatusText($activities->status),
-                    4 => '<a href="javascript:void(0);" id="'. $activities->id .'" class="edit_province"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    4 => '<a href="javascript:void(0);" id="'. $activities->id .'" class="edit_activity"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
