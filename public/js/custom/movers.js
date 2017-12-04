@@ -25,8 +25,18 @@ $(document).ready(function(){
 
 	/* ---------- Activities functionality ---------- */
 
+	var forwardMailStep = 1;
 	$('.forward_mail').click(function(){
 		$('#forward_mail_modal').modal('show');
+
+		// Reset the counter
+		forwardMailStep = 1;
+
+		// Show the first step
+		$('#forward_mail_step1').show();
+		$('#forward_mail_step2').hide();
+		$('#forward_mail_step3').hide();
+		$('#forward_mail_step4').hide();
 	});
 
 	// Admin login form validation
@@ -43,7 +53,6 @@ $(document).ready(function(){
         }
     });
 
-    var forwardMailStep = 1;
     // Forward mail - Show next step
     $('#btn_next_forward_mail').click(function(){
     	if( forwardMailStep == 1 )
@@ -54,6 +63,7 @@ $(document).ready(function(){
 	    		{
 	    			$('#forward_mail_step1').hide();
 	    			$('#forward_mail_step3').hide();
+	    			$('#forward_mail_step4').hide();
 	    			$('#forward_mail_step2').show();
 	    		}
 	    		else
@@ -61,25 +71,68 @@ $(document).ready(function(){
 	    			$('#forward_mail_step1').hide();
 	    			$('#forward_mail_step2').hide();
 	    			$('#forward_mail_step3').show();
+	    			$('#forward_mail_step4').hide();
 	    		}
 
 	    		forwardMailStep++;
 	    	}
     	}
+    	else if( forwardMailStep == 2 )
+    	{
+    		$('#forward_mail_step1').hide();
+			$('#forward_mail_step2').hide();
+			$('#forward_mail_step3').hide();
+			$('#forward_mail_step4').show();
+
+    		forwardMailStep++;
+    	}
     });
 
     // Forward mail - Show previous step
     $('#btn_prev_forward_mail').click(function(){
-    	if( forwardMailStep == 2 )
+    	if( forwardMailStep == 3 )
+    	{
+    		$('#forward_mail_step1').hide();
+			$('#forward_mail_step2').hide();
+			$('#forward_mail_step3').show();
+			$('#forward_mail_step4').hide();
+
+    		forwardMailStep--;
+    	}
+    	else if( forwardMailStep == 2 )
     	{
     		$('#forward_mail_step1').show();
     		$('#forward_mail_step2').hide();
 	    	$('#forward_mail_step3').hide();
+	    	$('#forward_mail_step4').hide();
 
     		forwardMailStep--;
     	}
     });
 
+    // To set the address in URL param string
+    $('#forward_mail_search_postoffice').click(function(){
+    	var paramString = $('#forward_mail_search_postoffices_address').val();
+
+    	var searchFor = '';
+    	if( paramString != '' )
+    	{
+    		searchFor = 'post+offices+in+';
+
+    		var URL = window.open("https://www.google.co.in/maps/search/" + searchFor + paramString + "/@51.1745672,-115.6424392,12z/data=!3m1!4b1", "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
+    	}
+    	else
+    	{
+    		var URL = window.open("https://www.google.co.in/maps/search/canada+post+offices/@51.1745672,-115.6424392,12z/data=!3m1!4b1", "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
+    	}
+    });
+
 	/* ---------- Activities functionality ---------- */
+
+	// To handle the modal close event
+	$('.close_modal').click(function(){
+		$('#user_response_modal').modal('show');
+		
+	});
 
 });
