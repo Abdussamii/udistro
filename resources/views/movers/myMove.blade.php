@@ -371,7 +371,7 @@
 		      			<p>
 		      				When you buy a Mail Forwarding before you moves, with your permission, Canada Post will share your updated address information with companies who have an existing relationship with you and who are subscribed to Canada post NCOA Mover Data Service. Choose the 12-month service for the most convenience and savings. 
 		      			</p>
-		      			<a href="https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh" class="btn btn-info">Click here to get started</a>
+		      			<a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
 		      		</div>
 
 		      		<div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step3" style="width: 500px; height: 300px; display: none;">
@@ -379,12 +379,15 @@
       						<strong>Search Canada post office closest to you</strong>
       					</div>
       					<div>
-      						<div class="col-sm-9 col-md-9 col-lg-9">
-      							<input type="text" name="" id="" class="form-control" placeholder="Search for Canada post office">
-      						</div>
-      						<div class="col-sm-3 col-md-3 col-lg-3">
-      							<input type="button" name="" id="" class="btn" value="Go">
-      						</div>
+      						<form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices">
+	      						<div class="col-sm-9 col-md-9 col-lg-9">
+	      							<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office">
+	      						</div>
+	      						<div class="col-sm-3 col-md-3 col-lg-3">
+	      							<!-- <input type="button" name="" id="" class="btn" value="Go"> -->
+	      							<a href="javascript:void(0);" onclick="" id="forward_mail_search_postoffice">Go</a>
+	      						</div>
+      						</form>
       					</div>
 		      		</div>
 
