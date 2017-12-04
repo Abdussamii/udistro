@@ -390,13 +390,20 @@ class CompanyController extends Controller
      * @param void
      * @return array
      */
-    public function updateCompanyDetails()
+    public function updateCompanyDetails(Request $request)
     {
-    	// Get the serialized form data
-        $frmData = Input::get('frmData');
-
-        // Parse the serialize form data to an array
-        parse_str($frmData, $companyDetails);
+    	$companyImage   		= $request->file('fileData');
+    	$representative_fname   = $request->input('representative_fname');
+    	$representative_lname   = $request->input('representative_lname');
+    	$representative_email   = $request->input('representative_email');
+    	$company_name  			= $request->input('company_name');
+    	$company_id    			= $request->input('company_id');
+    	$company_category    	= $request->input('company_category');
+    	$company_address    	= $request->input('company_address');
+    	$company_province    	= $request->input('company_province');
+    	$company_city    		= $request->input('company_city');
+    	$postal_code    		= $request->input('postal_code');
+    	$company_status    		= $request->input('company_status');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -406,15 +413,15 @@ class CompanyController extends Controller
 
 		$validation = Validator::make(
 		    array(
-		        'rep_fname'			=> $companyDetails['representative_fname'],
-		        'rep_email'			=> $companyDetails['representative_email'],
-		        'company_name'		=> $companyDetails['company_name'],
-		        'company_category'	=> $companyDetails['company_category'],
-		        'company_address'	=> $companyDetails['company_address'],
-		        'company_province'	=> $companyDetails['company_province'],
-		        'company_city'		=> $companyDetails['company_city'],
-		        'postal_code'		=> $companyDetails['postal_code'],
-		        'company_status'	=> $companyDetails['company_status'],
+		        'rep_fname'			=> $representative_fname,
+		        'rep_email'			=> $representative_email,
+		        'company_name'		=> $company_name,
+		        'company_category'	=> $company_category,
+		        'company_address'	=> $company_address,
+		        'company_province'	=> $company_province,
+		        'company_city'		=> $company_city,
+		        'postal_code'		=> $postal_code,
+		        'company_status'	=> $company_status,
 		    ),
 		    array(
 		        'rep_fname'			=> array('required'),
@@ -453,15 +460,58 @@ class CompanyController extends Controller
 		}
 		else
 		{
-			$company = Company::find($companyDetails['company_id']);
+			if($companyImage->getSize() > 0)
+			{
 
-			$company->company_name 			= $companyDetails['company_name'];	
-			$company->company_category_id 	= $companyDetails['company_category'];
-			$company->address 				= $companyDetails['company_address'];
-			$company->province_id 			= $companyDetails['company_province'];
-			$company->city_id 				= $companyDetails['company_city'];
-			$company->postal_code 			= $companyDetails['postal_code'];
-			$company->status 				= $companyDetails['company_status'];
+				// Image destination folder
+				$destinationPath = storage_path() . '/uploads/company';
+				if( $companyImage->isValid() )  // If the file is valid or not
+				{
+				    $fileExt  = $companyImage->getClientOriginalExtension();
+				    $fileType = $companyImage->getMimeType();
+				    $fileSize = $companyImage->getSize();
+
+				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+				    {
+				        // Rename the file
+				        $fileNewName = str_random(40) . '.' . $fileExt;
+
+				        if( $companyImage->move( $destinationPath, $fileNewName ) )
+				        {
+				        	$response['errCode']    = 0;
+				        }
+			        	else
+			        	{
+			        		$response['errCode']    = 3;
+			                $response['errMsg']     = 'Some error in image upload';
+			        	}
+				    }
+			    	else
+			    	{
+			    		$response['errCode']    = 4;
+			            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+			    	}
+				}
+				else
+				{
+					$response['errCode']    = 5;
+			        $response['errMsg']     = 'Invalid file';
+				}
+			}
+
+			if(!$response['errCode'])
+			{
+				if( $activityId == '' )	// Check if the activity id is available or not, if not add the company
+				{
+			$company = Company::find($company_id);
+
+			$company->company_name 			= $company_name;	
+			$company->company_category_id 	= $company_category;
+			$company->address 				= $company_address;
+			$company->province_id 			= $company_province;
+			$company->city_id 				= $company_city;
+			$company->postal_code 			= $postal_code;
+			$company->status 				= $company_status;
 			$company->updated_by 			= $userId;
 
 			if( $company->save() )

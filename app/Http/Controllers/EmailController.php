@@ -47,6 +47,9 @@ class EmailController extends Controller
     	// Company name
     	$companyName 	= ucwords( strtolower( trim($companyDetails->company_name ) ) );
 
+        // Company Address
+        $companyAddress    = ucwords( strtolower( trim($companyDetails->address ) ) );
+
     	// Invitation url
     	$invitationURL 	= $inviteDetails->email_url;
 
@@ -58,7 +61,8 @@ class EmailController extends Controller
     		/* Template data */
     		'finalTemplateContent' 	=> $finalTemplateContent, 
     		'agentDetails' 			=> $agentDetails, 
-    		'companyName' 			=> $companyName, 
+    		'companyName' 			=> $companyName,
+            'companyAddress'        => $companyAddress, 
     		'clientName' 			=> $clientName, 
     		'invitationURL' 		=> $invitationURL
     		

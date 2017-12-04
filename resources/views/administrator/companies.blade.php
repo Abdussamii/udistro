@@ -166,8 +166,8 @@
 
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-sm-9">
-								<form name="frm_edit_company" id="frm_edit_company" autocomplete="off">
+							<form name="frm_edit_company" id="frm_edit_company" autocomplete="off">
+								<div class="col-sm-9">
 									<legend>Representative Information</legend>
 									<div class="form-group">
 										<div class="row">
@@ -255,24 +255,19 @@
 										</div>
 										<label id="company_status-error" class="error" for="company_status"></label>
 									</div>
-									<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
-								</form>
-							</div>
-							<div class="col-sm-3">
-								<form class="form-horizontal" role="form" name="frm_company_image" id="frm_company_image">
-									<div class="text-center">
-										<img src="" id="company_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
-										<div class="top-buffer">
-											<!-- To upload image -->
-											<label for="company_upload_image" class="">Select File <i class="fa fa-file-image-o" aria-hidden="true"></i></label>
-											<input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
-											<button type="submit" class="btn btn-primary" name="btn_update_company_image" id="btn_update_company_image">Upload</button>
-
-											<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
-										</div>
+								</div>
+								<div class="col-sm-3">
+									<label for="company_status">Image</label>
+									<img src="" id="company_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
+									<div class="top-buffer">
+										<!-- To upload image -->
+										<label for="company_upload_image" class="">Select File <i class="fa fa-file-image-o" aria-hidden="true"></i></label>
+										<input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
+										<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
 									</div>
-								</form>
-							</div>
+								</div>
+								<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
+							</form>
 						</div>
 					</div>
 			    </div>

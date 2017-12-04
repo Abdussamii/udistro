@@ -996,7 +996,7 @@ class AdminController extends Controller
 		}
 		else
 		{
-			if($provinceImage->getSize() > 0)
+			if(!is_null($provinceImage) && ($provinceImage->getSize() > 0))
 			{
 
 				// Image destination folder
@@ -1033,9 +1033,11 @@ class AdminController extends Controller
 					$response['errCode']    = 5;
 			        $response['errMsg']     = 'Invalid file';
 				}
+			} else {
+				$response['errCode']    = 2;
 			}
 
-			if(!$response['errCode'])
+			if($response['errCode'] == 1 || $response['errCode'] == 2)
 			{
 				if( $provinceId == '' )	// Check if the province id is available or not, if not add the province
 				{
