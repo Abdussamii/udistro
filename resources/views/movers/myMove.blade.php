@@ -437,7 +437,244 @@
 </div>
 <!-- Forward Mail Modal End -->
 
+<!-- Update Address Modal -->
+<div id="update_address_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	<h2>Mail Forward</h2>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+	      				<div>
+      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      					</div>
+      					<div>&nbsp;</div>
+		      		</div>
 
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step1" style="width: 500px; height: 300px;">
+		      			<div>
+      						<strong>Canada post cannot update your new address with all the organization you are have business with, especially infrequent mailers(for example, tax documents, licence renewals and financial statements)</strong>
+      					</div>
+      					<br>
+      					<div>
+      						<form name="frm_update_address" id="frm_update_address">
+      							<div><input type="checkbox" name="update_address_method" value="1"> Federal Agencies</div>
+      							<div><input type="checkbox" name="update_address_method" value="2"> Provincial Agencies</div>
+      							<div><input type="checkbox" name="update_address_method" value="3"> Other Checklist</div>
+
+      							<label id="update_address_method-error" class="error" for="update_address_method"></label>
+      						</form>
+      					</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step2" style="width: 500px; height: 300px; display: none;">
+		      			<p>
+		      				When you buy a Mail Forwarding before you moves, with your permission, Canada Post will share your updated address information with companies who have an existing relationship with you and who are subscribed to Canada post NCOA Mover Data Service. Choose the 12-month service for the most convenience and savings. 
+		      			</p>
+		      			<a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step3" style="width: 500px; height: 300px; display: none;">
+		      			<div>
+      						<strong>Search Canada post office closest to you</strong>
+      					</div>
+      					<div>
+      						<form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices">
+	      						<div class="col-sm-9 col-md-9 col-lg-9">
+	      							<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office">
+	      						</div>
+	      						<div class="col-sm-3 col-md-3 col-lg-3">
+	      							<!-- <input type="button" name="" id="" class="btn" value="Go"> -->
+	      							<a href="javascript:void(0);" onclick="" id="forward_mail_search_postoffice">Go</a>
+	      						</div>
+      						</form>
+      					</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step4" style="width: 500px; height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
+
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+		      			Review / Rating
+		      		</div>
+		      		<div class="col-sm-9 col-md-9 col-lg-9">
+		      			<div class="col-md-4">
+	      					<p>
+	      						Do you have full access to your CRA My online account?
+	      					</p>
+	      					<div>
+	      						<label><input type="radio" name="">Yes</label>
+	      						<label><input type="radio" name="">No</label>
+	      					</div>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>
+	      						Do you have dependent children
+	      					</p>
+	      					<div>
+	      						<label><input type="radio" name="">Yes</label>
+	      						<label><input type="radio" name="">No</label>
+	      					</div>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>Do you receive child benefit</p>
+	      					<div>
+	      						<label><input type="radio" name="">Yes</label>
+	      						<label><input type="radio" name="">No</label>
+	      					</div>
+	      				</div>
+		      		</div>
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<a href="javascript:void(0);" id="btn_prev_update_address" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_update_address" class="btn">Next</a>
+		      		</div>
+		      	</div>
+	      	</div>
+	      	<!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div> -->
+	    </div>
+  	</div>
+</div>
+<!-- Update Address Modal End -->
+
+<!-- Mailbox keys Modal -->
+<div id="mailbox_key_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	<h2>Mailbox Keys</h2>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+	      				<div>
+      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      					</div>
+      					<div>&nbsp;</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step1" style="width: 500px; height: 300px;">
+		      			<div>
+      						<strong>New to the neighbourhood, you need mailbox keys. If you are moving to a neighbourhood where mail is delivered to a community mailbox, check to see if the former residents left the mailbox keys behind. If not, here's what to do:</strong>
+      					</div>
+      					<br>
+      					<div>
+      						<form name="frm_mailbox_keys" id="frm_mailbox_keys">
+      							<div><input type="radio" name="mailbox_keys_method" value="2"> Do it here online</div>
+      							<div><input type="radio" name="mailbox_keys_method" value="1"> Call Canada Post</div>
+
+      							<label id="mailbox_keys_method-error" class="error" for="mailbox_keys_method"></label>
+      						</form>
+      					</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step2" style="width: 500px; height: 300px; display: none;">
+		      			<div>
+      						<strong>Calling Canada Post</strong>
+      						<div class="row">
+      							<br>
+      							<div class="col-sm-4 col-md-4 col-lg-4">
+      								<strong>What you to make this call</strong>
+      								<ul>
+      									<li>Your full name</li>
+      									<li>Old and new address</li>
+      									<li>Old and new postal code etc</li>
+      								</ul>
+      							</div>
+      							<div class="col-sm-4 col-md-4 col-lg-4">
+      								<strong>Opening Hours</strong>
+      								<p>
+      									Monday to Friday, 7:00 AM - 11:00 PM ET
+      								</p>
+      								<p>
+      									Saturday and Sunday, 09:00 AM - 09:00 PM ET
+      								</p>
+      							</div>
+      							<div class="col-sm-4 col-md-4 col-lg-4">
+      								<strong>Phone Numbers</strong>
+      								<p>
+      									1-866-607-6301
+      								</p>
+      								<p>
+      									Outside of Canada: 416-979-3033
+      								</p>
+      							</div>
+      						</div>
+      					</div>
+      				</div>
+
+      				<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step3" style="width: 500px; height: 300px; display: none;">
+		      			<div>
+      						<strong>Do it online:</strong>
+      						<div><a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/cpo/mc/app/cmb/existing_state.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a></div>
+      					</div>
+      				</div>
+
+      				<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step4" style="width: 500px; height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
+
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+		      			Review / Rating
+		      		</div>
+		      		<div class="col-sm-9 col-md-9 col-lg-9">
+		      			<div class="col-md-4">
+	      					<p>
+	      						Canada post will inform you of your community mailbox location
+	      					</p>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>
+	      						Canada post will leave Delivery Notice Card on your front door
+	      					</p>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>
+	      						Bring the Delivery Notice Card, government-issued photo identification and proof of residence when you pick up your keys 
+	      					</p>
+	      				</div>
+		      		</div>
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<a href="javascript:void(0);" id="btn_prev_mailbox_keys" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_mailbox_keys" class="btn">Next</a>
+		      		</div>
+		      	</div>
+	      	</div>
+	      	<!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div> -->
+	    </div>
+  	</div>
+</div>
+<!-- Mailbox keys Modal End -->
 
 
 

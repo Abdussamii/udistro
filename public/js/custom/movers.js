@@ -39,7 +39,7 @@ $(document).ready(function(){
 		$('#forward_mail_step4').hide();
 	});
 
-	// Admin login form validation
+	// Forward email activity form validation
     $('#frm_forward_mail').validate({
         rules: {
             forward_mail_method: {
@@ -92,10 +92,20 @@ $(document).ready(function(){
     $('#btn_prev_forward_mail').click(function(){
     	if( forwardMailStep == 3 )
     	{
-    		$('#forward_mail_step1').hide();
-			$('#forward_mail_step2').hide();
-			$('#forward_mail_step3').show();
-			$('#forward_mail_step4').hide();
+    		if( $('input[name="forward_mail_method"]:checked').val() == 1 )
+    		{
+    			$('#forward_mail_step1').hide();
+    			$('#forward_mail_step3').hide();
+    			$('#forward_mail_step4').hide();
+    			$('#forward_mail_step2').show();
+    		}
+    		else
+    		{
+    			$('#forward_mail_step1').hide();
+    			$('#forward_mail_step2').hide();
+    			$('#forward_mail_step3').show();
+    			$('#forward_mail_step4').hide();
+    		}
 
     		forwardMailStep--;
     	}
@@ -110,7 +120,7 @@ $(document).ready(function(){
     	}
     });
 
-    // To set the address in URL param string
+    // To opne the website in a separate window
     $('#forward_mail_search_postoffice').click(function(){
     	var paramString = $('#forward_mail_search_postoffices_address').val();
 
@@ -127,12 +137,140 @@ $(document).ready(function(){
     	}
     });
 
-	/* ---------- Activities functionality ---------- */
+	/* ---------- Activities functionality ends ---------- */
+
+	/* ---------- Update Address functionality ---------- */
+
+	var updateAddressStep = 1;
+	$('.update_address').click(function(){
+		$('#update_address_modal').modal('show');
+
+		// Reset the steps
+	});
+
+	// Update address activity form validation
+    $('#frm_update_address').validate({
+        rules: {
+            update_address_method: {
+                required: true
+            }
+        },
+        messages: {
+            update_address_method: {
+                required: 'Please select atleast one option'
+            }
+        }
+    });
+
+    $('#btn_next_update_address').click(function(){
+    	/*if( $('#frm_update_address').valid() )
+    	{
+
+    	}*/
+    });
+
+	/* ---------- Update Address functionality ends ---------- */
+
+	/* ---------- Mail box functionality ---------- */
+
+	var mailBoxStep = 1;
+	$('.mailbox_keys').click(function(){
+		$('#mailbox_key_modal').modal('show');
+
+		// Refresh the modal contents
+		mailBoxStep = 1;
+
+		$('#mailbox_keys_step1').show();
+		$('#mailbox_keys_step2').hide();
+		$('#mailbox_keys_step3').hide();
+		$('#mailbox_keys_step4').hide();
+
+	});
+
+	// Mail box keys activity form validation
+    $('#frm_mailbox_keys').validate({
+        rules: {
+            mailbox_keys_method: {
+                required: true
+            }
+        },
+        messages: {
+            mailbox_keys_method: {
+                required: 'Please select an option'
+            }
+        }
+    });
+
+    $('#btn_next_mailbox_keys').click(function(){
+    	if( $('#frm_mailbox_keys').valid() )
+    	{
+    		if( mailBoxStep == 1 )
+    		{
+	    		if( $('input[name="mailbox_keys_method"]:checked').val() == 1 )
+	    		{
+	    			$('#mailbox_keys_step1').hide();
+	    			$('#mailbox_keys_step2').show();
+	    			$('#mailbox_keys_step3').hide();
+	    			$('#mailbox_keys_step4').hide();
+	    		}
+	    		else
+	    		{
+	    			$('#mailbox_keys_step1').hide();
+	    			$('#mailbox_keys_step2').hide();
+	    			$('#mailbox_keys_step3').show();
+	    			$('#mailbox_keys_step4').hide();
+	    		}
+
+	    		mailBoxStep++;
+    		}
+    		else if( mailBoxStep == 2 )
+    		{
+    			$('#mailbox_keys_step1').hide();
+    			$('#mailbox_keys_step2').hide();
+    			$('#mailbox_keys_step3').hide();
+    			$('#mailbox_keys_step4').show();
+
+    			mailBoxStep++;
+    		}
+    	}
+    });
+
+    $('#btn_prev_mailbox_keys').click(function(){
+    	if( mailBoxStep == 3 )
+    	{
+    		if( $('input[name="mailbox_keys_method"]:checked').val() == 1 )
+    		{
+    			$('#mailbox_keys_step1').hide();
+    			$('#mailbox_keys_step2').show();
+    			$('#mailbox_keys_step3').hide();
+    			$('#mailbox_keys_step4').hide();
+    		}
+    		else
+    		{
+    			$('#mailbox_keys_step1').hide();
+    			$('#mailbox_keys_step2').hide();
+    			$('#mailbox_keys_step3').show();
+    			$('#mailbox_keys_step4').hide();
+    		}
+
+    		mailBoxStep--;
+    	}
+    	else if( mailBoxStep == 2 )
+    	{
+    		$('#mailbox_keys_step1').show();
+			$('#mailbox_keys_step2').hide();
+			$('#mailbox_keys_step3').hide();
+			$('#mailbox_keys_step4').hide();
+
+			mailBoxStep--;
+    	}
+    });
+	
+	/* ---------- Mail box functionality ends ---------- */
 
 	// To handle the modal close event
 	$('.close_modal').click(function(){
 		$('#user_response_modal').modal('show');
-		
 	});
 
 });
