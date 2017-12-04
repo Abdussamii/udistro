@@ -106,19 +106,18 @@
     <div class="container-fluid">
         <div class="navbar-header">
         	<!-- Company image -->
-          	<a class="navbar-brand" href="javascript:void(0);">
-          		<!-- <img src="{{ url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" /> -->
-          		<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
+          	<a class="navbar-brand" href="{{ url('/') }}">
+          		<img src="{{ url('/images/logo.png') }}" height="60px" width="60px" alt="Udistro" />
+          		<!-- <img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" /> -->
           	</a>
-          	<div class="user-name-section">
-          		<!-- Agent image -->
+          	<!-- <div class="user-name-section">
 	          	<a href="javascript:void(0);">
 	          		<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
 	          	</a>
 	          	<div class="username">
 	          		<h3>{{ $agentName }}</h3>
 	          	</div>
-          	</div>
+          	</div> -->
         </div>
         <div class="nav navbar-nav navbar-right user-page">
 	        <div class="dropdown user-dropdown">
@@ -342,8 +341,8 @@
   	<div class="modal-dialog modal-lg">
     <!-- Modal content-->
 	    <div class="modal-content">
-	    	<div class="modal-body text-center">
-	      		<div class="close close-btn" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Mail Forward</h2>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -391,6 +390,17 @@
       					</div>
 		      		</div>
 
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step4" style="width: 500px; height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
+
 		      	</div>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -426,6 +436,27 @@
   	</div>
 </div>
 <!-- Forward Mail Modal End -->
+
+
+
+
+
+<!-- To handle the modal close event -->
+<div id="user_response_modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Have you completed this task?</h4>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-primary forward_mail_user_response" id="1" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-primary forward_mail_user_response" id="0" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- To handle the modal close event -->
 
 </body>
 </html> 

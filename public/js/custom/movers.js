@@ -34,8 +34,9 @@ $(document).ready(function(){
 
 		// Show the first step
 		$('#forward_mail_step1').show();
-		$('#forward_mail_step3').hide();
 		$('#forward_mail_step2').hide();
+		$('#forward_mail_step3').hide();
+		$('#forward_mail_step4').hide();
 	});
 
 	// Admin login form validation
@@ -62,6 +63,7 @@ $(document).ready(function(){
 	    		{
 	    			$('#forward_mail_step1').hide();
 	    			$('#forward_mail_step3').hide();
+	    			$('#forward_mail_step4').hide();
 	    			$('#forward_mail_step2').show();
 	    		}
 	    		else
@@ -69,20 +71,40 @@ $(document).ready(function(){
 	    			$('#forward_mail_step1').hide();
 	    			$('#forward_mail_step2').hide();
 	    			$('#forward_mail_step3').show();
+	    			$('#forward_mail_step4').hide();
 	    		}
 
 	    		forwardMailStep++;
 	    	}
     	}
+    	else if( forwardMailStep == 2 )
+    	{
+    		$('#forward_mail_step1').hide();
+			$('#forward_mail_step2').hide();
+			$('#forward_mail_step3').hide();
+			$('#forward_mail_step4').show();
+
+    		forwardMailStep++;
+    	}
     });
 
     // Forward mail - Show previous step
     $('#btn_prev_forward_mail').click(function(){
-    	if( forwardMailStep == 2 )
+    	if( forwardMailStep == 3 )
+    	{
+    		$('#forward_mail_step1').hide();
+			$('#forward_mail_step2').hide();
+			$('#forward_mail_step3').show();
+			$('#forward_mail_step4').hide();
+
+    		forwardMailStep--;
+    	}
+    	else if( forwardMailStep == 2 )
     	{
     		$('#forward_mail_step1').show();
     		$('#forward_mail_step2').hide();
 	    	$('#forward_mail_step3').hide();
+	    	$('#forward_mail_step4').hide();
 
     		forwardMailStep--;
     	}
@@ -103,11 +125,14 @@ $(document).ready(function(){
     	{
     		var URL = window.open("https://www.google.co.in/maps/search/canada+post+offices/@51.1745672,-115.6424392,12z/data=!3m1!4b1", "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
     	}
-
-    	//$(this).attr('onclick', '');
-    	//$(this).click();
     });
 
 	/* ---------- Activities functionality ---------- */
+
+	// To handle the modal close event
+	$('.close_modal').click(function(){
+		$('#user_response_modal').modal('show');
+		
+	});
 
 });
