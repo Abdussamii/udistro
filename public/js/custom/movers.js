@@ -146,27 +146,240 @@ $(document).ready(function(){
 		$('#update_address_modal').modal('show');
 
 		// Reset the steps
+		$('#update_address_step1').show();
+		$('#update_address_step2').hide();
+		$('#update_address_step3').hide();
+		$('#update_address_step4').hide();
+		$('#update_address_step5').hide();
+		$('#update_address_step6').hide();
+		$('#update_address_step7').hide();
 	});
 
 	// Update address activity form validation
     $('#frm_update_address').validate({
         rules: {
-            update_address_method: {
+            update_address_method1: {
+                required: true
+            },
+            update_address_method2: {
+                required: true
+            },
+            update_address_method3: {
                 required: true
             }
         },
         messages: {
-            update_address_method: {
-                required: 'Please select atleast one option'
+            update_address_method1: {
+                required: 'Please select an option'
+            },
+            update_address_method2: {
+                required: 'Please select an option'
+            },
+            update_address_method3: {
+                required: 'Please select an option'
             }
         }
     });
 
+    // Update address next button functionality
     $('#btn_next_update_address').click(function(){
-    	/*if( $('#frm_update_address').valid() )
+    	if( updateAddressStep == 1 )
     	{
+    		if( $('#frm_update_address').valid() )
+    		{
+	    		if( ( $('input[name="update_address_method1"]:checked').val() == 1 && $('input[name="update_address_method2"]:checked').val() == 1 && $('input[name="update_address_method3"]:checked').val() == 1 ) || ( $('input[name="update_address_method1"]:checked').val() == 1 && $('input[name="update_address_method2"]:checked').val() == 2 && $('input[name="update_address_method3"]:checked').val() == 2 ) )
+	    		{
+	    			$('#update_address_step1').hide();
+	    			$('#update_address_step2').show();
+	    			$('#update_address_step3').hide();
+	    			$('#update_address_step4').hide();
+	    			$('#update_address_step5').hide();
+	    			$('#update_address_step6').hide();
+	    			$('#update_address_step7').hide();
+	    		}
+	    		else
+	    		{
+	    			$('#update_address_step1').hide();
+	    			$('#update_address_step2').hide();
+	    			$('#update_address_step3').show();
+	    			$('#update_address_step4').hide();
+	    			$('#update_address_step5').hide();
+	    			$('#update_address_step6').hide();
+	    			$('#update_address_step7').hide();
+	    		}
 
-    	}*/
+	    		updateAddressStep++;
+    		}
+
+    	}
+    	else if( updateAddressStep == 2 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').show();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').hide();
+
+			updateAddressStep++;
+    	}
+    	else if( updateAddressStep == 3 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').show();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').hide();
+
+			updateAddressStep++;
+    	}
+    	else if( updateAddressStep == 4 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').show();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').hide();
+
+			updateAddressStep++;
+    	}
+    	else if( updateAddressStep == 5 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').show();
+			$('#update_address_step7').hide();
+
+			updateAddressStep++;
+    	}
+    	else if( updateAddressStep == 6 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').show();
+
+			updateAddressStep++;
+    	}
+    });
+
+    // Update address previous button functionality
+    $('#btn_prev_update_address').click(function(){
+    	if( updateAddressStep == 2 )
+    	{
+    		if( $('#frm_update_address').valid() )
+    		{
+	    		$('#update_address_step1').show();
+    			$('#update_address_step2').hide();
+    			$('#update_address_step3').hide();
+    			$('#update_address_step4').hide();
+    			$('#update_address_step5').hide();
+    			$('#update_address_step6').hide();
+    			$('#update_address_step7').hide();
+
+    			updateAddressStep--;
+    		}
+
+    	}
+    	else if( updateAddressStep == 3 )
+    	{
+    		if( ( $('input[name="update_address_method1"]:checked').val() == 1 && $('input[name="update_address_method2"]:checked').val() == 1 && $('input[name="update_address_method3"]:checked').val() == 1 ) || ( $('input[name="update_address_method1"]:checked').val() == 1 && $('input[name="update_address_method2"]:checked').val() == 2 && $('input[name="update_address_method3"]:checked').val() == 2 ) )
+    		{
+    			$('#update_address_step1').hide();
+    			$('#update_address_step2').show();
+    			$('#update_address_step3').hide();
+    			$('#update_address_step4').hide();
+    			$('#update_address_step5').hide();
+    			$('#update_address_step6').hide();
+    			$('#update_address_step7').hide();
+    		}
+    		else
+    		{
+    			$('#update_address_step1').hide();
+    			$('#update_address_step2').hide();
+    			$('#update_address_step3').show();
+    			$('#update_address_step4').hide();
+    			$('#update_address_step5').hide();
+    			$('#update_address_step6').hide();
+    			$('#update_address_step7').hide();
+    		}
+
+    		updateAddressStep--;
+    	}
+    	else if( updateAddressStep == 4 )
+    	{
+    		if( ( $('input[name="update_address_method1"]:checked').val() == 1 && $('input[name="update_address_method2"]:checked').val() == 1 && $('input[name="update_address_method3"]:checked').val() == 1 ) || ( $('input[name="update_address_method1"]:checked').val() == 1 && $('input[name="update_address_method2"]:checked').val() == 2 && $('input[name="update_address_method3"]:checked').val() == 2 ) )
+    		{
+    			$('#update_address_step1').hide();
+    			$('#update_address_step2').show();
+    			$('#update_address_step3').hide();
+    			$('#update_address_step4').hide();
+    			$('#update_address_step5').hide();
+    			$('#update_address_step6').hide();
+    			$('#update_address_step7').hide();
+    		}
+    		else
+    		{
+    			$('#update_address_step1').hide();
+    			$('#update_address_step2').hide();
+    			$('#update_address_step3').show();
+    			$('#update_address_step4').hide();
+    			$('#update_address_step5').hide();
+    			$('#update_address_step6').hide();
+    			$('#update_address_step7').hide();
+    		}
+
+    		updateAddressStep--;
+    	}
+    	else if( updateAddressStep == 5 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').show();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').hide();
+
+			updateAddressStep--;
+    	}
+    	else if( updateAddressStep == 6 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').show();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').hide();
+
+			updateAddressStep--;
+    	}
+    	else if( updateAddressStep == 7 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').show();
+			$('#update_address_step7').hide();
+
+			updateAddressStep--;
+    	}
+
+    	console.log(updateAddressStep);
     });
 
 	/* ---------- Update Address functionality ends ---------- */

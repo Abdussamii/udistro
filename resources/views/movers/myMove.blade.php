@@ -444,7 +444,7 @@
 	    <div class="modal-content">
 	    	<div class="modal-body">
 	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
-		      	<h2>Mail Forward</h2>
+		      	<h2>Update Address</h2>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
 	      				<div>
@@ -459,48 +459,163 @@
       					</div>
       					<br>
       					<div>
-      						<form name="frm_update_address" id="frm_update_address">
-      							<div><input type="checkbox" name="update_address_method" value="1"> Federal Agencies</div>
-      							<div><input type="checkbox" name="update_address_method" value="2"> Provincial Agencies</div>
-      							<div><input type="checkbox" name="update_address_method" value="3"> Other Checklist</div>
-
-      							<label id="update_address_method-error" class="error" for="update_address_method"></label>
-      						</form>
+      						<ul>
+      							<li>Federal Agencies</li>
+      							<li>Provincial Agencies</li>
+      							<li>Other Checklist</li>
+      						</ul>
       					</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step2" style="width: 500px; height: 300px; display: none;">
-		      			<p>
-		      				When you buy a Mail Forwarding before you moves, with your permission, Canada Post will share your updated address information with companies who have an existing relationship with you and who are subscribed to Canada post NCOA Mover Data Service. Choose the 12-month service for the most convenience and savings. 
-		      			</p>
-		      			<a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
-		      		</div>
-
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step3" style="width: 500px; height: 300px; display: none;">
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step2" style="width: 500px; height: 400px; display: none;">
 		      			<div>
-      						<strong>Search Canada post office closest to you</strong>
-      					</div>
-      					<div>
-      						<form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices">
-	      						<div class="col-sm-9 col-md-9 col-lg-9">
-	      							<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office">
-	      						</div>
-	      						<div class="col-sm-3 col-md-3 col-lg-3">
-	      							<!-- <input type="button" name="" id="" class="btn" value="Go"> -->
-	      							<a href="javascript:void(0);" onclick="" id="forward_mail_search_postoffice">Go</a>
-	      						</div>
-      						</form>
-      					</div>
+		      				<strong>Update address with CRA</strong>
+		      			</div>
+		      			<div>
+		      				<div>
+		      					Since you have full access to your CRA account, you will be redirected to CRA website and you can do it online by yourself in less than 2 to 3 minutes. Having full access means you have access code giving to you by CRA
+		      				</div>
+		      				<div>
+		      					<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/changes-your-business/change-address.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+		      				</div>
+		      			</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step4" style="width: 500px; height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="1">Yes</button>
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step3" style="height: 400px; display: none;">
+		      			<div>
+		      				<strong>Update address with CRA</strong>
 		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="0">No</button>
+		      			<div>
+		      				<div>
+		      					If you have don't have full access to your CRA account, here is what you do, call CRA:
+		      				</div>
+		      				<div class="row">
+		      					<div class="col-sm-3 col-md-3 col-lg-3">
+		      						<strong>
+		      							Have these handy, before this call
+		      						</strong>
+		      						<div>
+		      							<div>Your full name</div>
+		      							<div>Old and new address</div>
+		      							<div>Old and new postal codes</div>
+		      							<div>Your SIN#</div>
+		      							<div>Phone contact, name and DOB of children</div>
+		      						</div>
+		      					</div>
+		      					<div class="col-sm-3 col-md-3 col-lg-3">
+		      						<strong>
+		      							Opening Hours
+		      						</strong>
+		      						<div>
+		      							<div>
+		      								Monday to Friday, 07:00 AM - 11:00 PM ET
+ 		      							</div>
+		      							<div>
+		      								Saturday and Sunday, 09:00 AM - 09:00 PM ET
+		      							</div>
+		      						</div>
+		      					</div>
+		      					<div class="col-sm-3 col-md-3 col-lg-3">
+		      						<strong>
+		      							Phone Numbers
+		      						</strong>
+		      						<div>
+		      							<div>1-800-959-8281</div>
+		      							<div>Outside of Canada: 613-940-8495</div>
+		      							
+		      						</div>
+		      					</div>
+		      				</div>
+		      			</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step4" style="height: 400px; display: none;">
+		      			<div>
+		      				<strong>Update address with Provincial Health Agency</strong>
+		      			</div>
+		      			<div>
+		      				<div>
+		      					If you have don't have full access to your CRA account, here is what you do, call CRA:
+		      				</div>
+		      				<div class="row">
+		      					<div class="col-sm-3 col-md-3 col-lg-3">
+		      						<strong>
+		      							Have these handy, before this call
+		      						</strong>
+		      						<div>
+		      							<div>Your full name</div>
+		      							<div>Old and new address</div>
+		      							<div>Old and new postal codes</div>
+		      							<div>Your SIN#</div>
+		      							<div>Phone contact, name and DOB of children</div>
+		      						</div>
+		      					</div>
+		      					<div class="col-sm-3 col-md-3 col-lg-3">
+		      						<strong>
+		      							Opening Hours
+		      						</strong>
+		      						<div>
+		      							<div>
+		      								Monday to Friday, 07:00 AM - 11:00 PM ET
+ 		      							</div>
+		      							<div>
+		      								Saturday and Sunday, 09:00 AM - 09:00 PM ET
+		      							</div>
+		      						</div>
+		      					</div>
+		      					<div class="col-sm-3 col-md-3 col-lg-3">
+		      						<strong>
+		      							Phone Numbers
+		      						</strong>
+		      						<div>
+		      							<div>1-800-959-8281</div>
+		      							<div>Outside of Canada: 613-940-8495</div>
+		      							
+		      						</div>
+		      					</div>
+		      				</div>
+		      			</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step5" style="width: 500px; height: 400px; display: none;">
+		      			<div>
+		      				<strong>Update address with Driver's License Agency</strong>
+		      			</div>
+		      			<div>
+		      				<div>
+		      					You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410
+		      				</div>
+		      				<div>
+		      					<a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+		      				</div>
+		      			</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step6" style="width: 500px; height: 400px; display: none;">
+		      			<div>
+		      				<strong>Update address with Driver's License Agency</strong>
+		      			</div>
+		      			<div>
+		      				<div>
+		      					You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410
+		      				</div>
+		      				<div>
+		      					<a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+		      				</div>
+		      			</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step7" style="width: 500px; height: 400px; display: none;">
+		      			<div>
+		      				<strong>Update address with Driver's License Agency</strong>
+		      			</div>
+		      			<div>
+		      				<div>
+		      					You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410
+		      				</div>
+		      				<div>
+		      					<a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+		      				</div>
 		      			</div>
 		      		</div>
 
@@ -510,31 +625,36 @@
 		      			Review / Rating
 		      		</div>
 		      		<div class="col-sm-9 col-md-9 col-lg-9">
-		      			<div class="col-md-4">
-	      					<p>
-	      						Do you have full access to your CRA My online account?
-	      					</p>
-	      					<div>
-	      						<label><input type="radio" name="">Yes</label>
-	      						<label><input type="radio" name="">No</label>
-	      					</div>
-	      				</div>
-	      				<div class="col-md-4">
-	      					<p>
-	      						Do you have dependent children
-	      					</p>
-	      					<div>
-	      						<label><input type="radio" name="">Yes</label>
-	      						<label><input type="radio" name="">No</label>
-	      					</div>
-	      				</div>
-	      				<div class="col-md-4">
-	      					<p>Do you receive child benefit</p>
-	      					<div>
-	      						<label><input type="radio" name="">Yes</label>
-	      						<label><input type="radio" name="">No</label>
-	      					</div>
-	      				</div>
+		      			<form name="frm_update_address" id="frm_update_address">
+			      			<div class="col-md-4">
+		      					<p>
+		      						Do you have full access to your CRA My online account?
+		      					</p>
+		      					<div>
+		      						<label><input type="radio" name="update_address_method1" value="1">Yes</label>
+		      						<label><input type="radio" name="update_address_method1" value="2">No</label>
+		      					</div>
+		      					<label id="update_address_method1-error" class="error" for="update_address_method1"></label>
+		      				</div>
+		      				<div class="col-md-4">
+		      					<p>
+		      						Do you have dependent children
+		      					</p>
+		      					<div>
+		      						<label><input type="radio" name="update_address_method2" value="1">Yes</label>
+		      						<label><input type="radio" name="update_address_method2" value="2">No</label>
+		      					</div>
+		      					<label id="update_address_method2-error" class="error" for="update_address_method2"></label>
+		      				</div>
+		      				<div class="col-md-4">
+		      					<p>Do you receive child benefit</p>
+		      					<div>
+		      						<label><input type="radio" name="update_address_method3" value="1">Yes</label>
+		      						<label><input type="radio" name="update_address_method3" value="2">No</label>
+		      					</div>
+		      					<label id="update_address_method3-error" class="error" for="update_address_method3"></label>
+		      				</div>
+	      				</form>
 		      		</div>
 		      	</div>
 		      	<div class="row">
