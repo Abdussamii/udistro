@@ -980,6 +980,274 @@
 </div>
 <!-- Connect Utilities Modal End -->
 
+<!-- Home Cleaning Services Modal -->
+<div id="home_cleaning_services_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	<h2>Home Cleaning Services</h2>
+
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+	      				<div>
+      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      					</div>
+      					<div>&nbsp;</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step1">
+		      			<div>
+      						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</strong>
+      					</div>
+      					<br>
+      					<div>
+      						<form name="frm_home_cleaning_services" id="frm_home_cleaning_services">
+						        <div class="panel-group" id="accordion">
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Indicate type of cleaning</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseOne" class="panel-collapse collapse in">
+						                    <div class="panel-body">
+						                        <div><label><input type="checkbox" name=""> Move in cleaning</label></div>
+						                        <div><label><input type="checkbox" name=""> Move out cleaning</label></div>
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Moving From</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseTwo" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <div class="form-group">
+						                        	<label>Type</label>
+						                        	<select class="form-control">
+						                        		<option value="House">House</option>
+						                        		<option value="Apartment/Flat">Apartment/Flat</option>
+						                        		<option value="Condo">Condo</option>
+						                        		<option value="Studio">Studio</option>
+						                        	</select>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>No of bedrooms</label>
+						                        	<label class="form-group"><input type="radio" name="">1</label>
+						                        	<label class="form-group"><input type="radio" name="">2</label>
+						                        	<label class="form-group"><input type="radio" name="">3</label>
+						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Did you own or rent this property</label>
+						                        	<label class="form-group"><input type="radio" name="">Own</label>
+						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Moving To</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseThree" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <div class="form-group">
+						                        	<label>Type</label>
+						                        	<select class="form-control">
+						                        		<option value="House">House</option>
+						                        		<option value="Apartment/Flat">Apartment/Flat</option>
+						                        		<option value="Condo">Condo</option>
+						                        		<option value="Studio">Studio</option>
+						                        	</select>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>No of bedrooms</label>
+						                        	<label class="form-group"><input type="radio" name="">1</label>
+						                        	<label class="form-group"><input type="radio" name="">2</label>
+						                        	<label class="form-group"><input type="radio" name="">3</label>
+						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Did you own or rent this property</label>
+						                        	<label class="form-group"><input type="radio" name="">Own</label>
+						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Detailed Job Description</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseFour" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <div class="form-group">
+						                        	<label>Home Condition</label>
+						                        	<label class="form-group"><input type="radio" name="">Dirty</label>
+						                        	<label class="form-group"><input type="radio" name="">Clean</label>
+						                        	<label class="form-group"><input type="radio" name="">Average</label>
+						                        	<label class="form-group"><input type="radio" name="">Poor</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many levels do you have</label>
+						                        	<label class="form-group"><input type="radio" name="">1</label>
+						                        	<label class="form-group"><input type="radio" name="">2</label>
+						                        	<label class="form-group"><input type="radio" name="">3</label>
+						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Size of area you want to clean</label>
+						                        	<label class="form-group"><input type="radio" name="">0-600 sqft</label>
+						                        	<label class="form-group"><input type="radio" name="">600-1500 sqft</label>
+						                        	<label class="form-group"><input type="radio" name="">1500-2500 sqft</label>
+						                        	<label class="form-group"><input type="radio" name="">above 2500 sqft</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many peoples live in the house</label>
+						                        	<label class="form-group"><input type="radio" name="">1</label>
+						                        	<label class="form-group"><input type="radio" name="">2</label>
+						                        	<label class="form-group"><input type="radio" name="">3</label>
+						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many pets live in the house</label>
+						                        	<label class="form-group"><input type="radio" name="">1</label>
+						                        	<label class="form-group"><input type="radio" name="">2</label>
+						                        	<label class="form-group"><input type="radio" name="">3</label>
+						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many bathrooms</label>
+						                        	<label class="form-group"><input type="radio" name="">1</label>
+						                        	<label class="form-group"><input type="radio" name="">2</label>
+						                        	<label class="form-group"><input type="radio" name="">3</label>
+						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Streaming Carpet Cleaning</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Rooms</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Hall Way</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Other place to clean</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Kitchen</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Dinning Room</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Office Room</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Half Way</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Interior</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Staircase</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Recreation Room</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Den</label>
+						                        	<label class="form-group"><input type="checkbox" name="">Laundry</label>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">Additional Services</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseFive" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <div class="form-group">
+						                        	<label>Oven inside cleaned</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Fridge inside cleaned</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many balconies would you like to have swept</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many windows(interior) would you like to have washed</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>How many windows(exterior) would you like to have washed</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Would you like wet wiping blinds? How many?</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Cleaning behind the refrigrator and stove</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Would you like baseboard to be washed</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Clean Fireplace</label>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">Call Me On</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseSix" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <div class="form-group">
+						                        	<input type="" name="" placeholder="Contact Number" class="form-control">
+						                        	<button type="button" class="btn">+</button>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">Additional Information (If Any)</a>
+						                    </h4>
+						                </div>
+						                <div id="collapseSeven" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <textarea class="form-control">
+						                        	
+						                        </textarea>
+						                    </div>
+						                </div>
+						            </div>
+						        </div>
+
+						        <div>
+						        	<button type="button" class="btn btn-info">Submit</button>
+						        </div>
+						    </form>
+      					</div>
+		      		</div>
+		      	</div>
+		      	
+		      	<div class="row">
+		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<a href="javascript:void(0);" id="btn_prev_home_cleaning_services" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_home_cleaning_services" class="btn">Next</a>
+		      		</div>
+		      	</div>
+	      	</div>
+	      	<!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div> -->
+	    </div>
+  	</div>
+</div>
+<!-- Home Cleaning Services Modal End -->
 
 
 <!-- To handle the modal close event -->

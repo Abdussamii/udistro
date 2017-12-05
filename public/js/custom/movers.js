@@ -378,8 +378,6 @@ $(document).ready(function(){
 
 			updateAddressStep--;
     	}
-
-    	console.log(updateAddressStep);
     });
 
 	/* ---------- Update Address functionality ends ---------- */
@@ -573,6 +571,14 @@ $(document).ready(function(){
     });
 
 	/* ---------- Connect Utilities functionality ends ---------- */
+
+	/* ---------- Home Cleaning Services functionality ---------- */
+
+	$('.home_cleaning_services').click(function(){
+		$('#home_cleaning_services_modal').modal('show');
+	});
+
+	/* ---------- Home Cleaning Services functionality ends ---------- */
 
 	// To handle the modal close event
 	$('.close_modal').click(function(){
