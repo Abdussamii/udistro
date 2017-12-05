@@ -796,6 +796,190 @@
 </div>
 <!-- Mailbox keys Modal End -->
 
+<!-- Connect Utilities Modal -->
+<div id="connect_utilities_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	<h2>Connect Utilities</h2>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+	      				<div>
+      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      					</div>
+      					<div>&nbsp;</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step1" style="height: 300px;">
+		      			<div>
+      						<strong>Moving to a new neighborhood, you need to setup new, cancel or transfer old service to your new address. If you need to open a Hydro, Gas, Water and Waste accounts, then start here:</strong>
+      					</div>
+      					<br>
+      					<div>
+      						<ul>
+      							<li>Hydro, Electricity and Gas</li>
+      							<li>Water, Waste and Recycle</li>
+      						</ul>
+      					</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step2" style="height: 400px; display: none;">
+		      			<div>
+      						<strong>Connect Hydro, Electricity and Gas</strong>
+      						<p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
+      					</div>
+      					<div>
+      						<div><label><input type="radio" name="connect_utilities_method_type" value="1" checked=""> Call utility service</label></div>
+      						<div><label><input type="radio" name="connect_utilities_method_type" value="2"> Do it here online</label></div>
+      					</div>
+
+      					<!-- Different Methods -->
+      					<!-- Call utility service -->
+      					<div class="row" id="connect_utilities_method_type_container1">
+	      					<div class="col-sm-3 col-md-3 col-lg-3">
+	      						<strong>
+	      							What you to make this call
+	      						</strong>
+	      						<div>
+	      							<div>Your full name</div>
+	      							<div>Old and new address</div>
+	      							<div>Old and new postal code</div>
+	      						</div>
+	      					</div>
+	      					<div class="col-sm-3 col-md-3 col-lg-3">
+	      						<strong>
+	      							Opening Hours
+	      						</strong>
+	      						<div>
+	      							<div>
+	      								Monday to Friday, 07:00 AM - 11:00 PM ET
+		      							</div>
+	      							<div>
+	      								Saturday and Sunday, 09:00 AM - 09:00 PM ET
+	      							</div>
+	      						</div>
+	      					</div>
+	      					<div class="col-sm-3 col-md-3 col-lg-3">
+	      						<strong>
+	      							Phone Numbers
+	      						</strong>
+	      						<div>
+	      							<div>1-866-607-6301</div>
+	      							<div>Outside of Canada: 416-979-3033</div>
+	      						</div>
+	      					</div>
+	      				</div>
+
+	      				<!-- Do it here online -->
+      					<div class="row" id="connect_utilities_method_type_container2" style="display: none;">
+	      					<div>
+	      						<strong>Do it online</strong>
+	      					</div>
+	      					<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+	      				</div>
+
+
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step3" style="height: 450px; display: none;">
+		      			<div>
+      						<strong>Water, Waste and Recycle Bins</strong>
+      						<p>If you are moving in, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
+      					</div>
+      					<div>
+      						<ul>
+      							<li>Moving In</li>
+      							<li>Moving Out</li>
+      						</ul>
+      					</div>
+
+      					<div class="row">
+	      					<div class="col-sm-3 col-md-3 col-lg-3">
+	      						<strong>
+	      							We will require
+	      						</strong>
+	      						<div>
+	      							<div>Your name</div>
+	      							<div>Name of anyone financially resonsible for the utility bill</div>
+	      							<div>Service Address</div>
+	      						</div>
+	      					</div>
+	      					<div class="col-sm-3 col-md-3 col-lg-3">
+	      						<strong>
+	      							Hours
+	      						</strong>
+	      						<div>
+	      							<div>
+	      								Monday to Thursday, 08:30 AM - 07:00 PM (except holidays)
+		      							</div>
+	      							<div>
+	      								Friday and Saturday, 08:30 AM - 04:30 PM (except holiday long weekend)
+	      							</div>
+	      						</div>
+	      					</div>
+	      					<div class="col-sm-3 col-md-3 col-lg-3">
+	      						<strong>
+	      							Phone Numbers
+	      						</strong>
+	      						<div>
+	      							<div>City Services: 3-1-1</div>
+	      						</div>
+	      					</div>
+	      				</div>
+		      		</div>
+
+      				<div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step4" style="width: 500px; height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
+
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-3 col-md-3 col-lg-3">
+		      			Review / Rating
+		      		</div>
+		      		<div class="col-sm-9 col-md-9 col-lg-9">
+		      			<div class="col-md-4">
+	      					<p>
+	      						I need to start new service at a new address (open new account)
+	      					</p>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>
+	      						I need to stop service at one address and start service at a new address (transfer account)
+	      					</p>
+	      				</div>
+	      				<div class="col-md-4">
+	      					<p>
+	      						I need to stop service or cancel account (account cancel)
+	      					</p>
+	      				</div>
+		      		</div>
+		      	</div>
+		      	<div class="row">
+		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<a href="javascript:void(0);" id="btn_prev_connect_utilities" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_connect_utilities" class="btn">Next</a>
+		      		</div>
+		      	</div>
+	      	</div>
+	      	<!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div> -->
+	    </div>
+  	</div>
+</div>
+<!-- Connect Utilities Modal End -->
+
 
 
 <!-- To handle the modal close event -->

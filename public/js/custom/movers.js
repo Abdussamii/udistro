@@ -481,6 +481,99 @@ $(document).ready(function(){
 	
 	/* ---------- Mail box functionality ends ---------- */
 
+	/* ---------- Connect Utilities functionality ---------- */
+
+	var connectUtilitiesStep = 1;
+	$('.connect_utilities').click(function(){
+		$('#connect_utilities_modal').modal('show');
+
+		// Reset the steps
+		$('#connect_utilities_step1').show();
+		$('#connect_utilities_step2').hide();
+		$('#connect_utilities_step3').hide();
+		$('#connect_utilities_step4').hide();
+
+		connectUtilitiesStep = 1;
+	});
+
+    // Connect utilities next step functionality
+    $('#btn_next_connect_utilities').click(function(){
+    	if( connectUtilitiesStep == 1 )
+		{
+			$('#connect_utilities_step1').hide();
+			$('#connect_utilities_step2').show();
+			$('#connect_utilities_step3').hide();
+			$('#connect_utilities_step4').hide();
+
+			connectUtilitiesStep++;
+		}
+		else if( connectUtilitiesStep == 2 )
+		{
+			$('#connect_utilities_step1').hide();
+			$('#connect_utilities_step2').hide();
+			$('#connect_utilities_step3').show();
+			$('#connect_utilities_step4').hide();
+
+			connectUtilitiesStep++;
+		}
+		else if( connectUtilitiesStep == 3 )
+		{
+			$('#connect_utilities_step1').hide();
+			$('#connect_utilities_step2').hide();
+			$('#connect_utilities_step3').hide();
+			$('#connect_utilities_step4').show();
+
+			connectUtilitiesStep++;
+		}
+    });
+
+    // Connect utilities previous step functionality
+    $('#btn_prev_connect_utilities').click(function(){
+    	if( connectUtilitiesStep == 2 )
+		{
+			$('#connect_utilities_step1').show();
+			$('#connect_utilities_step2').hide();
+			$('#connect_utilities_step3').hide();
+			$('#connect_utilities_step4').hide();
+
+			connectUtilitiesStep--;
+		}
+		else if( connectUtilitiesStep == 3 )
+		{
+			$('#connect_utilities_step1').hide();
+			$('#connect_utilities_step2').show();
+			$('#connect_utilities_step3').hide();
+			$('#connect_utilities_step4').hide();
+
+			connectUtilitiesStep--;
+		}
+		else if( connectUtilitiesStep == 4 )
+		{
+			$('#connect_utilities_step1').hide();
+			$('#connect_utilities_step2').hide();
+			$('#connect_utilities_step3').show();
+			$('#connect_utilities_step4').hide();
+
+			connectUtilitiesStep--;
+		}
+    });
+
+    // Show the different method details
+    $('input[name="connect_utilities_method_type"]').click(function(){
+    	if( $(this).val() == 1 )
+    	{
+    		$('#connect_utilities_method_type_container1').show();
+    		$('#connect_utilities_method_type_container2').hide();
+    	}
+    	else
+    	{
+    		$('#connect_utilities_method_type_container1').hide();
+    		$('#connect_utilities_method_type_container2').show();
+    	}
+    });
+
+	/* ---------- Connect Utilities functionality ends ---------- */
+
 	// To handle the modal close event
 	$('.close_modal').click(function(){
 		$('#user_response_modal').modal('show');
