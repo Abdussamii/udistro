@@ -1495,7 +1495,7 @@ $(document).ready(function(){
 			    	// Auto-fill the form
 			    	$('#frm_add_company_category #category_id').val(categoryId);
 			    	$('#frm_add_company_category #category_name').val(response.category);
-			    	$('#frm_add_company_category input[name="category_status"][value="'+ response.status +'"]').prop('checked', true);
+			    	$('#frm_add_company_category input[name="category_status_edit"][value="'+ response.status +'"]').prop('checked', true);
 
 			    	// Show the modal
 			    	$('#modal_add_company_category').modal('show');
@@ -2135,18 +2135,18 @@ $(document).ready(function(){
 		{
             // Ajax call to save the page related data
             var $this = $(this);
-            var representative_fname    = $('#representative_fname').val();
-            var representative_lname    = $('#representative_lname').val();
-            var representative_email    = $('#representative_email').val();
-            var company_name            = $('#company_name').val();
-            var company_id              = $('#company_id').val();
-            var company_category        = $("input[name='company_category']:selected").val();
-            var company_address         = $('#company_address').val();
-            var company_province        = $("input[name='company_province']:selected").val();
-            var company_city            = $("input[name='company_city']:selected").val();
-            var postal_code             = $('#postal_code').val();
-            var company_status          = $("input[name='company_status']:checked").val();
-            var fileData                = $('#company_upload_image').prop('files')[0];
+            var representative_fname    = $('#frm_edit_company #representative_fname').val();
+            var representative_lname    = $('#frm_edit_company #representative_lname').val();
+            var representative_email    = $('#frm_edit_company #representative_email').val();
+            var company_name            = $('#frm_edit_company #company_name').val();
+            var company_id              = $('#frm_edit_company #company_id').val();
+            var company_category        = $("#frm_edit_company #company_category").val();
+            var company_address         = $('#frm_edit_company #company_address').val();
+            var company_province        = $("#frm_edit_company #company_province").val();
+            var company_city            = $("#frm_edit_company #company_city").val();
+            var postal_code             = $("#frm_edit_company #postal_code").val();
+            var company_status          = $("input[name='company_status_edit']:checked").val();
+            var fileData                = $('#frm_edit_company #company_upload_image').prop('files')[0];
 
             // Create form data object and append the values into it
             var formData = new FormData();
@@ -2162,7 +2162,7 @@ $(document).ready(function(){
             formData.append('company_city', company_city);
             formData.append('postal_code', postal_code);
             formData.append('company_status', company_status);
-
+            
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/administrator/updatecompanydetails',
     			method: 'post',

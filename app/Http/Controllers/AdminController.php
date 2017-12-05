@@ -1014,7 +1014,7 @@ class AdminController extends Controller
 
 				        if( $provinceImage->move( $destinationPath, $fileNewName ) )
 				        {
-				        	$response['errCode']    = 0;
+				        	$response['errCode']    = 1;
 				        }
 			        	else
 			        	{

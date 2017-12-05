@@ -392,6 +392,7 @@ class CompanyController extends Controller
      */
     public function updateCompanyDetails(Request $request)
     {
+
     	$companyImage   		= $request->file('fileData');
     	$representative_fname   = $request->input('representative_fname');
     	$representative_lname   = $request->input('representative_lname');
@@ -460,7 +461,7 @@ class CompanyController extends Controller
 		}
 		else
 		{
-			if($companyImage->getSize() > 0)
+			if(!is_null($companyImage) && ($companyImage->getSize() > 0))
 			{
 
 				// Image destination folder
@@ -474,11 +475,11 @@ class CompanyController extends Controller
 				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
 				    {
 				        // Rename the file
-				        $fileNewName = str_random(40) . '.' . $fileExt;
+				        $fileNewName = str_random(30) . '.' . $fileExt;
 
 				        if( $companyImage->move( $destinationPath, $fileNewName ) )
 				        {
-				        	$response['errCode']    = 0;
+				        	$response['errCode']    = 1;
 				        }
 			        	else
 			        	{
@@ -497,53 +498,59 @@ class CompanyController extends Controller
 					$response['errCode']    = 5;
 			        $response['errMsg']     = 'Invalid file';
 				}
+			} else {
+				$response['errCode']    = 2;
 			}
 
-			if(!$response['errCode'])
+			if($response['errCode'] == 1 || $response['errCode'] == 2)
 			{
-				if( $activityId == '' )	// Check if the activity id is available or not, if not add the company
+				$company = Company::find($company_id);
+
+				$company->company_name 			= $company_name;	
+				$company->company_category_id 	= $company_category;
+				$company->address 				= $company_address;
+				$company->province_id 			= $company_province;
+				$company->city_id 				= $company_city;
+				$company->postal_code 			= $postal_code;
+				$company->status 				= $company_status;
+				$company->updated_by 			= $userId;
+				if($response['errCode'] == 1)
 				{
-			$company = Company::find($company_id);
-
-			$company->company_name 			= $company_name;	
-			$company->company_category_id 	= $company_category;
-			$company->address 				= $company_address;
-			$company->province_id 			= $company_province;
-			$company->city_id 				= $company_city;
-			$company->postal_code 			= $postal_code;
-			$company->status 				= $company_status;
-			$company->updated_by 			= $userId;
-
-			if( $company->save() )
-			{
-				$userDetails = DB::table('users as t1')
-						            ->join('company_user as t2', 't1.id', '=', 't2.user_id')
-						            ->join('role_user as t3', 't3.user_id', '=', 't1.id')
-						            ->select('t1.id')
-						            ->where('t3.role_id', '2')
-						            ->first();
-
-				$user = User::find($userDetails->id);
-
-				$user->email 		= $companyDetails['representative_email'];
-				$user->fname 		= $companyDetails['representative_fname'];
-				$user->lname 		= $companyDetails['representative_lname'];
-				$user->updated_by 	= $userId;
-
-				if( $user->save() )
-				{
-					DB::commit();
-
-					$response['errCode']    = 0;
-			        $response['errMsg']     = 'Company details updated successfully';
+					$company->image 			= $fileNewName;
+					$response['image']  		= URL::to('/').'/images/company/'.$fileNewName;
 				}
-			}
-			else
-			{
-				DB::rollBack();
 
-				$response['errCode']    = 3;
-        		$response['errMsg']     = 'Some error in updating the company details';
+				if( $company->save() )
+				{
+					$userDetails = DB::table('users as t1')
+							            ->join('company_user as t2', 't1.id', '=', 't2.user_id')
+							            ->join('role_user as t3', 't3.user_id', '=', 't1.id')
+							            ->select('t1.id')
+							            ->where('t3.role_id', '2')
+							            ->first();
+
+					$user = User::find($userDetails->id);
+
+					$user->email 		= $representative_email;
+					$user->fname 		= $representative_fname;
+					$user->lname 		= $representative_lname;
+					$user->updated_by 	= $userId;
+
+					if( $user->save() )
+					{
+						$response['errCode']    = 0;
+				        $response['errMsg']     = 'Company details updated successfully';
+
+					} else {
+
+						$response['errCode']    = 3;
+	        			$response['errMsg']     = 'Some error in updating the company details';
+					}
+				} else {
+
+					$response['errCode']    = 3;
+	        		$response['errMsg']     = 'Some error in updating the company details';
+				}
 			}
 		}
 

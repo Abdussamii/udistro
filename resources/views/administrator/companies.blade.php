@@ -198,7 +198,7 @@
 									</div>
 									<div class="form-group">
 										<label for="company_category">Company Category</label>
-										<select name="company_category" id="company_category" class="form-control">
+										<select name="company_category_edit" id="company_category" class="form-control">
 											<option value="">Select</option>
 											<?php
 											if( isset( $companyCategories ) && count( $companyCategories ) > 0 )
@@ -219,7 +219,7 @@
 										<div class="row">
 										  	<div class="col-sm-6">
 										  		<label for="company_province">Province</label>
-										  		<select name="company_province" id="company_province" class="form-control">
+										  		<select name="company_province_edit" id="company_province" class="form-control">
 										  			<option value="">Select</option>
 										  			<?php
 										  			if( isset( $provinces ) && count( $provinces ) > 0 )
@@ -234,7 +234,7 @@
 										  	</div>
 										  	<div class="col-sm-6">
 										  		<label for="company_city">City</label>
-										  		<select name="company_city" id="company_city" class="form-control">
+										  		<select name="company_city_edit" id="company_city" class="form-control">
 										  			<option value="">Select</option>
 										  		</select>
 										  	</div>
@@ -248,10 +248,10 @@
 									<div class="form-group">
 										<label for="company_status">Status</label>
 										<div class="radio">
-										 	<label><input type="radio" name="company_status" value="1" checked="true">Active</label>
+										 	<label><input type="radio" name="company_status_edit" value="1" checked="true">Active</label>
 										</div>
 										<div class="radio">
-										 	<label><input type="radio" name="company_status" value="0">Inactive</label>
+										 	<label><input type="radio" name="company_status_edit" value="0">Inactive</label>
 										</div>
 										<label id="company_status-error" class="error" for="company_status"></label>
 									</div>
