@@ -201,8 +201,14 @@ $(document).ready(function(){
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
             { 'bSortable' : false }
         ]
+    });
+
+    $(document).on('click', '.edit_invite', function(){
+        $('#modal_invite').modal('show');
     });
 
     // To edit the client details

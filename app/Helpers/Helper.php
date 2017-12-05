@@ -153,6 +153,23 @@ class Helper
     }
 
     /**
+     * To sget invite status
+     * @param array
+     * @return null
+     */
+    public static function getInviteScheduleStatus($status = 0)
+    {
+    	$statusText = 'Send Immediately';
+		
+		if( $status == '1' )
+		{
+			$statusText = 'Schedule it for later';
+		}
+
+		return $statusText;
+    }
+
+    /**
      * To sget invite content text
      * @param array
      * @return null
@@ -160,9 +177,9 @@ class Helper
     public static function getTrimText($string)
     {
     	$string = strip_tags($string);
-		if (strlen($string) > 80) 
+		if (strlen($string) > 100) 
 		{
-		    $stringCut = substr($string, 0, 80);
+		    $stringCut = substr($string, 0, 100);
 		    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'...';
 		}
 		return $string;

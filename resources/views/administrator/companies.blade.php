@@ -265,7 +265,7 @@
 										<input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
 										<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
 									</div>
-								</div>
+								</div><br /><br /><br /><br /><br /><br />
 								<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
 							</form>
 						</div>

@@ -492,8 +492,9 @@ class AgentController extends Controller
                     3 => ucfirst( strtolower( $invite->email ) ),
                     4 => ucfirst( strtolower( $invite->template_name ) ),
                     5 => Helper::getInviteStatus($invite->status),
-                    6 => Helper::getTrimText($invite->message_content),
-                    7 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="edit_navigation_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>',	// Category edit
+                    6 => Helper::getInviteScheduleStatus($invite->schedule_status),
+                    7 => Helper::getTrimText($invite->message_content),
+                    8 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="edit_invite"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
