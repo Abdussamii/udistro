@@ -580,6 +580,22 @@ $(document).ready(function(){
 
 	/* ---------- Home Cleaning Services functionality ends ---------- */
 
+	/* ---------- Moving Companies functionality ---------- */
+
+	$('.moving_companies').click(function(){
+		$('#moving_companies_modal').modal('show');
+	});
+
+	/* ---------- Moving Companies functionality ends ---------- */
+
+	/* ---------- Tech Concierge functionality ---------- */
+
+	$('.tech_concierge').click(function(){
+		$('#tech_concierge_modal').modal('show');
+	});
+
+	/* ---------- Tech Concierge functionality ends ---------- */
+
 	// To handle the modal close event
 	$('.close_modal').click(function(){
 		$('#user_response_modal').modal('show');
