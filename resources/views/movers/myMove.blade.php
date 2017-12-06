@@ -1825,6 +1825,73 @@
 </div>
 <!-- Tech Concierge Modal End -->
 
+<!-- Share Announcement Modal -->
+<div id="share_announcement_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	
+		      	<div class="row">
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<img src="{{ url('/images/house_sold.png') }}" height="200" width="250" alt="udistro">
+		      		</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<div>
+		      				<strong>The {{ ucwords( strtolower( $clientName ) ) }} are moving!</strong>
+		      			</div>
+		      			<br>
+		      			<div>
+		      				<p><strong>Hi friends</strong> we are moving from {{ 'old address' }} to {{ 'new address' }}.</p>
+		      				<p>Stop by Saturday night for a housewarming party!</p>
+		      				<p>With love from</p>
+		      				<p><strong>{{ ucwords( strtolower( $clientName ) ) }}</strong></p>
+		      			</div>
+		      		</div>
+		      	</div>
+
+		      	<div class="row">
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			<div class="">
+		      				<h4>Special Thanks to Agent {{ $agentName }}</h4>
+		      				<ul class="ratingstar">
+		      					<!-- <li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li> -->
+		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+		      				</ul>
+		      				<span>( {{ $agentRating }} Rating )</span>
+		      			</div>
+		      		</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<div class="row">
+			      			<div class="col-sm-6 col-md-6 col-lg-6">
+			      				<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
+			      			</div>
+			      			<div class="col-sm-6 col-md-6 col-lg-6">
+			      				<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
+			      				<div>
+			      					<h3>{{ $agentName }}</h3>
+			      				</div>
+			      			</div>
+			      		</div>
+		      		</div>
+		      	</div>
+
+		      	<div class="row">
+		      		<div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">Share this on: </div>
+		      	</div>
+
+		    </div>
+		</div>
+	</div>
+</div>
+<!-- Share Announcement Modal -->
 
 <!-- To handle the modal close event -->
 <div id="user_response_modal" class="modal fade">

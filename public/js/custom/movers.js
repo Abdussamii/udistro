@@ -4,17 +4,18 @@ $(document).ready(function(){
 
 	// To fill the star as per the rating assigned
 	$(document).on('click', '.assign_agent_rating', function(){
-		// Get the start index
-		let start 	= 0;
+	  	// Get the start index
+	    let start = 0;
+	    
+	    // Get the count of clicked item
+	    let clickedCount = $(this).closest('.ratingstar').find('.assign_agent_rating').index(this) + 1;
+	    
+	    // Removed the already filled stars
+	    $('.assign_agent_rating').removeClass('red');
 
-		// Get the index of clicked element and add 1 to it to make it count
-		let count 	= $('.assign_agent_rating').index(this) + 1;
-
-		// Remove the already filled stars
-		$('.assign_agent_rating').removeClass('red');
-		
-		// Fill the stars with the given range
-		$('.assign_agent_rating').slice(start, count).addClass('fa fa-star red');
+	    $('.ratingstar').each(function(){
+	    	$(this).find('.assign_agent_rating').slice(start, clickedCount).addClass('fa fa-star red');
+	    });
 	});
 
 	// To show the textarea to edit the rating message
@@ -676,6 +677,14 @@ $(document).ready(function(){
 	});
 
 	/* ---------- Tech Concierge functionality ends ---------- */
+
+	/* ---------- Share Announcement functionality ---------- */
+
+	$('.share_announcement').click(function(){
+		$('#share_announcement_modal').modal('show');
+	});
+
+	/* ---------- Share Announcement functionality ends ---------- */
 
 	// To handle the modal close event
 	$('.close_modal').click(function() {
