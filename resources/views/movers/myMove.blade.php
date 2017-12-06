@@ -1890,7 +1890,13 @@
 		      	<div class="row">
 		      		<div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">Share this on: </div>
+		      		<div class="col-sm-4 col-md-4 col-lg-4">
+		      			Share this on: 
+		      			<i class="fa fa-facebook-square"></i>
+		      			<i class="fa fa fa-twitter-square"></i>
+		      			<i class="fa fa fa-google-plus-square"></i>
+		      			<i class="fa fa fa-linkedin-square"></i>
+		      		</div>
 		      	</div>
 
 		    </div>
