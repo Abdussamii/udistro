@@ -19,6 +19,7 @@ use App\ClientActivityList;
 use App\AgentClientRating;
 use App\AgentClientMovingToAddress;
 use App\AgentClientMovingFromAddress;
+use App\UtilityServiceProvider;
 
 class MoversController extends Controller
 {
@@ -136,16 +137,19 @@ class MoversController extends Controller
     	$clientMovingToProvince = $clientMovingToAddress->province;
 
     	// Get the province of company
-    	$companyProvince= $companyDetails->province;
+    	$companyProvince = $companyDetails->province;
 
     	// Get the city of company
-    	$companyCity 	= $companyDetails->city;
+    	$companyCity = $companyDetails->city;
+
+    	// Get the list of service providers
+    	$serviceProviders = UtilityServiceProvider::where(['status' => '1'])->select('id', 'company_name')->get();
 
     	// echo '<pre>';
-    	// print_r( $companyCity->toArray() );
+    	// print_r( $serviceProviders->toArray() );
     	// exit;
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity]);
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders]);
     }
 
     /**

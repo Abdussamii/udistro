@@ -686,6 +686,41 @@ $(document).ready(function(){
 
 	/* ---------- Share Announcement functionality ends ---------- */
 
+	/* ---------- Tech Concierge functionality ---------- */
+
+	var StepCableInternetService = 1;
+	$('.cable_internet_services').click(function(){
+		$('#cable_internet_services_modal').modal('show');
+
+		// Reset the popup
+		$('#cable_internet_services_step1').show();
+		$('#cable_internet_services_step2').hide();
+	});
+
+	// Previuos button functionality
+	$('#btn_prev_cable_internet_services').click(function(){
+		if( StepTechConcierge == 2 )
+		{
+			$('#cable_internet_services_step1').show();
+			$('#cable_internet_services_step2').hide();
+		}
+
+		StepTechConcierge--;
+	});
+
+	// Next button functionality
+	$('#btn_next_cable_internet_services').click(function(){
+		if( StepTechConcierge == 1 )
+		{
+			$('#cable_internet_services_step1').hide();
+			$('#cable_internet_services_step2').show();
+		}
+
+		StepTechConcierge++;
+	});
+
+	/* ---------- Tech Concierge functionality ends ---------- */
+
 	// To handle the modal close event
 	$('.close_modal').click(function() {
 		var activityName = $(this).data('activity');
