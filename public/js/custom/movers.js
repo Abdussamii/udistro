@@ -574,31 +574,143 @@ $(document).ready(function(){
 
 	/* ---------- Home Cleaning Services functionality ---------- */
 
+	var StepHomeCleaningServices = 1;
 	$('.home_cleaning_services').click(function(){
 		$('#home_cleaning_services_modal').modal('show');
+
+		// Reset the popup
+		$('#home_cleaning_services_step1').show();
+		$('#home_cleaning_services_step2').hide();
+	});
+
+	// Previuos button functionality
+	$('#btn_prev_home_cleaning_services').click(function(){
+		if( StepHomeCleaningServices == 2 )
+		{
+			$('#home_cleaning_services_step1').show();
+			$('#home_cleaning_services_step2').hide();
+		}
+
+		StepHomeCleaningServices--;
+	});
+
+	// Next button functionality
+	$('#btn_next_home_cleaning_services').click(function(){
+		if( StepHomeCleaningServices == 1 )
+		{
+			$('#home_cleaning_services_step1').hide();
+			$('#home_cleaning_services_step2').show();
+		}
+
+		StepHomeCleaningServices++;
 	});
 
 	/* ---------- Home Cleaning Services functionality ends ---------- */
 
 	/* ---------- Moving Companies functionality ---------- */
 
+	var StepMovingCompanies = 1;
 	$('.moving_companies').click(function(){
 		$('#moving_companies_modal').modal('show');
+
+		// Reset the popup
+		$('#moving_companies_step1').show();
+		$('#moving_companies_step2').hide();
+	});
+
+	// Previuos button functionality
+	$('#btn_prev_home_moving_companies').click(function(){
+		if( StepMovingCompanies == 2 )
+		{
+			$('#moving_companies_step1').show();
+			$('#moving_companies_step2').hide();
+		}
+
+		StepMovingCompanies--;
+	});
+
+	// Next button functionality
+	$('#btn_next_home_moving_companies').click(function(){
+		if( StepMovingCompanies == 1 )
+		{
+			$('#moving_companies_step1').hide();
+			$('#moving_companies_step2').show();
+		}
+
+		StepMovingCompanies++;
 	});
 
 	/* ---------- Moving Companies functionality ends ---------- */
 
 	/* ---------- Tech Concierge functionality ---------- */
 
+	var StepTechConcierge = 1;
 	$('.tech_concierge').click(function(){
 		$('#tech_concierge_modal').modal('show');
+
+		// Reset the popup
+		$('#tech_concierge_step1').show();
+		$('#tech_concierge_step2').hide();
+	});
+
+	// Previuos button functionality
+	$('#btn_prev_tech_concierge').click(function(){
+		if( StepTechConcierge == 2 )
+		{
+			$('#tech_concierge_step1').show();
+			$('#tech_concierge_step2').hide();
+		}
+
+		StepTechConcierge--;
+	});
+
+	// Next button functionality
+	$('#btn_next_tech_concierge').click(function(){
+		if( StepTechConcierge == 1 )
+		{
+			$('#tech_concierge_step1').hide();
+			$('#tech_concierge_step2').show();
+		}
+
+		StepTechConcierge++;
 	});
 
 	/* ---------- Tech Concierge functionality ends ---------- */
 
 	// To handle the modal close event
-	$('.close_modal').click(function(){
-		$('#user_response_modal').modal('show');
+	$('.close_modal').click(function() {
+		var activityName = $(this).data('activity');
+
+		// Set the activity name
+		$('#frm_activity_user_response #activity_name').val(activityName);
+
+		$('#user_response_modal').modal({ backdrop: 'static', keyboard: false });
+	});
+
+	// To set active class according to the user response
+	$('.activity_user_response').click(function(){
+		var finalStatus = $(this).attr('id');
+		var activityName= $('#frm_activity_user_response #activity_name').val();
+
+		if( activityName != '' )
+		{
+			// Activity is done
+			if( finalStatus == 1 )
+			{
+				$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
+
+				// Set the status value
+				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+			}
+			else 	// Activity is still pending
+			{
+				$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
+
+				// Set the status value
+				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
+			}
+		}
+
 	});
 
 });

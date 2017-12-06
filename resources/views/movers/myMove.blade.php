@@ -202,10 +202,13 @@
 								<h3>{{ ucwords( strtolower( $activity->activity ) ) }}</h3>
 								</div>
 								<div class="pophover-icon">
-									<ul class="popover-icon-group">
+									<ul class="popover-icon-group activities_container">
 										<li><a href="javascript:void(0);" title="Get started" class="{{ $activity->activity_class }}"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
-										<li><a href="javascript:void(0);" title="Do later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
+										<li><a href="javascript:void(0);" title="Do it later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
 										<li><a href="javascript:void(0);" title="Discard" class=""><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
+										<li>
+											<input type="hidden" name="activity_final_status[]" class="activity_final_status" value="0">
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -342,7 +345,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="forward_mail" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Mail Forward</h2>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -443,7 +446,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="update_address" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Update Address</h2>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -679,7 +682,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="mailbox_keys" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Mailbox Keys</h2>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -802,7 +805,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="connect_utilities" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Connect Utilities</h2>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -986,7 +989,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="home_cleaning_services" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Home Cleaning Services</h2>
 
 		      	<div class="row">
@@ -997,7 +1000,7 @@
       					<div>&nbsp;</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step1">
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="home_cleaning_services_step1">
 		      			<div>
       						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</strong>
       					</div>
@@ -1231,6 +1234,17 @@
 						    </form>
       					</div>
 		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="home_cleaning_services_step2" style="height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary home_cleaning_services_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary home_cleaning_services_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
 		      	</div>
 		      	
 		      	<div class="row">
@@ -1255,7 +1269,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="moving_companies" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Home Cleaning Services</h2>
 
 		      	<div class="row">
@@ -1266,7 +1280,7 @@
       					<div>&nbsp;</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step1">
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="moving_companies_step1">
 		      			<div>
       						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</strong>
       					</div>
@@ -1500,13 +1514,25 @@
 						    </form>
       					</div>
 		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="moving_companies_step2" style="height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary moving_companies_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary moving_companies_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
+
 		      	</div>
 		      	
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<a href="javascript:void(0);" id="btn_prev_home_cleaning_services" class="btn">Previous</a>
-		      			<a href="javascript:void(0);" id="btn_next_home_cleaning_services" class="btn">Next</a>
+		      			<a href="javascript:void(0);" id="btn_prev_home_moving_companies" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_home_moving_companies" class="btn">Next</a>
 		      		</div>
 		      	</div>
 	      	</div>
@@ -1524,7 +1550,7 @@
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn close_modal" data-activity="tech_concierge" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	<h2>Home Cleaning Services</h2>
 
 		      	<div class="row">
@@ -1535,7 +1561,7 @@
       					<div>&nbsp;</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step1">
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step1">
 		      			<div>
       						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</strong>
       					</div>
@@ -1769,13 +1795,25 @@
 						    </form>
       					</div>
 		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step2" style="height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary tech_concierge_user_response" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary tech_concierge_user_response" id="0">No</button>
+		      			</div>
+		      		</div>
+
 		      	</div>
 		      	
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<a href="javascript:void(0);" id="btn_prev_home_cleaning_services" class="btn">Previous</a>
-		      			<a href="javascript:void(0);" id="btn_next_home_cleaning_services" class="btn">Next</a>
+		      			<a href="javascript:void(0);" id="btn_prev_tech_concierge" class="btn">Previous</a>
+		      			<a href="javascript:void(0);" id="btn_next_tech_concierge" class="btn">Next</a>
 		      		</div>
 		      	</div>
 	      	</div>
@@ -1797,8 +1835,13 @@
                 <h4 class="modal-title">Have you completed this task?</h4>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-primary forward_mail_user_response" id="1" data-dismiss="modal">Yes</button>
-                <button type="button" class="btn btn-primary forward_mail_user_response" id="0" data-dismiss="modal">No</button>
+            	<form name="frm_activity_user_response" id="frm_activity_user_response">
+	            	<!-- To hold the activity name generated dynamically -->
+	            	<input type="hidden" name="activity_name" id="activity_name" value="">
+
+	                <button type="button" class="btn btn-primary activity_user_response" id="1" data-dismiss="modal">Yes</button>
+	                <button type="button" class="btn btn-primary activity_user_response" id="0" data-dismiss="modal">No</button>
+                </form>
             </div>
         </div>
     </div>
