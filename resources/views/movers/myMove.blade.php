@@ -1843,7 +1843,7 @@
 		      			</div>
 		      			<br>
 		      			<div>
-		      				<p><strong>Hi friends</strong> we are moving from {{ 'old address' }} to {{ 'new address' }}.</p>
+		      				<p><strong>Hi friends</strong> we are moving from South to North.</p>
 		      				<p>Stop by Saturday night for a housewarming party!</p>
 		      				<p>With love from</p>
 		      				<p><strong>{{ ucwords( strtolower( $clientName ) ) }}</strong></p>
@@ -1870,11 +1870,17 @@
 		      			<div class="row">
 			      			<div class="col-sm-6 col-md-6 col-lg-6">
 			      				<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
+			      				<div>
+			      					{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
+			      				</div>
+			      				<div>
+			      					{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
+			      				</div>
 			      			</div>
 			      			<div class="col-sm-6 col-md-6 col-lg-6">
 			      				<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
 			      				<div>
-			      					<h3>{{ $agentName }}</h3>
+			      					{{ $agentName }}
 			      				</div>
 			      			</div>
 			      		</div>

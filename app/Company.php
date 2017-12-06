@@ -16,4 +16,20 @@ class Company extends Model
     ];
 
     public $timestamps = true;
+
+    /**
+     * Get the province associated with the company.
+     */
+    public function province()
+    {
+        return $this->belongsTo('App\Province');
+    }
+
+    /**
+     * Get the city associated with the company.
+     */
+    public function city()
+    {
+        return $this->belongsTo('App\City');
+    }
 }
