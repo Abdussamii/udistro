@@ -39,6 +39,9 @@ Route::group(['prefix' => 'administrator'], function() {
 
 // Administrator protected routes
 Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
+
+	// Logout
+	Route::get('/logout', 'HomeController@logout');
 	
 	// Admin dashboard
 	Route::get('/dashboard', 'AdminController@dashboard');
@@ -272,6 +275,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// To get the details of the selected client
 	Route::get('/getclientdetails', 'AgentController@getClientDetails');
+
+	// To get the details of the selected invite
+	Route::get('/getinvitedetails', 'AgentController@getInviteDetails');
 
 	// To show agent profile page
 	Route::get('/profile', 'AgentController@profile');

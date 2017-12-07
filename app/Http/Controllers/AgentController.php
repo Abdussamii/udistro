@@ -494,7 +494,7 @@ class AgentController extends Controller
                     5 => Helper::getInviteStatus($invite->status),
                     6 => Helper::getInviteScheduleStatus($invite->schedule_status),
                     7 => Helper::getTrimText($invite->message_content),
-                    8 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="edit_invite"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    8 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="view_invite"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -543,6 +543,42 @@ class AgentController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function get the details of the selected invite
+     * @param void
+     * @return array
+     */
+    public function getInviteDetails()
+    {
+        $inviteId = Input::get('inviteId');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $response = array();
+        if( $inviteId != '' )
+        {
+            // Get the invite details
+            $inviteArray  = DB::table('client_activity_lists')
+                                ->leftJoin('client_activity_logs', function ($join) use($inviteId) {
+                                    $join->on('client_activity_lists.id', '=', 'client_activity_logs.activity_id')
+                                         ->where('client_activity_logs.invitation_id', '=', $inviteId);
+                                })
+                                ->select('client_activity_lists.activity', 'client_activity_logs.action')
+                                ->get();
+
+            $html = '<table class="table"><thead><tr><th>#</th><th>Activity Name</th><th>Action</th></tr></thead><tbody>';
+            //echo '<pre>'; print_r($inviteArray); die('a');
+            foreach ($inviteArray as $key => $invities)
+            {
+                $html.= '<tr><td>'.$key.'</td><td>'.ucwords($invities->activity).'</td><td>'.Helper::getInviteAction($invities->action).'</td></tr>';
+            }
+            $html.= '</tbody></table>';
+        }
+
+        return response()->json(array('html' => $html));
     }
 
     /**
