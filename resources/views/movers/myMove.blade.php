@@ -299,7 +299,7 @@
 						<div class="col-md-8">
 							<div class="comment-group-left">
 								<ul class="comment-group">
-									<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
+									<li><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful</a></li>
 									<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
 									<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 								</ul>
@@ -2213,7 +2213,7 @@
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
 		      			<ul class="comment-group">
-							<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
+							<li><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful</a></li>
 							<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
 							<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 						</ul>

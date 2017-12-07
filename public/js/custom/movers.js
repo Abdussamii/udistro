@@ -784,6 +784,10 @@ $(document).ready(function(){
 			// Activity is done
 			if( finalStatus == 1 )
 			{
+				// Remove the tick mark if it is available on discard
+				$('.'+activityName).closest('.activities_container').find('.discard_activity').find('i').removeClass('fa fa-check').addClass('fa fa-times-circle');
+
+				// Put the tick mark on the activity marked as done
 				$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
 
 				// Set the status value
@@ -849,6 +853,11 @@ $(document).ready(function(){
 
 		// To put the check mark on discard
 		$(this).find('i').removeClass('fa fa-times-circle').addClass('fa fa-check');
+	});
+
+	// Update the helpful click response
+	$('.agent_helpful').click(function() {
+		// $(this).find('i').css('color', 'green');
 	});
 
 	// To set active class according to the user response on click of confirmation buttons

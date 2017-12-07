@@ -1477,7 +1477,7 @@ class AgentController extends Controller
 				}
 				else
 				{
-					$emailLink = config('constants.SERVER_APP_URL') . '/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
+					$emailLink = config('constants.SERVER_APP_URL') . '/public/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
 				}
 
 				// Update the email link
