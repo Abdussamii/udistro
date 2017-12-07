@@ -96,7 +96,9 @@ class MoversController extends Controller
      */
     public function myMove()
     {
-    	$invitationId = 1;
+    	$agentId 		= base64_decode(Input::get('agent_id'));
+    	$clientId 		= base64_decode(Input::get('client_id'));
+    	$invitationId 	= base64_decode(Input::get('invitation_id'));
 
     	// Get the email template id & message detail
     	$inviteDetails = AgentClientInvite::find($invitationId);
