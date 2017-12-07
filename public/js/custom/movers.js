@@ -777,6 +777,7 @@ $(document).ready(function(){
 	$('.activity_user_response').click(function() {
 		var finalStatus = $(this).attr('id');
 		var activityName= $('#frm_activity_user_response #activity_name').val();
+		var activityId  = $('.'+activityName).attr('id');
 
 		if( activityName != '' )
 		{
@@ -787,6 +788,26 @@ $(document).ready(function(){
 
 				// Set the status value
 				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				$.ajax({
+					url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+					method: 'post',
+					data: {
+						activityId: activityId,
+						action: finalStatus
+					},
+					headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    success: function(response){
+				    	if( response.errCode == 0 )
+					    {
+					    	$('#activity_progress1').html(response.percent);
+					    	$('#activity_progress2').html(response.percent);
+					    	$('#activity_progress_bar').css('width', response.percent + '%');
+					    }
+				    }
+				});
 			}
 			else 	// Activity is still pending
 			{
@@ -800,11 +821,50 @@ $(document).ready(function(){
 	});
 
 	// To set active class according to the user response on click of confirmation buttons
-	$('.btn_activity_user_response').click(function(){
+	/*$('.btn_activity_user_response').click(function(){
 		var finalStatus = $(this).attr('id');
 		var activityName= $(this).data('activity');
+		var activityId  = $('.'+activityName).attr('id');
 
-		console.log( finalStatus + ' : ' + activityName );
-	});
+		if( activityName != '' )
+		{
+			// Activity is done
+			if( finalStatus == 1 )
+			{
+				$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
+
+				// Set the status value
+				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				$.ajax({
+					url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+					method: 'post',
+					data: {
+						activityId: activityId,
+						action: finalStatus
+					},
+					headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    success: function(response){
+				    	if( response.errCode == 0 )
+					    {
+					    	$('#activity_progress1').html(response.percent);
+					    	$('#activity_progress2').html(response.percent);
+					    	$('#activity_progress_bar').css('width', response.percent + '%');
+					    }
+				    }
+				});
+			}
+			else 	// Activity is still pending
+			{
+				$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
+
+				// Set the status value
+				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
+			}
+		}
+
+	});*/
 
 });

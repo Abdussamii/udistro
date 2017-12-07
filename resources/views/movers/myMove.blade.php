@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="route" content="{{ url('/') }}">
+
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>uDistro</title>
 
@@ -169,10 +173,10 @@
 <section class="percentage-section">
 	<div class="container">
 		<div class="percentage-bar">
-		<h2>{{ $completedActivityPercentage }} Percent Completed</h2>
+		<h2><span id="activity_progress1">{{ $completedActivitiesPercentage }}</span>% Completed</h2>
 		<div class="progress">
-			<div class="progress-bar" role="progressbar" aria-valuenow="{{ $completedActivityPercentage }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $completedActivityPercentage }}%">
-				<span class="sr-only">{{ $completedActivityPercentage }}% Complete</span>
+			<div class="progress-bar" role="progressbar" id="activity_progress_bar" aria-valuenow="{{ $completedActivitiesPercentage }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $completedActivitiesPercentage }}%">
+				<span class="sr-only"><span id="activity_progress2">{{ $completedActivitiesPercentage }}</span>% Complete</span>
 			</div>
 		</div>
 		</div>
@@ -203,7 +207,18 @@
 								</div>
 								<div class="pophover-icon">
 									<ul class="popover-icon-group activities_container">
-										<li><a href="javascript:void(0);" title="Get started" class="{{ $activity->activity_class }}"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></li>
+										<li>
+											<a href="javascript:void(0);" title="Get started" id="{{ $activity->id }}" class="{{ $activity->activity_class }}">
+												<?php
+												$icon = 'fa fa-arrow-circle-o-right';
+												if( count( $completedActivities ) && in_array($activity->id, $completedActivities) )
+												{
+													$icon = 'fa fa-check';
+												}
+												?>
+												<i class="{{ $icon }}" aria-hidden="true"></i>
+											</a>
+										</li>
 										<li><a href="javascript:void(0);" title="Do it later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
 										<li><a href="javascript:void(0);" title="Discard" class=""><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
 										<li>
@@ -252,44 +267,46 @@
 		</div>
 	</div>
 	<div class="comment-section">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="comment-area">
-					<h2>Hi {{ $agentName }},</h2>
-					<p id="agent_rating_message_container">
-						I appreciate you work and want to say thank you.
-					</p>
-					<textarea id="agent_rating_message" class="form-control" style="display: none;">I appreciate you work and want to say thank you.</textarea>
+		<form name="frm_agent_feedback" id="frm_agent_feedback">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="comment-area">
+						<h2>Hi {{ $agentName }},</h2>
+						<p id="agent_rating_message_container">
+							I appreciate you work and want to say thank you.
+						</p>
+						<textarea id="agent_rating_message" class="form-control" style="display: none;">I appreciate you work and want to say thank you.</textarea>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="user-comment-info">
-					<div class="col-md-8">
-						<div class="comment-group-left">
-							<ul class="comment-group">
-								<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
-								<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
-								<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
-							</ul>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="user-comment-info">
+						<div class="col-md-8">
+							<div class="comment-group-left">
+								<ul class="comment-group">
+									<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
+									<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
+									<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
+								</ul>
+							</div>
 						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="user-name-section user-pro-coment">
-							<strong>Share this with :</strong>
-							<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
-							<div class="username">
-								<h3>{{ $agentName }}</h3>
+						<div class="col-md-4">
+							<div class="user-name-section user-pro-coment">
+								<strong>Share this with :</strong>
+								<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
+								<div class="username">
+									<h3>{{ $agentName }}</h3>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-12">
-					<button type="button" class="btn btn-lg center-block coment-submit-btn">Submit</button>
+					<div class="col-md-12">
+						<button type="button" class="btn btn-lg center-block coment-submit-btn">Submit</button>
+					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>
 
@@ -393,7 +410,7 @@
       					</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step4" style="width: 500px; height: 300px; display: none;">
+		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step4" style="width: 500px; height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -402,7 +419,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="forward_mail" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	<div class="row">
@@ -622,7 +639,7 @@
 		      			</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step8" style="width: 500px; height: 300px; display: none;">
+		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step8" style="width: 500px; height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -631,7 +648,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="update_address" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	<div class="row">
@@ -760,7 +777,7 @@
       					</div>
       				</div>
 
-      				<div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step4" style="width: 500px; height: 300px; display: none;">
+      				<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step4" style="width: 500px; height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -769,7 +786,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="mailbox_keys" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	<div class="row">
@@ -944,7 +961,7 @@
 	      				</div>
 		      		</div>
 
-      				<div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step4" style="width: 500px; height: 300px; display: none;">
+      				<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step4" style="width: 500px; height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -953,7 +970,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="connect_utilities" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	<div class="row">
@@ -1246,7 +1263,7 @@
       					</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="home_cleaning_services_step2" style="height: 300px; display: none;">
+		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="home_cleaning_services_step2" style="height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -1255,7 +1272,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="home_cleaning_services" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 		      	</div>
 		      	
 		      	<div class="row">
@@ -1526,7 +1543,7 @@
       					</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="moving_companies_step2" style="height: 300px; display: none;">
+		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="moving_companies_step2" style="height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -1535,7 +1552,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="moving_companies" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	
@@ -1807,7 +1824,7 @@
       					</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step2" style="height: 300px; display: none;">
+		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step2" style="height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -1816,7 +1833,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="tech_concierge" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	
@@ -2088,7 +2105,7 @@
       					</div>
 		      		</div>
 
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="cable_internet_services_step2" style="height: 300px; display: none;">
+		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="cable_internet_services_step2" style="height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -2097,7 +2114,7 @@
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
 		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="cable_internet_services" id="0">No</button>
 		      			</div>
-		      		</div>
+		      		</div> -->
 
 		      	</div>
 		      	

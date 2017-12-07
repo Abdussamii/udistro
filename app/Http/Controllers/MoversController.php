@@ -22,6 +22,9 @@ use App\AgentClientMovingFromAddress;
 use App\UtilityServiceProvider;
 use App\ClientActivityLog;
 
+use Helper;
+use Session;
+
 class MoversController extends Controller
 {
     /**
@@ -162,20 +165,97 @@ class MoversController extends Controller
 	    	$activityLog->save();
     	}
 
-    	// Get the total activities count
-    	$totalActivitiesCount = ClientActivityList::where(['status' => '1'])->count();
+    	// Get the completed activity percentage
+    	$completedActivitiesPercentage = Helper::calculateCompletedActivitiesPercentage($inviteDetails->client_id, $invitationId);
 
-    	// Get the activities completed count
-    	$totalCompletedActivitiesCount 	= ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id])->count();
+    	// Set the invitation id and clinet id in session
+    	session(['clientId' => $inviteDetails->client_id, 'invitationId' => $invitationId]);
 
-    	// Calculate the percentage of completed activities
-    	$completedActivityPercentage 	= ( $totalCompletedActivitiesCount / $totalActivitiesCount ) * 100;
+    	// Get the list of completed activities to show them checked
+    	$completedActivities = ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id])->select('activity_id')->get()->toArray();
+
+    	if( count( $completedActivities ) > 0 )
+    	{
+    		$completedActivities = array_column($completedActivities, 'activity_id');
+    	}
 
     	// echo '<pre>';
-    	// print_r( $completedActivityPercentage );
+    	// print_r( $completedActivities );
     	// exit;
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivityPercentage' => $completedActivityPercentage]);
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivitiesPercentage' => $completedActivitiesPercentage, 'invitationId' => $invitationId, 'completedActivities' => $completedActivities]);
+    }
+
+    /**
+     * Function to return my move view
+     * @param void
+     * @return array
+     */
+    public function updateActivityStatus()
+    {
+    	$activityId = Input::get('activityId');
+    	$action 	= Input::get('action');
+
+    	// Get the client and invitation id from session
+    	$clientId 		= Session::get('clientId');
+    	$invitationId 	= Session::get('invitationId');
+
+    	$response = array();
+
+		// Check if there is some entry already exist
+		$activityExist = ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $clientId, 'activity_id' => $activityId])->first();
+
+		if( count( $activityExist ) == 0 )		// Add the entry
+		{
+			$activity = new ClientActivityLog;
+
+			$activity->invitation_id= $invitationId;
+	    	$activity->client_id 	= $clientId;
+	    	$activity->activity_id 	= $activityId;
+	    	$activity->action 		= $action;
+
+	    	if( $activity->save() )
+	    	{
+	    		// Get the updated completed activity percentage
+	    		$completedActivitiesPercentage = Helper::calculateCompletedActivitiesPercentage($clientId, $invitationId);
+
+	    		$response['errCode'] 	= 0;
+	    		$response['errMsg'] 	= 'Activity logged successfully';
+	    		$response['percent']	= $completedActivitiesPercentage;
+	    	}
+	    	else
+	    	{
+	    		$response['errCode'] 	= 1;
+	    		$response['errMsg'] 	= 'Some issue';
+	    	}
+
+		}
+		else 									// Update the entry
+		{
+			$activity = ClientActivityLog::find($activityExist->id);
+
+			$activity->invitation_id= $invitationId;
+	    	$activity->client_id 	= $clientId;
+	    	$activity->activity_id 	= $activityId;
+	    	$activity->action 		= $action;
+
+	    	if( $activity->save() )
+	    	{
+	    		// Get the updated completed activity percentage
+	    		$completedActivitiesPercentage = Helper::calculateCompletedActivitiesPercentage($clientId, $invitationId);
+
+	    		$response['errCode'] 	= 0;
+	    		$response['errMsg'] 	= 'Activity logged successfully';
+	    		$response['percent']	= $completedActivitiesPercentage;
+	    	}
+	    	else
+	    	{
+	    		$response['errCode'] 	= 1;
+	    		$response['errMsg'] 	= 'Some issue';
+	    	}
+		}
+
+		return response()->json($response);
     }
 
     /**

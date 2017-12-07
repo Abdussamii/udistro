@@ -321,6 +321,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// Movers my move page
 	Route::get('/mymove', 'MoversController@myMove');
+
+	// To update the completed activity status
+	Route::post('/updateactivitystatus', 'MoversController@updateActivityStatus');
 	
 });
 

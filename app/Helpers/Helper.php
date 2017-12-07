@@ -6,6 +6,8 @@ namespace App\Helpers;
 use Mail;
 
 use App\LoginAttempt;
+use App\ClientActivityList;
+use App\ClientActivityLog;
 
 class Helper
 {
@@ -170,7 +172,7 @@ class Helper
     }
 
     /**
-     * To sget invite content text
+     * To get invite content text
      * @param array
      * @return null
      */
@@ -183,5 +185,24 @@ class Helper
 		    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'...';
 		}
 		return $string;
+    }
+
+    /**
+     * To calculate the completed activities percentage on My Move page
+     * @param array
+     * @return null
+     */
+    public static function calculateCompletedActivitiesPercentage($clientId, $invitationId)
+    {
+    	// Get the total activities count
+    	$totalActivitiesCount = ClientActivityList::where(['status' => '1'])->count();
+
+    	// Get the activities completed count
+    	$totalCompletedActivitiesCount 	= ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $clientId])->count();
+
+    	// Calculate the percentage of completed activities
+    	$completedActivitiesPercentage 	= ( $totalCompletedActivitiesCount / $totalActivitiesCount ) * 100;
+
+    	return $completedActivitiesPercentage;
     }
 }
