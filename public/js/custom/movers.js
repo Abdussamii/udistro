@@ -28,7 +28,7 @@ $(document).ready(function(){
 
 	var forwardMailStep = 1;
 	$('.forward_mail').click(function(){
-		$('#forward_mail_modal').modal('show');
+		$('#forward_mail_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the counter
 		forwardMailStep = 1;
@@ -144,7 +144,7 @@ $(document).ready(function(){
 
 	var updateAddressStep = 1;
 	$('.update_address').click(function(){
-		$('#update_address_modal').modal('show');
+		$('#update_address_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the steps
 		$('#update_address_step1').show();
@@ -154,6 +154,7 @@ $(document).ready(function(){
 		$('#update_address_step5').hide();
 		$('#update_address_step6').hide();
 		$('#update_address_step7').hide();
+		$('#update_address_step8').hide();
 	});
 
 	// Update address activity form validation
@@ -197,6 +198,7 @@ $(document).ready(function(){
 	    			$('#update_address_step5').hide();
 	    			$('#update_address_step6').hide();
 	    			$('#update_address_step7').hide();
+	    			$('#update_address_step8').hide();
 	    		}
 	    		else
 	    		{
@@ -207,6 +209,7 @@ $(document).ready(function(){
 	    			$('#update_address_step5').hide();
 	    			$('#update_address_step6').hide();
 	    			$('#update_address_step7').hide();
+	    			$('#update_address_step8').hide();
 	    		}
 
 	    		updateAddressStep++;
@@ -222,6 +225,7 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -234,6 +238,7 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -246,6 +251,7 @@ $(document).ready(function(){
 			$('#update_address_step5').show();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -258,6 +264,7 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').show();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -270,6 +277,20 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').show();
+			$('#update_address_step8').hide();
+
+			updateAddressStep++;
+    	}
+    	else if( updateAddressStep == 7 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').hide();
+			$('#update_address_step8').show();
 
 			updateAddressStep++;
     	}
@@ -288,6 +309,7 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
+    			$('#update_address_step8').hide();
 
     			updateAddressStep--;
     		}
@@ -304,6 +326,7 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
+    			$('#update_address_step8').hide();
     		}
     		else
     		{
@@ -314,6 +337,7 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
+    			$('#update_address_step8').hide();
     		}
 
     		updateAddressStep--;
@@ -329,6 +353,7 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
+    			$('#update_address_step8').hide();
     		}
     		else
     		{
@@ -339,6 +364,7 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
+    			$('#update_address_step8').hide();
     		}
 
     		updateAddressStep--;
@@ -352,6 +378,7 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
 
 			updateAddressStep--;
     	}
@@ -364,6 +391,7 @@ $(document).ready(function(){
 			$('#update_address_step5').show();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
 
 			updateAddressStep--;
     	}
@@ -376,6 +404,20 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').show();
 			$('#update_address_step7').hide();
+			$('#update_address_step8').hide();
+
+			updateAddressStep--;
+    	}
+    	else if( updateAddressStep == 8 )
+    	{
+    		$('#update_address_step1').hide();
+			$('#update_address_step2').hide();
+			$('#update_address_step3').hide();
+			$('#update_address_step4').hide();
+			$('#update_address_step5').hide();
+			$('#update_address_step6').hide();
+			$('#update_address_step7').show();
+			$('#update_address_step8').hide();
 
 			updateAddressStep--;
     	}
@@ -387,7 +429,7 @@ $(document).ready(function(){
 
 	var mailBoxStep = 1;
 	$('.mailbox_keys').click(function(){
-		$('#mailbox_key_modal').modal('show');
+		$('#mailbox_key_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Refresh the modal contents
 		mailBoxStep = 1;
@@ -484,7 +526,7 @@ $(document).ready(function(){
 
 	var connectUtilitiesStep = 1;
 	$('.connect_utilities').click(function(){
-		$('#connect_utilities_modal').modal('show');
+		$('#connect_utilities_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the steps
 		$('#connect_utilities_step1').show();
@@ -577,7 +619,7 @@ $(document).ready(function(){
 
 	var StepHomeCleaningServices = 1;
 	$('.home_cleaning_services').click(function(){
-		$('#home_cleaning_services_modal').modal('show');
+		$('#home_cleaning_services_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
 		$('#home_cleaning_services_step1').show();
@@ -612,7 +654,7 @@ $(document).ready(function(){
 
 	var StepMovingCompanies = 1;
 	$('.moving_companies').click(function(){
-		$('#moving_companies_modal').modal('show');
+		$('#moving_companies_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
 		$('#moving_companies_step1').show();
@@ -647,7 +689,7 @@ $(document).ready(function(){
 
 	var StepTechConcierge = 1;
 	$('.tech_concierge').click(function(){
-		$('#tech_concierge_modal').modal('show');
+		$('#tech_concierge_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
 		$('#tech_concierge_step1').show();
@@ -681,7 +723,7 @@ $(document).ready(function(){
 	/* ---------- Share Announcement functionality ---------- */
 
 	$('.share_announcement').click(function(){
-		$('#share_announcement_modal').modal('show');
+		$('#share_announcement_modal').modal({ backdrop: 'static', keyboard: false });
 	});
 
 	/* ---------- Share Announcement functionality ends ---------- */
@@ -690,7 +732,7 @@ $(document).ready(function(){
 
 	var StepCableInternetService = 1;
 	$('.cable_internet_services').click(function(){
-		$('#cable_internet_services_modal').modal('show');
+		$('#cable_internet_services_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
 		$('#cable_internet_services_step1').show();
@@ -731,8 +773,8 @@ $(document).ready(function(){
 		$('#user_response_modal').modal({ backdrop: 'static', keyboard: false });
 	});
 
-	// To set active class according to the user response
-	$('.activity_user_response').click(function(){
+	// To set active class according to the user response on click of close button confirmation modal
+	$('.activity_user_response').click(function() {
 		var finalStatus = $(this).attr('id');
 		var activityName= $('#frm_activity_user_response #activity_name').val();
 
@@ -755,6 +797,14 @@ $(document).ready(function(){
 			}
 		}
 
+	});
+
+	// To set active class according to the user response on click of confirmation buttons
+	$('.btn_activity_user_response').click(function(){
+		var finalStatus = $(this).attr('id');
+		var activityName= $(this).data('activity');
+
+		console.log( finalStatus + ' : ' + activityName );
 	});
 
 });

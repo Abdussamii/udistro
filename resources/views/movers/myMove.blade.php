@@ -397,10 +397,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="forward_mail" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary forward_mail_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="forward_mail" id="0">No</button>
 		      			</div>
 		      		</div>
 
@@ -622,6 +622,17 @@
 		      			</div>
 		      		</div>
 
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step8" style="width: 500px; height: 300px; display: none;">
+		      			<strong>Have you completed this task?</strong>
+		      			<br>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="update_address" id="1">Yes</button>
+		      			</div>
+		      			<div class="col-sm-6 col-md-6 col-lg-6">
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="update_address" id="0">No</button>
+		      			</div>
+		      		</div>
+
 		      	</div>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
@@ -753,10 +764,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="mailbox_keys" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="mailbox_keys" id="0">No</button>
 		      			</div>
 		      		</div>
 
@@ -937,10 +948,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="connect_utilities" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary mailbox_keys_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="connect_utilities" id="0">No</button>
 		      			</div>
 		      		</div>
 
@@ -1239,10 +1250,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary home_cleaning_services_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="home_cleaning_services" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary home_cleaning_services_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="home_cleaning_services" id="0">No</button>
 		      			</div>
 		      		</div>
 		      	</div>
@@ -1519,10 +1530,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary moving_companies_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="moving_companies" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary moving_companies_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="moving_companies" id="0">No</button>
 		      			</div>
 		      		</div>
 
@@ -1800,10 +1811,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary tech_concierge_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="tech_concierge" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary tech_concierge_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="tech_concierge" id="0">No</button>
 		      			</div>
 		      		</div>
 
@@ -2081,10 +2092,10 @@
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary tech_concierge_user_response" id="1">Yes</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="cable_internet_services" id="1">Yes</button>
 		      			</div>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary tech_concierge_user_response" id="0">No</button>
+		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="cable_internet_services" id="0">No</button>
 		      			</div>
 		      		</div>
 
