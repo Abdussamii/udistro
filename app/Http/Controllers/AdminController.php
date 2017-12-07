@@ -1473,7 +1473,7 @@ class AdminController extends Controller
 			{
 				$serviceCategory = new UtilityServiceCategory;
 
-				$serviceCategory->service_type 	= $serviceCategoryData['service_type'];
+				$serviceCategory->category_type = $serviceCategoryData['service_type'];
 				$serviceCategory->description 	= $serviceCategoryData['service_description'];
 				$serviceCategory->status 		= $serviceCategoryData['service_status'];
 				$serviceCategory->created_by 	= $userId;
@@ -1493,7 +1493,7 @@ class AdminController extends Controller
 			{
 				$serviceCategory = UtilityServiceCategory::find( $serviceCategoryData['service_id'] );
 
-				$serviceCategory->service_type 	= $serviceCategoryData['service_type'];
+				$serviceCategory->category_type = $serviceCategoryData['service_type'];
 				$serviceCategory->description 	= $serviceCategoryData['service_description'];
 				$serviceCategory->status 		= $serviceCategoryData['service_status'];
 				$serviceCategory->created_by 	= $userId;
@@ -1592,7 +1592,7 @@ class AdminController extends Controller
 
     		if( count( $serviceCategoryDetails ) > 0 )
     		{
-    			$response['service_type'] 	= $serviceCategoryDetails->service_type;
+    			$response['category_type'] 	= $serviceCategoryDetails->category_type;
     			$response['description'] 	= $serviceCategoryDetails->description;
     			$response['status'] 		= $serviceCategoryDetails->status;
     		}

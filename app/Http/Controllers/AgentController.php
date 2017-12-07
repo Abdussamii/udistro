@@ -803,14 +803,15 @@ class AgentController extends Controller
     public function saveCompanyDetails() 
     {
         // Get the serialized form data
-        $frmData = Input::get('frmData');
-
-        // Parse the serialize form data to an array
-        parse_str($frmData, $profileData);
-
-        // Get the logged in user id
-        $userId = Auth::user()->id;
-
+        $agent_company_name         = Input::get('agent_company_name');
+        $agent_company_category     = Input::get('agent_company_category');
+        $agent_company_address      = Input::get('agent_company_address');
+        $agent_company_province     = Input::get('agent_company_province');
+        $agent_company_city         = Input::get('agent_company_city');
+        $agent_company_postalcode   = Input::get('agent_company_postalcode');
+        $agent_company_country      = Input::get('agent_company_country');
+        $companyImage               = Input::file('fileData');
+        //echo '<pre>'; print_r($agent_company_category); print_r($agent_company_province); print_r($agent_company_country); print_r($agent_company_category); die();
         // Get the logged in user id
         $userId = Auth::user()->id;
 
@@ -819,8 +820,8 @@ class AgentController extends Controller
 
         $validation = Validator::make(
             array(
-                'agent_company_name'    => $profileData['agent_company_name'],
-                'agent_company_address' => $profileData['agent_company_address'],
+                'agent_company_name'    => $agent_company_name,
+                'agent_company_address' => $agent_company_address,
             ),
             array(
                 'agent_company_name'    => array('required'),
@@ -844,40 +845,97 @@ class AgentController extends Controller
         }
         else
         {
+            if(!is_null($companyImage) && ($companyImage->getSize() > 0))
+            {
+
+                // Image destination folder
+                $destinationPath = storage_path() . '/uploads/company';
+                if( $companyImage->isValid() )  // If the file is valid or not
+                {
+                    $fileExt  = $companyImage->getClientOriginalExtension();
+                    $fileType = $companyImage->getMimeType();
+                    $fileSize = $companyImage->getSize();
+
+                    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+                    {
+                        // Rename the file
+                        $fileNewName = str_random(40) . '.' . $fileExt;
+
+                        if( $companyImage->move( $destinationPath, $fileNewName ) )
+                        {
+                            $response['errCode']    = 1;
+                        }
+                        else
+                        {
+                            $response['errCode']    = 3;
+                            $response['errMsg']     = 'Some error in image upload';
+                        }
+                    }
+                    else
+                    {
+                        $response['errCode']    = 4;
+                        $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+                    }
+                }
+                else
+                {
+                    $response['errCode']    = 5;
+                    $response['errMsg']     = 'Invalid file';
+                }
+            } else {
+                $response['errCode']    = 2;
+            }
+
+
             $user = User::find($userId);
-            if( count( $user->company ) > 0 && isset( $user->company[0]->id ) )
+            if($response['errCode'] == 1 || $response['errCode'] == 2)
             {
-                // Update the company details also
-                $companyDetails = Company::find($user->company[0]->id);
+                if( count( $user->company ) > 0 && isset( $user->company[0]->id ) )
+                {
+                    // Update the company details also
+                    $companyDetails = Company::find($user->company[0]->id);
 
-                $companyDetails->company_name = $profileData['agent_company_name'];
-                $companyDetails->company_category_id = $profileData['agent_company_category'];
-                $companyDetails->address = $profileData['agent_company_address'];
-                $companyDetails->province_id = $profileData['agent_company_province'];
-                $companyDetails->city_id = $profileData['agent_company_city'];
-                $companyDetails->postal_code = $profileData['agent_company_postalcode'];
-                $companyDetails->country_id = $profileData['agent_company_country'];
+                    $companyDetails->company_name = $agent_company_name;
+                    $companyDetails->company_category_id = $agent_company_category;
+                    $companyDetails->address = $agent_company_address;
+                    $companyDetails->province_id = $agent_company_province;
+                    $companyDetails->city_id = $agent_company_city;
+                    $companyDetails->postal_code = $agent_company_postalcode;
+                    $companyDetails->country_id = $agent_company_country;
+                    if($response['errCode'] == 1)
+                    {
+                        $companyDetails->image    = $fileNewName;
+                        $response['image']  = URL::to('/').'/images/company/'.$fileNewName;
+                    }
 
-                $companyDetails->save();
+                    $companyDetails->save();
+                    $response['errCode']    = 0;
+                    $response['errMsg']     = 'Company info updated successfully';
+                }
+                else
+                {
+                    // Add the company details
+                    $companyDetails = new Company;
+
+                    $companyDetails->company_name = $agent_company_name;
+                    $companyDetails->company_category_id = $agent_company_category;
+                    $companyDetails->address = $agent_company_address;
+                    $companyDetails->province_id = $agent_company_province;
+                    $companyDetails->city_id = $agent_company_city;
+                    $companyDetails->postal_code = $agent_company_postalcode;
+                    $companyDetails->country_id = $agent_company_country;
+                    if($response['errCode'] == 1)
+                    {
+                        $companyDetails->image    = $fileNewName;
+                        $response['image']  = URL::to('/').'/images/company/'.$fileNewName;
+                    }
+
+                    $companyDetails->save();
+                    $response['errCode']    = 0;
+                    $response['errMsg']     = 'Company info updated successfully';
+                }
             }
-            else
-            {
-                // Add the company details
-                $companyDetails = new Company;
 
-                $companyDetails->company_name = $profileData['agent_company_name'];
-                $companyDetails->company_category_id = $profileData['agent_company_category'];
-                $companyDetails->address = $profileData['agent_company_address'];
-                $companyDetails->province_id = $profileData['agent_company_province'];
-                $companyDetails->city_id = $profileData['agent_company_city'];
-                $companyDetails->postal_code = $profileData['agent_company_postalcode'];
-                $companyDetails->country_id = $profileData['agent_company_country'];
-
-                $companyDetails->save();
-            }
-
-            $response['errCode']    = 0;
-            $response['errMsg']     = 'Company info updated successfully';
         }
 
         return response()->json($response);

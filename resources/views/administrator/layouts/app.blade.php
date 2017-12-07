@@ -365,22 +365,10 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-building-o" aria-hidden="true"></i> Payment Plan Management<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="{{ url('/administrator/paymentplans') }}"> Payment Plans</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
+                            <a href="{{ url('administrator/paymentplans') }}"><i class="fa fa-building-o"></i> Payment Plans</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> Email Template Management<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="{{ url('/administrator/emailtemplates') }}"> Email Templates</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
+                            <a href="{{ url('administrator/emailtemplates') }}"><i class="fa fa-envelope"></i> Email Templates</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i> Miscellaneous<span class="fa arrow"></span></a>

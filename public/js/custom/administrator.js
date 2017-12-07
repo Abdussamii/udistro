@@ -1008,7 +1008,7 @@ $(document).ready(function(){
 
 			    	// Auto-fill the form
 			    	$('#frm_add_utility_service_category #service_id').val(serviceCategoryId);
-			    	$('#frm_add_utility_service_category #service_type').val(response.service_type);
+			    	$('#frm_add_utility_service_category #service_type').val(response.category_type);
 			    	$('#frm_add_utility_service_category #service_description').val(response.description);
 			    	$('#frm_add_utility_service_category input[name="service_status"][value="'+ response.status +'"]').prop('checked', true);
 

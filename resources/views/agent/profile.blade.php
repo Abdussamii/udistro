@@ -214,7 +214,6 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Address:</label>
 								<div class="col-lg-8">
-								  	<!-- <textarea class="form-control autocomplete" name="agent_company_address" id="agent_company_address">{{ $companyDetails[0]->address or '' }}</textarea> -->
 								  	<input type="text" name="agent_company_address" id="agent_company_address" class="form-control" value="{{ $companyDetails[0]->address or '' }}">
 								</div>
 							</div>
@@ -290,6 +289,18 @@
 											?>
 									    </select>
 								  	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="company_status">Image</label>
+								<?php if($companyDetails[0]->image != '') { ?>
+									<img src="<?=url('/images/company/' . $companyDetails[0]->image)?>" id="company_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
+								<?php } ?>
+								<div class="top-buffer">
+									<!-- To upload image -->
+									<label for="company_upload_image" class="">Select File <i class="fa fa-file-image-o" aria-hidden="true"></i></label>
+									<input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
+									<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
 								</div>
 							</div>
   						</fieldset>

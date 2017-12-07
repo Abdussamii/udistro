@@ -416,16 +416,29 @@ $(document).ready(function(){
         });
     });
 
+    $('#frm_agent_company #company_upload_image').change(function()
+    {
+        var ext = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['png','jpg','jpeg']) == -1) {
+            $(this).val('');
+            alert('invalid file type, only images are allowed');
+        }
+    });
+
      // Agent profile form validation
     $('#frm_agent_company').submit(function(e){
         e.preventDefault();
     });
+
     $('#frm_agent_company').validate({
         rules: {
             agent_company_name: {
                 required: true
             },
             agent_company_address: {
+                required: true
+            },
+            company_upload_image: {
                 required: true
             }
         },
@@ -435,6 +448,9 @@ $(document).ready(function(){
             },
             agent_company_address: {
                 required: 'Please enter company address'
+            },
+            company_upload_image: {
+                required: 'Please select image to upload'
             }
         }
     });
@@ -445,14 +461,32 @@ $(document).ready(function(){
         if( $('#frm_agent_company').valid() )
         {
             var $this = $(this);
+            var agent_company_name          = $('#agent_company_name').val();
+            var agent_company_category      = $('select[name=agent_company_category]').val();
+            var agent_company_address       = $('#agent_company_address').val();
+            var agent_company_province      = $('select[name=agent_company_province]').val();
+            var agent_company_city          = $('select[name=agent_company_city]').val();
+            var agent_company_postalcode    = $('#agent_company_postalcode').val();
+            var agent_company_country       = $('select[name=agent_company_country]').val();
+            var fileData                    = $('#company_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('fileData', fileData);
+            formData.append('agent_company_name', agent_company_name);
+            formData.append('agent_company_category', agent_company_category);
+            formData.append('agent_company_address', agent_company_address);
+            formData.append('agent_company_province', agent_company_province);
+            formData.append('agent_company_city', agent_company_city);
+            formData.append('agent_company_postalcode', agent_company_postalcode);
+            formData.append('agent_company_country', agent_company_country);
 
             $.ajax({
                 url: $('meta[name="route"]').attr('content') + '/agent/savecompanydetails',
                 method: 'post',
-                data: {
-                    frmData: $('#frm_agent_company').serialize(),
-                    agent_company_address: $('#agent_company_address').text()
-                },
+                data: formData,
+                contentType : false,
+                processData : false,
                 beforeSend: function() {
                     // Show the loading button
                     $this.button('loading');
