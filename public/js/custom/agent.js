@@ -207,8 +207,23 @@ $(document).ready(function(){
         ]
     });
 
-    $(document).on('click', '.edit_invite', function(){
+    $(document).on('click', '.view_invite', function(){
         $('#modal_invite').modal('show');
+        var inviteId = $(this).attr('id');
+        if( inviteId != '' )
+        {
+            // Get the navigation category details for the selected category
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/getinvitedetails',
+                method: 'get',
+                data: {
+                    inviteId: inviteId
+                },
+                success: function(response){
+                    $('#htmlInvite').append(response.html);
+                }
+            });
+        }
     });
 
     // To edit the client details

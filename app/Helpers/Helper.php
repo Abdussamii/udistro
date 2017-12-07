@@ -155,6 +155,30 @@ class Helper
     }
 
     /**
+     * To sget invite action
+     * @param array
+     * @return null
+     */
+    public static function getInviteAction($action = '')
+    {
+		
+		if( !is_null($action) && $action == 1)
+		{
+			$text = '<i class="fa fa-check"></i>';
+		}
+		else if( !is_null($action) && $action == 0)
+		{
+			$text = '<i class="fa fa-times-circle"></i>';
+		} 
+		else 
+		{
+			$text = 'Not Try';
+		}
+
+		return $text;
+    }
+
+    /**
      * To sget invite status
      * @param array
      * @return null

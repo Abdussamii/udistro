@@ -40,8 +40,7 @@
 				</div>
 
 				<div class="modal-body">
-					<div class="row">
-					</div>
+					<div class="row" id="htmlInvite"></div>
 				</div>
 		    </div>
 	  	</div>
