@@ -12,8 +12,8 @@ class ClientActivityLog extends Model
      * @var array
      */
     protected $fillable = [
-        'client_id', 'activity_id', 'action'
+        'invitation_id', 'client_id', 'activity_id', 'action'
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 }

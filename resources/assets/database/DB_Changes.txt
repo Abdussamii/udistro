@@ -69,3 +69,13 @@
 . client_activity_logs
 
 . client_activity_feedbacks
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+07-12-2017
+
+ALTER TABLE `client_activity_logs` ADD `invitation_id` INT NOT NULL AFTER `id`;
+
+ALTER TABLE `client_activity_logs` ADD INDEX( `invitation_id`, `client_id`, `activity_id`);
+
+ALTER TABLE `client_activity_logs` ADD `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP() AFTER `action`;

@@ -20,6 +20,7 @@ use App\AgentClientRating;
 use App\AgentClientMovingToAddress;
 use App\AgentClientMovingFromAddress;
 use App\UtilityServiceProvider;
+use App\ClientActivityLog;
 
 class MoversController extends Controller
 {
@@ -92,10 +93,10 @@ class MoversController extends Controller
      */
     public function myMove()
     {
-    	$inviteId = 1;
+    	$invitationId = 1;
 
     	// Get the email template id & message detail
-    	$inviteDetails = AgentClientInvite::find($inviteId);
+    	$inviteDetails = AgentClientInvite::find($invitationId);
 
     	// Get the agent related details
     	$agentDetails = User::find($inviteDetails->agent_id);
@@ -145,11 +146,36 @@ class MoversController extends Controller
     	// Get the list of service providers
     	$serviceProviders = UtilityServiceProvider::where(['status' => '1'])->select('id', 'company_name')->get();
 
+    	// Check if the activity log already exist
+    	$activityLogExist = ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id, 'activity_id' => 1])->first();
+
+    	if( count( $activityLogExist ) == 0 )
+    	{
+	    	// Update client_activity_logs table for login activity is done
+	    	$activityLog = new ClientActivityLog;
+
+	    	$activityLog->invitation_id = $invitationId;
+	    	$activityLog->client_id 	= $inviteDetails->client_id;
+	    	$activityLog->activity_id 	= 1;
+	    	$activityLog->action 		= '1';
+
+	    	$activityLog->save();
+    	}
+
+    	// Get the total activities count
+    	$totalActivitiesCount = ClientActivityList::where(['status' => '1'])->count();
+
+    	// Get the activities completed count
+    	$totalCompletedActivitiesCount 	= ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id])->count();
+
+    	// Calculate the percentage of completed activities
+    	$completedActivityPercentage 	= ( $totalCompletedActivitiesCount / $totalActivitiesCount ) * 100;
+
     	// echo '<pre>';
-    	// print_r( $serviceProviders->toArray() );
+    	// print_r( $completedActivityPercentage );
     	// exit;
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders]);
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivityPercentage' => $completedActivityPercentage]);
     }
 
     /**

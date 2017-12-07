@@ -169,10 +169,10 @@
 <section class="percentage-section">
 	<div class="container">
 		<div class="percentage-bar">
-		<h2>25 Percent Completed</h2>
+		<h2>{{ $completedActivityPercentage }} Percent Completed</h2>
 		<div class="progress">
-			<div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width:25%">
-				<span class="sr-only">25% Complete</span>
+			<div class="progress-bar" role="progressbar" aria-valuenow="{{ $completedActivityPercentage }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $completedActivityPercentage }}%">
+				<span class="sr-only">{{ $completedActivityPercentage }}% Complete</span>
 			</div>
 		</div>
 		</div>
@@ -270,8 +270,8 @@
 						<div class="comment-group-left">
 							<ul class="comment-group">
 								<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
-								<li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li>
-								<li><a href="javascript:void(0);" id="agent_rating_edit_message">Edit Message</a></li>
+								<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
+								<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 							</ul>
 						</div>
 					</div>
@@ -2180,8 +2180,14 @@
 		      	</div>
 
 		      	<div class="row">
-		      		<div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<ul class="comment-group">
+							<li><a href="javascript:void(0);"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Helpful</a></li>
+							<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
+							<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
+						</ul>
+		      		</div>
+		      		<!-- <div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div> -->
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			Share this on: 
 		      			<i class="fa fa-facebook-square"></i>
