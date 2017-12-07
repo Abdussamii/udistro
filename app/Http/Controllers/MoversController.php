@@ -172,11 +172,15 @@ class MoversController extends Controller
     	session(['clientId' => $inviteDetails->client_id, 'invitationId' => $invitationId]);
 
     	// Get the list of completed activities to show them checked
-    	$completedActivities = ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id])->select('activity_id')->get()->toArray();
+    	$completedActivitiesList = ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id])->select('activity_id', 'action')->get();
 
-    	if( count( $completedActivities ) > 0 )
+    	$completedActivities = array();
+    	if( count( $completedActivitiesList ) > 0 )
     	{
-    		$completedActivities = array_column($completedActivities, 'activity_id');
+    		foreach ($completedActivitiesList as $activityList)
+    		{
+    			$completedActivities[$activityList->activity_id] = $activityList->action;
+    		}
     	}
 
     	// echo '<pre>';

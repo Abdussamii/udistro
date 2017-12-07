@@ -773,7 +773,7 @@ $(document).ready(function(){
 		$('#user_response_modal').modal({ backdrop: 'static', keyboard: false });
 	});
 
-	// To set active class according to the user response on click of close button confirmation modal
+	// To send the response to the server and set active class according to the user response on click of close button confirmation modal
 	$('.activity_user_response').click(function() {
 		var finalStatus = $(this).attr('id');
 		var activityName= $('#frm_activity_user_response #activity_name').val();
@@ -818,6 +818,37 @@ $(document).ready(function(){
 			}
 		}
 
+	});
+
+	// To save the discard response for an activity
+	$('.discard_activity').click(function(){
+		var activityId = $(this).attr('id');
+
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+			method: 'post',
+			data: {
+				activityId: activityId,
+				action: '0'
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+			    {
+			    	$('#activity_progress1').html(response.percent);
+			    	$('#activity_progress2').html(response.percent);
+			    	$('#activity_progress_bar').css('width', response.percent + '%');
+			    }
+		    }
+		});
+		
+		// To remove the check mark from done
+		$(this).closest('.activities_container').find('.done_activity').find('i').removeClass('fa fa-check').addClass('fa fa-arrow-circle-o-right');
+
+		// To put the check mark on discard
+		$(this).find('i').removeClass('fa fa-times-circle').addClass('fa fa-check');
 	});
 
 	// To set active class according to the user response on click of confirmation buttons

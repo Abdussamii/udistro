@@ -208,19 +208,33 @@
 								<div class="pophover-icon">
 									<ul class="popover-icon-group activities_container">
 										<li>
-											<a href="javascript:void(0);" title="Get started" id="{{ $activity->id }}" class="{{ $activity->activity_class }}">
+											<a href="javascript:void(0);" title="Get started" id="{{ $activity->id }}" class="{{ $activity->activity_class }} done_activity">
 												<?php
-												$icon = 'fa fa-arrow-circle-o-right';
-												if( count( $completedActivities ) && in_array($activity->id, $completedActivities) )
+												$icon1 = 'fa fa-arrow-circle-o-right';
+												$icon2 = 'fa fa-times-circle';
+												if( count( $completedActivities ) && array_key_exists($activity->id, $completedActivities) )
 												{
-													$icon = 'fa fa-check';
+													// $icon = 'fa fa-check';
+
+													if( array_key_exists($activity->id, $completedActivities) && $completedActivities[$activity->id] == 1 )
+													{
+														$icon1 = 'fa fa-check';
+													}
+													else
+													{
+														$icon2 = 'fa fa-check';
+													}
 												}
 												?>
-												<i class="{{ $icon }}" aria-hidden="true"></i>
+												<i class="{{ $icon1 }}" aria-hidden="true"></i>
 											</a>
 										</li>
 										<li><a href="javascript:void(0);" title="Do it later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
-										<li><a href="javascript:void(0);" title="Discard" class=""><i class="fa fa-times-circle" aria-hidden="true"></i></a></li>
+										<li>
+											<a href="javascript:void(0);" title="Discard" class="discard_activity" id="{{ $activity->id }}">
+												<i class="{{ $icon2 }}" aria-hidden="true"></i>
+											</a>
+										</li>
 										<li>
 											<input type="hidden" name="activity_final_status[]" class="activity_final_status" value="0">
 										</li>
