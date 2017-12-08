@@ -130,6 +130,12 @@ class MoversController extends Controller
     	// Fetch the rating for the agent
     	$agentRating = AgentClientRating::where(['agent_id' => $inviteDetails->agent_id])->avg('rating');
 
+    	// Fetch the helpful count given by client to the agent
+		$agentClientHelpfulCount = AgentClientRating::where(['agent_id' => $inviteDetails->agent_id, 'client_id' => $clientDetails->id, 'helpful' => '1'])->count();
+
+		// Fetch the rating given by client to the agent
+		$agentClientRating = AgentClientRating::where(['agent_id' => $inviteDetails->agent_id, 'client_id' => $clientDetails->id])->select('rating')->first();
+
     	// Fetch the helpful count for the agent
     	$agentHelpfulCount = AgentClientRating::where(['agent_id' => $inviteDetails->agent_id, 'helpful' => '1'])->count();
 
@@ -189,10 +195,10 @@ class MoversController extends Controller
     	}
 
     	// echo '<pre>';
-    	// print_r( $completedActivities );
+    	// print_r( $agentClientRating->rating );
     	// exit;
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'agentHelpfulCount' => $agentHelpfulCount, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivitiesPercentage' => $completedActivitiesPercentage, 'invitationId' => $invitationId, 'completedActivities' => $completedActivities]);
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'agentHelpfulCount' => $agentHelpfulCount, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivitiesPercentage' => $completedActivitiesPercentage, 'invitationId' => $invitationId, 'completedActivities' => $completedActivities, 'agentClientHelpfulCount' => $agentClientHelpfulCount, 'agentClientRating' => $agentClientRating]);
     }
 
     /**
@@ -305,8 +311,12 @@ class MoversController extends Controller
 
 	    		if( $agentClientRating->save() )
 	    		{
+	    			// Fetch the updated rating percentage
+    				$agentRating = AgentClientRating::where(['agent_id' => $agentId])->avg('rating');
+
 	    			$response['errCode'] 	= 0;
 		    		$response['errMsg'] 	= 'Thanks for the feedback!';
+		    		$response['agentRating']= is_null($agentRating) ? 0 : $agentRating;
 	    		}
 	    		else
 	    		{
@@ -327,8 +337,12 @@ class MoversController extends Controller
 
 	    		if( $agentClientRating->save() )
 	    		{
+	    			// Fetch the updated rating percentage
+    				$agentRating = AgentClientRating::where(['agent_id' => $agentId])->avg('rating');
+
 	    			$response['errCode'] 	= 0;
 		    		$response['errMsg'] 	= 'Thanks for the feedback!';
+		    		$response['agentRating']= is_null($agentRating) ? 0 : $agentRating;
 	    		}
 	    		else
 	    		{
@@ -370,7 +384,11 @@ class MoversController extends Controller
     		{
 	    		$agentClientRating = new AgentClientRating;
 
-	    		$agentClientRating->helpful = $newStatus;
+	    		$agentClientRating->invitation_id = $invitationId;
+	    		$agentClientRating->agent_id 	= $agentId;
+	    		$agentClientRating->client_id 	= $clientId;
+	    		$agentClientRating->helpful 	= $newStatus;
+	    		$agentClientRating->created_at 	= date('Y-m-d H:i:s');
 
 	    		if( $agentClientRating->save() )
 	    		{
@@ -387,7 +405,11 @@ class MoversController extends Controller
     		{
     			$agentClientRating = AgentClientRating::find($rating->id);
 
-	    		$agentClientRating->helpful = $newStatus;
+	    		$agentClientRating->invitation_id = $invitationId;
+	    		$agentClientRating->agent_id 	= $agentId;
+	    		$agentClientRating->client_id 	= $clientId;
+	    		$agentClientRating->helpful 	= $newStatus;
+	    		$agentClientRating->created_at 	= date('Y-m-d H:i:s');
 
 	    		if( $agentClientRating->save() )
 	    		{

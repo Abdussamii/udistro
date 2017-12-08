@@ -84,4 +84,8 @@ ALTER TABLE `client_activity_logs` ADD `updated_at` TIMESTAMP on update CURRENT_
 
 ALTER TABLE `agent_client_ratings` ADD `invitation_id` INT NOT NULL AFTER `id`;
 
-ALTER TABLE `cms_navigation_cms_navigation_category` DROP `status`;
+ALTER TABLE `cms_navigation_cms_navigation_category` DROP `status`;					(Need to run on my Db)
+
+ALTER TABLE `client_activity_feedbacks` ADD `invitation_id` INT NOT NULL AFTER `id`;
+
+ALTER TABLE `agent_client_ratings` CHANGE `rating` `rating` FLOAT NULL DEFAULT NULL, CHANGE `comment` `comment` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;

@@ -274,13 +274,13 @@
 					<h2>Special Thanks to Agent {{ $agentName }}</h2>
 					<ul class="ratingstar">
 						<!-- <li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li> -->
-						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 0 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 1 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 2 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 3 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 4 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
 					</ul>
-					<span>( {{ $agentRating }} Rating )</span>
+					<span id="agent_average_rating">( {{ $agentRating or 0 }} Rating )</span>
 				</div>
 			</div>
 		</div>
@@ -306,8 +306,8 @@
 							<div class="comment-group-left">
 								<ul class="comment-group">
 									<li>
-										<a href="javascript:void(0);" class="agent_helpful" data-status="{{ $agentHelpfulCount }}">
-											<i class="fa fa-thumbs-up" aria-hidden="true" style="{{ ( $agentHelpfulCount == 1 ) ? 'color: green' : '' }}"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful
+										<a href="javascript:void(0);" class="agent_helpful" data-status="{{ $agentClientHelpfulCount }}">
+											<i class="fa fa-thumbs-up" aria-hidden="true" style="{{ ( $agentClientHelpfulCount == 1 ) ? 'color: green' : '' }}"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful
 										</a>
 									</li>
 									<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->

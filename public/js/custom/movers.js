@@ -81,44 +81,24 @@ $(document).ready(function(){
 	    		forwardMailStep++;
 	    	}
     	}
-    	else if( forwardMailStep == 2 )
-    	{
-    		$('#forward_mail_step1').hide();
-			$('#forward_mail_step2').hide();
-			$('#forward_mail_step3').hide();
-			$('#forward_mail_step4').show();
-
-    		forwardMailStep++;
-    	}
     });
 
     // Forward mail - Show previous step
     $('#btn_prev_forward_mail').click(function(){
-    	if( forwardMailStep == 3 )
+    	if( forwardMailStep == 2 )
     	{
     		if( $('input[name="forward_mail_method"]:checked').val() == 1 )
     		{
-    			$('#forward_mail_step1').hide();
+    			$('#forward_mail_step1').show();
+    			$('#forward_mail_step2').hide();
     			$('#forward_mail_step3').hide();
-    			$('#forward_mail_step4').hide();
-    			$('#forward_mail_step2').show();
     		}
     		else
     		{
-    			$('#forward_mail_step1').hide();
+    			$('#forward_mail_step1').show();
     			$('#forward_mail_step2').hide();
-    			$('#forward_mail_step3').show();
-    			$('#forward_mail_step4').hide();
+    			$('#forward_mail_step3').hide();
     		}
-
-    		forwardMailStep--;
-    	}
-    	else if( forwardMailStep == 2 )
-    	{
-    		$('#forward_mail_step1').show();
-    		$('#forward_mail_step2').hide();
-	    	$('#forward_mail_step3').hide();
-	    	$('#forward_mail_step4').hide();
 
     		forwardMailStep--;
     	}
@@ -157,7 +137,6 @@ $(document).ready(function(){
 		$('#update_address_step5').hide();
 		$('#update_address_step6').hide();
 		$('#update_address_step7').hide();
-		$('#update_address_step8').hide();
 	});
 
 	// Update address activity form validation
@@ -201,7 +180,6 @@ $(document).ready(function(){
 	    			$('#update_address_step5').hide();
 	    			$('#update_address_step6').hide();
 	    			$('#update_address_step7').hide();
-	    			$('#update_address_step8').hide();
 	    		}
 	    		else
 	    		{
@@ -212,7 +190,6 @@ $(document).ready(function(){
 	    			$('#update_address_step5').hide();
 	    			$('#update_address_step6').hide();
 	    			$('#update_address_step7').hide();
-	    			$('#update_address_step8').hide();
 	    		}
 
 	    		updateAddressStep++;
@@ -228,7 +205,6 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -241,7 +217,6 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -254,7 +229,6 @@ $(document).ready(function(){
 			$('#update_address_step5').show();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -267,7 +241,6 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').show();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep++;
     	}
@@ -280,20 +253,6 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').show();
-			$('#update_address_step8').hide();
-
-			updateAddressStep++;
-    	}
-    	else if( updateAddressStep == 7 )
-    	{
-    		$('#update_address_step1').hide();
-			$('#update_address_step2').hide();
-			$('#update_address_step3').hide();
-			$('#update_address_step4').hide();
-			$('#update_address_step5').hide();
-			$('#update_address_step6').hide();
-			$('#update_address_step7').hide();
-			$('#update_address_step8').show();
 
 			updateAddressStep++;
     	}
@@ -312,7 +271,6 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
-    			$('#update_address_step8').hide();
 
     			updateAddressStep--;
     		}
@@ -329,7 +287,6 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
-    			$('#update_address_step8').hide();
     		}
     		else
     		{
@@ -340,7 +297,6 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
-    			$('#update_address_step8').hide();
     		}
 
     		updateAddressStep--;
@@ -356,7 +312,6 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
-    			$('#update_address_step8').hide();
     		}
     		else
     		{
@@ -367,7 +322,6 @@ $(document).ready(function(){
     			$('#update_address_step5').hide();
     			$('#update_address_step6').hide();
     			$('#update_address_step7').hide();
-    			$('#update_address_step8').hide();
     		}
 
     		updateAddressStep--;
@@ -381,7 +335,6 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep--;
     	}
@@ -394,7 +347,6 @@ $(document).ready(function(){
 			$('#update_address_step5').show();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep--;
     	}
@@ -407,11 +359,10 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').show();
 			$('#update_address_step7').hide();
-			$('#update_address_step8').hide();
 
 			updateAddressStep--;
     	}
-    	else if( updateAddressStep == 8 )
+    	/*else if( updateAddressStep == 8 )
     	{
     		$('#update_address_step1').hide();
 			$('#update_address_step2').hide();
@@ -420,10 +371,9 @@ $(document).ready(function(){
 			$('#update_address_step5').hide();
 			$('#update_address_step6').hide();
 			$('#update_address_step7').show();
-			$('#update_address_step8').hide();
 
 			updateAddressStep--;
-    	}
+    	}*/
     });
 
 	/* ---------- Update Address functionality ends ---------- */
@@ -479,15 +429,6 @@ $(document).ready(function(){
 	    		}
 
 	    		mailBoxStep++;
-    		}
-    		else if( mailBoxStep == 2 )
-    		{
-    			$('#mailbox_keys_step1').hide();
-    			$('#mailbox_keys_step2').hide();
-    			$('#mailbox_keys_step3').hide();
-    			$('#mailbox_keys_step4').show();
-
-    			mailBoxStep++;
     		}
     	}
     });
@@ -560,15 +501,6 @@ $(document).ready(function(){
 
 			connectUtilitiesStep++;
 		}
-		else if( connectUtilitiesStep == 3 )
-		{
-			$('#connect_utilities_step1').hide();
-			$('#connect_utilities_step2').hide();
-			$('#connect_utilities_step3').hide();
-			$('#connect_utilities_step4').show();
-
-			connectUtilitiesStep++;
-		}
     });
 
     // Connect utilities previous step functionality
@@ -630,7 +562,7 @@ $(document).ready(function(){
 	});
 
 	// Previuos button functionality
-	$('#btn_prev_home_cleaning_services').click(function(){
+	/*$('#btn_prev_home_cleaning_services').click(function(){
 		if( StepHomeCleaningServices == 2 )
 		{
 			$('#home_cleaning_services_step1').show();
@@ -638,10 +570,10 @@ $(document).ready(function(){
 		}
 
 		StepHomeCleaningServices--;
-	});
+	});*/
 
 	// Next button functionality
-	$('#btn_next_home_cleaning_services').click(function(){
+	/*$('#btn_next_home_cleaning_services').click(function(){
 		if( StepHomeCleaningServices == 1 )
 		{
 			$('#home_cleaning_services_step1').hide();
@@ -649,7 +581,7 @@ $(document).ready(function(){
 		}
 
 		StepHomeCleaningServices++;
-	});
+	});*/
 
 	/* ---------- Home Cleaning Services functionality ends ---------- */
 
@@ -665,7 +597,7 @@ $(document).ready(function(){
 	});
 
 	// Previuos button functionality
-	$('#btn_prev_home_moving_companies').click(function(){
+	/*$('#btn_prev_home_moving_companies').click(function(){
 		if( StepMovingCompanies == 2 )
 		{
 			$('#moving_companies_step1').show();
@@ -673,10 +605,10 @@ $(document).ready(function(){
 		}
 
 		StepMovingCompanies--;
-	});
+	});*/
 
 	// Next button functionality
-	$('#btn_next_home_moving_companies').click(function(){
+	/*$('#btn_next_home_moving_companies').click(function(){
 		if( StepMovingCompanies == 1 )
 		{
 			$('#moving_companies_step1').hide();
@@ -684,7 +616,7 @@ $(document).ready(function(){
 		}
 
 		StepMovingCompanies++;
-	});
+	});*/
 
 	/* ---------- Moving Companies functionality ends ---------- */
 
@@ -700,7 +632,7 @@ $(document).ready(function(){
 	});
 
 	// Previuos button functionality
-	$('#btn_prev_tech_concierge').click(function(){
+	/*$('#btn_prev_tech_concierge').click(function(){
 		if( StepTechConcierge == 2 )
 		{
 			$('#tech_concierge_step1').show();
@@ -708,10 +640,10 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge--;
-	});
+	});*/
 
 	// Next button functionality
-	$('#btn_next_tech_concierge').click(function(){
+	/*$('#btn_next_tech_concierge').click(function(){
 		if( StepTechConcierge == 1 )
 		{
 			$('#tech_concierge_step1').hide();
@@ -719,7 +651,7 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge++;
-	});
+	});*/
 
 	/* ---------- Tech Concierge functionality ends ---------- */
 
@@ -743,7 +675,7 @@ $(document).ready(function(){
 	});
 
 	// Previuos button functionality
-	$('#btn_prev_cable_internet_services').click(function(){
+	/*$('#btn_prev_cable_internet_services').click(function(){
 		if( StepTechConcierge == 2 )
 		{
 			$('#cable_internet_services_step1').show();
@@ -751,10 +683,10 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge--;
-	});
+	});*/
 
 	// Next button functionality
-	$('#btn_next_cable_internet_services').click(function(){
+	/*$('#btn_next_cable_internet_services').click(function(){
 		if( StepTechConcierge == 1 )
 		{
 			$('#cable_internet_services_step1').hide();
@@ -762,7 +694,7 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge++;
-	});
+	});*/
 
 	/* ---------- Tech Concierge functionality ends ---------- */
 
@@ -936,7 +868,7 @@ $(document).ready(function(){
     });
 
 	// Submit the agent feedback form
-	$('#btn_agent_feedback').click(function(){
+	$('#btn_agent_feedback').click(function() {
 		if( $('#frm_agent_feedback').valid() )
 		{
 			// Show the confirmation modal
@@ -956,7 +888,7 @@ $(document).ready(function(){
 				var labelTxt = $(this).closest('.boxes').find('.box-title').find('h3').html();
 
 				// Show the alert message
-				alertify.error(labelTxt + ' is still incomplete');
+				alertify.error(labelTxt + ' activity is still incomplete');
 
 				activitiesCheck = false;
 
@@ -980,6 +912,9 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 			    	{
 			    		alertify.success(response.errMsg);
+
+			    		// Update the rating average count
+			    		$('#agent_average_rating').html('( ' + response.agentRating + ' Rating )');
 			    	}
 			    	else
 			    	{
