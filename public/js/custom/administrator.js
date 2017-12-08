@@ -305,7 +305,7 @@ $(document).ready(function(){
 
     // Get the navigation details and show the autofill form for edit navigation
     $(document).off('click', '.edit_navigation').on('click', '.edit_navigation', function(){
-    	let navigationId = $(this).attr('id');
+    	var navigationId = $(this).attr('id');
 
     	// Get the details of the selected navigation
 		$.ajax({

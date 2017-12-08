@@ -457,34 +457,10 @@ class AdminController extends Controller
 
 		   			if( $navigation->save() )
 		   			{
-		   				$categoryNavigation = array();
-		   				// Iterate over the categories and save the mapping
-		   				foreach ($inputData['navigation_categories'] as $key => $value)
-				   		{
-				   			$categoryNavigation[] = array(
-				   				'cms_navigation_category_id' 	=> $value,
-				   				'cms_navigation_id' => $navigation->id,
-				   				'status' 		=> $inputData['navigation_status']
-				   			);
-				   		}
-
-				   		if( count( $categoryNavigation ) > 0 )
-				   		{
-					   		if( DB::table('cms_navigation_cms_navigation_category')->insert($categoryNavigation) )
-				   			{
-				   				DB::commit();
-
-				   				$response['errCode']    = 0;
-					        	$response['errMsg']     = 'Navigation added successfully';
-				   			}
-				   		}
-				   		else
-				   		{
-				   			DB::rollBack();
-
-			   				$response['errCode']    = 5;
-				        	$response['errMsg']     = 'Some error in saving the navigation';
-				   		}
+		   				$navigation->categories()->sync($inputData['navigation_categories']);
+		   				DB::commit();
+		   				$response['errCode']    = 0;
+		   				$response['errMsg']     = 'Navigation added successfully';
 		   			}
 		   			else
 		   			{
@@ -680,14 +656,20 @@ class AdminController extends Controller
 			// Check if any one of the category is selected or not
 			if( isset( $inputData['navigation_edit_categories'] ) )
 			{
-				$cmsNavigationUpdate = 	DB::table('cms_navigations')
-											->where('id', $inputData['navigation_id'])
-											->update(['navigation_text' => $inputData['navigation_edit_text'], 'navigation_url' => $inputData['navigation_edit_url'], 'status' => $inputData['navigation_edit_status'], 'updated_by' => $userId]);
 
-				if($cmsNavigationUpdate)
+				DB::beginTransaction();
+
+				$navigation = CmsNavigation::find($inputData['navigation_id']);
+	   			$navigation->navigation_text= $inputData['navigation_edit_text'];
+	   			$navigation->navigation_url = $inputData['navigation_edit_url'];
+	   			$navigation->status 		= $inputData['navigation_edit_status'];
+	   			$navigation->updated_by 	= $userId;
+
+				if($navigation->save())
 				{
 					// Update the navigation categories mapping also
-
+					$navigation->categories()->sync($inputData['navigation_edit_categories']);
+					DB::commit();
 					$response['errCode']    = 0;
 			        $response['errMsg']     = 'Navigation details updated successfully';
 				}
