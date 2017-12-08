@@ -9,6 +9,9 @@ $(document).ready(function(){
 	    
 	    // Get the count of clicked item
 	    let clickedCount = $(this).closest('.ratingstar').find('.assign_agent_rating').index(this) + 1;
+
+	    // Set the value in form
+	    $('#agent_rating').val(clickedCount);
 	    
 	    // Removed the already filled stars
 	    $('.assign_agent_rating').removeClass('red');
@@ -857,7 +860,135 @@ $(document).ready(function(){
 
 	// Update the helpful click response
 	$('.agent_helpful').click(function() {
-		// $(this).find('i').css('color', 'green');
+
+		// Hold the refernce
+		var refernce = $(this);
+
+		// Get the current status
+		var currentStatus 	= $(refernce).attr('data-status');
+
+		// Get the newly assigned status
+		var newStatus = 0;
+		if( currentStatus == 0 )
+		{
+			newStatus = 1;
+		}
+
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/movers/updatehelpfulcount',
+			method: 'post',
+			data: {
+				newStatus: newStatus
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+			    {
+			    	alertify.success(response.errMsg);
+
+					if( newStatus == 1 )
+			    	{
+			    		// Update the current status
+				    	$(refernce).attr('data-status', 1);
+
+				    	// Update the color
+				    	$(refernce).find('i').css('color', 'green');
+
+				    	// Update the count
+				    	$(refernce).find('.agent_helpful_count').text( parseInt( $(refernce).find('.agent_helpful_count').text() ) + 1 );
+			    	}
+			    	else
+			    	{
+			    		// Update the current status
+				    	$(refernce).attr('data-status', 0);
+
+			    		// Update the color
+				    	$(refernce).find('i').css('color', '');
+
+				    	// Update the count
+				    	$(refernce).find('.agent_helpful_count').text( parseInt( $(refernce).find('.agent_helpful_count').text() ) - 1 );
+			    	}
+			    }
+			    else
+			    {
+			    	alertify.error(response.errMsg);
+			    }
+		    }
+		});
+
+	});
+
+	// Agent feedback form
+	$('#frm_agent_feedback').validate({
+		ignore: "not:hidden",
+        rules: {
+            agent_rating: {
+                required: true
+            }
+        },
+        messages: {
+            agent_rating: {
+                required: 'Please assign agent rating'
+            }
+        }
+    });
+
+	// Submit the agent feedback form
+	$('#btn_agent_feedback').click(function(){
+		if( $('#frm_agent_feedback').valid() )
+		{
+			// Show the confirmation modal
+			$('#confirmation_modal').modal({ backdrop: 'static', keyboard: false });
+		}
+	});
+
+	// Check if all the user activities are completed or not, and submit the form
+	$('#confirmation_modal #btn_confirmation').click(function(){
+
+		var activitiesCheck = true;
+		// Check if all the activities are done or not
+		$('.activity_final_status').each(function(){
+			if( $(this).val() == '' )
+			{
+				// Get the label text for the activity which is incomplete
+				var labelTxt = $(this).closest('.boxes').find('.box-title').find('h3').html();
+
+				// Show the alert message
+				alertify.error(labelTxt + ' is still incomplete');
+
+				activitiesCheck = false;
+
+				return false;
+			}
+		});
+
+		// All the activities are completed, save the data
+		if( activitiesCheck == true )
+		{
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/updateagentfeedback',
+				method: 'post',
+				data: {
+					frmData: $('#frm_agent_feedback').serialize()
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success(response.errMsg);
+			    	}
+			    	else
+			    	{
+			    		alertify.error(response.errMsg);
+			    	}
+			    }
+			});
+		}
+
 	});
 
 	// To set active class according to the user response on click of confirmation buttons

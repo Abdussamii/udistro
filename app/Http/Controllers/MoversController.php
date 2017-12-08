@@ -174,7 +174,7 @@ class MoversController extends Controller
     	$completedActivitiesPercentage = Helper::calculateCompletedActivitiesPercentage($inviteDetails->client_id, $invitationId);
 
     	// Set the invitation id and clinet id in session
-    	session(['clientId' => $inviteDetails->client_id, 'invitationId' => $invitationId]);
+    	session(['agentId' => $inviteDetails->agent_id,'clientId' => $inviteDetails->client_id, 'invitationId' => $invitationId]);
 
     	// Get the list of completed activities to show them checked
     	$completedActivitiesList = ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $inviteDetails->client_id])->select('activity_id', 'action')->get();
@@ -265,6 +265,149 @@ class MoversController extends Controller
 		}
 
 		return response()->json($response);
+    }
+
+    /**
+     * Function to save the agent feedback given by the client
+     * @param void
+     * @return array
+     */
+    public function updateAgentFeedback()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$feedbackData = array();
+
+    	// Parse the serialize data
+    	parse_str($frmData, $feedbackData);
+
+    	// Get the client and invitation id from session
+    	$agentId 		= Session::get('agentId', '');
+    	$clientId 		= Session::get('clientId', '');
+    	$invitationId 	= Session::get('invitationId', '');
+
+    	$response = array();
+    	if( $agentId != '' && $clientId != '' && $invitationId != '' )
+    	{
+    		// Check if rating already exist
+    		$rating = AgentClientRating::where(['invitation_id' => $invitationId, 'agent_id' => $agentId, 'client_id' => $clientId])->first();
+
+    		if( count( $rating ) == 0 )
+    		{
+	    		$agentClientRating = new AgentClientRating;
+
+	    		$agentClientRating->invitation_id 	= $invitationId;
+	    		$agentClientRating->agent_id 		= $agentId;
+	    		$agentClientRating->client_id 		= $clientId;
+	    		$agentClientRating->rating 			= $feedbackData['agent_rating'];
+	    		$agentClientRating->comment 		= $feedbackData['agent_rating_message'];
+	    		$agentClientRating->created_at 		= date('Y-m-d H:i:s');
+
+	    		if( $agentClientRating->save() )
+	    		{
+	    			$response['errCode'] 	= 0;
+		    		$response['errMsg'] 	= 'Thanks for the feedback!';
+	    		}
+	    		else
+	    		{
+	    			$response['errCode'] 	= 1;
+		    		$response['errMsg'] 	= 'Some issue in data saving';
+	    		}
+    		}
+    		else
+    		{
+    			$agentClientRating = AgentClientRating::find($rating->id);
+
+	    		$agentClientRating->invitation_id 	= $invitationId;
+	    		$agentClientRating->agent_id 		= $agentId;
+	    		$agentClientRating->client_id 		= $clientId;
+	    		$agentClientRating->rating 			= $feedbackData['agent_rating'];
+	    		$agentClientRating->comment 		= $feedbackData['agent_rating_message'];
+	    		$agentClientRating->created_at 		= date('Y-m-d H:i:s');
+
+	    		if( $agentClientRating->save() )
+	    		{
+	    			$response['errCode'] 	= 0;
+		    		$response['errMsg'] 	= 'Thanks for the feedback!';
+	    		}
+	    		else
+	    		{
+	    			$response['errCode'] 	= 1;
+		    		$response['errMsg'] 	= 'Some issue in data saving';
+	    		}
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'Invalid user';
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to update the helpful click response
+     * @param void
+     * @return array
+     */
+    public function updateHelpfulCount()
+    {
+    	$newStatus = Input::get('newStatus');
+
+    	// Get the client and invitation id from session
+    	$agentId 		= Session::get('agentId', '');
+    	$clientId 		= Session::get('clientId', '');
+    	$invitationId 	= Session::get('invitationId', '');
+
+    	$response = array();
+    	if( $agentId != '' && $clientId != '' && $invitationId != '' )
+    	{
+    		// Check if rating already exist
+    		$rating = AgentClientRating::where(['invitation_id' => $invitationId, 'agent_id' => $agentId, 'client_id' => $clientId])->first();
+
+    		if( count( $rating ) == 0 )
+    		{
+	    		$agentClientRating = new AgentClientRating;
+
+	    		$agentClientRating->helpful = $newStatus;
+
+	    		if( $agentClientRating->save() )
+	    		{
+	    			$response['errCode'] 	= 0;
+		    		$response['errMsg'] 	= 'Thanks for the feedback!';
+	    		}
+	    		else
+	    		{
+	    			$response['errCode'] 	= 1;
+		    		$response['errMsg'] 	= 'Some issue in data saving';
+	    		}
+    		}
+    		else
+    		{
+    			$agentClientRating = AgentClientRating::find($rating->id);
+
+	    		$agentClientRating->helpful = $newStatus;
+
+	    		if( $agentClientRating->save() )
+	    		{
+	    			$response['errCode'] 	= 0;
+		    		$response['errMsg'] 	= 'Thanks for the feedback!';
+	    		}
+	    		else
+	    		{
+	    			$response['errCode'] 	= 1;
+		    		$response['errMsg'] 	= 'Some issue in data saving';
+	    		}
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'Invalid user';
+    	}
+
+    	return response()->json($response);
     }
 
     /**

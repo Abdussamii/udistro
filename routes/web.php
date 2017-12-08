@@ -333,6 +333,12 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To update the completed activity status
 	Route::post('/updateactivitystatus', 'MoversController@updateActivityStatus');
+
+	// To save the agent feedback given by the client
+	Route::post('/updateagentfeedback', 'MoversController@updateAgentFeedback');
+
+	// To update the helpful click response
+	Route::post('/updatehelpfulcount', 'MoversController@updateHelpfulCount');
 	
 });
 

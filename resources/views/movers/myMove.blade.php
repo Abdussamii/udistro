@@ -34,18 +34,22 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="{{ URL::asset('js/jquery.min.js') }}"></script>
-	<script src="{{ URL::asset('js/movers/bootstrap.min.3.3.7.js') }}"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="{{ URL::asset('js/jquery.min.js') }}"></script>
+<script src="{{ URL::asset('js/movers/bootstrap.min.3.3.7.js') }}"></script>
 
-	<!-- Custom functionality -->
-	<script src="{{ URL::asset('js/custom/movers.js') }}"></script>
+<!-- Custom functionality -->
+<script src="{{ URL::asset('js/custom/movers.js') }}"></script>
 
-	<!-- Google Map API -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE"></script>
+<!-- Google Map API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE"></script>
 
-	<!-- JQuery Validation -->
-    <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+<!-- JQuery Validation -->
+<script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+
+<!-- JS Alert Plug-in -->
+<script type="text/javascript" src="{{ URL::asset('js/alertify.min.js') }}"></script>
+<link rel="stylesheet" href="{{ URL::asset('css/alertify.min.css') }}" />
 
 	<script>
 	// To show the to navigation when page is scroll down
@@ -212,10 +216,9 @@
 												<?php
 												$icon1 = 'fa fa-arrow-circle-o-right';
 												$icon2 = 'fa fa-times-circle';
+												$completed = '';
 												if( count( $completedActivities ) && array_key_exists($activity->id, $completedActivities) )
 												{
-													// $icon = 'fa fa-check';
-
 													if( array_key_exists($activity->id, $completedActivities) && $completedActivities[$activity->id] == 1 )
 													{
 														$icon1 = 'fa fa-check';
@@ -224,6 +227,8 @@
 													{
 														$icon2 = 'fa fa-check';
 													}
+
+													$completed = 1;
 												}
 												?>
 												<i class="{{ $icon1 }}" aria-hidden="true"></i>
@@ -236,7 +241,7 @@
 											</a>
 										</li>
 										<li>
-											<input type="hidden" name="activity_final_status[]" class="activity_final_status" value="0">
+											<input type="hidden" name="activity_final_status[]" class="activity_final_status" value="{{ $completed }}">
 										</li>
 									</ul>
 								</div>
@@ -289,7 +294,8 @@
 						<p id="agent_rating_message_container">
 							I appreciate you work and want to say thank you.
 						</p>
-						<textarea id="agent_rating_message" class="form-control" style="display: none;">I appreciate you work and want to say thank you.</textarea>
+						<textarea name="agent_rating_message" id="agent_rating_message" class="form-control" style="display: none;">Hi {{ $agentName }},I appreciate you work and want to say thank you.</textarea>
+						<input type="hidden" name="agent_rating" id="agent_rating" value="">
 					</div>
 				</div>
 			</div>
@@ -299,7 +305,11 @@
 						<div class="col-md-8">
 							<div class="comment-group-left">
 								<ul class="comment-group">
-									<li><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful</a></li>
+									<li>
+										<a href="javascript:void(0);" class="agent_helpful" data-status="{{ $agentHelpfulCount }}">
+											<i class="fa fa-thumbs-up" aria-hidden="true" style="{{ ( $agentHelpfulCount == 1 ) ? 'color: green' : '' }}"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful
+										</a>
+									</li>
 									<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
 									<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 								</ul>
@@ -316,7 +326,8 @@
 						</div>
 					</div>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-lg center-block coment-submit-btn">Submit</button>
+						<div class="text-center"><label id="agent_rating-error" class="error" for="agent_rating"></label></div>
+						<button type="button" class="btn btn-lg center-block coment-submit-btn" name="btn_agent_feedback" id="btn_agent_feedback">Submit</button>
 					</div>
 				</div>
 			</div>
@@ -2235,7 +2246,7 @@
 <!-- Share Announcement Modal -->
 
 <!-- To handle the modal close event -->
-<div id="user_response_modal" class="modal fade">
+<!-- <div id="user_response_modal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -2244,7 +2255,6 @@
             </div>
             <div class="modal-body">
             	<form name="frm_activity_user_response" id="frm_activity_user_response">
-	            	<!-- To hold the activity name generated dynamically -->
 	            	<input type="hidden" name="activity_name" id="activity_name" value="">
 
 	                <button type="button" class="btn btn-primary activity_user_response" id="1" data-dismiss="modal">Yes</button>
@@ -2253,8 +2263,49 @@
             </div>
         </div>
     </div>
+</div> -->
+
+<div id="user_response_modal" class="modal fade">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<h4 class="modal-title">Have you completed this task?</h4>
+		    </div>
+		    <div class="modal-footer">
+				<form name="frm_activity_user_response" id="frm_activity_user_response">
+	            	<!-- To hold the activity name generated dynamically -->
+	            	<input type="hidden" name="activity_name" id="activity_name" value="">
+
+	                <button type="button" class="btn btn-primary activity_user_response" id="1" data-dismiss="modal">Yes</button>
+	                <button type="button" class="btn btn-primary activity_user_response" id="0" data-dismiss="modal">No</button>
+                </form>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- To handle the modal close event -->
+
+<!-- Form submit confirmation modal -->
+<div id="confirmation_modal" class="modal fade">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div>
+	      			Have you completed all the task?
+	      		</div>
+		    </div>
+		    <div class="modal-footer">
+				<button type="button" data-dismiss="modal" class="btn btn-primary" id="btn_confirmation">Yes</button>
+				<button type="button" data-dismiss="modal" class="btn" id="btn_decline">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Form submit confirmation modal -->
 
 </body>
 </html> 
