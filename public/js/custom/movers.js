@@ -926,6 +926,15 @@ $(document).ready(function(){
 
 	});
 
+	// Capture the user feedback on different activities, whether it is helful for them or not
+	$('.activity_feedback').click(function(){
+		var activityClass 	= $(this).attr('data-activity');
+		var userFeedback  	= $(this).attr('id');
+
+		// Call the function to save the data
+		userActivityFeedback(activityClass, userFeedback);
+	});
+
 	// To set active class according to the user response on click of confirmation buttons
 	/*$('.btn_activity_user_response').click(function(){
 		var finalStatus = $(this).attr('id');
@@ -974,3 +983,29 @@ $(document).ready(function(){
 	});*/
 
 });
+
+// function to update the user feedback on individual activity, whether it is helpful or not
+function userActivityFeedback(activity, feedback)
+{
+	$.ajax({
+		url: $('meta[name="route"]').attr('content') + '/movers/updateactivityfeedback',
+		method: 'post',
+		data: {
+			activity: activity,
+			feedback: feedback
+		},
+		headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+	    success: function(response){
+	    	if( response.errCode == 0 )
+		    {
+		    	alertify.success(response.errMsg);
+		    }
+		    else
+		    {
+		    	alertify.error(response.errMsg);	
+		    }
+	    }
+	});
+}

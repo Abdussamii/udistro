@@ -434,22 +434,15 @@
       						</form>
       					</div>
 		      		</div>
-
-		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="forward_mail_step4" style="width: 500px; height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="forward_mail" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="forward_mail" id="0">No</button>
-		      			</div>
-		      		</div> -->
-
 		      	</div>
+
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
-		      			Review / Rating
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="forward_mail" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="forward_mail" class="activity_feedback">No</a>
+		      			</div>
 		      		</div>
 		      		<div class="col-sm-9 col-md-9 col-lg-9">
 		      			<div class="col-md-4">
@@ -678,7 +671,11 @@
 		      	</div>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
-		      			Review / Rating
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="update_address" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="update_address" class="activity_feedback">No</a>
+		      			</div>
 		      		</div>
 		      		<div class="col-sm-9 col-md-9 col-lg-9">
 		      			<form name="frm_update_address" id="frm_update_address">
@@ -816,7 +813,11 @@
 		      	</div>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
-		      			Review / Rating
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="mailbox_keys" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="mailbox_keys" class="activity_feedback">No</a>
+		      			</div>
 		      		</div>
 		      		<div class="col-sm-9 col-md-9 col-lg-9">
 		      			<div class="col-md-4">
@@ -1000,7 +1001,11 @@
 		      	</div>
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
-		      			Review / Rating
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="connect_utilities" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="connect_utilities" class="activity_feedback">No</a>
+		      			</div>
 		      		</div>
 		      		<div class="col-sm-9 col-md-9 col-lg-9">
 		      			<div class="col-md-4">
@@ -1301,7 +1306,13 @@
 		      	</div>
 		      	
 		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="home_cleaning_services" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="home_cleaning_services" class="activity_feedback">No</a>
+		      			</div>
+		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_home_cleaning_services" class="btn">Previous</a>
 		      			<a href="javascript:void(0);" id="btn_next_home_cleaning_services" class="btn">Next</a>
@@ -1582,7 +1593,13 @@
 		      	</div>
 		      	
 		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="moving_companies" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="moving_companies" class="activity_feedback">No</a>
+		      			</div>
+		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_home_moving_companies" class="btn">Previous</a>
 		      			<a href="javascript:void(0);" id="btn_next_home_moving_companies" class="btn">Next</a>
@@ -1863,7 +1880,13 @@
 		      	</div>
 		      	
 		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="tech_concierge" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="tech_concierge" class="activity_feedback">No</a>
+		      			</div>
+		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_tech_concierge" class="btn">Previous</a>
 		      			<a href="javascript:void(0);" id="btn_next_tech_concierge" class="btn">Next</a>
@@ -2144,7 +2167,13 @@
 		      	</div>
 		      	
 		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      			<div>
+		      				<label>Is this helpful to you?</label>
+		      				<a href="javascript:void(0);" id="1" data-activity="cable_internet_services" class="activity_feedback">Yes</a>
+		      				<a href="javascript:void(0);" id="0" data-activity="cable_internet_services" class="activity_feedback">No</a>
+		      			</div>
+		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_cable_internet_services" class="btn">Previous</a>
 		      			<a href="javascript:void(0);" id="btn_next_cable_internet_services" class="btn">Next</a>

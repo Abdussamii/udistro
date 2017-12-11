@@ -21,6 +21,7 @@ use App\AgentClientMovingToAddress;
 use App\AgentClientMovingFromAddress;
 use App\UtilityServiceProvider;
 use App\ClientActivityLog;
+use App\ClientActivityFeedback;
 
 use Helper;
 use Session;
@@ -427,6 +428,89 @@ class MoversController extends Controller
     	{
     		$response['errCode'] 	= 2;
 	    	$response['errMsg'] 	= 'Invalid user';
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to update the user feedback on individual activity
+     * @param void
+     * @return array
+     */
+    public function updateActivityFeedback()
+    {
+    	$activity = Input::get('activity');
+    	$feedback = Input::get('feedback');
+
+    	// Get the client and invitation id from session
+    	$clientId 		= Session::get('clientId', '');
+    	$invitationId 	= Session::get('invitationId', '');
+
+    	$response = array();
+    	if( $clientId != '' && $invitationId != '' && $activity != '' && $feedback != '' )
+    	{
+    		// Get the id of the activity by its class name
+    		$activityDetails = ClientActivityList::where(['activity_class' => $activity])->select('id', 'activity')->first();
+
+    		if( count( $activityDetails ) > 0 )
+    		{
+    			// Check if feedback already exist
+    			$clientFeedback = ClientActivityFeedback::where(['invitation_id' => $invitationId, 'client_id' => $clientId, 'activity_id' => $activityDetails->id])->first();
+
+    			if( count( $clientFeedback ) == 0 )								// No feedback exist, add it
+    			{
+	    			$ClientActivityFeedback = new ClientActivityFeedback;
+
+					$ClientActivityFeedback->invitation_id 	= $invitationId;
+					$ClientActivityFeedback->client_id 		= $clientId;
+					$ClientActivityFeedback->activity_id 	= $activityDetails->id;
+					$ClientActivityFeedback->feedback 		= $feedback;
+					$ClientActivityFeedback->created_at 	= date('Y-m-d H:i:s');
+
+					if( $ClientActivityFeedback->save() )
+					{
+						$response['errCode'] 	= 0;
+	    				$response['errMsg'] 	= 'Thanks for the feedback';
+					}
+					else
+					{
+						$response['errCode'] 	= 1;
+	    				$response['errMsg'] 	= 'Some error in saving the feedback';
+					}
+    			}
+    			else 														// Feedback exist, update it
+    			{
+    				$ClientActivityFeedback = ClientActivityFeedback::where(['invitation_id' => $invitationId, 'client_id' => $clientId, 'activity_id' => $activityDetails->id])->first();
+
+					$ClientActivityFeedback->invitation_id 	= $invitationId;
+					$ClientActivityFeedback->client_id 		= $clientId;
+					$ClientActivityFeedback->activity_id 	= $activityDetails->id;
+					$ClientActivityFeedback->feedback 		= $feedback;
+					$ClientActivityFeedback->created_at 	= date('Y-m-d H:i:s');
+
+					if( $ClientActivityFeedback->save() )
+					{
+						$response['errCode'] 	= 0;
+	    				$response['errMsg'] 	= 'Thanks for the feedback';
+					}
+					else
+					{
+						$response['errCode'] 	= 1;
+	    				$response['errMsg'] 	= 'Some error in saving the feedback';
+					}
+    			}
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 3;
+	    		$response['errMsg'] 	= 'Invalid activity selected';
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode'] 	= 4;
+	    	$response['errMsg'] 	= 'Invalid request, missing required parameter';
     	}
 
     	return response()->json($response);

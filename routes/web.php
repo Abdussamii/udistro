@@ -339,6 +339,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To update the helpful click response
 	Route::post('/updatehelpfulcount', 'MoversController@updateHelpfulCount');
+
+	// To update the user feedback on individual activity
+	Route::post('/updateactivityfeedback', 'MoversController@updateActivityFeedback');
 	
 });
 

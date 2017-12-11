@@ -15,5 +15,5 @@ class ClientActivityFeedback extends Model
         'client_id', 'activity_id', 'feedback'
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 }
