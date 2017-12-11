@@ -788,6 +788,9 @@ $(document).ready(function(){
 
 		// To put the check mark on discard
 		$(this).find('i').removeClass('fa fa-times-circle').addClass('fa fa-check');
+
+		// Put the final status value to 0 i.e. discard
+		$(this).closest('.activities_container').find('.activity_final_status').val(0);
 	});
 
 	// Update the helpful click response
@@ -887,12 +890,16 @@ $(document).ready(function(){
 				// Get the label text for the activity which is incomplete
 				var labelTxt = $(this).closest('.boxes').find('.box-title').find('h3').html();
 
-				// Show the alert message
-				alertify.error(labelTxt + ' activity is still incomplete');
+				if( !$(this).closest('ul').find('li').first().find('a').hasClass('share_announcement') )	// Share announcement is not a mandatory activity
+				{
+					// Show the alert message
+					alertify.error(labelTxt + ' activity is still incomplete');
 
-				activitiesCheck = false;
+					activitiesCheck = false;
 
-				return false;
+					return false;
+					
+				}
 			}
 		});
 
@@ -933,6 +940,22 @@ $(document).ready(function(){
 
 		// Call the function to save the data
 		userActivityFeedback(activityClass, userFeedback);
+	});
+
+	// Show a message if user is not following the sequence of activities on first activity click
+	$('.done_activity, .discard_activity').click(function(){
+		var step = 0;
+		$('.activity_final_status').each(function(){
+			if( $(this).val() != '' )
+			{
+				step++;
+			}
+		});
+
+		if( step == 0 )
+		{
+			alertify.error('You are not following the correct sequence');
+		}
 	});
 
 	// To set active class according to the user response on click of confirmation buttons
