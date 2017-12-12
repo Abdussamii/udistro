@@ -128,36 +128,47 @@ class CompanyController extends Controller
 
 			if( count($user)  > 0 )
 			{
-		        if( $user->hasRole(['company_representative']) )	// list of allowed users
-		        {
-		            if(Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember))
-		            {
-		                // Get the logged-in user id
-		                $userId = Auth::id();
+				// Check if the company is active or not
+				$userCompany = $user->company->first();
 
-		                // If user credentials are valid, update the last_login time in users table.
-		                $user = User::find($userId);
-		                $user->last_login = date('Y-m-d H:i:s');
-		                $user->update();
+				if( ( count( $userCompany ) > 0 ) && $userCompany->status == 1 )
+				{
+			        if( $user->hasRole(['company_representative']) )	// list of allowed users
+			        {
+			            if( Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember) )
+			            {
+			                // Get the logged-in user id
+			                $userId = Auth::id();
 
-		                $response['errCode']    = 0;
-		                $response['errMsg']     = 'Successful login';
-		            }
-		            else
-		            {
-		                $response['errCode']    = 2;
-		                $response['errMsg']     = 'Invalid user credentials';
-		            }
-		        }
-		        else
-		        {
-		        	$response['errCode']    = 3;
-		           	$response['errMsg']     = 'Invalid user';
-		        }
+			                // If user credentials are valid, update the last_login time in users table.
+			                $user = User::find($userId);
+			                $user->last_login = date('Y-m-d H:i:s');
+			                $user->update();
+
+			                $response['errCode']    = 0;
+			                $response['errMsg']     = 'Successful login';
+			            }
+			            else
+			            {
+			                $response['errCode']    = 2;
+			                $response['errMsg']     = 'Invalid user credentials';
+			            }
+			        }
+			        else
+			        {
+			        	$response['errCode']    = 3;
+			           	$response['errMsg']     = 'Invalid user';
+			        }
+				}
+				else
+				{
+					$response['errCode']    = 4;
+	           		$response['errMsg']     = 'Company is not verified yet';
+				}
 			}
 			else
 	        {
-	        	$response['errCode']    = 4;
+	        	$response['errCode']    = 5;
 	           	$response['errMsg']     = 'Invalid user credentials';
 	        }
 		}
