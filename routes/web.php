@@ -364,6 +364,13 @@ Route::group(['prefix' => 'company'], function() {
 	
 });
 
+Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
+
+	// Company dashboard
+	Route::get('/dashboard', 'CompanyController@dashboard');
+	
+});
+
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
