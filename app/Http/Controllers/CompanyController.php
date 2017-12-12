@@ -47,6 +47,7 @@ class CompanyController extends Controller
     	// Get the province list
     	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
 
+    	// Get the company categories
     	$companyCategories = CompanyCategory::where(['status' => '1'])->select('id', 'category')->orderBy('category', 'asc')->get();
 
     	return view('company/register', ['provinces' => $provinces, 'companyCategories' => $companyCategories]);
@@ -71,7 +72,7 @@ class CompanyController extends Controller
 
 
     /**
-     * Function for company login
+     * Function for company representative login
      * @param void
      * @return array
      */
@@ -123,12 +124,11 @@ class CompanyController extends Controller
 		{
 			// Check for the credential and role. Only back-end user can login here
 			
-			// $user = User::where('email', '=', $loginData['username'])->first();
 			$user = User::where(['email' => $loginData['username'], 'status' => '1'])->first();
 
 			if( count($user)  > 0 )
 			{
-		        if( $user->hasRole(['admin']) )	// list of allowed users
+		        if( $user->hasRole(['company_representative']) )	// list of allowed users
 		        {
 		            if(Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember))
 		            {
