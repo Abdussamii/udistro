@@ -1,0 +1,12 @@
+<a href="https://www.facebook.com/sharer/sharer.php?u=PAGE_URL" target="_blank"> Share on Facebook</a>
+<a href="http://twitter.com/share?text=TEXT_TO_SHARE&url=WEBSITE_URL&hashtags=HASHTAG1,HASHTAG2,HASHTAG3">Share on Twitter</a>
+<a href="https://www.linkedin.com/shareArticle?mini=true&url=PAGE_URL&title=PAGE_TITLE&summary=PAGE_DESC">Share on LinkedIn</a>
+
+
+<!--- META TAGS ---->
+<meta property="og:title" content="PAGE_TITLE" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="PAGE_URL" />
+<meta property="og:image" content="IMAGE_URL" />
+<meta property="og:site_name" content="WEBSITE_NAME"/>
+<meta property="og:description" content="WEBSITE_DESC"/>
