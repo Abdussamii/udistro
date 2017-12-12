@@ -4,13 +4,18 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="route" content="{{ url('/') }}">
+
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>uDistro</title>
 
 <!-- Bootstrap -->
 <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">
-<link href="{{ URL::asset('css/style.css') }}" rel="stylesheet">
-<!--------Fonts--------------->
+<link href="{{ URL::asset('css/style1.css') }}" rel="stylesheet">
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
 <link href="{{ URL::asset('css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/owl.carousel.min.css') }}" rel="stylesheet">
@@ -21,9 +26,70 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+<script src="{{ URL::asset('js/owl.carousel.min.js') }}"></script>
+<script src="{{ URL::asset('js/bootstrap.min.3.3.7.js') }}"></script> 
+
+<!-- JQuery Validation -->
+<script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+
+<!-- JS Alert Plug-in -->
+<script type="text/javascript" src="{{ URL::asset('js/alertify.min.js') }}"></script>
+<link rel="stylesheet" href="{{ URL::asset('css/alertify.min.css') }}" />
+
+<!-- Company JS -->
+<script type="text/javascript" src="{{ URL::asset('js/custom/company.js') }}"></script>
+
+<script>
+$(function() {
+	$('.scroll-down').click (function() {
+	  $('html, body').animate({scrollTop: $('section.ok').offset().top }, 'slow');
+	  return false;
+	});
+
+    var navbar = $('.navbar');
+    $(window).scroll(function(){
+        if($(window).scrollTop() <= 40){
+          navbar.css('display', 'none');
+        } else {
+          navbar.css('display', 'block'); 
+        }
+    });
+
+    // owl-carousel
+	$('.owl-carousel').owlCarousel({
+		items: 1,
+		margin: 10,
+		autoHeight: false,
+		dots:true
+	});
+
+	$(".expand").on( "click", function() {
+	    // $(this).next().slideToggle(200);
+	    $expand = $(this).find(">:first-child");
+	    
+	    if($expand.text() == "+") {
+	      $expand.text("-");
+	    } else {
+	      $expand.text("+");
+	    }
+  	});
+});      
+</script>
+
+<style type="text/css">
+.error {
+	color: red;
+}
+</style>
+
 </head>
 <body>
-<!----------------Navbar------------->
+<!-- Navbar -->
 <nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -35,8 +101,8 @@
           </ul>
       </div>
     </nav>
-<!------------End Navbar------------->
-<!--Video Section-->
+<!-- End Navbar -->
+<!-- Video Section -->
 <section class="content-section video-section video-bg2">
   <div class="video_bg">
   <video autoplay loop class="fillWidth" width="100%">
@@ -52,49 +118,74 @@
           <div class="leftbg-text">
           <h1 class="title-bg2small">Get new quote requests from movers, all day long!</h1>
           <h3 class="overview">Our business product helps you communicate contextually with movers, who are actively looking for your services</h3>
-</div>
-</div>
+			</div>
+			</div>
 
+<!-- Company Registration -->
 <div class="col-md-4">
-            <div class="login-box">
-                    <form action="">
-                        <div class="form-title">
-                        <h2>Get started. It’s 100% Free!</h2>
-                        <h3>Start your 30 days FREE trial Now!</h3>
-                        </div>
-                        <div class="form-group">
-                            <input placeholder="First name" name="first_name" type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="Last name" name="last_name" type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="Job Title" name="job_title" type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="Email" name="email" type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="Phone" name="phone" type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="Company" name="company" type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="Province" name="province" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input value='' placeholder="industry_type" name="industry_type" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-default btn-login-submit" value="Start Free Trail" />
-                        </div>
-                        <span class="text-center instraction">No risk. No credit card required.</span>
-                        
-                    </form>
-                
+	<div class="login-box">
+        <form name="frm_company_registration" id="frm_company_registration" autocomplete="off">
+            <div class="form-title">
+            <h2>Get started. It’s 100% Free!</h2>
+            <h3>Start your 30 days FREE trial Now!</h3>
             </div>
-        </div>
+            <div class="form-group">
+                <input placeholder="First name" name="rep_fname" id="rep_fname" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input placeholder="Last name" name="rep_lname" id="rep_lname" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input placeholder="Job Title" name="rep_designation" id="rep_designation" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input placeholder="Email" name="email" id="email" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input placeholder="Password" name="password" id="password" type="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input placeholder="Phone Number" name="phone_no" id="phone_no" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input placeholder="Company Name" name="company_name" id="company_name" type="text" class="form-control" />
+            </div>
+            <div class="form-group">
+                <select name="company_province" id="company_province" class="form-control">
+                	<option value="">Select Province</option>
+                	<?php
+                	if( count( $provinces ) > 0 )
+                	{
+                		foreach ($provinces as $province)
+                		{
+                			echo '<option value="'. $province->id .'">'. ucwords( strtolower( $province->name ) ) .'</option>';
+                		}
+                	}
+                	?>
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="company_type" id="company_type" class="form-control">
+                	<option value="">Select Industry Type</option>
+                	<?php
+                	if( count( $companyCategories ) > 0 )
+                	{
+                		foreach ($companyCategories as $category)
+                		{
+                			echo '<option value="'. $category->id .'">'. ucwords( strtolower( $category->category ) ) .'</option>';
+                		}
+                	}
+                	?>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-default btn-login-submit" id="btn_company_registration" name="btn_company_registration" value="Start Free Trail" />
+            </div>
+            <span class="text-center instraction">No risk. No credit card required.</span>
+        </form>
+	</div>
+</div>
+<!-- Company Registration -->
 
 </div>
         </div>
@@ -104,7 +195,7 @@
 </section>
 <!--Video Section Ends Here--> 
 
-<!--- /Let’s Organize Your Move/ --->
+<!--- /Let’s Organize Your Move/ ->
 <section class="content-section section-pd">
   <div class="container">
     <div class="row">
@@ -161,7 +252,7 @@
 </section>
 
 
-<!-----/ New customer /------>
+<!-- / New customer / -->
 
 <section class="content-section section-pd price-table new-customer-section">
   <div class="container">
@@ -206,7 +297,7 @@
 
 
 
-<!-----/ Get Started/------>
+<!-- / Get Started -->
 <section class="content-section section-pd get-start-free-trial">
   <div class="container">
     <div class="row">
@@ -296,7 +387,7 @@
 </section>
 
 
-<!-----/ scale your business/------>
+<!-- / scale your business/ -->
 <section class="content-section section-pd ready-yourBusiness">
   <div class="container">
     <div class="row">
@@ -353,7 +444,7 @@
 </section>
 
 
-<!-----/ FAQ/------>
+<!-- / FAQ / -->
 <section class="content-section section-pd faq-section">
   <div class="container">
   
@@ -473,59 +564,5 @@
     </div>
   </div>
 </footer>
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="{{ URL::asset('js/owl.carousel.min.js') }}"></script>
-<script src="{{ URL::asset('js/bootstrap.min.3.3.7.js') }}"></script> 
-<script>
- $(function() {
-$('.scroll-down').click (function() {
-  $('html, body').animate({scrollTop: $('section.ok').offset().top }, 'slow');
-  return false;
-});
-});
-</script>
-<script>
-  $(function(){
-    var navbar = $('.navbar');
-    $(window).scroll(function(){
-        if($(window).scrollTop() <= 40){
-          navbar.css('display', 'none');
-        } else {
-          navbar.css('display', 'block'); 
-        }
-    });  
-})
-
-// owl-carousel
-
-            $(document).ready(function() {
-              $('.owl-carousel').owlCarousel({
-                items: 1,
-                margin: 10,
-                autoHeight: false,
-        dots:true
-              });
-            })
- 
-
-
-  
-  $(function() {
-  $(".expand").on( "click", function() {
-    // $(this).next().slideToggle(200);
-    $expand = $(this).find(">:first-child");
-    
-    if($expand.text() == "+") {
-      $expand.text("-");
-    } else {
-      $expand.text("+");
-    }
-  });
-});
-          
-</script>
 </body>
 </html> 

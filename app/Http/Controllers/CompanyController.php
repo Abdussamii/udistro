@@ -37,6 +37,291 @@ use Helper;
 
 class CompanyController extends Controller
 {
+	/**
+     * Function to return the company registration page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function register()
+    {
+    	// Get the province list
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+    	$companyCategories = CompanyCategory::where(['status' => '1'])->select('id', 'category')->orderBy('category', 'asc')->get();
+
+    	return view('company/register', ['provinces' => $provinces, 'companyCategories' => $companyCategories]);
+    }
+
+    /**
+     * Function to return login view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        if( Auth::check() || Auth::viaRemember() )	// User is already logged-in or remembered
+        {
+        	return redirect('company/dashboard');
+        }
+        else 					// User is not logged-in, show the login page
+        {
+        	return view('company/index');
+        }
+    }
+
+
+    /**
+     * Function for company login
+     * @param void
+     * @return array
+     */
+    public function login()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $loginData);
+
+        $remember = false;
+        if( isset( $loginData['remember'] ) )
+        {
+        	$remember = true;
+        }
+
+        // Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'username'	=> $loginData['username'],
+		        'password' 	=> $loginData['password']
+		    ),
+		    array(
+		        'username' 	=> array('required', 'email'),
+		        'password'	=> array('required', 'min:6'),
+		    ),
+		    array(
+		        'username.required' => 'Please enter email',
+		        'username.email'   	=> 'Please enter valid email',
+		        'password.required'	=> 'Please enter password',
+		        'password.min'    	=> 'Password must contain atleat 6 characters',
+		    )
+		);
+
+		if ( $validation->fails() )		// Some data is not valid as per the defined rules
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else 							// The data is valid, go ahead and check the login credentials and do login
+		{
+			// Check for the credential and role. Only back-end user can login here
+			
+			// $user = User::where('email', '=', $loginData['username'])->first();
+			$user = User::where(['email' => $loginData['username'], 'status' => '1'])->first();
+
+			if( count($user)  > 0 )
+			{
+		        if( $user->hasRole(['admin']) )	// list of allowed users
+		        {
+		            if(Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember))
+		            {
+		                // Get the logged-in user id
+		                $userId = Auth::id();
+
+		                // If user credentials are valid, update the last_login time in users table.
+		                $user = User::find($userId);
+		                $user->last_login = date('Y-m-d H:i:s');
+		                $user->update();
+
+		                $response['errCode']    = 0;
+		                $response['errMsg']     = 'Successful login';
+		            }
+		            else
+		            {
+		                $response['errCode']    = 2;
+		                $response['errMsg']     = 'Invalid user credentials';
+		            }
+		        }
+		        else
+		        {
+		        	$response['errCode']    = 3;
+		           	$response['errMsg']     = 'Invalid user';
+		        }
+			}
+			else
+	        {
+	        	$response['errCode']    = 4;
+	           	$response['errMsg']     = 'Invalid user credentials';
+	        }
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to register a new company
+     * @param void
+     * @return array
+     */
+    public function registerCompany()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$companyData = array();
+
+    	// Parse the serialize form
+    	parse_str($frmData, $companyData);
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'rep_fname'			=> $companyData['rep_fname'],
+		        'rep_lname'			=> $companyData['rep_lname'],
+		        'rep_designation'	=> $companyData['rep_designation'],
+		        'email'				=> $companyData['email'],
+		        'password'			=> $companyData['password'],
+		        'phone_no'			=> $companyData['phone_no'],
+		        'company_name'		=> $companyData['company_name'],
+		        'company_province'	=> $companyData['company_province'],
+		        'company_type'		=> $companyData['company_type']
+		    ),
+		    array(
+		    	'rep_fname'			=> array('required'),
+		        'rep_lname'			=> array('required'),
+		        'rep_designation'	=> array('required'),
+		        'email'				=> array('required', 'email'),
+		        'password'			=> array('required', 'min:6'),
+		        'phone_no'			=> array('required', 'numeric'),
+		        'company_name'		=> array('required'),
+		        'company_province'	=> array('required'),
+		        'company_type'		=> array('required')
+		    ),
+		    array(
+		        'rep_fname.required' 		=> 'Please enter first name',
+		        'rep_lname.required' 		=> 'Please last last name',
+		        'rep_designation.required' 	=> 'Please enter job title',
+		        'email.required' 			=> 'Please enter email',
+		        'email.email' 				=> 'Please enter valid email',
+		        'password.required' 		=> 'Please enter password',
+		        'password.min' 				=> 'Password must contain atleat 6 characters',
+		        'phone_no.required' 		=> 'Please enter phone number',
+		        'phone_no.numeric' 			=> 'Please enter a valid number',
+		        'company_name.required' 	=> 'Please enter company name',
+		        'company_province.required' => 'Please select province',
+		        'company_type.required' 	=> 'Please select industry type'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Check if the company representative with the same email id already exist
+			$user = User::where(['email' => $companyData['email']])->first();
+
+			if( count( $user ) == 0 )
+			{
+				// Check if the company with the same name already exist
+				$company = Company::where(['company_name' => $companyData['company_name']])->first();
+
+				if( count( $company ) == 0 )
+				{
+					// Start the transaction
+					DB::beginTransaction();
+
+					// Create the User (Company Representative)
+					$companyRep = new User;
+
+					$companyRep->email 		= $companyData['email'];
+					$companyRep->designation= $companyData['rep_designation'];
+					$companyRep->fname 		= $companyData['rep_fname'];
+					$companyRep->lname 		= $companyData['rep_lname'];
+					$companyRep->password 	= Hash::make($companyData['password']);
+					$companyRep->status 	= '0'; 										// Initially the account is not active
+
+					if( $companyRep->save() )
+					{
+						// Attach the role (Company Representative) to the newly created user
+						$companyRep->attachRole(2);		// 2: Company Representative
+
+						// Create the Company
+						$company = new Company;
+
+						$company->company_name 			= $companyData['company_name'];
+						$company->company_category_id 	= $companyData['company_province'];
+						$company->province_id 			= $companyData['company_type'];
+						$company->created_by			= $companyRep->id;									// Id of newly created user
+						$company->status 				= '0';												// Initially the account is not active
+
+						if( $company->save() )
+						{
+							// Attach the created user to the company
+							$companyRep->company()->attach($company->id);
+
+							DB::commit();
+
+							$response['errCode']    = 0;
+				        	$response['errMsg']     = 'Company registered successfully';
+						}
+						else
+						{
+							DB::rollBack();
+
+							$response['errCode']    = 2;
+				        	$response['errMsg']     = 'Some error in company registeration';
+						}
+					}
+					else
+					{
+						DB::rollBack();
+
+						$response['errCode']    = 3;
+			        	$response['errMsg']     = 'Some error in company registeration';
+					}
+				}
+				else
+				{
+					$response['errCode']    = 4;
+			        $response['errMsg']     = 'Company with the same name already exist';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 5;
+		        $response['errMsg']     = 'User with the same email already exist';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Function to return the company categories view
      * @param void

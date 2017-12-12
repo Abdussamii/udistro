@@ -345,21 +345,25 @@ Route::group(['prefix' => 'movers'], function() {
 	
 });
 
-// Movers openly access routes
+/* ---------- Movers related functionality ---------- */
+
+// Company openly access routes
 Route::group(['prefix' => 'company'], function() {
 
 	// Company login page
-	Route::get('/', 'DashboardController@index');
+	Route::get('/', 'CompanyController@index');
 	
 	// Company registration page home page
-	Route::get('/registration', 'DashboardController@register');
+	Route::get('/registration', 'CompanyController@register');
 
 	// Function to check company credentials
-	Route::post('/login', 'DashboardController@login');
+	Route::post('/login', 'CompanyController@login');
+
+	// To register a new company
+	Route::post('/registercompany', 'CompanyController@registerCompany');
 	
 });
 
-/* ---------- Movers related functionality ---------- */
 
 // Logout
 Route::get('/logout', 'HomeController@logout');

@@ -72,22 +72,10 @@
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-07-12-2017
+12-12-2017
 
-ALTER TABLE `client_activity_logs` ADD `invitation_id` INT NOT NULL AFTER `id`;
+ALTER TABLE `companies` CHANGE `address` `address` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `province_id` `province_id` INT(11) NULL DEFAULT NULL, CHANGE `city_id` `city_id` INT(11) NULL DEFAULT NULL, CHANGE `postal_code` `postal_code` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `country_id` `country_id` INT(11) NULL DEFAULT NULL, CHANGE `image` `image` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 
-ALTER TABLE `client_activity_logs` ADD INDEX( `invitation_id`, `client_id`, `activity_id`);
+ALTER TABLE `users` CHANGE `created_by` `created_by` INT(10) NULL DEFAULT NULL;
 
-ALTER TABLE `client_activity_logs` ADD `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP() AFTER `action`;
-
-08-12-2017
-
-ALTER TABLE `agent_client_ratings` ADD `invitation_id` INT NOT NULL AFTER `id`;
-
-ALTER TABLE `cms_navigation_cms_navigation_category` DROP `status`;					(Need to run on my Db)
-
-ALTER TABLE `client_activity_feedbacks` ADD `invitation_id` INT NOT NULL AFTER `id`;
-
-ALTER TABLE `agent_client_ratings` CHANGE `rating` `rating` FLOAT NULL DEFAULT NULL, CHANGE `comment` `comment` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `client_activity_feedbacks` ADD `created_at` DATETIME NOT NULL AFTER `feedback`;
+ALTER TABLE `users` ADD `designation` VARCHAR(20) NULL DEFAULT NULL COMMENT 'designation of company representative' AFTER `email`;

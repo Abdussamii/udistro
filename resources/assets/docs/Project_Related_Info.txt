@@ -15,3 +15,9 @@ protected function unauthenticated($request, AuthenticationException $exception)
 
     return redirect()->guest(route('login')); 	// Change this line
 }
+
+3. The different types of user present in the system are:
+
+	# Company:
+		# Representative (For all companies)
+		# Agent (For real estate companies)
