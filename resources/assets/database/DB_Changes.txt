@@ -79,3 +79,23 @@ ALTER TABLE `companies` CHANGE `address` `address` TEXT CHARACTER SET utf8mb4 CO
 ALTER TABLE `users` CHANGE `created_by` `created_by` INT(10) NULL DEFAULT NULL;
 
 ALTER TABLE `users` ADD `designation` VARCHAR(20) NULL DEFAULT NULL COMMENT 'designation of company representative' AFTER `email`;
+
+ALTER TABLE `companies` CHANGE `company_category_id` `company_category_id` INT(10) NOT NULL, CHANGE `province_id` `province_id` INT(10) NULL DEFAULT NULL, CHANGE `city_id` `city_id` INT(10) NULL DEFAULT NULL, CHANGE `created_by` `created_by` INT(10) NOT NULL, CHANGE `updated_by` `updated_by` INT(10) NULL DEFAULT NULL;
+
+ALTER TABLE `companies` ADD `email` VARCHAR(100) NOT NULL AFTER `company_category_id`;
+
+ALTER TABLE `companies` ADD `contact_number` VARCHAR(20) NOT NULL AFTER `email`, ADD `fax` VARCHAR(20) NOT NULL AFTER `contact_number`, ADD `website` VARCHAR(100) NOT NULL AFTER `fax`;
+
+ALTER TABLE `companies` CHANGE `email` `email` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `contact_number` `contact_number` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `fax` `fax` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `website` `website` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+ALTER TABLE `companies` CHANGE `address` `address1` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+ALTER TABLE `companies` ADD `address2` TEXT NULL DEFAULT NULL AFTER `address1`;
+
+ALTER TABLE `companies` ADD `target_area` INT NULL DEFAULT NULL COMMENT 'Radius in which company is working in KM' AFTER `country_id`, ADD `working_globally` ENUM('0','1') NOT NULL COMMENT '0: Local Company, 1: Global Company' AFTER `target_area`;
+
+ALTER TABLE `companies` ADD `availability_mode` ENUM('0','1') NOT NULL DEFAULT '1' COMMENT 'If available can receive the quotations, otherwise not' AFTER `working_globally`;
+
+ALTER TABLE `companies` ADD `facebook` VARCHAR(200) NULL DEFAULT NULL AFTER `availability_mode`, ADD `google_plus` VARCHAR(200) NULL DEFAULT NULL AFTER `facebook`, ADD `instagram` VARCHAR(200) NULL DEFAULT NULL AFTER `google_plus`, ADD `linkedin` VARCHAR(200) NULL DEFAULT NULL AFTER `instagram`, ADD `skype` VARCHAR(200) NULL DEFAULT NULL AFTER `linkedin`, ADD `twitter` VARCHAR(200) NULL DEFAULT NULL AFTER `skype`;
+
+ALTER TABLE `companies` CHANGE `availability_mode` `availability_mode` ENUM('0','1') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'If available can receive the quotations, otherwise not';

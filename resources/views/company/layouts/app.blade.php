@@ -75,7 +75,7 @@
 	<link rel="stylesheet" href="{{ URL::asset('css/alertify.min.css') }}" />
 
     <!-- Admin JS -->
-    <script type="text/javascript" src="{{ URL::asset('js/custom/agent.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/custom/company.js') }}"></script>
 
     <style type="text/css">
     .error {

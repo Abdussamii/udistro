@@ -333,6 +333,139 @@ class CompanyController extends Controller
     	return view('company/dashboard');
     }
 
+    /**
+     * Function to return company profile view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function profile()
+    {
+    	// Get province list
+    	$provinces 	= Province::where(['status' => '1'])->orderBy('name', 'asc')->select('id', 'abbreviation', 'name')->get();
+
+    	// Get cities list
+    	$cities 	= City::where(['status' => '1'])->orderBy('name', 'asc')->select('id', 'name')->get();
+
+    	// Get country list
+    	$countries 	= Country::orderBy('name', 'asc')->select('id', 'name')->get();
+
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user details
+		$user = User::find($userId);
+
+		// Get the company associated with the user
+		$companyDetails = $user->company->first();
+
+		// echo '<pre>';
+		// print_r( $userCompany->toArray() );
+		// exit;
+
+    	return view('company/profile', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyDetails' => $companyDetails]);
+    }
+
+    /**
+     * Function to update the company details
+     * @param void
+     * @return array
+     */
+    public function updateCompanyBasicDetails()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $companyData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'company_name'	=> $companyData['company_name'],
+		        'company_email'	=> $companyData['company_email'],
+		        'company_phone'	=> $companyData['company_phone']
+		    ),
+		    array(
+		        'company_name' 	=> array('required'),
+		        'company_email' => array('required', 'email'),
+		        'company_phone' => array('required', 'numeric')
+		    ),
+		    array(
+		        'company_name.required' => 'Please enter company name',
+		        'company_email.required'=> 'Please enter email',
+		        'company_email.email'	=> 'Please enter valid email',
+		        'company_phone.required'=> 'Please enter phone number',
+		        'company_phone.numeric'	=> 'Please enter a valid number'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Get the logged in user details
+			$user = User::find($userId);
+
+			// Get the company associated with the user
+			$userCompany = $user->company->first();
+
+			if( count( $userCompany ) > 0 )
+			{
+				// Check if the same does not exist with any other company
+				$companyName = Company::where('id', '=', $userCompany->id)->where('company_name', '!=', $companyData['company_name'])->first();
+
+				if( count( $companyName ) == 0 )
+				{
+					// Update the details
+					$company = Company::find( $userCompany->id );
+
+					$company->company_name 	= $companyData['company_name'];
+					$company->email 		= $companyData['company_email'];
+					$company->contact_number= $companyData['company_phone'];
+					$company->fax 			= $companyData['company_fax'];
+					$company->website 		= $companyData['company_website'];
+					$company->updated_by	= $userId;
+
+					if( $company->save() )
+					{
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Company details updated successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+				        $response['errMsg']     = 'Some error in updating the company details';
+					}
+				}
+				else
+				{
+					$response['errCode']    = 3;
+			        $response['errMsg']     = 'Company with the same name already exist';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 4;
+		        $response['errMsg']     = 'Invalid company';
+			}
+		}
+
+		return response()->json($response);
+    }
+
 
 
 

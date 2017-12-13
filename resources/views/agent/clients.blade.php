@@ -63,6 +63,7 @@
 						<td>Email</td>
 						<td>Mobile</td>
 						<td>Status</td>
+						<td>Invite</td>
 						<td>Action</td>
 					</tr>
 				</thead>

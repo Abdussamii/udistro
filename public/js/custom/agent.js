@@ -172,7 +172,7 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchclients',
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 6, 7] }
+            { "className": "dt-center", "targets": [ 0, 6, 7, 8 ] }
         ],
         "aoColumns": [
             { 'bSortable' : true },
@@ -182,6 +182,7 @@ $(document).ready(function(){
             { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : true },
+            { 'bSortable' : false },
             { 'bSortable' : false }
         ]
     });

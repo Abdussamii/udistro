@@ -101,4 +101,69 @@ $(document).ready(function(){
     		});
     	}
     });
+
+    /* ----- Company profile related functionality ----- */
+
+    // Company Details form validation
+    $('#frm_company_details').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_company_details').validate({
+        /*rules: {
+        	company_name: {
+        		required: true
+        	},
+        	company_email: {
+                required: true,
+                email: true
+            },
+            company_phone: {
+        		required: true,
+        		number: true
+        	}
+        },
+        messages: {
+        	company_name: {
+        		required: 'Please enter company name'
+        	},
+        	company_email: {
+                required: 'Please enter email',
+                email: 'Please enter valid email'
+            },
+            company_phone: {
+        		required: 'Please enter phone number',
+        		number: 'Please enter a valid number'
+        	}	
+        }*/
+    });
+
+    // Update the Company Details
+    $('#btn_update_company_details').click(function(){
+    	if( $('#frm_company_details').valid() )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/company/updatecompanybasicdetails',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_company_details').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    /* ----- Company profile related functionality ends ----- */
+
 });

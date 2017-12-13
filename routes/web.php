@@ -368,6 +368,12 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// Company dashboard
 	Route::get('/dashboard', 'CompanyController@dashboard');
+
+	// Company profile
+	Route::get('/profile', 'CompanyController@profile');
+
+	// To update the company details
+	Route::post('/updatecompanybasicdetails', 'CompanyController@updateCompanyBasicDetails');
 	
 });
 
