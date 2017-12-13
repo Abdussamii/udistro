@@ -929,6 +929,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to return the IndustryType page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function industryType()
+    {
+        return view('administrator/industrytype');
+    }
+
+    /**
      * Function to save the province details
      * @param void
      * @return Array
@@ -1228,6 +1238,77 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to save the industry details
+     * @param void
+     * @return Array
+     */
+    public function saveIndustryType(Request $request)
+    {
+    	$industry_id      = $request->input('industry_id');
+    	$industry_name    = $request->input('industry_name');
+    	$industry_status  = $request->input('industry_status');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'industry_name'		=> $industry_name,
+		        'industry_status'	=> $industry_status
+		    ),
+		    array(
+		        'industry_name' 	=> array('required'),
+		        'industry_status' 	=> array('required')
+		    ),
+		    array(
+		        'industry_name.required'	=> 'Please enter the industry name',
+		        'industry_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if($industry_id != '') 
+			{
+				$industry = CompanyCategory::find($industry_id);
+
+				$industry->category 		= $industry_name;
+				$industry->status 			= $industry_status;
+				$industry->updated_by 		= $userId;
+
+				if( $industry->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Industry updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the industry';
+				}
+			} else {
+				$response['errCode']    = 2;
+		        $response['errMsg']     = 'Some error in updating the industry';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
      * Function to show the province list in datatable
      * @param void
      * @return array
@@ -1343,6 +1424,62 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to show the Industry Type list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchIndustryType()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $industrylist = CompanyCategory::orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->get();
+
+        $iTotal = CompanyCategory::count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $industrylist ) > 0 )
+        {
+            foreach ($industrylist as $industry)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $industry->id,
+                    1 => ucfirst( strtolower( $industry->category ) ),
+                    2 => Helper::getStatusText($industry->status),
+                    3 => '<a href="javascript:void(0);" id="'. $industry->id .'" class="edit_industry"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
      * Function to get the details for the selected province
      * @param void
      * @return array
@@ -1385,6 +1522,28 @@ class AdminController extends Controller
     		$response['status'] = $activities->status;
     		$response['image']  = URL::to('/').'/images/activity/'.$activities->image_name;
     		$response['description']  = $activities->description;
+
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected Industry
+     * @param void
+     * @return array
+     */
+    public function getIndustryTypeDetails()
+    {
+    	$industryId = Input::get('industryId');
+
+    	$response = array();
+    	if( $industryId != '' )
+    	{
+    		$industry = CompanyCategory::find($industryId);
+
+    		$response['category'] 	= $industry->category;
+    		$response['status'] = $industry->status;
 
     	}
 
