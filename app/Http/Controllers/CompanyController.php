@@ -466,6 +466,101 @@ class CompanyController extends Controller
 		return response()->json($response);
     }
 
+    /**
+     * Function to update company address details
+     * @param void
+     * @return array
+     */
+    public function updateCompanyAddressDetails()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $companyData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'company_address1'	=> $companyData['company_address1'],
+		        'company_city'		=> $companyData['company_city'],
+		        'company_province'	=> $companyData['company_province'],
+		        'company_postalcode'=> $companyData['company_postalcode'],
+		        'company_country'	=> $companyData['company_country']
+		    ),
+		    array(
+		        'company_address1' 	=> array('required'),
+		        'company_city' 		=> array('required'),
+		        'company_province' 	=> array('required'),
+		        'company_postalcode'=> array('required'),
+		        'company_country' 	=> array('required')
+		    ),
+		    array(
+		        'company_address1.required' 	=> 'Please enter address',
+		        'company_city.required' 		=> 'Please select city',
+		        'company_province.required' 	=> 'Please select province',
+		        'company_postalcode.required'	=> 'Please enter postalcode',
+		        'company_country.required' 		=> 'Please select country'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Get the logged in user details
+			$user = User::find($userId);
+
+			// Get the company associated with the user
+			$userCompany = $user->company->first();
+
+			if( count( $userCompany ) > 0 )
+			{
+				// Update the details
+				$company = Company::find( $userCompany->id );
+
+				$company->address1 		= $companyData['company_address1'];
+				$company->address2 		= $companyData['company_address2'];
+				$company->province_id 	= $companyData['company_province'];
+				$company->city_id 		= $companyData['company_city'];
+				$company->postal_code 	= $companyData['company_postalcode'];
+				$company->country_id	= $companyData['company_country'];
+				$company->updated_by	= $userId;
+
+				if( $company->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Company details updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+			        $response['errMsg']     = 'Some error in updating the company details';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 4;
+		        $response['errMsg']     = 'Invalid company';
+			}
+		}
+
+		return response()->json($response);
+    }
+
 
 
 

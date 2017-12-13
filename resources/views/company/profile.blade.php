@@ -161,13 +161,13 @@
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Address Line 1:</label>
 												<div class="col-lg-8 input-line">
-													<input id="street-address" type="text" class="form-control" placeholder="Street address" />
+													<input id="street-address" name="company_address1" type="text" class="form-control" placeholder="Street address" value="{{ $companyDetails->address1 or '' }}" />
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Address Line 2:</label>
 												<div class="col-lg-8 input-line">
-													<input id="street-address2" type="text" class="form-control" placeholder="Street address" />
+													<input id="street-address2" name="company_address2" type="text" class="form-control" placeholder="Street address" value="{{ $companyDetails->address2 or '' }}" />
 												</div>
 											</div>
 											<div class="form-group">
@@ -181,7 +181,13 @@
 														{
 															foreach($cities as $city)
 															{
-																echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+																$selected = '';
+																if( $city->id ==  $companyDetails->city_id )
+																{
+																	$selected = 'selected="selected"';
+																}
+
+																echo '<option value="'. $city->id .'" '. $selected .'>'. $city->name .'</option>';
 															}
 														}
 														?>
@@ -198,7 +204,13 @@
 														{
 															foreach($provinces as $province)
 															{
-																echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+																$selected = '';
+																if( $province->id ==  $companyDetails->province_id )
+																{
+																	$selected = 'selected="selected"';
+																}
+
+																echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'" '. $selected .'>'. $province->name .'</option>';
 															}
 														}
 														?>
@@ -208,7 +220,7 @@
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Postalcode:</label>
 												<div class="col-lg-8 input-line">
-													<input id="postcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+													<input id="postcode" name="company_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" value="{{ $companyDetails->postal_code or '' }}" />
 												</div>
 											</div>
 											<div class="form-group">
@@ -222,7 +234,13 @@
 														{
 															foreach($countries as $country)
 															{
-																echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+																$selected = '';
+																if( $country->id ==  $companyDetails->country_id )
+																{
+																	$selected = 'selected="selected"';
+																}
+
+																echo '<option value="'. $country->id .'" '. $selected .'>'. $country->name .'</option>';
 															}
 														}
 														?>
@@ -233,7 +251,7 @@
 												<label class="col-lg-3 control-label">&nbsp;</label>
 												<div class="col-lg-8">
 													<div class="ui-select">
-														<button type="submit" class="btn btn-primary" name="btn_update_agent_profile" id="btn_update_agent_profile">Submit</button>
+														<button type="submit" class="btn btn-primary" name="btn_update_company_address_details" id="btn_update_company_address_details">Submit</button>
 													</div>
 												</div>
 											</div>
@@ -248,37 +266,37 @@
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Facebook:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text">
+													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->facebook or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Google Plus:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text">
+													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->google_plus or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Instagram:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text">
+													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->instagram or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Linkedin:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text">
+													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->linkedin or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Skype:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text">
+													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->skype or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Twitter:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text">
+													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->twitter or '' }}">
 												</div>
 											</div>
 											<div class="form-group">

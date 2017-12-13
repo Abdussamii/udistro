@@ -23,6 +23,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', 'MoversController@index');
 
+/*Route::get('/', function () {
+    return view('Home');
+});*/
+
 // To test email template view
 Route::get('/email', 'EmailController@renderEmailTemplate');
 
@@ -372,8 +376,11 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 	// Company profile
 	Route::get('/profile', 'CompanyController@profile');
 
-	// To update the company details
+	// To update company details
 	Route::post('/updatecompanybasicdetails', 'CompanyController@updateCompanyBasicDetails');
+
+	// To update company address details
+	Route::post('/updatecompanyaddressdetails', 'CompanyController@updateCompanyAddressDetails');
 	
 });
 

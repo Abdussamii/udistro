@@ -109,7 +109,7 @@ $(document).ready(function(){
         e.preventDefault();
     });
     $('#frm_company_details').validate({
-        /*rules: {
+        rules: {
         	company_name: {
         		required: true
         	},
@@ -134,7 +134,7 @@ $(document).ready(function(){
         		required: 'Please enter phone number',
         		number: 'Please enter a valid number'
         	}	
-        }*/
+        }
     });
 
     // Update the Company Details
@@ -146,6 +146,74 @@ $(document).ready(function(){
     			method: 'post',
     			data: {
     				frmData: $('#frm_company_details').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Company Address Details form validation
+    $('#frm_company_address_details').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_company_address_details').validate({
+        rules: {
+        	company_address1: {
+        		required: true
+        	},
+        	company_city: {
+        		required: true	
+        	},
+        	company_province: {
+        		required: true	
+        	},
+        	company_postalcode: {
+        		required: true	
+        	},
+        	company_country: {
+        		required: true		
+        	}
+        },
+        messages: {
+        	company_address1: {
+        		required: 'Please enter address'
+        	},
+        	company_city: {
+        		required: 'Please select city'
+        	},
+        	company_province: {
+        		required: 'Please select province'
+        	},
+        	company_postalcode: {
+        		required: 'Please enter postalcode'
+        	},
+        	company_country: {
+        		required: 'Please select country'
+        	}	
+        }
+    });
+
+    // Update the Company Address Details
+    $('#btn_update_company_address_details').click(function(){
+    	if( $('#frm_company_address_details').valid() )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/company/updatecompanyaddressdetails',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_company_address_details').serialize()
     			},
     			headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
