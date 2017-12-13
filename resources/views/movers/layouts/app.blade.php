@@ -13,6 +13,12 @@
 <!--------Fonts--------------->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
 <link href="{{ URL::asset('css/movers/font-awesome.min.css') }}" rel="stylesheet">
+<meta property="og:title" content="udistro" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://udistro.ca/" />
+<meta property="og:image" content="http://udistro.ca/images/logo.png" />
+<meta property="og:site_name" content="udistro"/>
+<meta property="og:description" content="udistro"/>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

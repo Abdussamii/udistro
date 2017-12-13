@@ -1031,7 +1031,7 @@ class AdminController extends Controller
 					$province->abbreviation = $abbreviation;
 					$province->updated_by 	= $userId;
 					$province->created_by 	= $userId;
-					if(!$response['errCode'])
+					if($response['errCode'] == 1)
 					{
 						$province->image 	= $fileNewName;
 						$response['image']  = URL::to('/').'/images/province/'.$fileNewName;
@@ -1056,7 +1056,7 @@ class AdminController extends Controller
 					$province->country_id 	= $countryId;
 					$province->abbreviation = $abbreviation;
 					$province->created_by 	= $userId;
-					if(!$response['errCode'])
+					if($response['errCode'] == 1)
 					{
 						$province->image 	= $fileNewName;
 						$response['image']  = URL::to('/').'/images/province/'.$fileNewName;
