@@ -2261,10 +2261,10 @@
 		      		<!-- <div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div> -->
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			Share this on: 
-		      			<i class="fa fa-facebook-square"></i>
-		      			<i class="fa fa fa-twitter-square"></i>
+		      			<a href="https://www.facebook.com/sharer/sharer.php?u=http://udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
+		      			<a href="http://twitter.com/share?text=udistro&url=http://udistro.ca/&hashtags=udistro"><i class="fa fa fa-twitter-square"></i></a>
+		      			<a href="https://www.linkedin.com/shareArticle?mini=true&url=http://udistro.ca/&title=udistro&summary=udistro"><i class="fa fa fa-linkedin-square"></i></a>
 		      			<i class="fa fa fa-google-plus-square"></i>
-		      			<i class="fa fa fa-linkedin-square"></i>
 		      		</div>
 		      	</div>
 
