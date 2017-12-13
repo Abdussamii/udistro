@@ -31,6 +31,7 @@ use App\PaymentPlan;
 use App\City;
 use App\Company;
 use App\PaymentPlanType;
+use App\CategoryService;
 
 use Validator;
 use Helper;
@@ -358,11 +359,17 @@ class CompanyController extends Controller
 		// Get the company associated with the user
 		$companyDetails = $user->company->first();
 
+		// Get company categories list
+		$companyCategories = CompanyCategory::where('status', '1')->select('id', 'category')->orderBy('category', 'asc')->get();
+
+		// Get the service types list
+		$categoryServices = CategoryService::where(['status' => '1', 'company_category_id' => $companyDetails->company_category_id])->select('id', 'service')->orderBy('service', 'asc')->get();
+
 		// echo '<pre>';
-		// print_r( $userCompany->toArray() );
+		// print_r( $categoryServices->toArray() );
 		// exit;
 
-    	return view('company/profile', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyDetails' => $companyDetails]);
+    	return view('company/profile', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyDetails' => $companyDetails, 'companyCategories' => $companyCategories, 'categoryServices' => $categoryServices]);
     }
 
     /**
@@ -543,12 +550,12 @@ class CompanyController extends Controller
 				if( $company->save() )
 				{
 					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Company details updated successfully';
+		        	$response['errMsg']     = 'Address details updated successfully';
 				}
 				else
 				{
 					$response['errCode']    = 2;
-			        $response['errMsg']     = 'Some error in updating the company details';
+			        $response['errMsg']     = 'Some error in updating the address details';
 				}
 			}
 			else
@@ -560,6 +567,98 @@ class CompanyController extends Controller
 
 		return response()->json($response);
     }
+
+    /**
+     * Function to update company social details
+     * @param void
+     * @return array
+     */
+    public function updateCompanySocialDetails()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $companyData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		// Get the logged in user details
+		$user = User::find($userId);
+
+		// Get the company associated with the user
+		$userCompany = $user->company->first();
+
+		if( count( $userCompany ) > 0 )
+		{
+			// Update the details
+			$company = Company::find( $userCompany->id );
+
+			$company->facebook 		= $companyData['company_facebook'];
+			$company->google_plus 	= $companyData['company_google_plus'];
+			$company->instagram 	= $companyData['company_instagram'];
+			$company->linkedin 		= $companyData['company_linkedin'];
+			$company->skype 		= $companyData['company_skype'];
+			$company->twitter		= $companyData['company_twitter'];
+			$company->updated_by	= $userId;
+
+			if( $company->save() )
+			{
+				$response['errCode']    = 0;
+	        	$response['errMsg']     = 'Social networking details updated successfully';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+		        $response['errMsg']     = 'Some error in updating the social networking details';
+			}
+		}
+		else
+		{
+			$response['errCode']    = 4;
+	        $response['errMsg']     = 'Invalid company';
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to fetch the services as per the selected category
+     * @param void
+     * @return array
+     */
+    public function getCompanyCategoryServices()
+    {
+    	$industryTypeId = Input::get('industryTypeId');
+
+    	$response = '';
+    	if( $industryTypeId != '' )
+    	{
+    		$companyCategoryServices = CompanyCategoryService::where(['status' => '1', 'company_category_id' => $industryTypeId])->select('id', 'service')->orderBy('service', 'asc')->get();
+
+    		if( count( $companyCategoryServices ) > 0 )
+    		{
+    			foreach ($companyCategoryServices as $categoryServices)
+    			{
+    				$response .= '<option value="'. $categoryServices->id .'">'. $categoryServices->service .'</option>';
+    			}
+    		}
+    	}
+
+    	return response()->json($response);
+    }
+
+
+
+
+
+
+
+
 
 
 

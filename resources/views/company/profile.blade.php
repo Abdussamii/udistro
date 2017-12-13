@@ -3,6 +3,10 @@
 
 @section('content')
 
+	<!-- Multiple Select Dropdown -->
+	<script type="text/javascript" src="{{ URL::asset('js/multiple-select.js') }}"></script>
+	<link rel="stylesheet" href="{{ URL::asset('css/multiple-select.css') }}" />
+
 	<!-- Canada Post API -->
 	<script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=kp88-mx67-ff25-xd59"></script>
 	<link rel="stylesheet" type="text/css" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.30.min.css?key=kp88-mx67-ff25-xd59" />
@@ -32,9 +36,18 @@
 		});
 
 	});
+
+	$(document).ready(function(){
+		// Multi-select initialization
+		$('#company_services').multipleSelect({
+            width: '100%',
+            selectAll: false
+        });
+	});
 	</script>
 
 	<style type="text/css">
+	/* To create switch kind of button */
 	.switch {
 	  position: relative;
 	  display: inline-block;
@@ -266,44 +279,44 @@
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Facebook:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->facebook or '' }}">
+													<input class="form-control" name="company_facebook" id="company_facebook" type="text" value="{{ $companyDetails->facebook or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Google Plus:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->google_plus or '' }}">
+													<input class="form-control" name="company_google_plus" id="company_google_plus" type="text" value="{{ $companyDetails->google_plus or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Instagram:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->instagram or '' }}">
+													<input class="form-control" name="company_instagram" id="company_instagram" type="text" value="{{ $companyDetails->instagram or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Linkedin:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->linkedin or '' }}">
+													<input class="form-control" name="company_linkedin" id="company_linkedin" type="text" value="{{ $companyDetails->linkedin or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Skype:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->skype or '' }}">
+													<input class="form-control" name="company_skype" id="company_skype" type="text" value="{{ $companyDetails->skype or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">Twitter:</label>
 												<div class="col-lg-8">
-													<input class="form-control" value="" name="" id="" type="text" value="{{ $companyDetails->twitter or '' }}">
+													<input class="form-control" name="company_twitter" id="company_twitter" type="text" value="{{ $companyDetails->twitter or '' }}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label">&nbsp;</label>
 												<div class="col-lg-8">
 													<div class="ui-select">
-														<button type="submit" class="btn btn-primary" name="btn_update_agent_profile" id="btn_update_agent_profile">Submit</button>
+														<button type="submit" class="btn btn-primary" name="btn_update_company_social_details" id="btn_update_company_social_details">Submit</button>
 													</div>
 												</div>
 											</div>
@@ -316,36 +329,65 @@
 	    	    	</div>
 					<div id="settings" class="tab-pane fade">
 						<div class="profile-wrap top-buffer">
-							<form class="form-horizontal" role="form" name="frm_company_setting" id="frm_company_setting">
+							<form class="form-horizontal" role="form" name="frm_company_additional_details" id="frm_company_additional_details">
 								<fieldset>
 									<legend>Settings: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
 									<div class="collapsbox" style="display:block;">
 										<div class="form-group">
 											<label class="col-lg-3 control-label">Industry Type:</label>
 											<div class="col-lg-8">
-												<input id="street-address" type="text" class="form-control" placeholder="" autofocus />
+												<select name="company_industry_type" id="company_industry_type" class="form-control">
+														<option value="">Select</option>
+														<?php
+														if( isset( $companyCategories ) && count( $companyCategories ) > 0 )
+														{
+															foreach($companyCategories as $category)
+															{
+																$selected = '';
+																if( $category->id ==  $companyDetails->company_category_id )
+																{
+																	$selected = 'selected="selected"';
+																}
+
+																echo '<option value="'. $category->id .'" '. $selected .'>'. $category->category .'</option>';
+															}
+														}
+														?>
+													</select>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-3 control-label">Services:</label>
 											<div class="col-lg-8">
-												<input id="street-address" type="text" class="form-control" placeholder="" autofocus />
+												<select name="company_services[]" id="company_services" multiple="true">
+												<?php
+												if( isset( $categoryServices ) && count( $categoryServices ) > 0 )
+												{
+													foreach ($categoryServices as $service)
+													{
+														echo '<option value="'. $service->id .'">'. $service->service .'</option>';
+													}
+												}
+												?>
+												</select>
+												<label id="company_services-error" class="error" for="company_services"></label>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-3 control-label">Target Area:</label>
 											<div class="col-lg-8">
-												<input id="street-address" type="text" class="form-control" placeholder="In KM" autofocus />
+												<input type="text" name="company_target_area" id="company_target_area" class="form-control" placeholder="In KM" />
 												<label>
-													<input type="checkbox" name="" id=""> I am working on multiple locations
+													<input type="checkbox" name="company_target_global" id="company_target_global" value="1"> I am working on multiple locations
 												</label>
+												<div><label id="company_target_area-error" class="error" for="company_target_area" style=""></label></div>
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-lg-3 control-label">Availability Mode:</label>
 											<div class="col-lg-8">
 												<label class="switch">
-												  <input type="checkbox" checked>
+												  <input type="checkbox" name="company_availability_mode" id="company_availability_mode" value="1" checked="">
 												  <span class="slider round"></span>
 												</label>
 											</div>
@@ -354,7 +396,7 @@
 											<label class="col-lg-3 control-label">&nbsp;</label>
 											<div class="col-lg-8">
 												<div class="ui-select">
-													<button type="submit" class="btn btn-primary" name="btn_update_agent_profile" id="btn_update_agent_profile">Submit</button>
+													<button type="submit" class="btn btn-primary" name="btn_update_company_additional_details" id="btn_update_company_additional_details">Submit</button>
 												</div>
 											</div>
 										</div>

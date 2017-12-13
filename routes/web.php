@@ -381,6 +381,12 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To update company address details
 	Route::post('/updatecompanyaddressdetails', 'CompanyController@updateCompanyAddressDetails');
+
+	// To update company social details
+	Route::post('/updatecompanysocialdetails', 'CompanyController@updateCompanySocialDetails');
+
+	// To fetch the services as per the selected category
+	Route::get('/getcompanycategoryservices', 'CompanyController@getCompanyCategoryServices');
 	
 });
 

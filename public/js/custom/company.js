@@ -232,6 +232,120 @@ $(document).ready(function(){
     	}
     });
 
+    // Update the Company Social Details
+    $('#frm_company_social_details').submit(function(e){
+        e.preventDefault();
+    });
+    $('#btn_update_company_social_details').click(function() {
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/updatecompanysocialdetails',
+			method: 'post',
+			data: {
+				frmData: $('#frm_company_social_details').serialize()
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		alertify.success( response.errMsg );
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+    });
+
+    // To fetch the services as per the selected category
+    $('#company_industry_type').change(function(){
+    	var industryTypeId = $(this).val();
+
+    	// Empty the dropdown
+    	$('#company_services').html('');
+
+    	if( industryTypeId != '' )
+    	{
+	    	$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/company/getcompanycategoryservices',
+				method: 'get',
+				data: {
+					industryTypeId: industryTypeId
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+
+			    	$('#company_services').html(response);
+			    	
+			    	// Refresh the multiple-select dropdown
+			    	$('#company_services').multipleSelect("refresh");
+
+			    }
+			});
+    	}
+    });
+
+    // Clear the target area value and disable it when the company is working on multiple location
+    $('#company_target_global').click(function(){
+    	if( $(this).is(':checked') )
+    	{
+    		$('#company_target_area').val('');
+    		$('#company_target_area').attr('disabled', true);
+    	}
+    	else
+    	{
+    		$('#company_target_area').val('');
+    		$('#company_target_area').attr('disabled', false);	
+    	}
+    });
+
+    // Company Additional Details form validation
+    $('#frm_company_additional_details').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_company_additional_details').validate({
+    	ignore: "not:hidden", 			// Put the validation on hidden also
+        rules: {
+        	company_industry_type: {
+        		required: true
+        	},
+        	'company_services[]': {
+                required: true
+            },
+            company_target_area: {
+            	required: function (element) {
+                    if($("#company_target_global").is(':checked'))
+                    	return false;
+                    else
+                    	return true;
+                }
+            }
+        },
+        messages: {
+        	company_industry_type: {
+        		required: 'Please select industry type'
+        	},
+        	'company_services[]': {
+                required: 'Please select atleast one service'
+            },
+            company_target_area: {
+            	required: 'Please enter target area in KM'	
+            }
+        }
+    });
+
+    // Update the company additional information
+    $('#btn_update_company_additional_details').click(function(){
+    	if( $('#frm_company_additional_details').valid() )
+    	{
+    		
+    	}
+    });
+
     /* ----- Company profile related functionality ends ----- */
 
 });
