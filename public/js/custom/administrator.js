@@ -779,6 +779,86 @@ $(document).ready(function(){
         }
     });
 
+    // Add / Edit province form validation
+    $('#frm_edit_industry').submit(function(e){
+        e.preventDefault();
+    });
+
+    $('#frm_edit_industry').validate({
+        rules: {
+            industry_name: {
+                required: true
+            },
+            industry_status: {
+                required: true  
+            }
+        },
+        messages: {
+            industry_name: {
+                required: 'Please enter the industry name'
+            },
+            industry_status: {
+                required: 'Please select status'
+            }
+        }
+    });
+
+    // Save the industry data
+    $('#btn_edit_industry').click(function(){
+        if( $('#frm_edit_industry').valid() )
+        {
+            // Ajax call to save the page related data
+            var $this = $(this);
+            var industry_id     = $('#industry_id').val();
+            var industry_name   = $('#industry_name').val();
+            var industry_status = $("input[name='industry_status']:checked").val();
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('industry_id', industry_id);
+            formData.append('industry_name', industry_name);
+            formData.append('industry_status', industry_status);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/saveindustrytype',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+                        
+                        // Refresh the form and close the modal
+                        //$('#frm_edit_industry')[0].reset();
+
+                        //$('#modal_edit_industry').modal('hide');
+
+                        // Refresh the datatable
+                        //$('#datatable_industry').DataTable().ajax.reload();
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
     // Province list datatable
     $.fn.dataTableExt.errMode = 'ignore';
     $('#datatable_provinces').dataTable({
@@ -812,6 +892,24 @@ $(document).ready(function(){
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
+    $('#datatable_industry').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchindustrytype',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : false, "width": "10%" }
@@ -877,6 +975,35 @@ $(document).ready(function(){
 
                     // Show the modal
                     $('#modal_add_activity').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing province id');
+        }
+    });
+
+    // To update the Industry details
+    $(document).on('click', '.edit_industry', function(){
+        var industryId = $(this).attr('id');
+
+        if( industryId != '' )
+        {
+            // Get the province details for the selected province
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/getindustrytypedetails',
+                method: 'get',
+                data: {
+                    industryId: industryId
+                },
+                success: function(response){
+                    $('#frm_edit_industry #industry_id').val(industryId);
+                    $('#frm_edit_industry #industry_name').val(response.category);
+                    $('#frm_edit_industry input[name="industry_status"][value="'+ response.status +'"]').prop('checked', true);
+
+                    // Show the modal
+                    $('#modal_edit_industry').modal('show');
                 }
             });
         }
