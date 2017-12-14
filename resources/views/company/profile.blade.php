@@ -43,7 +43,35 @@
             width: '100%',
             selectAll: false
         });
+
+        $('#company_image_upload').change(function () {
+            var fileExtension = ['jpg', 'jpeg', 'png'];
+            if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                alert("Only image is allowed.");
+                this.value = ''; // Clean field
+                return false;
+            }
+        });
+
+		// Show the preview of image
+        $("#company_image_upload").change(function() {
+		  readURL(this);
+		});
 	});
+
+	// Function to show the preview of page
+	function readURL(input)
+	{
+		if (input.files && input.files[0]) {
+		var reader = new FileReader();
+
+		reader.onload = function(e) {
+		  $('#company_logo').attr('src', e.target.result);
+		}
+
+		reader.readAsDataURL(input.files[0]);
+		}
+	}
 	</script>
 
 	<style type="text/css">
@@ -415,7 +443,18 @@
 						<!-- <h3>Email Template</h3> -->
 						<div class="email-template-wrap top-buffer">
 							<form class="form-horizontal" role="form" name="frm_company_logo" id="frm_company_logo">
-								
+								<div class="profile-pic-box">
+									<!-- <img src="{{ url('/images/company/' . $companyDetails->image) }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo"> -->
+									<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/company_icon.png') }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo">
+									<div class="edit-profile-pic">
+										<label for="company_image_upload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
+										<input type="file" id="company_image_upload" name="company_image_upload" accept="image/*" style="display: none">
+									</div>
+									<div class="sub-can-box">
+										<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
+										<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
+									</div>
+								</div>
 							</form>
 						</div>
 		    	    </div>
