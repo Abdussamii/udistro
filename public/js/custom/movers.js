@@ -954,7 +954,12 @@ $(document).ready(function(){
 
 		if( step == 0 )
 		{
-			alertify.error('You are not following the correct sequence');
+			// Check the index of the clicked item, if the index is greater then 1, the user is not following the correct sequence
+
+			if( $('.done_activity, .discard_activity').index(this) > 1 )
+			{
+				alertify.error('You are not following the correct sequence');
+			}
 		}
 	});
 

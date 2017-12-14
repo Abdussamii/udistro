@@ -222,7 +222,7 @@ class Helper
     	$totalActivitiesCount = ClientActivityList::where(['status' => '1'])->count();
 
     	// Get the activities completed count
-    	$totalCompletedActivitiesCount 	= ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $clientId])->count();
+    	$totalCompletedActivitiesCount 	= ClientActivityLog::where(['invitation_id' => $invitationId, 'client_id' => $clientId, 'action' => '1'])->count();
 
     	// Calculate the percentage of completed activities
     	$completedActivitiesPercentage 	= ( $totalCompletedActivitiesCount / $totalActivitiesCount ) * 100;
