@@ -113,17 +113,29 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected activity
 	Route::get('/getactivitydetails', 'AdminController@getActivityDetails');
 
-	// To return the activity page
+	// To return the industry page
 	Route::get('/industrytype', 'AdminController@industryType');
 
-	// To save the activity details
+	// To save the industry details
 	Route::post('/saveindustrytype', 'AdminController@saveIndustryType');
 
-	// To show the activity list in datatable
+	// To show the industry list in datatable
 	Route::get('/fetchindustrytype', 'AdminController@fetchIndustryType');
 
-	// To get the details for the selected activity
+	// To get the details for the selected industry
 	Route::get('/getindustrytypedetails', 'AdminController@getIndustryTypeDetails');
+
+	// To return the services page
+	Route::get('/services', 'AdminController@services');
+
+	// To save the services details
+	Route::post('/saveservices', 'AdminController@saveServices');
+
+	// To show the services list in datatable
+	Route::get('/fetchservices', 'AdminController@fetchServices');
+
+	// To get the details for the selected services
+	Route::get('/getservicesdetails', 'AdminController@getServicesDetails');
 
 	// To return the utility service categories page
 	Route::get('/utilityservicecategories', 'AdminController@utilityServiceCategories');

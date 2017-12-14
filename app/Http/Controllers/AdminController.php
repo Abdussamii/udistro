@@ -27,6 +27,7 @@ use App\State;
 use App\UtilityServiceType;
 use App\UtilityServiceProvider;
 use App\CompanyCategory;
+use App\CategoryService;
 use App\PaymentPlan;
 use App\PaymentPlanType;
 use App\City;
@@ -939,6 +940,17 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to return the Services page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function services()
+    {
+    	$companyCategories = CompanyCategory::where(['status' => '1'])->select('id', 'category')->orderBy('category', 'asc')->get();
+        return view('administrator/services', ['companyCategories' => $companyCategories]);
+    }
+
+    /**
      * Function to save the province details
      * @param void
      * @return Array
@@ -1309,6 +1321,105 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to save the service details
+     * @param void
+     * @return Array
+     */
+    public function saveServices(Request $request)
+    {
+    	$services_id      = $request->input('services_id');
+    	$services_name    = $request->input('services_name');
+    	$description      = $request->input('description');
+    	$category      = $request->input('category');
+    	$services_status  = $request->input('services_status');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'services_name'		=> $services_name,
+		        'description'		=> $description,
+		        'services_status'	=> $services_status,
+		        'category'			=> $category,
+		    ),
+		    array(
+		        'services_name' 	=> array('required'),
+		        'description' 		=> array('required'),
+		        'services_status' 	=> array('required'),
+		        'category' 			=> array('required')
+		    ),
+		    array(
+		        'services_name.required'	=> 'Please enter the service name',
+		        'description.required'		=> 'Please enter the service description',
+		        'services_status.required' 	=> 'Please select status',
+		        'category.required' 		=> 'Please select category'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if($services_id == '') 
+			{
+				$services = new CategoryService;
+				$services->service 				= $services_name;
+				$services->description 			= $description;
+				$services->status    			= $services_status;
+				$services->company_category_id  = $category;
+				$services->updated_by 			= $userId;
+				$services->created_by 			= $userId;
+
+				if( $services->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Service added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in adding the service';
+				}
+			}
+			else
+			{ 
+
+				$services = CategoryService::find($services_id);
+				$services->service 				= $services_name;
+				$services->description 			= $description;
+				$services->status 				= $services_status;
+				$services->company_category_id 	= $category;
+				$services->updated_by 			= $userId;
+
+				if( $services->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Service updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the service';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
      * Function to show the province list in datatable
      * @param void
      * @return array
@@ -1415,6 +1526,69 @@ class AdminController extends Controller
                     2 => ucfirst( strtolower( $activities->description ) ),
                     3 => Helper::getStatusText($activities->status),
                     4 => '<a href="javascript:void(0);" id="'. $activities->id .'" class="edit_activity"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to show the Services list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchServices()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+      	$servicelist = DB::table('category_services')
+           				->leftJoin('company_categories', 'company_categories.id', '=', 'category_services.company_category_id')
+           				->orderBy($sortBy, $sortType)
+           				->limit($length)
+           				->offset($start)
+            			->select('category_services.*', 'company_categories.category')
+            			->get();
+
+        $iTotal = DB::table('category_services')
+           			->leftJoin('company_categories', 'company_categories.id', '=', 'category_services.company_category_id')
+            		->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $servicelist ) > 0 )
+        {
+            foreach ($servicelist as $services)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $services->id,
+                    1 => ucfirst( strtolower( $services->service ) ),
+                    2 => $services->description,
+                    3 => ucfirst( strtolower( $services->category ) ),
+                    4 => Helper::getStatusText($services->status),
+                    5 => '<a href="javascript:void(0);" id="'. $services->id .'" class="edit_services"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1544,6 +1718,30 @@ class AdminController extends Controller
 
     		$response['category'] 	= $industry->category;
     		$response['status'] = $industry->status;
+
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected services
+     * @param void
+     * @return array
+     */
+    public function getServicesDetails()
+    {
+    	$serviceId = Input::get('serviceId');
+
+    	$response = array();
+    	if( $serviceId != '' )
+    	{
+    		$services = CategoryService::find($serviceId);
+
+    		$response['service'] 	= $services->service;
+    		$response['status'] = $services->status;
+    		$response['category'] = $services->company_category_id;
+    		$response['description']  = $services->description;
 
     	}
 

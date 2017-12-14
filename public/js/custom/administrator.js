@@ -779,6 +779,101 @@ $(document).ready(function(){
         }
     });
 
+    // Add / Edit services form validation
+    $('#frm_add_services').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_services').validate({
+        rules: {
+            services_name: {
+                required: true
+            },
+            services_status: {
+                required: true  
+            },
+            description: {
+                required: true
+            },
+            services_category: {
+                required: true
+            }
+        },
+        messages: {
+            services_name: {
+                required: 'Please enter the service name'
+            },
+            services_status: {
+                required: 'Please select status'
+            },
+            description: {
+                required: 'Please enter description'
+            },
+            services_category: {
+                required: 'Please select service category'
+            }
+        }
+    });
+
+    // Save the activity data
+    $('#btn_add_services').click(function(){
+        if( $('#frm_add_services').valid() )
+        {
+            // Ajax call to save the page related data
+            var $this = $(this);
+            var services_id     = $('#services_id').val();
+            var services_name   = $('#services_name').val();
+            var description     = $('#description').val();
+            var category        = $("#services_category").val();
+            var services_status = $("input[name='services_status']:checked").val();
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('services_name', services_name);
+            formData.append('description', description);
+            formData.append('services_id', services_id);
+            formData.append('category', category);
+            formData.append('services_status', services_status);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/saveservices',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+                        
+                        // Refresh the form and close the modal
+                        $('#frm_add_services')[0].reset();
+
+                        $('#modal_add_services').modal('hide');
+
+                        // Refresh the datatable
+                        $('#datatable_services').DataTable().ajax.reload();
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
     // Add / Edit province form validation
     $('#frm_edit_industry').submit(function(e){
         e.preventDefault();
@@ -843,12 +938,12 @@ $(document).ready(function(){
                         alertify.success( response.errMsg );
                         
                         // Refresh the form and close the modal
-                        //$('#frm_edit_industry')[0].reset();
+                        $('#frm_edit_industry')[0].reset();
 
-                        //$('#modal_edit_industry').modal('hide');
+                        $('#modal_edit_industry').modal('hide');
 
                         // Refresh the datatable
-                        //$('#datatable_industry').DataTable().ajax.reload();
+                        $('#datatable_industry').DataTable().ajax.reload();
                     }
                     else
                     {
@@ -910,6 +1005,26 @@ $(document).ready(function(){
         
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
+    $('#datatable_services').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchservices',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "20%" },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : false, "width": "10%" }
@@ -980,7 +1095,42 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing province id');
+            alertify.error('Missing Activity id');
+        }
+    });
+
+    // To update the services details
+    $(document).on('click', '.edit_services', function()
+    {
+        var serviceId = $(this).attr('id');
+
+        if( serviceId != '' )
+        {
+            // Get the service details for the selected service
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/getservicesdetails',
+                method: 'get',
+                data: {
+                    serviceId: serviceId
+                },
+                success: function(response){
+                    $('#modal_add_services').find('.modal-title').html('Edit Services');
+
+                    // Auto-fill the form
+                    $('#frm_add_services #services_id').val(serviceId);
+                    $('#frm_add_services #services_name').val(response.service);
+                    $('#frm_add_services #description').val(response.description);
+                    $('#frm_add_services #category').val(response.category);
+                    $('#frm_add_services input[name="services_status"][value="'+ response.status +'"]').prop('checked', true);
+
+                    // Show the modal
+                    $('#modal_add_services').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing Service id');
         }
     });
 
@@ -1522,6 +1672,12 @@ $(document).ready(function(){
     $('#btn_modal_company_category').click(function(){
     	$('#modal_add_company_category').find('.modal-title').html('Add Category');
     	$('#modal_add_company_category').modal('show');
+    });
+
+    // To add company category
+    $('#btn_modal_services').click(function(){
+        $('#modal_add_services').find('.modal-title').html('Add Service');
+        $('#modal_add_services').modal('show');
     });
 
    	// Add / Edit company category form validation

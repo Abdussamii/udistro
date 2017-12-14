@@ -361,6 +361,12 @@
                                 <li>
                                     <a href="{{ url('/administrator/agents') }}"> Agents</a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('/administrator/industrytype') }}"> Industry Type</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/services') }}"> Services</a>
+                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
