@@ -99,3 +99,9 @@ ALTER TABLE `companies` ADD `availability_mode` ENUM('0','1') NOT NULL DEFAULT '
 ALTER TABLE `companies` ADD `facebook` VARCHAR(200) NULL DEFAULT NULL AFTER `availability_mode`, ADD `google_plus` VARCHAR(200) NULL DEFAULT NULL AFTER `facebook`, ADD `instagram` VARCHAR(200) NULL DEFAULT NULL AFTER `google_plus`, ADD `linkedin` VARCHAR(200) NULL DEFAULT NULL AFTER `instagram`, ADD `skype` VARCHAR(200) NULL DEFAULT NULL AFTER `linkedin`, ADD `twitter` VARCHAR(200) NULL DEFAULT NULL AFTER `skype`;
 
 ALTER TABLE `companies` CHANGE `availability_mode` `availability_mode` ENUM('0','1') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'If available can receive the quotations, otherwise not';
+
+CREATE TABLE `udistro`.`category_service_company` ( `category_service_id` INT(10) NOT NULL , `company_id` INT(10) NOT NULL ) ENGINE = InnoDB;
+
+ALTER TABLE `category_service_company` ADD INDEX( `category_service_id`, `company_id`);
+
+ALTER TABLE `category_service_company` ADD UNIQUE( `category_service_id`, `company_id`);

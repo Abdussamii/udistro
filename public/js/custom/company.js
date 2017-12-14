@@ -342,7 +342,26 @@ $(document).ready(function(){
     $('#btn_update_company_additional_details').click(function(){
     	if( $('#frm_company_additional_details').valid() )
     	{
-    		
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/company/updatecompanyadditionaldetails',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_company_additional_details').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
     	}
     });
 

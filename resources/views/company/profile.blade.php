@@ -329,7 +329,7 @@
 	    	    	</div>
 					<div id="settings" class="tab-pane fade">
 						<div class="profile-wrap top-buffer">
-							<form class="form-horizontal" role="form" name="frm_company_additional_details" id="frm_company_additional_details">
+							<form class="form-horizontal" role="form" name="frm_company_additional_details" id="frm_company_additional_details" autocomplete="off">
 								<fieldset>
 									<legend>Settings: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
 									<div class="collapsbox" style="display:block;">
@@ -365,7 +365,13 @@
 												{
 													foreach ($categoryServices as $service)
 													{
-														echo '<option value="'. $service->id .'">'. $service->service .'</option>';
+														$selected = '';
+														if( in_array($service->id, $companyServices) )
+														{
+															$selected = 'selected="selected"';
+														}
+
+														echo '<option value="'. $service->id .'" '. $selected .'>'. $service->service .'</option>';
 													}
 												}
 												?>
@@ -376,9 +382,9 @@
 										<div class="form-group">
 											<label class="col-lg-3 control-label">Target Area:</label>
 											<div class="col-lg-8">
-												<input type="text" name="company_target_area" id="company_target_area" class="form-control" placeholder="In KM" />
+												<input type="text" name="company_target_area" id="company_target_area" class="form-control" placeholder="In KM" {{ ( $companyDetails['working_globally'] == 1 ) ? 'disabled' : '' }} value="{{ $companyDetails['target_area'] or '' }}" />
 												<label>
-													<input type="checkbox" name="company_target_global" id="company_target_global" value="1"> I am working on multiple locations
+													<input type="checkbox" name="company_target_global" id="company_target_global" value="1" {{ ( $companyDetails['working_globally'] == 1 ) ? 'checked' : '' }}> I am working on multiple locations
 												</label>
 												<div><label id="company_target_area-error" class="error" for="company_target_area" style=""></label></div>
 											</div>

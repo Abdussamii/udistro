@@ -32,4 +32,12 @@ class Company extends Model
     {
         return $this->belongsTo('App\City');
     }
+
+    /**
+     * The services provided by the company.
+     */
+    public function services()
+    {
+        return $this->belongsToMany('App\CategoryService');
+    }
 }
