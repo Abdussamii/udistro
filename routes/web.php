@@ -411,6 +411,12 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To fetch the services as per the selected category
 	Route::get('/getcompanycategoryservices', 'CompanyController@getCompanyCategoryServices');
+
+	// To update company additional details
+	Route::post('/updatecompanyadditionaldetails', 'CompanyController@updateCompanyAdditionalDetails');
+
+	// To update company image
+	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
 	
 });
 

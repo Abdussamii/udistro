@@ -342,7 +342,76 @@ $(document).ready(function(){
     $('#btn_update_company_additional_details').click(function(){
     	if( $('#frm_company_additional_details').valid() )
     	{
-    		
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/company/updatecompanyadditionaldetails',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_company_additional_details').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // Company logo form validation
+    $('#frm_company_logo').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_company_logo').validate({
+    	ignore: "not:hidden",
+        rules: {
+        	company_image_upload: {
+        		required: true
+        	}
+        },
+        messages: {
+        	company_image_upload: {
+        		required: 'Please select image'
+        	}	
+        }
+    });
+
+    // To update the company image
+    $('#btn_update_company_logo').click(function(){
+    	if( $('#frm_company_logo').valid() )
+    	{
+    		var fileData = $('#company_image_upload').prop('files')[0];
+
+    		var formData = new FormData();
+    		formData.append('fileData', fileData);
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/company/updatecompanyimage',
+    			method: 'post',
+    			data: formData,
+    		    contentType : false,
+    		    processData : false,
+    			headers: {
+    		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    		    },
+    		    success: function(response){
+    		    	if( response.errCode == 0 )
+    		    	{
+    		    		alertify.success( response.errMsg );
+    		    	}
+    		    	else
+    		    	{
+    		    		alertify.error( response.errMsg );
+    		    	}
+    		    }
+    		});
     	}
     });
 

@@ -365,11 +365,23 @@ class CompanyController extends Controller
 		// Get the service types list
 		$categoryServices = CategoryService::where(['status' => '1', 'company_category_id' => $companyDetails->company_category_id])->select('id', 'service')->orderBy('service', 'asc')->get();
 
+		// Get the services list
+		$services = $companyDetails->services;
+
+		$companyServices = array();
+		if( count( $services ) > 0 )
+		{
+			foreach ($services as $service)
+			{
+				$companyServices[] = $service->id;
+			}
+		}
+
 		// echo '<pre>';
-		// print_r( $categoryServices->toArray() );
+		// print_r( $companyServices );
 		// exit;
 
-    	return view('company/profile', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyDetails' => $companyDetails, 'companyCategories' => $companyCategories, 'categoryServices' => $categoryServices]);
+    	return view('company/profile', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyDetails' => $companyDetails, 'companyCategories' => $companyCategories, 'categoryServices' => $categoryServices, 'companyServices' => $companyServices]);
     }
 
     /**
@@ -627,6 +639,137 @@ class CompanyController extends Controller
     }
 
     /**
+     * Function to update company additional details
+     * @param void
+     * @return array
+     */
+    public function updateCompanyAdditionalDetails()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $companyData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		// Get the logged in user details
+		$user = User::find($userId);
+
+		// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'industry_type'	=> $companyData['company_industry_type']
+		    ),
+		    array(
+		        'industry_type' => array('required')
+		    ),
+		    array(
+		        'industry_type.required' => 'Please select industry type'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Check whether atleast one service is selected or not
+			if( isset( $companyData['company_services'] ) && count( $companyData['company_services'] ) != 0 )
+			{
+				// Check whether target area or working on multiple selection value is available or not
+				if( isset( $companyData['company_target_global'] ) || $companyData['company_target_area'] != '' )
+				{
+					// Get the company associated with the user
+					$userCompany = $user->company->first();
+
+					if( count( $userCompany ) > 0 )
+					{
+						// Update the details
+						$company = Company::find( $userCompany->id );
+
+						$company->company_category_id 	= $companyData['company_industry_type'];
+
+						if( isset( $companyData['company_target_area'] ) )
+						{
+							$company->target_area = $companyData['company_target_area'];
+						}
+						else
+						{
+							$company->target_area = null;	
+						}
+
+
+						if( isset( $companyData['company_target_global'] ) )
+						{
+							$company->working_globally = $companyData['company_target_global'];
+						}
+						else
+						{
+							$company->working_globally = '0';
+						}
+
+						if( isset( $companyData['company_availability_mode'] ) )
+						{
+							$company->availability_mode = $companyData['company_availability_mode'];
+						}
+						else
+						{
+							$company->availability_mode = '0';
+						}
+
+						$company->updated_by = $userId;
+
+						if( $company->save() )
+						{
+							// Update the services provided by the company
+							$userCompany->services()->sync($companyData['company_services']);
+
+							$response['errCode']    = 0;
+				        	$response['errMsg']     = 'Company Additional details updated successfully';
+						}
+						else
+						{
+							$response['errCode']    = 2;
+					        $response['errMsg']     = 'Some error in updating the company additional details';
+						}
+					}
+					else
+					{
+						$response['errCode']    = 4;
+				        $response['errMsg']     = 'Invalid company';
+					}
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Please provide target area';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 3;
+		        $response['errMsg']     = 'Please select atleast one service';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
      * Function to fetch the services as per the selected category
      * @param void
      * @return array
@@ -650,6 +793,103 @@ class CompanyController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to update company image
+     * @param void
+     * @return array
+     */
+    public function updateCompanyImage(Request $request)
+    {
+    	$companyImage = $request->file('fileData');
+    	
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the company details associated with the user
+        $user = User::find($userId);
+        $companyDetails = $user->company->first();
+
+        $validation = Validator::make(
+		    array(
+		        'companyImage' => $companyImage
+		    ),
+		    array(
+		        'companyImage' => array('required')
+		    ),
+		    array(
+		        'companyImage.required' => 'Please select image to upload'
+		    )
+		);
+
+        $response = array();
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Image destination folder
+			$destinationPath = storage_path() . '/uploads/company';
+
+			if( $companyImage->isValid() )  // If the file is valid or not
+			{
+			    $fileExt  = $companyImage->getClientOriginalExtension();
+			    $fileType = $companyImage->getMimeType();
+			    $fileSize = $companyImage->getSize();
+
+			    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+			    {
+			        // Rename the file
+			        $fileNewName = str_random(10) . '.' . $fileExt;
+
+			        if( $companyImage->move( $destinationPath, $fileNewName ) )
+			        {
+			        	// Update the image entry in table
+			        	$company = Company::find($companyDetails->id);
+
+			        	$company->image = $fileNewName;
+			        	$company->updated_by = $userId;
+
+			        	if( $company->save() )
+			        	{
+			        		$response['errCode']    = 0;
+		        			$response['errMsg']     = 'Image uploaded successfully';
+		        			$response['imgPath']    = url('/images/company/' . $fileNewName);
+			        	}
+			        	else
+			        	{
+			        		$response['errCode']    = 2;
+		                	$response['errMsg']     = 'Some error in image upload';
+			        	}
+			        }
+		        	else
+		        	{
+		        		$response['errCode']    = 3;
+		                $response['errMsg']     = 'Some error in image upload';
+		        	}
+			    }
+		    	else
+		    	{
+		    		$response['errCode']    = 4;
+		            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+		    	}
+			}
+			else
+			{
+				$response['errCode']    = 5;
+		        $response['errMsg']     = 'Invalid file';
+			}
+		}
+
+		return response()->json($response);
     }
 
 
@@ -1344,7 +1584,7 @@ class CompanyController extends Controller
      * @param void
      * @return array
      */
-    public function updateCompanyImage(Request $request)
+    /*public function updateCompanyImage(Request $request)
     {
     	$companyImage = $request->file('fileData');
     	$companyId = $request->input('companyId');
@@ -1431,7 +1671,7 @@ class CompanyController extends Controller
 		}
 
 		return response()->json($response);
-    }
+    }*/
     
     /**
      * Function to return the company agent view
