@@ -1449,7 +1449,7 @@ class CompanyController extends Controller
 
         $companies 	= DB::select(
                         DB::raw(
-                        	"SELECT t1.id, t1.company_name, t1.address, t1.postal_code, t1.status, t3.email, t3.fname, CONCAT_WS(' ', t3.fname, t3.lname) AS rep_name, 
+                        	"SELECT t1.id, t1.company_name, t1.address1, t1.postal_code, t1.status, t3.email, t3.fname, CONCAT_WS(' ', t3.fname, t3.lname) AS rep_name, 
 							t5.category,
 							t6.name AS province, t7.name AS city 
 							FROM companies AS t1 
@@ -1495,7 +1495,7 @@ class CompanyController extends Controller
    	                0 => $company->id,
    	                1 => ucwords( strtolower( $company->company_name ) ),
    	                2 => ucwords( strtolower( $company->category ) ),
-   	                3 => ucfirst( strtolower( $company->address ) ),
+   	                3 => ucfirst( strtolower( $company->address1 ) ),
    	                4 => ucfirst( strtolower( $company->province ) ),
    	                5 => ucfirst( strtolower( $company->city ) ),
    	                6 => $company->postal_code,
