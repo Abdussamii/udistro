@@ -389,7 +389,16 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="{{ url('administrator/activity') }}"><i class="fa fa-dashboard fa-fw"></i> Activity</a>
+                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Activity<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/activity') }}"> Activity List</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/activityfeedback') }}"> Activity Feedback</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
                         </li>
                     </ul>
                 </div>
