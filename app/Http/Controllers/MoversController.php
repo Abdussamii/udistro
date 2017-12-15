@@ -201,7 +201,7 @@ class MoversController extends Controller
     	$movingItemCategories = MovingItemCategory::where('status', '1')->select('id', 'item_name')->orderBy('id', 'asc')->get();
 
     	// Get the moving item category details
-    	$movingItemDetails = MovingItemDetail::where('status', '1')->select('id', 'moving_item_category_id', 'item_name')->orderBy('id', 'asc')->get();
+    	$movingItemDetails = MovingItemDetail::where('status', '1')->select('id', 'moving_item_category_id', 'item_name', 'item_weight')->orderBy('id', 'asc')->get();
 
     	// echo '<pre>';
     	// print_r( $movingItemDetails->toArray() );

@@ -51,61 +51,75 @@
 <script type="text/javascript" src="{{ URL::asset('js/alertify.min.js') }}"></script>
 <link rel="stylesheet" href="{{ URL::asset('css/alertify.min.css') }}" />
 
-	<script>
-	// To show the to navigation when page is scroll down
-	$(function(){
-	    var navbar = $('.navbar');
-	    $(window).scroll(function(){
-	        if($(window).scrollTop() <= 40){
-	       		navbar.css('display', 'none');
-	        } else {
-	          navbar.css('display', 'block'); 
-	        }
-	    });
+<!-- Multiple Select Dropdown -->
+<script type="text/javascript" src="{{ URL::asset('js/multiple-select.js') }}"></script>
+<link rel="stylesheet" href="{{ URL::asset('css/multiple-select.css') }}" />
 
-	    calculateRoute('{{ $clientMovingFromAddress->address . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address . ' ' . $clientMovingToProvince->name }}');
-	});
+<script>
+// To show the to navigation when page is scroll down
+$(function(){
+    var navbar = $('.navbar');
+    $(window).scroll(function(){
+        if($(window).scrollTop() <= 40){
+       		navbar.css('display', 'none');
+        } else {
+          navbar.css('display', 'block'); 
+        }
+    });
 
-	// To create route between two addresses
-	function calculateRoute(from, to) {
-	  // Center initialized to Naples, Italy
-	  var myOptions = {
-	    zoom: 10,
-	    center: new google.maps.LatLng(56.1304, 106.3468),
-	    mapTypeId: google.maps.MapTypeId.ROADMAP
-	  };
-	  // Draw the map
-	  var mapObject = new google.maps.Map(document.getElementById("map"), myOptions);
-	  var directionsService = new google.maps.DirectionsService();
-	  var directionsRequest = {
-	    origin: from,
-	    destination: to,
-	    travelMode: google.maps.DirectionsTravelMode.DRIVING,
-	    unitSystem: google.maps.UnitSystem.METRIC
-	  };
-	  directionsService.route(
-	    directionsRequest,
-	    function(response, status)
-	    {
-	      if (status == google.maps.DirectionsStatus.OK)
-	      {
-	        new google.maps.DirectionsRenderer({
-	          map: mapObject,
-	          directions: response
-	        });
-	      }
-	      else
-	        alert('Unable to retrieve your route');
-	    }
-	  );
-	}
-	</script>
+    // Multi-select Inintialize
+    $('.multiselect').multipleSelect({
+    	placeholder: 'Select',
+        selectAll: false,
+        multiple: true,
+        width: 880,
+        multipleWidth: 280
+    });
 
-	<style type="text/css">
-	.error {
-		color: red;
-	}
-	</style>
+    // Call the method to calculate the route between two addresses
+    calculateRoute('{{ $clientMovingFromAddress->address . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address . ' ' . $clientMovingToProvince->name }}');
+});
+
+// To create route between two addresses
+function calculateRoute(from, to) {
+  // Center initialized to Naples, Italy
+  var myOptions = {
+    zoom: 10,
+    center: new google.maps.LatLng(56.1304, 106.3468),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  // Draw the map
+  var mapObject = new google.maps.Map(document.getElementById("map"), myOptions);
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRequest = {
+    origin: from,
+    destination: to,
+    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+    unitSystem: google.maps.UnitSystem.METRIC
+  };
+  directionsService.route(
+    directionsRequest,
+    function(response, status)
+    {
+      if (status == google.maps.DirectionsStatus.OK)
+      {
+        new google.maps.DirectionsRenderer({
+          map: mapObject,
+          directions: response
+        });
+      }
+      else
+        alert('Unable to retrieve your route');
+    }
+  );
+}
+</script>
+
+<style type="text/css">
+.error {
+	color: red;
+}
+</style>
 </head>
 
 <body>
@@ -1329,7 +1343,7 @@
 
 <!-- Moving Companies Modal -->
 <div id="moving_companies_modal" class="modal fade">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="width: 80%">
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
@@ -1454,10 +1468,9 @@
 						                    		{
 						                    		?>
 						                    			<div class="form-group">
-						                        			<div class="col-sm-6 col-md-6 col-lg-6"><label>{{ $movingItemCategory->item_name }}</label></div>
-						                        			<div class="col-sm-6 col-md-6 col-lg-6">
-						                        				<select name="moving_house_description_{{ $movingItemCategory->id }}" id="moving_house_description_{{ $movingItemCategory->id }}" class="form-control moving_house_description">
-						                        					<option value="">Select</option>
+						                        			<div class="col-sm-2 col-md-2 col-lg-2"><label>{{ $movingItemCategory->item_name }}</label></div>
+						                        			<div class="col-sm-10 col-md-10 col-lg-10">
+						                        				<select name="moving_house_description_{{ $movingItemCategory->id }}[]" id="moving_house_description_{{ $movingItemCategory->id }}" class="moving_house_description multiselect" multiple="true">
 								                        			<?php
 								                        			if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
 								                        			{
@@ -1465,7 +1478,7 @@
 								                        				{
 								                        					if( $movingItemDetail->moving_item_category_id == $movingItemCategory->id )
 								                        					{
-								                        						echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name .'</option>';
+								                        						echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name . ' - ' . $movingItemDetail->item_weight .'</option>';
 								                        					}
 								                        				}
 								                        			}
