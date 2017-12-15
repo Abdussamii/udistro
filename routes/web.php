@@ -370,6 +370,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To update the user feedback on individual activity
 	Route::post('/updateactivityfeedback', 'MoversController@updateActivityFeedback');
+
+	// To save the user's moving query detail
+	Route::post('/saveusermovingquery', 'MoversController@saveUserMovingQuery');
 	
 });
 

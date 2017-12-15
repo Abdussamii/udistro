@@ -672,38 +672,58 @@ $(document).ready(function(){
 			moving_house_from_bedroom_count: { required: 'Please select bedroom count' },
 			moving_house_from_property_type: { required: 'Please select property type' },
 
-			moving_house_description_1:  { required: true },
-			moving_house_description_2:  { required: true },
-			moving_house_description_3:  { required: true },
-			moving_house_description_4:  { required: true },
-			moving_house_description_5:  { required: true },
-			moving_house_description_6:  { required: true },
-			moving_house_description_7:  { required: true },
-			moving_house_description_8:  { required: true },
-			moving_house_description_9:  { required: true },
-			moving_house_description_10: { required: true },
+			moving_house_description_1:  { required: 'Please select a option' },
+			moving_house_description_2:  { required: 'Please select a option' },
+			moving_house_description_3:  { required: 'Please select a option' },
+			moving_house_description_4:  { required: 'Please select a option' },
+			moving_house_description_5:  { required: 'Please select a option' },
+			moving_house_description_6:  { required: 'Please select a option' },
+			moving_house_description_7:  { required: 'Please select a option' },
+			moving_house_description_8:  { required: 'Please select a option' },
+			moving_house_description_9:  { required: 'Please select a option' },
+			moving_house_description_10: { required: 'Please select a option' },
 
-			moving_house_special_instruction_1: { required: true },
-			moving_house_special_instruction_2: { required: true },
-			moving_house_special_instruction_3: { required: true },
-			moving_house_special_instruction_4: { required: true },
-			moving_house_special_instruction_5: { required: true },
+			moving_house_special_instruction_1: { required: 'Please select a option' },
+			moving_house_special_instruction_2: { required: 'Please select a option' },
+			moving_house_special_instruction_3: { required: 'Please select a option' },
+			moving_house_special_instruction_4: { required: 'Please select a option' },
+			moving_house_special_instruction_5: { required: 'Please select a option' },
 
-			moving_house_additional_service_1: { required: true },
-			moving_house_additional_service_2: { required: true },
-			moving_house_additional_service_3: { required: true },
-			moving_house_additional_service_4: { required: true },
+			moving_house_additional_service_1: { required: 'Please select a option' },
+			moving_house_additional_service_2: { required: 'Please select a option' },
+			moving_house_additional_service_3: { required: 'Please select a option' },
+			moving_house_additional_service_4: { required: 'Please select a option' },
 
-			moving_house_vehicle_type: { required: true },
-			moving_house_packing_issue: { required: true },
-			moving_house_callback_option: { required: true }
+			moving_house_vehicle_type: { required: 'Please select a option' },
+			moving_house_packing_issue: { required: 'Please select a option' },
+			moving_house_callback_option: { required: 'Please select a option' }
 		}
 	});
 
+	// To save the user's moving query detail
 	$('#btn_submit_moving_query').click(function(){
 		if( $('#frm_home_moving_companies').valid() )
 		{
-			console.log( $('#frm_home_moving_companies').serialize() );
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/saveusermovingquery',
+				method: 'post',
+				data: {
+					frmData: $('#frm_home_moving_companies').serialize()
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+				    {
+				    	alertify.success(response.errMsg);
+				    }
+				    else
+				    {
+				    	alertify.error(response.errMsg);
+				    }
+			    }
+			});
 		}
 	});
 

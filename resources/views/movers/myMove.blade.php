@@ -2370,25 +2370,5 @@
 </div>
 <!-- Form submit confirmation modal -->
 
-<!-- Quotation confirmation modal -->
-<div id="quotation_confirmation_modal" class="modal fade">
-    <div class="modal-dialog">
-    <!-- Modal content-->
-	    <div class="modal-content">
-	    	<div class="modal-body">
-	      		<div class="close close-btn" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
-	      		<div>
-	      			Are you sure?
-	      		</div>
-		    </div>
-		    <div class="modal-footer">
-				<button type="button" data-dismiss="modal" class="btn btn-primary" id="btn_quotation_confirmation">Yes</button>
-				<button type="button" data-dismiss="modal" class="btn" id="btn_quotation_decline">No</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Quotation confirmation modal -->
-
 </body>
 </html> 

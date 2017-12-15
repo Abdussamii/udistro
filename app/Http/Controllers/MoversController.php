@@ -525,6 +525,23 @@ class MoversController extends Controller
     }
 
     /**
+     * Function save the user's moving query detail
+     * @param void
+     * @return array
+     */
+    public function saveUserMovingQuery()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$details = array();
+    	parse_str($frmData, $details);
+
+    	print_r( $details );
+
+    	exit;
+    }
+
+    /**
 	 * Return the first letter of each word in uppercase - if it's too long.
 	 *
 	 * @param string $str
