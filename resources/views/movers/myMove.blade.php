@@ -1355,44 +1355,42 @@
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse1">Indicate type of cleaning</a>
-						                    </h4>
-						                </div>
-						                <div id="home_moving_companies_collapse1" class="panel-collapse collapse in">
-						                    <div class="panel-body">
-						                        <div><label><input type="checkbox" name=""> Move in cleaning</label></div>
-						                        <div><label><input type="checkbox" name=""> Move out cleaning</label></div>
-						                    </div>
-						                </div>
-						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse2">Moving From</a>
 						                    </h4>
 						                </div>
-						                <div id="home_moving_companies_collapse2" class="panel-collapse collapse">
+						                <div id="home_moving_companies_collapse2" class="panel-collapse collapse in">
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
+						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
 						                        	</select>
 						                        </div>
 						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1407,7 +1405,8 @@
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control">
+						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
+						                        		<option value="">Select</option>
 						                        		<option value="House">House</option>
 						                        		<option value="Apartment/Flat">Apartment/Flat</option>
 						                        		<option value="Condo">Condo</option>
@@ -1415,16 +1414,26 @@
 						                        	</select>
 						                        </div>
 						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1437,106 +1446,78 @@
 						                </div>
 						                <div id="home_moving_companies_collapse4" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<label>Home Condition</label>
-						                        	<label class="form-group"><input type="radio" name="">Dirty</label>
-						                        	<label class="form-group"><input type="radio" name="">Clean</label>
-						                        	<label class="form-group"><input type="radio" name="">Average</label>
-						                        	<label class="form-group"><input type="radio" name="">Poor</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many levels do you have</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Size of area you want to clean</label>
-						                        	<label class="form-group"><input type="radio" name="">0-600 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">600-1500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">1500-2500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">above 2500 sqft</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many peoples live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many pets live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many bathrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Streaming Carpet Cleaning</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Rooms</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Hall Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Other place to clean</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Kitchen</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Dinning Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Office Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Half Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Interior</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Staircase</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Recreation Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Den</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Laundry</label>
-						                        </div>
+						                    	<?php
+						                    	// Moving item categories
+						                    	if( isset( $movingItemCategories ) && count( $movingItemCategories ) > 0 )
+						                    	{
+						                    		foreach ($movingItemCategories as $movingItemCategory)
+						                    		{
+						                    		?>
+						                    			<div class="form-group">
+						                        			<div class="col-sm-6 col-md-6 col-lg-6"><label>{{ $movingItemCategory->item_name }}</label></div>
+						                        			<div class="col-sm-6 col-md-6 col-lg-6">
+						                        				<select name="moving_house_description_{{ $movingItemCategory->id }}" id="moving_house_description_{{ $movingItemCategory->id }}" class="form-control moving_house_description">
+						                        					<option value="">Select</option>
+								                        			<?php
+								                        			if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
+								                        			{
+								                        				foreach ($movingItemDetails as $movingItemDetail)
+								                        				{
+								                        					if( $movingItemDetail->moving_item_category_id == $movingItemCategory->id )
+								                        					{
+								                        						echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name .'</option>';
+								                        					}
+								                        				}
+								                        			}
+								                        			?>
+							                        			</select>
+						                        			</div>
+						                        		</div>
+						                        		<div class="clearfix"></div>
+						                    		<?php
+						                    		}
+						                    	}
+						                    	?>
 						                    </div>
 						                </div>
 						            </div>
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse5">Additional Services</a>
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse5">Special Instructions</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<label>Oven inside cleaned</label>
+						                        	<label>I have all items already in boxes and locked?</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_1" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_1" value="0">No</label>
+						                        	<div><label id="moving_house_special_instruction_1-error" class="error" for="moving_house_special_instruction_1"></label></div>
 						                        </div>
 						                        <div class="form-group">
-						                        	<label>Fridge inside cleaned</label>
+						                        	<label>You need to move stuff from the basement?</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_2" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_2" value="0">No</label>
+						                        	<div><label id="moving_house_special_instruction_2-error" class="error" for="moving_house_special_instruction_2"></label></div>
 						                        </div>
 						                        <div class="form-group">
-						                        	<label>How many balconies would you like to have swept</label>
+						                        	<label>You need to move stuff from the garage?</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_3" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_3" value="0">No</label>
+						                        	<div><label id="moving_house_special_instruction_3-error" class="error" for="moving_house_special_instruction_3"></label></div>
 						                        </div>
 						                        <div class="form-group">
-						                        	<label>How many windows(interior) would you like to have washed</label>
+						                        	<label>You need to move play structure from the nursery?</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_4" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_4" value="0">No</label>
+						                        	<div><label id="moving_house_special_instruction_4-error" class="error" for="moving_house_special_instruction_4"></label></div>
 						                        </div>
 						                        <div class="form-group">
-						                        	<label>How many windows(exterior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like wet wiping blinds? How many?</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Cleaning behind the refrigrator and stove</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like baseboard to be washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Clean Fireplace</label>
+						                        	<label>You need to move children swing set?</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_5" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_special_instruction_5" value="0">No</label>
+						                        	<div><label id="moving_house_special_instruction_5-error" class="error" for="moving_house_special_instruction_5"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1544,14 +1525,69 @@
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse6">Call Me On</a>
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse6">Additional Services</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse6" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<input type="" name="" placeholder="Contact Number" class="form-control">
-						                        	<button type="button" class="btn">+</button>
+						                        	<label>I need packaging services?</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_1" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_1" value="0">No</label>
+						                        	<div><label id="moving_house_additional_service_1-error" class="error" for="moving_house_additional_service_1"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>I need packaging boxes?</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_2" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_2" value="0">No</label>
+						                        	<div><label id="moving_house_additional_service_2-error" class="error" for="moving_house_additional_service_2"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>I need to disassemble and re-assemble items?</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_3" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_3" value="0">No</label>
+						                        	<div><label id="moving_house_additional_service_3-error" class="error" for="moving_house_additional_service_3"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>I need storage service?</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_4" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_additional_service_4" value="0">No</label>
+						                        	<div><label id="moving_house_additional_service_4-error" class="error" for="moving_house_additional_service_4"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Transportation Vehicle?</label>
+						                        	<br>
+						                        	<label><input type="radio" name="moving_house_vehicle_type" value="pickup">Pickup</label>
+						                        	<label><input type="radio" name="moving_house_vehicle_type" value="cargo van">Cargo Van</label>
+						                        	<label><input type="radio" name="moving_house_vehicle_type" value="10' truck">10' Truck</label>
+						                        	<label><input type="radio" name="moving_house_vehicle_type" value="15' truck">15' Truck</label>
+						                        	<label><input type="radio" name="moving_house_vehicle_type" value="17' truck">17' Truck</label>
+						                        	<label><input type="radio" name="moving_house_vehicle_type" value="26' Truck">26' Truck</label>
+						                        	<div><label id="moving_house_vehicle_type-error" class="error" for="moving_house_vehicle_type"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Any packing issue in the house?</label>
+						                        	<label> <input type="radio" name="moving_house_packing_issue" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_packing_issue" value="0">No</label>
+						                        	<div><label id="moving_house_packing_issue-error" class="error" for="moving_house_packing_issue"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Call back option?</label>
+						                        	<label> <input type="radio" name="moving_house_callback_option" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_callback_option" value="0">No</label>
+						                        	<div><label id="moving_house_callback_option-error" class="error" for="moving_house_callback_option"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Call back time?</label>
+						                        	<label> <input type="radio" name="moving_house_callback_time" value="anytime">Anytime</label>
+						                        	<label> <input type="radio" name="moving_house_callback_time" value="daytime">Daytime</label>
+						                        	<label> <input type="radio" name="moving_house_callback_time" value="evening">Evening</label>
+						                        	<div><label id="moving_house_callback_time-error" class="error" for="moving_house_callback_time"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Call me on?</label>
+						                        	<input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
+						                        	<input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
 						                        </div>
 						                    </div>
 						                </div>
@@ -1564,16 +1600,14 @@
 						                </div>
 						                <div id="home_moving_companies_collapse7" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <textarea class="form-control">
-						                        	
-						                        </textarea>
+						                        <textarea class="form-control" name="moving_house_additional_information" id="moving_house_additional_information"></textarea>
 						                    </div>
 						                </div>
 						            </div>
 						        </div>
 
 						        <div>
-						        	<button type="button" class="btn btn-info">Submit</button>
+						        	<button type="submit" class="btn btn-info" name="" id="btn_submit_moving_query">Submit</button>
 						        </div>
 						    </form>
       					</div>
@@ -2335,6 +2369,26 @@
 	</div>
 </div>
 <!-- Form submit confirmation modal -->
+
+<!-- Quotation confirmation modal -->
+<div id="quotation_confirmation_modal" class="modal fade">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div>
+	      			Are you sure?
+	      		</div>
+		    </div>
+		    <div class="modal-footer">
+				<button type="button" data-dismiss="modal" class="btn btn-primary" id="btn_quotation_confirmation">Yes</button>
+				<button type="button" data-dismiss="modal" class="btn" id="btn_quotation_decline">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Quotation confirmation modal -->
 
 </body>
 </html> 

@@ -618,6 +618,95 @@ $(document).ready(function(){
 		StepMovingCompanies++;
 	});*/
 
+	// Save the query data
+	$('#frm_home_moving_companies').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_home_moving_companies').validate({
+		ignore: "not:hidden",
+		rules: 
+		{
+			moving_house_to_type: { required: true },
+			moving_house_to_level: { required: true },
+			moving_house_to_bedroom_count: { required: true },
+			moving_house_to_property_type: { required: true },
+			moving_house_from_type: { required: true },
+			moving_house_from_level: { required: true },
+			moving_house_from_bedroom_count: { required: true },
+			moving_house_from_property_type: { required: true },
+
+			moving_house_description_1:  { required: true },
+			moving_house_description_2:  { required: true },
+			moving_house_description_3:  { required: true },
+			moving_house_description_4:  { required: true },
+			moving_house_description_5:  { required: true },
+			moving_house_description_6:  { required: true },
+			moving_house_description_7:  { required: true },
+			moving_house_description_8:  { required: true },
+			moving_house_description_9:  { required: true },
+			moving_house_description_10: { required: true },
+
+			moving_house_special_instruction_1: { required: true },
+			moving_house_special_instruction_2: { required: true },
+			moving_house_special_instruction_3: { required: true },
+			moving_house_special_instruction_4: { required: true },
+			moving_house_special_instruction_5: { required: true },
+
+			moving_house_additional_service_1: { required: true },
+			moving_house_additional_service_2: { required: true },
+			moving_house_additional_service_3: { required: true },
+			moving_house_additional_service_4: { required: true },
+
+			moving_house_vehicle_type: { required: true },
+			moving_house_packing_issue: { required: true },
+			moving_house_callback_option: { required: true }
+		},
+		messages: 
+		{
+			moving_house_to_type: { required: 'Select the type' },
+			moving_house_to_level: { required: 'Please select floor level' },
+			moving_house_to_bedroom_count: { required: 'Please select bedroom count' },
+			moving_house_to_property_type: { required: 'Please select property type' },
+			moving_house_from_type: { required: 'Select the type' },
+			moving_house_from_level: { required: 'Please select floor level' },
+			moving_house_from_bedroom_count: { required: 'Please select bedroom count' },
+			moving_house_from_property_type: { required: 'Please select property type' },
+
+			moving_house_description_1:  { required: true },
+			moving_house_description_2:  { required: true },
+			moving_house_description_3:  { required: true },
+			moving_house_description_4:  { required: true },
+			moving_house_description_5:  { required: true },
+			moving_house_description_6:  { required: true },
+			moving_house_description_7:  { required: true },
+			moving_house_description_8:  { required: true },
+			moving_house_description_9:  { required: true },
+			moving_house_description_10: { required: true },
+
+			moving_house_special_instruction_1: { required: true },
+			moving_house_special_instruction_2: { required: true },
+			moving_house_special_instruction_3: { required: true },
+			moving_house_special_instruction_4: { required: true },
+			moving_house_special_instruction_5: { required: true },
+
+			moving_house_additional_service_1: { required: true },
+			moving_house_additional_service_2: { required: true },
+			moving_house_additional_service_3: { required: true },
+			moving_house_additional_service_4: { required: true },
+
+			moving_house_vehicle_type: { required: true },
+			moving_house_packing_issue: { required: true },
+			moving_house_callback_option: { required: true }
+		}
+	});
+
+	$('#btn_submit_moving_query').click(function(){
+		if( $('#frm_home_moving_companies').valid() )
+		{
+			console.log( $('#frm_home_moving_companies').serialize() );
+		}
+	});
+
 	/* ---------- Moving Companies functionality ends ---------- */
 
 	/* ---------- Tech Concierge functionality ---------- */
