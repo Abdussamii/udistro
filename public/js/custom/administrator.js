@@ -993,6 +993,24 @@ $(document).ready(function(){
         ]
     });
 
+    $('#datatable_activity_feedback').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchactivityfeedback',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+        ]
+    });
+
     $('#datatable_industry').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,

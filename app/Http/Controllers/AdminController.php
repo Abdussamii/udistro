@@ -175,6 +175,72 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to return the activity feedback page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function activityFeedback()
+    {
+        return view('administrator/activityfeedback');
+    }
+
+    /**
+     * Function to return the activity feedback view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchActivityFeedback()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+                0 => 't1.id',
+                1 => 't1.activity',
+                2 => 'YesCount',
+                3 => 'NoCount',
+            );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $activityFeedback  = DB::select(
+                        		DB::raw("SELECT SUM(case t2.action when '1' then 1 else 0 end) YesCount, SUM(case t2.action when '0' then 1 else 0 end) NoCount, t1.id, t1.activity FROM client_activity_lists as t1 left join client_activity_logs as t2 ON (t1.id = t2.activity_id) where t1.id != 1 and t1.listing_event = '1' and t1.status = '1' GROUP BY t1.id ORDER BY t1.id asc")
+                    		);
+
+        // Assign it to the datatable pagination variable
+        $iTotal = count($activityFeedback);
+
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $activityFeedback ) > 0 )
+        {
+            foreach ($activityFeedback as $activities)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $activities->id,
+                    1 => ucfirst( strtolower($activities->activity)),
+                    2 => $activities->YesCount,
+                    3 => $activities->NoCount
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
      * Function to save the navigation category
      * @param void
      * @return array
