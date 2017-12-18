@@ -2175,7 +2175,7 @@ $(document).ready(function(){
 	        company_category: {
 	        	required: true
 	        },
-	        company_addres: {
+	        company_address1: {
 	        	required: true
 	        },
 	        company_province: {
@@ -2184,7 +2184,10 @@ $(document).ready(function(){
 	        company_city: {
 	        	required: true
 	        },
-	        postal_code: {
+            company_country: {
+                required: true
+            },
+	        company_postalcode: {
 	        	required: true
 	        },
 			company_status: {
@@ -2209,7 +2212,7 @@ $(document).ready(function(){
 	        company_category: {
 	        	required: 'Please select company category'
 	        },
-	        company_addres: {
+	        company_address1: {
 	        	required: 'Please enter company address'
 	        },
 	        company_province: {
@@ -2218,7 +2221,10 @@ $(document).ready(function(){
 	        company_city: {
 	        	required: 'Please select city'
 	        },
-	        postal_code: {
+            company_country: {
+                required: 'Please select country'
+            },
+	        company_postalcode: {
 	        	required: 'Please enter postal code'
 	        },
 	        company_status: {

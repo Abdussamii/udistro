@@ -2,7 +2,40 @@
 @section('title', 'Udistro | Companies')
 
 @section('content')
+	<!-- Multiple Select Dropdown -->
+	<script type="text/javascript" src="{{ URL::asset('js/multiple-select.js') }}"></script>
+	<link rel="stylesheet" href="{{ URL::asset('css/multiple-select.css') }}" />
+
+	<!-- Canada Post API -->
+	<script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=kp88-mx67-ff25-xd59"></script>
+	<link rel="stylesheet" type="text/css" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.30.min.css?key=kp88-mx67-ff25-xd59" />
+
 	<script type="text/javascript">
+	var fields = [
+		{ element: "street-address", field: "Line1" },
+		{ element: "street-address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "postcode", field: "PostalCode" },
+		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+	],
+	options = {
+		key: "kp88-mx67-ff25-xd59"
+	},
+	control = new pca.Address(fields, options);
+
+	// On the selesction of address get the province abbreviation, and set it on the province dropdown
+	control.listen("populate", function (address) {
+
+	    $("#company_province option").each(function() {
+			if($(this).data('abbreviation') == address.Province)
+			{
+				$(this).attr('selected', 'selected').change();
+			}
+		});
+
+	});
+
 	$(document).ready(function(){
 		// To pot a space after user enters 3 characters like (123 456)
 		$('#postal_code').keyup(function() {
@@ -104,38 +137,76 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="company_address">Company Address</label>
-								<textarea name="company_address" id="company_address" placeholder="Enter address" class="form-control"></textarea>
-							</div>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="company_province">Province</label>
-								  		<select name="company_province" id="company_province" class="form-control">
-								  			<option value="">Select</option>
-								  			<?php
-								  			if( isset( $provinces ) && count( $provinces ) > 0 )
-								  			{
-								  				foreach ($provinces as $province)
-								  				{
-								  					echo '<option value="'. $province->id .'">'. $province->name .'</option>';
-								  				}
-								  			}
-								  			?>
-								  		</select>
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="company_city">City</label>
-								  		<select name="company_city" id="company_city" class="form-control">
-								  			<option value="">Select</option>
-								  		</select>
-								  	</div>
+								<label class="control-label">Address Line 1:</label>
+								<div class="input-line">
+									<input id="street-address" name="company_address1" type="text" class="form-control" placeholder="Street address" value="" />
 								</div>
 							</div>
-
 							<div class="form-group">
-								<label for="postal_code">Postal Code</label>
-								<input type="text" name="postal_code" id="postal_code" class="form-control" placeholder="Enter postal code">
+								<label class="control-label">Address Line 2:</label>
+								<div class="input-line">
+									<input id="street-address2" name="company_address2" type="text" class="form-control" placeholder="Street address" value="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">City:</label>
+								<div class="input-line">
+									<select name="company_city" id="company_city" class="form-control">
+										<option value="">Select</option>
+										<?php
+										if( isset( $cities ) && count( $cities ) > 0 )
+										{
+											foreach($cities as $city)
+											{
+												$selected = '';
+												echo '<option value="'. $city->id .'" '. $selected .'>'. $city->name .'</option>';
+											}
+										}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Province:</label>
+								<div class="input-line">
+									<select name="company_province" id="company_province" class="form-control">
+										<option value="">Select</option>
+										<?php
+										if( isset( $provinces ) && count( $provinces ) > 0 )
+										{
+											foreach($provinces as $province)
+											{
+												$selected = '';
+												echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'" '. $selected .'>'. $province->name .'</option>';
+											}
+										}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Postalcode:</label>
+								<div class="input-line">
+									<input id="postcode" name="company_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" value="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Country:</label>
+								<div class="input-line">
+									<select name="company_country" id="company_country" class="form-control">
+										<option value="">Select</option>
+										<?php
+										if( isset( $countries ) && count( $countries ) > 0 )
+										{
+											foreach($countries as $country)
+											{
+												$selected = '';
+												echo '<option value="'. $country->id .'" '. $selected .'>'. $country->name .'</option>';
+											}
+										}
+										?>
+									</select>
+								</div>
 							</div>
 							<div class="form-group">
 								<label for="company_status">Status</label>

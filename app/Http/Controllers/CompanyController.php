@@ -1098,9 +1098,15 @@ class CompanyController extends Controller
     	$companyCategories = CompanyCategory::where(['status' => '1'])->select('id', 'category')->orderBy('category', 'asc')->get();
 
     	// Get province list
-    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+    	$provinces 	= Province::where(['status' => '1'])->orderBy('name', 'asc')->select('id', 'abbreviation', 'name')->get();
 
-    	return view('administrator/companies', ['provinces' => $provinces, 'companyCategories' => $companyCategories]);
+    	// Get cities list
+    	$cities 	= City::where(['status' => '1'])->orderBy('name', 'asc')->select('id', 'name')->get();
+
+    	// Get country list
+    	$countries 	= Country::orderBy('name', 'asc')->select('id', 'name')->get();
+
+    	return view('administrator/companies', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyCategories' => $companyCategories]);
     }
 
     /**
@@ -1129,10 +1135,11 @@ class CompanyController extends Controller
 		        'rep_password'		=> $companyDetails['representative_password'],
 		        'company_name'		=> $companyDetails['company_name'],
 		        'company_category'	=> $companyDetails['company_category'],
-		        'company_address'	=> $companyDetails['company_address'],
+		        'company_address'	=> $companyDetails['company_address1'],
 		        'company_province'	=> $companyDetails['company_province'],
 		        'company_city'		=> $companyDetails['company_city'],
-		        'postal_code'		=> $companyDetails['postal_code'],
+		        'company_country'	=> $companyDetails['company_country'],
+		        'postal_code'		=> $companyDetails['company_postalcode'],
 		        'company_status'	=> $companyDetails['company_status'],
 		    ),
 		    array(
@@ -1144,6 +1151,7 @@ class CompanyController extends Controller
 		        'company_address'	=> array('required'),
 		        'company_province'	=> array('required'),
 		        'company_city'		=> array('required'),
+		        'company_country'	=> array('required'),
 		        'postal_code'		=> array('required'),
 		        'company_status'	=> array('required')
 		    ),
@@ -1159,6 +1167,7 @@ class CompanyController extends Controller
 		        'company_address.required' 	=> 'Please enter company address',
 		        'company_province.required' => 'Please select province',
 		        'company_city.required' 	=> 'Please select city',
+		        'company_country.required' 	=> 'Please select country',
 		        'postal_code.required' 		=> 'Please enter postal code',
 		        'company_status.required' 	=> 'Please select status',
 		    )
@@ -1209,10 +1218,12 @@ class CompanyController extends Controller
 
 					$company->company_name 			= $companyDetails['company_name'];	
 					$company->company_category_id 	= $companyDetails['company_category'];
-					$company->address 				= $companyDetails['company_address'];
+					$company->address1	 			= $companyDetails['company_address1'];
+					$company->address2	 			= $companyDetails['company_address2'];
 					$company->province_id 			= $companyDetails['company_province'];
 					$company->city_id 				= $companyDetails['company_city'];
-					$company->postal_code 			= $companyDetails['postal_code'];
+					$company->country_id 			= $companyDetails['company_country'];
+					$company->postal_code 			= $companyDetails['company_postalcode'];
 					$company->status 				= $companyDetails['company_status'];
 					$company->created_by 			= $userId;
 
