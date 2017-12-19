@@ -2081,6 +2081,58 @@ class CompanyController extends Controller
      */
     public function paymentplan()
     {
-    	return view('company/paymentPlan');
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Get the company category, if the company is real estate then the payment plan is for agent, otherwise the plans is for companies
+    	$user = User::find($userId);
+
+    	$userCompany = $user->company->first();
+
+    	$companyType = 'company';
+    	if( $userCompany->company_category_id == 1 )		// Real estate company
+    	{
+    		$companyType = 'agent';
+    	}
+
+    	// Get the payment plan type id for company
+    	$PaymentPlanType = PaymentPlanType::where(['plan_type' => $companyType, 'status' => '1'])->select('id')->first();
+
+    	// Get the payment plan list for companies
+    	$paymentPlans = PaymentPlan::where(['status' => '1', 'plan_type_id' => $PaymentPlanType->id])->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')->get();
+
+    	return view('company/paymentPlan', ['paymentPlans' => $paymentPlans]);
+    }
+
+    /**
+     * Function to return the payment plan page
+     * @param void
+     * @return array
+     */
+    public function updateCompanyPaymentPlan()
+    {
+    	$paymentPlanId = Input::get('paymentPlanId');
+
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Get the company category, if the company is real estate then the payment plan is for agent, otherwise the plans is for companies
+    	$user = User::find($userId);
+
+    	$userCompany = $user->company->first();
+
+    	$companyType = 'company';
+    	if( $userCompany->company_category_id == 1 )		// Real estate company
+    	{
+    		$companyType = 'agent';
+    	}
+
+    	// Get the payment plan type id for company
+    	$PaymentPlanType = PaymentPlanType::where(['plan_type' => $companyType, 'status' => '1'])->select('id')->first();
+
+    	// $paymentPlanSubscription = new 
     }
 }
+// echo '<pre>';
+// print_r( $paymentPlans->toArray() );
+// exit;

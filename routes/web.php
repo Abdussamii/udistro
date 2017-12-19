@@ -401,6 +401,9 @@ Route::group(['prefix' => 'company'], function() {
 
 	// To return the payment plan page
 	Route::get('/paymentplan', 'CompanyController@paymentplan');
+
+	// To update the company payment plan
+	Route::post('/updatecompanypaymentplan', 'CompanyController@updateCompanyPaymentPlan');
 	
 });
 

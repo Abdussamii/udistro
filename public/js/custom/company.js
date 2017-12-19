@@ -417,4 +417,30 @@ $(document).ready(function(){
 
     /* ----- Company profile related functionality ends ----- */
 
+    // To update the company payment plan
+    $('.company_plan_selection').click(function(){
+    	var paymentPlanId = $(this).attr('id');
+
+    	$.ajax({
+    		url: $('meta[name="route"]').attr('content') + '/company/updatecompanypaymentplan',
+    		method: 'post',
+    		data: {
+    			paymentPlanId: paymentPlanId
+    		},
+    		headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	    },
+    	    success: function(response){
+    	    	if( response.errCode == 0 )
+    	    	{
+    	    		alertify.success( response.errMsg );
+    	    	}
+    	    	else
+    	    	{
+    	    		alertify.error( response.errMsg );
+    	    	}
+    	    }
+    	});
+    });
+
 });
