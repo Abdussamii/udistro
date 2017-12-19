@@ -44,27 +44,6 @@
 					<div class="modal-body">
 						<form name="frm_add_payment_plan" id="frm_add_payment_plan" autocomplete="off">
 							<div class="form-group">
-								<label for="payment_plan_name">Payment Plan Name</label>
-								<input type="text" name="payment_plan_name" id="payment_plan_name" class="form-control" placeholder="Enter plan name">
-								<input type="hidden" name="payment_plan_id" id="payment_plan_id">
-							</div>
-							<div class="form-group">
-								<label for="payment_plan_charge">Payment Plan Charge</label>
-								<input type="text" name="payment_plan_charge" id="payment_plan_charge" class="form-control" placeholder="Enter charge">
-							</div>
-							<div class="form-group">
-								<label for="payment_plan_discount">Payment Plan Discount</label>
-								<input type="text" name="payment_plan_discount" id="payment_plan_discount" class="form-control" placeholder="Enter charge">
-							</div>
-							<div class="form-group">
-								<label for="payment_plan_validity">Validity (In days)</label>
-								<input type="text" name="payment_plan_validity" id="payment_plan_validity" class="form-control" placeholder="Enter validity">
-							</div>
-							<div class="form-group">
-								<label for="payment_plan_emails">Number of emails</label>
-								<input type="text" name="payment_plan_emails" id="payment_plan_emails" class="form-control" placeholder="Enter number of emails">
-							</div>
-							<div class="form-group">
 								<label for="payment_plan_type">Plan Type</label>
 								<select name="payment_plan_type" id="payment_plan_type" class="form-control">
 									<option value="">Select</option>
@@ -78,6 +57,27 @@
 									}
 									?>
 								</select>
+							</div>
+							<div class="form-group">
+								<label for="payment_plan_name">Payment Plan Name</label>
+								<input type="text" name="payment_plan_name" id="payment_plan_name" class="form-control" placeholder="Enter plan name">
+								<input type="hidden" name="payment_plan_id" id="payment_plan_id">
+							</div>
+							<div class="form-group">
+								<label for="payment_plan_charge">Payment Plan Charge</label>
+								<input type="text" name="payment_plan_charge" id="payment_plan_charge" class="form-control" placeholder="Enter charge">
+							</div>
+							<div class="form-group">
+								<label for="payment_plan_discount">Payment Plan Discount</label>
+								<input type="text" name="payment_plan_discount" id="payment_plan_discount" class="form-control" placeholder="Enter discount, if any">
+							</div>
+							<div class="form-group">
+								<label for="payment_plan_validity">Validity (In days)</label>
+								<input type="text" name="payment_plan_validity" id="payment_plan_validity" class="form-control" placeholder="Enter validity">
+							</div>
+							<div class="form-group">
+								<label for="payment_plan_emails">Number of emails / Percentage of quotation</label>
+								<input type="text" name="payment_plan_emails" id="payment_plan_emails" class="form-control" placeholder="Enter number of emails / percentage of quotation">
 							</div>
 							<div class="form-group">
 								<label for="payment_plan_status">Status</label>

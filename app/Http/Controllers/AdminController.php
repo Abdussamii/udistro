@@ -2653,7 +2653,7 @@ class AdminController extends Controller
 				$paymentPlan->plan_name 		= $planDetails['payment_plan_name'];
 				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
 				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
-				$paymentPlan->number_of_emails 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->allowed_count 	= $planDetails['payment_plan_emails'];
 				$paymentPlan->plan_type_id 		= $planDetails['payment_plan_type'];
 				$paymentPlan->discount 			= $planDetails['payment_plan_discount'];
 				$paymentPlan->status 			= $planDetails['payment_plan_status'];
@@ -2677,7 +2677,7 @@ class AdminController extends Controller
 				$paymentPlan->plan_name 		= $planDetails['payment_plan_name'];
 				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
 				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
-				$paymentPlan->number_of_emails 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->allowed_count 	= $planDetails['payment_plan_emails'];
 				$paymentPlan->plan_type_id 		= $planDetails['payment_plan_type'];
 				$paymentPlan->discount 			= $planDetails['payment_plan_discount'];
 				$paymentPlan->status 			= $planDetails['payment_plan_status'];
@@ -2719,7 +2719,7 @@ class AdminController extends Controller
             2 => 'plan_charges',
             3 => 'discount',
             4 => 'validity_days',
-            5 => 'number_of_emails',
+            5 => 'allowed_count',
             7 => 'status'
         );
 
@@ -2731,7 +2731,7 @@ class AdminController extends Controller
                     ->orderBy($sortBy, $sortType)
                     ->limit($length)
                     ->offset($start)
-                    ->select('id', 'plan_type_id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'number_of_emails', 'status')
+                    ->select('id', 'plan_type_id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count', 'status')
                     ->get();
 
         $iTotal = PaymentPlan::where('plan_name','like', '%'.$sSearch.'%')->count();
@@ -2755,7 +2755,7 @@ class AdminController extends Controller
                     3 => ( $paymentPlan->discount != '' ) ? $paymentPlan->discount: 'NA',
                     4 => $paymentPlan->validity_days,
                     5 => $paymentPlan->number_of_emails,
-                    6 => PaymentPlan::find($paymentPlan->plan_type_id)->paymentPlanType->plan_type,
+                    6 => ucwords( strtolower( PaymentPlan::find($paymentPlan->plan_type_id)->paymentPlanType->plan_type ) ),
                     7 => Helper::getStatusText($paymentPlan->status),
                     8 => '<a href="javascript:void(0);" id="'. $paymentPlan->id .'" class="edit_payment_plan"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );

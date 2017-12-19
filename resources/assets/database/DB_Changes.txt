@@ -105,3 +105,8 @@ CREATE TABLE `udistro`.`category_service_company` ( `category_service_id` INT(10
 ALTER TABLE `category_service_company` ADD INDEX( `category_service_id`, `company_id`);
 
 ALTER TABLE `category_service_company` ADD UNIQUE( `category_service_id`, `company_id`);
+
+19-12-2017
+
+ALTER TABLE `payment_plans` CHANGE `number_of_emails` `allowed_count` INT(11) NOT NULL COMMENT 'No of emails/quotation allowed in the package';
+ALTER TABLE `payment_plans` CHANGE `allowed_count` `allowed_count` INT(11) NOT NULL COMMENT 'No of emails / quotation percentage allowed in the package';
