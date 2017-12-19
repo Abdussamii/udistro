@@ -377,7 +377,7 @@
                                     <a href="{{ url('/administrator/movingcategory') }}"> Moving Categories</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/administrator/movingdetails') }}"> Moving Details</a>
+                                    <a href="{{ url('/administrator/movingitemdetails') }}"> Moving Details</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

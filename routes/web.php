@@ -113,6 +113,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected moving Category
 	Route::get('/getmovingcategory', 'AdminController@getMovingCategory');
 
+	// To return the moving Category details page
+	Route::get('/movingitemdetails', 'AdminController@movingItemDetails');
+
+	// To save the moving Category details
+	Route::post('/savemovingitemdetails', 'AdminController@saveMovingItemDetails');
+
+	// To show the moving Category details list in datatable
+	Route::get('/fetchmovingitemdetails', 'AdminController@fetchMovingItemDetails');
+
+	// To get the details for the selected moving Category details
+	Route::get('/getmovingitemdetails', 'AdminController@getMovingItemDetails');
+
 	// To return the activity feedback page
 	Route::get('/activityfeedback', 'AdminController@activityFeedback');
 

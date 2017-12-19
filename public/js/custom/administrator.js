@@ -578,6 +578,13 @@ $(document).ready(function(){
         $('#modal_add_moving_category').modal('show');
     });
 
+    // To show the add Moving Category modal
+    $('#btn_modal_moving_item').click(function(){
+        // Set the modal title, as the same modal is used for edit also
+        $('#modal_add_moving_item').find('.modal-title').html('Add Moving Item Detail');
+        $('#modal_add_moving_item').modal('show');
+    });
+
     // To show the add activity modal
     $('#btn_modal_activity').click(function(){
         // Set the modal title, as the same modal is used for edit also
@@ -756,6 +763,101 @@ $(document).ready(function(){
 
                         // Refresh the datatable
                         $('#datatable_moving_category').DataTable().ajax.reload();
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
+    // Add / Edit moving category form validation
+    $('#frm_add_moving_item').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_moving_item').validate({
+        rules: {
+            item_name: {
+                required: true
+            },
+            item_weight: {
+                required: true  
+            },
+            item_status: {
+                required: true
+            },
+            item_category: {
+                required: true
+            }
+        },
+        messages: {
+            item_name: {
+                required: 'Please enter the category name'
+            },
+            item_weight: {
+                required: 'Please enter the item weight'
+            },
+            item_category: {
+                required: 'Please enter the item category'
+            },
+            item_status: {
+                required: 'Please select status'
+            }
+        }
+    });
+
+    // Save the province data
+    $('#btn_add_moving_item').click(function(){
+        if( $('#frm_add_moving_item').valid() )
+        {
+            // Ajax call to save the page related data
+            var $this = $(this);
+            var item_id         = $('#item_id').val();
+            var item_name       = $('#item_name').val();
+            var item_weight     = $('#item_weight').val();
+            var item_category   = $('#item_category').val();
+            var item_status     = $("input[name='item_status']:checked").val();
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('item_id', item_id);
+            formData.append('item_name', item_name);
+            formData.append('item_weight', item_weight);
+            formData.append('item_category', item_category);
+            formData.append('item_status', item_status);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/savemovingitemdetails',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+                        
+                        // Refresh the form and close the modal
+                        $('#frm_add_moving_item')[0].reset();
+
+                        $('#modal_add_moving_item').modal('hide');
+
+                        // Refresh the datatable
+                        $('#datatable_moving_item').DataTable().ajax.reload();
                     }
                     else
                     {
@@ -1078,6 +1180,26 @@ $(document).ready(function(){
         ]
     });
 
+    $('#datatable_moving_item').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchmovingitemdetails',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 2, 3] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
     $('#datatable_activity').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
@@ -1216,6 +1338,40 @@ $(document).ready(function(){
         else
         {
             alertify.error('Missing category id');
+        }
+    });
+
+    // To update the moving category details
+    $(document).on('click', '.edit_moving_item', function(){
+        var movingItemId = $(this).attr('id');
+
+        if( movingItemId != '' )
+        {
+            // Get the province details for the selected province
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/getmovingitemdetails',
+                method: 'get',
+                data: {
+                    movingItemId: movingItemId
+                },
+                success: function(response){
+                    $('#modal_add_moving_category').find('.modal-title').html('Edit Moving Item Name');
+
+                    // Auto-fill the form
+                    $('#frm_add_moving_item #item_id').val(movingItemId);
+                    $('#frm_add_moving_item #item_category').val(response.moving_item_category_id);
+                    $('#frm_add_moving_item #item_name').val(response.item_name);
+                    $('#frm_add_moving_item #item_weight').val(response.item_weight);
+                    $('#frm_add_moving_item input[name="item_status"][value="'+ response.status +'"]').prop('checked', true);
+
+                    // Show the modal
+                    $('#modal_add_moving_item').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing item id');
         }
     });
 
