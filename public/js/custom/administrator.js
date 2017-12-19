@@ -2314,8 +2314,9 @@ $(document).ready(function(){
 			    	$('#frm_edit_company #representative_email').val(response.email);
 			    	$('#frm_edit_company #company_name').val(response.company_name);
 			    	$('#frm_edit_company #company_category').val(response.company_category_id);
-			    	$('#frm_edit_company #company_address').val(response.address);
-			    	$('#frm_edit_company #company_province').val(response.province_id);
+			    	$('#frm_edit_company #company_address1_edit').val(response.address1);
+                    $('#frm_edit_company #company_address2_edit').val(response.address2);
+			    	$('#frm_edit_company #company_province_edit').val(response.province_id);
                     $('#frm_edit_company #company_profile_image').attr('src', response.image);
 			    	
 			    	// Fill the cities
@@ -2324,12 +2325,13 @@ $(document).ready(function(){
 			    	{
 			    	  	cities += '<option value="'+response.cities[key].id+'">'+response.cities[key].city+'</option>';
 			    	}
-			    	$('#frm_edit_company #company_city').html(cities);
+			    	$('#frm_edit_company #company_city_edit').html(cities);
 					
 					// Make the city selected 
 					$('#frm_edit_company #company_city').val(response.city_id);
+                    $('#frm_edit_company #company_country_edit').val(response.country_id);
 
-			    	$('#frm_edit_company #postal_code').val(response.postal_code);
+			    	$('#frm_edit_company #postcode_edit').val(response.postal_code);
 			    	$('#frm_edit_company input[name="company_status"][value="'+ response.status +'"]').prop('checked', true);
 
 			    	// Show the modal
@@ -2448,10 +2450,12 @@ $(document).ready(function(){
             var company_name            = $('#frm_edit_company #company_name').val();
             var company_id              = $('#frm_edit_company #company_id').val();
             var company_category        = $("#frm_edit_company #company_category").val();
-            var company_address         = $('#frm_edit_company #company_address').val();
-            var company_province        = $("#frm_edit_company #company_province").val();
-            var company_city            = $("#frm_edit_company #company_city").val();
-            var postal_code             = $("#frm_edit_company #postal_code").val();
+            var company_address1        = $('#frm_edit_company #street-address_edit').val();
+            var company_address2        = $('#frm_edit_company #street-address2_edit').val();
+            var company_province        = $("#frm_edit_company #company_province_edit").val();
+            var company_city            = $("#frm_edit_company #company_city_edit").val();
+            var company_country         = $("#frm_edit_company #company_country_edit").val();
+            var postal_code             = $("#frm_edit_company #postcode_edit").val();
             var company_status          = $("input[name='company_status_edit']:checked").val();
             var fileData                = $('#frm_edit_company #company_upload_image').prop('files')[0];
 
@@ -2464,9 +2468,11 @@ $(document).ready(function(){
             formData.append('company_name', company_name);
             formData.append('company_id', company_id);
             formData.append('company_category', company_category);
-            formData.append('company_address', company_address);
+            formData.append('company_address1', company_address1);
+            formData.append('company_address2', company_address2);
             formData.append('company_province', company_province);
             formData.append('company_city', company_city);
+            formData.append('company_country', company_country);
             formData.append('postal_code', postal_code);
             formData.append('company_status', company_status);
             
