@@ -371,6 +371,18 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
+                            <a href="#"><i class="fa fa-building-o" aria-hidden="true"></i> Moving Category Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/movingcategory') }}"> Moving Categories</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/movingitemdetails') }}"> Moving Details</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
                             <a href="{{ url('administrator/paymentplans') }}"><i class="fa fa-building-o"></i> Payment Plans</a>
                         </li>
                         <li>
