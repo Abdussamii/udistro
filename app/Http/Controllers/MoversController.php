@@ -24,6 +24,7 @@ use App\ClientActivityLog;
 use App\ClientActivityFeedback;
 use App\MovingItemCategory;
 use App\MovingItemDetail;
+use App\MovingItemServiceRequest;
 
 use Helper;
 use Session;
@@ -533,12 +534,77 @@ class MoversController extends Controller
     {
     	$frmData = Input::get('frmData');
 
+    	// Get the client and invitation id from session
+    	$clientId 		= Session::get('clientId', '');
+    	$invitationId 	= Session::get('invitationId', '');
+
     	$details = array();
     	parse_str($frmData, $details);
 
-    	print_r( $details );
+    	// Check if the request already exist
+    	$movingRequest = MovingItemServiceRequest::where(['status' => '1', 'agent_client_id' => $clientId, 'invitation_id' => $invitationId])->first();
 
-    	exit;
+    	$response = array();
+    	if( count( $movingRequest ) == 0 )
+    	{
+	    	$movingServiceRequest = new MovingItemServiceRequest;
+
+	    	$movingServiceRequest->agent_client_id = $clientId;
+	    	$movingServiceRequest->invitation_id = $invitationId;
+
+	    	$movingServiceRequest->moving_to_house_type = $details['moving_house_to_type'];
+	    	$movingServiceRequest->moving_to_floor = $details['moving_house_to_level'];
+	    	$movingServiceRequest->moving_to_bedroom_count = $details['moving_house_to_bedroom_count'];
+	    	$movingServiceRequest->moving_to_property_type = $details['moving_house_to_property_type'];
+
+	    	$movingServiceRequest->moving_from_house_type = $details['moving_house_from_type'];
+	    	$movingServiceRequest->moving_from_floor = $details['moving_house_from_level'];
+	    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
+	    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
+
+	    	$movingServiceRequest->items_in_storage_locker_already = $details['moving_house_special_instruction_1'];
+	    	$movingServiceRequest->needs_to_move_things_from_basement = $details['moving_house_special_instruction_2'];
+	    	$movingServiceRequest->move_items_from_my_garage_include_also = $details['moving_house_special_instruction_3'];
+	    	$movingServiceRequest->move_play_structure_from_nursery = $details['moving_house_special_instruction_4'];
+	    	$movingServiceRequest->need_children_swing_set = $details['moving_house_special_instruction_5'];
+
+	    	$movingServiceRequest->need_packing_services = $details['moving_house_additional_service_1'];
+	    	$movingServiceRequest->need_packing_boxes = $details['moving_house_additional_service_2'];
+	    	$movingServiceRequest->need_to_dismantle_reassemble_items = $details['moving_house_additional_service_3'];
+	    	$movingServiceRequest->need_storage = $details['moving_house_additional_service_4'];
+
+	    	$movingServiceRequest->vehicle_type = $details['moving_house_vehicle_type'];
+	    	$movingServiceRequest->packing_issue = $details['moving_house_packing_issue'];
+
+	    	$movingServiceRequest->callback_option = $details['moving_house_callback_option'];
+	    	$movingServiceRequest->callback_time = $details['moving_house_callback_time'];
+
+	    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
+	    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
+	    	
+	    	$movingServiceRequest->moving_date = date('Y-m-d H:i:s', strtotime( $details['moving_house_date'] ) );
+	    	$movingServiceRequest->additional_information = $details['moving_house_additional_information'];
+	    	$movingServiceRequest->status = '1';
+	    	$movingServiceRequest->created_by = $clientId;
+
+	    	if( $movingServiceRequest->save() )
+	    	{
+	    		$response['errCode'] 	= 0;
+	    		$response['errMsg'] 	= 'Request added successfully';
+	    	}
+	    	else
+	    	{
+	    		$response['errCode'] 	= 1;
+	    		$response['errMsg'] 	= 'Some issue in adding the request';
+	    	}
+    	}
+    	else
+    	{
+    		$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'Request already exist';
+    	}
+
+    	return response()->json($response);
     }
 
     /**

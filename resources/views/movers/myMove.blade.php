@@ -55,6 +55,10 @@
 <script type="text/javascript" src="{{ URL::asset('js/multiple-select.js') }}"></script>
 <link rel="stylesheet" href="{{ URL::asset('css/multiple-select.css') }}" />
 
+<!-- Jquery UI for datepicker -->
+<script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
+<link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.min.css') }}" />
+
 <script>
 // To show the to navigation when page is scroll down
 $(function(){
@@ -75,6 +79,11 @@ $(function(){
         width: 880,
         multipleWidth: 280
     });
+
+    // Datepicker intialize
+	$('#moving_house_date').datepicker({
+		dateFormat: 'dd-mm-yy'
+	});
 
     // Call the method to calculate the route between two addresses
     calculateRoute('{{ $clientMovingFromAddress->address . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address . ' ' . $clientMovingToProvince->name }}');
@@ -1343,7 +1352,7 @@ function calculateRoute(from, to) {
 
 <!-- Moving Companies Modal -->
 <div id="moving_companies_modal" class="modal fade">
-    <div class="modal-dialog modal-lg" style="width: 80%">
+    <div class="modal-dialog modal-lg">
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
@@ -1364,15 +1373,58 @@ function calculateRoute(from, to) {
       					</div>
       					<br>
       					<div>
-      						<form name="frm_home_moving_companies" id="frm_home_moving_companies">
+      						<form name="frm_home_moving_companies" id="frm_home_moving_companies" autocomplete="off">
 						        <div class="panel-group" id="accordion">
+						        	<div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse3">Moving From</a>
+						                    </h4>
+						                </div>
+						                <div id="home_moving_companies_collapse3" class="panel-collapse collapse in">
+						                    <div class="panel-body">
+						                        <div class="form-group">
+						                        	<label>Type</label>
+						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
+						                        	</select>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>No of bedrooms</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Did you own or rent this property</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse2">Moving From</a>
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse2">Moving To</a>
 						                    </h4>
 						                </div>
-						                <div id="home_moving_companies_collapse2" class="panel-collapse collapse in">
+						                <div id="home_moving_companies_collapse2" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
@@ -1409,49 +1461,7 @@ function calculateRoute(from, to) {
 						                    </div>
 						                </div>
 						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse3">Moving To</a>
-						                    </h4>
-						                </div>
-						                <div id="home_moving_companies_collapse3" class="panel-collapse collapse">
-						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<label>Type</label>
-						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
-						                        		<option value="">Select</option>
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
-						                        	</select>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Floor Level</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>No of bedrooms</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Did you own or rent this property</label>
-						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
-						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
-						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
-						                        </div>
-						                    </div>
-						                </div>
-						            </div>
+						            
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
@@ -1464,30 +1474,45 @@ function calculateRoute(from, to) {
 						                    	// Moving item categories
 						                    	if( isset( $movingItemCategories ) && count( $movingItemCategories ) > 0 )
 						                    	{
+						                    		$step = 1;
 						                    		foreach ($movingItemCategories as $movingItemCategory)
 						                    		{
 						                    		?>
 						                    			<div class="form-group">
-						                        			<div class="col-sm-2 col-md-2 col-lg-2"><label>{{ $movingItemCategory->item_name }}</label></div>
-						                        			<div class="col-sm-10 col-md-10 col-lg-10">
-						                        				<select name="moving_house_description_{{ $movingItemCategory->id }}[]" id="moving_house_description_{{ $movingItemCategory->id }}" class="moving_house_description multiselect" multiple="true">
-								                        			<?php
-								                        			if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
-								                        			{
-								                        				foreach ($movingItemDetails as $movingItemDetail)
-								                        				{
-								                        					if( $movingItemDetail->moving_item_category_id == $movingItemCategory->id )
-								                        					{
-								                        						echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name . ' - ' . $movingItemDetail->item_weight .'</option>';
-								                        					}
-								                        				}
-								                        			}
-								                        			?>
-							                        			</select>
+						                        			<!-- Collapse Title -->
+						                        			<div><label><a data-toggle="collapse" href="#collapse{{ $step }}">{{ $movingItemCategory->item_name }}</a></label></div>
+
+						                        			<!-- Collapse Body -->
+						                        			<div id="collapse{{ $step }}" class="panel-collapse collapse">
+						                        				<div>
+							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Item</strong></div>
+							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
+							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Quantity</strong></div>
+						                        				</div>
+							                        			<?php
+							                        			if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
+							                        			{
+							                        				foreach ($movingItemDetails as $movingItemDetail)
+							                        				{
+							                        					if( $movingItemDetail->moving_item_category_id == $movingItemCategory->id )
+							                        					{
+							                        						// echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name . ' - ' . $movingItemDetail->item_weight .'</option>';
+							                        					?>
+							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_name }}</div>
+							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_weight }}</div>
+							                        						<div class="col-sm-4 col-md-4 col-lg-4">
+							                        							<input class="form-control" type="text" name="item_quantity[{{ $movingItemDetail->id }}]" value="1">
+							                        						</div>
+							                        					<?php
+							                        					}
+							                        				}
+							                        			}
+							                        			?>
 						                        			</div>
 						                        		</div>
 						                        		<div class="clearfix"></div>
 						                    		<?php
+						                    			$step++;
 						                    		}
 						                    	}
 						                    	?>
@@ -1592,9 +1617,9 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Call back time?</label>
-						                        	<label> <input type="radio" name="moving_house_callback_time" value="anytime">Anytime</label>
-						                        	<label> <input type="radio" name="moving_house_callback_time" value="daytime">Daytime</label>
-						                        	<label> <input type="radio" name="moving_house_callback_time" value="evening">Evening</label>
+						                        	<label> <input type="radio" name="moving_house_callback_time" value="0">Anytime</label>
+						                        	<label> <input type="radio" name="moving_house_callback_time" value="1">Daytime</label>
+						                        	<label> <input type="radio" name="moving_house_callback_time" value="2">Evening</label>
 						                        	<div><label id="moving_house_callback_time-error" class="error" for="moving_house_callback_time"></label></div>
 						                        </div>
 						                        <div class="form-group">
@@ -1617,10 +1642,22 @@ function calculateRoute(from, to) {
 						                    </div>
 						                </div>
 						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse8">Moving Date</a>
+						                    </h4>
+						                </div>
+						                <div id="home_moving_companies_collapse8" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <input type="text" name="moving_house_date" id="moving_house_date" class="form-control">
+						                    </div>
+						                </div>
+						            </div>
 						        </div>
 
 						        <div>
-						        	<button type="submit" class="btn btn-info" name="" id="btn_submit_moving_query">Submit</button>
+						        	<button type="submit" class="btn btn-info" name="btn_submit_moving_query" id="btn_submit_moving_query">Submit</button>
 						        </div>
 						    </form>
       					</div>
