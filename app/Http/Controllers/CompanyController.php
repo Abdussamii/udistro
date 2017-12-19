@@ -1278,9 +1278,11 @@ class CompanyController extends Controller
     	$company_name  			= $request->input('company_name');
     	$company_id    			= $request->input('company_id');
     	$company_category    	= $request->input('company_category');
-    	$company_address    	= $request->input('company_address');
+    	$company_address1    	= $request->input('company_address1');
+    	$company_address2    	= $request->input('company_address2');
     	$company_province    	= $request->input('company_province');
     	$company_city    		= $request->input('company_city');
+    	$company_country    	= $request->input('company_country');
     	$postal_code    		= $request->input('postal_code');
     	$company_status    		= $request->input('company_status');
 
@@ -1296,9 +1298,10 @@ class CompanyController extends Controller
 		        'rep_email'			=> $representative_email,
 		        'company_name'		=> $company_name,
 		        'company_category'	=> $company_category,
-		        'company_address'	=> $company_address,
+		        'company_address'	=> $company_address1,
 		        'company_province'	=> $company_province,
 		        'company_city'		=> $company_city,
+		        'company_country'	=> $company_country,
 		        'postal_code'		=> $postal_code,
 		        'company_status'	=> $company_status,
 		    ),
@@ -1310,6 +1313,7 @@ class CompanyController extends Controller
 		        'company_address'	=> array('required'),
 		        'company_province'	=> array('required'),
 		        'company_city'		=> array('required'),
+		        'company_country'	=> array('required'),
 		        'postal_code'		=> array('required'),
 		        'company_status'	=> array('required')
 		    ),
@@ -1322,6 +1326,7 @@ class CompanyController extends Controller
 		        'company_address.required' 	=> 'Please enter company address',
 		        'company_province.required' => 'Please select province',
 		        'company_city.required' 	=> 'Please select city',
+		        'company_country.required' 	=> 'Please select country',
 		        'postal_code.required' 		=> 'Please enter postal code',
 		        'company_status.required' 	=> 'Please select status',
 		    )
@@ -1386,9 +1391,11 @@ class CompanyController extends Controller
 
 				$company->company_name 			= $company_name;	
 				$company->company_category_id 	= $company_category;
-				$company->address 				= $company_address;
+				$company->address1 				= $company_address1;
+				$company->address2 				= $company_address2;
 				$company->province_id 			= $company_province;
 				$company->city_id 				= $company_city;
+				$company->city_id 				= $company_country;
 				$company->postal_code 			= $postal_code;
 				$company->status 				= $company_status;
 				$company->updated_by 			= $userId;
@@ -1542,9 +1549,11 @@ class CompanyController extends Controller
 	    		$response['id'] 				= $companyDetails->id;
 	    		$response['company_name'] 		= $companyDetails->company_name;
 	    		$response['company_category_id']= $companyDetails->company_category_id;
-	    		$response['address'] 			= $companyDetails->address;
+	    		$response['address1'] 			= $companyDetails->address1;
+	    		$response['address2'] 			= $companyDetails->address2;
 	    		$response['province_id'] 		= $companyDetails->province_id;
 	    		$response['city_id'] 			= $companyDetails->city_id;
+	    		$response['country_id'] 		= $companyDetails->country_id;
 	    		$response['postal_code'] 		= $companyDetails->postal_code;
 	    		$response['status'] 			= $companyDetails->status;
 
