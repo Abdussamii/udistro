@@ -2064,4 +2064,14 @@ class CompanyController extends Controller
 
 		return response()->json($response);
     }
+
+    /**
+     * Function to return the payment plan page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentplan()
+    {
+    	return view('company/paymentPlan');
+    }
 }

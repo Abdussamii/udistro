@@ -2754,7 +2754,7 @@ class AdminController extends Controller
                     2 => $paymentPlan->plan_charges,
                     3 => ( $paymentPlan->discount != '' ) ? $paymentPlan->discount: 'NA',
                     4 => $paymentPlan->validity_days,
-                    5 => $paymentPlan->number_of_emails,
+                    5 => $paymentPlan->allowed_count,
                     6 => ucwords( strtolower( PaymentPlan::find($paymentPlan->plan_type_id)->paymentPlanType->plan_type ) ),
                     7 => Helper::getStatusText($paymentPlan->status),
                     8 => '<a href="javascript:void(0);" id="'. $paymentPlan->id .'" class="edit_payment_plan"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'

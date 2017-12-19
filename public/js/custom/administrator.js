@@ -1918,7 +1918,7 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchpaymentplans',
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 6, 7, 8] },
+            { "className": "dt-center", "targets": [0, 7, 8] },
             { "className": "dt-right", "targets": [2, 3, 4, 5] }
         ],
         "aoColumns": [

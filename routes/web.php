@@ -398,6 +398,9 @@ Route::group(['prefix' => 'company'], function() {
 
 	// To register a new company
 	Route::post('/registercompany', 'CompanyController@registerCompany');
+
+	// To return the payment plan page
+	Route::get('/paymentplan', 'CompanyController@paymentplan');
 	
 });
 

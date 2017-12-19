@@ -22,7 +22,7 @@
 						<td style="text-align: center;">Charge</td>
 						<td style="text-align: center;">Discount</td>
 						<td>Validity (In Days)</td>
-						<td>Number Of Emails</td>
+						<td>Number Of Emails / Number of Quotations</td>
 						<td>Plan Type</td>
 						<td>Status</td>
 						<td>Action</td>
