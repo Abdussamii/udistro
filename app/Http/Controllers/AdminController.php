@@ -33,6 +33,7 @@ use App\PaymentPlanType;
 use App\City;
 use App\EmailTemplate;
 use App\ClientActivityList;
+use App\MovingItemCategory;
 
 use Validator;
 use Helper;
@@ -986,6 +987,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to return the moving category page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function movingCategory()
+    {
+        return view('administrator/movingcategory');
+    }
+
+    /**
      * Function to return the activity page
      * @param void
      * @return \Illuminate\Http\Response
@@ -1486,6 +1497,93 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to save the moviing category details
+     * @param void
+     * @return Array
+     */
+    public function saveMovingCategory(Request $request)
+    {
+        $category_id      = $request->input('category_id');
+        $category_name    = $request->input('category_name');
+        $category_status  = $request->input('category_status');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+        $validation = Validator::make(
+            array(
+                'category_name'     => $category_name,
+                'category_status'   => $category_status
+            ),
+            array(
+                'category_name'     => array('required'),
+                'category_status'   => array('required')
+            ),
+            array(
+                'category_name.required'    => 'Please enter the category name',
+                'category_status.required'  => 'Please select status'
+            )
+        );
+
+        if ( $validation->fails() )
+        {
+            $error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else
+        {
+            if($category_id == '') 
+            {
+                $movingItem = new MovingItemCategory;
+                $movingItem->item_name          = $category_name;
+                $movingItem->status             = $category_status;
+                $movingItem->updated_by         = $userId;
+                $movingItem->created_by         = $userId;
+
+                if( $movingItem->save() )
+                {
+                    $response['errCode']    = 0;
+                    $response['errMsg']     = 'Category added successfully';
+                }
+                else
+                {
+                    $response['errCode']    = 2;
+                    $response['errMsg']     = 'Some error in adding the category';
+                }
+            }
+            else
+            { 
+
+                $movingItem = MovingItemCategory::find($category_id);
+                $movingItem->item_name            = $category_name;
+                $movingItem->status               = $category_status;
+                $movingItem->updated_by           = $userId;
+
+                if( $movingItem->save() )
+                {
+                    $response['errCode']    = 0;
+                    $response['errMsg']     = 'Category updated successfully';
+                }
+                else
+                {
+                    $response['errCode']    = 2;
+                    $response['errMsg']     = 'Some error in updating the category';
+                }
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
      * Function to show the province list in datatable
      * @param void
      * @return array
@@ -1541,6 +1639,64 @@ class AdminController extends Controller
         }
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to show the moving Category list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchMovingCategory()
+    {
+        $start      = Input::get('iDisplayStart');      // Offset
+        $length     = Input::get('iDisplayLength');     // Limit
+        $sSearch    = Input::get('sSearch');            // Search string
+        $col        = Input::get('iSortCol_0');         // Column number for sorting
+        $sortType   = Input::get('sSortDir_0');         // Sort type
+
+        // Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $movingItemArray = MovingItemCategory::where('item_name','like', '%'.$sSearch.'%')
+                    ->orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->select('id', 'item_name', 'status')
+                    ->get();
+
+        $iTotal = MovingItemCategory::where('item_name','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $movingItemArray ) > 0 )
+        {
+            foreach ($movingItemArray as $movingItem)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $movingItem->id,
+                    1 => ucfirst( strtolower( $movingItem->item_name ) ),
+                    2 => Helper::getStatusText($movingItem->status),
+                    3 => '<a href="javascript:void(0);" id="'. $movingItem->id .'" class="edit_moving_category"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        return response()->json($response);
     }
 
     /**
@@ -1742,6 +1898,26 @@ class AdminController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected moving item details
+     * @param void
+     * @return array
+     */
+    public function getMovingCategory()
+    {
+        $movingItemId = Input::get('movingItemId');
+
+        $response = array();
+        if( $movingItemId != '' )
+        {
+            $movingItem = MovingItemCategory::find($movingItemId);
+            $response['item_name']   = $movingItem->item_name;
+            $response['status'] = $movingItem->status;
+        }
+
+        return response()->json($response);
     }
 
     /**

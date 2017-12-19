@@ -101,6 +101,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected province
 	Route::get('/getprovincedetails', 'AdminController@getProvinceDetails');
 
+	// To return the moving Category page
+	Route::get('/movingcategory', 'AdminController@movingCategory');
+
+	// To save the moving Category details
+	Route::post('/savemovingcategory', 'AdminController@saveMovingCategory');
+
+	// To show the moving Category list in datatable
+	Route::get('/fetchmovingcategory', 'AdminController@fetchMovingCategory');
+
+	// To get the details for the selected moving Category
+	Route::get('/getmovingcategory', 'AdminController@getMovingCategory');
+
 	// To return the activity feedback page
 	Route::get('/activityfeedback', 'AdminController@activityFeedback');
 

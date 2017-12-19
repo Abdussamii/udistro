@@ -571,6 +571,13 @@ $(document).ready(function(){
     	$('#modal_add_province').modal('show');
     });
 
+    // To show the add Moving Category modal
+    $('#btn_modal_moving_category').click(function(){
+        // Set the modal title, as the same modal is used for edit also
+        $('#modal_add_moving_category').find('.modal-title').html('Add Moving Category');
+        $('#modal_add_moving_category').modal('show');
+    });
+
     // To show the add activity modal
     $('#btn_modal_activity').click(function(){
         // Set the modal title, as the same modal is used for edit also
@@ -678,6 +685,85 @@ $(document).ready(function(){
 			    }
 			});
 		}
+    });
+
+    // Add / Edit moving category form validation
+    $('#frm_add_moving_category').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_moving_category').validate({
+        rules: {
+            category_name: {
+                required: true
+            },
+            category_status: {
+                required: true  
+            }
+        },
+        messages: {
+            category_name: {
+                required: 'Please enter the category name'
+            },
+            category_status: {
+                required: 'Please select status'
+            }
+        }
+    });
+
+    // Save the province data
+    $('#btn_add_moving_category').click(function(){
+        if( $('#frm_add_moving_category').valid() )
+        {
+            // Ajax call to save the page related data
+            var $this = $(this);
+            var category_id     = $('#category_id').val();
+            var category_name   = $('#category_name').val();
+            var category_status = $("input[name='category_status']:checked").val();
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+            formData.append('category_id', category_id);
+            formData.append('category_name', category_name);
+            formData.append('category_status', category_status);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/savemovingcategory',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+                        
+                        // Refresh the form and close the modal
+                        $('#frm_add_moving_category')[0].reset();
+
+                        $('#modal_add_moving_category').modal('hide');
+
+                        // Refresh the datatable
+                        $('#datatable_moving_category').DataTable().ajax.reload();
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
     });
 
     // To check the file extension
@@ -974,6 +1060,24 @@ $(document).ready(function(){
         ]
     });
 
+    $('#datatable_moving_category').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchmovingcategory',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 2, 3] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
     $('#datatable_activity').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
@@ -1081,6 +1185,38 @@ $(document).ready(function(){
     	{
     		alertify.error('Missing province id');
     	}
+    });
+
+    // To update the moving category details
+    $(document).on('click', '.edit_moving_category', function(){
+        var movingItemId = $(this).attr('id');
+
+        if( movingItemId != '' )
+        {
+            // Get the province details for the selected province
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/getmovingcategory',
+                method: 'get',
+                data: {
+                    movingItemId: movingItemId
+                },
+                success: function(response){
+                    $('#modal_add_moving_category').find('.modal-title').html('Edit Moving Category');
+
+                    // Auto-fill the form
+                    $('#frm_add_moving_category #category_id').val(movingItemId);
+                    $('#frm_add_moving_category #category_name').val(response.item_name);
+                    $('#frm_add_moving_category input[name="category_status"][value="'+ response.status +'"]').prop('checked', true);
+
+                    // Show the modal
+                    $('#modal_add_moving_category').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing category id');
+        }
     });
 
     // To update the activity details
