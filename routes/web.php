@@ -370,6 +370,18 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To save the agent invitation details
 	Route::post('/saveinvitationdetails', 'AgentController@saveInvitationDetails');
 
+	// To return email template listing view
+	Route::get('/emailtemplates', 'AgentController@emailTemplates');
+
+	// To save the email template details
+	Route::post('/saveemailtemplate', 'AgentController@saveEmailTemplate');
+
+	// To show the email template list in datatable
+	Route::get('/fetchemailtemplates', 'AgentController@fetchEmailTemplates');
+
+	// To get the details of selected email template
+	Route::get('/getemailtemplatedetails', 'AgentController@getEmailTemplateDetails');
+
 });
 
 /* ---------- Agent related functionality ---------- */

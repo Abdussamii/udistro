@@ -1226,6 +1226,209 @@ class AgentController extends Controller
     }
 
     /**
+     * Function to return email template listing view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function emailTemplates()
+    {
+        return view('agent/emailTemplates');
+    }
+
+    /**
+     * Function to show the email template list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchEmailTemplates()
+    {
+        $start      = Input::get('iDisplayStart');      // Offset
+        $length     = Input::get('iDisplayLength');     // Limit
+        $sSearch    = Input::get('sSearch');            // Search string
+        $col        = Input::get('iSortCol_0');         // Column number for sorting
+        $sortType   = Input::get('sSortDir_0');         // Sort type
+
+        // Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'template_name',
+            3 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+        $userId = Auth::user()->id;
+
+        // Get the records after applying the datatable filters
+        $emailTemplates = EmailTemplate::where('template_name','like', '%'.$sSearch.'%')
+                        ->orderBy($sortBy, $sortType)
+                        ->limit($length)
+                        ->offset($start)
+                        ->where('created_by', '=', $userId)
+                        ->select('id', 'template_name', 'template_content', 'status')
+                        ->get();
+
+        $iTotal = EmailTemplate::where('template_name','like', '%'.$sSearch.'%')->where('created_by', '=', $userId)->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $emailTemplates ) > 0 )
+        {
+            foreach ($emailTemplates as $emailTemplates)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $emailTemplates->id,
+                    1 => ucfirst( strtolower( $emailTemplates->template_name ) ),
+                    2 => '<div><a href="javascript:void(0);" class="datatable_template_check_preview">Check Preview</a><div class="datatable_template_preview" style="display:none;">'. $emailTemplates->template_content .'</div></div>',
+                    3 => Helper::getStatusText($emailTemplates->status),
+                    4 => '<a href="javascript:void(0);" id="'. $emailTemplates->id .'" class="edit_email_template"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to get the details of selected email template
+     * @param void
+     * @return array
+     */
+    public function getEmailTemplateDetails()
+    {
+        $templateId = Input::get('templateId');
+
+        $response = array();
+        if( $templateId != '' )
+        {
+            $templateDetails = EmailTemplate::find($templateId);
+
+            if( count( $templateDetails ) > 0 )
+            {
+                $response['id']                 = $templateDetails->id;
+                $response['template_name']      = $templateDetails->template_name;
+                $response['template_content']   = $templateDetails->template_content;
+                $response['status']             = $templateDetails->status;
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to save the email template details
+     * @param void
+     * @return array
+     */
+    public function saveEmailTemplate()
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $templateData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $response =array();
+
+        // Server side validation
+        $validation = Validator::make(
+            array(
+                'email_template_name'   => $templateData['email_template_name'],
+                'email_template_content'=> $templateData['email_template_content'],
+                'email_template_status' => $templateData['email_template_status']
+            ),
+            array(
+                'email_template_name'   => array('required'),
+                'email_template_content'=> array('required'),
+                'email_template_status' => array('required')
+            ),
+            array(
+                'email_template_name.required'      => 'Please enter template name',
+                'email_template_content.required'   => 'Please enter some content',
+                'email_template_status.required'    => 'Please select status'
+            )
+        );
+
+        if ( $validation->fails() )
+        {
+            $error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else
+        {
+            // Check if email template id is present. If yes, update the content, otherwise add the content
+            if( $templateData['email_template_id'] == '' )  // Add the content
+            {
+                // Check if the same email template already exist
+                $templateExist = EmailTemplate::where(['template_name' => $templateData['email_template_name']])->first();
+
+                if( count( $templateExist ) == 0 )
+                {
+                    $emailTemplate = new EmailTemplate;
+
+                    $emailTemplate->template_name   = $templateData['email_template_name'];
+                    $emailTemplate->template_content= $templateData['email_template_content'];              
+                    $emailTemplate->status          = $templateData['email_template_status'];
+                    $emailTemplate->created_by      = $userId;
+
+                    if( $emailTemplate->save() )
+                    {
+                        $response['errCode']    = 0;
+                        $response['errMsg']     = 'Email template added successfully';
+                    }
+                    else
+                    {
+                        $response['errCode']    = 2;
+                        $response['errMsg']     = 'Some error in saving email template';
+                    }
+                }
+                else
+                {
+                    $response['errCode']    = 3;
+                    $response['errMsg']     = 'Email template already exist with the same name';
+                }
+            }
+            else                                            // Update the content
+            {
+                $emailTemplate = EmailTemplate::find($templateData['email_template_id']);
+
+                $emailTemplate->template_name   = $templateData['email_template_name'];
+                $emailTemplate->template_content= $templateData['email_template_content'];              
+                $emailTemplate->status          = $templateData['email_template_status'];
+                $emailTemplate->updated_by      = $userId;
+
+                if( $emailTemplate->save() )
+                {
+                    $response['errCode']    = 0;
+                    $response['errMsg']     = 'Email template updated successfully';
+                }
+                else
+                {
+                    $response['errCode']    = 2;
+                    $response['errMsg']     = 'Some error in updating email template';
+                }
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
      * Function fetch the client details as well as its associated message and template details to show in popup
      * @param void
      * @return array
