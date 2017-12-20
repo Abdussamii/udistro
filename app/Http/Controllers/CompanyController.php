@@ -32,6 +32,7 @@ use App\City;
 use App\Company;
 use App\PaymentPlanType;
 use App\CategoryService;
+use App\PaymentPlanSubscription;
 
 use Validator;
 use Helper;
@@ -2113,24 +2114,71 @@ class CompanyController extends Controller
     {
     	$paymentPlanId = Input::get('paymentPlanId');
 
-    	// Get the logged in user id
-        $userId = Auth::user()->id;
-
-    	// Get the company category, if the company is real estate then the payment plan is for agent, otherwise the plans is for companies
-    	$user = User::find($userId);
-
-    	$userCompany = $user->company->first();
-
-    	$companyType = 'company';
-    	if( $userCompany->company_category_id == 1 )		// Real estate company
+    	if( $paymentPlanId != '' )
     	{
-    		$companyType = 'agent';
+	    	// Get the payment plan details
+	    	$paymentPlanDetails = PaymentPlan::find($paymentPlanId);
+
+	    	// Get the logged in user id
+	        $userId = Auth::user()->id;
+
+	    	// Get the company category, if the company is real estate then the payment plan is for agent, otherwise the plans is for companies
+	    	$user = User::find($userId);
+
+	    	$userCompany = $user->company->first();
+
+	    	$companyType = 'company';
+	    	if( $userCompany->company_category_id == 1 )		// Real estate company
+	    	{
+	    		$companyType = 'agent';
+	    	}
+
+	    	// Get the payment plan type id for company
+	    	$PaymentPlanType = PaymentPlanType::where(['plan_type' => $companyType, 'status' => '1'])->select('id')->first();
+
+	    	// Check if any payment plan already exist. If exist, update the status to 0
+
+	    	$existingPaymentPlan = PaymentPlanSubscription::where(['plan_type_id' => $PaymentPlanType->id, 'subscriber_id' => $userCompany->id, 'status' => '1'])->first();
+
+	    	if( count( $existingPaymentPlan ) > 0 )
+	    	{
+	    		$oldPlan = PaymentPlanSubscription::find($existingPaymentPlan->id);
+	    		$oldPlan->status = '0';
+
+	    		$oldPlan->save();
+	    	}
+
+	    	// Calculate the start and the end date
+	    	$startDate 	= date('Y-m-d');
+	    	$endDate 	= date('Y-m-d', strtotime('+' . $paymentPlanDetails->validity_days . ' days'));
+
+	    	$paymentPlanSubscription = new PaymentPlanSubscription;
+
+			$paymentPlanSubscription->plan_id = $paymentPlanId;
+			$paymentPlanSubscription->plan_type_id = $PaymentPlanType->id;
+			$paymentPlanSubscription->subscriber_id = $userCompany->id;
+			$paymentPlanSubscription->start_date = $startDate;
+			$paymentPlanSubscription->end_date = $endDate;
+			$paymentPlanSubscription->status = '1';
+
+			if( $paymentPlanSubscription->save() )
+			{
+				$response['errCode']    = 0;
+	        	$response['errMsg']     = 'Payment plan updated successfully';
+			}
+			else
+			{
+				$response['errCode']    = 1;
+	        	$response['errMsg']     = 'Some error';
+			}	
     	}
+    	else
+		{
+			$response['errCode']    = 2;
+        	$response['errMsg']     = 'Missing payment plan id';
+		}
 
-    	// Get the payment plan type id for company
-    	$PaymentPlanType = PaymentPlanType::where(['plan_type' => $companyType, 'status' => '1'])->select('id')->first();
-
-    	// $paymentPlanSubscription = new 
+		return response()->json($response);
     }
 }
 // echo '<pre>';
