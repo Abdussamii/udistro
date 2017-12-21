@@ -293,10 +293,6 @@ $(document).ready(function(){
     });
     $('#frm_agent_profile').validate({
         rules: {
-            agent_email: {
-                required: true,
-                email: true
-            },
             agent_fname: {
                 required: true
             },
@@ -305,10 +301,6 @@ $(document).ready(function(){
             }
         },
         messages: {
-            agent_email: {
-                required: 'Please enter email',
-                email: 'Please enter valid email'
-            },
             agent_fname: {
                 required: 'Please enter first name'
             },
@@ -357,19 +349,109 @@ $(document).ready(function(){
         }
     });
 
-     // Agent address form validation
-    $('#frm_agent_address').submit(function(e){
+    // Agent profile form validation
+    $('#frm_agent_contact').submit(function(e){
         e.preventDefault();
     });
-    $('#frm_agent_address').validate({
+    $('#frm_agent_contact').validate({
         rules: {
-            agent_address: {
+            agent_email: {
+                required: true,
+                email: true
+            },
+            phone_number: {
                 required: true
             }
         },
         messages: {
-            agent_address: {
-                required: 'Please enter address'
+            agent_email: {
+                required: 'Please enter email',
+                email: 'Please enter valid email'
+            },
+            phone_number: {
+                required: 'Please enter phone number'
+            }
+        }
+    });
+
+    // Update agent profile
+    $('#btn_update_agent_contact').click(function(){
+        // Check the validation
+        if( $('#frm_agent_contact').valid() )
+        {
+            var $this = $(this);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/savecontactdetails',
+                method: 'post',
+                data: {
+                    frmData: $('#frm_agent_contact').serialize()
+                },
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );                        
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
+    // Add company form validation
+    $('#frm_agent_address').submit(function(e){
+        e.preventDefault();
+    });
+    
+     // Agent address form validation
+    $('#frm_agent_address').validate({
+        rules: {
+            agent_address1: {
+                required: true
+            },
+            agent_city: {
+                required: true
+            },
+            agent_country: {
+                required: true
+            },
+            agent_province: {
+                required: true
+            },
+            agent_postalcode: {
+                required: true
+            }
+        },
+        messages: {
+            agent_address1: {
+                required: 'Please enter address1'
+            },
+            agent_city: {
+                required: 'Please enter city'
+            },
+            agent_country: {
+                required: 'Please enter country'
+            },
+            agent_province: {
+                required: 'Please enter province'
+            },
+            agent_postalcode: {
+                required: 'Please enter postal code'
             }
         }
     });
@@ -385,8 +467,7 @@ $(document).ready(function(){
                 url: $('meta[name="route"]').attr('content') + '/agent/saveaddressdetails',
                 method: 'post',
                 data: {
-                    frmData: $('#frm_agent_address').serialize(),
-                    agent_address: $('#agent_address').text()
+                    frmData: $('#frm_agent_address').serialize()
                 },
                 beforeSend: function() {
                     // Show the loading button

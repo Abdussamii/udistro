@@ -604,7 +604,7 @@ class AgentController extends Controller
     	$countries = Country::select('id', 'name')->orderBy('name', 'asc')->get();
 
        	// Get the province list
-    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+        $provinces  = Province::where(['status' => '1'])->orderBy('name', 'asc')->select('id', 'abbreviation', 'name')->get();
 
     	$cityArray = array();
     	if( count( $agentDetails ) > 0 && $agentDetails->province_id != '' )
@@ -667,17 +667,14 @@ class AgentController extends Controller
 
 		$validation = Validator::make(
 		    array(
-		        'agent_email'		    => $profileData['agent_email'],
 		        'agent_fname'	        => $profileData['agent_fname'],
 		        'agent_lname'		    => $profileData['agent_lname'],
 		    ),
 		    array(
-		        'agent_email' 	        => array('required', 'email'),
 		        'agent_fname' 	        => array('required'),
 		        'agent_lname' 	        => array('required'),
 		    ),
 		    array(
-		        'agent_email.required' 	         => 'Please enter email',
 		        'agent_fname.required' 	         => 'Please enter first name',
 		        'agent_lname.required' 	         => 'Please enter last name',
 		    )
@@ -697,10 +694,11 @@ class AgentController extends Controller
 		{
 			$user = User::find($userId);
 
-			$user->email 		= $profileData['agent_email'];
-			$user->fname 		= $profileData['agent_fname'];			
-			$user->lname 		= $profileData['agent_lname'];
-			$user->updated_by 	= $userId;
+			$user->fname 		 = $profileData['agent_fname'];			
+			$user->lname 		 = $profileData['agent_lname'];
+            $user->gender        = $profileData['gender'];
+            $user->business_name = $profileData['agent_bname'];
+			$user->updated_by 	 = $userId;
 
 			if( $user->save() )
 			{
@@ -719,11 +717,11 @@ class AgentController extends Controller
     }
 
     /**
-     * Function to save agent address details
+     * Function to save agent contact details
      * @param void
      * @return array
      */
-    public function saveAddressDetails() 
+    public function saveContactDetails() 
     {
         // Get the serialized form data
         $frmData = Input::get('frmData');
@@ -742,13 +740,17 @@ class AgentController extends Controller
 
         $validation = Validator::make(
             array(
-                'agent_address' => $profileData['agent_address'],
+                'agent_email'            => $profileData['agent_email'],
+                'phone_number'           => $profileData['phone_number'],
             ),
             array(
-                'agent_address' => array('required'),
+                'agent_email'           => array('required', 'email'),
+                'phone_number'          => array('required'),
             ),
             array(
-                'agent_address.required' => 'Please enter address',
+                'agent_email.required'           => 'Please enter first name',
+                'agent_email.email'              => 'Please enter valid email',
+                'phone_number.required'          => 'Please enter phone number',
             )
         );
 
@@ -766,12 +768,93 @@ class AgentController extends Controller
         {
             $user = User::find($userId);
 
-            $user->address      = $profileData['agent_address'];
-            $user->province_id  = $profileData['agent_province'];
-            $user->city_id      = $profileData['agent_city'];
-            $user->postalcode   = $profileData['agent_postalcode'];
-            $user->country_id   = $profileData['agent_country'];
-            $user->updated_by   = $userId;
+            $user->email            = $profileData['agent_email'];         
+            $user->phone_number     = $profileData['phone_number'];
+            $user->extension_number = $profileData['ex_number'];
+            $user->fax              = $profileData['fax'];
+            $user->website          = $profileData['agent_website'];
+            $user->updated_by       = $userId;
+
+            if( $user->save() )
+            {
+
+                $response['errCode']    = 0;
+                $response['errMsg']     = 'Contact info updated successfully';
+            }
+            else
+            {
+                $response['errCode']    = 2;
+                $response['errMsg']     = 'Some error in updating the details';
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to save agent address details
+     * @param void
+     * @return array
+     */
+    public function saveAddressDetails() 
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $profileData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server Side Validation
+        $response = array();
+
+        $validation = Validator::make(
+            array(
+                'agent_address1'   => $profileData['agent_address1'],
+                'agent_city'       => $profileData['agent_city'],
+                'agent_country'    => $profileData['agent_country'],
+                'agent_province'   => $profileData['agent_province'],
+                'agent_postalcode' => $profileData['agent_postalcode']
+            ),
+            array(
+                'agent_address1'    => array('required'),
+                'agent_city'        => array('required'),
+                'agent_country'     => array('required'),
+                'agent_province'    => array('required'),
+                'agent_postalcode'  => array('required')
+            ),
+            array(
+                'agent_address1.required'   => 'Please enter company address',
+                'agent_city.required'       => 'Please select city',
+                'agent_country.required'    => 'Please select country',
+                'agent_province.required'   => 'Please select province',
+                'agent_postalcode.required' => 'Please enter postal code'
+            )
+        );
+
+        if ( $validation->fails() )
+        {
+            $error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else
+        {
+            $user = User::find($userId);
+
+            $user->address1      = $profileData['agent_address1'];
+            $user->address2      = $profileData['agent_address2'];
+            $user->city_id       = $profileData['agent_city'];
+            $user->province_id   = $profileData['agent_province'];
+            $user->postalcode    = $profileData['agent_postalcode'];
+            $user->country_id    = $profileData['agent_country'];
+            $user->updated_by    = $userId;
 
             if( $user->save() )
             {
@@ -805,17 +888,17 @@ class AgentController extends Controller
         // Get the logged in user id
         $userId = Auth::user()->id;
 
-        // Get the logged in user id
-        $userId = Auth::user()->id;
-
         // Server Side Validation
         $response = array();
 
         $user = User::find($userId);
+
         $user->twitter      = $profileData['agent_twitter'];
         $user->linkedin     = $profileData['agent_linkedin'];
-        $user->skype        = $profileData['agent_facebook'];
-        $user->website      = $profileData['agent_website'];
+        $user->skype        = $profileData['agent_skype'];
+        $user->facebook     = $profileData['agent_facebook'];
+        $user->gplus        = $profileData['agent_gplus'];
+        $user->instagram    = $profileData['agent_instagram'];
         $user->updated_by   = $userId;
 
         if( $user->save() )
