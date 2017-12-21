@@ -651,26 +651,22 @@ $(document).ready(function(){
 			    		// fill the old address, if available
 			    		if( !$.isEmptyObject( response.oldAddress ) )
 			    		{
-			    			$('#frm_invite_client #client_old_address').val(response.oldAddress.address);
-			    			$('#frm_invite_client #client_old_unit_type').val(response.oldAddress.unit_type);
-			    			$('#frm_invite_client #client_old_unit_no').val(response.oldAddress.unit_no);
-			    			$('#frm_invite_client #client_old_street_type').val(response.oldAddress.street_type_id);
+			    			$('#frm_invite_client #client_old_address1').val(response.oldAddress.address1);
+                            $('#frm_invite_client #client_old_address2').val(response.oldAddress.address2);
 			    			$('#frm_invite_client #client_old_province').val(response.oldAddress.province_id);
 			    			$('#frm_invite_client #client_old_city').val(response.oldAddress.city_id);
-			    			$('#frm_invite_client #client_old_postalcode').val(response.oldAddress.postalcode);
+			    			$('#frm_invite_client #client_old_postalcode').val(response.oldAddress.postal_code);
 			    			$('#frm_invite_client #client_old_country').val(response.oldAddress.country_id);
 			    		}
 
 			    		// fill the new address, if available
 			    		if( !$.isEmptyObject(response.newAddress) )
 			    		{
-			    			$('#frm_invite_client #client_new_address').val(response.newAddress.address);
-			    			$('#frm_invite_client #client_new_unit_type').val(response.newAddress.unit_type);
-			    			$('#frm_invite_client #client_new_unit_no').val(response.newAddress.unit_no);
-			    			$('#frm_invite_client #client_new_street_type').val(response.newAddress.street_type_id);
+			    			$('#frm_invite_client #client_new_address1').val(response.newAddress.address1);
+                            $('#frm_invite_client #client_new_address2').val(response.newAddress.address2);
 			    			$('#frm_invite_client #client_new_province').val(response.newAddress.province_id);
 			    			$('#frm_invite_client #client_new_city').val(response.newAddress.city_id);
-			    			$('#frm_invite_client #client_new_postalcode').val(response.newAddress.postalcode);
+			    			$('#frm_invite_client #client_new_postalcode').val(response.newAddress.postal_code);
 			    			$('#frm_invite_client #client_new_country').val(response.newAddress.country_id);
 
 			    			// Moving date

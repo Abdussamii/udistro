@@ -1540,7 +1540,7 @@ class AgentController extends Controller
     		$agent = User::find($userId);
     		$agentEmailTemplate = $agent->emailTemplate->first();
 
-    		if( $agentDetails->fname == '' || $agentDetails->address == '' || $agentDetails->province_id == '' || $agentDetails->city_id == '' || $agentDetails->postalcode == '' || $agentDetails->country_id == '' || $agentMessage == '' || $agentEmailTemplate == '' )
+    		if( $agentDetails->fname == '' || $agentDetails->address1 == '' || $agentDetails->province_id == '' || $agentDetails->city_id == '' || $agentDetails->postalcode == '' || $agentDetails->country_id == '' || $agentMessage == '' || $agentEmailTemplate == '' )
     		{
     			$response['errCode']    = 1;
 		        $response['errMsg']     = 'Please fill the basic information including name, address, image and add the default message and email template!';
@@ -1560,8 +1560,8 @@ class AgentController extends Controller
 	    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
 
 	    		// Get the Moving from & Moving to addresses
-	    		$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->select('address', 'unit_type', 'unit_no', 'province_id', 'city_id', 'street_type_id','postalcode','country_id')->first();
-    			$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->select('address', 'unit_type', 'unit_no', 'province_id', 'city_id', 'street_type_id','postalcode','country_id', 'moving_date')->first();
+	    		$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->select('address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id')->first();
+    			$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->select('address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id', 'moving_date')->first();
 
     			// Get the default selected email template, if available
     			$user = User::find($userId);
@@ -1575,13 +1575,11 @@ class AgentController extends Controller
 		        if( count( $movingToAddress ) > 0 )
 		        {
 			        $response['newAddress'] = array(
-			        	'address' 		=> $movingToAddress->address,
-			        	'unit_type' 	=> $movingToAddress->unit_type,
-			        	'unit_no' 		=> $movingToAddress->unit_no,
+			        	'address1' 		=> $movingToAddress->address1,
+                        'address2'       => $movingToAddress->address2,
 			        	'province_id' 	=> $movingToAddress->province_id,
 			        	'city_id' 		=> $movingToAddress->city_id,
-			        	'street_type_id'=> $movingToAddress->street_type_id,
-			        	'postalcode' 	=> $movingToAddress->postalcode,
+			        	'postal_code' 	=> $movingToAddress->postal_code,
 			        	'country_id' 	=> $movingToAddress->country_id,
 			        	'moving_date' 	=> date('d-m-Y', strtotime($movingToAddress->moving_date))
 			        );
@@ -1622,14 +1620,12 @@ class AgentController extends Controller
 
 		$validation = Validator::make(
 		    array(
-		        'client_old_address'	=> $inviteDetails['client_old_address'],
-		        'client_old_unit_type'	=> $inviteDetails['client_old_unit_type'],
+		        'client_old_address'	=> $inviteDetails['client_old_address1'],
 		        'client_old_province'	=> $inviteDetails['client_old_province'],
 		        'client_old_city'		=> $inviteDetails['client_old_city'],
 		        'client_old_postalcode'	=> $inviteDetails['client_old_postalcode'],
 		        'client_old_country'	=> $inviteDetails['client_old_country'],
-		        'client_new_address'	=> $inviteDetails['client_new_address'],
-		        'client_new_unit_type'	=> $inviteDetails['client_new_unit_type'],
+		        'client_new_address'	=> $inviteDetails['client_new_address1'],
 		        'client_new_province'	=> $inviteDetails['client_new_province'],
 		        'client_new_city'		=> $inviteDetails['client_new_city'],
 		        'client_new_postalcode'	=> $inviteDetails['client_new_postalcode'],
@@ -1640,13 +1636,11 @@ class AgentController extends Controller
 		    ),
 		    array(
 		        'client_old_address'	=> array('required'),
-		        'client_old_unit_type'	=> array('required'),
 		        'client_old_province'	=> array('required'),
 		        'client_old_city'		=> array('required'),
 		        'client_old_postalcode'	=> array('required'),
 		        'client_old_country'	=> array('required'),
 		        'client_new_address'	=> array('required'),
-		        'client_new_unit_type'	=> array('required'),
 		        'client_new_province'	=> array('required'),
 		        'client_new_city'		=> array('required'),
 		        'client_new_postalcode'	=> array('required'),
@@ -1656,14 +1650,12 @@ class AgentController extends Controller
 		        'client_email_template'	=> array('required')
 		    ),
 		    array(
-		        'client_old_address.required'	=> 'Please enter address',
-		        'client_old_unit_type.required'	=> 'Please select unit',
+		        'client_old_address.required'	=> 'Please enter old address line 1',
 		        'client_old_province.required'	=> 'Please select province',
 		        'client_old_city.required'		=> 'Please select city',
 		        'client_old_postalcode.required'=> 'Please enter postalcode',
 		        'client_old_country.required'	=> 'Please select country',
-		        'client_new_address.required'	=> 'Please enter address',
-		        'client_new_unit_type.required'	=> 'Please select unit',
+		        'client_new_address.required'	=> 'Please enter new address line 1',
 		        'client_new_province.required'	=> 'Please select province',
 		        'client_new_city.required'		=> 'Please select city',
 		        'client_new_postalcode.required'=> 'Please enter postalcode',
@@ -1695,13 +1687,11 @@ class AgentController extends Controller
 					$movingFromAddress = new AgentClientMovingFromAddress;
 
 					$movingFromAddress->agent_client_id = $inviteDetails['client_id'];
-					$movingFromAddress->address 		= $inviteDetails['client_old_address'];
-					$movingFromAddress->unit_type 		= $inviteDetails['client_old_unit_type'];
-					$movingFromAddress->unit_no 		= $inviteDetails['client_old_unit_no'];
+					$movingFromAddress->address1 		= $inviteDetails['client_old_address1'];
+                    $movingFromAddress->address2        = $inviteDetails['client_old_address2'];
 					$movingFromAddress->province_id 	= $inviteDetails['client_old_province'];
 					$movingFromAddress->city_id 		= $inviteDetails['client_old_city'];
-					$movingFromAddress->street_type_id 	= $inviteDetails['client_old_street_type'];
-					$movingFromAddress->postalcode 		= $inviteDetails['client_old_postalcode'];
+					$movingFromAddress->postal_code 	= $inviteDetails['client_old_postalcode'];
 					$movingFromAddress->country_id 		= $inviteDetails['client_old_country'];
 					$movingFromAddress->status 			= '1';
 					$movingFromAddress->created_by 		= $userId;
@@ -1712,16 +1702,15 @@ class AgentController extends Controller
 				{
 					$movingFromAddress = AgentClientMovingFromAddress::where(['agent_client_id' => $inviteDetails['client_id']])->first();
 
-					$movingFromAddress->address 		= $inviteDetails['client_old_address'];
-					$movingFromAddress->unit_type 		= $inviteDetails['client_old_unit_type'];
-					$movingFromAddress->unit_no 		= $inviteDetails['client_old_unit_no'];
-					$movingFromAddress->province_id 	= $inviteDetails['client_old_province'];
-					$movingFromAddress->city_id 		= $inviteDetails['client_old_city'];
-					$movingFromAddress->street_type_id 	= $inviteDetails['client_old_street_type'];
-					$movingFromAddress->postalcode 		= $inviteDetails['client_old_postalcode'];
-					$movingFromAddress->country_id 		= $inviteDetails['client_old_country'];
-					$movingFromAddress->status 			= '1';
-					$movingFromAddress->updated_by 		= $userId;
+					$movingFromAddress->agent_client_id = $inviteDetails['client_id'];
+                    $movingFromAddress->address1        = $inviteDetails['client_old_address1'];
+                    $movingFromAddress->address2        = $inviteDetails['client_old_address2'];
+                    $movingFromAddress->province_id     = $inviteDetails['client_old_province'];
+                    $movingFromAddress->city_id         = $inviteDetails['client_old_city'];
+                    $movingFromAddress->postal_code     = $inviteDetails['client_old_postalcode'];
+                    $movingFromAddress->country_id      = $inviteDetails['client_old_country'];
+                    $movingFromAddress->status          = '1';
+                    $movingFromAddress->updated_by      = $userId;
 
 					$movingFromAddress->save();
 				}
@@ -1732,13 +1721,11 @@ class AgentController extends Controller
 					$movingToAddress = new AgentClientMovingToAddress;
 
 					$movingToAddress->agent_client_id 	= $inviteDetails['client_id'];
-					$movingToAddress->address 			= $inviteDetails['client_new_address'];
-					$movingToAddress->unit_type 		= $inviteDetails['client_new_unit_type'];
-					$movingToAddress->unit_no 			= $inviteDetails['client_new_unit_no'];
+					$movingToAddress->address1 			= $inviteDetails['client_new_address1'];
+                    $movingToAddress->address2          = $inviteDetails['client_new_address2'];
 					$movingToAddress->province_id 		= $inviteDetails['client_new_province'];
 					$movingToAddress->city_id 			= $inviteDetails['client_new_city'];
-					$movingToAddress->street_type_id 	= $inviteDetails['client_new_street_type'];
-					$movingToAddress->postalcode 		= $inviteDetails['client_new_postalcode'];
+					$movingToAddress->postal_code 		= $inviteDetails['client_new_postalcode'];
 					$movingToAddress->country_id 		= $inviteDetails['client_new_country'];
 					$movingToAddress->moving_date 		= date('Y-m-d', strtotime($inviteDetails['client_moving_date']));
 					$movingToAddress->status 			= '1';
@@ -1750,17 +1737,16 @@ class AgentController extends Controller
 				{
 					$movingToAddress = AgentClientMovingToAddress::where(['agent_client_id' => $inviteDetails['client_id']])->first();
 					
-					$movingToAddress->address 			= $inviteDetails['client_new_address'];
-					$movingToAddress->unit_type 		= $inviteDetails['client_new_unit_type'];
-					$movingToAddress->unit_no 			= $inviteDetails['client_new_unit_no'];
-					$movingToAddress->province_id 		= $inviteDetails['client_new_province'];
-					$movingToAddress->city_id 			= $inviteDetails['client_new_city'];
-					$movingToAddress->street_type_id 	= $inviteDetails['client_new_street_type'];
-					$movingToAddress->postalcode 		= $inviteDetails['client_new_postalcode'];
-					$movingToAddress->country_id 		= $inviteDetails['client_new_country'];
-					$movingToAddress->moving_date 		= date('Y-m-d', strtotime($inviteDetails['client_moving_date']));
-					$movingToAddress->status 			= '1';
-					$movingToAddress->updated_by 		= $userId;
+					$movingToAddress->agent_client_id  = $inviteDetails['client_id'];
+                    $movingToAddress->address1          = $inviteDetails['client_new_address1'];
+                    $movingToAddress->address2          = $inviteDetails['client_new_address2'];
+                    $movingToAddress->province_id       = $inviteDetails['client_new_province'];
+                    $movingToAddress->city_id           = $inviteDetails['client_new_city'];
+                    $movingToAddress->postal_code       = $inviteDetails['client_new_postalcode'];
+                    $movingToAddress->country_id        = $inviteDetails['client_new_country'];
+                    $movingToAddress->moving_date       = date('Y-m-d', strtotime($inviteDetails['client_moving_date']));
+                    $movingToAddress->status            = '1';
+                    $movingToAddress->created_by        = $userId;
 
 					$movingToAddress->save();
 				}

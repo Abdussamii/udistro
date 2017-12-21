@@ -6,9 +6,71 @@
 	<script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
 	<link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.min.css') }}" />
 
+	<!-- Canada Post API -->
+	<script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=kp88-mx67-ff25-xd59"></script>
+	<link rel="stylesheet" type="text/css" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.30.min.css?key=kp88-mx67-ff25-xd59" />
+
 	<script type="text/javascript">
+	var fields = [
+		{ element: "client_old_address1", field: "Line1" },
+		{ element: "client_old_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "client_old_postalcode", field: "PostalCode" },
+		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+	],
+	options = {
+		key: "kp88-mx67-ff25-xd59"
+	},
+	control = new pca.Address(fields, options);
+
+	// On the selesction of address get the province abbreviation, and set it on the province dropdown
+	control.listen("populate", function (address) {
+
+	    $("#client_old_province option").each(function() {
+			if($(this).data('abbreviation') == address.Province)
+			{
+				$(this).attr('selected', 'selected').change();
+			}
+		});
+
+	});
+
+	var fields1 = [
+		{ element: "client_new_address1", field: "Line1" },
+		{ element: "client_new_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "client_new_postalcode", field: "PostalCode" },
+		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+	],
+	options1 = {
+		key: "kp88-mx67-ff25-xd59"
+	},
+	control1 = new pca.Address(fields1, options1);
+
+	// On the selesction of address get the province abbreviation, and set it on the province dropdown
+	control1.listen("populate", function (address) {
+
+	    $("#client_new_province option").each(function() {
+			if($(this).data('abbreviation') == address.Province)
+			{
+				$(this).attr('selected', 'selected').change();
+			}
+		});
+
+	});
+
 	$(document).ready(function(){
-		// Datepicker intialize
+		// To pot a space after user enters 3 characters like (123 456)
+		$('#postal_code').keyup(function() {
+		  	var postalCode = $(this).val().split(" ").join("");
+		  	if (postalCode.length > 0) {
+		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
+		  	}
+		  	$(this).val(postalCode);
+		});
+
 		$('#client_moving_date').datepicker({
 			dateFormat: 'dd-mm-yy'
 		});
@@ -17,7 +79,7 @@
 		});
 
 		// To pot a space after user enters 3 characters like (123 456)
-		$('#client_old_postalcode').keyup(function() {
+		/*$('#client_old_postalcode').keyup(function() {
 		  	var postalCode = $(this).val().split(" ").join("");
 		  	if (postalCode.length > 0) {
 		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
@@ -30,7 +92,7 @@
 		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
 		  	}
 		  	$(this).val(postalCode);
-		});
+		});*/
 	});
 	</script>
 
@@ -135,43 +197,17 @@
 							<div>
 								<fieldset>
 									<div class="form-group">
-										<label for="client_fname">Old Address</label>
-										<input type="text" class="form-control" name="client_old_address" id="client_old_address" value="{{ $movingFromAddress->address or '' }}">
+										<label for="client_fname">Old Address Line 1</label>
+										<input type="text" class="form-control" name="client_old_address1" id="client_old_address1" value="">
 										<input type="hidden" name="client_id" id="client_id">
+									</div>
+									<div class="form-group">
+										<label for="client_fname">Old Address Line 2</label>
+										<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
 									</div>
 
 									<!-- Old address related fields -->
 									<div id="container_old_address_fields">
-										<div class="row">
-											<div class="col-sm-3">
-										  		<label for="">Unit</label>
-
-										  		<select class="form-control" name="client_old_unit_type" id="client_old_unit_type">
-										  			<option value="">Select</option>
-											  		<option value="appartment">Appartment</option>
-											  		<option value="basement">Basement</option>
-										  		</select>
-										  	</div>
-										  	<div class="col-sm-3">
-										  		<label for="">Unit No</label>
-										  		<input type="text" class="form-control" name="client_old_unit_no" id="client_old_unit_no" value="">
-										  	</div>
-										  	<div class="col-sm-6">
-										  		<label for="">Street Type</label>
-										  		<select class="form-control" name="client_old_street_type" id="client_old_street_type">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $streetTypes ) && count( $streetTypes ) > 0 )
-											  		{
-											  			foreach ($streetTypes as $streetType)
-											  			{
-											  				echo '<option value="'. $streetType->id .'">'. $streetType->type .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
-										</div>
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="">Province</label>
@@ -207,7 +243,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="{{ $movingFromAddress->postalcode or '' }}">
+										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="">
 										  	</div>
 											<div class="col-sm-6">
 										  		<label for="">Country</label>
@@ -234,40 +270,16 @@
 								<fieldset>
 									<div class="form-group">
 										<label for="client_fname">New Address</label>
-										<input type="text" class="form-control" name="client_new_address" id="client_new_address" value="{{ $movingToAddress->address or '' }}">
+										<input type="text" class="form-control" name="client_new_address1" id="client_new_address1" value="">
+									</div>
+
+									<div class="form-group">
+										<label for="client_fname">New Address</label>
+										<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
 									</div>
 
 									<!-- New address related fields -->
 									<div id="container_new_address_fields">
-										<div class="row">
-											<div class="col-sm-3">
-										  		<label for="">Unit</label>
-										  		<select class="form-control" name="client_new_unit_type" id="client_new_unit_type">
-										  			<option value="">Select</option>
-											  		<option value="appartment">Appartment</option>
-											  		<option value="basement">Basement</option>
-										  		</select>
-										  	</div>
-										  	<div class="col-sm-3">
-										  		<label for="">Unit No</label>
-										  		<input type="text" class="form-control" name="client_new_unit_no" id="client_new_unit_no">
-										  	</div>
-										  	<div class="col-sm-6">
-										  		<label for="">Street Type</label>
-										  		<select class="form-control" name="client_new_street_type" id="client_new_street_type">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $streetTypes ) && count( $streetTypes ) > 0 )
-											  		{
-											  			foreach ($streetTypes as $streetType)
-											  			{
-											  				echo '<option value="'. $streetType->id .'">'. $streetType->type .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
-										</div>
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="">Province</label>
@@ -303,7 +315,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="{{ $movingToAddress->postalcode or '' }}">
+										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="">
 										  	</div>
 											<div class="col-sm-6">
 										  		<label for="">Country</label>
@@ -364,90 +376,4 @@
 		</div>
 
     </div>
-
-    <!-- Google map address auto-complete -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE&libraries=places&callback=initMap" async defer></script>
-	<script type="text/javascript">
-	function initMap() {
-		// To manage the client old address
-		$clientOldAddress = $("#client_old_address");
-	    var options = {
-	        types: ['geocode'],
-	        componentRestrictions: {
-	            country: 'ca'
-	        }
-	    };
-	    autocomplete = new google.maps.places.Autocomplete($clientOldAddress.get(0), options);    
-	    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-	        var address = $clientOldAddress.val();
-            addressComponent = address.split(",");
-            
-            // Replace the complete address with the address part only
-            $clientOldAddress.val(addressComponent[0]);
-
-            // (4) ["104 Nelson Street West", " Brampton", " ON", " Canada"]
-            // [0]: Address, [1]: City, [2]: Province, [3]: Country
-
-            // Set the province
-            var province = addressComponent[2].trim();
-            $("#client_old_province option").each(function() {
-				if($(this).data('abbreviation') == province)
-				{
-					$(this).attr('selected', 'selected').change();
-				}
-			});
-
-            // Set the city
-            let city = addressComponent[1].trim();
-            $("#client_old_city option:contains(" + city + ")").attr('selected', 'selected').change();
-
-            // Set the country
-            let country = addressComponent[3].trim();
-            $("#client_old_country option:contains(" + country + ")").attr('selected', 'selected').change();
-
-            // Show the hidden address fields
-            $('#container_old_address_fields').show();
-	    });
-
-	    // To manage the client new address
-	    $clientNewAddress = $("#client_new_address");
-	    var options = {
-	        types: ['geocode'],
-	        componentRestrictions: {
-	            country: 'ca'
-	        }
-	    };
-	    autocomplete = new google.maps.places.Autocomplete($clientNewAddress.get(0), options);    
-	    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-	        var address = $clientNewAddress.val();
-            addressComponent = address.split(",");
-            
-            // Replace the complete address with the address part only
-            $clientNewAddress.val(addressComponent[0]);
-
-            // (4) ["104 Nelson Street West", " Brampton", " ON", " Canada"]
-            // [0]: Address, [1]: City, [2]: Province, [3]: Country
-
-            // Set the province
-            var province = addressComponent[2].trim();
-            $("#client_new_province option").each(function() {
-				if($(this).data('abbreviation') == province)
-				{
-					$(this).attr('selected', 'selected').change();
-				}
-			});
-
-            // Set the city
-            let city = addressComponent[1].trim();
-            $("#client_new_city option:contains(" + city + ")").attr('selected', 'selected').change();
-
-            // Set the country
-            let country = addressComponent[3].trim();
-            $("#client_new_country option:contains(" + country + ")").attr('selected', 'selected').change();
-
-            // Show the hidden address fields
-            $('#container_new_address_fields').show();
-	    });
-	}
-	</script>
 @endsection
