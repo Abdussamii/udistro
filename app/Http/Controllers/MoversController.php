@@ -25,6 +25,8 @@ use App\ClientActivityFeedback;
 use App\MovingItemCategory;
 use App\MovingItemDetail;
 use App\MovingItemServiceRequest;
+use App\MovingOtherItemService;
+use App\MovingTransportation;
 
 use Helper;
 use Session;
@@ -204,11 +206,17 @@ class MoversController extends Controller
     	// Get the moving item category details
     	$movingItemDetails = MovingItemDetail::where('status', '1')->select('id', 'moving_item_category_id', 'item_name', 'item_weight')->orderBy('id', 'asc')->get();
 
+    	// Get the moving other item services list
+    	$movingOtherItemList = MovingOtherItemService::get();
+
+    	// Get the moving transportation list
+    	$MovingTransportationList = MovingTransportation::get();
+
     	// echo '<pre>';
-    	// print_r( $movingItemDetails->toArray() );
+    	// print_r( $MovingTransportationList->toArray() );
     	// exit;
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'agentHelpfulCount' => $agentHelpfulCount, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivitiesPercentage' => $completedActivitiesPercentage, 'invitationId' => $invitationId, 'completedActivities' => $completedActivities, 'agentClientHelpfulCount' => $agentClientHelpfulCount, 'agentClientRating' => $agentClientRating, 'movingItemCategories' => $movingItemCategories, 'movingItemDetails' => $movingItemDetails]);
+    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'agentHelpfulCount' => $agentHelpfulCount, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivitiesPercentage' => $completedActivitiesPercentage, 'invitationId' => $invitationId, 'completedActivities' => $completedActivities, 'agentClientHelpfulCount' => $agentClientHelpfulCount, 'agentClientRating' => $agentClientRating, 'movingItemCategories' => $movingItemCategories, 'movingItemDetails' => $movingItemDetails, 'movingOtherItemList' => $movingOtherItemList, 'MovingTransportationList' => $MovingTransportationList]);
     }
 
     /**
@@ -562,7 +570,7 @@ class MoversController extends Controller
 	    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
 	    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
 
-	    	$movingServiceRequest->items_in_storage_locker_already = $details['moving_house_special_instruction_1'];
+	    	/*$movingServiceRequest->items_in_storage_locker_already = $details['moving_house_special_instruction_1'];
 	    	$movingServiceRequest->needs_to_move_things_from_basement = $details['moving_house_special_instruction_2'];
 	    	$movingServiceRequest->move_items_from_my_garage_include_also = $details['moving_house_special_instruction_3'];
 	    	$movingServiceRequest->move_play_structure_from_nursery = $details['moving_house_special_instruction_4'];
@@ -573,8 +581,8 @@ class MoversController extends Controller
 	    	$movingServiceRequest->need_to_dismantle_reassemble_items = $details['moving_house_additional_service_3'];
 	    	$movingServiceRequest->need_storage = $details['moving_house_additional_service_4'];
 
-	    	$movingServiceRequest->vehicle_type = $details['moving_house_vehicle_type'];
-	    	$movingServiceRequest->packing_issue = $details['moving_house_packing_issue'];
+	    	$movingServiceRequest->transportation_vehicle_type = $details['moving_house_vehicle_type'];
+	    	$movingServiceRequest->packing_issue = $details['moving_house_packing_issue'];*/
 
 	    	$movingServiceRequest->callback_option = $details['moving_house_callback_option'];
 	    	$movingServiceRequest->callback_time = $details['moving_house_callback_time'];
@@ -606,6 +614,91 @@ class MoversController extends Controller
 
     	return response()->json($response);
     }
+
+    /**
+	 * To get the list of companies satisfying all the criteria to get the mover's quotations
+	 * @return string
+	 */
+	public function getServingCompaniesList()
+	{
+		# Company must be active
+		# Company category must match
+		# Availability Mode must be true
+		# Must have a payment plan
+
+		# Services (Atleast 30% match)
+		# Target Area must lies with in the working area of company or company working on multiple locations
+
+		$clientId 		= 1;	// Client Id
+		$companyCategory= 3; 	// For Moving Company
+
+		// Get the moving from and moving to address of client
+		$clientMovingFromAddress = 	DB::table('agent_client_moving_from_addresses as t1')
+									->leftJoin('provinces as t2', 't2.id', '=', 't1.province_id')
+									->leftJoin('cities as t3', 't3.id', '=', 't1.city_id')
+									->leftJoin('countries as t4', 't4.id', '=', 't1.country_id')
+									->where(['t1.agent_client_id' => $clientId, 't1.status' => '1'])
+									->select('t1.id', 't1.address1', 't1.address2', 't2.name as province', 't3.name as city', 't1.postal_code', 't4.name as country')
+									->first();
+
+		// Get the latitude, longitude of the mover from the Google Map API
+		$clientMovingFromAddressCoordinates = array();
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		$mapApiResponse = json_decode(file_get_contents($url), true);
+		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+		{
+			$clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+		}
+
+		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
+		$companies = DB::table('companies as t1')
+					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
+					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
+					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
+					->where(['t2.id' => $companyCategory])							// company category must match
+					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
+					->get();
+
+		// Check if any company satisfy all the rules or not
+		$services = array();
+		$companyCoordinates = array();
+		if( count( $companies ) > 0 )
+		{
+			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
+			foreach ($companies as $company)
+			{
+				/*$services[$company->company_id] = 	DB::table('category_services as t1')
+													->leftJoin('category_service_company as t2', 't2.category_service_id', '=', 't1.id')
+													->where(['t2.company_id' => $company->company_id, 't1.status' => '1'])
+													->select('t1.id', 't1.service')
+													->get();*/
+
+				// For the companies who are not working globally, get the lat long of the address
+				if( $company->working_globally != '1' )
+				{
+					// Get the latitude, longitude of the company address from the Google Map API
+					$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+
+					$mapApiResponse = json_decode(file_get_contents($url), true);
+
+					if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+					{
+						$companyCoordinates[$company->company_id] = $mapApiResponse['results'][0]['geometry']['location'];
+					}
+				}
+			}
+		}
+
+		// distance(32.9697, -96.80322, 29.46786, -98.53506, "K");
+
+		// echo '<pre>';
+		// print_r( $clientMovingFromAddressCoordinates );
+		// exit;
+
+		// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		// $mapApiResponse = json_decode(file_get_contents($url), true);
+	}
 
     /**
 	 * Return the first letter of each word in uppercase - if it's too long.

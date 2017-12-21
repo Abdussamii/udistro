@@ -86,7 +86,7 @@ $(function(){
 	});
 
     // Call the method to calculate the route between two addresses
-    calculateRoute('{{ $clientMovingFromAddress->address . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address . ' ' . $clientMovingToProvince->name }}');
+    calculateRoute('{{ $clientMovingFromAddress->address1 . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address1 . ' ' . $clientMovingToProvince->name }}');
 });
 
 // To create route between two addresses
@@ -1352,7 +1352,7 @@ function calculateRoute(from, to) {
 
 <!-- Moving Companies Modal -->
 <div id="moving_companies_modal" class="modal fade">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="width: 70%;">
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
@@ -1527,36 +1527,27 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="home_moving_companies_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<label>I have all items already in boxes and locked?</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_1" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_1" value="0">No</label>
-						                        	<div><label id="moving_house_special_instruction_1-error" class="error" for="moving_house_special_instruction_1"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>You need to move stuff from the basement?</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_2" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_2" value="0">No</label>
-						                        	<div><label id="moving_house_special_instruction_2-error" class="error" for="moving_house_special_instruction_2"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>You need to move stuff from the garage?</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_3" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_3" value="0">No</label>
-						                        	<div><label id="moving_house_special_instruction_3-error" class="error" for="moving_house_special_instruction_3"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>You need to move play structure from the nursery?</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_4" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_4" value="0">No</label>
-						                        	<div><label id="moving_house_special_instruction_4-error" class="error" for="moving_house_special_instruction_4"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>You need to move children swing set?</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_5" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_special_instruction_5" value="0">No</label>
-						                        	<div><label id="moving_house_special_instruction_5-error" class="error" for="moving_house_special_instruction_5"></label></div>
-						                        </div>
+						                    	<?php
+						                    	$step1 = 1;
+						                    	if( isset( $movingOtherItemList ) && count( $movingOtherItemList ) > 0 )
+						                    	{
+						                    		foreach ($movingOtherItemList as $itemList)
+						                    		{
+						                    			if( $itemList->type == 1 )
+						                    			{
+						                    			?>
+						                    				<div class="form-group">
+						                    					<label>{{ $itemList->other_moving_items_services_details }}</label>
+						                    					<label> <input type="radio" name="moving_house_special_instruction_{{ $step1 }}" value="1">Yes</label>
+						                    					<label> <input type="radio" name="moving_house_special_instruction_{{ $step1 }}" value="0">No</label>
+						                    					<div><label id="moving_house_special_instruction_{{ $step1 }}-error" class="error" for="moving_house_special_instruction_{{ $step1 }}"></label></div>
+						                    				</div>
+						                    			<?php
+						                    			}
+						                    			$step1++;
+						                    		}
+						                    	}
+						                    	?>
 						                    </div>
 						                </div>
 						            </div>
@@ -1567,48 +1558,51 @@ function calculateRoute(from, to) {
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse6" class="panel-collapse collapse">
-						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<label>I need packaging services?</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_1" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_1" value="0">No</label>
-						                        	<div><label id="moving_house_additional_service_1-error" class="error" for="moving_house_additional_service_1"></label></div>
+						                	<div class="panel-body">
+						                		<?php
+						                		$step2 = 1;
+						                		if( isset( $movingOtherItemList ) && count( $movingOtherItemList ) > 0 )
+						                		{
+						                			foreach ($movingOtherItemList as $itemList)
+						                    		{
+						                    			if( $itemList->type == 2 )
+						                    			{
+						                    			?>
+						                    				<div class="form-group">
+						                    					<label>{{ $itemList->other_moving_items_services_details }}</label>
+						                    					<label> <input type="radio" name="moving_house_additional_service_{{ $step2 }}" value="1">Yes</label>
+						                    					<label> <input type="radio" name="moving_house_additional_service_{{ $step2 }}" value="0">No</label>
+						                    					<div><label id="moving_house_additional_service_{{ $step2 }}-error" class="error" for="moving_house_additional_service_{{ $step2 }}"></label></div>
+						                    				</div>
+						                    			<?php
+						                    			}
+						                    			$step2++;
+						                    		}
+						                		}
+						                		?>
+
+						                		<div class="form-group">
+						                		<?php
+						                		if( isset( $MovingTransportationList ) && count( $MovingTransportationList ) > 0 )
+						                		{
+						                			foreach ($MovingTransportationList as $transportationList)
+						                    		{
+						                    		?>
+						                    			<label>{{ $transportationList->transportation_type }}</label>
+						                    			<br>
+							                        	<label><input type="radio" name="moving_house_vehicle_type" value="pickup">Pickup</label>
+							                        	<label><input type="radio" name="moving_house_vehicle_type" value="cargo van">Cargo Van</label>
+							                        	<label><input type="radio" name="moving_house_vehicle_type" value="10' truck">10' Truck</label>
+							                        	<label><input type="radio" name="moving_house_vehicle_type" value="15' truck">15' Truck</label>
+							                        	<label><input type="radio" name="moving_house_vehicle_type" value="17' truck">17' Truck</label>
+							                        	<label><input type="radio" name="moving_house_vehicle_type" value="26' Truck">26' Truck</label>
+							                        	<div><label id="moving_house_vehicle_type-error" class="error" for="moving_house_vehicle_type"></label></div>
+						                    		<?php
+						                    		}
+						                    	}
+						                		?>
 						                        </div>
-						                        <div class="form-group">
-						                        	<label>I need packaging boxes?</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_2" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_2" value="0">No</label>
-						                        	<div><label id="moving_house_additional_service_2-error" class="error" for="moving_house_additional_service_2"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>I need to disassemble and re-assemble items?</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_3" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_3" value="0">No</label>
-						                        	<div><label id="moving_house_additional_service_3-error" class="error" for="moving_house_additional_service_3"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>I need storage service?</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_4" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_additional_service_4" value="0">No</label>
-						                        	<div><label id="moving_house_additional_service_4-error" class="error" for="moving_house_additional_service_4"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Transportation Vehicle?</label>
-						                        	<br>
-						                        	<label><input type="radio" name="moving_house_vehicle_type" value="pickup">Pickup</label>
-						                        	<label><input type="radio" name="moving_house_vehicle_type" value="cargo van">Cargo Van</label>
-						                        	<label><input type="radio" name="moving_house_vehicle_type" value="10' truck">10' Truck</label>
-						                        	<label><input type="radio" name="moving_house_vehicle_type" value="15' truck">15' Truck</label>
-						                        	<label><input type="radio" name="moving_house_vehicle_type" value="17' truck">17' Truck</label>
-						                        	<label><input type="radio" name="moving_house_vehicle_type" value="26' Truck">26' Truck</label>
-						                        	<div><label id="moving_house_vehicle_type-error" class="error" for="moving_house_vehicle_type"></label></div>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Any packing issue in the house?</label>
-						                        	<label> <input type="radio" name="moving_house_packing_issue" value="1">Yes</label>
-						                        	<label> <input type="radio" name="moving_house_packing_issue" value="0">No</label>
-						                        	<div><label id="moving_house_packing_issue-error" class="error" for="moving_house_packing_issue"></label></div>
-						                        </div>
+
 						                        <div class="form-group">
 						                        	<label>Call back option?</label>
 						                        	<label> <input type="radio" name="moving_house_callback_option" value="1">Yes</label>
@@ -1627,7 +1621,8 @@ function calculateRoute(from, to) {
 						                        	<input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
 						                        	<input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
 						                        </div>
-						                    </div>
+
+						                	</div>
 						                </div>
 						            </div>
 						            <div class="panel panel-default">

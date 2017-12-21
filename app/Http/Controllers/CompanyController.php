@@ -782,7 +782,7 @@ class CompanyController extends Controller
     	$response = '';
     	if( $industryTypeId != '' )
     	{
-    		$companyCategoryServices = CompanyCategoryService::where(['status' => '1', 'company_category_id' => $industryTypeId])->select('id', 'service')->orderBy('service', 'asc')->get();
+    		$companyCategoryServices = CategoryService::where(['status' => '1', 'company_category_id' => $industryTypeId])->select('id', 'service')->orderBy('service', 'asc')->get();
 
     		if( count( $companyCategoryServices ) > 0 )
     		{

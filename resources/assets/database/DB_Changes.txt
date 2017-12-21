@@ -110,3 +110,11 @@ ALTER TABLE `category_service_company` ADD UNIQUE( `category_service_id`, `compa
 
 ALTER TABLE `payment_plans` CHANGE `number_of_emails` `allowed_count` INT(11) NOT NULL COMMENT 'No of emails/quotation allowed in the package';
 ALTER TABLE `payment_plans` CHANGE `allowed_count` `allowed_count` INT(11) NOT NULL COMMENT 'No of emails / quotation percentage allowed in the package';
+
+*********************************************************************************************************************************************************
+
+21-12-2017
+
+ALTER TABLE `agent_client_moving_to_addresses` ADD `address1` TEXT NOT NULL AFTER `agent_client_id`, ADD `address2` TEXT NOT NULL AFTER `address1`, ADD `province_id` INT(10) NOT NULL AFTER `address2`, ADD `city_id` INT(10) NOT NULL AFTER `province_id`, ADD `postal_code` VARCHAR(10) NOT NULL AFTER `city_id`, ADD `country_id` INT NOT NULL AFTER `postal_code`;
+
+ALTER TABLE `agent_client_moving_from_addresses` ADD `address1` TEXT NOT NULL AFTER `agent_client_id`, ADD `address2` TEXT NOT NULL AFTER `address1`, ADD `province_id` INT(10) NOT NULL AFTER `address2`, ADD `city_id` INT(10) NOT NULL AFTER `province_id`, ADD `postal_code` VARCHAR(10) NOT NULL AFTER `city_id`, ADD `country_id` INT NOT NULL AFTER `postal_code`;

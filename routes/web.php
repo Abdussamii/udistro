@@ -415,6 +415,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To save the user's moving query detail
 	Route::post('/saveusermovingquery', 'MoversController@saveUserMovingQuery');
+
+	// To get the list of companies satisfying all the criteria to get the mover's quotations
+	Route::get('/quotation', 'MoversController@getServingCompaniesList');
 	
 });
 
