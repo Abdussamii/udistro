@@ -343,6 +343,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To save the agent profile details
 	Route::post('/saveprofiledetails', 'AgentController@saveProfileDetails');
 
+	// To save the agent contact details
+	Route::post('/savecontactdetails', 'AgentController@saveContactDetails');
+
 	// To save the agent address details
 	Route::post('/saveaddressdetails', 'AgentController@saveAddressDetails');
 
