@@ -1543,8 +1543,8 @@ function calculateRoute(from, to) {
 						                    					<div><label id="moving_house_special_instruction_{{ $step1 }}-error" class="error" for="moving_house_special_instruction_{{ $step1 }}"></label></div>
 						                    				</div>
 						                    			<?php
+						                    				$step1++;
 						                    			}
-						                    			$step1++;
 						                    		}
 						                    	}
 						                    	?>
@@ -1575,8 +1575,8 @@ function calculateRoute(from, to) {
 						                    					<div><label id="moving_house_additional_service_{{ $step2 }}-error" class="error" for="moving_house_additional_service_{{ $step2 }}"></label></div>
 						                    				</div>
 						                    			<?php
+						                    				$step2++;
 						                    			}
-						                    			$step2++;
 						                    		}
 						                		}
 						                		?>

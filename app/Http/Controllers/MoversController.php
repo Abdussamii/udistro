@@ -629,8 +629,10 @@ class MoversController extends Controller
 		# Services (Atleast 30% match)
 		# Target Area must lies with in the working area of company or company working on multiple locations
 
-		$clientId 		= 1;	// Client Id
-		$companyCategory= 3; 	// For Moving Company
+		$requiredServices 	= array('moving_house_vehicle_type', 'moving_house_additional_service_1', 'moving_house_additional_service_2', 'moving_house_additional_service_3', 'moving_house_additional_service_5', 'moving_house_additional_service_4');
+
+		$clientId 			= 1;	// Client Id
+		$companyCategory 	= 3; 	// For Moving Company
 
 		// Get the moving from and moving to address of client
 		$clientMovingFromAddress = 	DB::table('agent_client_moving_from_addresses as t1')
@@ -661,43 +663,123 @@ class MoversController extends Controller
 					->get();
 
 		// Check if any company satisfy all the rules or not
-		$services = array();
+		$filteredCompanies 	= array();
 		$companyCoordinates = array();
 		if( count( $companies ) > 0 )
 		{
 			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
 			foreach ($companies as $company)
 			{
-				/*$services[$company->company_id] = 	DB::table('category_services as t1')
-													->leftJoin('category_service_company as t2', 't2.category_service_id', '=', 't1.id')
-													->where(['t2.company_id' => $company->company_id, 't1.status' => '1'])
-													->select('t1.id', 't1.service')
-													->get();*/
+				$services =	DB::table('category_services as t1')
+							->leftJoin('category_service_company as t2', 't2.category_service_id', '=', 't1.id')
+							->where(['t2.company_id' => $company->company_id, 't1.status' => '1'])
+							->select('t1.id', 't1.service')
+							->get();
 
-				// For the companies who are not working globally, get the lat long of the address
-				if( $company->working_globally != '1' )
+				$matchedServices = 0;
+				if( count( $services ) > 0 )
 				{
-					// Get the latitude, longitude of the company address from the Google Map API
-					$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-
-					$mapApiResponse = json_decode(file_get_contents($url), true);
-
-					if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+					foreach ($services as $service)
 					{
-						$companyCoordinates[$company->company_id] = $mapApiResponse['results'][0]['geometry']['location'];
+						if( $service->id == 7 )		// Truck Renters
+						{
+							if( in_array('moving_house_vehicle_type', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 8 )		// Boxing service
+						{
+							if( in_array('moving_house_additional_service_2', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 9 )		// Assembling service
+						{
+							if( in_array('moving_house_additional_service_3', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 10 ) 	// Disassembling service
+						{
+							if( in_array('moving_house_additional_service_3', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 11 ) 	// Shuttle Service
+						{
+							if( in_array('moving_house_additional_service_5', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 12 ) 	// Transport service
+						{
+							if( in_array('moving_house_vehicle_type', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 13 ) 	// Storage Service
+						{
+							if( in_array('moving_house_additional_service_4', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
+
+						if( $service->id == 14 ) 	// Packing Service
+						{
+							if( in_array('moving_house_additional_service_1', $requiredServices) )
+							{
+								$matchedServices++;
+							}
+						}
 					}
 				}
+
+				if( $matchedServices > 0 )
+				{
+					// For the companies who are not working globally, get the lat long of the address
+					if( $company->working_globally != '1' )
+					{
+						// Get the latitude, longitude of the company address from the Google Map API
+						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+
+						$mapApiResponse = json_decode(file_get_contents($url), true);
+
+						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+						{
+							$companyCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+
+							$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+
+							if( $distance <= $company->target_area )
+							{
+								$filteredCompanies[] = $company;
+							}
+						}
+					}
+					else
+					{
+						$filteredCompanies[] = $company;
+					}
+				}
+
 			}
 		}
 
-		// distance(32.9697, -96.80322, 29.46786, -98.53506, "K");
-
-		// echo '<pre>';
-		// print_r( $clientMovingFromAddressCoordinates );
-		// exit;
-
-		// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-		// $mapApiResponse = json_decode(file_get_contents($url), true);
+		echo '<pre>';
+		print_r( $filteredCompanies );
 	}
 
     /**
