@@ -646,7 +646,7 @@ $(document).ready(function(){
 			moving_house_description_9:  { required: true },
 			moving_house_description_10: { required: true },
 
-			moving_house_special_instruction_1: { required: true },
+			/*moving_house_special_instruction_1: { required: true },
 			moving_house_special_instruction_2: { required: true },
 			moving_house_special_instruction_3: { required: true },
 			moving_house_special_instruction_4: { required: true },
@@ -655,9 +655,8 @@ $(document).ready(function(){
 			moving_house_additional_service_1: { required: true },
 			moving_house_additional_service_2: { required: true },
 			moving_house_additional_service_3: { required: true },
-			moving_house_additional_service_4: { required: true },
-
-			moving_house_vehicle_type: { required: true },
+			moving_house_additional_service_4: { required: true },*/
+			
 			moving_house_packing_issue: { required: true },
 			moving_house_callback_option: { required: true }
 		},

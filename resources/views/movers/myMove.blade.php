@@ -1528,7 +1528,6 @@ function calculateRoute(from, to) {
 						                <div id="home_moving_companies_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                    	<?php
-						                    	$step1 = 1;
 						                    	if( isset( $movingOtherItemList ) && count( $movingOtherItemList ) > 0 )
 						                    	{
 						                    		foreach ($movingOtherItemList as $itemList)
@@ -1538,12 +1537,10 @@ function calculateRoute(from, to) {
 						                    			?>
 						                    				<div class="form-group">
 						                    					<label>{{ $itemList->other_moving_items_services_details }}</label>
-						                    					<label> <input type="radio" name="moving_house_special_instruction_{{ $step1 }}" value="1">Yes</label>
-						                    					<label> <input type="radio" name="moving_house_special_instruction_{{ $step1 }}" value="0">No</label>
-						                    					<div><label id="moving_house_special_instruction_{{ $step1 }}-error" class="error" for="moving_house_special_instruction_{{ $step1 }}"></label></div>
+						                    					<label> <input type="radio" name="moving_house_special_instruction[{{ $itemList->id }}]" value="1">Yes</label>
+						                    					<label> <input type="radio" name="moving_house_special_instruction[{{ $itemList->id  }}]" value="0">No</label>
 						                    				</div>
 						                    			<?php
-						                    				$step1++;
 						                    			}
 						                    		}
 						                    	}
@@ -1570,9 +1567,8 @@ function calculateRoute(from, to) {
 						                    			?>
 						                    				<div class="form-group">
 						                    					<label>{{ $itemList->other_moving_items_services_details }}</label>
-						                    					<label> <input type="radio" name="moving_house_additional_service_{{ $step2 }}" value="1">Yes</label>
-						                    					<label> <input type="radio" name="moving_house_additional_service_{{ $step2 }}" value="0">No</label>
-						                    					<div><label id="moving_house_additional_service_{{ $step2 }}-error" class="error" for="moving_house_additional_service_{{ $step2 }}"></label></div>
+						                    					<label> <input type="radio" name="moving_house_additional_service[{{ $itemList->id }}]" value="1">Yes</label>
+						                    					<label> <input type="radio" name="moving_house_additional_service[{{ $itemList->id }}]" value="0">No</label>
 						                    				</div>
 						                    			<?php
 						                    				$step2++;

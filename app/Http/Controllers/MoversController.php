@@ -28,6 +28,7 @@ use App\MovingItemServiceRequest;
 use App\MovingOtherItemService;
 use App\MovingTransportation;
 use App\MovingItemDetailServiceRequest;
+use App\MovingOtherItemServiceRequest;
 
 use Helper;
 use Session;
@@ -560,6 +561,7 @@ class MoversController extends Controller
     	$movingRequest = MovingItemServiceRequest::where(['status' => '1', 'agent_client_id' => $clientId, 'invitation_id' => $invitationId])->first();
 
     	$itemsQuantities = array();
+    	$specialInstructions = array();
     	$response = array();
     	if( count( $movingRequest ) == 0 )
     	{
@@ -645,6 +647,20 @@ class MoversController extends Controller
 			    				);
 			    			}
 			    		}
+
+			    		// Get the data for moving_other_item_service_requests
+			    		if( isset( $details['moving_house_special_instruction'] ) && count( $details['moving_house_special_instruction'] ) > 0 )
+			    		{
+			    			foreach( $details['moving_house_special_instruction'] as $itemKey => $itemValue )
+			    			{
+				    			$specialInstructions[] = array(
+				    				'other_moving_items_services_id' => $itemKey,
+				    				'moving_items_service_id' => $movingServiceRequest->id,
+				    				'created_at' => date('Y-m-d H:i:s'),
+				    				'created_by' => $clientId
+				    			);
+				    		}
+			    		}
 			    	}
     			}
     		}
@@ -655,6 +671,12 @@ class MoversController extends Controller
 	    		if( count( $itemsQuantities ) > 0 )
 	    		{
 	    			MovingItemDetailServiceRequest::insert($itemsQuantities);
+	    		}
+
+	    		// Save the data in moving_other_item_service_requests
+	    		if( count( $itemsQuantities ) > 0 )
+	    		{
+	    			MovingOtherItemServiceRequest::insert($specialInstructions);
 	    		}
 
 	    		$response['errCode'] 	= 0;
