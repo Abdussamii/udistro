@@ -625,7 +625,6 @@ class MoversController extends Controller
 		# Company category must match
 		# Availability Mode must be true
 		# Must have a payment plan
-
 		# Services (Atleast 30% match)
 		# Target Area must lies with in the working area of company or company working on multiple locations
 
@@ -665,6 +664,7 @@ class MoversController extends Controller
 		// Check if any company satisfy all the rules or not
 		$filteredCompanies 	= array();
 		$companyCoordinates = array();
+		$minimumPercentage	= 30;
 		if( count( $companies ) > 0 )
 		{
 			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
@@ -747,7 +747,7 @@ class MoversController extends Controller
 					}
 				}
 
-				if( $matchedServices > 0 )
+				if( ( $matchedServices / count( $services ) * 100 ) >= $minimumPercentage )
 				{
 					// For the companies who are not working globally, get the lat long of the address
 					if( $company->working_globally != '1' )
