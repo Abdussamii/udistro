@@ -27,6 +27,7 @@ use App\MovingItemDetail;
 use App\MovingItemServiceRequest;
 use App\MovingOtherItemService;
 use App\MovingTransportation;
+use App\MovingItemDetailServiceRequest;
 
 use Helper;
 use Session;
@@ -546,64 +547,123 @@ class MoversController extends Controller
     	$clientId 		= Session::get('clientId', '');
     	$invitationId 	= Session::get('invitationId', '');
 
+    	// Company category 
+    	$companyCategory= 3;	// Moving company category
+
+    	// To hold the required services
+    	$requiredServices = array();
+
     	$details = array();
     	parse_str($frmData, $details);
 
     	// Check if the request already exist
     	$movingRequest = MovingItemServiceRequest::where(['status' => '1', 'agent_client_id' => $clientId, 'invitation_id' => $invitationId])->first();
 
+    	$itemsQuantities = array();
     	$response = array();
     	if( count( $movingRequest ) == 0 )
     	{
-	    	$movingServiceRequest = new MovingItemServiceRequest;
+    		// Check how many services request are raised
+    		if( isset( $details['moving_house_additional_service_1'] ) && $details['moving_house_additional_service_1'] == 1 )
+    		{
+    			array_push($requiredServices, 'moving_house_additional_service_1');
+    		}
+    		if( isset( $details['moving_house_additional_service_2'] ) && $details['moving_house_additional_service_2'] == 1 )
+    		{
+    			array_push($requiredServices, 'moving_house_additional_service_2');
+    		}
+    		if( isset( $details['moving_house_additional_service_3'] ) && $details['moving_house_additional_service_3'] == 1 )
+    		{
+    			array_push($requiredServices, 'moving_house_additional_service_3');
+    		}
+    		if( isset( $details['moving_house_additional_service_4'] ) && $details['moving_house_additional_service_4'] == 1 )
+    		{
+    			array_push($requiredServices, 'moving_house_additional_service_4');
+    		}
+    		if( isset( $details['moving_house_additional_service_5'] ) && $details['moving_house_additional_service_5'] == 1 )
+    		{
+    			array_push($requiredServices, 'moving_house_additional_service_5');
+    		}
+    		if( isset( $details['moving_house_vehicle_type'] ) && $details['moving_house_vehicle_type'] == 1 )
+    		{
+    			array_push($requiredServices, 'moving_house_vehicle_type');
+    		}
 
-	    	$movingServiceRequest->agent_client_id = $clientId;
-	    	$movingServiceRequest->invitation_id = $invitationId;
+    		$filteredCompanies = $this->getFilteredMoverCompaniesList($clientId, $companyCategory, $requiredServices);
 
-	    	$movingServiceRequest->moving_to_house_type = $details['moving_house_to_type'];
-	    	$movingServiceRequest->moving_to_floor = $details['moving_house_to_level'];
-	    	$movingServiceRequest->moving_to_bedroom_count = $details['moving_house_to_bedroom_count'];
-	    	$movingServiceRequest->moving_to_property_type = $details['moving_house_to_property_type'];
+    		$successCount = 0;
+    		if( count( $filteredCompanies ) > 0 )
+    		{
+    			foreach ($filteredCompanies as $filterCompany)
+    			{
+    				// Save the data in moving_item_service_requests
 
-	    	$movingServiceRequest->moving_from_house_type = $details['moving_house_from_type'];
-	    	$movingServiceRequest->moving_from_floor = $details['moving_house_from_level'];
-	    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
-	    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
+			    	$movingServiceRequest = new MovingItemServiceRequest;
 
-	    	/*$movingServiceRequest->items_in_storage_locker_already = $details['moving_house_special_instruction_1'];
-	    	$movingServiceRequest->needs_to_move_things_from_basement = $details['moving_house_special_instruction_2'];
-	    	$movingServiceRequest->move_items_from_my_garage_include_also = $details['moving_house_special_instruction_3'];
-	    	$movingServiceRequest->move_play_structure_from_nursery = $details['moving_house_special_instruction_4'];
-	    	$movingServiceRequest->need_children_swing_set = $details['moving_house_special_instruction_5'];
+			    	$movingServiceRequest->agent_client_id 	= $clientId;
+			    	$movingServiceRequest->invitation_id 	= $invitationId;
+			    	$movingServiceRequest->mover_company_id = $filterCompany->company_id;
 
-	    	$movingServiceRequest->need_packing_services = $details['moving_house_additional_service_1'];
-	    	$movingServiceRequest->need_packing_boxes = $details['moving_house_additional_service_2'];
-	    	$movingServiceRequest->need_to_dismantle_reassemble_items = $details['moving_house_additional_service_3'];
-	    	$movingServiceRequest->need_storage = $details['moving_house_additional_service_4'];
+			    	$movingServiceRequest->moving_to_house_type = $details['moving_house_to_type'];
+			    	$movingServiceRequest->moving_to_floor = $details['moving_house_to_level'];
+			    	$movingServiceRequest->moving_to_bedroom_count = $details['moving_house_to_bedroom_count'];
+			    	$movingServiceRequest->moving_to_property_type = $details['moving_house_to_property_type'];
 
-	    	$movingServiceRequest->transportation_vehicle_type = $details['moving_house_vehicle_type'];
-	    	$movingServiceRequest->packing_issue = $details['moving_house_packing_issue'];*/
+			    	$movingServiceRequest->moving_from_house_type = $details['moving_house_from_type'];
+			    	$movingServiceRequest->moving_from_floor = $details['moving_house_from_level'];
+			    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
+			    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
 
-	    	$movingServiceRequest->callback_option = $details['moving_house_callback_option'];
-	    	$movingServiceRequest->callback_time = $details['moving_house_callback_time'];
+			    	$movingServiceRequest->callback_option = $details['moving_house_callback_option'];
+			    	$movingServiceRequest->callback_time = $details['moving_house_callback_time'];
 
-	    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
-	    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
-	    	
-	    	$movingServiceRequest->moving_date = date('Y-m-d H:i:s', strtotime( $details['moving_house_date'] ) );
-	    	$movingServiceRequest->additional_information = $details['moving_house_additional_information'];
-	    	$movingServiceRequest->status = '1';
-	    	$movingServiceRequest->created_by = $clientId;
+			    	$movingServiceRequest->transportation_vehicle_type = $details['moving_house_vehicle_type'];
 
-	    	if( $movingServiceRequest->save() )
+			    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
+			    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
+			    	
+			    	$movingServiceRequest->moving_date = date('Y-m-d H:i:s', strtotime( $details['moving_house_date'] ) );
+			    	$movingServiceRequest->additional_information = $details['moving_house_additional_information'];
+			    	$movingServiceRequest->status = '1';
+			    	$movingServiceRequest->created_by = $clientId;
+
+			    	if( $movingServiceRequest->save() )
+			    	{
+			    		$successCount++;
+
+			    		// Get the items quantities
+			    		foreach( $details['item_quantity'] as $itemKey => $itemValue )
+			    		{
+			    			if( $itemValue != '' && $itemValue > 0 )
+			    			{
+			    				$itemsQuantities[] = array(
+			    					'moving_items_service_id' => $movingServiceRequest->id,
+			    					'moving_items_details_id' => $itemKey,
+			    					'quantity' => $itemValue,
+			    					'created_at' => date('Y-m-d H:i:s'),
+			    					'created_by' => $clientId
+			    				);
+			    			}
+			    		}
+			    	}
+    			}
+    		}
+
+	    	if( $successCount > 0 )
 	    	{
+	    		// Save the data in moving_item_detail_service_requests table
+	    		if( count( $itemsQuantities ) > 0 )
+	    		{
+	    			MovingItemDetailServiceRequest::insert($itemsQuantities);
+	    		}
+
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
 	    	}
 	    	else
 	    	{
 	    		$response['errCode'] 	= 1;
-	    		$response['errMsg'] 	= 'Some issue in adding the request';
+	    		$response['errMsg'] 	= 'No matching company found!';
 	    	}
     	}
     	else
@@ -616,23 +676,23 @@ class MoversController extends Controller
     }
 
     /**
-	 * To get the list of companies satisfying all the criteria to get the mover's quotations
-	 * @return string
+	 * To get the list of mover companies satisfying all the criteria to get the mover's quotations
+	 *
+	 * 		- Rules
+	 * 		# Company must be active
+	 * 		# Company category must match
+	 * 		# Availability Mode must be true
+	 * 		# Must have a payment plan
+	 * 		# Services (Atleast 30% match)
+	 * 		# Target Area must lies with in the working area of company or company working on multiple locations
+	 *
+	 * @param int
+	 * @param int
+	 * @param array
+	 * @return array
 	 */
-	public function getServingCompaniesList()
+	public function getFilteredMoverCompaniesList($clientId, $companyCategory, $requiredServices)
 	{
-		# Company must be active
-		# Company category must match
-		# Availability Mode must be true
-		# Must have a payment plan
-		# Services (Atleast 30% match)
-		# Target Area must lies with in the working area of company or company working on multiple locations
-
-		$requiredServices 	= array('moving_house_vehicle_type', 'moving_house_additional_service_1', 'moving_house_additional_service_2', 'moving_house_additional_service_3', 'moving_house_additional_service_5', 'moving_house_additional_service_4');
-
-		$clientId 			= 1;	// Client Id
-		$companyCategory 	= 3; 	// For Moving Company
-
 		// Get the moving from and moving to address of client
 		$clientMovingFromAddress = 	DB::table('agent_client_moving_from_addresses as t1')
 									->leftJoin('provinces as t2', 't2.id', '=', 't1.province_id')
@@ -778,8 +838,7 @@ class MoversController extends Controller
 			}
 		}
 
-		echo '<pre>';
-		print_r( $filteredCompanies );
+		return $filteredCompanies;
 	}
 
     /**

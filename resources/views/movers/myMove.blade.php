@@ -1501,7 +1501,7 @@ function calculateRoute(from, to) {
 							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_name }}</div>
 							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_weight }}</div>
 							                        						<div class="col-sm-4 col-md-4 col-lg-4">
-							                        							<input class="form-control" type="text" name="item_quantity[{{ $movingItemDetail->id }}]" value="1">
+							                        							<input class="form-control" type="text" name="item_quantity[{{ $movingItemDetail->id }}]" value="">
 							                        						</div>
 							                        					<?php
 							                        					}
