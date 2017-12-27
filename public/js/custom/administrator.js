@@ -967,6 +967,64 @@ $(document).ready(function(){
         }
     });
 
+    // Add / Edit activity form validation
+    $('#frm_add_address').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_address').validate({
+        rules: {
+        },
+        messages: {
+        }
+    });
+
+    // Save the activity data
+    $('#btn_add_address').click(function(){
+        if( $('#frm_add_address').valid() )
+        {
+            // Ajax call to save the page related data
+            var $this = $(this);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/saveaddress',
+                method: 'post',
+                data: {
+                    frmData: $('#frm_add_address').serialize()
+                },
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+                        
+                        // Refresh the form and close the modal
+                        $('#frm_add_address')[0].reset();
+
+                        $('#modal_add_address').modal('hide');
+
+                        // Refresh the datatable
+                        $('#datatable_address').DataTable().ajax.reload();
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
     // Add / Edit services form validation
     $('#frm_add_services').submit(function(e){
         e.preventDefault();
@@ -1219,6 +1277,23 @@ $(document).ready(function(){
         ]
     });
 
+    $('#datatable_address').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchaddress',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
     $('#datatable_activity_feedback').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
@@ -1400,6 +1475,52 @@ $(document).ready(function(){
 
                     // Show the modal
                     $('#modal_add_activity').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing Activity id');
+        }
+    });
+
+    // To update the address details
+    $(document).on('click', '.edit_address', function()
+    {
+        var Id = $(this).attr('id');
+
+        if( Id != '' )
+        {
+            // Get the province details for the selected province
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/getaddressdetails',
+                method: 'get',
+                data: {
+                    Id: Id
+                },
+                success: function(response){
+
+                    // Auto-fill the form
+                    $('#frm_add_address #province_id').val(Id);
+                    $('#frm_add_address #id').val(response.id);
+                    $('#frm_add_address #label1').val(response.label1);
+                    $('#frm_add_address #label2').val(response.label2);
+                    $('#frm_add_address #label3').val(response.label3);
+                    $('#frm_add_address #label4').val(response.label4);
+                    $('#frm_add_address #label5').val(response.label5);
+                    $('#frm_add_address #label6').val(response.label6);
+                    $('#frm_add_address #label7').val(response.label7);
+                    $('#frm_add_address #label8').val(response.label8);
+                    $('#frm_add_address #label9').val(response.label9);
+                    $('#frm_add_address #label10').val(response.label10);
+                    $('#frm_add_address #title1').val(response.title1);
+                    $('#frm_add_address #timing1').val(response.timing1);
+                    $('#frm_add_address #title2').val(response.title2);
+                    $('#frm_add_address #timing2').val(response.timing2);
+                    $('#frm_add_address input[name="status"][value="'+ response.status +'"]').prop('checked', true);
+
+                    // Show the modal
+                    $('#modal_add_address').modal('show');
                 }
             });
         }

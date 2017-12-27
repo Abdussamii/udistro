@@ -1,8 +1,10 @@
-/****************Fonts**************/
+ @import url( ../css/font-awesome.min.css )
+
+/****************Fonts**************
 @font-face {
 	font-family: 'HelveticaNeueLTStd-ThCn';
-	src: url('../font/HelveticaNeueLTStd-ThCn.eot');
-	src: url('../font/HelveticaNeueLTStd-ThCn.woff2') format('woff2'),  url('../font/HelveticaNeueLTStd-ThCn.woff') format('woff'),  url('../font/HelveticaNeueLTStd-ThCn.ttf') format('truetype'),  url('../font/HelveticaNeueLTStd-ThCn.svg#HelveticaNeueLTStd-ThCn') format('svg'),  url('../font/HelveticaNeueLTStd-ThCn.eot?#iefix') format('embedded-opentype');
+	src: url('../fonts/HelveticaNeueLTStd-ThCn.eot');
+	src: url('../fonts/HelveticaNeueLTStd-ThCn.woff2') format('woff2'),  url('../fonts/HelveticaNeueLTStd-ThCn.woff') format('woff'),  url('../fonts/HelveticaNeueLTStd-ThCn.ttf') format('truetype'),  url('../fonts/HelveticaNeueLTStd-ThCn.svg#HelveticaNeueLTStd-ThCn') format('svg'),  url('../fonts/HelveticaNeueLTStd-ThCn.eot?#iefix') format('embedded-opentype');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -13,7 +15,7 @@ body {
 	color: #000;
 }
 h1, h2, h3, h4, h5 {
-	font-family: 'HelveticaNeueLTStd-ThCn';
+	font-family: 'Open Sans', sans-serif;
 	color: #000;
 }
 /*Video banner */
@@ -198,7 +200,7 @@ section {
 	
 }
 .banner_btn-group .btn {
-	font-family: 'HelveticaNeueLTStd-ThCn';
+	font-family: 'Open Sans', sans-serif;
 	font-size: 25px;
 }
 .section-testi {
@@ -211,7 +213,7 @@ section {
 	color: #000;
 }
 .well h2 {
-	font-family: 'HelveticaNeueLTStd-ThCn';
+	font-family: 'Open Sans', sans-serif;
 	font-size: 48px;
 	font-weight: bold;
 	margin-top: 10px;

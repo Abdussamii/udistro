@@ -295,6 +295,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 
 	/* ---------- Company related functionality ---------- */
 
+	// To return the address page
+	Route::get('/address', 'AdminController@address');
+
+	// To save the address details
+	Route::post('/saveaddress', 'AdminController@saveAddress');
+
+	// To show the address list in datatable
+	Route::get('/fetchaddress', 'AdminController@fetchAddress');
+
+	// To get the details for the selected address
+	Route::get('/getaddressdetails', 'AdminController@getAddressDetails');
+
 });
 
 /* ---------- Agent related functionality ---------- */

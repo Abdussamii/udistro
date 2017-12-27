@@ -35,6 +35,7 @@ use App\EmailTemplate;
 use App\ClientActivityList;
 use App\MovingItemCategory;
 use App\MovingItemDetail;
+use App\UpdateAddress;
 
 use Validator;
 use Helper;
@@ -1019,6 +1020,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to return the address page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function address()
+    {
+        return view('administrator/address');
+    }
+
+    /**
      * Function to return the IndustryType page
      * @param void
      * @return \Illuminate\Http\Response
@@ -1336,6 +1347,98 @@ class AdminController extends Controller
 		}
 
 		return response()->json($response);
+    }
+
+
+    /**
+     * Function to save the address details
+     * @param void
+     * @return Array
+     */
+    public function saveAddress()
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $inputData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $response = array();
+
+        $addressExist = UpdateAddress::where('province_id', '=', $inputData['province_id'])->first();
+
+        if(!$addressExist) // Check if the province id is available or not, if not add the province
+        {
+            $updateAddress = new UpdateAddress;
+
+            $updateAddress->label1          = $inputData['label1'];
+            $updateAddress->label2          = $inputData['label2'];
+            $updateAddress->label3          = $inputData['label3'];
+            $updateAddress->label4          = $inputData['label4'];
+            $updateAddress->label5          = $inputData['label5'];
+            $updateAddress->label6          = $inputData['label6'];
+            $updateAddress->label7          = $inputData['label7'];
+            $updateAddress->label8          = $inputData['label8'];
+            $updateAddress->label9          = $inputData['label9'];
+            $updateAddress->label10         = $inputData['label10'];
+            $updateAddress->title1          = $inputData['title1'];
+            $updateAddress->timing1         = $inputData['timing1'];
+            $updateAddress->title2          = $inputData['title2'];
+            $updateAddress->timing2         = $inputData['timing2'];
+            $updateAddress->status          = $inputData['status'];
+            $updateAddress->province_id     = $inputData['province_id'];
+            $updateAddress->updated_by      = $userId;
+            $updateAddress->created_by      = $userId;
+
+            if( $updateAddress->save() )
+            {
+                $response['errCode']    = 0;
+                $response['errMsg']     = 'Address added successfully';
+            }
+            else
+            {
+                $response['errCode']    = 2;
+                $response['errMsg']     = 'Some error in adding the address';
+            }
+        }
+        else                                        // Check if the activity id is available or not, if available update the activity
+        {
+            $updateAddress = UpdateAddress::find($inputData['id']);
+
+            $updateAddress->label1          = $inputData['label1'];
+            $updateAddress->label2          = $inputData['label2'];
+            $updateAddress->label3          = $inputData['label3'];
+            $updateAddress->label4          = $inputData['label4'];
+            $updateAddress->label5          = $inputData['label5'];
+            $updateAddress->label6          = $inputData['label6'];
+            $updateAddress->label7          = $inputData['label7'];
+            $updateAddress->label8          = $inputData['label8'];
+            $updateAddress->label9          = $inputData['label9'];
+            $updateAddress->label10         = $inputData['label10'];
+            $updateAddress->title1          = $inputData['title1'];
+            $updateAddress->timing1         = $inputData['timing1'];
+            $updateAddress->title2          = $inputData['title2'];
+            $updateAddress->timing2         = $inputData['timing2'];
+            $updateAddress->status          = $inputData['status'];
+            $updateAddress->created_by      = $userId;
+            
+
+            if( $updateAddress->save() )
+            {
+                $response['errCode']    = 0;
+                $response['errMsg']     = 'Address updated successfully';
+            }
+            else
+            {
+                $response['errCode']    = 2;
+                $response['errMsg']     = 'Some error in updating the address';
+            }
+        }
+
+        return response()->json($response);
     }
 
     /**
@@ -1931,6 +2034,64 @@ class AdminController extends Controller
     }
 
     /**
+     * Function to show the address list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchAddress()
+    {
+        $start      = Input::get('iDisplayStart');      // Offset
+        $length     = Input::get('iDisplayLength');     // Limit
+        $sSearch    = Input::get('sSearch');            // Search string
+        $col        = Input::get('iSortCol_0');         // Column number for sorting
+        $sortType   = Input::get('sSortDir_0');         // Sort type
+
+        // Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $addressArray = DB::table('provinces')
+                        ->leftJoin('update_addresses', 'update_addresses.province_id', '=', 'provinces.id')
+                        ->orderBy($sortBy, $sortType)
+                        ->limit($length)
+                        ->offset($start)
+                        ->select('update_addresses.id', 'provinces.name', 'provinces.id as pid')
+                        ->get();
+
+        $iTotal = Province::count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $addressArray ) > 0 )
+        {
+            foreach ($addressArray as $address)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $k+1,
+                    1 => ucfirst(strtolower($address->name)),
+                    2 => '<a href="javascript:void(0);" id="'. $address->pid .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
      * Function to show the Services list in datatable
      * @param void
      * @return array
@@ -2138,6 +2299,59 @@ class AdminController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to get the details for the selected address
+     * @param void
+     * @return array
+     */
+    public function getAddressDetails()
+    {
+        $Id = Input::get('Id');
+
+        $response = array();
+
+        $addressArray = UpdateAddress::where('province_id', '=', $Id)->first();
+
+        if($addressArray) 
+        {
+            $response['id']        = $addressArray->id;
+            $response['label1']    = $addressArray->label1;
+            $response['label2']    = $addressArray->label2;
+            $response['label3']    = $addressArray->label3;
+            $response['label4']    = $addressArray->label4;
+            $response['label5']    = $addressArray->label5;
+            $response['label6']    = $addressArray->label6;
+            $response['label7']    = $addressArray->label7;
+            $response['label8']    = $addressArray->label8;
+            $response['label9']    = $addressArray->label9;
+            $response['label10']   = $addressArray->label10;
+            $response['title1']    = $addressArray->title1;
+            $response['timing1']   = $addressArray->timing1;
+            $response['title2']    = $addressArray->title2;
+            $response['timing2']   = $addressArray->timing2;
+            $response['status']    = $addressArray->status;
+        } else {
+            $response['id']        = '';
+            $response['label1']    = '';
+            $response['label2']    = '';
+            $response['label3']    = '';
+            $response['label4']    = '';
+            $response['label5']    = '';
+            $response['label6']    = '';
+            $response['label7']    = '';
+            $response['label8']    = '';
+            $response['label9']    = '';
+            $response['label10']   = '';
+            $response['title1']    = '';
+            $response['timing1']   = '';
+            $response['title2']    = '';
+            $response['timing2']   = '';
+            $response['status']    = '';
+        }
+
+        return response()->json($response);
     }
 
     /**
