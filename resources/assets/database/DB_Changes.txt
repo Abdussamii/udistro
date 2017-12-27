@@ -126,3 +126,7 @@ ALTER TABLE `agent_client_moving_from_addresses` ADD `address1` TEXT NOT NULL AF
 ALTER TABLE `payment_plan_subscriptions` ADD `quota` INT(10) NOT NULL COMMENT 'email / quotation count' AFTER `end_date`, ADD `remaining_qouta` INT(10) NOT NULL COMMENT 'remaining email / quotation count' AFTER `quota`;
 
 ALTER TABLE `payment_plan_subscriptions` CHANGE `quota` `quota` INT(10) NOT NULL COMMENT 'email / quotation qouta count';
+
+ALTER TABLE `moving_item_service_requests` CHANGE `callback_time` `callback_time` ENUM('0','1','2') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT '0: Anytime, 1: Daytime, 2: Evening';
+
+ALTER TABLE `moving_item_service_requests` CHANGE `transportation_vehicle_type` `transportation_vehicle_type` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;

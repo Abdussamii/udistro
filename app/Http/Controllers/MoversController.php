@@ -619,10 +619,10 @@ class MoversController extends Controller
 				    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
 				    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
 
-				    	$movingServiceRequest->callback_option = $details['moving_house_callback_option'];
-				    	$movingServiceRequest->callback_time = $details['moving_house_callback_time'];
+				    	$movingServiceRequest->callback_option 	= isset( $details['moving_house_callback_option'] ) ? $details['moving_house_callback_option'] : 0;
+				    	$movingServiceRequest->callback_time 	= isset( $details['moving_house_callback_time'] ) ? $details['moving_house_callback_time'] : null;
 
-				    	$movingServiceRequest->transportation_vehicle_type = $details['moving_house_vehicle_type'];
+				    	$movingServiceRequest->transportation_vehicle_type = isset( $details['moving_house_vehicle_type'] ) ? $details['moving_house_vehicle_type'] : null;
 
 				    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
 				    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
@@ -695,7 +695,7 @@ class MoversController extends Controller
 	    	else
 	    	{
 	    		$response['errCode'] 	= 1;
-	    		$response['errMsg'] 	= 'No matching company found!';
+	    		$response['errMsg'] 	= 'No matching company found for the selected services';
 	    	}
     	}
     	else
