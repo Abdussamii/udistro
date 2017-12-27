@@ -29,6 +29,8 @@ use App\MovingOtherItemService;
 use App\MovingTransportation;
 use App\MovingItemDetailServiceRequest;
 use App\MovingOtherItemServiceRequest;
+use App\PaymentPlanSubscription;
+use App\MovingTransportationTypeRequest;
 
 use Helper;
 use Session;
@@ -560,29 +562,30 @@ class MoversController extends Controller
     	// Check if the request already exist
     	$movingRequest = MovingItemServiceRequest::where(['status' => '1', 'agent_client_id' => $clientId, 'invitation_id' => $invitationId])->first();
 
-    	$itemsQuantities = array();
-    	$specialInstructions = array();
+    	$itemsQuantities 		= array();
+    	$specialInstructions 	= array();
+    	$movingHouseVehicleType = array();
     	$response = array();
     	if( count( $movingRequest ) == 0 )
     	{
     		// Check how many services request are raised
-    		if( isset( $details['moving_house_additional_service_1'] ) && $details['moving_house_additional_service_1'] == 1 )
+    		if( isset( $details['moving_house_additional_service'][6] ) && $details['moving_house_additional_service'][6] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_additional_service_1');
     		}
-    		if( isset( $details['moving_house_additional_service_2'] ) && $details['moving_house_additional_service_2'] == 1 )
+    		if( isset( $details['moving_house_additional_service'][7] ) && $details['moving_house_additional_service'][7] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_additional_service_2');
     		}
-    		if( isset( $details['moving_house_additional_service_3'] ) && $details['moving_house_additional_service_3'] == 1 )
+    		if( isset( $details['moving_house_additional_service'][8] ) && $details['moving_house_additional_service'][8] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_additional_service_3');
     		}
-    		if( isset( $details['moving_house_additional_service_4'] ) && $details['moving_house_additional_service_4'] == 1 )
+    		if( isset( $details['moving_house_additional_service'][9] ) && $details['moving_house_additional_service'][9] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_additional_service_4');
     		}
-    		if( isset( $details['moving_house_additional_service_5'] ) && $details['moving_house_additional_service_5'] == 1 )
+    		if( isset( $details['moving_house_additional_service'][10] ) && $details['moving_house_additional_service'][10] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_additional_service_5');
     		}
@@ -593,75 +596,98 @@ class MoversController extends Controller
 
     		$filteredCompanies = $this->getFilteredMoverCompaniesList($clientId, $companyCategory, $requiredServices);
 
+    		// Transaction start
+    		DB::beginTransaction();
+
     		$successCount = 0;
     		if( count( $filteredCompanies ) > 0 )
     		{
     			foreach ($filteredCompanies as $filterCompany)
     			{
-    				// Save the data in moving_item_service_requests
+    				// Check the payment plan quota, if quota exceeds don't send the quotation
+    				if( Helper::checkPaymentPlanSubscriptionQuota($filterCompany->company_id, 2) )	// company id, payment plan type id
+    				{
+	    				// Save the data in moving_item_service_requests
+				    	$movingServiceRequest = new MovingItemServiceRequest;
 
-			    	$movingServiceRequest = new MovingItemServiceRequest;
+				    	$movingServiceRequest->agent_client_id 	= $clientId;
+				    	$movingServiceRequest->invitation_id 	= $invitationId;
+				    	$movingServiceRequest->mover_company_id = $filterCompany->company_id;
 
-			    	$movingServiceRequest->agent_client_id 	= $clientId;
-			    	$movingServiceRequest->invitation_id 	= $invitationId;
-			    	$movingServiceRequest->mover_company_id = $filterCompany->company_id;
+				    	$movingServiceRequest->moving_to_house_type = $details['moving_house_to_type'];
+				    	$movingServiceRequest->moving_to_floor = $details['moving_house_to_level'];
+				    	$movingServiceRequest->moving_to_bedroom_count = $details['moving_house_to_bedroom_count'];
+				    	$movingServiceRequest->moving_to_property_type = $details['moving_house_to_property_type'];
 
-			    	$movingServiceRequest->moving_to_house_type = $details['moving_house_to_type'];
-			    	$movingServiceRequest->moving_to_floor = $details['moving_house_to_level'];
-			    	$movingServiceRequest->moving_to_bedroom_count = $details['moving_house_to_bedroom_count'];
-			    	$movingServiceRequest->moving_to_property_type = $details['moving_house_to_property_type'];
+				    	$movingServiceRequest->moving_from_house_type = $details['moving_house_from_type'];
+				    	$movingServiceRequest->moving_from_floor = $details['moving_house_from_level'];
+				    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
+				    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
 
-			    	$movingServiceRequest->moving_from_house_type = $details['moving_house_from_type'];
-			    	$movingServiceRequest->moving_from_floor = $details['moving_house_from_level'];
-			    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
-			    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
+				    	$movingServiceRequest->callback_option 	= isset( $details['moving_house_callback_option'] ) ? $details['moving_house_callback_option'] : 0;
+				    	$movingServiceRequest->callback_time 	= isset( $details['moving_house_callback_time'] ) ? $details['moving_house_callback_time'] : null;
 
-			    	$movingServiceRequest->callback_option = $details['moving_house_callback_option'];
-			    	$movingServiceRequest->callback_time = $details['moving_house_callback_time'];
+				    	$movingServiceRequest->transportation_vehicle_type = isset( $details['moving_house_vehicle_type'] ) ? $details['moving_house_vehicle_type'] : null;
 
-			    	$movingServiceRequest->transportation_vehicle_type = $details['moving_house_vehicle_type'];
+				    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
+				    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
+				    	
+				    	$movingServiceRequest->moving_date = date('Y-m-d H:i:s', strtotime( $details['moving_house_date'] ) );
+				    	$movingServiceRequest->additional_information = $details['moving_house_additional_information'];
+				    	$movingServiceRequest->status = '1';
+				    	$movingServiceRequest->created_by = $clientId;
 
-			    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
-			    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
-			    	
-			    	$movingServiceRequest->moving_date = date('Y-m-d H:i:s', strtotime( $details['moving_house_date'] ) );
-			    	$movingServiceRequest->additional_information = $details['moving_house_additional_information'];
-			    	$movingServiceRequest->status = '1';
-			    	$movingServiceRequest->created_by = $clientId;
+				    	if( $movingServiceRequest->save() )
+				    	{
+				    		$successCount++;
 
-			    	if( $movingServiceRequest->save() )
-			    	{
-			    		$successCount++;
+				    		// Update the payment plan remaining quota count
+				    		PaymentPlanSubscription::where('subscriber_id', '=', $filterCompany->company_id)			// subscriber is either company / agent
+		    										->where('plan_type_id', '=', '2')									// plan type is either for company / agent
+		    										->where('status', '=', '1')
+		    										->update(['remaining_qouta' => DB::raw('remaining_qouta - 1')]);
 
-			    		// Get the items quantities
-			    		foreach( $details['item_quantity'] as $itemKey => $itemValue )
-			    		{
-			    			if( $itemValue != '' && $itemValue > 0 )
-			    			{
-			    				$itemsQuantities[] = array(
-			    					'moving_items_service_id' => $movingServiceRequest->id,
-			    					'moving_items_details_id' => $itemKey,
-			    					'quantity' => $itemValue,
-			    					'created_at' => date('Y-m-d H:i:s'),
-			    					'created_by' => $clientId
-			    				);
-			    			}
-			    		}
+				    		// Get the items quantities
+				    		foreach( $details['item_quantity'] as $itemKey => $itemValue )
+				    		{
+				    			if( $itemValue != '' && $itemValue > 0 )
+				    			{
+				    				$itemsQuantities[] = array(
+				    					'moving_items_service_id' => $movingServiceRequest->id,
+				    					'moving_items_details_id' => $itemKey,
+				    					'quantity' => $itemValue,
+				    					'created_at' => date('Y-m-d H:i:s'),
+				    					'created_by' => $clientId
+				    				);
+				    			}
+				    		}
 
-			    		// Get the data for moving_other_item_service_requests
-			    		if( isset( $details['moving_house_special_instruction'] ) && count( $details['moving_house_special_instruction'] ) > 0 )
-			    		{
-			    			foreach( $details['moving_house_special_instruction'] as $itemKey => $itemValue )
-			    			{
-				    			$specialInstructions[] = array(
-				    				'other_moving_items_services_id' => $itemKey,
-				    				'moving_items_service_id' => $movingServiceRequest->id,
+				    		// Get the data for moving_other_item_service_requests
+				    		if( isset( $details['moving_house_special_instruction'] ) && count( $details['moving_house_special_instruction'] ) > 0 )
+				    		{
+				    			foreach( $details['moving_house_special_instruction'] as $itemKey => $itemValue )
+				    			{
+					    			$specialInstructions[] = array(
+					    				'other_moving_items_services_id' => $itemKey,
+					    				'moving_items_service_id' => $movingServiceRequest->id,
+					    				'created_at' => date('Y-m-d H:i:s'),
+					    				'created_by' => $clientId
+					    			);
+					    		}
+				    		}
+
+				    		// Get the Transportation Vehicle type selection
+				    		if( isset( $details['moving_house_vehicle_type'] ) )
+				    		{
+				    			$movingHouseVehicleType[] = array(
+				    				'transportation_id' => 1,
+				    				'moving_items_services_id' => $movingServiceRequest->id,
 				    				'created_at' => date('Y-m-d H:i:s'),
-				    				'created_by' => $clientId
+					    			'created_by' => $clientId
 				    			);
 				    		}
-			    		}
-			    	}
+				    	}
+    				}
     			}
     		}
 
@@ -679,13 +705,22 @@ class MoversController extends Controller
 	    			MovingOtherItemServiceRequest::insert($specialInstructions);
 	    		}
 
+	    		// Save the data in moving_item_detail_service_requests
+	    		if( count( $movingHouseVehicleType ) > 0 )
+	    		{
+	    			MovingTransportationTypeRequest::insert($movingHouseVehicleType);
+	    		}
+
+	    		// Commit transaction
+	    		DB::commit();
+
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
 	    	}
 	    	else
 	    	{
 	    		$response['errCode'] 	= 1;
-	    		$response['errMsg'] 	= 'No matching company found!';
+	    		$response['errMsg'] 	= 'No matching company found for the selected services';
 	    	}
     	}
     	else
