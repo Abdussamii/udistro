@@ -1352,7 +1352,7 @@ function calculateRoute(from, to) {
 
 <!-- Moving Companies Modal -->
 <div id="moving_companies_modal" class="modal fade">
-    <div class="modal-dialog modal-lg" style="width: 70%;">
+    <div class="modal-dialog modal-lg">
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
@@ -1485,9 +1485,9 @@ function calculateRoute(from, to) {
 						                        			<!-- Collapse Body -->
 						                        			<div id="collapse{{ $step }}" class="panel-collapse collapse">
 						                        				<div>
-							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Item</strong></div>
+							                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
 							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Quantity</strong></div>
+							                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
 						                        				</div>
 							                        			<?php
 							                        			if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
@@ -1498,10 +1498,10 @@ function calculateRoute(from, to) {
 							                        					{
 							                        						// echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name . ' - ' . $movingItemDetail->item_weight .'</option>';
 							                        					?>
-							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_name }}</div>
+							                        						<div class="col-sm-6 col-md-6 col-lg-6">{{ $movingItemDetail->item_name }}</div>
 							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_weight }}</div>
-							                        						<div class="col-sm-4 col-md-4 col-lg-4">
-							                        							<input class="form-control" type="text" name="item_quantity[{{ $movingItemDetail->id }}]" value="">
+							                        						<div class="col-sm-2 col-md-2 col-lg-2">
+							                        							<input class="form-control" type="number" min="0" name="item_quantity[{{ $movingItemDetail->id }}]" value="">
 							                        						</div>
 							                        					<?php
 							                        					}

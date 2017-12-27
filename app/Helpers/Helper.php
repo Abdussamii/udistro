@@ -8,6 +8,7 @@ use Mail;
 use App\LoginAttempt;
 use App\ClientActivityList;
 use App\ClientActivityLog;
+use App\PaymentPlanSubscription;
 
 class Helper
 {
@@ -134,7 +135,7 @@ class Helper
     }
 
     /**
-     * To sget invite status
+     * To get invite status
      * @param array
      * @return null
      */
@@ -277,5 +278,41 @@ class Helper
         {
             return $miles;
         }
+    }
+
+    /**
+     * To check the current active payment plan and the remaining quota count
+     * @param int
+     * @param int
+     * @return bool
+     */
+    public static function checkPaymentPlanSubscriptionQuota($companyId, $planTypeId)
+    {
+    	if( !is_null( $companyId ) && ( $companyId != '' ) )
+    	{
+    		$date = date('Y-m-d');
+
+    		// Check if their is an active payment plan exist on the present date
+    		$paymentPlanSubscriptionQouta = PaymentPlanSubscription::where('subscriber_id', '=', $companyId)	// subscriber is either company / agent
+    										->where('plan_type_id', '=', $planTypeId)							// plan type is either for company / agent
+    										->where('start_date', '<=', $date)									// plan start date must lie between the today's date
+    										->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
+    										->where('remaining_qouta', '>', 0)									// plan remaining qouta count must not be zero
+    										->where('status', '=', '1')
+    										->first();
+
+    		if( count( $paymentPlanSubscriptionQouta ) > 0 )
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
     }
 }
