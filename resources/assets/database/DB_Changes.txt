@@ -130,3 +130,9 @@ ALTER TABLE `payment_plan_subscriptions` CHANGE `quota` `quota` INT(10) NOT NULL
 ALTER TABLE `moving_item_service_requests` CHANGE `callback_time` `callback_time` ENUM('0','1','2') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT '0: Anytime, 1: Daytime, 2: Evening';
 
 ALTER TABLE `moving_item_service_requests` CHANGE `transportation_vehicle_type` `transportation_vehicle_type` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+ALTER TABLE `moving_transportation_type_request` DROP `created_at`, DROP `updated_at`;
+
+ALTER TABLE `moving_transportation_type_request` ADD `created_at` DATETIME NOT NULL AFTER `amount`, ADD `created_by` INT(10) NOT NULL AFTER `created_at`, ADD `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP() AFTER `created_by`, ADD `updated_by` INT(10) NULL AFTER `updated_at`;
+
+ALTER TABLE `moving_transportation_type_request` CHANGE `amount` `amount` DECIMAL(10,2) NULL;

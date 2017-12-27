@@ -30,6 +30,7 @@ use App\MovingTransportation;
 use App\MovingItemDetailServiceRequest;
 use App\MovingOtherItemServiceRequest;
 use App\PaymentPlanSubscription;
+use App\MovingTransportationTypeRequest;
 
 use Helper;
 use Session;
@@ -561,8 +562,9 @@ class MoversController extends Controller
     	// Check if the request already exist
     	$movingRequest = MovingItemServiceRequest::where(['status' => '1', 'agent_client_id' => $clientId, 'invitation_id' => $invitationId])->first();
 
-    	$itemsQuantities = array();
-    	$specialInstructions = array();
+    	$itemsQuantities 		= array();
+    	$specialInstructions 	= array();
+    	$movingHouseVehicleType = array();
     	$response = array();
     	if( count( $movingRequest ) == 0 )
     	{
@@ -593,6 +595,9 @@ class MoversController extends Controller
     		}
 
     		$filteredCompanies = $this->getFilteredMoverCompaniesList($clientId, $companyCategory, $requiredServices);
+
+    		// Transaction start
+    		DB::beginTransaction();
 
     		$successCount = 0;
     		if( count( $filteredCompanies ) > 0 )
@@ -670,6 +675,17 @@ class MoversController extends Controller
 					    			);
 					    		}
 				    		}
+
+				    		// Get the Transportation Vehicle type selection
+				    		if( isset( $details['moving_house_vehicle_type'] ) )
+				    		{
+				    			$movingHouseVehicleType[] = array(
+				    				'transportation_id' => 1,
+				    				'moving_items_services_id' => $movingServiceRequest->id,
+				    				'created_at' => date('Y-m-d H:i:s'),
+					    			'created_by' => $clientId
+				    			);
+				    		}
 				    	}
     				}
     			}
@@ -688,6 +704,15 @@ class MoversController extends Controller
 	    		{
 	    			MovingOtherItemServiceRequest::insert($specialInstructions);
 	    		}
+
+	    		// Save the data in moving_item_detail_service_requests
+	    		if( count( $movingHouseVehicleType ) > 0 )
+	    		{
+	    			MovingTransportationTypeRequest::insert($movingHouseVehicleType);
+	    		}
+
+	    		// Commit transaction
+	    		DB::commit();
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
