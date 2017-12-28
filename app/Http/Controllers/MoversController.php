@@ -32,6 +32,10 @@ use App\MovingOtherItemServiceRequest;
 use App\PaymentPlanSubscription;
 use App\MovingTransportationTypeRequest;
 
+use App\TechConciergePlace;
+use App\TechConciergeAppliance;
+use App\TechConciergeOtherDetail;
+
 use Helper;
 use Session;
 
@@ -216,11 +220,54 @@ class MoversController extends Controller
     	// Get the moving transportation list
     	$MovingTransportationList = MovingTransportation::get();
 
+    	// Get the tech concierge places list
+    	$techConciergePlaces = TechConciergePlace::orderBy('places', 'asc')->select('id', 'places')->get();
+
+    	// Get the tech concierge appliances list
+    	$techConciergeAppliances = TechConciergeAppliance::orderBy('appliances', 'asc')->select('id', 'appliances')->get();
+
+    	// Get the tech concierge details list
+    	$techConciergeOtherDetails = TechConciergeOtherDetail::get();
+
     	// echo '<pre>';
-    	// print_r( $MovingTransportationList->toArray() );
+    	// print_r( $techConciergeOtherDetails->toArray() );
     	// exit;
 
-    	return view('movers/myMove', ['agentDetails' => $agentDetails, 'clientDetails' => $clientDetails, 'companyDetails' => $companyDetails, 'clientInitials' => $clientInitials, 'clientName' => $clientName, 'agentName' => $agentName, 'agentInitials' => $agentInitials, 'activities' => $activities, 'agentRating' => $agentRating, 'agentHelpfulCount' => $agentHelpfulCount, 'clientMovingFromProvince' => $clientMovingFromProvince, 'clientMovingToProvince' => $clientMovingToProvince, 'clientMovingFromAddress' => $clientMovingFromAddress, 'clientMovingToAddress' => $clientMovingToAddress, 'companyProvince' => $companyProvince, 'companyCity' => $companyCity, 'serviceProviders' => $serviceProviders, 'completedActivitiesPercentage' => $completedActivitiesPercentage, 'invitationId' => $invitationId, 'completedActivities' => $completedActivities, 'agentClientHelpfulCount' => $agentClientHelpfulCount, 'agentClientRating' => $agentClientRating, 'movingItemCategories' => $movingItemCategories, 'movingItemDetails' => $movingItemDetails, 'movingOtherItemList' => $movingOtherItemList, 'MovingTransportationList' => $MovingTransportationList]);
+    	return view('movers/myMove', 
+    		[
+    			'agentDetails' => $agentDetails, 
+    			'clientDetails' => $clientDetails, 
+    			'companyDetails' => $companyDetails, 
+    			'clientInitials' => $clientInitials, 
+    			'clientName' => $clientName, 
+    			'agentName' => $agentName, 
+    			'agentInitials' => $agentInitials, 
+    			'activities' => $activities, 
+    			'agentRating' => $agentRating, 
+    			'agentHelpfulCount' => $agentHelpfulCount, 
+    			'clientMovingFromProvince' => $clientMovingFromProvince, 
+    			'clientMovingToProvince' => $clientMovingToProvince, 
+    			'clientMovingFromAddress' => $clientMovingFromAddress, 
+    			'clientMovingToAddress' => $clientMovingToAddress, 
+    			'companyProvince' => $companyProvince, 
+    			'companyCity' => $companyCity, 
+    			'serviceProviders' => $serviceProviders, 
+    			'completedActivitiesPercentage' => $completedActivitiesPercentage, 
+    			'invitationId' => $invitationId, 
+    			'completedActivities' => $completedActivities, 
+    			'agentClientHelpfulCount' => $agentClientHelpfulCount, 
+    			'agentClientRating' => $agentClientRating, 
+    			'movingItemCategories' => $movingItemCategories, 
+    			'movingItemDetails' => $movingItemDetails, 
+    			'movingOtherItemList' => $movingOtherItemList, 
+    			'MovingTransportationList' => $MovingTransportationList,
+
+    			// Tech Concierge
+    			'techConciergePlaces' 		=> $techConciergePlaces,
+    			'techConciergeAppliances' 	=> $techConciergeAppliances,
+    			'techConciergeOtherDetails' => $techConciergeOtherDetails
+    		]
+    	);
     }
 
     /**

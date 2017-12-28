@@ -740,7 +740,7 @@ $(document).ready(function(){
 	});
 
 	// Previuos button functionality
-	/*$('#btn_prev_tech_concierge').click(function(){
+	$('#btn_prev_tech_concierge').click(function(){
 		if( StepTechConcierge == 2 )
 		{
 			$('#tech_concierge_step1').show();
@@ -748,10 +748,10 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge--;
-	});*/
+	});
 
 	// Next button functionality
-	/*$('#btn_next_tech_concierge').click(function(){
+	$('#btn_next_tech_concierge').click(function(){
 		if( StepTechConcierge == 1 )
 		{
 			$('#tech_concierge_step1').hide();
@@ -759,7 +759,7 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge++;
-	});*/
+	});
 
 	/* ---------- Tech Concierge functionality ends ---------- */
 

@@ -80,7 +80,7 @@ $(function(){
     });
 
     // Datepicker intialize
-	$('#moving_house_date').datepicker({
+	$('.datepicker').datepicker({
 		dateFormat: 'dd-mm-yy'
 	});
 
@@ -1470,11 +1470,11 @@ function calculateRoute(from, to) {
       					<br>
       					<div>
       						<form name="frm_home_moving_companies" id="frm_home_moving_companies" autocomplete="off">
-						        <div class="panel-group" id="accordion">
+						        <div class="panel-group" id="accordion_home_moving_companies">
 						        	<div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse3">Moving From</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse3">Moving From</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse3" class="panel-collapse collapse in">
@@ -1517,7 +1517,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse2">Moving To</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse2">Moving To</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse2" class="panel-collapse collapse">
@@ -1561,7 +1561,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse4">Detailed Job Description</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse4">Detailed Job Description</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse4" class="panel-collapse collapse">
@@ -1618,7 +1618,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse5">Special Instructions</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse5">Special Instructions</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse5" class="panel-collapse collapse">
@@ -1647,7 +1647,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse6">Additional Services</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse6">Additional Services</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse6" class="panel-collapse collapse">
@@ -1720,7 +1720,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse7">Additional Information (If Any)</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse7">Additional Information (If Any)</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse7" class="panel-collapse collapse">
@@ -1732,12 +1732,12 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_moving_companies_collapse8">Moving Date</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse8">Moving Date</a>
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse8" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <input type="text" name="moving_house_date" id="moving_house_date" class="form-control">
+						                        <input type="text" name="moving_house_date" id="moving_house_date" class="form-control datepicker">
 						                    </div>
 						                </div>
 						            </div>
@@ -1804,53 +1804,88 @@ function calculateRoute(from, to) {
 
 		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step1">
 		      			<div>
+      						<p>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</p>
+      					</div>
+      					<div>
+      						<strong>Indicate type of Tech</strong>
+      					</div>
+      					<div>
+      						<br>
+      						<p>
+      							<label>
+      								<input type="radio" class="" name="type_of_tech_concierge" value="1"> Install Appliances
+      							</label>
+      						</p>
+      						<p>
+      							<label>
+      								<input type="radio" class="" name="type_of_tech_concierge" value="2"> Install windows and blinds
+      							</label>
+      						</p>
+      						<p>
+      							<label>
+      								<input type="radio" class="" name="type_of_tech_concierge" value="3" disabled="true"> Lawn care
+      							</label>
+      						</p>
+      						<p>
+      							<label>
+      								<input type="radio" class="" name="type_of_tech_concierge" value="4" disabled="true"> Snow removal
+      							</label>
+      						</p>
+      						<p>
+      							<label>
+      								<input type="radio" class="" name="type_of_tech_concierge" value="5" disabled="true"> Plumbing and painting
+      							</label>
+      						</p>
+      					</div>
+		      		</div>
+
+		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step2">
+		      			<div>
       						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</strong>
       					</div>
       					<br>
       					<div>
-      						<form name="frm_tech_concierge" id="frm_tech_concierge">
-						        <div class="panel-group" id="accordion">
+      						<form name="frm_tech_concierge" id="frm_tech_concierge" autocomplete="off">
+						        <div class="panel-group" id="accordion_concierge">
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse1">Indicate type of cleaning</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse2">Moving To</a>
 						                    </h4>
 						                </div>
-						                <div id="tech_concierge_collapse1" class="panel-collapse collapse in">
-						                    <div class="panel-body">
-						                        <div><label><input type="checkbox" name=""> Move in cleaning</label></div>
-						                        <div><label><input type="checkbox" name=""> Move out cleaning</label></div>
-						                    </div>
-						                </div>
-						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse2">Moving From</a>
-						                    </h4>
-						                </div>
-						                <div id="tech_concierge_collapse2" class="panel-collapse collapse">
+						                <div id="tech_concierge_collapse2" class="panel-collapse collapse in">
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
+						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
 						                        	</select>
 						                        </div>
 						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1858,31 +1893,26 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse3">Moving To</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse3">Other Places to install appliances in</a>
 						                    </h4>
 						                </div>
 						                <div id="tech_concierge_collapse3" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
-						                        	</select>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label>Other place to install appliances in</label>
+						                        	<div>
+							                        	<?php
+							                        	if( isset( $techConciergePlaces ) && count( $techConciergePlaces ) > 0 )
+							                        	{
+							                        		foreach( $techConciergePlaces as $details )
+							                        		{
+							                        		?>
+							                        			<div class="col-lg-4 col-md-2 col-sm-1"><label class="form-group"><input type="checkbox" name="tech_concierge_places" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->places ) ) }}</label></div>
+							                        		<?php
+							                        		}
+							                        	}
+							                        	?>
+						                        	</div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1890,73 +1920,26 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse4">Detailed Job Description</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse4">Job description</a>
 						                    </h4>
 						                </div>
 						                <div id="tech_concierge_collapse4" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<label>Home Condition</label>
-						                        	<label class="form-group"><input type="radio" name="">Dirty</label>
-						                        	<label class="form-group"><input type="radio" name="">Clean</label>
-						                        	<label class="form-group"><input type="radio" name="">Average</label>
-						                        	<label class="form-group"><input type="radio" name="">Poor</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many levels do you have</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Size of area you want to clean</label>
-						                        	<label class="form-group"><input type="radio" name="">0-600 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">600-1500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">1500-2500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">above 2500 sqft</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many peoples live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many pets live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many bathrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Streaming Carpet Cleaning</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Rooms</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Hall Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Other place to clean</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Kitchen</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Dinning Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Office Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Half Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Interior</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Staircase</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Recreation Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Den</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Laundry</label>
+						                        	<label>Which of these appliances you plan to install</label>
+						                        	<div>
+							                        	<?php
+							                        	if( isset( $techConciergeAppliances ) && count( $techConciergeAppliances ) > 0 )
+							                        	{
+							                        		foreach( $techConciergeAppliances as $details )
+							                        		{
+							                        		?>
+							                        			<div class="col-lg-4 col-md-2 col-sm-1"><label class="form-group"><input type="checkbox" name="tech_concierge_places" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->appliances ) ) }}</label></div>
+							                        		<?php
+							                        		}
+							                        	}
+							                        	?>
+						                        	</div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1964,37 +1947,27 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse5">Additional Services</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse5">Other details about the job</a>
 						                    </h4>
 						                </div>
 						                <div id="tech_concierge_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<label>Oven inside cleaned</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Fridge inside cleaned</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many balconies would you like to have swept</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many windows(interior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many windows(exterior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like wet wiping blinds? How many?</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Cleaning behind the refrigrator and stove</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like baseboard to be washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Clean Fireplace</label>
+						                        	<?php
+						                        	if( isset( $techConciergeOtherDetails ) && count( $techConciergeOtherDetails ) > 0 )
+						                        	{
+						                        		foreach( $techConciergeOtherDetails as $otherDetails )
+						                        		{
+						                        		?>
+						                        			<div class="">
+						                        				{{ ucwords( strtolower( $otherDetails->details ) ) }}
+						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value=""> Yes</label>
+						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value=""> No</label>
+						                        			</div>
+						                        		<?php
+						                        		}
+						                        	}
+						                        	?>
 						                        </div>
 						                    </div>
 						                </div>
@@ -2002,25 +1975,52 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse6">Call Me On</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse6">Availability</a>
 						                    </h4>
 						                </div>
 						                <div id="tech_concierge_collapse6" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<input type="" name="" placeholder="Contact Number" class="form-control">
-						                        	<button type="button" class="btn">+</button>
-						                        </div>
+						                    	<div>
+						                    		<div class="col-lg-2">Day</div>
+						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    	</div>
+						                    	<div>
+						                    		<div class="col-lg-2">Evening</div>
+						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    	</div>
+						                    	<div>
+						                    		<div class="col-lg-2">All Day</div>
+						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    	</div>
 						                    </div>
 						                </div>
 						            </div>
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#tech_concierge_collapse7">Additional Information (If Any)</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse7">Call me on</a>
 						                    </h4>
 						                </div>
 						                <div id="tech_concierge_collapse7" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                        <input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
+						                        <input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
+						                    </div>
+						                </div>
+						            </div>
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse8">Additional Information</a>
+						                    </h4>
+						                </div>
+						                <div id="tech_concierge_collapse8" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <textarea class="form-control">
 						                        	
@@ -2096,11 +2096,11 @@ function calculateRoute(from, to) {
       					<br>
       					<div>
       						<form name="frm_cable_internet_services" id="frm_cable_internet_services">
-						        <div class="panel-group" id="accordion">
+						        <div class="panel-group" id="accordion_internet_service">
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse1">Indicate type of cleaning</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse1">Indicate type of cleaning</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse1" class="panel-collapse collapse in">
@@ -2113,7 +2113,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse2">Moving From</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2">Moving From</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse2" class="panel-collapse collapse">
@@ -2145,7 +2145,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse3">Moving To</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse3">Moving To</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse3" class="panel-collapse collapse">
@@ -2177,7 +2177,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse4">Detailed Job Description</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse4">Detailed Job Description</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse4" class="panel-collapse collapse">
@@ -2251,7 +2251,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse5">Additional Services</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse5">Additional Services</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse5" class="panel-collapse collapse">
@@ -2289,7 +2289,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse6">Call Me On</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse6">Call Me On</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse6" class="panel-collapse collapse">
@@ -2304,7 +2304,7 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#cable_internet_services_collapse7">Additional Information (If Any)</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse7">Additional Information (If Any)</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse7" class="panel-collapse collapse">
