@@ -104,7 +104,7 @@ $(document).ready(function(){
             var $this = $(this);
 
             $.ajax({
-                url: $('meta[name="route"]').attr('content') + '/administrator/changepassword',
+                url: $('meta[name="route"]').attr('content') + '/agent/changepassword',
                 method: 'post',
                 data: {
                     frmData: $('#frm_change_password').serialize()
@@ -128,7 +128,7 @@ $(document).ready(function(){
 
                         // Refresh the form and close the modal
                         $('#frm_change_password')[0].reset();
-                        document.location.href = $('meta[name="route"]').attr('content') + '/administrator/dashboard';
+                        document.location.href = $('meta[name="route"]').attr('content') + '/agent/dashboard';
                     }
                     else
                     {

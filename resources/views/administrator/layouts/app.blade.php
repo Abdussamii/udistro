@@ -412,6 +412,9 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="{{ url('administrator/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
