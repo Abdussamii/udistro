@@ -21,11 +21,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 */
 
-Route::get('/', 'MoversController@index');
+// Route::get('/', 'MoversController@index');
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     return view('Home');
-});*/
+});
 
 // To test email template view
 Route::get('/email', 'EmailController@renderEmailTemplate');
