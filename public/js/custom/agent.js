@@ -67,6 +67,78 @@ $(document).ready(function(){
     	}
     });
 
+    // Change Password form validation
+    $('#frm_change_password').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_change_password').validate({
+        rules: {
+            oldpassword: {
+                required: true
+            },
+            newpassword: {
+                required: true
+            },
+            cnfpassword: {
+                required: true
+            }
+        },
+        messages: {
+            oldpassword: {
+                required: 'Please enter old password'
+            },
+            newpassword: {
+                required: 'Please enter new password'
+            },
+            cnfpassword: {
+                required: 'Please enter confirm password'
+            }
+        }
+    });
+
+    // Check Change Password details
+    $('#btn_change_password').click(function(){
+        // Check the validation
+        if( $('#frm_change_password').valid() )
+        {
+            var $this = $(this);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/administrator/changepassword',
+                method: 'post',
+                data: {
+                    frmData: $('#frm_change_password').serialize()
+                },
+                beforeSend: function() {
+                    // Show the loading button
+                    $this.button('loading');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                complete: function()
+                {
+                    // Change the button to previous
+                    $this.button('reset');
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+                    {
+                        alertify.success( response.errMsg );
+
+                        // Refresh the form and close the modal
+                        $('#frm_change_password')[0].reset();
+                        document.location.href = $('meta[name="route"]').attr('content') + '/administrator/dashboard';
+                    }
+                    else
+                    {
+                        alertify.error( response.errMsg );
+                    }
+                }
+            });
+        }
+    });
+
     // To add new agent
     $('#btn_modal_client').click(function(){
     	// Set the title

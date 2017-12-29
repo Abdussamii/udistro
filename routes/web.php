@@ -307,6 +307,12 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details for the selected address
 	Route::get('/getaddressdetails', 'AdminController@getAddressDetails');
 
+	// Change Password
+	Route::get('/changepassword', 'AdminController@getchangepassword');
+
+	// To update Password
+	Route::post('/changepassword', 'AdminController@changePassword');
+
 });
 
 /* ---------- Agent related functionality ---------- */
@@ -397,6 +403,12 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To get the details of selected email template
 	Route::get('/getemailtemplatedetails', 'AgentController@getEmailTemplateDetails');
 
+	// Change Password
+	Route::get('/changepassword', 'AgentController@getchangepassword');
+
+	// To update Password
+	Route::post('/changepassword', 'AgentController@changePassword');
+
 });
 
 /* ---------- Agent related functionality ---------- */
@@ -486,6 +498,12 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To update company image
 	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
+
+	// Change Password
+	Route::get('/changepassword', 'CompanyController@getchangepassword');
+
+	// To update Password
+	Route::post('/changepassword', 'CompanyController@changePassword');
 	
 });
 

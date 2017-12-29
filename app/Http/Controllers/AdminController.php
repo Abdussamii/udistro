@@ -70,6 +70,91 @@ class AdminController extends Controller
     }
 
     /**
+     * Function for Change Password
+     * @param void
+     * @return array
+     */
+    public function getchangepassword()
+    {
+        return view('administrator/changepassword');
+    }
+
+    /**
+     * Function for Change Password
+     * @param void
+     * @return array
+     */
+    public function changePassword()
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $pwddata);
+
+        // Server Side Validation
+        $response =array();
+
+        $validation = Validator::make(
+            array(
+                'oldpassword'  => $pwddata['oldpassword'],
+                'newpassword'  => $pwddata['newpassword'],
+                'cnfpassword'  => $pwddata['cnfpassword']
+            ),
+            array(
+                'oldpassword'  => array('required'),
+                'newpassword'  => array('required'),
+                'cnfpassword'  => array('required')
+            ),
+            array(
+                'oldpassword.required' => 'Please enter old password',
+                'newpassword.required' => 'Please enter new password',
+                'cnfpassword.required' => 'Please enter confirm password'
+            )
+        );
+
+        if ( $validation->fails() )     // Some data is not valid as per the defined rules
+        {
+            $error = $validation->errors()->first();
+
+            if( isset( $error ) && !empty( $error ) )
+            {
+                $response['errCode']    = 1;
+                $response['errMsg']     = $error;
+            }
+        }
+        else 
+        {
+
+            $userId = Auth::id();
+            $user = User::find($userId);
+
+            if(($pwddata['newpassword'] == $pwddata['cnfpassword']) && ($pwddata['newpassword'] != '') && ($pwddata['cnfpassword'] != '')) 
+            {
+                if (Hash::check($pwddata['oldpassword'], $user->password))
+                {    
+                    $user->password = Hash::make($pwddata['newpassword']);
+                    $user->update();
+                    $response['errCode']    = 0;
+                    $response['errMsg']     = 'Password change successfully.';
+                }
+                else
+                {
+                    $response['errCode']    = 2;
+                    $response['errMsg']     = 'Old password does not match.';
+                }
+            } 
+            else 
+            {
+                $response['errCode']    = 3;
+                $response['errMsg']     = 'Password and confirm password doest not match.';
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
      * Function for admin login
      * @param void
      * @return array
