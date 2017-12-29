@@ -332,6 +332,9 @@
                         <li>
                             <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
                         </li>
+                        <li>
+                            <a href="{{ url('company/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

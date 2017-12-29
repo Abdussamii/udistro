@@ -338,6 +338,9 @@
                         <li>
                             <a href="{{ url('agent/emailtemplates') }}"><i class="fa fa-envelope" aria-hidden="true"></i>  Email Templates</a>
                         </li>
+                        <li>
+                            <a href="{{ url('agent/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
