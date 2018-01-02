@@ -445,6 +445,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To get the list of companies satisfying all the criteria to get the mover's quotations
 	Route::get('/quotation', 'MoversController@getFilteredMoverCompaniesList');
+
+	// To save the user's tech concierge query detail
+	Route::post('/savetechconciergequery', 'MoversController@saveTechConciergeQuery');
 	
 });
 

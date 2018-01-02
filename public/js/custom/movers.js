@@ -705,17 +705,6 @@ $(document).ready(function(){
 			moving_house_description_8:  { required: true },
 			moving_house_description_9:  { required: true },
 			moving_house_description_10: { required: true },
-
-			/*moving_house_special_instruction_1: { required: true },
-			moving_house_special_instruction_2: { required: true },
-			moving_house_special_instruction_3: { required: true },
-			moving_house_special_instruction_4: { required: true },
-			moving_house_special_instruction_5: { required: true },
-
-			moving_house_additional_service_1: { required: true },
-			moving_house_additional_service_2: { required: true },
-			moving_house_additional_service_3: { required: true },
-			moving_house_additional_service_4: { required: true },*/
 			
 			moving_house_packing_issue: { required: true },
 			moving_house_callback_option: { required: true }
@@ -741,17 +730,6 @@ $(document).ready(function(){
 			moving_house_description_8:  { required: 'Please select a option' },
 			moving_house_description_9:  { required: 'Please select a option' },
 			moving_house_description_10: { required: 'Please select a option' },
-
-			moving_house_special_instruction_1: { required: 'Please select a option' },
-			moving_house_special_instruction_2: { required: 'Please select a option' },
-			moving_house_special_instruction_3: { required: 'Please select a option' },
-			moving_house_special_instruction_4: { required: 'Please select a option' },
-			moving_house_special_instruction_5: { required: 'Please select a option' },
-
-			moving_house_additional_service_1: { required: 'Please select a option' },
-			moving_house_additional_service_2: { required: 'Please select a option' },
-			moving_house_additional_service_3: { required: 'Please select a option' },
-			moving_house_additional_service_4: { required: 'Please select a option' },
 
 			moving_house_vehicle_type: { required: 'Please select a option' },
 			moving_house_packing_issue: { required: 'Please select a option' },
@@ -819,6 +797,53 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge++;
+	});
+
+	$('#frm_tech_concierge').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_tech_concierge').validate({
+		ignore: "not:hidden",
+		rules: 
+		{
+			moving_house_to_type : { required: true },
+			moving_house_to_level : { required: true },
+			moving_house_to_bedroom_count : { required: true },
+			moving_house_to_property_type : { required: true }
+		},
+		messages: 
+		{
+			moving_house_to_type: { required: 'Select the type' },
+			moving_house_to_level: { required: 'Please select floor level' },
+			moving_house_to_bedroom_count: { required: 'Please select bedroom count' },
+			moving_house_to_property_type: { required: 'Please select property type' },
+		}
+	});
+
+	$('#btn_submit_tech_concierge_query').click(function(){
+		if( $('#frm_tech_concierge').valid() )
+		{
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/savetechconciergequery',
+				method: 'post',
+				data: {
+					frmData: $('#frm_tech_concierge').serialize()
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+				    {
+				    	alertify.success(response.errMsg);
+				    }
+				    else
+				    {
+				    	alertify.error(response.errMsg);
+				    }
+			    }
+			});
+		}
 	});
 
 	/* ---------- Tech Concierge functionality ends ---------- */

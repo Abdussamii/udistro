@@ -1834,12 +1834,13 @@ function calculateRoute(from, to) {
       					</div>
       					<div>
       						<br>
-      						<p>
+      						<div>
       							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="1"> Install Appliances
+      								<input type="radio" class="" name="type_of_tech_concierge" value="1" checked=""> Install Appliances
       							</label>
-      						</p>
-      						<p>
+      						</div>
+      						<br>
+      						<!-- <p>
       							<label>
       								<input type="radio" class="" name="type_of_tech_concierge" value="2"> Install windows and blinds
       							</label>
@@ -1858,7 +1859,7 @@ function calculateRoute(from, to) {
       							<label>
       								<input type="radio" class="" name="type_of_tech_concierge" value="5" disabled> Plumbing and painting
       							</label>
-      						</p>
+      						</p> -->
       					</div>
 		      		</div>
 
@@ -1930,7 +1931,11 @@ function calculateRoute(from, to) {
 							                        		foreach( $techConciergePlaces as $details )
 							                        		{
 							                        		?>
-							                        			<div class="col-lg-4 col-md-2 col-sm-1"><label class="form-group"><input type="checkbox" name="tech_concierge_places" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->places ) ) }}</label></div>
+							                        			<div class="col-lg-4 col-md-2 col-sm-1">
+							                        				<label class="form-group">
+							                        					<input type="checkbox" name="tech_concierge_places[]" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->places ) ) }}
+							                        				</label>
+							                        			</div>
 							                        		<?php
 							                        		}
 							                        	}
@@ -1957,7 +1962,11 @@ function calculateRoute(from, to) {
 							                        		foreach( $techConciergeAppliances as $details )
 							                        		{
 							                        		?>
-							                        			<div class="col-lg-4 col-md-2 col-sm-1"><label class="form-group"><input type="checkbox" name="tech_concierge_places" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->appliances ) ) }}</label></div>
+							                        			<div class="col-lg-4 col-md-2 col-sm-1">
+							                        				<label class="form-group">
+							                        					<input type="checkbox" name="tech_concierge_appliances[]" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->appliances ) ) }}
+							                        				</label>
+							                        			</div>
 							                        		<?php
 							                        		}
 							                        	}
@@ -1984,8 +1993,8 @@ function calculateRoute(from, to) {
 						                        		?>
 						                        			<div class="">
 						                        				{{ ucwords( strtolower( $otherDetails->details ) ) }}
-						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value=""> Yes</label>
-						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value=""> No</label>
+						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value="1"> Yes</label>
+						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value="0"> No</label>
 						                        			</div>
 						                        		<?php
 						                        		}
@@ -2005,21 +2014,21 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                    	<div>
 						                    		<div class="col-lg-2">Day</div>
-						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-4"><input type="text" name="availability_date1" id="availability_date1" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_from1" id="availability_time_from1" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="" name="availability_time_upto1" id="availability_time_upto1" class="form-control" placeholder="To hours"></div>
 						                    	</div>
 						                    	<div>
 						                    		<div class="col-lg-2">Evening</div>
-						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-4"><input type="text" name="availability_date2" id="availability_date2" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_from2" id="availability_time_from2" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control" placeholder="To hours"></div>
 						                    	</div>
 						                    	<div>
 						                    		<div class="col-lg-2">All Day</div>
-						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-4"><input type="text" name="availability_date3" id="availability_date3" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_from3" id="availability_date3_day_from_hour" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control" placeholder="To hours"></div>
 						                    	</div>
 						                    </div>
 						                </div>
@@ -2032,8 +2041,8 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="tech_concierge_collapse7" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
-						                        <input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
+						                        <input type="text" name="tech_concierge_callback_primary_no" class="form-control" placeholder="Primary Number">
+						                        <input type="text" name="tech_concierge_callback_secondary_no" class="form-control" placeholder="Additional Number">
 						                    </div>
 						                </div>
 						            </div>
@@ -2045,16 +2054,14 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="tech_concierge_collapse8" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <textarea class="form-control">
-						                        	
-						                        </textarea>
+						                        <textarea class="form-control" name="tech_concierge_additional_information" id="tech_concierge_additional_information"></textarea>
 						                    </div>
 						                </div>
 						            </div>
 						        </div>
 
 						        <div>
-						        	<button type="button" class="btn btn-info">Submit</button>
+						        	<button type="submit" class="btn btn-info" name="btn_submit_tech_concierge_query" id="btn_submit_tech_concierge_query">Submit</button>
 						        </div>
 						    </form>
       					</div>

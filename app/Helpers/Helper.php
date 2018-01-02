@@ -297,7 +297,7 @@ class Helper
     										->where('plan_type_id', '=', $planTypeId)							// plan type is either for company / agent
     										->where('start_date', '<=', $date)									// plan start date must lie between the today's date
     										->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
-    										->where('remaining_qouta', '>', 0)									// plan remaining qouta count must not be zero
+    										// ->where('remaining_qouta', '>', 0)	// plan remaining qouta count must not be zero (hold for now, as there is no limit)
     										->where('status', '=', '1')
     										->first();
 
