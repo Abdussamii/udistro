@@ -284,6 +284,11 @@ class AdminController extends Controller
                         $user = User::find($user->id);
                         $user->password = Hash::make($pwddata['newpassword']);
                         $user->update();
+
+                        $forgotPassword = ForgotPassword::find($array->id);
+                        $forgotPassword->status = 1;
+                        $forgotPassword->update();
+                        
                         $response['errCode']    = 0;
                         $response['errMsg']     = 'Password change successfully.';
                     } 

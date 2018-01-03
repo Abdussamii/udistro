@@ -139,6 +139,51 @@ $(document).ready(function(){
         }
     });
 
+    // Change Password form validation
+    $('#frm_forgot_password').submit(function(e){
+        e.preventDefault();
+    });
+
+    // Check Change Password details
+    $('#btn_forgot_password').click(function()
+    {
+        var $this = $(this);
+
+        $.ajax({
+            url: $('meta[name="route"]').attr('content') + '/agent/forgotpassword',
+            method: 'post',
+            data: {
+                frmData: $('#frm_forgot_password').serialize()
+            },
+            beforeSend: function() {
+                // Show the loading button
+                $this.button('loading');
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            complete: function()
+            {
+                // Change the button to previous
+                $this.button('reset');
+            },
+            success: function(response)
+            {
+                if( response.errCode == 0 )
+                {
+                    alertify.success( response.errMsg );
+
+                    // Refresh the form and close the modal
+                    $('#frm_forgot_password')[0].reset();
+                }
+                else
+                {
+                    alertify.error( response.errMsg );
+                }
+            }
+        });
+    });
+
     // To add new agent
     $('#btn_modal_client').click(function(){
     	// Set the title
