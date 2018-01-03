@@ -140,6 +140,51 @@ $(document).ready(function(){
         }
     });
 
+    // Change Password form validation
+    $('#frm_forgot_password').submit(function(e){
+        e.preventDefault();
+    });
+
+    // Check Change Password details
+    $('#btn_forgot_password').click(function()
+    {
+        var $this = $(this);
+
+        $.ajax({
+            url: $('meta[name="route"]').attr('content') + '/administrator/forgotpassword',
+            method: 'post',
+            data: {
+                frmData: $('#frm_forgot_password').serialize()
+            },
+            beforeSend: function() {
+                // Show the loading button
+                $this.button('loading');
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            complete: function()
+            {
+                // Change the button to previous
+                $this.button('reset');
+            },
+            success: function(response)
+            {
+                if( response.errCode == 0 )
+                {
+                    alertify.success( response.errMsg );
+
+                    // Refresh the form and close the modal
+                    $('#frm_forgot_password')[0].reset();
+                }
+                else
+                {
+                    alertify.error( response.errMsg );
+                }
+            }
+        });
+    });
+
     // Navigation category form validation
     $('#frm_navigation_category').submit(function(e){
         e.preventDefault();
@@ -3443,6 +3488,7 @@ $(document).ready(function(){
 			    success: function(response){
 			    	// Auto-fill the form
 			    	$('#frm_email_template #email_template_id').val(templateId);
+                    $('#frm_email_template #template_category').val(response.category_id);
 			    	$('#frm_email_template #email_template_name').val(response.template_name);
 
 			    	// Set the content in tinymce editor

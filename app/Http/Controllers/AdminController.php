@@ -36,6 +36,8 @@ use App\ClientActivityList;
 use App\MovingItemCategory;
 use App\MovingItemDetail;
 use App\UpdateAddress;
+use App\ForgotPassword;
+use App\EmailTemplateCategory;
 
 use Validator;
 use Helper;
@@ -152,6 +154,154 @@ class AdminController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    /**
+     * Function for Forgot Password
+     * @param void
+     * @return array
+     */
+    public function getForgotPassword(Request $request)
+    {
+        $type = 1;
+        $q = $request->input('q');
+        $hash = $request->input('hash');
+        if($q != '' && $hash != '')
+        {
+            $type = 2;
+        }
+
+        return view('administrator/forgotpassword',['type' => $type, 'q' => $q, 'hash' => $hash]);
+    }
+
+    /**
+     * Function for Forgot Password
+     * @param void
+     * @return array
+     */
+    public function forgotPassword()
+    {
+        // Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $pwddata);
+
+        // Server Side Validation
+        $response =array();
+
+        if($pwddata['type'] == 1) 
+        {
+
+            $validation = Validator::make(
+                array(
+                    'email'  => $pwddata['email']
+                ),
+                array(
+                    'email'  => array('required', 'email')
+                ),
+                array(
+                    'email.required' => 'Please enter email',
+                    'email.email'    => 'Please enter valid email',
+                )
+            );
+
+            if ( $validation->fails() )     // Some data is not valid as per the defined rules
+            {
+                $error = $validation->errors()->first();
+
+                if( isset( $error ) && !empty( $error ) )
+                {
+                    $response['errCode']    = 1;
+                    $response['errMsg']     = $error;
+                }
+            }
+            else                            // The data is valid, go ahead and check the login credentials and do login
+            {
+                $user = User::where(['email' => $pwddata['email'], 'status' => '1'])->first();
+                if( count($user)  > 0 )
+                {
+                    if(1)
+                    {
+                        $response['errCode'] = 0;
+                        $response['errMsg']  = 'Email has been sent successfully. Please check you email';
+                    }
+                    else
+                    {
+                        $response['errCode'] = 2;
+                        $response['errMsg']  = 'Error while sending mail'; 
+                    }
+
+                }
+                else
+                {
+                    $response['errCode'] = 3;
+                    $response['errMsg']  = 'Invalid user credentials';
+                }
+            }
+
+            return response()->json($response);
+        
+        } 
+        elseif ($pwddata['type'] == 2)
+        {
+            $validation = Validator::make(
+                array(
+                    'newpassword'  => $pwddata['newpassword'],
+                    'cnfpassword'  => $pwddata['cnfpassword']
+                ),
+                array(
+                    'newpassword'  => array('required'),
+                    'cnfpassword'  => array('required')
+                ),
+                array(
+                    'newpassword.required' => 'Please enter new password',
+                    'cnfpassword.required' => 'Please enter confirm password'
+                )
+            );
+
+            if ( $validation->fails() )     // Some data is not valid as per the defined rules
+            {
+                $error = $validation->errors()->first();
+
+                if( isset( $error ) && !empty( $error ) )
+                {
+                    $response['errCode']    = 1;
+                    $response['errMsg']     = $error;
+                }
+            }
+            else                            // The data is valid, go ahead and check the login credentials and do login
+            {
+                $email = base64_decode($pwddata['q']);
+                $hash  = base64_decode($pwddata['hash']);
+                $array = ForgotPassword::where(['email' => $email, 'hash' => $pwddata['hash'], 'status' => 0])->first();
+                $user = User::where(['email' => $loginData['username'], 'status' => '1'])->first();
+
+                if (count($array) > 0) 
+                {
+                    if(($pwddata['newpassword'] == $pwddata['cnfpassword']) && ($pwddata['newpassword'] != '') && ($pwddata['cnfpassword'] != '')) 
+                    {
+                        $user = User::find($user->id);
+                        $user->password = Hash::make($pwddata['newpassword']);
+                        $user->update();
+                        $response['errCode']    = 0;
+                        $response['errMsg']     = 'Password change successfully.';
+                    } 
+                    else 
+                    {
+                        $response['errCode']    = 3;
+                        $response['errMsg']     = 'Password and confirm password doest not match.';
+                    }
+                }
+                else
+                {
+                    $response['errCode']    = 4;
+                    $response['errMsg']     = 'Error';
+                }
+            }
+
+            return response()->json($response);
+        }
     }
 
     /**
@@ -3666,7 +3816,8 @@ class AdminController extends Controller
      */
     public function emailTemplates()
     {
-        return view('administrator/emailTemplates');
+        $templateCategories = EmailTemplateCategory::get();
+        return view('administrator/emailTemplates', ['templateCategories' => $templateCategories]);
     }
 
     /**
@@ -3728,6 +3879,7 @@ class AdminController extends Controller
 				{
 					$emailTemplate = new EmailTemplate;
 
+                    $emailTemplate->category_id     = $templateData['template_category'];
 					$emailTemplate->template_name 	= $templateData['email_template_name'];
 					$emailTemplate->template_content= $templateData['email_template_content'];				
 					$emailTemplate->status 			= $templateData['email_template_status'];
@@ -3754,6 +3906,7 @@ class AdminController extends Controller
 			{
 				$emailTemplate = EmailTemplate::find($templateData['email_template_id']);
 
+                $emailTemplate->category_id     = $templateData['template_category'];
 				$emailTemplate->template_name 	= $templateData['email_template_name'];
 				$emailTemplate->template_content= $templateData['email_template_content'];				
 				$emailTemplate->status 			= $templateData['email_template_status'];
@@ -3851,6 +4004,7 @@ class AdminController extends Controller
     		if( count( $templateDetails ) > 0 )
     		{
 	    		$response['id']					= $templateDetails->id;
+                $response['category_id']        = $templateDetails->category_id;
 	    		$response['template_name']		= $templateDetails->template_name;
 	    		$response['template_content']	= $templateDetails->template_content;
 	    		$response['status']				= $templateDetails->status;

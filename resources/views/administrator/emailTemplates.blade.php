@@ -84,6 +84,21 @@
 					<div class="modal-body">
 						<form name="frm_email_template" id="frm_email_template" autocomplete="off">
 							<div class="form-group">
+								<label for="template_category">Template Category</label>
+								<select name="template_category" id="template_category" class="form-control">
+									<option value="">Select</option>
+									<?php
+									if( isset( $templateCategories ) && count( $templateCategories ) > 0 )
+									{
+										foreach ($templateCategories as $templateCategory)
+										{
+											echo '<option value="'. $templateCategory->id .'">'. ucwords( strtolower( $templateCategory->name ) ) .'</option>';
+										}
+									}
+									?>
+								</select>
+							</div>
+							<div class="form-group">
 								<label for="email_template_name">Template Name</label>
 								<input type="text" class="form-control" id="email_template_name" name="email_template_name" placeholder="Enter template name">
 								<input type="hidden" name="email_template_id" id="email_template_id" value="">
