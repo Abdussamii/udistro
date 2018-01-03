@@ -315,4 +315,15 @@ class Helper
     		return false;
     	}
     }
+
+    /**
+     * To get the Udistro system agent id. 
+     * This is the agent who is handling the movers who don't have the agent invite and they get the invite by filling "Get Invitation" form
+     * @param array
+     * @return null
+     */
+    public static function getSystemAgent()
+    {
+    	return 1000;
+    }
 }

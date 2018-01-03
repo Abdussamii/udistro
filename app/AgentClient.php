@@ -16,4 +16,20 @@ class AgentClient extends Model
     ];
 
     public $timestamps = true;
+
+    /**
+     * Get the moving from address.
+     */
+    public function movingFromAddress()
+    {
+        return $this->hasOne('App\AgentClientMovingFromAddress');
+    }
+
+    /**
+     * Get the moving to address.
+     */
+    public function movingToAddress()
+    {
+        return $this->hasOne('App\AgentClientMovingToAddress');
+    }
 }
