@@ -36,6 +36,12 @@ use App\TechConciergePlace;
 use App\TechConciergeAppliance;
 use App\TechConciergeOtherDetail;
 
+use App\TechConciergeServiceRequest;
+use App\TechConciergePlaceServiceRequest;
+use App\TechConciergeOtherDetailServiceRequest;
+use App\TechConciergeAppliancesServiceRequest;
+use App\QuotationLog;
+
 use Helper;
 use Session;
 
@@ -944,6 +950,275 @@ class MoversController extends Controller
 
 		return $filteredCompanies;
 	}
+
+	/**
+     * Function to save the user's tech concierge query detail
+     * @param void
+     * @return array
+     */
+    public function saveTechConciergeQuery()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$techConciergeDetails = array();
+    	parse_str($frmData, $techConciergeDetails);
+
+    	// Company category 
+    	$companyCategory= 5;	// Tech Concierge company category
+
+    	// Get the client and invitation id from session
+    	$clientId 		= Session::get('clientId', '');
+    	$invitationId 	= Session::get('invitationId', '');
+
+    	// Required services list
+    	$requiredServices = array('installer', 'plumbing', 'painting');
+
+    	$filteredCompanies = $this->getFilteredTechConciergeCompaniesList($clientId, $companyCategory, $requiredServices);
+
+    	// Transaction start
+		DB::beginTransaction();
+
+		$response = array();
+		$successCount = 0;
+		$techConciergePlaces = array();
+		$techConciergeAppliances = array();
+		$techConciergeOtherDetails = array();
+		if( count( $filteredCompanies ) > 0 )
+		{
+			foreach ($filteredCompanies as $filterCompany)
+			{
+				// Check the payment plan, if the plan expires don't send the quotations
+				if( Helper::checkPaymentPlanSubscriptionQuota($filterCompany->company_id, 2) )	// company id, payment plan type id
+				{
+					$techConciergeRequest = new TechConciergeServiceRequest;
+
+					$techConciergeRequest->agent_client_id = $clientId;
+					$techConciergeRequest->invitation_id = $invitationId;
+					$techConciergeRequest->company_id = $filterCompany->company_id;
+
+					$techConciergeRequest->moving_from_house_type = $techConciergeDetails['moving_house_to_type'];
+					$techConciergeRequest->moving_from_floor = $techConciergeDetails['moving_house_to_level'];
+					$techConciergeRequest->moving_from_bedroom_count = $techConciergeDetails['moving_house_to_bedroom_count'];
+					$techConciergeRequest->moving_from_property_type = $techConciergeDetails['moving_house_to_property_type'];
+					$techConciergeRequest->primary_no = $techConciergeDetails['tech_concierge_callback_primary_no'];
+					$techConciergeRequest->secondary_no = $techConciergeDetails['tech_concierge_callback_secondary_no'];
+					$techConciergeRequest->additional_information = $techConciergeDetails['tech_concierge_additional_information'];
+
+					$techConciergeRequest->availability_date1 		= date('Y-m-d', strtotime($techConciergeDetails['availability_date1']));
+					$techConciergeRequest->availability_time_from1 	= $techConciergeDetails['availability_time_from1'];
+					$techConciergeRequest->availability_time_upto1 	= $techConciergeDetails['availability_time_upto1'];
+					$techConciergeRequest->availability_date2 		= date('Y-m-d', strtotime($techConciergeDetails['availability_date2']));
+					$techConciergeRequest->availability_time_from2 	= $techConciergeDetails['availability_time_from2'];
+					$techConciergeRequest->availability_time_upto2 	= $techConciergeDetails['availability_time_upto2'];
+					$techConciergeRequest->availability_date3 		= date('Y-m-d', strtotime($techConciergeDetails['availability_date3']));
+					$techConciergeRequest->availability_time_from3 	= $techConciergeDetails['availability_time_from3'];
+					$techConciergeRequest->availability_time_upto3 	= $techConciergeDetails['availability_time_upto3'];
+
+					$techConciergeRequest->status = '1';
+					$techConciergeRequest->created_by = $clientId;
+
+					if( $techConciergeRequest->save() )
+					{
+						// Commit transaction
+	    				DB::commit();
+
+						if( isset( $techConciergeDetails['tech_concierge_places'] ) && count( $techConciergeDetails['tech_concierge_places'] ) > 0 )
+						{
+							foreach( $techConciergeDetails['tech_concierge_places'] as $place )
+							{
+								$techConciergePlaces[] = array(
+									'service_request_id' => $techConciergeRequest->id,
+									'place_id' => $place,
+									'created_at' => date('Y-m-d H:i:s'),
+									'created_by' => $clientId
+								);
+							}
+						}
+
+						if( isset( $techConciergeDetails['tech_concierge_appliances'] ) && count( $techConciergeDetails['tech_concierge_appliances'] ) > 0 )
+						{
+							foreach( $techConciergeDetails['tech_concierge_appliances'] as $appliance )
+							{
+								$techConciergeAppliances[] = array(
+									'service_request_id' => $techConciergeRequest->id,
+									'appliance_id' => $appliance,
+									'created_at' => date('Y-m-d H:i:s'),
+									'created_by' => $clientId
+								);
+							}
+						}
+
+						if( isset( $techConciergeDetails['tech_concierge_details'] ) && count( $techConciergeDetails['tech_concierge_details'] ) > 0 )
+						{
+							foreach( $techConciergeDetails['tech_concierge_details'] as $key => $value )
+							{
+								if( $value == 1 )
+								{
+									$techConciergeOtherDetails[] = array(
+										'service_request_id' => $techConciergeRequest->id,
+										'other_detail_id' => $key,
+										'created_at' => date('Y-m-d H:i:s'),
+										'created_by' => $clientId
+									);
+								}
+							}
+						}
+
+						$successCount++;
+					}
+
+		    		// Add the quotation entry
+		    		$date = date('Y-m-d');
+		    		$paymentPlanSubscription = 	PaymentPlanSubscription::where('subscriber_id', '=', $filterCompany->company_id)	// subscriber is either company / agent
+												->where('plan_type_id', '=', '2')			// plan type is either for company / agent
+												->where('start_date', '<=', $date)			// plan start date must lie between the today's date
+												->where('end_date', '>=', $date) 			// plan end date must lie between the today's date
+												->where('status', '=', '1')
+												->first();
+
+		    		if( count( $paymentPlanSubscription ) > 0 )
+		    		{
+		    			$quotation = new QuotationLog;
+
+						$quotation->company_id = $filterCompany->company_id;
+						$quotation->client_id = $clientId;
+						$quotation->payment_plan_id = $paymentPlanSubscription->plan_id; 
+						$quotation->created_at = date('Y-m-d H:i:s');
+						$quotation->status = '1';
+
+						$quotation->save();						
+		    		}
+
+				}
+			}
+
+			if( $successCount > 0 )
+	    	{
+	    		TechConciergePlaceServiceRequest::insert( $techConciergePlaces );
+
+	    		TechConciergeAppliancesServiceRequest::insert( $techConciergeAppliances );
+
+	    		TechConciergeOtherDetailServiceRequest::insert( $techConciergeOtherDetails );
+
+	    		$response['errCode'] 	= 0;
+	    		$response['errMsg'] 	= 'Request added successfully';
+	    	}
+	    	else
+	    	{
+	    		$response['errCode'] 	= 1;
+	    		$response['errMsg'] 	= 'No matching company found';
+	    	}
+		}
+
+		return response()->json($response);
+    }
+
+        /**
+    	 * To get the list of tech concierge companies satisfying all the criteria to get the mover's quotations
+    	 *
+    	 * 		- Rules
+    	 * 		# Company must be active
+    	 * 		# Company category must match
+    	 * 		# Availability Mode must be true
+    	 * 		# Must have a payment plan
+    	 * 		# Services (Atleast 30% match)
+    	 * 		# Target Area must lies with in the working area of company or company working on multiple locations
+    	 *
+    	 * @param int
+    	 * @param int
+    	 * @param array
+    	 * @return array
+    	 */
+    	public function getFilteredTechConciergeCompaniesList($clientId, $companyCategory, $requiredServices)
+    	{
+    		// Get the moving from and moving to address of client
+    		$clientMovingToAddress = 	DB::table('agent_client_moving_to_addresses as t1')
+    									->leftJoin('provinces as t2', 't2.id', '=', 't1.province_id')
+    									->leftJoin('cities as t3', 't3.id', '=', 't1.city_id')
+    									->leftJoin('countries as t4', 't4.id', '=', 't1.country_id')
+    									->where(['t1.agent_client_id' => $clientId, 't1.status' => '1'])
+    									->select('t1.id', 't1.address1', 't1.address2', 't2.name as province', 't3.name as city', 't1.postal_code', 't4.name as country')
+    									->first();
+
+    		// Get the latitude, longitude of the mover from the Google Map API
+    		$clientMovingToAddressCoordinates = array();
+    		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    		$mapApiResponse = json_decode(file_get_contents($url), true);
+    		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+    		{
+    			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+    		}
+
+    		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
+    		$companies = DB::table('companies as t1')
+    					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
+    					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
+    					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
+    					->where(['t2.id' => $companyCategory])							// company category must match
+    					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+    					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
+    					->get();
+
+    		// Check if any company satisfy all the rules or not
+    		$filteredCompanies 	= array();
+    		$companyCoordinates = array();
+    		$minimumPercentage	= 30;
+    		if( count( $companies ) > 0 )
+    		{
+    			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
+    			foreach ($companies as $company)
+    			{
+    				$services =	DB::table('category_services as t1')
+    							->leftJoin('category_service_company as t2', 't2.category_service_id', '=', 't1.id')
+    							->where(['t2.company_id' => $company->company_id, 't1.status' => '1'])
+    							->select('t1.id', 't1.service')
+    							->get();
+
+    				$matchedServices = 0;
+    				if( count( $services ) > 0 )
+    				{
+    					foreach ($services as $service)
+    					{
+    						if( in_array( strtolower($service->service), $requiredServices) )
+							{
+								$matchedServices++;
+							}
+    					}
+    				}
+
+    				if( ( $matchedServices / count( $services ) * 100 ) >= $minimumPercentage )
+    				{
+    					// For the companies who are not working globally, get the lat long of the address
+    					if( $company->working_globally != '1' )
+    					{
+    						// Get the latitude, longitude of the company address from the Google Map API
+    						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+
+    						$mapApiResponse = json_decode(file_get_contents($url), true);
+
+    						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+    						{
+    							$companyCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+
+    							$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+
+    							if( $distance <= $company->target_area )
+    							{
+    								$filteredCompanies[] = $company;
+    							}
+    						}
+    					}
+    					else
+    					{
+    						$filteredCompanies[] = $company;
+    					}
+    				}
+
+    			}
+    		}
+
+    		return $filteredCompanies;
+    	}
 
     /**
 	 * Return the first letter of each word in uppercase - if it's too long.

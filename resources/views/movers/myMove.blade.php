@@ -969,52 +969,53 @@ function calculateRoute(from, to) {
        </div>
       </div>
       <div class="clearfix"></div>
-      <div class="col-sm-12 up_add_li">
-       <ul>
-        <li><i class="fa fa-check" aria-hidden="true"></i> Hydro, Electricity and Gas</li>
-        <li><i class="fa fa-check" aria-hidden="true"></i> Water, Waste and Recycle</li>
-       </ul>
-      </div>
-	  <div class="clearfix"></div>
-	  <div class="col-sm-12">
-         <div class="row">
-          <form name="frm_update_address" id="frm_update_address" novalidate="novalidate">
-           <div class="col-md-4">
-            <div class="model-box-YN"> <span> I need to start new service (new account) </span>
-             <label>
-              <input name="update_address_method1" value="1" type="radio">
-              Yes</label>
-             <label>
-              <input name="update_address_method1" value="2" type="radio">
-              No</label>
-            </div>
-            <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
-           </div>
-           <div class="col-md-4">
-            <div class="model-box-YN"> <span> I need to stop service (transfer account)</span>
-             <label>
-              <input name="update_address_method2" value="1" type="radio">
-              Yes</label>
-             <label>
-              <input name="update_address_method2" value="2" type="radio">
-              No</label>
-            </div>
-            <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
-           </div>
-           <div class="col-md-4">
-            <div class="model-box-YN"> <span>I need to stop service (cancel account)</span>
-             <label>
-              <input name="update_address_method3" value="1" type="radio">
-              Yes</label>
-             <label>
-              <input name="update_address_method3" value="2" type="radio">
-              No</label>
-            </div>
-            <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
-           </div>
-          </form>
-         </div>
-        </div>
+      <form name="frm_connect_utilities" id="frm_connect_utilities">
+	      <div class="col-sm-12 up_add_li">
+	       <ul>
+	        <li><label><input type="checkbox" name="connect_utilities_services_type1" id="connect_utilities_services_type1" value="1"> Hydro, Electricity and Gas</label></li>
+	        <li><label><input type="checkbox" name="connect_utilities_services_type2" id="connect_utilities_services_type2" value="2"> Water, Waste and Recycle</label></li>
+	       </ul>
+	      </div>
+	  	  <div class="clearfix"></div>
+
+		  <div class="col-sm-12">
+	         <div class="row">
+	           <div class="col-md-4">
+	            <div class="model-box-YN"> <span> I need to start new service (new account) </span>
+	             <label>
+	              <input name="update_address_method1" value="1" type="radio">
+	              Yes</label>
+	             <label>
+	              <input name="update_address_method1" value="2" type="radio">
+	              No</label>
+	            </div>
+	            <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
+	           </div>
+	           <div class="col-md-4">
+	            <div class="model-box-YN"> <span> I need to stop service (transfer account)</span>
+	             <label>
+	              <input name="update_address_method2" value="1" type="radio">
+	              Yes</label>
+	             <label>
+	              <input name="update_address_method2" value="2" type="radio">
+	              No</label>
+	            </div>
+	            <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
+	           </div>
+	           <div class="col-md-4">
+	            <div class="model-box-YN"> <span>I need to stop service (cancel account)</span>
+	             <label>
+	              <input name="update_address_method3" value="1" type="radio">
+	              Yes</label>
+	             <label>
+	              <input name="update_address_method3" value="2" type="radio">
+	              No</label>
+	            </div>
+	            <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
+	           </div>
+	         </div>
+	        </div>
+	    </form>
      </div>
      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step2" style="display: none;">
       <div class="row">
@@ -1025,7 +1026,7 @@ function calculateRoute(from, to) {
       <div class="col-sm-12 mailfarwd_wrap_radio">
        <form>
         <label class="mailfarw_radio-lb">
-         <input type="radio" name="connect_utilities_method_type" value="1" checked="">
+         <input type="radio" name="connect_utilities_method_type" value="1">
          Do it here online </label>
         <label class="mailfarw_radio-lb">
          <input type="radio" name="connect_utilities_method_type" value="2">
@@ -1035,8 +1036,8 @@ function calculateRoute(from, to) {
       
       <!-- Different Methods --> 
       <!-- Call utility service --> 
-      <!--
-      <div class="row" id="connect_utilities_method_type_container1">
+      
+      <div class="row" id="connect_utilities_method_type_container2" style="display: none;">
        <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Have these handy, before this call</strong>
         <div>
          <div>Your full name</div>
@@ -1057,26 +1058,21 @@ function calculateRoute(from, to) {
         </div>
        </div>
       </div>
-	  --> 
+	   
       
       <!-- Do it here online --> 
-      <!--
-	  <div class="row" id="connect_utilities_method_type_container2" style="display: none;">
-       <div> <strong>Do it online</strong> </div>
+      
+	  <div class="row" id="connect_utilities_method_type_container1" style="display: none;">
        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
       </div>
-	  --> 
+	   
       
      </div>
-     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step3" style="display: none;">
+     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step4" style="display: none;">
       <div> <strong>Water, Waste and Recycle Bins</strong>
-       <p>If you are moving in, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
+       <p>If you are moving in or moving out, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
       </div>
       <div class="col-sm-12 up_add_li">
-       <ul>
-        <li><i class="fa fa-check" aria-hidden="true"></i> Moving In</li>
-        <li><i class="fa fa-check" aria-hidden="true"></i> Moving Out</li>
-       </ul>
       </div>
       <div class="row">
        <div class="col-sm-12 col-md-12 col-lg-12">
@@ -1117,7 +1113,7 @@ function calculateRoute(from, to) {
       </div>
      </div>
      
-     <!-- <div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step4" style="width: 500px; height: 300px; display: none;">
+     <!-- <div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step5" style="width: 500px; height: 300px; display: none;">
 		      			<strong>Have you completed this task?</strong>
 		      			<br>
 		      			<div class="col-sm-6 col-md-6 col-lg-6">
@@ -1149,7 +1145,9 @@ function calculateRoute(from, to) {
     </div>
     <div class="row">
      <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
-     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> <a href="javascript:void(0);" id="btn_prev_connect_utilities" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a> <a href="javascript:void(0);" id="btn_next_connect_utilities" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a> </div>
+     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> 
+     	<a href="javascript:void(0);" id="btn_prev_connect_utilities" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
+     	<a href="javascript:void(0);" id="btn_next_connect_utilities" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a> </div>
     </div>
    </div>
    <!-- <div class="modal-footer">
@@ -1179,7 +1177,7 @@ function calculateRoute(from, to) {
 
 		      		<div class="col-sm-9 col-md-9 col-lg-9" id="home_cleaning_services_step1">
 		      			<div>
-      						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</strong>
+      						<strong>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service starts here</strong>
       					</div>
       					<br>
       					<div>
@@ -1195,6 +1193,9 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div><label><input type="checkbox" name=""> Move in cleaning</label></div>
 						                        <div><label><input type="checkbox" name=""> Move out cleaning</label></div>
+						                        <div><label><input type="checkbox" name="" disabled> Weekly cleaning</label></div>
+						                        <div><label><input type="checkbox" name="" disabled> Monthly cleaning</label></div>
+						                        <div><label><input type="checkbox" name="" disabled> Post construction cleaning</label></div>
 						                    </div>
 						                </div>
 						            </div>
@@ -1208,24 +1209,35 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
+						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
 						                        	</select>
 						                        </div>
 						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1240,24 +1252,35 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
+						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
 						                        	</select>
 						                        </div>
 						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1811,31 +1834,32 @@ function calculateRoute(from, to) {
       					</div>
       					<div>
       						<br>
-      						<p>
+      						<div>
       							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="1"> Install Appliances
+      								<input type="radio" class="" name="type_of_tech_concierge" value="1" checked=""> Install Appliances
       							</label>
-      						</p>
-      						<p>
+      						</div>
+      						<br>
+      						<!-- <p>
       							<label>
       								<input type="radio" class="" name="type_of_tech_concierge" value="2"> Install windows and blinds
       							</label>
       						</p>
       						<p>
       							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="3" disabled="true"> Lawn care
+      								<input type="radio" class="" name="type_of_tech_concierge" value="3" disabled> Lawn care
       							</label>
       						</p>
       						<p>
       							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="4" disabled="true"> Snow removal
+      								<input type="radio" class="" name="type_of_tech_concierge" value="4" disabled> Snow removal
       							</label>
       						</p>
       						<p>
       							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="5" disabled="true"> Plumbing and painting
+      								<input type="radio" class="" name="type_of_tech_concierge" value="5" disabled> Plumbing and painting
       							</label>
-      						</p>
+      						</p> -->
       					</div>
 		      		</div>
 
@@ -1907,7 +1931,11 @@ function calculateRoute(from, to) {
 							                        		foreach( $techConciergePlaces as $details )
 							                        		{
 							                        		?>
-							                        			<div class="col-lg-4 col-md-2 col-sm-1"><label class="form-group"><input type="checkbox" name="tech_concierge_places" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->places ) ) }}</label></div>
+							                        			<div class="col-lg-4 col-md-2 col-sm-1">
+							                        				<label class="form-group">
+							                        					<input type="checkbox" name="tech_concierge_places[]" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->places ) ) }}
+							                        				</label>
+							                        			</div>
 							                        		<?php
 							                        		}
 							                        	}
@@ -1934,7 +1962,11 @@ function calculateRoute(from, to) {
 							                        		foreach( $techConciergeAppliances as $details )
 							                        		{
 							                        		?>
-							                        			<div class="col-lg-4 col-md-2 col-sm-1"><label class="form-group"><input type="checkbox" name="tech_concierge_places" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->appliances ) ) }}</label></div>
+							                        			<div class="col-lg-4 col-md-2 col-sm-1">
+							                        				<label class="form-group">
+							                        					<input type="checkbox" name="tech_concierge_appliances[]" value="{{ $details->id }}"> {{ ucwords( strtolower( $details->appliances ) ) }}
+							                        				</label>
+							                        			</div>
 							                        		<?php
 							                        		}
 							                        	}
@@ -1961,8 +1993,8 @@ function calculateRoute(from, to) {
 						                        		?>
 						                        			<div class="">
 						                        				{{ ucwords( strtolower( $otherDetails->details ) ) }}
-						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value=""> Yes</label>
-						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value=""> No</label>
+						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value="1"> Yes</label>
+						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value="0"> No</label>
 						                        			</div>
 						                        		<?php
 						                        		}
@@ -1982,21 +2014,21 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                    	<div>
 						                    		<div class="col-lg-2">Day</div>
-						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-4"><input type="text" name="availability_date1" id="availability_date1" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_from1" id="availability_time_from1" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="" name="availability_time_upto1" id="availability_time_upto1" class="form-control" placeholder="To hours"></div>
 						                    	</div>
 						                    	<div>
 						                    		<div class="col-lg-2">Evening</div>
-						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-4"><input type="text" name="availability_date2" id="availability_date2" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_from2" id="availability_time_from2" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control" placeholder="To hours"></div>
 						                    	</div>
 						                    	<div>
 						                    		<div class="col-lg-2">All Day</div>
-						                    		<div class="col-lg-4"><input type="" name="" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-4"><input type="text" name="availability_date3" id="availability_date3" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_from3" id="availability_date3_day_from_hour" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control" placeholder="To hours"></div>
 						                    	</div>
 						                    </div>
 						                </div>
@@ -2009,8 +2041,8 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="tech_concierge_collapse7" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
-						                        <input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
+						                        <input type="text" name="tech_concierge_callback_primary_no" class="form-control" placeholder="Primary Number">
+						                        <input type="text" name="tech_concierge_callback_secondary_no" class="form-control" placeholder="Additional Number">
 						                    </div>
 						                </div>
 						            </div>
@@ -2022,16 +2054,14 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="tech_concierge_collapse8" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <textarea class="form-control">
-						                        	
-						                        </textarea>
+						                        <textarea class="form-control" name="tech_concierge_additional_information" id="tech_concierge_additional_information"></textarea>
 						                    </div>
 						                </div>
 						            </div>
 						        </div>
 
 						        <div>
-						        	<button type="button" class="btn btn-info">Submit</button>
+						        	<button type="submit" class="btn btn-info" name="btn_submit_tech_concierge_query" id="btn_submit_tech_concierge_query">Submit</button>
 						        </div>
 						    </form>
       					</div>

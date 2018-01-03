@@ -468,6 +468,31 @@ $(document).ready(function(){
 
 	/* ---------- Connect Utilities functionality ---------- */
 
+	$('#frm_connect_utilities').validate({
+		rules: {
+			update_address_method1: {
+				required: true
+			},
+			update_address_method2: {
+				required: true
+			},
+			update_address_method3: {
+				required: true
+			}
+		},
+		messages: {
+			update_address_method1: {
+				required: 'Please select an option'
+			},
+			update_address_method2: {
+				required: 'Please select an option'
+			},
+			update_address_method3: {
+				required: 'Please select an option'
+			}
+		}
+	});
+
 	var connectUtilitiesStep = 1;
 	$('.connect_utilities').click(function(){
 		$('#connect_utilities_modal').modal({ backdrop: 'static', keyboard: false });
@@ -484,54 +509,89 @@ $(document).ready(function(){
     // Connect utilities next step functionality
     $('#btn_next_connect_utilities').click(function(){
     	if( connectUtilitiesStep == 1 )
-		{
-			$('#connect_utilities_step1').hide();
-			$('#connect_utilities_step2').show();
-			$('#connect_utilities_step3').hide();
-			$('#connect_utilities_step4').hide();
+    	{
+	    	if( $('#frm_connect_utilities').valid() )
+	    	{
+	    		if( $('#connect_utilities_services_type1').is(':checked') && $('#connect_utilities_services_type2').is(':checked') )
+	    		{
+	    			$('#connect_utilities_step1').hide();
+    				$('#connect_utilities_step2').show();
+    				$('#connect_utilities_step3').hide();
 
-			connectUtilitiesStep++;
-		}
-		else if( connectUtilitiesStep == 2 )
-		{
-			$('#connect_utilities_step1').hide();
-			$('#connect_utilities_step2').hide();
-			$('#connect_utilities_step3').show();
-			$('#connect_utilities_step4').hide();
+    				$('#connect_utilities_step4').hide();
+	    		}
+	    		else if( $('#connect_utilities_services_type1').is(':checked') )
+	    		{
+	    			if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '2' && $('input[name="update_address_method3"]:checked').val() == '2' )
+					{
+						$('#connect_utilities_step1').hide();
+	    				$('#connect_utilities_step2').show();
+	    				$('#connect_utilities_step3').hide();
 
-			connectUtilitiesStep++;
-		}
+	    				$('#connect_utilities_step4').hide();
+					}
+	    		}
+	    		else if( $('#connect_utilities_services_type2').is(':checked') )
+	    		{
+	    			if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '2' && $('input[name="update_address_method3"]:checked').val() == '2' )
+					{
+						$('#connect_utilities_step1').hide();
+	    				$('#connect_utilities_step2').hide();
+	    				$('#connect_utilities_step3').hide();
+
+	    				$('#connect_utilities_step4').show();
+					}
+	    		}
+
+	    		connectUtilitiesStep++;
+
+	    	}
+    	}
+    	else if( connectUtilitiesStep == 2 )
+    	{
+    		if( $('#connect_utilities_services_type1').is(':checked') && $('#connect_utilities_services_type2').is(':checked') )
+    		{
+    			if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '2' && $('input[name="update_address_method3"]:checked').val() == '2' )
+				{
+					$('#connect_utilities_step1').hide();
+    				$('#connect_utilities_step2').hide();
+    				$('#connect_utilities_step3').hide();
+
+    				$('#connect_utilities_step4').show();
+				}
+    		}
+    	}
+
     });
 
     // Connect utilities previous step functionality
     $('#btn_prev_connect_utilities').click(function(){
     	if( connectUtilitiesStep == 2 )
-		{
-			$('#connect_utilities_step1').show();
+    	{
+    		if( $('#connect_utilities_services_type1').is(':checked') && $('#connect_utilities_services_type2').is(':checked') )
+    		{
+    			$('#connect_utilities_step1').hide();
+				$('#connect_utilities_step2').show();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+    		}
+    		else
+    		{
+    			$('#connect_utilities_step1').show();
+				$('#connect_utilities_step2').hide();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+    		}
+
+    		connectUtilitiesStep--;
+    	}
+    	else if( connectUtilitiesStep == 1 )
+    	{
+    		$('#connect_utilities_step1').show();
 			$('#connect_utilities_step2').hide();
 			$('#connect_utilities_step3').hide();
 			$('#connect_utilities_step4').hide();
-
-			connectUtilitiesStep--;
-		}
-		else if( connectUtilitiesStep == 3 )
-		{
-			$('#connect_utilities_step1').hide();
-			$('#connect_utilities_step2').show();
-			$('#connect_utilities_step3').hide();
-			$('#connect_utilities_step4').hide();
-
-			connectUtilitiesStep--;
-		}
-		else if( connectUtilitiesStep == 4 )
-		{
-			$('#connect_utilities_step1').hide();
-			$('#connect_utilities_step2').hide();
-			$('#connect_utilities_step3').show();
-			$('#connect_utilities_step4').hide();
-
-			connectUtilitiesStep--;
-		}
+    	}
     });
 
     // Show the different method details
@@ -645,17 +705,6 @@ $(document).ready(function(){
 			moving_house_description_8:  { required: true },
 			moving_house_description_9:  { required: true },
 			moving_house_description_10: { required: true },
-
-			/*moving_house_special_instruction_1: { required: true },
-			moving_house_special_instruction_2: { required: true },
-			moving_house_special_instruction_3: { required: true },
-			moving_house_special_instruction_4: { required: true },
-			moving_house_special_instruction_5: { required: true },
-
-			moving_house_additional_service_1: { required: true },
-			moving_house_additional_service_2: { required: true },
-			moving_house_additional_service_3: { required: true },
-			moving_house_additional_service_4: { required: true },*/
 			
 			moving_house_packing_issue: { required: true },
 			moving_house_callback_option: { required: true }
@@ -681,17 +730,6 @@ $(document).ready(function(){
 			moving_house_description_8:  { required: 'Please select a option' },
 			moving_house_description_9:  { required: 'Please select a option' },
 			moving_house_description_10: { required: 'Please select a option' },
-
-			moving_house_special_instruction_1: { required: 'Please select a option' },
-			moving_house_special_instruction_2: { required: 'Please select a option' },
-			moving_house_special_instruction_3: { required: 'Please select a option' },
-			moving_house_special_instruction_4: { required: 'Please select a option' },
-			moving_house_special_instruction_5: { required: 'Please select a option' },
-
-			moving_house_additional_service_1: { required: 'Please select a option' },
-			moving_house_additional_service_2: { required: 'Please select a option' },
-			moving_house_additional_service_3: { required: 'Please select a option' },
-			moving_house_additional_service_4: { required: 'Please select a option' },
 
 			moving_house_vehicle_type: { required: 'Please select a option' },
 			moving_house_packing_issue: { required: 'Please select a option' },
@@ -759,6 +797,53 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge++;
+	});
+
+	$('#frm_tech_concierge').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_tech_concierge').validate({
+		ignore: "not:hidden",
+		rules: 
+		{
+			moving_house_to_type : { required: true },
+			moving_house_to_level : { required: true },
+			moving_house_to_bedroom_count : { required: true },
+			moving_house_to_property_type : { required: true }
+		},
+		messages: 
+		{
+			moving_house_to_type: { required: 'Select the type' },
+			moving_house_to_level: { required: 'Please select floor level' },
+			moving_house_to_bedroom_count: { required: 'Please select bedroom count' },
+			moving_house_to_property_type: { required: 'Please select property type' },
+		}
+	});
+
+	$('#btn_submit_tech_concierge_query').click(function(){
+		if( $('#frm_tech_concierge').valid() )
+		{
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/savetechconciergequery',
+				method: 'post',
+				data: {
+					frmData: $('#frm_tech_concierge').serialize()
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+				    {
+				    	alertify.success(response.errMsg);
+				    }
+				    else
+				    {
+				    	alertify.error(response.errMsg);
+				    }
+			    }
+			});
+		}
 	});
 
 	/* ---------- Tech Concierge functionality ends ---------- */
