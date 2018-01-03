@@ -60,6 +60,11 @@ Route::group(['prefix' => 'administrator'], function() {
 	// Admin login function
 	Route::post('/login', 'AdminController@login');
 
+	// Forgot Password function
+	Route::get('/forgotpassword', 'AdminController@getForgotPassword');
+
+	Route::post('/forgotpassword', 'AdminController@forgotPassword');
+
 });
 
 // Administrator protected routes
@@ -347,6 +352,12 @@ Route::group(['prefix' => 'agent'], function() {
 	// Function to check user credentials
 	Route::post('/login', 'AgentController@login');
 
+	// Forgot Password function
+	Route::get('/forgotpassword', 'AgentController@getForgotPassword');
+
+	Route::post('/forgotpassword', 'AgentController@forgotPassword');
+
+
 });
 
 // Agent protected routes
@@ -494,6 +505,11 @@ Route::group(['prefix' => 'company'], function() {
 
 	// To update the company payment plan
 	Route::post('/updatecompanypaymentplan', 'CompanyController@updateCompanyPaymentPlan');
+
+	// Forgot Password function
+	Route::get('/forgotpassword', 'CompanyController@getForgotPassword');
+	
+	Route::post('/forgotpassword', 'CompanyController@forgotPassword');
 	
 });
 
