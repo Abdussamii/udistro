@@ -17,7 +17,7 @@
 	<link href="css/style.css" rel="stylesheet"> -->
 
 	<link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
-	<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page1.css') }}" />
+	<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
 
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
@@ -145,7 +145,8 @@
      <div class="logo_banner"><img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro"></div>
      <h1 class="title_banner">Improving relocation experience for 4 million household movers in Canada every year.</h1>
      <div class="banner_btn-group center-block">
-      <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am Moving</button>
+      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am Moving</button> -->
+      <a href="{{ url('/getinvitation') }}" class="btn banner_btn btn-lg skyBlue_btn">I am Moving</a>
       <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
      </div>
     </div>

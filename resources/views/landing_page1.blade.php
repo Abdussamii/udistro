@@ -13,7 +13,7 @@
 <link href="css/style.css" rel="stylesheet"> -->
 
 <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page1.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
@@ -33,10 +33,10 @@
  <div class="container-fluid">
   <div class="navbar-header"> <a class="navbar-brand" href="#"><img src="images/logo.png" alt="Udistro" /></a> </div>
   <ul class="nav navbar-nav navbar-right navbar-top-link">
-   <li><a href="#">
+   <li><a href="{{ url('/agent') }}">
     <button type="button" class="btn top-btn1">I Help Others Move</button>
     </a></li>
-   <li><a href="#">
+   <li><a href="{{ url('/company') }}">
     <button type="button" class="btn top-btn1">I Am a Business</button>
     </a></li>
   </ul>
@@ -59,7 +59,8 @@
      <div class="logo_banner"><img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro"></div>
      <h1 class="title_banner">Improving relocation experience for 4 million household movers in Canada every year.</h1>
      <div class="banner_btn-group center-block">
-      <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am Moving</button>
+      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am Moving</button> -->
+      <a href="{{ url('/getinvitation') }}" class="btn banner_btn btn-lg skyBlue_btn">I am Moving</a>
       <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
      </div>
     </div>
@@ -101,7 +102,8 @@
         </ul>
        </div>
        <div class="banner_btn-group center-block">
-        <button type="button" class="btn try_btn btn-lg blue_btn">Ask for an Invite</button>
+        <!-- <button type="button" class="btn try_btn btn-lg blue_btn">Ask for an Invite</button> -->
+        <a href="{{ url('/getinvitation') }}" class="btn try_btn btn-lg blue_btn">Ask for an Invite</a>
        </div>
       </div>
      </div>
@@ -123,7 +125,7 @@
       <div class="col-md-12">
        	<div class="software_content">
        		<!-- <img src="images/softwr_contents.png" alt="" /> -->
-       		<img src="{{ url('/images/landing_page1/softwr_contents.png') }}" alt="" />
+       		<img src="{{ url('/images/landing_image/softwr_contents.png') }}" alt="" />
        	</div>
       </div>
       <div class="clearfix"></div>
@@ -145,7 +147,7 @@
    <div class="col-md-4">
     <div class="foot_logo">
     	<!-- <img src="images/logo-foot.png" alt=""/> -->
-    	<img src="{{ url('/images/landing_page1/logo-foot.png') }}" alt="" />
+    	<img src="{{ url('/images/landing_image/logo-foot.png') }}" alt="" />
     </div>
     <ul class="footer_social_icon">
      <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
@@ -205,8 +207,8 @@
    <ul>
     <li> <a href="#">Privacy</a> </li>
     <li> <a href="#">Terms</a> </li>
-    <li> <a href="#">I Help Others Move</a> </li>
-    <li> <a href="#">I Am a Business</a> </li>
+    <li> <a href="{{ url('/agent') }}">I Help Others Move</a> </li>
+    <li> <a href="{{ url('/company') }}">I Am a Business</a> </li>
     <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
    </ul>
   </div>
