@@ -107,6 +107,9 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 			    	{
 			    		alertify.success( response.errMsg );
+
+			    		// Reset the form
+			    		$('#frm_get_invitation')[0].reset();
 			    	}
 			    	else
 			    	{
