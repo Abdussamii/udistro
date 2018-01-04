@@ -23,9 +23,30 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::get('/', 'MoversController@index');
 
+////////// Home Pages Routes //////////
+
+// uDistro home
 Route::get('/', function () {
-    return view('Home');
+    return view('landing_page1');
 });
+
+// uDistro agent home
+Route::get('/agent/home', function () {
+    return view('landing_page2');
+});
+
+// uDistro business home
+Route::get('/company/home', function () {
+    return view('landing_page3');
+});
+
+// uDistro get invitation route
+Route::get('/getinvitation', 'HomeController@getInvitation');
+
+// Save the invitation details
+Route::post('/saveinvitationdetails', 'HomeController@saveInvitationDetails');
+
+////////// Home Pages Routes //////////
 
 // To test email template view
 Route::get('/email', 'EmailController@renderEmailTemplate');

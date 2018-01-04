@@ -1113,112 +1113,112 @@ class MoversController extends Controller
 		return response()->json($response);
     }
 
-        /**
-    	 * To get the list of tech concierge companies satisfying all the criteria to get the mover's quotations
-    	 *
-    	 * 		- Rules
-    	 * 		# Company must be active
-    	 * 		# Company category must match
-    	 * 		# Availability Mode must be true
-    	 * 		# Must have a payment plan
-    	 * 		# Services (Atleast 30% match)
-    	 * 		# Target Area must lies with in the working area of company or company working on multiple locations
-    	 *
-    	 * @param int
-    	 * @param int
-    	 * @param array
-    	 * @return array
-    	 */
-    	public function getFilteredTechConciergeCompaniesList($clientId, $companyCategory, $requiredServices)
-    	{
-    		// Get the moving from and moving to address of client
-    		$clientMovingToAddress = 	DB::table('agent_client_moving_to_addresses as t1')
-    									->leftJoin('provinces as t2', 't2.id', '=', 't1.province_id')
-    									->leftJoin('cities as t3', 't3.id', '=', 't1.city_id')
-    									->leftJoin('countries as t4', 't4.id', '=', 't1.country_id')
-    									->where(['t1.agent_client_id' => $clientId, 't1.status' => '1'])
-    									->select('t1.id', 't1.address1', 't1.address2', 't2.name as province', 't3.name as city', 't1.postal_code', 't4.name as country')
-    									->first();
+    /**
+	 * To get the list of tech concierge companies satisfying all the criteria to get the mover's quotations
+	 *
+	 * 		- Rules
+	 * 		# Company must be active
+	 * 		# Company category must match
+	 * 		# Availability Mode must be true
+	 * 		# Must have a payment plan
+	 * 		# Services (Atleast 30% match)
+	 * 		# Target Area must lies with in the working area of company or company working on multiple locations
+	 *
+	 * @param int
+	 * @param int
+	 * @param array
+	 * @return array
+	 */
+	public function getFilteredTechConciergeCompaniesList($clientId, $companyCategory, $requiredServices)
+	{
+		// Get the moving from and moving to address of client
+		$clientMovingToAddress = 	DB::table('agent_client_moving_to_addresses as t1')
+									->leftJoin('provinces as t2', 't2.id', '=', 't1.province_id')
+									->leftJoin('cities as t3', 't3.id', '=', 't1.city_id')
+									->leftJoin('countries as t4', 't4.id', '=', 't1.country_id')
+									->where(['t1.agent_client_id' => $clientId, 't1.status' => '1'])
+									->select('t1.id', 't1.address1', 't1.address2', 't2.name as province', 't3.name as city', 't1.postal_code', 't4.name as country')
+									->first();
 
-    		// Get the latitude, longitude of the mover from the Google Map API
-    		$clientMovingToAddressCoordinates = array();
-    		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-    		$mapApiResponse = json_decode(file_get_contents($url), true);
-    		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
-    		{
-    			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
-    		}
+		// Get the latitude, longitude of the mover from the Google Map API
+		$clientMovingToAddressCoordinates = array();
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		$mapApiResponse = json_decode(file_get_contents($url), true);
+		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+		{
+			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+		}
 
-    		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
-    		$companies = DB::table('companies as t1')
-    					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
-    					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
-    					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
-    					->where(['t2.id' => $companyCategory])							// company category must match
-    					->where(['t3.plan_type_id' => '2'])								// for company payment plan
-    					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
-    					->get();
+		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
+		$companies = DB::table('companies as t1')
+					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
+					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
+					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
+					->where(['t2.id' => $companyCategory])							// company category must match
+					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
+					->get();
 
-    		// Check if any company satisfy all the rules or not
-    		$filteredCompanies 	= array();
-    		$companyCoordinates = array();
-    		$minimumPercentage	= 30;
-    		if( count( $companies ) > 0 )
-    		{
-    			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
-    			foreach ($companies as $company)
-    			{
-    				$services =	DB::table('category_services as t1')
-    							->leftJoin('category_service_company as t2', 't2.category_service_id', '=', 't1.id')
-    							->where(['t2.company_id' => $company->company_id, 't1.status' => '1'])
-    							->select('t1.id', 't1.service')
-    							->get();
+		// Check if any company satisfy all the rules or not
+		$filteredCompanies 	= array();
+		$companyCoordinates = array();
+		$minimumPercentage	= 30;
+		if( count( $companies ) > 0 )
+		{
+			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
+			foreach ($companies as $company)
+			{
+				$services =	DB::table('category_services as t1')
+							->leftJoin('category_service_company as t2', 't2.category_service_id', '=', 't1.id')
+							->where(['t2.company_id' => $company->company_id, 't1.status' => '1'])
+							->select('t1.id', 't1.service')
+							->get();
 
-    				$matchedServices = 0;
-    				if( count( $services ) > 0 )
-    				{
-    					foreach ($services as $service)
-    					{
-    						if( in_array( strtolower($service->service), $requiredServices) )
+				$matchedServices = 0;
+				if( count( $services ) > 0 )
+				{
+					foreach ($services as $service)
+					{
+						if( in_array( strtolower($service->service), $requiredServices) )
+						{
+							$matchedServices++;
+						}
+					}
+				}
+
+				if( ( $matchedServices / count( $services ) * 100 ) >= $minimumPercentage )
+				{
+					// For the companies who are not working globally, get the lat long of the address
+					if( $company->working_globally != '1' )
+					{
+						// Get the latitude, longitude of the company address from the Google Map API
+						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+
+						$mapApiResponse = json_decode(file_get_contents($url), true);
+
+						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+						{
+							$companyCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+
+							$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+
+							if( $distance <= $company->target_area )
 							{
-								$matchedServices++;
+								$filteredCompanies[] = $company;
 							}
-    					}
-    				}
+						}
+					}
+					else
+					{
+						$filteredCompanies[] = $company;
+					}
+				}
 
-    				if( ( $matchedServices / count( $services ) * 100 ) >= $minimumPercentage )
-    				{
-    					// For the companies who are not working globally, get the lat long of the address
-    					if( $company->working_globally != '1' )
-    					{
-    						// Get the latitude, longitude of the company address from the Google Map API
-    						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+			}
+		}
 
-    						$mapApiResponse = json_decode(file_get_contents($url), true);
-
-    						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
-    						{
-    							$companyCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
-
-    							$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
-
-    							if( $distance <= $company->target_area )
-    							{
-    								$filteredCompanies[] = $company;
-    							}
-    						}
-    					}
-    					else
-    					{
-    						$filteredCompanies[] = $company;
-    					}
-    				}
-
-    			}
-    		}
-
-    		return $filteredCompanies;
-    	}
+		return $filteredCompanies;
+	}
 
     /**
 	 * Return the first letter of each word in uppercase - if it's too long.

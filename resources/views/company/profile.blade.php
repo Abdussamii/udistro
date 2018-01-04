@@ -59,7 +59,7 @@
 		});
 	});
 
-	// Function to show the preview of page
+	// Function to show the preview of image
 	function readURL(input)
 	{
 		if (input.files && input.files[0]) {
