@@ -33,10 +33,10 @@
  <div class="container-fluid">
   <div class="navbar-header"> <a class="navbar-brand" href="#"><img src="images/logo.png" alt="Udistro" /></a> </div>
   <ul class="nav navbar-nav navbar-right navbar-top-link">
-   <li><a href="{{ url('/agent') }}">
+   <li><a href="{{ url('/agent/home') }}">
     <button type="button" class="btn top-btn1">I Help Others Move</button>
     </a></li>
-   <li><a href="{{ url('/company') }}">
+   <li><a href="{{ url('/company/home') }}">
     <button type="button" class="btn top-btn1">I Am a Business</button>
     </a></li>
   </ul>
@@ -207,8 +207,8 @@
    <ul>
     <li> <a href="#">Privacy</a> </li>
     <li> <a href="#">Terms</a> </li>
-    <li> <a href="{{ url('/agent') }}">I Help Others Move</a> </li>
-    <li> <a href="{{ url('/company') }}">I Am a Business</a> </li>
+    <li> <a href="{{ url('/agent/home') }}">I Help Others Move</a> </li>
+    <li> <a href="{{ url('/company/home') }}">I Am a Business</a> </li>
     <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
    </ul>
   </div>

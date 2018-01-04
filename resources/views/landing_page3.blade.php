@@ -41,7 +41,7 @@
    <li><a href="{{ url('/getinvitation') }}">
     <button type="button" class="btn top-btn1">I Am Moving</button>
     </a></li>
-   <li><a href="{{ url('/agent') }}">
+   <li><a href="{{ url('/agent/home') }}">
     <button type="button" class="btn top-btn1">I Help Others Move</button>
     </a></li>
   </ul>
@@ -237,8 +237,8 @@
    <ul>
     <li> <a href="#">Privacy</a> </li>
     <li> <a href="#">Terms</a> </li>
-    <li> <a href="#">I Help Others Move</a> </li>
-    <li> <a href="#">I Am a Business</a> </li>
+    <li> <a href="{{ url('/agent/home') }}">I Help Others Move</a> </li>
+    <li> <a href="{{ url('/getinvitation') }}">I Am a moving</a> </li>
     <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
    </ul>
   </div>

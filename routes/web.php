@@ -25,14 +25,27 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 ////////// Home Pages Routes //////////
 
+/*
+	1 Page:
+	uDistro For Realtors and Property Managers (I help others move)
+
+	2 Page:
+	uDistro For Local Businesses (I am business)
+
+	3 Page:
+	uDistro For People Who Moving (I am moving)
+*/
+
 // uDistro home
 Route::get('/', function () {
-    return view('landing_page1');
+    // return view('landing_page1');
+    return view('landing_page2');
 });
 
 // uDistro agent home
 Route::get('/agent/home', function () {
-    return view('landing_page2');
+    // return view('landing_page2');
+    return view('landing_page1');
 });
 
 // uDistro business home

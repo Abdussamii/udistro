@@ -41,7 +41,7 @@
    <li><a href="{{ url('/getinvitation') }}">
     <button type="button" class="btn top-btn1">I Am Moving</button>
     </a></li>
-   <li><a href="{{ url('/company') }}">
+   <li><a href="{{ url('/company/home') }}">
     <button type="button" class="btn top-btn1">I Am a Business</button>
     </a></li>
   </ul>
@@ -112,7 +112,8 @@
         </ul>
        </div>
        <div class="banner_btn-group center-block">
-        <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button>
+        <!-- <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button> -->
+        <a href="{{ url('/agent') }}" class="btn try_btn btn-lg blue_btn">Start your free trial today!</a>
        </div>
       </div>
      </div>
@@ -159,7 +160,8 @@
       </div>
       <div class="clearfix"></div>
       <div class="banner_btn-group text-center">
-       <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button>
+       <!-- <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button> -->
+       <a href="{{ url('/agent') }}" class="btn banner_btn btn-lg blue_btn">Start your free trial today!</a>
       </div>
      </div>
     </div>
@@ -236,8 +238,8 @@
    <ul>
     <li> <a href="#">Privacy</a> </li>
     <li> <a href="#">Terms</a> </li>
-    <li> <a href="#">I Help Others Move</a> </li>
-    <li> <a href="#">I Am a Business</a> </li>
+    <li> <a href="{{ url('/getinvitation') }}">I Help Others Move</a> </li>
+    <li> <a href="{{ url('/company/home') }}">I Am a Business</a> </li>
     <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
    </ul>
   </div>
