@@ -745,6 +745,18 @@ $(document).ready(function(){
         }
     });
 
+    $('#btn_next_invitation').click(function()
+    {
+        $('#invite_client_step1').addClass('hide');
+        $('#invite_client_step2').removeClass('hide');
+    });
+
+    $('#btn_previous_invitation').click(function()
+    {
+        $('#invite_client_step1').removeClass('hide');
+        $('#invite_client_step2').addClass('hide');
+    });
+
     // To invite the client
     $(document).on('click', '.agent_invite_client', function(){
     	var clientId = $(this).attr('id');

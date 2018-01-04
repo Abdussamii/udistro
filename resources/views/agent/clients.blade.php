@@ -184,7 +184,7 @@
 
 		<!-- Modal to invite client -->
 		<div id="modal_invite_client" class="modal fade" role="dialog">
-		  	<div class="modal-dialog">
+		  	<div class="modal-dialog modal-lg">
 			    <!-- Modal content-->
 			    <div class="modal-content">
 					<div class="modal-header">
@@ -194,181 +194,190 @@
 
 					<div class="modal-body">
 						<form name="frm_invite_client" id="frm_invite_client" autocomplete="off">
-							<div>
-								<fieldset>
-									<div class="form-group">
-										<label for="client_fname">Old Address Line 1</label>
-										<input type="text" class="form-control" name="client_old_address1" id="client_old_address1" value="">
-										<input type="hidden" name="client_id" id="client_id">
-									</div>
-									<div class="form-group">
-										<label for="client_fname">Old Address Line 2</label>
-										<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
-									</div>
-
-									<!-- Old address related fields -->
-									<div id="container_old_address_fields">
-										<div class="row">
-											<div class="col-sm-6">
-										  		<label for="">Province</label>
-										  		<select class="form-control" name="client_old_province" id="client_old_province">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $provinces ) && count( $provinces ) > 0 )
-											  		{
-											  			foreach ($provinces as $province)
-											  			{
-											  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
-										  	<div class="col-sm-6">
-										  		<label for="">City</label>
-										  		<select class="form-control" name="client_old_city" id="client_old_city">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $cities ) && count( $cities ) > 0 )
-											  		{
-											  			foreach ($cities as $city)
-											  			{
-											  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
+							<div id="invite_client_step1">
+								<div>
+									<fieldset>
+										<div class="form-group">
+											<label for="client_fname">Old Address Line 1</label>
+											<input type="text" class="form-control" name="client_old_address1" id="client_old_address1" value="">
+											<input type="hidden" name="client_id" id="client_id">
 										</div>
-										<div class="row">
-											<div class="col-sm-6">
-										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="">
-										  	</div>
-											<div class="col-sm-6">
-										  		<label for="">Country</label>
-										  		<select class="form-control" name="client_old_country" id="client_old_country">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $countries ) && count( $countries ) > 0 )
-											  		{
-											  			foreach ($countries as $country)
-											  			{
-											  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
+										<div class="form-group">
+											<label for="client_fname">Old Address Line 2</label>
+											<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
 										</div>
-									</div>
 
-								</fieldset>
+										<!-- Old address related fields -->
+										<div id="container_old_address_fields">
+											<div class="row">
+												<div class="col-sm-6">
+											  		<label for="">Province</label>
+											  		<select class="form-control" name="client_old_province" id="client_old_province">
+											  			<option value="">Select</option>
+												  		<?php
+												  		if( isset( $provinces ) && count( $provinces ) > 0 )
+												  		{
+												  			foreach ($provinces as $province)
+												  			{
+												  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
+												  			}
+												  		}
+												  		?>
+											  		</select>
+											  	</div>
+											  	<div class="col-sm-6">
+											  		<label for="">City</label>
+											  		<select class="form-control" name="client_old_city" id="client_old_city">
+											  			<option value="">Select</option>
+												  		<?php
+												  		if( isset( $cities ) && count( $cities ) > 0 )
+												  		{
+												  			foreach ($cities as $city)
+												  			{
+												  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+												  			}
+												  		}
+												  		?>
+											  		</select>
+											  	</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+											  		<label for="client_new_country">Postal Code</label>
+											  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="">
+											  	</div>
+												<div class="col-sm-6">
+											  		<label for="">Country</label>
+											  		<select class="form-control" name="client_old_country" id="client_old_country">
+											  			<option value="">Select</option>
+												  		<?php
+												  		if( isset( $countries ) && count( $countries ) > 0 )
+												  		{
+												  			foreach ($countries as $country)
+												  			{
+												  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+												  			}
+												  		}
+												  		?>
+											  		</select>
+											  	</div>
+											</div>
+										</div>
+
+									</fieldset>
+								</div>
+								<br>
+								<div>
+									<fieldset>
+										<div class="form-group">
+											<label for="client_fname">New Address</label>
+											<input type="text" class="form-control" name="client_new_address1" id="client_new_address1" value="">
+										</div>
+
+										<div class="form-group">
+											<label for="client_fname">New Address</label>
+											<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
+										</div>
+
+										<!-- New address related fields -->
+										<div id="container_new_address_fields">
+											<div class="row">
+												<div class="col-sm-6">
+											  		<label for="">Province</label>
+											  		<select class="form-control" name="client_new_province" id="client_new_province">
+											  			<option value="">Select</option>
+												  		<?php
+												  		if( isset( $provinces ) && count( $provinces ) > 0 )
+												  		{
+												  			foreach ($provinces as $province)
+												  			{
+												  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
+												  			}
+												  		}
+												  		?>
+											  		</select>
+											  	</div>
+											  	<div class="col-sm-6">
+											  		<label for="">City</label>
+											  		<select class="form-control" name="client_new_city" id="client_new_city">
+											  			<option value="">Select</option>
+												  		<?php
+												  		if( isset( $cities ) && count( $cities ) > 0 )
+												  		{
+												  			foreach ($cities as $city)
+												  			{
+												  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+												  			}
+												  		}
+												  		?>
+											  		</select>
+											  	</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+											  		<label for="client_new_country">Postal Code</label>
+											  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="">
+											  	</div>
+												<div class="col-sm-6">
+											  		<label for="">Country</label>
+											  		<select class="form-control" name="client_new_country" id="client_new_country">
+											  			<option value="">Select</option>
+												  		<?php
+												  		if( isset( $countries ) && count( $countries ) > 0 )
+												  		{
+												  			foreach ($countries as $country)
+												  			{
+												  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+												  			}
+												  		}
+												  		?>
+											  		</select>
+											  	</div>
+											</div>
+										</div>
+
+									</fieldset>
+								</div>
+								<div class="">
+							  		<label for="">Moving Date</label>
+							  		<input type="text" class="form-control" name="client_moving_date" id="client_moving_date">
+							  	</div>
+								<hr />
+								<button type="button" id="btn_next_invitation" class="btn btn-primary">Next</button>
 							</div>
-							<br>
-							<div>
-								<fieldset>
-									<div class="form-group">
-										<label for="client_fname">New Address</label>
-										<input type="text" class="form-control" name="client_new_address1" id="client_new_address1" value="">
-									</div>
 
-									<div class="form-group">
-										<label for="client_fname">New Address</label>
-										<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
-									</div>
+							<div class="hide" id="invite_client_step2">
 
-									<!-- New address related fields -->
-									<div id="container_new_address_fields">
-										<div class="row">
-											<div class="col-sm-6">
-										  		<label for="">Province</label>
-										  		<select class="form-control" name="client_new_province" id="client_new_province">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $provinces ) && count( $provinces ) > 0 )
-											  		{
-											  			foreach ($provinces as $province)
-											  			{
-											  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
-										  	<div class="col-sm-6">
-										  		<label for="">City</label>
-										  		<select class="form-control" name="client_new_city" id="client_new_city">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $cities ) && count( $cities ) > 0 )
-											  		{
-											  			foreach ($cities as $city)
-											  			{
-											  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-										  		<label for="client_new_country">Postal Code</label>
-										  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="">
-										  	</div>
-											<div class="col-sm-6">
-										  		<label for="">Country</label>
-										  		<select class="form-control" name="client_new_country" id="client_new_country">
-										  			<option value="">Select</option>
-											  		<?php
-											  		if( isset( $countries ) && count( $countries ) > 0 )
-											  		{
-											  			foreach ($countries as $country)
-											  			{
-											  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-											  			}
-											  		}
-											  		?>
-										  		</select>
-										  	</div>
-										</div>
-									</div>
+								<div class="form-group">
+									<label for="client_fname">Client Message</label>
+									<textarea class="form-control" name="client_message" id="client_message" rows="6"></textarea>
+								</div>
 
-								</fieldset>
-							</div>
-							<div class="">
-						  		<label for="">Moving Date</label>
-						  		<input type="text" class="form-control" name="client_moving_date" id="client_moving_date">
-						  	</div>
-							<hr>
-							<div class="form-group">
-								<label for="client_fname">Client Message</label>
-								<textarea class="form-control" name="client_message" id="client_message" rows="6"></textarea>
-							</div>
-
-							<div class="form-group">
-								<label for="client_fname">Templates</label>
-								<?php
-								if( isset( $emailTemplates ) && count( $emailTemplates ) > 0 )
-								{
-									foreach ($emailTemplates as $emailTemplate)
+								<div class="form-group">
+									<label for="client_fname">Templates</label>
+									<?php
+									if( isset( $emailTemplates ) && count( $emailTemplates ) > 0 )
 									{
-										echo '<div><label><input type="radio" name="client_email_template" value="'. $emailTemplate->id .'"> '. ucwords( strtolower( $emailTemplate->template_name ) ) .'</label></div>';
+										foreach ($emailTemplates as $emailTemplate)
+										{
+											echo '<div><label><input type="radio" name="client_email_template" value="'. $emailTemplate->id .'"> '. ucwords( strtolower( $emailTemplate->template_name ) ) .'</label></div>';
+										}
 									}
-								}
-								?>
-								<div><label id="client_email_template-error" class="error" for="client_email_template"></label></div>
-							</div>
+									?>
+									<div><label id="client_email_template-error" class="error" for="client_email_template"></label></div>
+								</div>
 
-							<div class="form-group" style="display: none;" id="client_invitation_scheduler">
-								<label for="">Schedule Date</label>
-						  		<input type="text" class="form-control" name="client_invitation_schedule_date" id="client_invitation_schedule_date">
-						  		<div class="pull-right"><a href="javascript:void(0);" id="cancel_shedule">Cancel</a></div>
+								<div class="form-group" style="display: none;" id="client_invitation_scheduler">
+									<label for="">Schedule Date</label>
+							  		<input type="text" class="form-control" name="client_invitation_schedule_date" id="client_invitation_schedule_date">
+							  		<div class="pull-right"><a href="javascript:void(0);" id="cancel_shedule">Cancel</a></div>
+								</div>
+								<hr />
+								<button type="submit" id="btn_previous_invitation" class="btn btn-primary">Previous</button>
+								<button type="submit" id="btn_send_invitation" class="btn btn-primary">Send</button>
+								<button type="submit" id="btn_schedule_invitation" class="btn btn-primary">Schedule</button>
 							</div>
 							
-							<button type="submit" id="btn_send_invitation" class="btn btn-primary">Send</button>
-							<button type="submit" id="btn_schedule_invitation" class="btn btn-primary">Schedule</button>
 						</form>
 					</div>
 			    </div>
