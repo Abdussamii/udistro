@@ -866,6 +866,37 @@ $(document).ready(function(){
     	}
     });
 
+    $('#client_email_template').on('change', function()
+    {
+        //alert('aaaa');
+        $.ajax({
+            url: $('meta[name="route"]').attr('content') + '/agent/emailpreview',
+            method: 'post',
+            data: {
+                id:3
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response){
+                if( response.errCode == 0 )
+                {
+                    //alert(response.errMsg);
+                    var text = response.errMsg;
+                     
+                    //alert(text);
+                    $('#email_previeww').html(text.replace('[TEMPLATE_CONTENT]', '<textarea class="form-control" name="email_template_content" id="email_template_content"></textarea>'));
+                    //alertify.success( response.errMsg );
+                }
+                else
+                {
+                    //alertify.error( response.errMsg );
+                }
+            }
+        });
+    });
+
+
     // To get the email template content and render the html
     $('input[name="agent_email_template"]').change(function(){
     	var templateId = $(this).val();
