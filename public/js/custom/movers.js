@@ -856,7 +856,7 @@ $(document).ready(function(){
 
 	/* ---------- Share Announcement functionality ends ---------- */
 
-	/* ---------- Tech Concierge functionality ---------- */
+	/* ---------- Cable & Internet Service functionality ---------- */
 
 	var StepCableInternetService = 1;
 	$('.cable_internet_services').click(function(){
@@ -889,7 +889,81 @@ $(document).ready(function(){
 		StepTechConcierge++;
 	});*/
 
-	/* ---------- Tech Concierge functionality ends ---------- */
+	// Save the query data
+	$('#frm_cable_internet_services').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_cable_internet_services').validate({
+		ignore: "not:hidden",
+		rules: 
+		{
+			cable_internet_house_to_type: { required: true },
+			cable_internet_house_to_level: { required: true },
+			cable_internet_house_to_bedroom_count: { required: true },
+			cable_internet_house_to_property_type: { required: true },
+			cable_internet_house_from_type: { required: true },
+			cable_internet_house_from_level: { required: true },
+			cable_internet_house_from_bedroom_count: { required: true },
+			cable_internet_from_property_type: { required: true },
+			'cable_internet_service_type[]': { required: true }
+		},
+		messages: 
+		{
+			cable_internet_house_to_type: { required: 'Select the type' },
+			cable_internet_house_to_level: { required: 'Please select floor level' },
+			cable_internet_house_to_bedroom_count: { required: 'Please select bedroom count' },
+			cable_internet_house_to_property_type: { required: 'Please select property type' },
+			cable_internet_house_from_type: { required: 'Select the type' },
+			cable_internet_house_from_level: { required: 'Please select floor level' },
+			cable_internet_house_from_bedroom_count: { required: 'Please select bedroom count' },
+			cable_internet_from_property_type: { required: 'Please select property type' },
+			'cable_internet_service_type[]': { required: 'Please select atleast one service' }
+		}
+	});
+
+	$('#btn_cable_internet_submit_query').click(function(){
+		if( $('#frm_cable_internet_services').valid() )
+		{
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/savecableinternetquery',
+				method: 'post',
+				data: {
+					frmData: $('#frm_cable_internet_services').serialize()
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+				    {
+				    	alertify.success(response.errMsg);
+				    }
+				    else
+				    {
+				    	alertify.error(response.errMsg);
+				    }
+			    }
+			});
+		}
+	});
+
+	//  Show/hide the billing responsible div
+	$('.cable_internet_employment_status').click(function(){
+		var employmentStatus = $(this).val();
+
+		$('#cable_internet_billing_responsible_container').hide();
+		
+		if( employmentStatus == '0' )		// Unemployeed
+		{
+			$('#cable_internet_billing_responsible_container').show();
+		}
+		else
+		{
+			$('#cable_internet_billing_responsible_container').hide();
+		}
+	});
+
+	/* ---------- Cable & Internet Service ends ---------- */
 
 	// To handle the modal close event
 	$('.close_modal').click(function() {
