@@ -10,6 +10,9 @@
 	<script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=kp88-mx67-ff25-xd59"></script>
 	<link rel="stylesheet" type="text/css" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.30.min.css?key=kp88-mx67-ff25-xd59" />
 
+	<!-- TinyMCE -->
+	<script type="text/javascript" src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+
 	<script type="text/javascript">
 	var fields = [
 		{ element: "client_old_address1", field: "Line1" },
@@ -78,21 +81,39 @@
 			dateFormat: 'dd-mm-yy'
 		});
 
-		// To pot a space after user enters 3 characters like (123 456)
-		/*$('#client_old_postalcode').keyup(function() {
-		  	var postalCode = $(this).val().split(" ").join("");
-		  	if (postalCode.length > 0) {
-		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
-		  	}
-		  	$(this).val(postalCode);
+
+		tinymce.init({
+			selector: "#email_template_content",
+			height: 400,
+    		// width: 750,
+			theme: "modern",
+			paste_data_images: true,
+			plugins: [
+			  "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+			  "searchreplace wordcount visualblocks visualchars code fullscreen",
+			  "insertdatetime media nonbreaking save table contextmenu directionality",
+			  "emoticons template paste textcolor colorpicker textpattern"
+			],
+			toolbar1: "code fullpage insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+			toolbar2: "print preview media | forecolor backcolor emoticons",
+			image_advtab: true,
+			file_picker_callback: function(callback, value, meta) {
+			  if (meta.filetype == 'image') {
+			    $('#upload').trigger('click');
+			    $('#upload').on('change', function() {
+			      var file = this.files[0];
+			      var reader = new FileReader();
+			      reader.onload = function(e) {
+			        callback(e.target.result, {
+			          alt: ''
+			        });
+			      };
+			      reader.readAsDataURL(file);
+			    });
+			  }
+			}
 		});
-		$('#client_new_postalcode').keyup(function() {
-		  	var postalCode = $(this).val().split(" ").join("");
-		  	if (postalCode.length > 0) {
-		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
-		  	}
-		  	$(this).val(postalCode);
-		});*/
+
 	});
 	</script>
 
@@ -349,22 +370,29 @@
 							<div class="hide" id="invite_client_step2">
 
 								<div class="form-group">
-									<label for="client_fname">Client Message</label>
-									<textarea class="form-control" name="client_message" id="client_message" rows="6"></textarea>
+									<label for="client_fname">Templates</label>
+									<select class="form-control" name="client_email_template" id="client_email_template">
+							  			<option value="">Select</option>
+								  		<?php
+								  		if( isset( $emailTemplates ) && count( $emailTemplates ) > 0 )
+								  		{
+								  			foreach ($emailTemplates as $emailTemplate)
+								  			{
+								  				echo '<option value="'. $emailTemplate->id .'">'. $emailTemplate->template_name .'</option>';
+								  			}
+								  		}
+								  		?>
+							  		</select>
+									<div><label id="client_email_template-error" class="error" for="client_email_template"></label></div>
 								</div>
 
-								<div class="form-group">
-									<label for="client_fname">Templates</label>
-									<?php
-									if( isset( $emailTemplates ) && count( $emailTemplates ) > 0 )
-									{
-										foreach ($emailTemplates as $emailTemplate)
-										{
-											echo '<div><label><input type="radio" name="client_email_template" value="'. $emailTemplate->id .'"> '. ucwords( strtolower( $emailTemplate->template_name ) ) .'</label></div>';
-										}
-									}
-									?>
-									<div><label id="client_email_template-error" class="error" for="client_email_template"></label></div>
+								<!--<div class="form-group">
+									<label for="email_template_content">Template Content <span class="alert-danger"> (Put [Content] for the content part, that is replaced with the actual content) </span></label>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="email_template_previeww">Preview</a>
+									<textarea class="form-control" name="email_template_content" id="email_template_content"></textarea>
+									<input name="image" type="file" id="upload" class="hidden" onchange="">
+								</div>-->
+
+								<div class="form-group" id="email_previeww">
 								</div>
 
 								<div class="form-group" style="display: none;" id="client_invitation_scheduler">

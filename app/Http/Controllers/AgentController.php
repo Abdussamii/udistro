@@ -448,6 +448,22 @@ class AgentController extends Controller
     }
 
     /**
+     * Function to return Email Preview
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function emailPreview()
+    {
+        // Get the client count
+        $array = EmailTemplate::where(['id' => 5])->first();
+
+        $response['errCode'] = 0;
+        $response['errMsg']  = $array->template_content; 
+
+        return response()->json($response);
+    }
+
+    /**
      * Function to show agent contacts listing page
      * @param void
      * @return \Illuminate\Http\Response
@@ -467,7 +483,7 @@ class AgentController extends Controller
     	$streetTypes = StreetType::where(['status' => '1'])->select('id', 'type')->orderBy('type', 'asc')->get();
 
     	// Get the email template lists
-    	$emailTemplates = EmailTemplate::where(['status' => '1'])->select('id', 'template_name')->orderBy('template_name', 'asc')->get();
+    	$emailTemplates = EmailTemplate::where(['category_id' => 1, 'status' => '1'])->select('id', 'template_name')->orderBy('template_name', 'asc')->get();
 
 		return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes, 'emailTemplates' => $emailTemplates]);
     }

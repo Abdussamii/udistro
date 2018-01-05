@@ -452,6 +452,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To update Password
 	Route::post('/changepassword', 'AgentController@changePassword');
 
+	// To email preview
+	Route::post('/emailpreview', 'AgentController@emailPreview');
+
 });
 
 /* ---------- Agent related functionality ---------- */
