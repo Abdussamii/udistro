@@ -81,7 +81,7 @@
 			dateFormat: 'dd-mm-yy'
 		});
 
-
+		/*
 		tinymce.init({
 			selector: "#email_template_content",
 			height: 400,
@@ -113,6 +113,7 @@
 			  }
 			}
 		});
+		*/
 
 	});
 	</script>

@@ -868,12 +868,11 @@ $(document).ready(function(){
 
     $('#client_email_template').on('change', function()
     {
-        //alert('aaaa');
         $.ajax({
             url: $('meta[name="route"]').attr('content') + '/agent/emailpreview',
             method: 'post',
             data: {
-                id:3
+                id:$(this).val()
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -881,16 +880,26 @@ $(document).ready(function(){
             success: function(response){
                 if( response.errCode == 0 )
                 {
-                    //alert(response.errMsg);
                     var text = response.errMsg;
-                     
-                    //alert(text);
                     $('#email_previeww').html(text.replace('[TEMPLATE_CONTENT]', '<textarea class="form-control" name="email_template_content" id="email_template_content"></textarea>'));
-                    //alertify.success( response.errMsg );
+                    
+                    tinymce.init({
+                        selector: "#email_template_content",
+                        height: 400,
+                        theme: "modern",
+                        paste_data_images: true,
+                        plugins: [
+                          "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                          "searchreplace wordcount visualblocks visualchars code fullscreen",
+                          "insertdatetime media nonbreaking save table contextmenu directionality",
+                          "emoticons template paste textcolor colorpicker textpattern"
+                        ],
+                        toolbar1: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"
+                    });
                 }
                 else
                 {
-                    //alertify.error( response.errMsg );
+                    alertify.error( response.errMsg );
                 }
             }
         });
@@ -898,7 +907,8 @@ $(document).ready(function(){
 
 
     // To get the email template content and render the html
-    $('input[name="agent_email_template"]').change(function(){
+    $('input[name="agent_email_template"]').change(function()
+    {
     	var templateId = $(this).val();
 
     	// Show the spinner

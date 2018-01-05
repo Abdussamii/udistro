@@ -455,7 +455,8 @@ class AgentController extends Controller
     public function emailPreview()
     {
         // Get the client count
-        $array = EmailTemplate::where(['id' => 5])->first();
+        $id = Input::get('id');
+        $array = EmailTemplate::where(['id' => $id])->first();
 
         $response['errCode'] = 0;
         $response['errMsg']  = $array->template_content; 

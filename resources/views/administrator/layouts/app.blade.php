@@ -415,6 +415,9 @@
                         <li>
                             <a href="{{ url('administrator/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
                         </li>
+                        <li>
+                            <a href="{{ url('administrator/address') }}"><i class="fa fa-dashboard fa-fw"></i> Provisional Health Data</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
