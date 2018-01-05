@@ -2137,7 +2137,7 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
+						                        	<select class="form-control" name="cable_internet_house_from_type" id="cable_internet_house_from_type">
 						                        		<option value="">Select</option>
 						                        		<option value="house">House</option>
 						                        		<option value="apartment/flat">Apartment/Flat</option>
@@ -2147,25 +2147,25 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Floor Level</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
+						                        	<label><input type="radio" name="cable_internet_house_from_level" value="1">1</label>
+						                        	<label><input type="radio" name="cable_internet_house_from_level" value="2">2</label>
+						                        	<label><input type="radio" name="cable_internet_house_from_level" value="3">3</label>
+						                        	<label><input type="radio" name="cable_internet_house_from_level" value="4+">4 or more</label>
+						                        	<div><label id="cable_internet_house_from_level-error" class="error" for="cable_internet_house_from_level"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
+						                        	<label><input type="radio" name="cable_internet_house_from_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="cable_internet_house_from_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="cable_internet_house_from_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="cable_internet_house_from_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="cable_internet_house_from_bedroom_count-error" class="error" for="cable_internet_house_from_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
-						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
-						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
+						                        	<label><input type="radio" name="cable_internet_from_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="cable_internet_from_property_type" value="rent">Rent</label>
+						                        	<div><label id="cable_internet_from_property_type-error" class="error" for="cable_internet_from_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -2180,7 +2180,7 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
+						                        	<select class="form-control" name="cable_internet_house_to_type" id="cable_internet_house_to_type">
 						                        		<option value="">Select</option>
 						                        		<option value="house">House</option>
 						                        		<option value="apartment/flat">Apartment/Flat</option>
@@ -2190,25 +2190,25 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Floor Level</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
+						                        	<label><input type="radio" name="cable_internet_house_to_level" value="1">1</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_level" value="2">2</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_level" value="3">3</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_level" value="4+">4 or more</label>
+						                        	<div><label id="cable_internet_house_to_level-error" class="error" for="cable_internet_house_to_level"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
+						                        	<label><input type="radio" name="cable_internet_house_to_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="cable_internet_house_to_bedroom_count-error" class="error" for="cable_internet_house_to_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
-						                        	<label><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
-						                        	<div><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
+						                        	<label><input type="radio" name="cable_internet_house_to_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="cable_internet_house_to_property_type" value="rent">Rent</label>
+						                        	<div><label id="cable_internet_house_to_property_type-error" class="error" for="cable_internet_house_to_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -2223,19 +2223,21 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Do you have cable & internet service before</label>
-						                        	<label class="form-group"><input type="radio" name="">Yes</label>
-						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_service_before" value="1">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_service_before" value="0">No</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Employment Status</label>
-						                        	<label class="form-group"><input type="radio" name="">Employeed</label>
-						                        	<label class="form-group"><input type="radio" name="">Self Employeed</label>
-						                        	<label class="form-group"><input type="radio" name="">Unemployeed</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_employment_status" class="cable_internet_employment_status" value="1">Employeed</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_employment_status" class="cable_internet_employment_status" value="2">Self Employeed</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_employment_status" class="cable_internet_employment_status" value="0">Unemployeed</label>
 						                        </div>
-						                        <div class="form-group">
+						                        <div class="form-group" id="cable_internet_billing_responsible_container" style="display: none;">
 						                        	<label>Are there other adult responsible for billing at this address</label>
-						                        	<label class="form-group"><input type="radio" name="">Yes</label>
-						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_billing_responsible" value="1">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_billing_responsible" value="0">No</label>
+
+						                        	<label id="cable_internet_billing_responsible-error" class="error" for="cable_internet_billing_responsible"></label>
 						                        </div>
 
 						                        <div class="form-group">
@@ -2247,32 +2249,33 @@ function calculateRoute(from, to) {
 							                        	foreach( $digitalServiceTypes as $digitalServiceType )
 							                        	{
 							                        	?>
-							                        		<label> <input type="radio" name="" class=""> {{ $digitalServiceType->service }}</label>
+							                        		<label> <input type="checkbox" name="cable_internet_service_type[]" class="cable_internet_service_types" value="{{ $digitalServiceType->id }}"> {{ $digitalServiceType->service }}</label>
 							                        	<?php
 							                        	}
 							                        }
 							                        ?>
+							                        <label id="cable_internet_service_type[]-error" class="error" for="cable_internet_service_type[]">Please select atleast one service</label>
 						                        </div>
 
 						                        <div class="form-group">
 						                        	<label>Would you like to receive your bill electronically</label>
-						                        	<label class="form-group"><input type="radio" name="">Yes</label>
-						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_bill_electronically" value="1">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_bill_electronically" value="0">No</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Would you consider any contract plan</label>
-						                        	<label class="form-group"><input type="radio" name="">Yes</label>
-						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_contract_plan" value="1">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_contract_plan" value="0">No</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Would you want to setup pre-authorise payment</label>
-						                        	<label class="form-group"><input type="radio" name="">Yes</label>
-						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_preauthorise_payment" value="1">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_preauthorise_payment" value="0">No</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Callback option</label>
-						                        	<label class="form-group"><input type="radio" name="">Yes</label>
-						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_callback_option" value="1">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="cable_internet_callback_option" value="0">No</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Call back time?</label>
@@ -2305,7 +2308,7 @@ function calculateRoute(from, to) {
 							                        	foreach( $digitalAdditionalServices as $digitalAdditionalService )
 							                        	{
 							                        	?>
-							                        		<div><label><input type="checkbox" name="" class=""> {{ $digitalAdditionalService->additional_service }}</label></div>
+							                        		<div><label><input type="checkbox" name="cable_internet_additional_service[]" class="cable_internet_additional_service" value="{{ $digitalAdditionalService->id }}"> {{ $digitalAdditionalService->additional_service }}</label></div>
 							                        	<?php
 							                        	}
 							                        }
@@ -2313,14 +2316,14 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                    <div class="panel-body">
-						                        <textarea class="form-control"></textarea>
+						                        <textarea class="form-control" name="cable_internet_additional_info" id="cable_internet_additional_info" class="form-control"></textarea>
 						                    </div>
 						                </div>
 						            </div>
 						        </div>
 
 						        <div>
-						        	<button type="button" class="btn btn-info">Submit</button>
+						        	<button type="submit" class="btn btn-info" name="btn_cable_internet_submit_query" id="btn_cable_internet_submit_query">Submit</button>
 						        </div>
 						    </form>
       					</div>

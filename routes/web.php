@@ -38,14 +38,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // uDistro home
 Route::get('/', function () {
-    // return view('landing_page1');
-    return view('landing_page2');
+    return view('landing_page1');
 });
 
 // uDistro agent home
 Route::get('/agent/home', function () {
-    // return view('landing_page2');
-    return view('landing_page1');
+    return view('landing_page2');
 });
 
 // uDistro business home
@@ -496,6 +494,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To save the user's tech concierge query detail
 	Route::post('/savetechconciergequery', 'MoversController@saveTechConciergeQuery');
+
+	// To save the user's cable & internet query detail
+	Route::post('/savecableinternetquery', 'MoversController@saveCableInternetQuery');
 	
 });
 
