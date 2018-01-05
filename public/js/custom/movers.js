@@ -940,6 +940,10 @@ $(document).ready(function(){
 					    }
 				    }
 				});
+
+				// Show the "Is this activity helpful thing" modal
+				$('#frm_activity_helpful_user_response #activity_name').val(activityName);
+				$('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
 			}
 			else 	// Activity is still pending
 			{
@@ -1128,7 +1132,8 @@ $(document).ready(function(){
 
 	// Capture the user feedback on different activities, whether it is helful for them or not
 	$('.activity_feedback').click(function(){
-		var activityClass 	= $(this).attr('data-activity');
+		// var activityClass 	= $(this).attr('data-activity');
+		var activityClass 	= $(this).closest('#frm_activity_helpful_user_response').find('#activity_name').val();
 		var userFeedback  	= $(this).attr('id');
 
 		// Call the function to save the data

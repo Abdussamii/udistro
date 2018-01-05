@@ -41,6 +41,8 @@ use App\TechConciergePlaceServiceRequest;
 use App\TechConciergeOtherDetailServiceRequest;
 use App\TechConciergeAppliancesServiceRequest;
 use App\QuotationLog;
+use App\DigitalServiceType;
+use App\DigitalAdditionalService;
 
 use Helper;
 use Session;
@@ -235,8 +237,14 @@ class MoversController extends Controller
     	// Get the tech concierge details list
     	$techConciergeOtherDetails = TechConciergeOtherDetail::get();
 
+    	// Get digital services list
+    	$digitalServiceTypes = DigitalServiceType::where(['status' => '1'])->select('id', 'service')->get();
+
+    	// Get addtional digital services list
+    	$digitalAdditionalServices = DigitalAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();
+
     	// echo '<pre>';
-    	// print_r( $techConciergeOtherDetails->toArray() );
+    	// print_r( $digitalAdditionalServices->toArray() );
     	// exit;
 
     	return view('movers/myMove', 
@@ -271,7 +279,11 @@ class MoversController extends Controller
     			// Tech Concierge
     			'techConciergePlaces' 		=> $techConciergePlaces,
     			'techConciergeAppliances' 	=> $techConciergeAppliances,
-    			'techConciergeOtherDetails' => $techConciergeOtherDetails
+    			'techConciergeOtherDetails' => $techConciergeOtherDetails,
+    			
+    			// Cable & Internet services
+    			'digitalServiceTypes' 		=> $digitalServiceTypes,
+    			'digitalAdditionalServices' => $digitalAdditionalServices
     		]
     	);
     }

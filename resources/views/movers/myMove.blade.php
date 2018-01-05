@@ -453,11 +453,11 @@ function calculateRoute(from, to) {
      </div>
     </div>
     <div class="row" style="display:none;">
-     <div class="col-sm-3 col-md-3 col-lg-3">
+     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
       <div class="helpful-box">
        <label>Is this helpful to you?</label>
        <a href="javascript:void(0);" id="1" data-activity="forward_mail" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="forward_mail" class="activity_feedback">No</a> </div>
-     </div>
+     </div> -->
      <div class="col-sm-9 col-md-9 col-lg-9">
       <div class="row">
        <div class="col-md-4">
@@ -761,11 +761,11 @@ function calculateRoute(from, to) {
 		      		</div> -->
     
     <div class="row">
-     <div class="col-sm-3 col-md-3 col-lg-3">
+     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
       <div class="helpful-box">
        <label>Is this helpful to you?</label>
        <a href="javascript:void(0);" id="1" data-activity="update_address" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="update_address" class="activity_feedback">No</a> </div>
-     </div>
+     </div> -->
      
      <!--<div class="col-sm-9 col-md-9 col-lg-9">
      <form name="frm_update_address" id="frm_update_address">
@@ -918,11 +918,11 @@ function calculateRoute(from, to) {
 		      			</div>
 		      		</div> -->
     <div class="row" style="display:none;">
-     <div class="col-sm-3 col-md-3 col-lg-3">
+     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
       <div class="helpful-box">
        <label>Is this helpful to you?</label>
        <a href="javascript:void(0);" id="1" data-activity="mailbox_keys" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="mailbox_keys" class="activity_feedback">No</a> </div>
-     </div>
+     </div> -->
      <div class="col-sm-9 col-md-9 col-lg-9">
       <div class="col-md-4">
        <p> Canada post will inform you of your community mailbox location </p>
@@ -1126,11 +1126,11 @@ function calculateRoute(from, to) {
      
     </div>
     <div class="row" style="display:none;">
-     <div class="col-sm-3 col-md-3 col-lg-3">
+     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
       <div class="helpful-box">
        <label>Is this helpful to you?</label>
        <a href="javascript:void(0);" id="1" data-activity="connect_utilities" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="connect_utilities" class="activity_feedback">No</a> </div>
-     </div>
+     </div> -->
      <div class="col-sm-9 col-md-9 col-lg-9">
       <div class="col-md-4">
        <p> I need to start new service at a new address (open new account) </p>
@@ -1449,11 +1449,11 @@ function calculateRoute(from, to) {
 		      	
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<div>
+		      			<!-- <div>
 		      				<label>Is this helpful to you?</label>
 		      				<a href="javascript:void(0);" id="1" data-activity="home_cleaning_services" class="activity_feedback">Yes</a>
 		      				<a href="javascript:void(0);" id="0" data-activity="home_cleaning_services" class="activity_feedback">No</a>
-		      			</div>
+		      			</div> -->
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_home_cleaning_services" class="btn">Previous</a>
@@ -1788,11 +1788,11 @@ function calculateRoute(from, to) {
 		      	
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<div>
+		      			<!-- <div>
 		      				<label>Is this helpful to you?</label>
 		      				<a href="javascript:void(0);" id="1" data-activity="moving_companies" class="activity_feedback">Yes</a>
 		      				<a href="javascript:void(0);" id="0" data-activity="moving_companies" class="activity_feedback">No</a>
-		      			</div>
+		      			</div> -->
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_home_moving_companies" class="btn">Previous</a>
@@ -2082,11 +2082,11 @@ function calculateRoute(from, to) {
 		      	
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<div>
+		      			<!-- <div>
 		      				<label>Is this helpful to you?</label>
 		      				<a href="javascript:void(0);" id="1" data-activity="tech_concierge" class="activity_feedback">Yes</a>
 		      				<a href="javascript:void(0);" id="0" data-activity="tech_concierge" class="activity_feedback">No</a>
-		      			</div>
+		      			</div> -->
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_tech_concierge" class="btn">Previous</a>
@@ -2130,44 +2130,85 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse1">Indicate type of cleaning</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse1">Moving From</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse1" class="panel-collapse collapse in">
 						                    <div class="panel-body">
-						                        <div><label><input type="checkbox" name=""> Move in cleaning</label></div>
-						                        <div><label><input type="checkbox" name=""> Move out cleaning</label></div>
+						                        <div class="form-group">
+						                        	<label>Type</label>
+						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
+						                        	</select>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>No of bedrooms</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Did you own or rent this property</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
+						                        </div>
 						                    </div>
 						                </div>
 						            </div>
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2">Moving From</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2">Moving To</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse2" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
+						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
+						                        		<option value="">Select</option>
+						                        		<option value="house">House</option>
+						                        		<option value="apartment/flat">Apartment/Flat</option>
+						                        		<option value="condo">Condo</option>
+						                        		<option value="studio">Studio</option>
 						                        	</select>
 						                        </div>
 						                        <div class="form-group">
+						                        	<label>Floor Level</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
+						                        	<div><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -2175,31 +2216,74 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse3">Moving To</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse3">Detailed Job Description</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse3" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<label>Type</label>
-						                        	<select class="form-control">
-						                        		<option value="House">House</option>
-						                        		<option value="Apartment/Flat">Apartment/Flat</option>
-						                        		<option value="Condo">Condo</option>
-						                        		<option value="Studio">Studio</option>
-						                        	</select>
+						                        	<label>Do you have cable & internet service before</label>
+						                        	<label class="form-group"><input type="radio" name="">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="">No</label>
 						                        </div>
 						                        <div class="form-group">
-						                        	<label>No of bedrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label>Employment Status</label>
+						                        	<label class="form-group"><input type="radio" name="">Employeed</label>
+						                        	<label class="form-group"><input type="radio" name="">Self Employeed</label>
+						                        	<label class="form-group"><input type="radio" name="">Unemployeed</label>
 						                        </div>
 						                        <div class="form-group">
-						                        	<label>Did you own or rent this property</label>
-						                        	<label class="form-group"><input type="radio" name="">Own</label>
-						                        	<label class="form-group"><input type="radio" name="">Rent</label>
+						                        	<label>Are there other adult responsible for billing at this address</label>
+						                        	<label class="form-group"><input type="radio" name="">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        </div>
+
+						                        <div class="form-group">
+						                        	<label>What service(s) are applying for</label>
+						                        	<br>
+							                        <?php
+							                        if( isset( $digitalServiceTypes ) && count( $digitalServiceTypes ) > 0 )
+							                        {
+							                        	foreach( $digitalServiceTypes as $digitalServiceType )
+							                        	{
+							                        	?>
+							                        		<label> <input type="radio" name="" class=""> {{ $digitalServiceType->service }}</label>
+							                        	<?php
+							                        	}
+							                        }
+							                        ?>
+						                        </div>
+
+						                        <div class="form-group">
+						                        	<label>Would you like to receive your bill electronically</label>
+						                        	<label class="form-group"><input type="radio" name="">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Would you consider any contract plan</label>
+						                        	<label class="form-group"><input type="radio" name="">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Would you want to setup pre-authorise payment</label>
+						                        	<label class="form-group"><input type="radio" name="">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Callback option</label>
+						                        	<label class="form-group"><input type="radio" name="">Yes</label>
+						                        	<label class="form-group"><input type="radio" name="">No</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Call back time?</label>
+						                        	<label> <input type="radio" name="cable_internet_callback_time" value="0">Anytime</label>
+						                        	<label> <input type="radio" name="cable_internet_callback_time" value="1">Daytime</label>
+						                        	<label> <input type="radio" name="cable_internet_callback_time" value="2">Evening</label>
+						                        </div>
+						                        <div class="form-group">
+						                        	<label>Call me on?</label>
+						                        	<input type="text" name="cable_internet_callback_primary_no" class="form-control" placeholder="Primary Number">
+						                        	<input type="text" name="cable_internet_callback_secondary_no" class="form-control" placeholder="Additional Number">
 						                        </div>
 						                    </div>
 						                </div>
@@ -2207,141 +2291,29 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse4">Detailed Job Description</a>
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse4">Additional Information</a>
 						                    </h4>
 						                </div>
 						                <div id="cable_internet_services_collapse4" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<label>Home Condition</label>
-						                        	<label class="form-group"><input type="radio" name="">Dirty</label>
-						                        	<label class="form-group"><input type="radio" name="">Clean</label>
-						                        	<label class="form-group"><input type="radio" name="">Average</label>
-						                        	<label class="form-group"><input type="radio" name="">Poor</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many levels do you have</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Size of area you want to clean</label>
-						                        	<label class="form-group"><input type="radio" name="">0-600 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">600-1500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">1500-2500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">above 2500 sqft</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many peoples live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many pets live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many bathrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Streaming Carpet Cleaning</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Rooms</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Hall Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Other place to clean</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Kitchen</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Dinning Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Office Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Half Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Interior</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Staircase</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Recreation Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Den</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Laundry</label>
+						                        	<label></label>
+						                        	<br>
+							                        <?php
+							                        if( isset( $digitalAdditionalServices ) && count( $digitalAdditionalServices ) > 0 )
+							                        {
+							                        	foreach( $digitalAdditionalServices as $digitalAdditionalService )
+							                        	{
+							                        	?>
+							                        		<div><label><input type="checkbox" name="" class=""> {{ $digitalAdditionalService->additional_service }}</label></div>
+							                        	<?php
+							                        	}
+							                        }
+							                        ?>
 						                        </div>
 						                    </div>
-						                </div>
-						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse5">Additional Services</a>
-						                    </h4>
-						                </div>
-						                <div id="cable_internet_services_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<label>Oven inside cleaned</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Fridge inside cleaned</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many balconies would you like to have swept</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many windows(interior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many windows(exterior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like wet wiping blinds? How many?</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Cleaning behind the refrigrator and stove</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like baseboard to be washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Clean Fireplace</label>
-						                        </div>
-						                    </div>
-						                </div>
-						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse6">Call Me On</a>
-						                    </h4>
-						                </div>
-						                <div id="cable_internet_services_collapse6" class="panel-collapse collapse">
-						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<input type="" name="" placeholder="Contact Number" class="form-control">
-						                        	<button type="button" class="btn">+</button>
-						                        </div>
-						                    </div>
-						                </div>
-						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse7">Additional Information (If Any)</a>
-						                    </h4>
-						                </div>
-						                <div id="cable_internet_services_collapse7" class="panel-collapse collapse">
-						                    <div class="panel-body">
-						                        <textarea class="form-control">
-						                        	
-						                        </textarea>
+						                        <textarea class="form-control"></textarea>
 						                    </div>
 						                </div>
 						            </div>
@@ -2369,11 +2341,11 @@ function calculateRoute(from, to) {
 		      	
 		      	<div class="row">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<div>
+		      			<!-- <div>
 		      				<label>Is this helpful to you?</label>
 		      				<a href="javascript:void(0);" id="1" data-activity="cable_internet_services" class="activity_feedback">Yes</a>
 		      				<a href="javascript:void(0);" id="0" data-activity="cable_internet_services" class="activity_feedback">No</a>
-		      			</div>
+		      			</div> -->
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<a href="javascript:void(0);" id="btn_prev_cable_internet_services" class="btn">Previous</a>
@@ -2536,6 +2508,29 @@ function calculateRoute(from, to) {
 	</div>
 </div>
 <!-- Form submit confirmation modal -->
+
+<!-- To handle the Is this activity helpful thing -->
+<div id="user_activity_helpful_response_modal" class="modal fade">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<h4 class="modal-title">Is this helpful to you?</h4>
+		    </div>
+		    <div class="modal-footer">
+				<form name="frm_activity_helpful_user_response" id="frm_activity_helpful_user_response">
+	            	<!-- To hold the activity name generated dynamically -->
+	            	<input type="hidden" name="activity_name" id="activity_name" value="">
+
+	                <button type="button" class="btn btn-primary activity_feedback" id="1" data-dismiss="modal">Yes</button>
+	                <button type="button" class="btn btn-primary activity_feedback" id="0" data-dismiss="modal">No</button>
+                </form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- To handle the Is this activity helpful thing -->
 
 </body>
 </html> 

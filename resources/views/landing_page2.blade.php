@@ -13,7 +13,7 @@
 <link href="css/style.css" rel="stylesheet"> -->
 
 <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
-<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page2.css') }}" />
+<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
@@ -38,10 +38,10 @@
   	</a>
   </div>
   <ul class="nav navbar-nav navbar-right navbar-top-link">
-   <li><a href="#">
+   <li><a href="{{ url('/getinvitation') }}">
     <button type="button" class="btn top-btn1">I Am Moving</button>
     </a></li>
-   <li><a href="#">
+   <li><a href="{{ url('/company/home') }}">
     <button type="button" class="btn top-btn1">I Am a Business</button>
     </a></li>
   </ul>
@@ -69,7 +69,8 @@
      </div>
      <h1 class="title_banner">Improving relocation experience for 4 million household movers in Canada every year.</h1>
      <div class="banner_btn-group center-block">
-      <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I Help Others Move</button>
+      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I Help Others Move</button> -->
+      <a href="{{ url('/agent') }}" class="btn banner_btn btn-lg skyBlue_btn">I Help Others Move</a>
       <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
      </div>
     </div>
@@ -111,7 +112,8 @@
         </ul>
        </div>
        <div class="banner_btn-group center-block">
-        <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button>
+        <!-- <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button> -->
+        <a href="{{ url('/agent') }}" class="btn try_btn btn-lg blue_btn">Start your free trial today!</a>
        </div>
       </div>
      </div>
@@ -134,7 +136,7 @@
       <div class="col-md-4 box-border">
       			<div class="udistro_client">
       				<!-- <img src="images/time-save.png" alt=""/> -->
-      				<img src="{{ url('/images/landing_page2/time-save.png') }}" alt="" />
+      				<img src="{{ url('/images/landing_image/time-save.png') }}" alt="" />
       			</div>
          <div class="heading2">You save them time</div>
          <p>uDistro is a time saving machine for residential and commercial moves. Your clients  can complete each recommneded moving task in minutes, saving them hours!</p>
@@ -142,7 +144,7 @@
       <div class="col-md-4 box-border">
       		<div class="udistro_client">
       			<!-- <img src="images/money-save.png" alt=""/> -->
-      			<img src="{{ url('/images/landing_page2/money-save.png') }}" alt="" />
+      			<img src="{{ url('/images/landing_image/money-save.png') }}" alt="" />
       		</div>
          <div class="heading2">You save them money</div>
          <p>uDistro compares hundreds of quotes from different service providers allowing your clients to seat back and choose the best </p>
@@ -150,7 +152,7 @@
       <div class="col-md-4 box-border">
       			<div class="udistro_client">
       				<!-- <img src="images/move-save.png" alt=""/> -->
-      				<img src="{{ url('/images/landing_page2/move-save.png') }}" alt="" />
+      				<img src="{{ url('/images/landing_image/move-save.png') }}" alt="" />
       			</div>
          <div class="heading2">You help them move everything!</div>
          <p>uDistro helps your clients move everthing they need to move from one easy to use platform including mails and utility services.</p>
@@ -158,7 +160,8 @@
       </div>
       <div class="clearfix"></div>
       <div class="banner_btn-group text-center">
-       <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button>
+       <!-- <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button> -->
+       <a href="{{ url('/agent') }}" class="btn banner_btn btn-lg blue_btn">Start your free trial today!</a>
       </div>
      </div>
     </div>
@@ -175,7 +178,7 @@
    <div class="col-md-4">
     <div class="foot_logo">
     	<!-- <img src="images/logo-foot.png" alt=""/> -->
-    	<img src="{{ url('/images/landing_page2/logo-foot.png') }}" alt="" />
+    	<img src="{{ url('/images/landing_image/logo-foot.png') }}" alt="" />
     </div>
     <ul class="footer_social_icon">
      <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
@@ -235,8 +238,8 @@
    <ul>
     <li> <a href="#">Privacy</a> </li>
     <li> <a href="#">Terms</a> </li>
-    <li> <a href="#">I Help Others Move</a> </li>
-    <li> <a href="#">I Am a Business</a> </li>
+    <li> <a href="{{ url('/getinvitation') }}">I Help Others Move</a> </li>
+    <li> <a href="{{ url('/company/home') }}">I Am a Business</a> </li>
     <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
    </ul>
   </div>
