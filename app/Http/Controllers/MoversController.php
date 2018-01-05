@@ -44,6 +44,8 @@ use App\QuotationLog;
 use App\DigitalServiceType;
 use App\DigitalAdditionalService;
 use App\DigitalServiceRequest;
+use App\DigitalServiceTypeRequest;
+use App\DigitalAdditionalServiceTypeRequest;
 
 use Helper;
 use Session;
@@ -1262,9 +1264,9 @@ class MoversController extends Controller
 
 		$response = array();
 		$successCount = 0;
-		$techConciergePlaces = array();
-		$techConciergeAppliances = array();
-		$techConciergeOtherDetails = array();
+
+		$digitalServicesApplied = array();
+		$additionalDigitalServicesApplied = array();
 		if( count( $filteredCompanies ) > 0 )
 		{
 			foreach ($filteredCompanies as $filterCompany)
@@ -1297,22 +1299,84 @@ class MoversController extends Controller
 					$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
 					$digitalServiceRequest->additional_information = $cableInternetDetails['cable_internet_additional_info'];
 					$digitalServiceRequest->status = '1';
+					$digitalServiceRequest->created_by = $clientId;
 
 					if( $digitalServiceRequest->save() )
 					{
 						// Commit transaction
 	    				DB::commit();
-						
-						$response['errCode'] 	= 0;
-			    		$response['errMsg'] 	= 'Request added successfully';
+
+						if( isset( $cableInternetDetails['cable_internet_service_type'] ) && count( $cableInternetDetails['cable_internet_service_type'] ) > 0 )
+						{
+							foreach( $cableInternetDetails['cable_internet_service_type'] as $serviceId )
+							{
+								$digitalServicesApplied[] = array(
+									'digital_service_request_id' => $digitalServiceRequest->id,
+									'digital_service_type_id' => $serviceId,
+									'created_at' => date('Y-m-d H:i:s'),
+									'status' => '1',
+									'created_by' => $clientId
+								);
+							}
+						}
+
+						if( isset( $cableInternetDetails['cable_internet_additional_service'] ) && count( $cableInternetDetails['cable_internet_additional_service'] ) > 0 )
+						{
+							foreach( $cableInternetDetails['cable_internet_additional_service'] as $additionalServiceId )
+							{
+								$additionalDigitalServicesApplied[] = array(
+									'digital_service_request_id' => $digitalServiceRequest->id,
+									'digital_additional_service_type_id' => $additionalServiceId,
+									'created_at' => date('Y-m-d H:i:s'),
+									'status' => '1',
+									'created_by' => $clientId
+								);
+							}
+						}
+
+						$successCount++;
 					}
-					else
-			    	{
-			    		$response['errCode'] 	= 1;
-			    		$response['errMsg'] 	= 'No matching company found';
-			    	}
+
+		    		// Add the quotation entry
+		    		$date = date('Y-m-d');
+		    		$paymentPlanSubscription = 	PaymentPlanSubscription::where('subscriber_id', '=', $filterCompany->company_id)	// subscriber is either company / agent
+												->where('plan_type_id', '=', '2')			// plan type is either for company / agent
+												->where('start_date', '<=', $date)			// plan start date must lie between the today's date
+												->where('end_date', '>=', $date) 			// plan end date must lie between the today's date
+												->where('status', '=', '1')
+												->first();
+
+		    		if( count( $paymentPlanSubscription ) > 0 )
+		    		{
+		    			$quotation = new QuotationLog;
+
+						$quotation->company_id = $filterCompany->company_id;
+						$quotation->client_id = $clientId;
+						$quotation->payment_plan_id = $paymentPlanSubscription->plan_id; 
+						$quotation->created_at = date('Y-m-d H:i:s');
+						$quotation->status = '1';
+
+						$quotation->save();						
+		    		}
+
 				}
 			}
+
+			if( $successCount > 0 )
+	    	{
+	    		DigitalServiceTypeRequest::insert( $digitalServicesApplied );
+
+	    		DigitalAdditionalServiceTypeRequest::insert( $additionalDigitalServicesApplied );
+
+	    		$response['errCode'] 	= 0;
+	    		$response['errMsg'] 	= 'Request added successfully';
+	    	}
+	    	else
+	    	{
+	    		$response['errCode'] 	= 1;
+	    		$response['errMsg'] 	= 'No matching company found';
+	    	}
+
 		}
 
 		return response()->json($response);
