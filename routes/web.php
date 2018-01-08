@@ -27,13 +27,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /*
 	1 Page:
-	uDistro For Realtors and Property Managers (I help others move)
+	uDistro For People Who Moving (I am moving)
 
 	2 Page:
-	uDistro For Local Businesses (I am business)
+	uDistro For Realtors and Property Managers (I help others move)
 
 	3 Page:
-	uDistro For People Who Moving (I am moving)
+	uDistro For local business (I am business)
 */
 
 // uDistro home
@@ -497,6 +497,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To save the user's cable & internet query detail
 	Route::post('/savecableinternetquery', 'MoversController@saveCableInternetQuery');
+
+	// To save the user's home cleaning query detail
+	Route::post('/savehomecleaningquery', 'MoversController@saveHomeCleaningQuery');
 	
 });
 

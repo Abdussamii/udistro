@@ -643,6 +643,64 @@ $(document).ready(function(){
 		StepHomeCleaningServices++;
 	});*/
 
+	// Save the query data
+	$('#frm_home_cleaning_services').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_home_cleaning_services').validate({
+		ignore: "not:hidden",
+		rules: 
+		{
+			home_cleaning_house_from_type: { required: true },
+			home_cleaning_house_from_level: { required: true },
+			home_cleaning_house_from_bedroom_count: { required: true },
+			home_cleaning_house_from_property_type: { required: true },
+
+			home_cleaning_house_to_type: { required: true },
+			home_cleaning_house_to_level: { required: true },
+			home_cleaning_house_to_bedroom_count: { required: true },
+			home_cleaning_house_to_property_type: { required: true },
+		},
+		messages: 
+		{
+			home_cleaning_house_from_type: { required: 'Select the type' },
+			home_cleaning_house_from_level: { required: 'Please select floor level' },
+			home_cleaning_house_from_bedroom_count: { required: 'Please select bedroom count' },
+			home_cleaning_house_from_property_type: { required: 'Please select property type' },
+
+			home_cleaning_house_to_type: { required: 'Select the type' },
+			home_cleaning_house_to_level: { required: 'Please select floor level' },
+			home_cleaning_house_to_bedroom_count: { required: 'Please select bedroom count' },
+			home_cleaning_house_to_property_type: { required: 'Please select property type' },
+		}
+	});
+
+	$('#btn_submit_home_cleaning_query').click(function(){
+		if( $('#frm_home_cleaning_services').valid() )
+		{
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/savehomecleaningquery',
+				method: 'post',
+				data: {
+					frmData: $('#frm_home_cleaning_services').serialize()
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+				    {
+				    	alertify.success(response.errMsg);
+				    }
+				    else
+				    {
+				    	alertify.error(response.errMsg);
+				    }
+			    }
+			});
+		}
+	})
+
 	/* ---------- Home Cleaning Services functionality ends ---------- */
 
 	/* ---------- Moving Companies functionality ---------- */

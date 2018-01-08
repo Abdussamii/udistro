@@ -38,9 +38,11 @@
   	</a>
   </div>
   <ul class="nav navbar-nav navbar-right navbar-top-link">
-   <li><a href="{{ url('/getinvitation') }}">
-    <button type="button" class="btn top-btn1">I Am Moving</button>
-    </a></li>
+   <li>
+   		<a href="{{ url('/') }}">
+    		<button type="button" class="btn top-btn1">I Am Moving</button>
+    	</a>
+    </li>
    <li><a href="{{ url('/agent/home') }}">
     <button type="button" class="btn top-btn1">I Help Others Move</button>
     </a></li>
@@ -112,7 +114,8 @@
         </ul>
        </div>
        <div class="banner_btn-group center-block">
-        <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button>
+        <!-- <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button> -->
+        <a href="{{ url('/company/registration') }}" class="btn try_btn btn-lg blue_btn">Start your free trial today!</a>
        </div>
       </div>
      </div>
@@ -160,7 +163,8 @@
       </div>
       <div class="clearfix"></div>
       <div class="banner_btn-group text-center">
-       <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button>
+       <!-- <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button> -->
+       <a href="{{ url('/company/registration') }}" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</a>
       </div>
      </div>
     </div>
