@@ -560,4 +560,24 @@ $(document).ready(function(){
     	});
     });
 
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_quotation_request').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchquotationrequest',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 2, 3] }
+        ],
+        
+        "aoColumns": [
+            { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "10%" }
+        ]
+    });
+
 });

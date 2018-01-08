@@ -821,6 +821,142 @@ class CompanyController extends Controller
     }
 
     /**
+     * Function to return the Quotation Request page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function QuotationRequest()
+    {
+        return view('company/quotationrequest');
+    }
+
+    /**
+     * Function to show the Quotation Request list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchQuotationRequest()
+    {
+        $start      = Input::get('iDisplayStart');      // Offset
+        $length     = Input::get('iDisplayLength');     // Limit
+        $sSearch    = Input::get('sSearch');            // Search string
+        $col        = Input::get('iSortCol_0');         // Column number for sorting
+        $sortType   = Input::get('sSortDir_0');         // Sort type
+
+        $userId = Auth::user()->id;
+        $companyArray = DB::table('company_user')
+                            ->leftJoin('companies', 'companies.id', '=', 'company_user.company_id')
+                            ->select('companies.company_category_id', 'companies.id')
+                            ->where('user_id', '=', $userId)
+                            ->first();
+        //echo '<pre>'; print_r($companyArray->id); die();
+        // Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+            2 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        if($companyArray->company_category_id == 5) 
+        {
+            // Get the records after applying the datatable filters
+            $movingItemArray = DB::table('tech_concierge_service_requests')
+                                ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->orderBy($sortBy, $sortType)
+                                ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
+                                ->limit($length)
+                                ->offset($start)
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'tech_concierge_service_requests.id')
+                                ->get();
+
+            $iTotal = DB::table('tech_concierge_service_requests')
+                        ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
+                        ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
+                        ->count();
+        } 
+        elseif ($companyArray->company_category_id == 4) 
+        {
+            // Get the records after applying the datatable filters
+            $movingItemArray = DB::table('digital_service_requests')
+                                ->leftJoin('agent_clients', 'digital_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->orderBy($sortBy, $sortType)
+                                ->where('digital_service_requests.digital_service_company_id', '=', $companyArray->id)
+                                ->limit($length)
+                                ->offset($start)
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'digital_service_requests.id')
+                                ->get();
+
+            $iTotal = DB::table('digital_service_requests')
+                        ->leftJoin('agent_clients', 'digital_service_requests.agent_client_id', '=', 'agent_clients.id')
+                        ->where('digital_service_requests.digital_service_company_id', '=', $companyArray->id)
+                        ->count();
+        } 
+        elseif ($companyArray->company_category_id == 3) 
+        {
+            // Get the records after applying the datatable filters
+            $movingItemArray = DB::table('moving_item_service_requests')
+                                ->leftJoin('agent_clients', 'moving_item_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->orderBy($sortBy, $sortType)
+                                ->where('moving_item_service_requests.mover_company_id', '=', $companyArray->id)
+                                ->limit($length)
+                                ->offset($start)
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'moving_item_service_requests.id')
+                                ->get();
+
+            $iTotal = DB::table('moving_item_service_requests')
+                        ->leftJoin('agent_clients', 'moving_item_service_requests.agent_client_id', '=', 'agent_clients.id')
+                        ->where('moving_item_service_requests.mover_company_id', '=', $companyArray->id)
+                        ->count();
+        } 
+        elseif ($companyArray->company_category_id == 2) 
+        {
+            // Get the records after applying the datatable filters
+            $movingItemArray = DB::table('tech_concierge_service_requests')
+                                ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->orderBy($sortBy, $sortType)
+                                ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
+                                ->limit($length)
+                                ->offset($start)
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'tech_concierge_service_requests.id')
+                                ->get();
+
+            $iTotal = DB::table('tech_concierge_service_requests')
+                        ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
+                        ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
+                        ->count();
+        }
+
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $movingItemArray ) > 0 )
+        {
+            foreach ($movingItemArray as $movingItem)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $movingItem->id,
+                    1 => ucfirst( strtolower( $movingItem->fname." ".$movingItem->lname ) ),
+                    2 => ucfirst( strtolower( $movingItem->email ) ),
+                    3 => $movingItem->contact_number,
+                    4 => '<a href="javascript:void(0);" id="'. $movingItem->id .'" class="edit_moving_item"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
      * Function to update company social details
      * @param void
      * @return array

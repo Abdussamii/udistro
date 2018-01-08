@@ -35,7 +35,7 @@ use App\EmailTemplate;
 use App\ClientActivityList;
 use App\MovingItemCategory;
 use App\MovingItemDetail;
-use App\UpdateAddress;
+use App\ProvincialHealthAgencyDetail;
 use App\ForgotPassword;
 use App\EmailTemplateCategory;
 
@@ -1608,32 +1608,36 @@ class AdminController extends Controller
 
         $response = array();
 
-        $addressExist = UpdateAddress::where('province_id', '=', $inputData['province_id'])->first();
+        $addressExist = ProvincialHealthAgencyDetail::where('province_id', '=', $inputData['province_id'])->first();
 
         if(!$addressExist) // Check if the province id is available or not, if not add the province
         {
-            $updateAddress = new UpdateAddress;
+            $provincialDetail = new ProvincialHealthAgencyDetail;
 
-            $updateAddress->label1          = $inputData['label1'];
-            $updateAddress->label2          = $inputData['label2'];
-            $updateAddress->label3          = $inputData['label3'];
-            $updateAddress->label4          = $inputData['label4'];
-            $updateAddress->label5          = $inputData['label5'];
-            $updateAddress->label6          = $inputData['label6'];
-            $updateAddress->label7          = $inputData['label7'];
-            $updateAddress->label8          = $inputData['label8'];
-            $updateAddress->label9          = $inputData['label9'];
-            $updateAddress->label10         = $inputData['label10'];
-            $updateAddress->title1          = $inputData['title1'];
-            $updateAddress->timing1         = $inputData['timing1'];
-            $updateAddress->title2          = $inputData['title2'];
-            $updateAddress->timing2         = $inputData['timing2'];
-            $updateAddress->status          = $inputData['status'];
-            $updateAddress->province_id     = $inputData['province_id'];
-            $updateAddress->updated_by      = $userId;
-            $updateAddress->created_by      = $userId;
+            $provincialDetail->label1          = $inputData['label1'];
+            $provincialDetail->label2          = $inputData['label2'];
+            $provincialDetail->label3          = $inputData['label3'];
+            $provincialDetail->label4          = $inputData['label4'];
+            $provincialDetail->label5          = $inputData['label5'];
+            $provincialDetail->label6          = $inputData['label6'];
+            $provincialDetail->label7          = $inputData['label7'];
+            $provincialDetail->label8          = $inputData['label8'];
+            $provincialDetail->label9          = $inputData['label9'];
+            $provincialDetail->label10         = $inputData['label10'];
+            $provincialDetail->title1          = $inputData['title1'];
+            $provincialDetail->timing1         = $inputData['timing1'];
+            $provincialDetail->title2          = $inputData['title2'];
+            $provincialDetail->timing2         = $inputData['timing2'];
+            $provincialDetail->title3          = $inputData['title3'];
+            $provincialDetail->text1           = $inputData['text1'];
+            $provincialDetail->title4          = $inputData['title4'];
+            $provincialDetail->text2           = $inputData['text2'];
+            $provincialDetail->status          = $inputData['status'];
+            $provincialDetail->province_id     = $inputData['province_id'];
+            $provincialDetail->updated_by      = $userId;
+            $provincialDetail->created_by      = $userId;
 
-            if( $updateAddress->save() )
+            if( $provincialDetail->save() )
             {
                 $response['errCode']    = 0;
                 $response['errMsg']     = 'Address added successfully';
@@ -1646,27 +1650,31 @@ class AdminController extends Controller
         }
         else                                        // Check if the activity id is available or not, if available update the activity
         {
-            $updateAddress = UpdateAddress::find($inputData['id']);
+            $provincialDetail = ProvincialHealthAgencyDetail::find($inputData['id']);
 
-            $updateAddress->label1          = $inputData['label1'];
-            $updateAddress->label2          = $inputData['label2'];
-            $updateAddress->label3          = $inputData['label3'];
-            $updateAddress->label4          = $inputData['label4'];
-            $updateAddress->label5          = $inputData['label5'];
-            $updateAddress->label6          = $inputData['label6'];
-            $updateAddress->label7          = $inputData['label7'];
-            $updateAddress->label8          = $inputData['label8'];
-            $updateAddress->label9          = $inputData['label9'];
-            $updateAddress->label10         = $inputData['label10'];
-            $updateAddress->title1          = $inputData['title1'];
-            $updateAddress->timing1         = $inputData['timing1'];
-            $updateAddress->title2          = $inputData['title2'];
-            $updateAddress->timing2         = $inputData['timing2'];
-            $updateAddress->status          = $inputData['status'];
-            $updateAddress->created_by      = $userId;
+            $provincialDetail->label1          = $inputData['label1'];
+            $provincialDetail->label2          = $inputData['label2'];
+            $provincialDetail->label3          = $inputData['label3'];
+            $provincialDetail->label4          = $inputData['label4'];
+            $provincialDetail->label5          = $inputData['label5'];
+            $provincialDetail->label6          = $inputData['label6'];
+            $provincialDetail->label7          = $inputData['label7'];
+            $provincialDetail->label8          = $inputData['label8'];
+            $provincialDetail->label9          = $inputData['label9'];
+            $provincialDetail->label10         = $inputData['label10'];
+            $provincialDetail->title1          = $inputData['title1'];
+            $provincialDetail->timing1         = $inputData['timing1'];
+            $provincialDetail->title2          = $inputData['title2'];
+            $provincialDetail->timing2         = $inputData['timing2'];
+            $provincialDetail->title3          = $inputData['title3'];
+            $provincialDetail->text1           = $inputData['text1'];
+            $provincialDetail->title4          = $inputData['title4'];
+            $provincialDetail->text2           = $inputData['text2'];
+            $provincialDetail->status          = $inputData['status'];
+            $provincialDetail->created_by      = $userId;
             
 
-            if( $updateAddress->save() )
+            if( $provincialDetail->save() )
             {
                 $response['errCode']    = 0;
                 $response['errMsg']     = 'Address updated successfully';
@@ -2297,12 +2305,12 @@ class AdminController extends Controller
         $sortBy = $arr[$col];
 
         // Get the records after applying the datatable filters
-        $addressArray = DB::table('provinces')
-                        ->leftJoin('update_addresses', 'update_addresses.province_id', '=', 'provinces.id')
+        $provincialArray = DB::table('provinces')
+                        ->leftJoin('provincial_health_agency_details', 'provincial_health_agency_details.province_id', '=', 'provinces.id')
                         ->orderBy($sortBy, $sortType)
                         ->limit($length)
                         ->offset($start)
-                        ->select('update_addresses.id', 'provinces.name', 'provinces.id as pid')
+                        ->select('provincial_health_agency_details.id', 'provinces.name', 'provinces.id as pid')
                         ->get();
 
         $iTotal = Province::count();
@@ -2315,14 +2323,14 @@ class AdminController extends Controller
         );
 
         $k=0;
-        if ( count( $addressArray ) > 0 )
+        if ( count( $provincialArray ) > 0 )
         {
-            foreach ($addressArray as $address)
+            foreach ($provincialArray as $provincial)
             {
                 $response['aaData'][$k] = array(
-                    0 => $k+1,
-                    1 => ucfirst(strtolower($address->name)),
-                    2 => '<a href="javascript:void(0);" id="'. $address->pid .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    0 => $provincial->pid,
+                    1 => ucfirst(strtolower($provincial->name)),
+                    2 => '<a href="javascript:void(0);" id="'. $provincial->pid .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2552,26 +2560,26 @@ class AdminController extends Controller
 
         $response = array();
 
-        $addressArray = UpdateAddress::where('province_id', '=', $Id)->first();
+        $provincialArray = ProvincialHealthAgencyDetail::where('province_id', '=', $Id)->first();
 
-        if($addressArray) 
+        if($provincialArray) 
         {
-            $response['id']        = $addressArray->id;
-            $response['label1']    = $addressArray->label1;
-            $response['label2']    = $addressArray->label2;
-            $response['label3']    = $addressArray->label3;
-            $response['label4']    = $addressArray->label4;
-            $response['label5']    = $addressArray->label5;
-            $response['label6']    = $addressArray->label6;
-            $response['label7']    = $addressArray->label7;
-            $response['label8']    = $addressArray->label8;
-            $response['label9']    = $addressArray->label9;
-            $response['label10']   = $addressArray->label10;
-            $response['title1']    = $addressArray->title1;
-            $response['timing1']   = $addressArray->timing1;
-            $response['title2']    = $addressArray->title2;
-            $response['timing2']   = $addressArray->timing2;
-            $response['status']    = $addressArray->status;
+            $response['id']        = $provincialArray->id;
+            $response['label1']    = $provincialArray->label1;
+            $response['label2']    = $provincialArray->label2;
+            $response['label3']    = $provincialArray->label3;
+            $response['label4']    = $provincialArray->label4;
+            $response['label5']    = $provincialArray->label5;
+            $response['label6']    = $provincialArray->label6;
+            $response['label7']    = $provincialArray->label7;
+            $response['label8']    = $provincialArray->label8;
+            $response['label9']    = $provincialArray->label9;
+            $response['label10']   = $provincialArray->label10;
+            $response['title1']    = $provincialArray->title1;
+            $response['timing1']   = $provincialArray->timing1;
+            $response['title2']    = $provincialArray->title2;
+            $response['timing2']   = $provincialArray->timing2;
+            $response['status']    = $provincialArray->status;
         } else {
             $response['id']        = '';
             $response['label1']    = '';

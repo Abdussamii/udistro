@@ -55,6 +55,22 @@
 										<input type="text" name="timing2" id="timing2" class="form-control" placeholder="Enter Timing 2" value="">
 									</div>
 									<div class="form-group">
+										<label for="timing2">Title 3</label>
+										<input type="text" name="title3" id="title3" class="form-control" placeholder="Enter Title 3" value="">
+									</div>
+									<div class="form-group">
+										<label for="timing2">Text 1</label>
+										<input type="text" name="text1" id="text1" class="form-control" placeholder="Enter Timing 2" value="">
+									</div>
+									<div class="form-group">
+										<label for="timing2">Title 4</label>
+										<input type="text" name="title4" id="title4" class="form-control" placeholder="Enter Title 4" value="">
+									</div>
+									<div class="form-group">
+										<label for="timing2">Text 2</label>
+										<input type="text" name="text2" id="text2" class="form-control" placeholder="Enter Timing 2" value="">
+									</div>
+									<div class="form-group">
 										<label for="timing2">Label 1</label>
 										<input type="text" name="label1" id="label1" class="form-control" placeholder="Enter Label 1" value="">
 									</div>
