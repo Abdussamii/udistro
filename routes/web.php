@@ -527,6 +527,18 @@ Route::group(['prefix' => 'company'], function() {
 	Route::get('/forgotpassword', 'CompanyController@getForgotPassword');
 	
 	Route::post('/forgotpassword', 'CompanyController@forgotPassword');
+
+	// To return the Quotation Request page
+	Route::get('/quotationrequest', 'CompanyController@QuotationRequest');
+
+	// To save the Quotation Request
+	Route::post('/savequotationrequest', 'CompanyController@saveQuotationRequest');
+
+	// To show the Quotation Request list in datatable
+	Route::get('/fetchquotationrequest', 'CompanyController@fetchQuotationRequest');
+
+	// To get the details for the selected Quotation Request
+	Route::get('/getquotationrequest', 'CompanyController@getQuotationRequest');
 	
 });
 

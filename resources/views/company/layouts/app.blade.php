@@ -330,6 +330,9 @@
                             <a href="{{ url('company/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                         </li>
                         <li>
+                            <a href="{{ url('company/quotationrequest') }}"><i class="fa fa-dashboard fa-fw"></i> Quotation Request</a>
+                        </li>
+                        <li>
                             <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
                         </li>
                         <li>

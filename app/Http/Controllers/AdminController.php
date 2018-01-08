@@ -2328,7 +2328,7 @@ class AdminController extends Controller
             foreach ($provincialArray as $provincial)
             {
                 $response['aaData'][$k] = array(
-                    0 => $provincial->id,
+                    0 => $provincial->pid,
                     1 => ucfirst(strtolower($provincial->name)),
                     2 => '<a href="javascript:void(0);" id="'. $provincial->pid .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
