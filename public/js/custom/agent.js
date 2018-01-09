@@ -1,6 +1,9 @@
 /* Common js for all agent related functionalities like register, login etc */
 
 $(document).ready(function(){
+
+	alertify.set('notifier','position', 'top-center');
+
     // Admin login form validation
     $('#frm_agent_login').submit(function(e){
         e.preventDefault();

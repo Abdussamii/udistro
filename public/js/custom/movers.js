@@ -2,6 +2,23 @@
 
 $(document).ready(function(){
 
+	alertify.set('notifier','position', 'top-center');
+
+	// Validation to check the monbile number
+	$.validator.addMethod("mobileNoValidate",function(value) {
+		if( value == '' )
+		{
+			return true;
+		}
+	    var filter = /^[0-9-+]+$/;
+	    if (filter.test(value)) {
+	        return true;
+	    }
+	    else {
+	        return false;
+	    }
+	}, "Please enter valid number");
+
 	// To fill the star as per the rating assigned
 	$(document).on('click', '.assign_agent_rating', function(){
 	  	// Get the start index
@@ -31,6 +48,13 @@ $(document).ready(function(){
 
 	var forwardMailStep = 1;
 	$('.forward_mail').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#forward_mail_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the counter
@@ -127,6 +151,13 @@ $(document).ready(function(){
 
 	var updateAddressStep = 1;
 	$('.update_address').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#update_address_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the steps
@@ -382,6 +413,13 @@ $(document).ready(function(){
 
 	var mailBoxStep = 1;
 	$('.mailbox_keys').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#mailbox_key_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Refresh the modal contents
@@ -495,6 +533,13 @@ $(document).ready(function(){
 
 	var connectUtilitiesStep = 1;
 	$('.connect_utilities').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#connect_utilities_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the steps
@@ -614,6 +659,13 @@ $(document).ready(function(){
 
 	var StepHomeCleaningServices = 1;
 	$('.home_cleaning_services').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#home_cleaning_services_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
@@ -660,6 +712,9 @@ $(document).ready(function(){
 			home_cleaning_house_to_level: { required: true },
 			home_cleaning_house_to_bedroom_count: { required: true },
 			home_cleaning_house_to_property_type: { required: true },
+
+			home_cleaning_callback_primary_no: { mobileNoValidate: true },
+			home_cleaning_callback_secondary_no: { mobileNoValidate: true },
 		},
 		messages: 
 		{
@@ -707,6 +762,13 @@ $(document).ready(function(){
 
 	var StepMovingCompanies = 1;
 	$('.moving_companies').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#moving_companies_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
@@ -765,7 +827,10 @@ $(document).ready(function(){
 			moving_house_description_10: { required: true },
 			
 			moving_house_packing_issue: { required: true },
-			moving_house_callback_option: { required: true }
+			moving_house_callback_option: { required: true },
+
+			moving_house_callback_primary_no: { mobileNoValidate: true },
+			moving_house_callback_secondary_no: { mobileNoValidate: true },
 		},
 		messages: 
 		{
@@ -828,6 +893,13 @@ $(document).ready(function(){
 
 	var StepTechConcierge = 1;
 	$('.tech_concierge').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#tech_concierge_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
@@ -867,7 +939,10 @@ $(document).ready(function(){
 			moving_house_to_type : { required: true },
 			moving_house_to_level : { required: true },
 			moving_house_to_bedroom_count : { required: true },
-			moving_house_to_property_type : { required: true }
+			moving_house_to_property_type : { required: true },
+
+			tech_concierge_callback_primary_no: { mobileNoValidate: true },
+			tech_concierge_callback_secondary_no: { mobileNoValidate: true },
 		},
 		messages: 
 		{
@@ -904,6 +979,17 @@ $(document).ready(function(){
 		}
 	});
 
+	// Tech Concierge Availability functionality
+	$('#availability_time_from1').change(function(){
+		$('#availability_time_upto1').val( $(this).val() );
+	});
+	$('#availability_time_from2').change(function(){
+		$('#availability_time_upto2').val( $(this).val() );
+	});
+	$('#availability_time_from3').change(function(){
+		$('#availability_time_upto3').val( $(this).val() );
+	});
+
 	/* ---------- Tech Concierge functionality ends ---------- */
 
 	/* ---------- Share Announcement functionality ---------- */
@@ -918,6 +1004,13 @@ $(document).ready(function(){
 
 	var StepCableInternetService = 1;
 	$('.cable_internet_services').click(function(){
+
+		if( $(this).hasClass('completed') )
+		{
+			alertify.error('This activity is already completed');
+			return false;
+		}
+
 		$('#cable_internet_services_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
@@ -963,7 +1056,10 @@ $(document).ready(function(){
 			cable_internet_house_from_level: { required: true },
 			cable_internet_house_from_bedroom_count: { required: true },
 			cable_internet_from_property_type: { required: true },
-			'cable_internet_service_type[]': { required: true }
+			'cable_internet_service_type[]': { required: true },
+
+			cable_internet_callback_primary_no: { mobileNoValidate: true },
+			cable_internet_callback_secondary_no: { mobileNoValidate: true },
 		},
 		messages: 
 		{
@@ -1052,6 +1148,9 @@ $(document).ready(function(){
 
 				// Set the status value
 				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				// Put the completed class on the anchor
+				$('.'+activityName).closest('.activities_container').find('.done_activity').addClass('completed');
 
 				$.ajax({
 					url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',

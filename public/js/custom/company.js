@@ -1,6 +1,9 @@
 /* Common js for all company related functionalities */
 
 $(document).ready(function(){
+
+	alertify.set('notifier','position', 'top-center');
+
     // Company registration form validation
     $('#frm_company_registration').submit(function(e){
         e.preventDefault();

@@ -16,7 +16,7 @@
 					<tr>
 						<td>#</td>
 						<td>Province Name</td>
-						<td>Status</td>
+						<td></td>
 						<td>Action</td>
 					</tr>
 				</thead>

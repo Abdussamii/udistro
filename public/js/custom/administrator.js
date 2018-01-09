@@ -1,6 +1,8 @@
 /* Common js for all administrator related functionalities */
 
 $(document).ready(function(){
+
+	alertify.set('notifier','position', 'top-center');
     
     // Admin login form validation
     $('#frm_admin_login').submit(function(e){

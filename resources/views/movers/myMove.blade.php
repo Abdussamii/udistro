@@ -221,25 +221,25 @@ function calculateRoute(from, to) {
 								<div class="pophover-icon">
 									<ul class="popover-icon-group activities_container">
 										<li>
-											<a href="javascript:void(0);" title="Get started" id="{{ $activity->id }}" class="{{ $activity->activity_class }} done_activity">
-												<?php
-												$icon1 = 'fa fa-arrow-circle-o-right';
-												$icon2 = 'fa fa-times-circle';
-												$completed = '';
-												if( count( $completedActivities ) && array_key_exists($activity->id, $completedActivities) )
+											<?php
+											$icon1 = 'fa fa-arrow-circle-o-right';
+											$icon2 = 'fa fa-times-circle';
+											$completed = '';
+											if( count( $completedActivities ) && array_key_exists($activity->id, $completedActivities) )
+											{
+												if( array_key_exists($activity->id, $completedActivities) && $completedActivities[$activity->id] == 1 )
 												{
-													if( array_key_exists($activity->id, $completedActivities) && $completedActivities[$activity->id] == 1 )
-													{
-														$icon1 = 'fa fa-check';
-													}
-													else
-													{
-														$icon2 = 'fa fa-check';
-													}
-
-													$completed = 1;
+													$icon1 = 'fa fa-check';
 												}
-												?>
+												else
+												{
+													$icon2 = 'fa fa-check';
+												}
+
+												$completed = 1;
+											}
+											?>
+											<a href="javascript:void(0);" title="{{ ( $completed != '' ) ? 'Activity Completed' : 'Get started' }}" id="{{ $activity->id }}" class="{{ $activity->activity_class }} done_activity{{ ( $completed == '1' ) ? ' completed' : '' }}">
 												<i class="{{ $icon1 }}" aria-hidden="true"></i>
 											</a>
 										</li>
@@ -1187,7 +1187,7 @@ function calculateRoute(from, to) {
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
 	      				<div>
-      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      						<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
       					</div>
       					<div>&nbsp;</div>
 		      		</div>
@@ -1496,7 +1496,7 @@ function calculateRoute(from, to) {
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
 	      				<div>
-      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      						<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
       					</div>
       					<div>&nbsp;</div>
 		      		</div>
@@ -1835,7 +1835,7 @@ function calculateRoute(from, to) {
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
 	      				<div>
-      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      						<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
       					</div>
       					<div>&nbsp;</div>
 		      		</div>
@@ -2028,22 +2028,64 @@ function calculateRoute(from, to) {
 						                <div id="tech_concierge_collapse6" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                    	<div>
-						                    		<div class="col-lg-2">Day</div>
-						                    		<div class="col-lg-4"><input type="text" name="availability_date1" id="availability_date1" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_from1" id="availability_time_from1" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="availability_time_upto1" id="availability_time_upto1" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-2">Day 1</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date1" id="availability_date1" class="form-control datepicker"></div>
+						                    		
+						                    		<!-- <div class="col-lg-3"><input type="text" name="availability_time_from1" id="availability_time_from1" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="" name="availability_time_upto1" id="availability_time_upto1" class="form-control" placeholder="To hours"></div> -->
+
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from1" id="availability_time_from1">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="" name="availability_time_upto1" id="availability_time_upto1" class="form-control">
+						                    		</div>
 						                    	</div>
 						                    	<div>
-						                    		<div class="col-lg-2">Evening</div>
-						                    		<div class="col-lg-4"><input type="text" name="availability_date2" id="availability_date2" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_from2" id="availability_time_from2" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-2">Day 2</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date2" id="availability_date2" class="form-control datepicker"></div>
+						                    		
+						                    		<!-- <div class="col-lg-3"><input type="text" name="availability_time_from2" id="availability_time_from2" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control" placeholder="To hours"></div> -->
+
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from2" id="availability_time_from2">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="" name="availability_time_upto2" id="availability_time_upto2" class="form-control">
+						                    		</div>
 						                    	</div>
 						                    	<div>
-						                    		<div class="col-lg-2">All Day</div>
-						                    		<div class="col-lg-4"><input type="text" name="availability_date3" id="availability_date3" class="form-control datepicker"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_from3" id="availability_date3_day_from_hour" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control" placeholder="To hours"></div>
+						                    		<div class="col-lg-2">Day 3</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date3" id="availability_date3" class="form-control datepicker"></div>
+						                    		
+						                    		<!-- <div class="col-lg-3"><input type="text" name="availability_time_from3" id="availability_date3_day_from_hour" class="form-control" placeholder="From hours"></div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control" placeholder="To hours"></div> -->
+
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from3" id="availability_time_from3">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="" name="availability_time_upto3" id="availability_time_upto3" class="form-control">
+						                    		</div>
 						                    	</div>
 						                    </div>
 						                </div>
@@ -2129,7 +2171,7 @@ function calculateRoute(from, to) {
 		      	<div class="row">
 		      		<div class="col-sm-3 col-md-3 col-lg-3">
 	      				<div>
-      						<img src="{{ url('/images/canada_post_logo.jpg') }}" alt="Udistro" />
+      						<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
       					</div>
       					<div>&nbsp;</div>
 		      		</div>

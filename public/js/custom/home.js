@@ -2,6 +2,8 @@
 
 $(document).ready(function(){
 
+	alertify.set('notifier','position', 'top-center');
+
 	// Get invite form validation
 	$('#frm_get_invitation').submit(function(e){
 		e.preventDefault();
