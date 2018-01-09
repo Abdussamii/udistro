@@ -1149,12 +1149,12 @@ $(document).ready(function(){
                         alertify.success( response.errMsg );
                         
                         // Refresh the form and close the modal
-                        // $('#frm_add_address')[0].reset();
+                        $('#frm_add_address')[0].reset();
 
-                        // $('#modal_add_address').modal('hide');
+                        $('#modal_add_address').modal('hide');
 
                         // Refresh the datatable
-                        // $('#datatable_address').DataTable().ajax.reload();
+                        $('#datatable_address').DataTable().ajax.reload();
                     }
                     else
                     {

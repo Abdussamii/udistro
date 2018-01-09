@@ -602,13 +602,20 @@ function calculateRoute(from, to) {
           <h3>Have these handy, before this call </h3>
          </div>
          <div class="up_add_li">
-          <ul>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name and Contact number</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your SIN number</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Name and Date Of Birth of children</li>
-          </ul>
+			<ul>
+				<?php
+					echo ( $provincialHealthAgencyDetails->label1 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label1 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label2 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label2 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label3 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label3 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label4 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label4 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label5 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label5 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label6 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label6 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label7 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label7 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label8 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label8 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label9 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label9 . '</li>' : '';
+					echo ( $provincialHealthAgencyDetails->label10 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label10 . '</li>' : '';
+				?>
+			</ul>
          </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-6">
@@ -617,8 +624,12 @@ function calculateRoute(from, to) {
          </div>
          <div class="up_add_li">
           <ul>
-           <li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-           <li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
+           <li>
+           	<span>{{ ( $provincialHealthAgencyDetails->heading1 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
+           	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail1 != '' ) ? $provincialHealthAgencyDetails->detail1 : '' }}</li>
+           <li>
+           	<span>{{ ( $provincialHealthAgencyDetails->heading2 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
+           	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail2 != '' ) ? $provincialHealthAgencyDetails->detail2 : '' }}</li>
           </ul>
          </div>
         </div>
@@ -628,8 +639,14 @@ function calculateRoute(from, to) {
          </div>
          <div class="up_add_li">
           <ul>
-           <li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>1-800-959-8281</li>
-           <li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>613-940-8495</li>
+           <li>
+           	<span>{{ ( $provincialHealthAgencyDetails->heading3 != '' ) ? $provincialHealthAgencyDetails->heading3 : '' }}</span>
+           	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail3 != '' ) ? $provincialHealthAgencyDetails->detail3 : '' }}
+           </li>
+           <li>
+           	<span>{{ ( $provincialHealthAgencyDetails->heading4 != '' ) ? $provincialHealthAgencyDetails->heading4 : '' }}</span>
+           	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail4 != '' ) ? $provincialHealthAgencyDetails->detail4 : '' }}
+           </li>
           </ul>
          </div>
         </div>
