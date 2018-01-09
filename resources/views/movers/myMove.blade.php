@@ -1186,22 +1186,6 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse1">Indicate type of cleaning</a>
-						                    </h4>
-						                </div>
-						                <div id="home_cleaning_services_collapse1" class="panel-collapse collapse in">
-						                    <div class="panel-body">
-						                        <div><label><input type="checkbox" name=""> Move in cleaning</label></div>
-						                        <div><label><input type="checkbox" name=""> Move out cleaning</label></div>
-						                        <div><label><input type="checkbox" name="" disabled> Weekly cleaning</label></div>
-						                        <div><label><input type="checkbox" name="" disabled> Monthly cleaning</label></div>
-						                        <div><label><input type="checkbox" name="" disabled> Post construction cleaning</label></div>
-						                    </div>
-						                </div>
-						            </div>
-						            <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse2">Moving From</a>
 						                    </h4>
 						                </div>
@@ -1209,7 +1193,7 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
+						                        	<select class="form-control" name="home_cleaning_house_from_type" id="moving_house_from_type">
 						                        		<option value="">Select</option>
 						                        		<option value="house">House</option>
 						                        		<option value="apartment/flat">Apartment/Flat</option>
@@ -1219,25 +1203,25 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Floor Level</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
+						                        	<label><input type="radio" name="home_cleaning_house_from_level" value="1">1</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_level" value="2">2</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_level" value="3">3</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_level" value="4+">4 or more</label>
+						                        	<div><label id="home_cleaning_house_from_level-error" class="error" for="home_cleaning_house_from_level"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
+						                        	<label><input type="radio" name="home_cleaning_house_from_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="home_cleaning_house_from_bedroom_count-error" class="error" for="home_cleaning_house_from_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
-						                        	<label><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
-						                        	<div><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
+						                        	<label><input type="radio" name="home_cleaning_house_from_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="home_cleaning_house_from_property_type" value="rent">Rent</label>
+						                        	<div><label id="home_cleaning_house_from_property_type-error" class="error" for="home_cleaning_house_from_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1252,7 +1236,7 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
-						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
+						                        	<select class="form-control" name="home_cleaning_house_to_type" id="home_cleaning_house_to_type">
 						                        		<option value="">Select</option>
 						                        		<option value="house">House</option>
 						                        		<option value="apartment/flat">Apartment/Flat</option>
@@ -1262,25 +1246,25 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Floor Level</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
+						                        	<label><input type="radio" name="home_cleaning_house_to_level" value="1">1</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_level" value="2">2</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_level" value="3">3</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_level" value="4+">4 or more</label>
+						                        	<div><label id="home_cleaning_house_to_level-error" class="error" for="home_cleaning_house_to_level"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>No of bedrooms</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
-						                        	<label><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
-						                        	<div><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
+						                        	<label><input type="radio" name="home_cleaning_house_to_bedroom_count" value="1">1</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_bedroom_count" value="2">2</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_bedroom_count" value="3">3</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_bedroom_count" value="4+">4 or more</label>
+						                        	<div><label id="home_cleaning_house_to_bedroom_count-error" class="error" for="home_cleaning_house_to_bedroom_count"></label></div>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Did you own or rent this property</label>
-						                        	<label><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
-						                        	<label><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
-						                        	<div><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
+						                        	<label><input type="radio" name="home_cleaning_house_to_property_type" value="own">Own</label>
+						                        	<label><input type="radio" name="home_cleaning_house_to_property_type" value="rent">Rent</label>
+						                        	<div><label id="home_cleaning_house_to_property_type-error" class="error" for="home_cleaning_house_to_property_type"></label></div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1295,67 +1279,80 @@ function calculateRoute(from, to) {
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Home Condition</label>
-						                        	<label class="form-group"><input type="radio" name="">Dirty</label>
-						                        	<label class="form-group"><input type="radio" name="">Clean</label>
-						                        	<label class="form-group"><input type="radio" name="">Average</label>
-						                        	<label class="form-group"><input type="radio" name="">Poor</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_condition" value="dirty">Dirty</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_condition" value="clean">Clean</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_condition" value="average">Average</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_condition" value="poor">Poor</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>How many levels do you have</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_levels" value="1">1</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_levels" value="2">2</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_levels" value="3">3</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_levels" value="4+">4 or more</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>Size of area you want to clean</label>
-						                        	<label class="form-group"><input type="radio" name="">0-600 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">600-1500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">1500-2500 sqft</label>
-						                        	<label class="form-group"><input type="radio" name="">above 2500 sqft</label>
+						                        	<br>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_area" value="0-600">0-600 sqft</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_area" value="600-1500">600-1500 sqft</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_area" value="1500-2500">1500-2500 sqft</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_area" value="above 2500">above 2500 sqft</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>How many peoples live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_peoples_count" value="1">1</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_peoples_count" value="2">2</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_peoples_count" value="3">3</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_peoples_count" value="4+">4 or more</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>How many pets live in the house</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_pets_count" value="1">1</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_pets_count" value="2">2</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_pets_count" value="3">3</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_pets_count" value="4+">4 or more</label>
 						                        </div>
 						                        <div class="form-group">
 						                        	<label>How many bathrooms</label>
-						                        	<label class="form-group"><input type="radio" name="">1</label>
-						                        	<label class="form-group"><input type="radio" name="">2</label>
-						                        	<label class="form-group"><input type="radio" name="">3</label>
-						                        	<label class="form-group"><input type="radio" name="">4 or more</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_bathrooms_count" value="1">1</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_bathrooms_count" value="2">2</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_bathrooms_count" value="3">3</label>
+						                        	<label class="form-group"><input type="radio" name="home_cleaning_bathrooms_count" value="4+">4 or more</label>
 						                        </div>
+
 						                        <div class="form-group">
-						                        	<label>Streaming Carpet Cleaning</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Rooms</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Hall Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
+						                        	<label>Steaming carpet cleaning</label><br>
+						                        	<?php
+						                        	if( isset( $homeCleaningSteamingServices ) && count( $homeCleaningSteamingServices ) > 0 )
+						                        	{
+						                        		foreach ($homeCleaningSteamingServices as $service)
+						                        		{
+						                        		?>
+						                        			<label class="form-group"><input type="checkbox" name="home_cleaning_steaming_services[]" value="{{ $service->id }}"> {{ ucwords( strtolower( $service->steaming_service_for ) ) }}</label>
+						                        		<?php
+						                        		}
+						                        	}
+						                        	?>
 						                        </div>
+
 						                        <div class="form-group">
-						                        	<label>Other place to clean</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Kitchen</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Living Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Dinning Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Stair Case</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Office Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Half Way</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Interior</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Staircase</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Recreation Room</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Den</label>
-						                        	<label class="form-group"><input type="checkbox" name="">Laundry</label>
+						                        	<label>Other places to clean</label><br>
+						                        	<?php
+						                        	if( isset( $homeCleaningOtherPlaces ) && count( $homeCleaningOtherPlaces ) > 0 )
+						                        	{
+						                        		foreach ($homeCleaningOtherPlaces as $service)
+						                        		{
+						                        		?>
+						                        			<div class="col-lg-4"><label class="form-group">
+						                        				<input type="checkbox" name="home_cleaning_other_places[]" value="{{ $service->id }}"> {{ ucwords( strtolower( $service->other_places ) ) }}</label>
+						                        			</div>
+						                        		<?php
+						                        		}
+						                        	}
+						                        	?>
 						                        </div>
+
 						                    </div>
 						                </div>
 						            </div>
@@ -1367,33 +1364,36 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="home_cleaning_services_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <div class="form-group">
-						                        	<label>Oven inside cleaned</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Fridge inside cleaned</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many balconies would you like to have swept</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many windows(interior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>How many windows(exterior) would you like to have washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like wet wiping blinds? How many?</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Cleaning behind the refrigrator and stove</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Would you like baseboard to be washed</label>
-						                        </div>
-						                        <div class="form-group">
-						                        	<label>Clean Fireplace</label>
-						                        </div>
+						                    	<div class="form-group">
+						                    		<div class="col-lg-9"><label>Services</label></div>
+						                    		<div class="col-lg-3"><label>Quantity</label></div>
+						                    	</div>
+						                    	<!-- Additional services list -->
+						                    	<?php
+						                    	if( isset( $homeCleaningAdditionalService ) && count( $homeCleaningAdditionalService ) > 0 )
+						                    	{
+						                    		foreach ($homeCleaningAdditionalService as $service)
+						                    		{
+						                    		?>
+						                    			<div class="form-group">
+						                        			<div class="col-lg-9 row"><label>{{ $service->additional_service }}</label></div>
+						                        			<div class="col-lg-3 row"><input class="form-control" type="number" name="home_cleaning_additional_services[{{ $service->id }}]"></div>
+						                        		</div>
+						                    		<?php
+						                    		}
+						                    	}
+						                    	?>
+
+						                    	<div class="form-group">
+							                        <label>Cleaning behind the refrigerator and stove?</label>
+							                        <label class="form-group"><input type="radio" name="home_cleaning_behind_refrigerator_stove" value="1">Yes</label>
+							                        <label class="form-group"><input type="radio" name="home_cleaning_behind_refrigerator_stove" value="0">No</label>
+							                    </div>
+							                    <div class="form-group">
+							                        <label>Would you like baseboard to be washed?</label>
+							                        <label class="form-group"><input type="radio" name="home_cleaning_baseboard" value="1">Yes</label>
+							                        <label class="form-group"><input type="radio" name="home_cleaning_baseboard" value="0">No</label>
+							                    </div>
 						                    </div>
 						                </div>
 						            </div>
@@ -1406,8 +1406,8 @@ function calculateRoute(from, to) {
 						                <div id="home_cleaning_services_collapse6" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group">
-						                        	<input type="" name="" placeholder="Contact Number" class="form-control">
-						                        	<button type="button" class="btn">+</button>
+						                        	<input type="text" name="home_cleaning_callback_primary_no" class="form-control" placeholder="Primary Number">
+						                        	<input type="text" name="home_cleaning_callback_secondary_no" class="form-control" placeholder="Additional Number">
 						                        </div>
 						                    </div>
 						                </div>
@@ -1420,16 +1420,14 @@ function calculateRoute(from, to) {
 						                </div>
 						                <div id="home_cleaning_services_collapse7" class="panel-collapse collapse">
 						                    <div class="panel-body">
-						                        <textarea class="form-control">
-						                        	
-						                        </textarea>
+						                        <textarea class="form-control" name="home_cleaning_additional_information" class="form-control"></textarea>
 						                    </div>
 						                </div>
 						            </div>
 						        </div>
 
 						        <div>
-						        	<button type="button" class="btn btn-info">Submit</button>
+						        	<button type="submit" class="btn btn-info" name="btn_submit_home_cleaning_query" id="btn_submit_home_cleaning_query">Submit</button>
 						        </div>
 						    </form>
       					</div>

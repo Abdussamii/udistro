@@ -105,9 +105,9 @@ $(function() {
 <!-- Video Section -->
 <section class="content-section video-section video-bg2">
   <div class="video_bg">
-  <video autoplay loop class="fillWidth" width="100%">
-            <source src="{{ URL::asset('images/udistro-video.webm') }}" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
-            <source src="{{ URL::asset('images/udistro-video.mp4') }}" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+  		<video autoplay loop class="fillWidth" width="100%">
+            <source src="{{ URL::asset('/videos/video.mov') }}" type="video/mov" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            <source src="{{ URL::asset('/videos/udistro-video.mp4') }}" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
         </video>
         <div class="overlay-bg"></div>
     <div class="container">

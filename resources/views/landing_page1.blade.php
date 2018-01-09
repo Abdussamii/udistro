@@ -27,23 +27,29 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
  <div class="container-fluid">
   <div class="navbar-header"> <a class="navbar-brand" href="#"><img src="images/logo.png" alt="Udistro" /></a> </div>
   <ul class="nav navbar-nav navbar-right navbar-top-link">
-   <li><a href="{{ url('/agent/home') }}">
-    <button type="button" class="btn top-btn1">I Help Others Move</button>
-    </a></li>
-   <li><a href="{{ url('/company/home') }}">
-    <button type="button" class="btn top-btn1">I Am a Business</button>
-    </a></li>
+   	<li>
+	   	<a href="{{ url('/agent/home') }}">
+	    	<button type="button" class="btn top-btn1">I Help Others Move</button>
+	    </a>
+	</li>
+   <li>
+   		<a href="{{ url('/company/home') }}">
+    		<button type="button" class="btn top-btn1">I Am a Business</button>
+    	</a>
+	</li>
   </ul>
  </div>
 </nav>
+
 <!-- End Navbar --> 
-<!-- Video Section-->
+<!-- Video Section -->
 <section class="content-section video-section">
  <div class="video_bg">
   <video autoplay loop class="fillWidth" width="100%">
@@ -123,14 +129,15 @@
      <p class="discretion">Our end to end moving application helps you organize all your moving related task into few manageable recommended steps performed from a single location.</p>
      <div class="row">
       <div class="col-md-12">
-       	<div class="software_content">
-       		<!-- <img src="images/softwr_contents.png" alt="" /> -->
-       		<img src="{{ url('/images/landing_image/softwr_contents.png') }}" alt="" />
-       	</div>
+       <div class="software_content">
+       	<!-- <img src="images/softwr_contents.png" alt="" /> -->
+       	<img src="{{ url('/images/landing_image/softwr_contents.png') }}" alt="" />
+       </div>
       </div>
       <div class="clearfix"></div>
       <div class="banner_btn-group text-center">
-       <button type="button" class="btn banner_btn btn-lg blue_btn">Ask for an Invite</button>
+       <!-- <button type="button" class="btn banner_btn btn-lg blue_btn">Ask for an Invite</button> -->
+       <a href="{{ url('/getinvitation') }}" class="btn banner_btn btn-lg blue_btn">Ask for an Invite</a>
       </div>
      </div>
     </div>
@@ -139,7 +146,7 @@
  </div>
 </section>
 
-<!-- Footer Starts -->
+<!-----/ Footer Starts/------>
 
 <footer class="footer-main section-pd">
  <div class="container">
@@ -147,7 +154,7 @@
    <div class="col-md-4">
     <div class="foot_logo">
     	<!-- <img src="images/logo-foot.png" alt=""/> -->
-    	<img src="{{ url('/images/landing_image/logo-foot.png') }}" alt="" />
+    	<img src="{{ url('/images/landing_image/logo-foot.png') }}" alt=""/>
     </div>
     <ul class="footer_social_icon">
      <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
@@ -207,8 +214,8 @@
    <ul>
     <li> <a href="#">Privacy</a> </li>
     <li> <a href="#">Terms</a> </li>
-    <li> <a href="{{ url('/agent/home') }}">I Help Others Move</a> </li>
-    <li> <a href="{{ url('/company/home') }}">I Am a Business</a> </li>
+    <li> <a href="#">I Help Others Move</a> </li>
+    <li> <a href="#">I Am a Business</a> </li>
     <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
    </ul>
   </div>
@@ -220,8 +227,7 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
-<!-- <script src="js/bootstrap.min.js"></script>  -->
-<script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
+<script src="js/bootstrap.min.js"></script> 
 <script>
  $(function() {
 $('.scroll-down').click (function() {

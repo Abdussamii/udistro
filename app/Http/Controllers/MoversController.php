@@ -46,6 +46,14 @@ use App\DigitalAdditionalService;
 use App\DigitalServiceRequest;
 use App\DigitalServiceTypeRequest;
 use App\DigitalAdditionalServiceTypeRequest;
+use App\HomeCleaningSteamingService;
+use App\HomeCleaningOtherPlace;
+use App\HomeCleaningAdditionalService;
+
+use App\HomeCleaningServiceRequest;
+use App\HomeCleaningAdditionalServiceRequest;
+use App\HomeCleaningOtherPlaceServiceRequest;
+use App\HomeCleaningSteamingServiceRequest;
 
 use Helper;
 use Session;
@@ -246,8 +254,21 @@ class MoversController extends Controller
     	// Get addtional digital services list
     	$digitalAdditionalServices = DigitalAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();
 
+    	// use App\HomeCleaningSteamingService;
+    	// use App\HomeCleaningOtherPlace;
+    	// use App\HomeCleaningAdditionalService;
+
+    	// Get the list of home cleaning steaming services
+    	$homeCleaningSteamingServices = HomeCleaningSteamingService::where(['status' => '1'])->select('id', 'steaming_service_for')->get();
+
+    	// Get the list of home cleaning other places to clean
+    	$homeCleaningOtherPlaces = HomeCleaningOtherPlace::where(['status' => '1'])->select('id', 'other_places')->get();
+
+    	// Get the list of home cleaning additional services
+    	$homeCleaningAdditionalService = HomeCleaningAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();
+
     	// echo '<pre>';
-    	// print_r( $digitalAdditionalServices->toArray() );
+    	// print_r( $homeCleaningAdditionalService->toArray() );
     	// exit;
 
     	return view('movers/myMove', 
@@ -286,7 +307,12 @@ class MoversController extends Controller
     			
     			// Cable & Internet services
     			'digitalServiceTypes' 		=> $digitalServiceTypes,
-    			'digitalAdditionalServices' => $digitalAdditionalServices
+    			'digitalAdditionalServices' => $digitalAdditionalServices,
+
+    			// Home cleaning services
+    			'homeCleaningSteamingServices' 	=> $homeCleaningSteamingServices,
+    			'homeCleaningOtherPlaces' 		=> $homeCleaningOtherPlaces,
+    			'homeCleaningAdditionalService' => $homeCleaningAdditionalService,
     		]
     	);
     }
@@ -1483,6 +1509,261 @@ class MoversController extends Controller
 					}
 				}
 
+			}
+		}
+
+		return $filteredCompanies;
+	}
+
+	/**
+     * Function to save the user's home cleaning query detail
+     * @param void
+     * @return array
+     */
+    public function saveHomeCleaningQuery()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$homeCleaningDetails = array();
+    	parse_str($frmData, $homeCleaningDetails);
+
+    	// Company category 
+    	$companyCategory= 2;	// Home Cleaning Service Company
+
+    	// Get the client and invitation id from session
+    	$clientId 		= Session::get('clientId', '');
+    	$invitationId 	= Session::get('invitationId', '');
+
+		$filteredCompanies = $this->getFilteredHomeCleaningCompaniesList($clientId, $companyCategory);
+
+     	// Transaction start
+ 		DB::beginTransaction();
+
+ 		$response = array();
+ 		$successCount = 0;
+
+ 		$otherPlacesToClean = array();
+ 		$additionalServices = array();
+ 		$steamServices  	= array();
+ 		if( count( $filteredCompanies ) > 0 )
+ 		{
+ 			foreach ($filteredCompanies as $filterCompany)
+ 			{
+ 				// Check the payment plan, if the plan expires don't send the quotations
+ 				if( Helper::checkPaymentPlanSubscriptionQuota($filterCompany->company_id, 2) )	// company id, payment plan type id
+ 				{
+ 					$homeCleaningServiceRequest = new HomeCleaningServiceRequest;
+
+ 					$homeCleaningServiceRequest->agent_client_id = $clientId;
+ 					$homeCleaningServiceRequest->invitation_id 	= $invitationId;
+ 					$homeCleaningServiceRequest->company_id = $filterCompany->company_id;
+
+ 					$homeCleaningServiceRequest->moving_from_house_type = $homeCleaningDetails['home_cleaning_house_from_type'];
+ 					$homeCleaningServiceRequest->moving_from_floor = $homeCleaningDetails['home_cleaning_house_from_level'];
+ 					$homeCleaningServiceRequest->moving_from_bedroom_count = $homeCleaningDetails['home_cleaning_house_from_bedroom_count'];
+ 					$homeCleaningServiceRequest->moving_from_property_type = $homeCleaningDetails['home_cleaning_house_from_property_type'];
+
+ 					$homeCleaningServiceRequest->moving_to_house_type = $homeCleaningDetails['home_cleaning_house_to_type'];
+ 					$homeCleaningServiceRequest->moving_to_floor = $homeCleaningDetails['home_cleaning_house_to_level'];
+ 					$homeCleaningServiceRequest->moving_to_bedroom_count = $homeCleaningDetails['home_cleaning_house_to_bedroom_count'];
+ 					$homeCleaningServiceRequest->moving_to_property_type = $homeCleaningDetails['home_cleaning_house_to_property_type'];
+
+ 					$homeCleaningServiceRequest->home_condition = $homeCleaningDetails['home_cleaning_condition'];
+ 					$homeCleaningServiceRequest->home_cleaning_level = $homeCleaningDetails['home_cleaning_levels'];
+ 					$homeCleaningServiceRequest->home_cleaning_area = $homeCleaningDetails['home_cleaning_area'];
+ 					$homeCleaningServiceRequest->home_cleaning_people_count = $homeCleaningDetails['home_cleaning_peoples_count'];
+ 					$homeCleaningServiceRequest->home_cleaning_pet_count = $homeCleaningDetails['home_cleaning_pets_count'];
+ 					$homeCleaningServiceRequest->home_cleaning_bathroom_count = $homeCleaningDetails['home_cleaning_bathrooms_count'];
+
+ 					$homeCleaningServiceRequest->cleaning_behind_refrigerator_and_stove = $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'];
+ 					$homeCleaningServiceRequest->baseboard_to_be_washed = $homeCleaningDetails['home_cleaning_baseboard'];
+
+ 					$homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
+ 					$homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
+
+ 					$homeCleaningServiceRequest->additional_information = $homeCleaningDetails['home_cleaning_additional_information'];
+ 					$homeCleaningServiceRequest->status = '1';
+ 					$homeCleaningServiceRequest->created_by = $clientId;
+
+ 					if( $homeCleaningServiceRequest->save() )
+ 					{
+ 						// Commit transaction
+ 	    				DB::commit();
+
+ 						if( isset( $homeCleaningDetails['home_cleaning_steaming_services'] ) && count( $homeCleaningDetails['home_cleaning_steaming_services'] ) > 0 )
+ 						{
+ 							foreach( $homeCleaningDetails['home_cleaning_steaming_services'] as $serviceId )
+ 							{
+ 								$steamServices[] = array(
+ 									'service_request_id' => $homeCleaningServiceRequest->id,
+ 									'steaming_service_id' => $serviceId,
+ 									'created_at' => date('Y-m-d H:i:s'),
+ 									'status' => '1',
+ 									'created_by' => $clientId
+ 								);
+ 							}
+ 						}
+
+ 						if( isset( $homeCleaningDetails['home_cleaning_other_places'] ) && count( $homeCleaningDetails['home_cleaning_other_places'] ) > 0 )
+ 						{
+ 							foreach( $homeCleaningDetails['home_cleaning_other_places'] as $serviceId )
+ 							{
+ 								$otherPlacesToClean[] = array(
+ 									'service_request_id' => $homeCleaningServiceRequest->id,
+ 									'other_place_id' => $serviceId,
+ 									'created_at' => date('Y-m-d H:i:s'),
+ 									'status' => '1',
+ 									'created_by' => $clientId
+ 								);
+ 							}
+ 						}
+
+ 						if( isset( $homeCleaningDetails['home_cleaning_additional_services'] ) && count( $homeCleaningDetails['home_cleaning_additional_services'] ) > 0 )
+ 						{
+ 							foreach( $homeCleaningDetails['home_cleaning_additional_services'] as $key => $value )
+ 							{
+ 								if( $value != '' )
+ 								{
+	 								$additionalServices[] = array(
+	 									'service_request_id' => $homeCleaningServiceRequest->id,
+	 									'additional_request_id' => $key,
+	 									'quantity' => $value,
+	 									'created_at' => date('Y-m-d H:i:s'),
+	 									'status' => '1',
+	 									'created_by' => $clientId
+	 								);
+ 								}
+ 							}
+ 						}
+
+ 						$successCount++;
+ 						
+ 					}
+
+ 					// Add the quotation entry
+ 		    		$date = date('Y-m-d');
+ 		    		$paymentPlanSubscription = 	PaymentPlanSubscription::where('subscriber_id', '=', $filterCompany->company_id)	// subscriber is either company / agent
+ 												->where('plan_type_id', '=', '2')			// plan type is either for company / agent
+ 												->where('start_date', '<=', $date)			// plan start date must lie between the today's date
+ 												->where('end_date', '>=', $date) 			// plan end date must lie between the today's date
+ 												->where('status', '=', '1')
+ 												->first();
+
+ 		    		if( count( $paymentPlanSubscription ) > 0 )
+ 		    		{
+ 		    			$quotation = new QuotationLog;
+
+ 						$quotation->company_id = $filterCompany->company_id;
+ 						$quotation->client_id = $clientId;
+ 						$quotation->payment_plan_id = $paymentPlanSubscription->plan_id; 
+ 						$quotation->created_at = date('Y-m-d H:i:s');
+ 						$quotation->status = '1';
+
+ 						$quotation->save();						
+ 		    		}
+ 				}
+ 			}
+
+			if( $successCount > 0 )
+	    	{
+				HomeCleaningAdditionalServiceRequest::insert( $additionalServices );
+
+	    		HomeCleaningOtherPlaceServiceRequest::insert( $otherPlacesToClean );
+
+	    		HomeCleaningSteamingServiceRequest::insert( $steamServices );
+
+	    		$response['errCode'] 	= 0;
+	    		$response['errMsg'] 	= 'Request added successfully';
+	    	}
+	    	else
+	    	{
+	    		$response['errCode'] 	= 1;
+	    		$response['errMsg'] 	= 'No matching company found';
+	    	}
+ 		}
+
+ 		return response()->json($response);
+    }
+
+    /**
+	 * To get the list of cable & internet companies satisfying all the criteria to get the mover's quotations
+	 *
+	 * 		- Rules
+	 * 		# Company must be active
+	 * 		# Company category must match
+	 * 		# Availability Mode must be true
+	 * 		# Must have a payment plan
+	 * 		# Services (Atleast 30% match)
+	 * 		# Target Area must lies with in the working area of company or company working on multiple locations
+	 *
+	 * @param int
+	 * @param int
+	 * @param array
+	 * @return array
+	 */
+	public function getFilteredHomeCleaningCompaniesList($clientId, $companyCategory)
+	{
+		// Get the moving from and moving to address of client
+		$clientMovingToAddress = 	DB::table('agent_client_moving_to_addresses as t1')
+									->leftJoin('provinces as t2', 't2.id', '=', 't1.province_id')
+									->leftJoin('cities as t3', 't3.id', '=', 't1.city_id')
+									->leftJoin('countries as t4', 't4.id', '=', 't1.country_id')
+									->where(['t1.agent_client_id' => $clientId, 't1.status' => '1'])
+									->select('t1.id', 't1.address1', 't1.address2', 't2.name as province', 't3.name as city', 't1.postal_code', 't4.name as country')
+									->first();
+
+		// Get the latitude, longitude of the mover from the Google Map API
+		$clientMovingToAddressCoordinates = array();
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		$mapApiResponse = json_decode(file_get_contents($url), true);
+		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+		{
+			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+		}
+
+		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
+		$companies = DB::table('companies as t1')
+					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
+					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
+					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
+					->where(['t2.id' => $companyCategory])							// company category must match
+					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
+					->get();
+
+		// Check if any company satisfy all the rules or not
+		$filteredCompanies 	= array();
+		$companyCoordinates = array();
+		$minimumPercentage	= 30;
+		if( count( $companies ) > 0 )
+		{
+			// Get the list of all the services provided by these companies, if atleast 30% match, then only send the quotation
+			foreach ($companies as $company)
+			{
+				// For the companies who are not working globally, get the lat long of the address
+				if( $company->working_globally != '1' )
+				{
+					// Get the latitude, longitude of the company address from the Google Map API
+					$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+
+					$mapApiResponse = json_decode(file_get_contents($url), true);
+
+					if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+					{
+						$companyCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+
+						$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+
+						if( $distance <= $company->target_area )
+						{
+							$filteredCompanies[] = $company;
+						}
+					}
+				}
+				else
+				{
+					$filteredCompanies[] = $company;
+				}
 			}
 		}
 
