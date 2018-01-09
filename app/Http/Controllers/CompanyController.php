@@ -914,18 +914,18 @@ class CompanyController extends Controller
         elseif ($companyArray->company_category_id == 2) 
         {
             // Get the records after applying the datatable filters
-            $movingItemArray = DB::table('tech_concierge_service_requests')
-                                ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
+            $movingItemArray = DB::table('home_cleaning_service_requests')
+                                ->leftJoin('agent_clients', 'home_cleaning_service_requests.agent_client_id', '=', 'agent_clients.id')
                                 ->orderBy($sortBy, $sortType)
-                                ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
+                                ->where('home_cleaning_service_requests.company_id', '=', $companyArray->id)
                                 ->limit($length)
                                 ->offset($start)
-                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'tech_concierge_service_requests.id')
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'home_cleaning_service_requests.id')
                                 ->get();
 
-            $iTotal = DB::table('tech_concierge_service_requests')
-                        ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
-                        ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
+            $iTotal = DB::table('home_cleaning_service_requests')
+                        ->leftJoin('agent_clients', 'home_cleaning_service_requests.agent_client_id', '=', 'agent_clients.id')
+                        ->where('home_cleaning_service_requests.company_id', '=', $companyArray->id)
                         ->count();
         }
 

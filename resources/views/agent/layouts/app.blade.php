@@ -341,6 +341,9 @@
                         <li>
                             <a href="{{ url('agent/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
                         </li>
+                        <li>
+                            <a href="{{ url('agent/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

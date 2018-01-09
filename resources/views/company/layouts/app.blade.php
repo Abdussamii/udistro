@@ -338,6 +338,9 @@
                         <li>
                             <a href="{{ url('company/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
                         </li>
+                        <li>
+                            <a href="{{ url('company/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

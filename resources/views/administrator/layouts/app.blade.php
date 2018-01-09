@@ -418,6 +418,9 @@
                         <li>
                             <a href="{{ url('administrator/address') }}"><i class="fa fa-dashboard fa-fw"></i> Provisional Health Data</a>
                         </li>
+                        <li>
+                            <a href="{{ url('administrator/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

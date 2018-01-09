@@ -363,6 +363,8 @@ Route::group(['prefix' => 'agent'], function() {
 	// Function to check user credentials
 	Route::post('/login', 'AgentController@login');
 
+	Route::get('/logout', 'HomeController@logout');
+
 	// Forgot Password function
 	Route::get('/forgotpassword', 'AgentController@getForgotPassword');
 
@@ -513,6 +515,8 @@ Route::group(['prefix' => 'company'], function() {
 
 	// Function to check company credentials
 	Route::post('/login', 'CompanyController@login');
+
+	Route::get('/logout', 'HomeController@logout');
 
 	// To register a new company
 	Route::post('/registercompany', 'CompanyController@registerCompany');
