@@ -1597,93 +1597,276 @@ class AdminController extends Controller
      */
     public function saveAddress()
     {
-        // Get the serialized form data
-        $frmData = Input::get('frmData');
+    	$logo 		= Input::file('logo');
 
-        // Parse the serialize form data to an array
-        parse_str($frmData, $inputData);
+    	$addressId 	= Input::get('addressId');
+    	$provinceId = Input::get('provinceId');
+
+    	$label1 	= Input::get('label1');
+    	$label2 	= Input::get('label2');
+    	$label3 	= Input::get('label3');
+    	$label4 	= Input::get('label4');
+    	$label5 	= Input::get('label5');
+    	$label6 	= Input::get('label6');
+    	$label7 	= Input::get('label7');
+    	$label8 	= Input::get('label8');
+    	$label9 	= Input::get('label9');
+    	$label10	= Input::get('label10');
+
+    	$heading1 	= Input::get('heading1');
+    	$heading2	= Input::get('heading2');
+    	$heading3	= Input::get('heading3');
+    	$heading4	= Input::get('heading4');
+
+    	$detail1	= Input::get('detail1');
+    	$detail2	= Input::get('detail2');
+    	$detail3	= Input::get('detail3');
+    	$detail4	= Input::get('detail4');
+
+    	$link 		= Input::get('link');
+    	$status		= Input::get('status');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
 
         $response = array();
-
-        $addressExist = ProvincialHealthAgencyDetail::where('province_id', '=', $inputData['province_id'])->first();
-
-        if(!$addressExist) // Check if the province id is available or not, if not add the province
+        if( $addressId == '' )	// Add the provincial data
         {
-            $provincialDetail = new ProvincialHealthAgencyDetail;
+        	$fileName = null;
+        	if( isset( $logo ) && count( $logo ) > 0 )
+        	{
+        		// Image destination folder
+				$destinationPath = storage_path() . '/uploads/provincial_health_agency';
 
-            $provincialDetail->label1          = $inputData['label1'];
-            $provincialDetail->label2          = $inputData['label2'];
-            $provincialDetail->label3          = $inputData['label3'];
-            $provincialDetail->label4          = $inputData['label4'];
-            $provincialDetail->label5          = $inputData['label5'];
-            $provincialDetail->label6          = $inputData['label6'];
-            $provincialDetail->label7          = $inputData['label7'];
-            $provincialDetail->label8          = $inputData['label8'];
-            $provincialDetail->label9          = $inputData['label9'];
-            $provincialDetail->label10         = $inputData['label10'];
-            $provincialDetail->title1          = $inputData['title1'];
-            $provincialDetail->timing1         = $inputData['timing1'];
-            $provincialDetail->title2          = $inputData['title2'];
-            $provincialDetail->timing2         = $inputData['timing2'];
-            $provincialDetail->title3          = $inputData['title3'];
-            $provincialDetail->text1           = $inputData['text1'];
-            $provincialDetail->title4          = $inputData['title4'];
-            $provincialDetail->text2           = $inputData['text2'];
-            $provincialDetail->status          = $inputData['status'];
-            $provincialDetail->province_id     = $inputData['province_id'];
-            $provincialDetail->updated_by      = $userId;
-            $provincialDetail->created_by      = $userId;
+				if( $logo->isValid() )  // If the file is valid or not
+				{
+					$fileExt  = $logo->getClientOriginalExtension();
+				    $fileType = $logo->getMimeType();
+				    $fileSize = $logo->getSize();
 
-            if( $provincialDetail->save() )
-            {
-                $response['errCode']    = 0;
-                $response['errMsg']     = 'Address added successfully';
-            }
-            else
-            {
-                $response['errCode']    = 2;
-                $response['errMsg']     = 'Some error in adding the address';
-            }
+				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+				    {
+				    	// Rename the file
+				        $fileName = str_random(40) . '.' . $fileExt;
+
+				        if( $logo->move( $destinationPath, $fileName ) )
+				        {
+	        	        	$provincialDetail = new ProvincialHealthAgencyDetail;
+
+	        	    		$provincialDetail->province_id 	= $provinceId;
+
+	        	    		$provincialDetail->label1 		= $label1;
+	        	    		$provincialDetail->label2 		= $label2;
+	        	    		$provincialDetail->label3		= $label3;
+	        	    		$provincialDetail->label4 		= $label4;
+	        	    		$provincialDetail->label5 		= $label5;
+	        	    		$provincialDetail->label6 		= $label6;
+	        	    		$provincialDetail->label7 		= $label7;
+	        	    		$provincialDetail->label8 		= $label8;
+	        	    		$provincialDetail->label9 		= $label9;
+	        	    		$provincialDetail->label10 		= $label10;
+
+	        	    		$provincialDetail->heading1 	= $heading1;
+	        	    		$provincialDetail->heading2 	= $heading2;
+	        	    		$provincialDetail->heading3 	= $heading3;
+	        	    		$provincialDetail->heading4 	= $heading4;
+
+	        	    		$provincialDetail->detail1 		= $detail1;
+	        	    		$provincialDetail->detail2 		= $detail2;
+	        	    		$provincialDetail->detail3 		= $detail3;
+	        	    		$provincialDetail->detail4 		= $detail4;
+
+	        	    		$provincialDetail->link 		= $link;
+	        	    		$provincialDetail->logo 		= $fileName;
+	        	    		$provincialDetail->status 		= $status;
+	        	    		$provincialDetail->created_by 	= $userId;
+
+	        	    		if( $provincialDetail->save() )
+	        				{
+	        					$response['errCode']    = 0;
+	        		        	$response['errMsg']     = 'Address added successfully';
+	        				}
+	        				else
+	        				{
+	        					$response['errCode']    = 2;
+	        		        	$response['errMsg']     = 'Some error in adding the address';
+	        				}
+				        }
+				        else
+				        {
+				        	$response['errCode']    = 3;
+	        		        $response['errMsg']     = 'Invalid file type';
+				        }
+				    }
+				}
+		        else
+		        {
+		        	$response['errCode']    = 4;
+    		        $response['errMsg']     = 'Invalid file type';
+		        }
+        	}
+        	else
+        	{
+	        	$provincialDetail = new ProvincialHealthAgencyDetail;
+
+	    		$provincialDetail->province_id 	= $provinceId;
+
+	    		$provincialDetail->label1 		= $label1;
+	    		$provincialDetail->label2 		= $label2;
+	    		$provincialDetail->label3		= $label3;
+	    		$provincialDetail->label4 		= $label4;
+	    		$provincialDetail->label5 		= $label5;
+	    		$provincialDetail->label6 		= $label6;
+	    		$provincialDetail->label7 		= $label7;
+	    		$provincialDetail->label8 		= $label8;
+	    		$provincialDetail->label9 		= $label9;
+	    		$provincialDetail->label10 		= $label10;
+
+	    		$provincialDetail->heading1 	= $heading1;
+	    		$provincialDetail->heading2 	= $heading2;
+	    		$provincialDetail->heading3 	= $heading3;
+	    		$provincialDetail->heading4 	= $heading4;
+
+	    		$provincialDetail->detail1 		= $detail1;
+	    		$provincialDetail->detail2 		= $detail2;
+	    		$provincialDetail->detail3 		= $detail3;
+	    		$provincialDetail->detail4 		= $detail4;
+
+	    		$provincialDetail->link 		= $link;
+	    		$provincialDetail->logo 		= $fileName;
+	    		$provincialDetail->status 		= $status;
+	    		$provincialDetail->created_by 	= $userId;
+
+	    		if( $provincialDetail->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Address added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in adding the address';
+				}
+        	}
         }
-        else                                        // Check if the activity id is available or not, if available update the activity
+        else 					// Update the provincial data
         {
-            $provincialDetail = ProvincialHealthAgencyDetail::find($inputData['id']);
+        	$fileName = null;
+        	if( isset( $logo ) && count( $logo ) > 0 )
+        	{
+        		// Image destination folder
+				$destinationPath = storage_path() . '/uploads/provincial_health_agency';
 
-            $provincialDetail->label1          = $inputData['label1'];
-            $provincialDetail->label2          = $inputData['label2'];
-            $provincialDetail->label3          = $inputData['label3'];
-            $provincialDetail->label4          = $inputData['label4'];
-            $provincialDetail->label5          = $inputData['label5'];
-            $provincialDetail->label6          = $inputData['label6'];
-            $provincialDetail->label7          = $inputData['label7'];
-            $provincialDetail->label8          = $inputData['label8'];
-            $provincialDetail->label9          = $inputData['label9'];
-            $provincialDetail->label10         = $inputData['label10'];
-            $provincialDetail->title1          = $inputData['title1'];
-            $provincialDetail->timing1         = $inputData['timing1'];
-            $provincialDetail->title2          = $inputData['title2'];
-            $provincialDetail->timing2         = $inputData['timing2'];
-            $provincialDetail->title3          = $inputData['title3'];
-            $provincialDetail->text1           = $inputData['text1'];
-            $provincialDetail->title4          = $inputData['title4'];
-            $provincialDetail->text2           = $inputData['text2'];
-            $provincialDetail->status          = $inputData['status'];
-            $provincialDetail->created_by      = $userId;
-            
+				if( $logo->isValid() )  // If the file is valid or not
+				{
+					$fileExt  = $logo->getClientOriginalExtension();
+				    $fileType = $logo->getMimeType();
+				    $fileSize = $logo->getSize();
 
-            if( $provincialDetail->save() )
-            {
-                $response['errCode']    = 0;
-                $response['errMsg']     = 'Address updated successfully';
-            }
-            else
-            {
-                $response['errCode']    = 2;
-                $response['errMsg']     = 'Some error in updating the address';
-            }
+				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+				    {
+				    	// Rename the file
+				        $fileName = str_random(40) . '.' . $fileExt;
+
+				        if( $logo->move( $destinationPath, $fileName ) )
+				        {
+	        	        	$provincialDetail = ProvincialHealthAgencyDetail::find($addressId);
+
+	        	    		$provincialDetail->province_id 	= $provinceId;
+
+	        	    		$provincialDetail->label1 		= $label1;
+	        	    		$provincialDetail->label2 		= $label2;
+	        	    		$provincialDetail->label3		= $label3;
+	        	    		$provincialDetail->label4 		= $label4;
+	        	    		$provincialDetail->label5 		= $label5;
+	        	    		$provincialDetail->label6 		= $label6;
+	        	    		$provincialDetail->label7 		= $label7;
+	        	    		$provincialDetail->label8 		= $label8;
+	        	    		$provincialDetail->label9 		= $label9;
+	        	    		$provincialDetail->label10 		= $label10;
+
+	        	    		$provincialDetail->heading1 	= $heading1;
+	        	    		$provincialDetail->heading2 	= $heading2;
+	        	    		$provincialDetail->heading3 	= $heading3;
+	        	    		$provincialDetail->heading4 	= $heading4;
+
+	        	    		$provincialDetail->detail1 		= $detail1;
+	        	    		$provincialDetail->detail2 		= $detail2;
+	        	    		$provincialDetail->detail3 		= $detail3;
+	        	    		$provincialDetail->detail4 		= $detail4;
+
+	        	    		$provincialDetail->link 		= $link;
+	        	    		$provincialDetail->logo 		= $fileName;
+	        	    		$provincialDetail->status 		= $status;
+	        	    		$provincialDetail->created_by 	= $userId;
+
+	        	    		if( $provincialDetail->save() )
+	        				{
+	        					$response['errCode']    = 0;
+	        		        	$response['errMsg']     = 'Address added successfully';
+	        				}
+	        				else
+	        				{
+	        					$response['errCode']    = 2;
+	        		        	$response['errMsg']     = 'Some error in adding the address';
+	        				}
+				        }
+				        else
+				        {
+				        	$response['errCode']    = 3;
+	        		        $response['errMsg']     = 'Invalid file type';
+				        }
+				    }
+				}
+		        else
+		        {
+		        	$response['errCode']    = 4;
+    		        $response['errMsg']     = 'Invalid file type';
+		        }
+        	}
+        	else
+        	{
+	        	$provincialDetail = ProvincialHealthAgencyDetail::find($addressId);
+
+	    		$provincialDetail->province_id 	= $provinceId;
+
+	    		$provincialDetail->label1 		= $label1;
+	    		$provincialDetail->label2 		= $label2;
+	    		$provincialDetail->label3		= $label3;
+	    		$provincialDetail->label4 		= $label4;
+	    		$provincialDetail->label5 		= $label5;
+	    		$provincialDetail->label6 		= $label6;
+	    		$provincialDetail->label7 		= $label7;
+	    		$provincialDetail->label8 		= $label8;
+	    		$provincialDetail->label9 		= $label9;
+	    		$provincialDetail->label10 		= $label10;
+
+	    		$provincialDetail->heading1 	= $heading1;
+	    		$provincialDetail->heading2 	= $heading2;
+	    		$provincialDetail->heading3 	= $heading3;
+	    		$provincialDetail->heading4 	= $heading4;
+
+	    		$provincialDetail->detail1 		= $detail1;
+	    		$provincialDetail->detail2 		= $detail2;
+	    		$provincialDetail->detail3 		= $detail3;
+	    		$provincialDetail->detail4 		= $detail4;
+
+	    		$provincialDetail->link 		= $link;
+	    		$provincialDetail->logo 		= $fileName;
+	    		$provincialDetail->status 		= $status;
+	    		$provincialDetail->created_by 	= $userId;
+
+	    		if( $provincialDetail->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Address added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in adding the address';
+				}
+        	}
         }
 
         return response()->json($response);
@@ -2297,8 +2480,7 @@ class AdminController extends Controller
         // Datatable column number to table column name mapping
         $arr = array(
             0 => 'id',
-            1 => 'name',
-            2 => 'status',
+            1 => 'name'
         );
 
         // Map the sorting column index to the column name
@@ -2306,11 +2488,12 @@ class AdminController extends Controller
 
         // Get the records after applying the datatable filters
         $provincialArray = DB::table('provinces')
-                        ->leftJoin('provincial_health_agency_details', 'provincial_health_agency_details.province_id', '=', 'provinces.id')
+                        // ->leftJoin('provincial_health_agency_details', 'provincial_health_agency_details.province_id', '=', 'provinces.id')
                         ->orderBy($sortBy, $sortType)
                         ->limit($length)
                         ->offset($start)
-                        ->select('provincial_health_agency_details.id', 'provinces.name', 'provinces.id as pid')
+                        //->select('provincial_health_agency_details.id', 'provinces.name', 'provinces.id as pid')
+                        ->select('id', 'name')
                         ->get();
 
         $iTotal = Province::count();
@@ -2328,9 +2511,10 @@ class AdminController extends Controller
             foreach ($provincialArray as $provincial)
             {
                 $response['aaData'][$k] = array(
-                    0 => $provincial->pid,
+                    0 => $provincial->id,
                     1 => ucfirst(strtolower($provincial->name)),
-                    2 => '<a href="javascript:void(0);" id="'. $provincial->pid .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    2 => '',
+                    3 => '<a href="javascript:void(0);" id="'. $provincial->id .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2562,40 +2746,85 @@ class AdminController extends Controller
 
         $provincialArray = ProvincialHealthAgencyDetail::where('province_id', '=', $Id)->first();
 
+        /*
+        Array
+        (
+            [id] => 1
+            [province_id] => 1
+            [label1] => label1
+            [label2] => label2
+            [label3] => label3
+            [label4] => label4
+            [label5] => label5
+            [label6] => label6
+            [label7] => label7
+            [label8] => label8
+            [label9] => label9
+            [label10] => label10
+            [heading1] => Heading 1
+            [detail1] => Detail 1
+            [heading2] => Heading 2
+            [detail2] => Detail 2
+            [heading3] => Heading 3
+            [detail3] => Detail 3
+            [heading4] => Heading 4
+            [detail4] => Detail 4
+            [link] => https://www.google.co.in/?gfe_rd=cr&dcr=0&ei=JGxUWvP_N5SAqQWvj6b4Cg
+            [logo] => UFGlSPO1q8OwNm8KTe4NFmVK7sY3ulty9A3e3PMK.jpg
+            [status] => 1
+            [created_at] => 2018-01-09 14:01:23
+            [created_by] => 1
+            [updated_at] => 2018-01-09 14:01:23
+            [updated_by] => 
+        )
+        */
+
         if($provincialArray) 
         {
-            $response['id']        = $provincialArray->id;
-            $response['label1']    = $provincialArray->label1;
-            $response['label2']    = $provincialArray->label2;
-            $response['label3']    = $provincialArray->label3;
-            $response['label4']    = $provincialArray->label4;
-            $response['label5']    = $provincialArray->label5;
-            $response['label6']    = $provincialArray->label6;
-            $response['label7']    = $provincialArray->label7;
-            $response['label8']    = $provincialArray->label8;
-            $response['label9']    = $provincialArray->label9;
-            $response['label10']   = $provincialArray->label10;
-            $response['title1']    = $provincialArray->title1;
-            $response['timing1']   = $provincialArray->timing1;
-            $response['title2']    = $provincialArray->title2;
-            $response['timing2']   = $provincialArray->timing2;
+            $response['id']        	= $provincialArray->id;
+            $response['label1']    	= $provincialArray->label1;
+            $response['label2']    	= $provincialArray->label2;
+            $response['label3']    	= $provincialArray->label3;
+            $response['label4']    	= $provincialArray->label4;
+            $response['label5']    	= $provincialArray->label5;
+            $response['label6']    	= $provincialArray->label6;
+            $response['label7']    	= $provincialArray->label7;
+            $response['label8']    	= $provincialArray->label8;
+            $response['label9']    	= $provincialArray->label9;
+            $response['label10']   	= $provincialArray->label10;
+            $response['heading1']   = $provincialArray->heading1;
+            $response['heading2']   = $provincialArray->heading2;
+            $response['heading3']   = $provincialArray->heading3;
+            $response['heading4']   = $provincialArray->heading4;
+            $response['detail1']   	= $provincialArray->detail1;
+            $response['detail2']   	= $provincialArray->detail2;
+            $response['detail3']   	= $provincialArray->detail3;
+            $response['detail4']   	= $provincialArray->detail4;
+            $response['link']   	= $provincialArray->link;
             $response['status']    = $provincialArray->status;
-        } else {
-            $response['id']        = '';
-            $response['label1']    = '';
-            $response['label2']    = '';
-            $response['label3']    = '';
-            $response['label4']    = '';
-            $response['label5']    = '';
-            $response['label6']    = '';
-            $response['label7']    = '';
-            $response['label8']    = '';
-            $response['label9']    = '';
-            $response['label10']   = '';
-            $response['title1']    = '';
-            $response['timing1']   = '';
-            $response['title2']    = '';
-            $response['timing2']   = '';
+        }
+        else
+        {
+            $response['id']        	= '';
+            $response['label1']    	= '';
+            $response['label2']    	= '';
+            $response['label3']    	= '';
+            $response['label4']    	= '';
+            $response['label5']    	= '';
+            $response['label6']    	= '';
+            $response['label7']    	= '';
+            $response['label8']    	= '';
+            $response['label9']    	= '';
+            $response['label10']   	= '';
+            $response['heading1']   = '';
+            $response['heading2']   = '';
+            $response['heading3']   = '';
+            $response['heading4']   = '';
+            $response['detail1']   	= '';
+            $response['detail2']   	= '';
+            $response['detail3']   	= '';
+            $response['detail4']   	= '';
+            $response['link']   	= '';
             $response['status']    = '';
         }
 

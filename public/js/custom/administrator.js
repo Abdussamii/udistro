@@ -1090,8 +1090,10 @@ $(document).ready(function(){
     });
     $('#frm_add_address').validate({
         rules: {
+        	label1: {	required: true	}
         },
         messages: {
+        	label1: {	required: 'Please enter atleast one label'	}
         }
     });
 
@@ -1099,26 +1101,47 @@ $(document).ready(function(){
     $('#btn_add_address').click(function(){
         if( $('#frm_add_address').valid() )
         {
-            // Ajax call to save the page related data
-            var $this = $(this);
+
+        	let formData = new FormData();
+
+        	formData.append('addressId', $('#frm_add_address #address_id').val());
+        	formData.append('provinceId', $('#frm_add_address #province_id').val());
+
+			formData.append('logo', $('#frm_add_address #logo').prop('files')[0]);            
+
+            formData.append('label1', $('#frm_add_address #label1').val());
+            formData.append('label2', $('#frm_add_address #label2').val());
+            formData.append('label3', $('#frm_add_address #label3').val());
+            formData.append('label4', $('#frm_add_address #label4').val());
+            formData.append('label5', $('#frm_add_address #label5').val());
+            formData.append('label6', $('#frm_add_address #label6').val());
+            formData.append('label7', $('#frm_add_address #label7').val());
+            formData.append('label8', $('#frm_add_address #label8').val());
+            formData.append('label9', $('#frm_add_address #label9').val());
+            formData.append('label10', $('#frm_add_address #label10').val());
+
+            formData.append('heading1', $('#frm_add_address #heading1').val());
+            formData.append('heading2', $('#frm_add_address #heading2').val());
+            formData.append('heading3', $('#frm_add_address #heading3').val());
+            formData.append('heading4', $('#frm_add_address #heading4').val());
+
+            formData.append('detail1', $('#frm_add_address #detail1').val());
+            formData.append('detail2', $('#frm_add_address #detail2').val());
+            formData.append('detail3', $('#frm_add_address #detail3').val());
+            formData.append('detail4', $('#frm_add_address #detail4').val());
+
+            formData.append('link', $('#frm_add_address #link').val());
+
+            formData.append('status', $("input[name='province_address_status']:checked").val());
 
             $.ajax({
                 url: $('meta[name="route"]').attr('content') + '/administrator/saveaddress',
                 method: 'post',
-                data: {
-                    frmData: $('#frm_add_address').serialize()
-                },
-                beforeSend: function() {
-                    // Show the loading button
-                    $this.button('loading');
-                },
+                data: formData,
+                contentType : false,
+                processData : false,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                complete: function()
-                {
-                    // Change the button to previous
-                    $this.button('reset');
                 },
                 success: function(response){
                     if( response.errCode == 0 )
@@ -1126,12 +1149,12 @@ $(document).ready(function(){
                         alertify.success( response.errMsg );
                         
                         // Refresh the form and close the modal
-                        $('#frm_add_address')[0].reset();
+                        // $('#frm_add_address')[0].reset();
 
-                        $('#modal_add_address').modal('hide');
+                        // $('#modal_add_address').modal('hide');
 
                         // Refresh the datatable
-                        $('#datatable_address').DataTable().ajax.reload();
+                        // $('#datatable_address').DataTable().ajax.reload();
                     }
                     else
                     {
@@ -1401,12 +1424,13 @@ $(document).ready(function(){
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchaddress',
         
         "columnDefs": [
-            { "className": "dt-center", "targets": [0] }
+            { "className": "dt-center", "targets": [0, 2, 3] }
         ],
         
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
+            { 'bSortable' : false },
             { 'bSortable' : false, "width": "10%" }
         ]
     });
@@ -1619,7 +1643,8 @@ $(document).ready(function(){
 
                     // Auto-fill the form
                     $('#frm_add_address #province_id').val(Id);
-                    $('#frm_add_address #id').val(response.id);
+                    $('#frm_add_address #address_id').val(response.id);
+                    
                     $('#frm_add_address #label1').val(response.label1);
                     $('#frm_add_address #label2').val(response.label2);
                     $('#frm_add_address #label3').val(response.label3);
@@ -1630,10 +1655,19 @@ $(document).ready(function(){
                     $('#frm_add_address #label8').val(response.label8);
                     $('#frm_add_address #label9').val(response.label9);
                     $('#frm_add_address #label10').val(response.label10);
-                    $('#frm_add_address #title1').val(response.title1);
-                    $('#frm_add_address #timing1').val(response.timing1);
-                    $('#frm_add_address #title2').val(response.title2);
-                    $('#frm_add_address #timing2').val(response.timing2);
+
+                    $('#frm_add_address #heading1').val(response.heading1);
+                    $('#frm_add_address #heading2').val(response.heading2);
+                    $('#frm_add_address #heading3').val(response.heading3);
+                    $('#frm_add_address #heading4').val(response.heading4);
+
+					$('#frm_add_address #detail1').val(response.detail1);
+                    $('#frm_add_address #detail2').val(response.detail2);
+                    $('#frm_add_address #detail3').val(response.detail3);
+                    $('#frm_add_address #detail4').val(response.detail4);
+
+                    $('#frm_add_address #link').val(response.link);
+                    
                     $('#frm_add_address input[name="status"][value="'+ response.status +'"]').prop('checked', true);
 
                     // Show the modal
