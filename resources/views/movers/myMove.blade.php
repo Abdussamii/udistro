@@ -532,7 +532,7 @@ function calculateRoute(from, to) {
               <input type="radio" name="update_address_method1" value="1">
               Yes</label>
              <label>
-              <input type="radio" name="update_address_method1" value="2">
+              <input type="radio" name="update_address_method1" value="0">
               No</label>
             </div>
             <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
@@ -543,7 +543,7 @@ function calculateRoute(from, to) {
               <input type="radio" name="update_address_method2" value="1">
               Yes</label>
              <label>
-              <input type="radio" name="update_address_method2" value="2">
+              <input type="radio" name="update_address_method2" value="0">
               No</label>
             </div>
             <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
@@ -554,7 +554,7 @@ function calculateRoute(from, to) {
               <input type="radio" name="update_address_method3" value="1">
               Yes</label>
              <label>
-              <input type="radio" name="update_address_method3" value="2">
+              <input type="radio" name="update_address_method3" value="0">
               No</label>
             </div>
             <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
@@ -582,78 +582,8 @@ function calculateRoute(from, to) {
        </div>
       </div>
      </div>
+
      <div class="model-WrapCont" id="update_address_step3" style="display: none;"> 
-      <!-- HSA 1 -->
-      <h2>Update Address On Phone</h2>
-      <div class="col-sm-3 col-md-3 col-lg-3">
-       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-       <div>&nbsp;</div>
-      </div>
-      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
-       <div class="block-head">
-        <h3>Update address with Canada Revenue Agency</h3>
-       </div>
-       <div class="row">
-        <div class="col-sm-12">
-         <p>If you don't have full access to your CRA account, here is what you do:</p>
-        </div>
-        <div class="col-md-12">
-         <div class="block-head">
-          <h3>Have these handy, before this call </h3>
-         </div>
-         <div class="up_add_li">
-			<ul>
-				<?php
-					echo ( $provincialHealthAgencyDetails->label1 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label1 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label2 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label2 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label3 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label3 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label4 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label4 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label5 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label5 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label6 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label6 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label7 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label7 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label8 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label8 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label9 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label9 . '</li>' : '';
-					echo ( $provincialHealthAgencyDetails->label10 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label10 . '</li>' : '';
-				?>
-			</ul>
-         </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
-         <div class="block-head">
-          <h3> Opening Hours </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li>
-           	<span>{{ ( $provincialHealthAgencyDetails->heading1 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
-           	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail1 != '' ) ? $provincialHealthAgencyDetails->detail1 : '' }}</li>
-           <li>
-           	<span>{{ ( $provincialHealthAgencyDetails->heading2 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
-           	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail2 != '' ) ? $provincialHealthAgencyDetails->detail2 : '' }}</li>
-          </ul>
-         </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
-         <div class="block-head">
-          <h3> Phone Numbers </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li>
-           	<span>{{ ( $provincialHealthAgencyDetails->heading3 != '' ) ? $provincialHealthAgencyDetails->heading3 : '' }}</span>
-           	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail3 != '' ) ? $provincialHealthAgencyDetails->detail3 : '' }}
-           </li>
-           <li>
-           	<span>{{ ( $provincialHealthAgencyDetails->heading4 != '' ) ? $provincialHealthAgencyDetails->heading4 : '' }}</span>
-           	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail4 != '' ) ? $provincialHealthAgencyDetails->detail4 : '' }}
-           </li>
-          </ul>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="model-WrapCont" id="update_address_step4" style="display: none;"> 
       <!-- HSA 1 -->
       <h2>Update Address</h2>
       <div class="col-sm-3 col-md-3 col-lg-3">
@@ -662,7 +592,7 @@ function calculateRoute(from, to) {
       </div>
       <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
        <div class="block-head">
-        <h3>Update address with Provincial Health Agency</h3>
+        <h3>Update address with Canada Revenue Agency</h3>
        </div>
        <div class="row">
         <div class="col-sm-12">
@@ -707,27 +637,117 @@ function calculateRoute(from, to) {
        </div>
       </div>
      </div>
+
+     <div class="model-WrapCont" id="update_address_step4" style="display: none;"> 
+      <!-- HSA 1 -->
+      <h2>Update Address</h2>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
+       <div>&nbsp;</div>
+      </div>
+      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
+       <div class="block-head">
+        <h3>Change of address with provintial agencies</h3>
+       </div>
+       <div>
+			<form name="frm_update_address_provintial" id="frm_update_address_provintial">
+				<label class="mailfarw_radio-lb">
+				<input type="radio" name="update_address_provintial_method" value="1">
+				Do it here online</label>
+				<label class="mailfarw_radio-lb">
+				<input type="radio" name="update_address_provintial_method" value="2">
+				Call Canada Post</label>
+				<label id="update_address_provintial_method-error" class="error" for="update_address_provintial_method"></label>
+			</form>
+       </div>
+      </div>
+     </div>
+
      <div class="model-WrapCont" id="update_address_step5" style="display: none;"> 
       <!-- HSA 1 -->
       <h2>Update Address</h2>
       <div class="col-sm-3 col-md-3 col-lg-3">
-       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
+       <div><img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
        <div>&nbsp;</div>
       </div>
       <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
-       <div class="block-head">
-        <h3>Update address with Driver's License Agency</h3>
-       </div>
-       <div class="row">
-        <div class="col-sm-12">
-         <p>You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410</p>
-        </div>
-        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-       </div>
+      	<div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('http://www.manitobaaddresschange.ca/', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
       </div>
      </div>
+
      <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
-      <!-- HSA 1 -->
+       <!-- HSA 1 -->
+       <h2>Update Address On Phone</h2>
+       <div class="col-sm-3 col-md-3 col-lg-3">
+        <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
+        <div>&nbsp;</div>
+       </div>
+       <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
+        <div class="block-head">
+         <h3>Update address with Provincial Health Agency</h3>
+        </div>
+        <div class="row">
+         <div class="col-sm-12">
+          <p>If you don't have full access to your CRA account, here is what you do:</p>
+         </div>
+         <div class="col-md-12">
+          <div class="block-head">
+           <h3>Have these handy, before this call </h3>
+          </div>
+          <div class="up_add_li">
+ 			<ul>
+ 				<?php
+ 					echo ( $provincialHealthAgencyDetails->label1 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label1 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label2 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label2 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label3 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label3 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label4 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label4 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label5 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label5 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label6 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label6 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label7 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label7 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label8 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label8 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label9 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label9 . '</li>' : '';
+ 					echo ( $provincialHealthAgencyDetails->label10 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label10 . '</li>' : '';
+ 				?>
+ 			</ul>
+          </div>
+         </div>
+         <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="block-head">
+           <h3> Opening Hours </h3>
+          </div>
+          <div class="up_add_li">
+           <ul>
+            <li>
+            	<span>{{ ( $provincialHealthAgencyDetails->heading1 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
+            	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail1 != '' ) ? $provincialHealthAgencyDetails->detail1 : '' }}</li>
+            <li>
+            	<span>{{ ( $provincialHealthAgencyDetails->heading2 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
+            	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail2 != '' ) ? $provincialHealthAgencyDetails->detail2 : '' }}</li>
+           </ul>
+          </div>
+         </div>
+         <div class="col-sm-12 col-md-6 col-lg-6">
+          <div class="block-head">
+           <h3> Phone Numbers </h3>
+          </div>
+          <div class="up_add_li">
+           <ul>
+            <li>
+            	<span>{{ ( $provincialHealthAgencyDetails->heading3 != '' ) ? $provincialHealthAgencyDetails->heading3 : '' }}</span>
+            	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail3 != '' ) ? $provincialHealthAgencyDetails->detail3 : '' }}
+            </li>
+            <li>
+            	<span>{{ ( $provincialHealthAgencyDetails->heading4 != '' ) ? $provincialHealthAgencyDetails->heading4 : '' }}</span>
+            	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail4 != '' ) ? $provincialHealthAgencyDetails->detail4 : '' }}
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+
+     <!-- <div class="model-WrapCont" id="update_address_step5" style="display: none;"> 
       <h2>Update Address</h2>
       <div class="col-sm-3 col-md-3 col-lg-3">
        <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
@@ -744,9 +764,26 @@ function calculateRoute(from, to) {
         <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
        </div>
       </div>
-     </div>
-     <div class="model-WrapCont" id="update_address_step7" style="display: none;"> 
-      <!-- HSA 1 -->
+     </div> -->
+     <!-- <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
+      <h2>Update Address</h2>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
+       <div>&nbsp;</div>
+      </div>
+      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
+       <div class="block-head">
+        <h3>Update address with Driver's License Agency</h3>
+       </div>
+       <div class="row">
+        <div class="col-sm-12">
+         <p>You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410</p>
+        </div>
+        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+       </div>
+      </div>
+     </div> -->
+     <!-- <div class="model-WrapCont" id="update_address_step7" style="display: none;"> 
       <h2>Update Address</h2>
       <div class="col-sm-3 col-md-3 col-lg-3">
        <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
@@ -763,67 +800,7 @@ function calculateRoute(from, to) {
         <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
        </div>
       </div>
-     </div>
-    </div>
-    
-    <!-- <div class="col-sm-9 col-md-9 col-lg-9" id="update_address_step8" style="width: 500px; height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="update_address" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="update_address" id="0">No</button>
-		      			</div>
-		      		</div> -->
-    
-    <div class="row">
-     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
-      <div class="helpful-box">
-       <label>Is this helpful to you?</label>
-       <a href="javascript:void(0);" id="1" data-activity="update_address" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="update_address" class="activity_feedback">No</a> </div>
      </div> -->
-     
-     <!--<div class="col-sm-9 col-md-9 col-lg-9">
-     <form name="frm_update_address" id="frm_update_address">
-      <div class="col-md-4">
-       <p> Do you have full access to your CRA? </p>
-       <div>
-        <label>
-         <input type="radio" name="update_address_method1" value="1">
-         Yes</label>
-        <label>
-         <input type="radio" name="update_address_method1" value="2">
-         No</label>
-       </div>
-       <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
-      </div>
-      <div class="col-md-4">
-       <p> Do you have dependent children?</p>
-       <div>
-        <label>
-         <input type="radio" name="update_address_method2" value="1">
-         Yes</label>
-        <label>
-         <input type="radio" name="update_address_method2" value="2">
-         No</label>
-       </div>
-       <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
-      </div>
-      <div class="col-md-4">
-       <p>Do you receive child benefit?</p>
-       <div>
-        <label>
-         <input type="radio" name="update_address_method3" value="1">
-         Yes</label>
-        <label>
-         <input type="radio" name="update_address_method3" value="2">
-         No</label>
-       </div>
-       <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
-      </div>
-     </form>
-    </div>--> 
     </div>
     <div class="row">
      <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
