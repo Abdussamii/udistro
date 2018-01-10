@@ -534,18 +534,6 @@ Route::group(['prefix' => 'company'], function() {
 	Route::get('/forgotpassword', 'CompanyController@getForgotPassword');
 	
 	Route::post('/forgotpassword', 'CompanyController@forgotPassword');
-
-	// To return the Quotation Request page
-	Route::get('/quotationrequest', 'CompanyController@QuotationRequest');
-
-	// To save the Quotation Request
-	Route::post('/savequotationrequest', 'CompanyController@saveQuotationRequest');
-
-	// To show the Quotation Request list in datatable
-	Route::get('/fetchquotationrequest', 'CompanyController@fetchQuotationRequest');
-
-	// To get the details for the selected Quotation Request
-	Route::get('/getquotationrequest', 'CompanyController@getQuotationRequest');
 	
 });
 
@@ -583,6 +571,27 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To get the details for the selected Home Service Request
 	Route::get('/gethomeservicerequest', 'CompanyController@getHomeServiceRequest');
+
+	// To get the details for the selected Cable Service Request
+	Route::get('/getcableservicerequest', 'CompanyController@getCableServiceRequest');
+
+	// To get the details for the selected Tech Concierge Request
+	Route::get('/gettechconciergerequest', 'CompanyController@getTechConciergeRequest');
+
+	// To get the details for the selected Moving Companies Request
+	Route::get('/getmovingcompaniesrequest', 'CompanyController@getMovingCompaniesRequest');
+
+	// To return the Quotation Request page
+	Route::get('/quotationrequest', 'CompanyController@QuotationRequest');
+
+	// To save the Quotation Request
+	Route::post('/savequotationrequest', 'CompanyController@saveQuotationRequest');
+
+	// To show the Quotation Request list in datatable
+	Route::get('/fetchquotationrequest', 'CompanyController@fetchQuotationRequest');
+
+	// To get the details for the selected Quotation Request
+	Route::get('/getquotationrequest', 'CompanyController@getQuotationRequest');
 	
 });
 

@@ -35,6 +35,8 @@ use App\CategoryService;
 use App\PaymentPlanSubscription;
 use App\ForgotPassword;
 use App\HomeCleaningServiceRequest;
+use App\DigitalServiceRequest;
+use App\TechConciergeServiceRequest;
 
 use Validator;
 use Helper;
@@ -863,6 +865,7 @@ class CompanyController extends Controller
 
         if($companyArray->company_category_id == 5) 
         {
+            $class = "edit_tech_concierge_service";
             // Get the records after applying the datatable filters
             $movingItemArray = DB::table('tech_concierge_service_requests')
                                 ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
@@ -880,6 +883,7 @@ class CompanyController extends Controller
         } 
         elseif ($companyArray->company_category_id == 4) 
         {
+            $class = "edit_cable_internet_service";
             // Get the records after applying the datatable filters
             $movingItemArray = DB::table('digital_service_requests')
                                 ->leftJoin('agent_clients', 'digital_service_requests.agent_client_id', '=', 'agent_clients.id')
@@ -897,6 +901,7 @@ class CompanyController extends Controller
         } 
         elseif ($companyArray->company_category_id == 3) 
         {
+            $class = "edit_moving_item_service";
             // Get the records after applying the datatable filters
             $movingItemArray = DB::table('moving_item_service_requests')
                                 ->leftJoin('agent_clients', 'moving_item_service_requests.agent_client_id', '=', 'agent_clients.id')
@@ -958,6 +963,7 @@ class CompanyController extends Controller
         return response()->json($response);
     }
 
+
     /**
      * Function to get the Home Service Request
      * @param void
@@ -990,8 +996,6 @@ class CompanyController extends Controller
                 $response['home_cleaning_bathroom_count']               = $homeServiceArray->home_cleaning_bathroom_count;
                 $response['cleaning_behind_refrigerator_and_stove']     = $homeServiceArray->cleaning_behind_refrigerator_and_stove;
                 $response['baseboard_to_be_washed   ']                  = $homeServiceArray->baseboard_to_be_washed ;
-                //$response['moving_from_house_type']  = $homeServiceArray->moving_from_house_type;
-                //$response['moving_from_house_type']  = $homeServiceArray->moving_from_house_type;
                 $response['primary_no']                                 = $homeServiceArray->primary_no;
                 $response['secondary_no']                               = $homeServiceArray->secondary_no;
                 $response['additional_information']                     = $homeServiceArray->additional_information;
@@ -999,6 +1003,122 @@ class CompanyController extends Controller
         }
         return response()->json($response);
     }
+
+
+    /**
+     * Function to get the Cable Service Request
+     * @param void
+     * @return array
+     */
+    public function getCableServiceRequest()
+    {
+        $cableInternetId = Input::get('cableInternetId');
+
+        $response = array();
+        if( $cableInternetId != '' )
+        {
+            $cableInternetArray = DigitalServiceRequest::find($cableInternetId);
+
+            if( count( $cableInternetArray ) > 0 )
+            {
+                $response['moving_from_house_type']                     = $cableInternetArray->moving_from_house_type;
+                $response['moving_from_floor']                          = $cableInternetArray->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $cableInternetArray->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = $cableInternetArray->moving_from_property_type;
+                $response['moving_to_house_type']                       = $cableInternetArray->moving_to_house_type;
+                $response['moving_to_floor']                            = $cableInternetArray->moving_to_floor;
+                $response['moving_to_bedroom_count']                    = $cableInternetArray->moving_to_bedroom_count;
+                $response['moving_to_property_type']                    = $cableInternetArray->moving_to_property_type;
+                $response['have_cable_internet_already']                = $cableInternetArray->have_cable_internet_already;
+                $response['employment_status']                          = $cableInternetArray->employment_status;
+                $response['want_to_receive_electronic_bill']            = $cableInternetArray->want_to_receive_electronic_bill;
+                $response['want_to_contract_plan']                      = $cableInternetArray->want_to_contract_plan;
+                $response['want_to_setup_preauthorise_payment']         = $cableInternetArray->want_to_setup_preauthorise_payment;
+                $response['callback_option']                            = $cableInternetArray->callback_option;
+                $response['callback_time']                              = $cableInternetArray->callback_time;
+                $response['primary_no']                                 = $cableInternetArray->primary_no;
+                $response['secondary_no']                               = $cableInternetArray->secondary_no;
+                $response['additional_information']                     = $cableInternetArray->additional_information;
+            }
+        }
+        return response()->json($response);
+    }
+
+
+    /**
+     * Function to get the Tech Concierge Request
+     * @param void
+     * @return array
+     */
+    public function getTechConciergeRequest()
+    {
+        $techConciergeId = Input::get('techConciergeId');
+
+        $response = array();
+        if( $techConciergeId != '' )
+        {
+            $techConciergeArray = TechConciergeServiceRequest::find($techConciergeId);
+
+            if( count( $techConciergeArray ) > 0 )
+            {
+                $response['moving_from_house_type']                     = $techConciergeArray->moving_from_house_type;
+                $response['moving_from_floor']                          = $techConciergeArray->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $techConciergeArray->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = $techConciergeArray->moving_from_property_type;
+                $response['primary_no']                                 = $techConciergeArray->primary_no;
+                $response['secondary_no']                               = $techConciergeArray->secondary_no;
+                $response['availability_date1']                         = $techConciergeArray->availability_date1;
+                $response['availability_time_from1']                    = $techConciergeArray->availability_time_from1;
+                $response['availability_time_upto1']                    = $techConciergeArray->availability_time_upto1;
+                $response['availability_date2']                         = $techConciergeArray->availability_date2;
+                $response['availability_time_from2']                    = $techConciergeArray->availability_time_from2;
+                $response['availability_time_upto2']                    = $techConciergeArray->availability_time_upto2;
+                $response['availability_date3']                         = $techConciergeArray->availability_date3;
+                $response['availability_time_from3']                    = $techConciergeArray->availability_time_from3;
+                $response['availability_time_upto3']                    = $techConciergeArray->availability_time_upto3;
+                $response['additional_information']                     = $techConciergeArray->additional_information;
+            }
+        }
+        return response()->json($response);
+    }
+
+
+    /**
+     * Function to get the Moving Companies Request
+     * @param void
+     * @return array
+     */
+    public function getMovingCompaniesRequest()
+    {
+        $movingCompaniesId = Input::get('movingCompaniesId');
+
+        $response = array();
+        if( $movingCompaniesId != '' )
+        {
+            $movingCompaniesArray = MovingItemServiceRequest::find($movingCompaniesId);
+
+            if( count( $movingCompaniesArray ) > 0 )
+            {
+                $response['moving_from_house_type']                     = $movingCompaniesArray->moving_from_house_type;
+                $response['moving_from_floor']                          = $movingCompaniesArray->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $movingCompaniesArray->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = $movingCompaniesArray->moving_from_property_type;
+                $response['moving_to_house_type']                       = $movingCompaniesArray->moving_to_house_type;
+                $response['moving_to_floor']                            = $movingCompaniesArray->moving_to_floor;
+                $response['moving_to_bedroom_count']                    = $movingCompaniesArray->moving_to_bedroom_count;
+                $response['moving_to_property_type']                    = $movingCompaniesArray->moving_to_property_type;
+                $response['transportation_vehicle_type']                = $movingCompaniesArray->transportation_vehicle_type;
+                $response['callback_option']                            = $movingCompaniesArray->callback_option;
+                $response['callback_time']                              = $movingCompaniesArray->callback_time;
+                $response['primary_no']                                 = $movingCompaniesArray->primary_no;
+                $response['secondary_no']                               = $movingCompaniesArray->secondary_no;
+                $response['moving_date']                                = $movingCompaniesArray->moving_date;
+                $response['additional_information']                     = $movingCompaniesArray->additional_information;
+            }
+        }
+        return response()->json($response);
+    }
+
 
     /**
      * Function to update company social details
