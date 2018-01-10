@@ -34,6 +34,7 @@ use App\PaymentPlanType;
 use App\CategoryService;
 use App\PaymentPlanSubscription;
 use App\ForgotPassword;
+use App\HomeCleaningServiceRequest;
 
 use Validator;
 use Helper;
@@ -910,9 +911,10 @@ class CompanyController extends Controller
                         ->leftJoin('agent_clients', 'moving_item_service_requests.agent_client_id', '=', 'agent_clients.id')
                         ->where('moving_item_service_requests.mover_company_id', '=', $companyArray->id)
                         ->count();
-        } 
-        elseif ($companyArray->company_category_id == 2) 
+        }
+        elseif ($companyArray->company_category_id == 2)
         {
+            $class = "edit_home_cleaning_service";
             // Get the records after applying the datatable filters
             $movingItemArray = DB::table('home_cleaning_service_requests')
                                 ->leftJoin('agent_clients', 'home_cleaning_service_requests.agent_client_id', '=', 'agent_clients.id')
@@ -947,12 +949,54 @@ class CompanyController extends Controller
                     1 => ucfirst( strtolower( $movingItem->fname." ".$movingItem->lname ) ),
                     2 => ucfirst( strtolower( $movingItem->email ) ),
                     3 => $movingItem->contact_number,
-                    4 => '<a href="javascript:void(0);" id="'. $movingItem->id .'" class="edit_moving_item"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    4 => '<a href="javascript:void(0);" id="'. $movingItem->id .'" class="'.$class.'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
         }
 
+        return response()->json($response);
+    }
+
+    /**
+     * Function to get the Home Service Request
+     * @param void
+     * @return array
+     */
+    public function getHomeServiceRequest()
+    {
+        $homeServiceId = Input::get('homeServiceId');
+
+        $response = array();
+        if( $homeServiceId != '' )
+        {
+            $homeServiceArray = HomeCleaningServiceRequest::find($homeServiceId);
+
+            if( count( $homeServiceArray ) > 0 )
+            {
+                $response['moving_from_house_type']                     = $homeServiceArray->moving_from_house_type;
+                $response['moving_from_floor']                          = $homeServiceArray->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $homeServiceArray->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = $homeServiceArray->moving_from_property_type;
+                $response['moving_to_house_type']                       = $homeServiceArray->moving_to_house_type;
+                $response['moving_to_floor']                            = $homeServiceArray->moving_to_floor;
+                $response['moving_to_bedroom_count']                    = $homeServiceArray->moving_to_bedroom_count;
+                $response['moving_to_property_type']                    = $homeServiceArray->moving_to_property_type;
+                $response['home_condition']                             = $homeServiceArray->home_condition;
+                $response['home_cleaning_level']                        = $homeServiceArray->home_cleaning_level;
+                $response['home_cleaning_area']                         = $homeServiceArray->home_cleaning_area;
+                $response['home_cleaning_people_count']                 = $homeServiceArray->home_cleaning_people_count;
+                $response['home_cleaning_pet_count']                    = $homeServiceArray->home_cleaning_pet_count;
+                $response['home_cleaning_bathroom_count']               = $homeServiceArray->home_cleaning_bathroom_count;
+                $response['cleaning_behind_refrigerator_and_stove']     = $homeServiceArray->cleaning_behind_refrigerator_and_stove;
+                $response['baseboard_to_be_washed   ']                  = $homeServiceArray->baseboard_to_be_washed ;
+                //$response['moving_from_house_type']  = $homeServiceArray->moving_from_house_type;
+                //$response['moving_from_house_type']  = $homeServiceArray->moving_from_house_type;
+                $response['primary_no']                                 = $homeServiceArray->primary_no;
+                $response['secondary_no']                               = $homeServiceArray->secondary_no;
+                $response['additional_information']                     = $homeServiceArray->additional_information;
+            }
+        }
         return response()->json($response);
     }
 

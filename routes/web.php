@@ -580,6 +580,9 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To update Password
 	Route::post('/changepassword', 'CompanyController@changePassword');
+
+	// To get the details for the selected Home Service Request
+	Route::get('/gethomeservicerequest', 'CompanyController@getHomeServiceRequest');
 	
 });
 

@@ -284,6 +284,60 @@ $(document).ready(function(){
     	}
     });
 
+    $(document).on('click', '.edit_home_cleaning_service', function()
+    {
+        var homeServiceId = $(this).attr('id');
+
+        if( homeServiceId != '' )
+        {
+            // Get the details of selected payment plan
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/company/gethomeservicerequest',
+                method: 'get',
+                data: {
+                    homeServiceId: homeServiceId
+                },
+                success: function(response){
+                    //$('#modal_payment_plan').find('.modal-title').html('Edit Category');
+
+                    // Auto-fill the form
+                    $('#frm_home_cleaning_services #moving_from_house_type').text(response.moving_from_house_type);
+                    $('#frm_home_cleaning_services #moving_from_floor').text(response.moving_from_floor);
+                    $('#frm_home_cleaning_services #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
+                    $('#frm_home_cleaning_services #moving_from_property_type').text(response.moving_from_property_type);
+                    $('#frm_home_cleaning_services #moving_to_house_type').text(response.moving_to_house_type);
+                    $('#frm_home_cleaning_services #moving_to_floor').text(response.moving_to_floor);
+                    $('#frm_home_cleaning_services #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
+                    $('#frm_home_cleaning_services #moving_to_property_type').text(response.moving_to_property_type);
+                    $('#frm_home_cleaning_services #home_condition').text(response.home_condition);
+                    $('#frm_home_cleaning_services #home_cleaning_level').text(response.home_cleaning_level);
+                    $('#frm_home_cleaning_services #home_cleaning_area').text(response.home_cleaning_area);
+                    $('#frm_home_cleaning_services #home_cleaning_people_count').text(response.home_cleaning_people_count);
+                    $('#frm_home_cleaning_services #home_cleaning_pet_count').text(response.home_cleaning_pet_count);
+                    $('#frm_home_cleaning_services #home_cleaning_bathroom_count').text(response.home_cleaning_bathroom_count);
+                    
+
+                    $('#frm_home_cleaning_services #primary_no').text(response.primary_no);
+                    $('#frm_home_cleaning_services #secondary_no').text(response.secondary_no);
+                    $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
+
+                    /*
+                    $('#frm_home_cleaning_services #moving_from_house_type').val(response.moving_from_house_type);
+                    $('#frm_home_cleaning_services #moving_from_house_type').val(response.moving_from_house_type);
+                    $('#frm_home_cleaning_services #moving_from_house_type').val(response.moving_from_house_type);
+                    */
+
+                    // Show the modal
+                    $('#modal_home_cleaning_service_request').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing category id');
+        }
+    });
+
     // Company Address Details form validation
     $('#frm_company_address_details').submit(function(e){
         e.preventDefault();
