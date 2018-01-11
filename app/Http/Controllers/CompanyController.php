@@ -37,6 +37,7 @@ use App\ForgotPassword;
 use App\HomeCleaningServiceRequest;
 use App\DigitalServiceRequest;
 use App\TechConciergeServiceRequest;
+use App\MovingItemServiceRequest;
 
 use Validator;
 use Helper;
@@ -1015,6 +1016,15 @@ class CompanyController extends Controller
         $cableInternetId = Input::get('cableInternetId');
 
         $response = array();
+        $response['employment_status']                  = "Unemployeed";
+        $response['callback_time']                      = "AnyTime";
+        $response['callback_option']                    = "No";
+        $response['want_to_setup_preauthorise_payment'] = "No";
+        $response['want_to_contract_plan']              = "No";
+        $response['want_to_receive_electronic_bill']    = "No";
+        $response['employment_status']                  = "No";
+        $response['have_cable_internet_already']        = "No";
+
         if( $cableInternetId != '' )
         {
             $cableInternetArray = DigitalServiceRequest::find($cableInternetId);
@@ -1029,16 +1039,32 @@ class CompanyController extends Controller
                 $response['moving_to_floor']                            = $cableInternetArray->moving_to_floor;
                 $response['moving_to_bedroom_count']                    = $cableInternetArray->moving_to_bedroom_count;
                 $response['moving_to_property_type']                    = $cableInternetArray->moving_to_property_type;
-                $response['have_cable_internet_already']                = $cableInternetArray->have_cable_internet_already;
-                $response['employment_status']                          = $cableInternetArray->employment_status;
-                $response['want_to_receive_electronic_bill']            = $cableInternetArray->want_to_receive_electronic_bill;
-                $response['want_to_contract_plan']                      = $cableInternetArray->want_to_contract_plan;
-                $response['want_to_setup_preauthorise_payment']         = $cableInternetArray->want_to_setup_preauthorise_payment;
-                $response['callback_option']                            = $cableInternetArray->callback_option;
-                $response['callback_time']                              = $cableInternetArray->callback_time;
                 $response['primary_no']                                 = $cableInternetArray->primary_no;
                 $response['secondary_no']                               = $cableInternetArray->secondary_no;
                 $response['additional_information']                     = $cableInternetArray->additional_information;
+
+                if($cableInternetArray->have_cable_internet_already == 1)
+                    $response['have_cable_internet_already']            = "Yes";
+                if($cableInternetArray->employment_status == 1)
+                    $response['employment_status']                      = "Yes";
+                if($cableInternetArray->want_to_receive_electronic_bill == 1)
+                    $response['want_to_receive_electronic_bill']        = "Yes";
+                if($cableInternetArray->want_to_contract_plan == 1)
+                    $response['want_to_contract_plan']                  = "Yes";
+                if($cableInternetArray->want_to_setup_preauthorise_payment == 1)
+                    $response['want_to_setup_preauthorise_payment']     = "Yes";
+                if($cableInternetArray->callback_option == 1)
+                    $response['callback_option']                        = "Yes";
+                if($cableInternetArray->callback_time == 1)
+                    $response['callback_time']                          = "DayTime";
+                elseif ($cableInternetArray->callback_time == 2)
+                    $response['callback_time']                          = "Evening";
+                if($cableInternetArray->employment_status == 1)
+                    $response['employment_status']                      = "Employeed";
+                elseif ($cableInternetArray->employment_status == 2)
+                    $response['employment_status']                      = "Self Employeed";
+
+                
             }
         }
         return response()->json($response);

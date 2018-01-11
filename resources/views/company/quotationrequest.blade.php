@@ -263,7 +263,7 @@
 			    <div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Home Cleaning Services Request</h4>
+						<h4 class="modal-title">Cable & Internet Services Request</h4>
 					</div>
 
 					<div class="modal-body">
@@ -326,22 +326,10 @@
 							                <div id="cable_internet_services_collapse3" class="panel-collapse collapse" aria-expanded="false">
 							                    <div class="panel-body">
 							                        <div class="form-group">
-							                        	<label>Do you have cable &amp; internet service before</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_service_before" value="1">Yes</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_service_before" value="0">No</label>
+							                        	<label>Do you have cable &amp; internet service before:&nbsp;&nbsp;</label><span id="have_cable_internet_already"></span>
 							                        </div>
 							                        <div class="form-group">
-							                        	<label>Employment Status</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_employment_status" class="cable_internet_employment_status" value="1">Employeed</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_employment_status" class="cable_internet_employment_status" value="2">Self Employeed</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_employment_status" class="cable_internet_employment_status" value="0">Unemployeed</label>
-							                        </div>
-							                        <div class="form-group" id="cable_internet_billing_responsible_container" style="display: none;">
-							                        	<label>Are there other adult responsible for billing at this address</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_billing_responsible" value="1">Yes</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_billing_responsible" value="0">No</label>
-
-							                        	<label id="cable_internet_billing_responsible-error" class="error" for="cable_internet_billing_responsible"></label>
+							                        	<label>Employment Status:&nbsp;&nbsp;</label><span id="employment_status"></span>
 							                        </div>
 
 							                        <div class="form-group">
@@ -356,35 +344,25 @@
 							                        </div>
 
 							                        <div class="form-group">
-							                        	<label>Would you like to receive your bill electronically</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_bill_electronically" value="1">Yes</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_bill_electronically" value="0">No</label>
+							                        	<label>Would you like to receive your bill electronically:&nbsp;&nbsp;</label><span id="want_to_receive_electronic_bill"></span>
 							                        </div>
 							                        <div class="form-group">
-							                        	<label>Would you consider any contract plan</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_contract_plan" value="1">Yes</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_contract_plan" value="0">No</label>
+							                        	<label>Would you consider any contract plan:&nbsp;&nbsp;</label><span id="want_to_contract_plan"></span>
 							                        </div>
 							                        <div class="form-group">
-							                        	<label>Would you want to setup pre-authorise payment</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_preauthorise_payment" value="1">Yes</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_preauthorise_payment" value="0">No</label>
+							                        	<label>Would you want to setup pre-authorise payment:&nbsp;&nbsp;</label><span id="want_to_setup_preauthorise_payment"></span>
 							                        </div>
 							                        <div class="form-group">
-							                        	<label>Callback option</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_callback_option" value="1">Yes</label>
-							                        	<label class="form-group"><input type="radio" name="cable_internet_callback_option" value="0">No</label>
+							                        	<label>Callback option:&nbsp;&nbsp;</label><span id="callback_option"></span>
 							                        </div>
 							                        <div class="form-group">
-							                        	<label>Call back time?</label>
-							                        	<label> <input type="radio" name="cable_internet_callback_time" value="0">Anytime</label>
-							                        	<label> <input type="radio" name="cable_internet_callback_time" value="1">Daytime</label>
-							                        	<label> <input type="radio" name="cable_internet_callback_time" value="2">Evening</label>
+							                        	<label></label>
+							                        	<label>Call back time:&nbsp;&nbsp;</label><span id="callback_time"></span>
 							                        </div>
 							                        <div class="form-group">
-							                        	<label>Call me on?</label>
-							                        	<input type="text" name="cable_internet_callback_primary_no" class="form-control" placeholder="Primary Number">
-							                        	<input type="text" name="cable_internet_callback_secondary_no" class="form-control" placeholder="Additional Number">
+							                        	<label>Call me on?</label><br />
+							                        	<label>Primary Number:&nbsp;&nbsp;</label><span id="primary_no"></span><br />
+							                        	<label>Additional Number:&nbsp;&nbsp;</label><span id="secondary_no"></span>
 							                        </div>
 							                    </div>
 							                </div>
@@ -407,7 +385,7 @@
 								                        							                        </div>
 							                    </div>
 							                    <div class="panel-body">
-							                        <textarea class="form-control" name="cable_internet_additional_info" id="cable_internet_additional_info"></textarea>
+							                    	<label>additional Information:&nbsp;&nbsp;</label><span id="additional_information"></span>
 							                    </div>
 							                </div>
 							            </div>
@@ -432,7 +410,7 @@
 			    <div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Home Cleaning Services Request</h4>
+						<h4 class="modal-title">Tech Concierge Services Request</h4>
 					</div>
 
 					<div class="modal-body">
@@ -686,7 +664,7 @@
 			    <div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Home Cleaning Services Request</h4>
+						<h4 class="modal-title">Moving Companies Services Request</h4>
 					</div>
 
 					<div class="modal-body">
