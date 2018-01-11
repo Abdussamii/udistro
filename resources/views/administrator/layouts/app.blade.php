@@ -416,7 +416,7 @@
                             <a href="{{ url('administrator/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
                         </li>
                         <li>
-                            <a href="{{ url('administrator/address') }}"><i class="fa fa-dashboard fa-fw"></i> Provisional Health Data</a>
+                            <a href="{{ url('administrator/provincialagencies') }}"><i class="fa fa-dashboard fa-fw"></i> Provincial Agencies</a>
                         </li>
                         <li>
                             <a href="{{ url('administrator/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>

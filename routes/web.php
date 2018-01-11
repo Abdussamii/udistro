@@ -332,17 +332,17 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 
 	/* ---------- Company related functionality ---------- */
 
-	// To return the address page
-	Route::get('/address', 'AdminController@address');
+	// To return the provincial agency details page
+	Route::get('/provincialagencies', 'AdminController@provincialAgencies');
 
-	// To save the address details
-	Route::post('/saveaddress', 'AdminController@saveAddress');
+	// To save the provincial agency details
+	Route::post('/saveprovincialagency', 'AdminController@saveProvincialAgency');
 
-	// To show the address list in datatable
-	Route::get('/fetchaddress', 'AdminController@fetchAddress');
+	// To show the provincial agency list in datatable
+	Route::get('/fetchprovincialagencies', 'AdminController@fetchProvincialAgencies');
 
-	// To get the details for the selected address
-	Route::get('/getaddressdetails', 'AdminController@getAddressDetails');
+	// To get the details for the selected provincial agency
+	Route::get('/getprovincialagencydetails', 'AdminController@getProvincialAgencyDetails');
 
 	// Change Password
 	Route::get('/changepassword', 'AdminController@getchangepassword');

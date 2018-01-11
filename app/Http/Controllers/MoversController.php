@@ -54,7 +54,7 @@ use App\HomeCleaningServiceRequest;
 use App\HomeCleaningAdditionalServiceRequest;
 use App\HomeCleaningOtherPlaceServiceRequest;
 use App\HomeCleaningSteamingServiceRequest;
-use App\ProvincialHealthAgencyDetail;
+use App\ProvincialAgencyDetail;
 
 use Helper;
 use Session;
@@ -269,11 +269,11 @@ class MoversController extends Controller
     	$homeCleaningAdditionalService = HomeCleaningAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();
 
     	// Get the provincial health agency data
-    	$provincialHealthAgencyDetails = ProvincialHealthAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id])->first();
+    	$provincialAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id])->get();
 
-    	/*echo '<pre>';
-    	print_r( $provincialHealthAgencyDetails->toArray() );
-    	exit;*/
+    	// echo '<pre>';
+    	// print_r( $provincialAgencyDetails->toArray() );
+    	// exit;
 
     	return view('movers/myMove', 
     		[
@@ -319,7 +319,7 @@ class MoversController extends Controller
     			'homeCleaningAdditionalService' => $homeCleaningAdditionalService,
 
     			// Provincial health agency data for the province in which mover is moving to
-    			'provincialHealthAgencyDetails' => $provincialHealthAgencyDetails
+    			'provincialAgencyDetails' 	=> $provincialAgencyDetails
     		]
     	);
     }

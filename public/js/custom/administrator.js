@@ -1087,57 +1087,63 @@ $(document).ready(function(){
     });
 
     // Add / Edit activity form validation
-    $('#frm_add_address').submit(function(e){
+    $('#frm_add_provincial_agency').submit(function(e){
         e.preventDefault();
     });
-    $('#frm_add_address').validate({
+    $('#frm_add_provincial_agency').validate({
         rules: {
-        	label1: {	required: true	}
+        	label1: { required: true },
+        	agency_name: { required: true },
+        	province: { required: true }
         },
         messages: {
-        	label1: {	required: 'Please enter atleast one label'	}
+        	label1: {	required: 'Please enter atleast one label'	},
+        	agency_name: { required: 'Please enter agency name' },
+        	province: { required: 'Please select province' }
         }
     });
 
     // Save the activity data
     $('#btn_add_address').click(function(){
-        if( $('#frm_add_address').valid() )
+        if( $('#frm_add_provincial_agency').valid() )
         {
 
         	let formData = new FormData();
 
-        	formData.append('addressId', $('#frm_add_address #address_id').val());
-        	formData.append('provinceId', $('#frm_add_address #province_id').val());
+        	formData.append('agencyId', $('#frm_add_provincial_agency #agency_id').val());
+			
+			formData.append('agencyName', $('#frm_add_provincial_agency #agency_name').val());
+			formData.append('province', $('#frm_add_provincial_agency #province').val());
 
-			formData.append('logo', $('#frm_add_address #logo').prop('files')[0]);            
+			formData.append('logo', $('#frm_add_provincial_agency #logo').prop('files')[0]);
 
-            formData.append('label1', $('#frm_add_address #label1').val());
-            formData.append('label2', $('#frm_add_address #label2').val());
-            formData.append('label3', $('#frm_add_address #label3').val());
-            formData.append('label4', $('#frm_add_address #label4').val());
-            formData.append('label5', $('#frm_add_address #label5').val());
-            formData.append('label6', $('#frm_add_address #label6').val());
-            formData.append('label7', $('#frm_add_address #label7').val());
-            formData.append('label8', $('#frm_add_address #label8').val());
-            formData.append('label9', $('#frm_add_address #label9').val());
-            formData.append('label10', $('#frm_add_address #label10').val());
+            formData.append('label1', $('#frm_add_provincial_agency #label1').val());
+            formData.append('label2', $('#frm_add_provincial_agency #label2').val());
+            formData.append('label3', $('#frm_add_provincial_agency #label3').val());
+            formData.append('label4', $('#frm_add_provincial_agency #label4').val());
+            formData.append('label5', $('#frm_add_provincial_agency #label5').val());
+            formData.append('label6', $('#frm_add_provincial_agency #label6').val());
+            formData.append('label7', $('#frm_add_provincial_agency #label7').val());
+            formData.append('label8', $('#frm_add_provincial_agency #label8').val());
+            formData.append('label9', $('#frm_add_provincial_agency #label9').val());
+            formData.append('label10', $('#frm_add_provincial_agency #label10').val());
 
-            formData.append('heading1', $('#frm_add_address #heading1').val());
-            formData.append('heading2', $('#frm_add_address #heading2').val());
-            formData.append('heading3', $('#frm_add_address #heading3').val());
-            formData.append('heading4', $('#frm_add_address #heading4').val());
+            formData.append('heading1', $('#frm_add_provincial_agency #heading1').val());
+            formData.append('heading2', $('#frm_add_provincial_agency #heading2').val());
+            formData.append('heading3', $('#frm_add_provincial_agency #heading3').val());
+            formData.append('heading4', $('#frm_add_provincial_agency #heading4').val());
 
-            formData.append('detail1', $('#frm_add_address #detail1').val());
-            formData.append('detail2', $('#frm_add_address #detail2').val());
-            formData.append('detail3', $('#frm_add_address #detail3').val());
-            formData.append('detail4', $('#frm_add_address #detail4').val());
+            formData.append('detail1', $('#frm_add_provincial_agency #detail1').val());
+            formData.append('detail2', $('#frm_add_provincial_agency #detail2').val());
+            formData.append('detail3', $('#frm_add_provincial_agency #detail3').val());
+            formData.append('detail4', $('#frm_add_provincial_agency #detail4').val());
 
-            formData.append('link', $('#frm_add_address #link').val());
+            formData.append('link', $('#frm_add_provincial_agency #link').val());
 
             formData.append('status', $("input[name='province_address_status']:checked").val());
 
             $.ajax({
-                url: $('meta[name="route"]').attr('content') + '/administrator/saveaddress',
+                url: $('meta[name="route"]').attr('content') + '/administrator/saveprovincialagency',
                 method: 'post',
                 data: formData,
                 contentType : false,
@@ -1151,12 +1157,12 @@ $(document).ready(function(){
                         alertify.success( response.errMsg );
                         
                         // Refresh the form and close the modal
-                        $('#frm_add_address')[0].reset();
+                        $('#frm_add_provincial_agency')[0].reset();
 
-                        $('#modal_add_address').modal('hide');
+                        $('#modal_add_provincial_agency').modal('hide');
 
                         // Refresh the datatable
-                        $('#datatable_address').DataTable().ajax.reload();
+                        $('#datatable_provincial_agencies').DataTable().ajax.reload();
                     }
                     else
                     {
@@ -1419,14 +1425,22 @@ $(document).ready(function(){
         ]
     });
 
-    $('#datatable_address').dataTable({
+    // To open the add provincial agency modal
+    $('#btn_add_provincial_agency').click(function(){
+
+    	$('#modal_add_provincial_agency').find('.modal-title').html('ADD PROVINCIAL AGENCY');
+    	$('#modal_add_provincial_agency').modal('show');
+
+    });
+
+    $('#datatable_provincial_agencies').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchaddress',
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchprovincialagencies',
         
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 2, 3] }
+            { "className": "dt-center", "targets": [0, 3] }
         ],
         
         "aoColumns": [
@@ -1628,52 +1642,54 @@ $(document).ready(function(){
     });
 
     // To update the address details
-    $(document).on('click', '.edit_address', function()
-    {
-        var Id = $(this).attr('id');
+    $(document).on('click', '.edit_provincial_agency_details', function() {
+        
+        var agencyId = $(this).attr('id');
 
-        if( Id != '' )
+        if( agencyId != '' )
         {
             // Get the province details for the selected province
             $.ajax({
-                url: $('meta[name="route"]').attr('content') + '/administrator/getaddressdetails',
+                url: $('meta[name="route"]').attr('content') + '/administrator/getprovincialagencydetails',
                 method: 'get',
                 data: {
-                    Id: Id
+                    agencyId: agencyId
                 },
                 success: function(response){
 
                     // Auto-fill the form
-                    $('#frm_add_address #province_id').val(Id);
-                    $('#frm_add_address #address_id').val(response.id);
+                    $('#frm_add_provincial_agency #agency_id').val(agencyId);
+                    $('#frm_add_provincial_agency #agency_name').val(response.agency_name);
+                    $('#frm_add_provincial_agency #province').val(response.province_id);
                     
-                    $('#frm_add_address #label1').val(response.label1);
-                    $('#frm_add_address #label2').val(response.label2);
-                    $('#frm_add_address #label3').val(response.label3);
-                    $('#frm_add_address #label4').val(response.label4);
-                    $('#frm_add_address #label5').val(response.label5);
-                    $('#frm_add_address #label6').val(response.label6);
-                    $('#frm_add_address #label7').val(response.label7);
-                    $('#frm_add_address #label8').val(response.label8);
-                    $('#frm_add_address #label9').val(response.label9);
-                    $('#frm_add_address #label10').val(response.label10);
+                    $('#frm_add_provincial_agency #label1').val(response.label1);
+                    $('#frm_add_provincial_agency #label2').val(response.label2);
+                    $('#frm_add_provincial_agency #label3').val(response.label3);
+                    $('#frm_add_provincial_agency #label4').val(response.label4);
+                    $('#frm_add_provincial_agency #label5').val(response.label5);
+                    $('#frm_add_provincial_agency #label6').val(response.label6);
+                    $('#frm_add_provincial_agency #label7').val(response.label7);
+                    $('#frm_add_provincial_agency #label8').val(response.label8);
+                    $('#frm_add_provincial_agency #label9').val(response.label9);
+                    $('#frm_add_provincial_agency #label10').val(response.label10);
 
-                    $('#frm_add_address #heading1').val(response.heading1);
-                    $('#frm_add_address #heading2').val(response.heading2);
-                    $('#frm_add_address #heading3').val(response.heading3);
-                    $('#frm_add_address #heading4').val(response.heading4);
+                    $('#frm_add_provincial_agency #heading1').val(response.heading1);
+                    $('#frm_add_provincial_agency #heading2').val(response.heading2);
+                    $('#frm_add_provincial_agency #heading3').val(response.heading3);
+                    $('#frm_add_provincial_agency #heading4').val(response.heading4);
 
-					$('#frm_add_address #detail1').val(response.detail1);
-                    $('#frm_add_address #detail2').val(response.detail2);
-                    $('#frm_add_address #detail3').val(response.detail3);
-                    $('#frm_add_address #detail4').val(response.detail4);
+					$('#frm_add_provincial_agency #detail1').val(response.detail1);
+                    $('#frm_add_provincial_agency #detail2').val(response.detail2);
+                    $('#frm_add_provincial_agency #detail3').val(response.detail3);
+                    $('#frm_add_provincial_agency #detail4').val(response.detail4);
 
-                    $('#frm_add_address #link').val(response.link);
+                    $('#frm_add_provincial_agency #link').val(response.link);
                     
-                    $('#frm_add_address input[name="status"][value="'+ response.status +'"]').prop('checked', true);
+                    $('#frm_add_provincial_agency input[name="status"][value="'+ response.status +'"]').prop('checked', true);
 
                     // Show the modal
-                    $('#modal_add_address').modal('show');
+                    $('#modal_add_provincial_agency').find('.modal-title').html('EDIT PROVINCIAL AGENCY');
+                    $('#modal_add_provincial_agency').modal('show');
                 }
             });
         }

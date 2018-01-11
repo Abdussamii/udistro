@@ -35,7 +35,7 @@ use App\EmailTemplate;
 use App\ClientActivityList;
 use App\MovingItemCategory;
 use App\MovingItemDetail;
-use App\ProvincialHealthAgencyDetail;
+use App\ProvincialAgencyDetail;
 use App\ForgotPassword;
 use App\EmailTemplateCategory;
 
@@ -1260,13 +1260,16 @@ class AdminController extends Controller
     }
 
     /**
-     * Function to return the address page
+     * Function to return the provincial agency details page
      * @param void
      * @return \Illuminate\Http\Response
      */
-    public function address()
+    public function provincialAgencies()
     {
-        return view('administrator/address');
+    	// Get the province lists
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+        return view('administrator/provincialAgencies', ['provinces' => $provinces]);
     }
 
     /**
@@ -1591,16 +1594,18 @@ class AdminController extends Controller
 
 
     /**
-     * Function to save the address details
+     * Function to save the provincial agency details
      * @param void
      * @return Array
      */
-    public function saveAddress()
+    public function saveProvincialAgency()
     {
-    	$logo 		= Input::file('logo');
+    	$agencyId 	= Input::get('agencyId');
 
-    	$addressId 	= Input::get('addressId');
-    	$provinceId = Input::get('provinceId');
+    	$agencyName = Input::get('agencyName');
+    	$provinceId = Input::get('province');
+
+    	$logo 		= Input::file('logo');
 
     	$label1 	= Input::get('label1');
     	$label2 	= Input::get('label2');
@@ -1630,13 +1635,13 @@ class AdminController extends Controller
         $userId = Auth::user()->id;
 
         $response = array();
-        if( $addressId == '' )	// Add the provincial data
+        if( $agencyId == '' )	// Add the provincial agency data
         {
         	$fileName = null;
         	if( isset( $logo ) && count( $logo ) > 0 )
         	{
         		// Image destination folder
-				$destinationPath = storage_path() . '/uploads/provincial_health_agency';
+				$destinationPath = storage_path() . '/uploads/provincial_agencies';
 
 				if( $logo->isValid() )  // If the file is valid or not
 				{
@@ -1651,9 +1656,10 @@ class AdminController extends Controller
 
 				        if( $logo->move( $destinationPath, $fileName ) )
 				        {
-	        	        	$provincialDetail = new ProvincialHealthAgencyDetail;
+	        	        	$provincialDetail = new ProvincialAgencyDetail;
 
-	        	    		$provincialDetail->province_id 	= $provinceId;
+    						$provincialDetail->province_id 	= $provinceId;
+	        	    		$provincialDetail->agency_name 	= $agencyName;
 
 	        	    		$provincialDetail->label1 		= $label1;
 	        	    		$provincialDetail->label2 		= $label2;
@@ -1707,9 +1713,10 @@ class AdminController extends Controller
         	}
         	else
         	{
-	        	$provincialDetail = new ProvincialHealthAgencyDetail;
+	        	$provincialDetail = new ProvincialAgencyDetail;
 
 	    		$provincialDetail->province_id 	= $provinceId;
+				$provincialDetail->agency_name 	= $agencyName;
 
 	    		$provincialDetail->label1 		= $label1;
 	    		$provincialDetail->label2 		= $label2;
@@ -1749,13 +1756,13 @@ class AdminController extends Controller
 				}
         	}
         }
-        else 					// Update the provincial data
+        else 					// Update the provincial agency data
         {
         	$fileName = null;
         	if( isset( $logo ) && count( $logo ) > 0 )
         	{
         		// Image destination folder
-				$destinationPath = storage_path() . '/uploads/provincial_health_agency';
+				$destinationPath = storage_path() . '/uploads/provincial_agencies';
 
 				if( $logo->isValid() )  // If the file is valid or not
 				{
@@ -1770,9 +1777,10 @@ class AdminController extends Controller
 
 				        if( $logo->move( $destinationPath, $fileName ) )
 				        {
-	        	        	$provincialDetail = ProvincialHealthAgencyDetail::find($addressId);
+	        	        	$provincialDetail = ProvincialAgencyDetail::find($agencyId);
 
 	        	    		$provincialDetail->province_id 	= $provinceId;
+							$provincialDetail->agency_name 	= $agencyName;
 
 	        	    		$provincialDetail->label1 		= $label1;
 	        	    		$provincialDetail->label2 		= $label2;
@@ -1798,17 +1806,17 @@ class AdminController extends Controller
 	        	    		$provincialDetail->link 		= $link;
 	        	    		$provincialDetail->logo 		= $fileName;
 	        	    		$provincialDetail->status 		= $status;
-	        	    		$provincialDetail->created_by 	= $userId;
+	        	    		$provincialDetail->updated_by 	= $userId;
 
 	        	    		if( $provincialDetail->save() )
 	        				{
 	        					$response['errCode']    = 0;
-	        		        	$response['errMsg']     = 'Address added successfully';
+	        		        	$response['errMsg']     = 'Provincial agency details updated successfully';
 	        				}
 	        				else
 	        				{
 	        					$response['errCode']    = 2;
-	        		        	$response['errMsg']     = 'Some error in adding the address';
+	        		        	$response['errMsg']     = 'Some error in updating the provincial agency details';
 	        				}
 				        }
 				        else
@@ -1826,9 +1834,10 @@ class AdminController extends Controller
         	}
         	else
         	{
-	        	$provincialDetail = ProvincialHealthAgencyDetail::find($addressId);
+	        	$provincialDetail = ProvincialAgencyDetail::find($agencyId);
 
 	    		$provincialDetail->province_id 	= $provinceId;
+				$provincialDetail->agency_name 	= $agencyName;
 
 	    		$provincialDetail->label1 		= $label1;
 	    		$provincialDetail->label2 		= $label2;
@@ -1854,17 +1863,17 @@ class AdminController extends Controller
 	    		$provincialDetail->link 		= $link;
 	    		$provincialDetail->logo 		= $fileName;
 	    		$provincialDetail->status 		= $status;
-	    		$provincialDetail->created_by 	= $userId;
+	    		$provincialDetail->updated_by 	= $userId;
 
 	    		if( $provincialDetail->save() )
 				{
 					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Address added successfully';
+		        	$response['errMsg']     = 'Provincial agency details updated successfully';
 				}
 				else
 				{
 					$response['errCode']    = 2;
-		        	$response['errMsg']     = 'Some error in adding the address';
+		        	$response['errMsg']     = 'Some error in adding the provincial agency details';
 				}
         	}
         }
@@ -2465,11 +2474,11 @@ class AdminController extends Controller
     }
 
     /**
-     * Function to show the address list in datatable
+     * Function to show the provincial agency list in datatable
      * @param void
      * @return array
      */
-    public function fetchAddress()
+    public function fetchProvincialAgencies()
     {
         $start      = Input::get('iDisplayStart');      // Offset
         $length     = Input::get('iDisplayLength');     // Limit
@@ -2479,24 +2488,20 @@ class AdminController extends Controller
 
         // Datatable column number to table column name mapping
         $arr = array(
-            0 => 'id',
-            1 => 'name'
+            0 => 'id'
         );
 
         // Map the sorting column index to the column name
         $sortBy = $arr[$col];
 
-        // Get the records after applying the datatable filters
-        $provincialArray = DB::table('provinces')
-                        // ->leftJoin('provincial_health_agency_details', 'provincial_health_agency_details.province_id', '=', 'provinces.id')
-                        ->orderBy($sortBy, $sortType)
-                        ->limit($length)
-                        ->offset($start)
-                        //->select('provincial_health_agency_details.id', 'provinces.name', 'provinces.id as pid')
-                        ->select('id', 'name')
-                        ->get();
+        $provincialAgencies = ProvincialAgencyDetail::where('agency_name','like', '%'.$sSearch.'%')
+        					->orderBy($sortBy, $sortType)
+	                        ->limit($length)
+	                        ->offset($start)
+	                        ->select('id', 'province_id', 'agency_name')
+                        	->get();
 
-        $iTotal = Province::count();
+        $iTotal = ProvincialAgencyDetail::count();
 
         // Create the datatable response array
         $response = array(
@@ -2506,15 +2511,17 @@ class AdminController extends Controller
         );
 
         $k=0;
-        if ( count( $provincialArray ) > 0 )
+        if ( count( $provincialAgencies ) > 0 )
         {
-            foreach ($provincialArray as $provincial)
+            foreach ($provincialAgencies as $provincialAgency)
             {
+            	$province = Province::find($provincialAgency->province_id);
+
                 $response['aaData'][$k] = array(
-                    0 => $provincial->id,
-                    1 => ucfirst(strtolower($provincial->name)),
-                    2 => '',
-                    3 => '<a href="javascript:void(0);" id="'. $provincial->id .'" class="edit_address"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    0 => $provincialAgency->id,
+                    1 => ucfirst(strtolower($provincialAgency->agency_name)),
+                    2 => ucwords( strtolower( $province->name ) ),
+                    3 => '<a href="javascript:void(0);" id="'. $provincialAgency->id .'" class="edit_provincial_agency_details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2734,101 +2741,17 @@ class AdminController extends Controller
     }
 
     /**
-     * Function to get the details for the selected address
+     * Function to get the details for the selected provincial agency
      * @param void
      * @return array
      */
-    public function getAddressDetails()
+    public function getProvincialAgencyDetails()
     {
-        $Id = Input::get('Id');
+        $agencyId = Input::get('agencyId');
 
-        $response = array();
+        $provincialAgencyDetails = ProvincialAgencyDetail::find($agencyId);
 
-        $provincialArray = ProvincialHealthAgencyDetail::where('province_id', '=', $Id)->first();
-
-        /*
-        Array
-        (
-            [id] => 1
-            [province_id] => 1
-            [label1] => label1
-            [label2] => label2
-            [label3] => label3
-            [label4] => label4
-            [label5] => label5
-            [label6] => label6
-            [label7] => label7
-            [label8] => label8
-            [label9] => label9
-            [label10] => label10
-            [heading1] => Heading 1
-            [detail1] => Detail 1
-            [heading2] => Heading 2
-            [detail2] => Detail 2
-            [heading3] => Heading 3
-            [detail3] => Detail 3
-            [heading4] => Heading 4
-            [detail4] => Detail 4
-            [link] => https://www.google.co.in/?gfe_rd=cr&dcr=0&ei=JGxUWvP_N5SAqQWvj6b4Cg
-            [logo] => UFGlSPO1q8OwNm8KTe4NFmVK7sY3ulty9A3e3PMK.jpg
-            [status] => 1
-            [created_at] => 2018-01-09 14:01:23
-            [created_by] => 1
-            [updated_at] => 2018-01-09 14:01:23
-            [updated_by] => 
-        )
-        */
-
-        if($provincialArray) 
-        {
-            $response['id']        	= $provincialArray->id;
-            $response['label1']    	= $provincialArray->label1;
-            $response['label2']    	= $provincialArray->label2;
-            $response['label3']    	= $provincialArray->label3;
-            $response['label4']    	= $provincialArray->label4;
-            $response['label5']    	= $provincialArray->label5;
-            $response['label6']    	= $provincialArray->label6;
-            $response['label7']    	= $provincialArray->label7;
-            $response['label8']    	= $provincialArray->label8;
-            $response['label9']    	= $provincialArray->label9;
-            $response['label10']   	= $provincialArray->label10;
-            $response['heading1']   = $provincialArray->heading1;
-            $response['heading2']   = $provincialArray->heading2;
-            $response['heading3']   = $provincialArray->heading3;
-            $response['heading4']   = $provincialArray->heading4;
-            $response['detail1']   	= $provincialArray->detail1;
-            $response['detail2']   	= $provincialArray->detail2;
-            $response['detail3']   	= $provincialArray->detail3;
-            $response['detail4']   	= $provincialArray->detail4;
-            $response['link']   	= $provincialArray->link;
-            $response['status']    = $provincialArray->status;
-        }
-        else
-        {
-            $response['id']        	= '';
-            $response['label1']    	= '';
-            $response['label2']    	= '';
-            $response['label3']    	= '';
-            $response['label4']    	= '';
-            $response['label5']    	= '';
-            $response['label6']    	= '';
-            $response['label7']    	= '';
-            $response['label8']    	= '';
-            $response['label9']    	= '';
-            $response['label10']   	= '';
-            $response['heading1']   = '';
-            $response['heading2']   = '';
-            $response['heading3']   = '';
-            $response['heading4']   = '';
-            $response['detail1']   	= '';
-            $response['detail2']   	= '';
-            $response['detail3']   	= '';
-            $response['detail4']   	= '';
-            $response['link']   	= '';
-            $response['status']    = '';
-        }
-
-        return response()->json($response);
+        return response()->json($provincialAgencyDetails);
     }
 
     /**

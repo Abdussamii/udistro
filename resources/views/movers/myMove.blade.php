@@ -678,73 +678,137 @@ function calculateRoute(from, to) {
      <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
        <!-- HSA 1 -->
        <h2>Update Address On Phone</h2>
-       <div class="col-sm-3 col-md-3 col-lg-3">
-        <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-        <div>&nbsp;</div>
-       </div>
-       <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
-        <div class="block-head">
-         <h3>Update address with Provincial Health Agency</h3>
-        </div>
-        <div class="row">
-         <div class="col-sm-12">
-          <p>If you don't have full access to your CRA account, here is what you do:</p>
-         </div>
-         <div class="col-md-12">
-          <div class="block-head">
-           <h3>Have these handy, before this call </h3>
-          </div>
-          <div class="up_add_li">
- 			<ul>
- 				<?php
- 					echo ( $provincialHealthAgencyDetails->label1 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label1 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label2 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label2 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label3 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label3 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label4 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label4 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label5 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label5 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label6 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label6 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label7 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label7 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label8 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label8 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label9 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label9 . '</li>' : '';
- 					echo ( $provincialHealthAgencyDetails->label10 != '' ) ? '<li><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialHealthAgencyDetails->label10 . '</li>' : '';
- 				?>
- 			</ul>
-          </div>
-         </div>
-         <div class="col-sm-12 col-md-6 col-lg-6">
-          <div class="block-head">
-           <h3> Opening Hours </h3>
-          </div>
-          <div class="up_add_li">
-           <ul>
-            <li>
-            	<span>{{ ( $provincialHealthAgencyDetails->heading1 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
-            	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail1 != '' ) ? $provincialHealthAgencyDetails->detail1 : '' }}</li>
-            <li>
-            	<span>{{ ( $provincialHealthAgencyDetails->heading2 != '' ) ? $provincialHealthAgencyDetails->heading1 : '' }}</span>
-            	<i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail2 != '' ) ? $provincialHealthAgencyDetails->detail2 : '' }}</li>
-           </ul>
-          </div>
-         </div>
-         <div class="col-sm-12 col-md-6 col-lg-6">
-          <div class="block-head">
-           <h3> Phone Numbers </h3>
-          </div>
-          <div class="up_add_li">
-           <ul>
-            <li>
-            	<span>{{ ( $provincialHealthAgencyDetails->heading3 != '' ) ? $provincialHealthAgencyDetails->heading3 : '' }}</span>
-            	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail3 != '' ) ? $provincialHealthAgencyDetails->detail3 : '' }}
-            </li>
-            <li>
-            	<span>{{ ( $provincialHealthAgencyDetails->heading4 != '' ) ? $provincialHealthAgencyDetails->heading4 : '' }}</span>
-            	<i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialHealthAgencyDetails->detail4 != '' ) ? $provincialHealthAgencyDetails->detail4 : '' }}
-            </li>
-           </ul>
-          </div>
-         </div>
-        </div>
-       </div>
+	       <!-- <div class="col-sm-3 col-md-3 col-lg-3">
+	        <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
+	        <div>&nbsp;</div>
+	       </div> -->
+
+			<div class="col-sm-12 col-md-12 col-lg-12 box-H-250">
+			  <div class="panel-group" id="provincial_health_agencies">
+			  	<?php
+			  	$step = 1;
+			  	if( isset( $provincialAgencyDetails ) && count( $provincialAgencyDetails ) > 0 )
+			  	{
+			  		foreach ($provincialAgencyDetails as $provincialAgency)
+			  		{
+			  		?>
+			  			<div class="panel panel-default">
+			  			  <div class="panel-heading">
+			  			    <h4 class="panel-title">
+			  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
+			  			    </h4>
+			  			  </div>
+			  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? 'in' : '' }}">
+			  			    <div class="panel-body">
+			  			    	
+
+			  			    	<div class="row">
+			  			    		<div>
+			  			    			<div class="col-lg-6 col-md-6 col-sm-6">
+			  			    				<?php
+			  			    				if( $provincialAgency->logo != '' )
+			  			    				{
+			  			    					echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
+			  			    				}
+			  			    				else
+			  			    				{
+			  			    					echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
+			  			    				}
+			  			    				?>
+			  			    			</div>
+			  			    			<div class="col-lg-6 col-md-6 col-sm-6">
+			  			    				<?php
+			  			    				if( $provincialAgency->link != '' )
+			  			    				{
+			  			    				?>
+			  			    					<div class="get_started_LB">
+			  			    						<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
+			  			    					</div>
+			  			    				<?php
+			  			    				}
+			  			    				?>
+			  			    			</div>
+			  			    		</div>
+			  			    		<div class="col-md-12">
+			  			    			<div class="block-head">
+			  			    				<h3>Have these handy, before this call </h3>
+			  			    			</div>
+			  			    			<div class="up_add_li">
+			  			    				<ul>
+			  			    				<?php
+			  			    				echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
+			  			    				?>
+			  			    				</ul>
+			  			    			</div>
+			  			    		</div>
+			  			    		<div class="col-sm-12 col-md-6 col-lg-6">
+			  			    			<div class="block-head">
+			  			    				<h3> Opening Hours </h3>
+			  			    			</div>
+			  			    			<div class="up_add_li">
+			  			    				<ul>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
+			  			    					</li>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
+			  			    					</li>
+			  			    				</ul>
+			  			    			</div>
+			  			    		</div>
+			  			    		<div class="col-sm-12 col-md-6 col-lg-6">
+			  			    			<div class="block-head">
+			  			    				<h3> Phone Numbers </h3>
+			  			    			</div>
+			  			    			<div class="up_add_li">
+			  			    				<ul>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
+			  			    					</li>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
+			  			    					</li>
+			  			    				</ul>
+			  			    			</div>
+			  			    		</div>
+			  			    	</div>
+
+
+			  				</div>
+			  			  </div>
+			  			</div>
+			  		<?php
+			  			$step++;
+			  		}
+			  	}
+			  	?>
+
+			    <!-- <div class="panel panel-default">
+			      <div class="panel-heading">
+			        <h4 class="panel-title">
+			          <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse2">Collapsible Group 2</a>
+			        </h4>
+			      </div>
+			      <div id="collapse2" class="panel-collapse collapse">
+			        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+			        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+			      </div>
+			    </div> -->
+
+			  </div> 
+			</div>
+
+
       </div>
 
      <!-- <div class="model-WrapCont" id="update_address_step5" style="display: none;"> 

@@ -1,50 +1,82 @@
 @extends('administrator.layouts.app')
-@section('title', 'Udistro | Address Details')
+@section('title', 'Udistro | Provincial Agencies')
 
 @section('content')
 	<div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Address Details</h1>
+            <h1 class="page-header">Provincial Agencies</h1>
+
+            <button id="btn_add_provincial_agency" class="btn btn-info">Add Provincial Agency</button>
         </div>
     </div>
     <div class="row">
 
       	<div class="col-lg-12 top-buffer">
-	      	<!-- Table to show all the activity -->
-			<table id="datatable_address" class="table table-striped">
+
+	      	<!-- Table to show all the provincial agencies -->
+			<table id="datatable_provincial_agencies" class="table table-striped">
 				<thead>
 					<tr>
 						<td>#</td>
-						<td>Province Name</td>
-						<td></td>
+						<td>Agency Name</td>
+						<td>Province</td>
 						<td>Action</td>
 					</tr>
 				</thead>
 			</table>
 		</div>
 
-		<!-- Modal to add / edit activity -->
-		<div id="modal_add_address" class="modal fade" role="dialog">
-		  	<div class="modal-dialog">
+		<!-- Modal to add / edit provincial agency -->
+		<div id="modal_add_provincial_agency" class="modal fade" role="dialog">
+		  	<div class="modal-dialog modal-lg">
 			    <!-- Modal content-->
 			    <div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Edit Address Details</h4>
+						<h4 class="modal-title">Add Provincial Agency</h4>
 					</div>
 
 					<div class="modal-body">
 						<div class="row">
-							<form name="frm_add_address" id="frm_add_address" autocomplete="off">
+							<form name="frm_add_provincial_agency" id="frm_add_provincial_agency" autocomplete="off">
+								<div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="agency_name">Label 1</label>
+											<label id="agency_name-error" class="error" for="agency_name"></label>
+											<input type="text" name="agency_name" id="agency_name" class="form-control" placeholder="Agency Name" value="">
+											<input type="hidden" name="agency_id" id="agency_id">
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="province">Province</label>
+											<label id="province-error" class="error" for="province"></label>
+											<select name="province" id="province" class="form-control">
+												<option value="">Select</option>
+												<?php
+												if( isset( $provinces ) && count( $provinces ) > 0 )
+												{
+													foreach( $provinces as $province )
+													{
+													?>
+														<option value="{{ $province->id }}">{{ $province->name }}</option>
+													<?php
+													}
+												}
+												?>
+											</select>
+										</div>
+									</div>
+								</div>
 								<!-- Headings -->
 								<div class="text-center"><h4>Labels</h4></div>
 								<div>
 									<div class="col-lg-6">
 										<div class="form-group">
 											<label for="label1">Label 1</label>
+											<label id="label1-error" class="error" for="label1"></label>
 											<input type="text" name="label1" id="label1" class="form-control" placeholder="Enter Label 1">
-											<input type="hidden" name="province_id" id="province_id">
-											<input type="hidden" name="address_id" id="address_id">
 										</div>
 									</div>
 									<div class="col-lg-6">
@@ -193,7 +225,6 @@
 											<div class="radio">
 											 	<label><input type="radio" name="province_address_status" value="0">Inactive</label>
 											</div>
-											<label id="province_address_status-error" class="error" for="province_address_status"></label>
 										</div>
 									</div>
 									<div class="col-lg-12">
