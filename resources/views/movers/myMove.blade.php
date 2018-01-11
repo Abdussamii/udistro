@@ -1181,7 +1181,7 @@ function calculateRoute(from, to) {
 						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse2">Moving From</a>
 						                    </h4>
 						                </div>
-						                <div id="home_cleaning_services_collapse2" class="panel-collapse collapse">
+						                <div id="home_cleaning_services_collapse2" class="panel-collapse collapse in">
 						                    <div class="panel-body">
 						                        <div class="form-group">
 						                        	<label>Type</label>
@@ -1423,31 +1423,6 @@ function calculateRoute(from, to) {
 						        </div>
 						    </form>
       					</div>
-		      		</div>
-
-		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="home_cleaning_services_step2" style="height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="home_cleaning_services" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="home_cleaning_services" id="0">No</button>
-		      			</div>
-		      		</div> -->
-		      	</div>
-		      	
-		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<!-- <div>
-		      				<label>Is this helpful to you?</label>
-		      				<a href="javascript:void(0);" id="1" data-activity="home_cleaning_services" class="activity_feedback">Yes</a>
-		      				<a href="javascript:void(0);" id="0" data-activity="home_cleaning_services" class="activity_feedback">No</a>
-		      			</div> -->
-		      		</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<a href="javascript:void(0);" id="btn_prev_home_cleaning_services" class="btn">Previous</a>
-		      			<a href="javascript:void(0);" id="btn_next_home_cleaning_services" class="btn">Next</a>
 		      		</div>
 		      	</div>
 	      	</div>
@@ -1762,32 +1737,6 @@ function calculateRoute(from, to) {
 						    </form>
       					</div>
 		      		</div>
-
-		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="moving_companies_step2" style="height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="moving_companies" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="moving_companies" id="0">No</button>
-		      			</div>
-		      		</div> -->
-
-		      	</div>
-		      	
-		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<!-- <div>
-		      				<label>Is this helpful to you?</label>
-		      				<a href="javascript:void(0);" id="1" data-activity="moving_companies" class="activity_feedback">Yes</a>
-		      				<a href="javascript:void(0);" id="0" data-activity="moving_companies" class="activity_feedback">No</a>
-		      			</div> -->
-		      		</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<a href="javascript:void(0);" id="btn_prev_home_moving_companies" class="btn">Previous</a>
-		      			<a href="javascript:void(0);" id="btn_next_home_moving_companies" class="btn">Next</a>
-		      		</div>
 		      	</div>
 	      	</div>
 	      	<!-- <div class="modal-footer">
@@ -1813,44 +1762,6 @@ function calculateRoute(from, to) {
       						<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
       					</div>
       					<div>&nbsp;</div>
-		      		</div>
-
-		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step1">
-		      			<div>
-      						<p>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</p>
-      					</div>
-      					<div>
-      						<strong>Indicate type of Tech</strong>
-      					</div>
-      					<div>
-      						<br>
-      						<div>
-      							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="1" checked=""> Install Appliances
-      							</label>
-      						</div>
-      						<br>
-      						<!-- <p>
-      							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="2"> Install windows and blinds
-      							</label>
-      						</p>
-      						<p>
-      							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="3" disabled> Lawn care
-      							</label>
-      						</p>
-      						<p>
-      							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="4" disabled> Snow removal
-      							</label>
-      						</p>
-      						<p>
-      							<label>
-      								<input type="radio" class="" name="type_of_tech_concierge" value="5" disabled> Plumbing and painting
-      							</label>
-      						</p> -->
-      					</div>
 		      		</div>
 
 		      		<div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step2">
@@ -2097,32 +2008,6 @@ function calculateRoute(from, to) {
 						        </div>
 						    </form>
       					</div>
-		      		</div>
-
-		      		<!-- <div class="col-sm-9 col-md-9 col-lg-9" id="tech_concierge_step2" style="height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="tech_concierge" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="tech_concierge" id="0">No</button>
-		      			</div>
-		      		</div> -->
-
-		      	</div>
-		      	
-		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<!-- <div>
-		      				<label>Is this helpful to you?</label>
-		      				<a href="javascript:void(0);" id="1" data-activity="tech_concierge" class="activity_feedback">Yes</a>
-		      				<a href="javascript:void(0);" id="0" data-activity="tech_concierge" class="activity_feedback">No</a>
-		      			</div> -->
-		      		</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<a href="javascript:void(0);" id="btn_prev_tech_concierge" class="btn">Previous</a>
-		      			<a href="javascript:void(0);" id="btn_next_tech_concierge" class="btn">Next</a>
 		      		</div>
 		      	</div>
 	      	</div>
@@ -2372,20 +2257,6 @@ function calculateRoute(from, to) {
 		      			</div>
 		      		</div> -->
 
-		      	</div>
-		      	
-		      	<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<!-- <div>
-		      				<label>Is this helpful to you?</label>
-		      				<a href="javascript:void(0);" id="1" data-activity="cable_internet_services" class="activity_feedback">Yes</a>
-		      				<a href="javascript:void(0);" id="0" data-activity="cable_internet_services" class="activity_feedback">No</a>
-		      			</div> -->
-		      		</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<a href="javascript:void(0);" id="btn_prev_cable_internet_services" class="btn">Previous</a>
-		      			<a href="javascript:void(0);" id="btn_next_cable_internet_services" class="btn">Next</a>
-		      		</div>
 		      	</div>
 	      	</div>
 	      	<!-- <div class="modal-footer">

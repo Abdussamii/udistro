@@ -317,6 +317,13 @@ $(document).ready(function(){
                     $('#frm_home_cleaning_services #home_cleaning_bathroom_count').text(response.home_cleaning_bathroom_count);
                     $('#frm_home_cleaning_services #primary_no').text(response.primary_no);
                     $('#frm_home_cleaning_services #secondary_no').text(response.secondary_no);
+
+                    $('#frm_home_cleaning_services #cleaning_behind_refrigerator_and_stove').text( (response.cleaning_behind_refrigerator_and_stove) ? 'Yes' : 'No' );
+                    $('#frm_home_cleaning_services #baseboard_to_be_washed').text( (response.baseboard_to_be_washed) ? 'Yes' : 'No' );
+
+                    $('#frm_home_cleaning_services #calling_numbers').text( ( response.primary_no != '' ) ? response.primary_no : '' );
+                    $('#frm_home_cleaning_services #calling_numbers').append( ( response.primary_no != '' && response.secondary_no != '' ) ? ', ' + response.secondary_no : response.secondary_no );
+
                     $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
 
                     // Show the modal

@@ -998,14 +998,10 @@ $(document).ready(function(){
 		}
 
 		$('#tech_concierge_modal').modal({ backdrop: 'static', keyboard: false });
-
-		// Reset the popup
-		$('#tech_concierge_step1').show();
-		$('#tech_concierge_step2').hide();
 	});
 
 	// Previuos button functionality
-	$('#btn_prev_tech_concierge').click(function(){
+	/*$('#btn_prev_tech_concierge').click(function(){
 		if( StepTechConcierge == 2 )
 		{
 			$('#tech_concierge_step1').show();
@@ -1013,10 +1009,10 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge--;
-	});
+	});*/
 
 	// Next button functionality
-	$('#btn_next_tech_concierge').click(function(){
+	/*$('#btn_next_tech_concierge').click(function(){
 		if( StepTechConcierge == 1 )
 		{
 			$('#tech_concierge_step1').hide();
@@ -1024,7 +1020,7 @@ $(document).ready(function(){
 		}
 
 		StepTechConcierge++;
-	});
+	});*/
 
 	$('#frm_tech_concierge').submit(function(e){
 		e.preventDefault();
