@@ -476,6 +476,15 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#frm_connect_utility_hydro_methods').validate({
+		rules: {
+			connect_utility_hydro_methods: { required: true }
+		},
+		messages: {
+			connect_utility_hydro_methods: { required: 'Please select an option' }
+		}
+	});
+
 	var connectUtilitiesStep = 1;
 	$('.connect_utilities').click(function(){
 
@@ -492,6 +501,7 @@ $(document).ready(function(){
 		$('#connect_utilities_step2').hide();
 		$('#connect_utilities_step3').hide();
 		$('#connect_utilities_step4').hide();
+		$('#connect_utilities_step5').hide();
 
 		connectUtilitiesStep = 1;
 	});
@@ -500,87 +510,229 @@ $(document).ready(function(){
     $('#btn_next_connect_utilities').click(function(){
     	if( connectUtilitiesStep == 1 )
     	{
-	    	if( $('#frm_connect_utilities').valid() )
+	    	// Check if both the services are selected or an individual is selected
+	    	if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
 	    	{
-	    		if( $('#connect_utilities_services_type1').is(':checked') && $('#connect_utilities_services_type2').is(':checked') )
-	    		{
-	    			$('#connect_utilities_step1').hide();
-    				$('#connect_utilities_step2').show();
-    				$('#connect_utilities_step3').hide();
+	    		$('#connect_utilities_step1').hide();
+				$('#connect_utilities_step2').show();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').hide();
 
-    				$('#connect_utilities_step4').hide();
-	    		}
-	    		else if( $('#connect_utilities_services_type1').is(':checked') )
-	    		{
-	    			if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '2' && $('input[name="update_address_method3"]:checked').val() == '2' )
-					{
-						$('#connect_utilities_step1').hide();
-	    				$('#connect_utilities_step2').show();
-	    				$('#connect_utilities_step3').hide();
+				connectUtilitiesStep++;
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').hide();
+				$('#connect_utilities_step2').show();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').hide();
 
-	    				$('#connect_utilities_step4').hide();
-					}
-	    		}
-	    		else if( $('#connect_utilities_services_type2').is(':checked') )
-	    		{
-	    			if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '2' && $('input[name="update_address_method3"]:checked').val() == '2' )
-					{
-						$('#connect_utilities_step1').hide();
-	    				$('#connect_utilities_step2').hide();
-	    				$('#connect_utilities_step3').hide();
-
-	    				$('#connect_utilities_step4').show();
-					}
-	    		}
+	    		connectUtilitiesStep++;
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').hide();
+				$('#connect_utilities_step2').hide();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').show();
 
 	    		connectUtilitiesStep++;
 
+	    		// Change the next button to close
+				$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
+	    	}
+	    	else
+	    	{
+	    		alertify.error('Please select atleast one service');
 	    	}
     	}
     	else if( connectUtilitiesStep == 2 )
     	{
-    		if( $('#connect_utilities_services_type1').is(':checked') && $('#connect_utilities_services_type2').is(':checked') )
-    		{
-    			if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '2' && $('input[name="update_address_method3"]:checked').val() == '2' )
-				{
-					$('#connect_utilities_step1').hide();
-    				$('#connect_utilities_step2').hide();
-    				$('#connect_utilities_step3').hide();
+    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		if( $('#frm_connect_utility_hydro_methods').valid() )
+	    		{
+	    			if( $('input[name="connect_utility_hydro_methods"]:checked').val() == '1' )		// Call utility service
+	    			{
+	    				$('#connect_utilities_step1').hide();
+						$('#connect_utilities_step2').hide();
+						$('#connect_utilities_step3').show();
+						$('#connect_utilities_step4').hide();
+						$('#connect_utilities_step5').hide();
 
-    				$('#connect_utilities_step4').show();
-				}
-    		}
+						connectUtilitiesStep++;
+	    			}
+	    			else 																			// Do it here online
+	    			{
+	    				$('#connect_utilities_step1').hide();
+						$('#connect_utilities_step2').hide();
+						$('#connect_utilities_step3').hide();
+						$('#connect_utilities_step4').show();
+						$('#connect_utilities_step5').hide();
+
+						connectUtilitiesStep++;
+	    			}
+	    		}
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
+	    	{
+	    		if( $('#frm_connect_utility_hydro_methods').valid() )
+	    		{
+	    			if( $('input[name="connect_utility_hydro_methods"]:checked').val() == '1' )		// Call utility service
+	    			{
+	    				$('#connect_utilities_step1').hide();
+						$('#connect_utilities_step2').hide();
+						$('#connect_utilities_step3').show();
+						$('#connect_utilities_step4').hide();
+						$('#connect_utilities_step5').hide();
+
+						connectUtilitiesStep++;
+	    			}
+	    			else 																			// Do it here online
+	    			{
+	    				$('#connect_utilities_step1').hide();
+						$('#connect_utilities_step2').hide();
+						$('#connect_utilities_step3').hide();
+						$('#connect_utilities_step4').show();
+						$('#connect_utilities_step5').hide();
+
+						connectUtilitiesStep++;
+	    			}
+
+	    			// Change the next button to close
+					$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
+	    		}
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		$(this).closest('.modal-body').find('.close_modal').click();
+	    	}
     	}
+    	else if( connectUtilitiesStep == 3 )
+    	{
+    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').hide();
+				$('#connect_utilities_step2').hide();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').show();
 
+				connectUtilitiesStep++;
+
+				// Change the next button to close
+				$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
+	    	{
+	    		$(this).closest('.modal-body').find('.close_modal').click();
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		$(this).closest('.modal-body').find('.close_modal').click();
+	    	}
+    	}
+    	else if( connectUtilitiesStep == 4 )
+    	{
+    		$(this).closest('.modal-body').find('.close_modal').click();
+    	}
     });
 
     // Connect utilities previous step functionality
     $('#btn_prev_connect_utilities').click(function(){
-    	if( connectUtilitiesStep == 2 )
+    	if( connectUtilitiesStep == 4 )
     	{
-    		if( $('#connect_utilities_services_type1').is(':checked') && $('#connect_utilities_services_type2').is(':checked') )
-    		{
+    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		if( $('input[name="connect_utility_hydro_methods"]:checked').val() == '1' )		// Call utility service
+    			{
+    				$('#connect_utilities_step1').hide();
+					$('#connect_utilities_step2').hide();
+					$('#connect_utilities_step3').show();
+					$('#connect_utilities_step4').hide();
+					$('#connect_utilities_step5').hide();
+
+					connectUtilitiesStep--;
+    			}
+    			else 																			// Do it here online
+    			{
+    				$('#connect_utilities_step1').hide();
+					$('#connect_utilities_step2').hide();
+					$('#connect_utilities_step3').hide();
+					$('#connect_utilities_step4').show();
+					$('#connect_utilities_step5').hide();
+
+					connectUtilitiesStep--;
+    			}
+
+    			// Change the close button to next
+				$(this).next('#btn_next_connect_utilities').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
+	    	}
+    	}
+    	else if( connectUtilitiesStep == 3 )
+    	{
+    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
     			$('#connect_utilities_step1').hide();
 				$('#connect_utilities_step2').show();
 				$('#connect_utilities_step3').hide();
 				$('#connect_utilities_step4').hide();
-    		}
-    		else
-    		{
-    			$('#connect_utilities_step1').show();
+				$('#connect_utilities_step5').hide();
+
+				connectUtilitiesStep--;
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').hide();
+				$('#connect_utilities_step2').show();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').hide();
+
+				// Change the close button to next
+				$(this).next('#btn_next_connect_utilities').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
+
+				connectUtilitiesStep--;
+	    	}
+    	}
+    	else if( connectUtilitiesStep == 2 )
+    	{
+    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').show();
 				$('#connect_utilities_step2').hide();
 				$('#connect_utilities_step3').hide();
 				$('#connect_utilities_step4').hide();
-    		}
+				$('#connect_utilities_step5').hide();
 
-    		connectUtilitiesStep--;
-    	}
-    	else if( connectUtilitiesStep == 1 )
-    	{
-    		$('#connect_utilities_step1').show();
-			$('#connect_utilities_step2').hide();
-			$('#connect_utilities_step3').hide();
-			$('#connect_utilities_step4').hide();
+				connectUtilitiesStep--;
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').show();
+				$('#connect_utilities_step2').hide();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').hide();
+
+				connectUtilitiesStep--;
+	    	}
+	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
+	    	{
+	    		$('#connect_utilities_step1').show();
+				$('#connect_utilities_step2').hide();
+				$('#connect_utilities_step3').hide();
+				$('#connect_utilities_step4').hide();
+				$('#connect_utilities_step5').hide();
+
+				// Change the close button to next
+				$(this).next('#btn_next_connect_utilities').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
+
+				connectUtilitiesStep--;
+	    	}
     	}
     });
 
