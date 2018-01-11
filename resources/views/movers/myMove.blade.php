@@ -656,7 +656,7 @@ function calculateRoute(from, to) {
 				Do it here online</label>
 				<label class="mailfarw_radio-lb">
 				<input type="radio" name="update_address_provintial_method" value="2">
-				Call Canada Post</label>
+				Call Provincial Agencies</label>
 				<label id="update_address_provintial_method-error" class="error" for="update_address_provintial_method"></label>
 			</form>
        </div>
@@ -971,98 +971,61 @@ function calculateRoute(from, to) {
 	       </ul>
 	      </div>
 	  	  <div class="clearfix"></div>
-
-		  <div class="col-sm-12">
-	         <div class="row">
-	           <div class="col-md-4">
-	            <div class="model-box-YN"> <span> I need to start new service (new account) </span>
-	             <label>
-	              <input name="update_address_method1" value="1" type="radio">
-	              Yes</label>
-	             <label>
-	              <input name="update_address_method1" value="2" type="radio">
-	              No</label>
-	            </div>
-	            <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
-	           </div>
-	           <div class="col-md-4">
-	            <div class="model-box-YN"> <span> I need to stop service (transfer account)</span>
-	             <label>
-	              <input name="update_address_method2" value="1" type="radio">
-	              Yes</label>
-	             <label>
-	              <input name="update_address_method2" value="2" type="radio">
-	              No</label>
-	            </div>
-	            <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
-	           </div>
-	           <div class="col-md-4">
-	            <div class="model-box-YN"> <span>I need to stop service (cancel account)</span>
-	             <label>
-	              <input name="update_address_method3" value="1" type="radio">
-	              Yes</label>
-	             <label>
-	              <input name="update_address_method3" value="2" type="radio">
-	              No</label>
-	            </div>
-	            <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
-	           </div>
-	         </div>
-	        </div>
 	    </form>
      </div>
-     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step2" style="display: none;">
-      <div class="row">
-       <div class="col-sm-12"> <strong>Connect Hydro, Electricity and Gas</strong>
-        <p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
-       </div>
-      </div>
-      <div class="col-sm-12 mailfarwd_wrap_radio">
-       <form>
-        <label class="mailfarw_radio-lb">
-         <input type="radio" name="connect_utilities_method_type" value="1">
-         Do it here online </label>
-        <label class="mailfarw_radio-lb">
-         <input type="radio" name="connect_utilities_method_type" value="2">
-         Call utility service </label>
-       </form>
-      </div>
-      
-      <!-- Different Methods --> 
-      <!-- Call utility service --> 
-      
-      <div class="row" id="connect_utilities_method_type_container2" style="display: none;">
-       <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Have these handy, before this call</strong>
-        <div>
-         <div>Your full name</div>
-         <div>Old and new address</div>
-         <div>Old and new postal code</div>
-        </div>
-       </div>
-       <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Opening Hours </strong>
-        <div>
-         <div> Monday to Friday, 07:00 AM - 11:00 PM ET </div>
-         <div> Saturday and Sunday, 09:00 AM - 09:00 PM ET </div>
-        </div>
-       </div>
-       <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Phone Numbers </strong>
-        <div>
-         <div><span>Inside of Canada:</span> 1-866-607-6301</div>
-         <div><span>Outside of Canada:</span> 416-979-3033</div>
-        </div>
-       </div>
-      </div>
-	   
-      
-      <!-- Do it here online --> 
-      
-	  <div class="row" id="connect_utilities_method_type_container1" style="display: none;">
-       <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-      </div>
-	   
-      
-     </div>
-     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step4" style="display: none;">
+
+    <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step2" style="display: none;">
+      	<div>
+      		<strong>Hydro, Electricity and Gas</strong>
+       		<p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
+      	</div>
+      	<div>
+      		<form name="frm_connect_utility_hydro_methods" id="frm_connect_utility_hydro_methods">
+				<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="1"> Call utility services</label>
+				<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="2"> Do it here online</label>
+				<label id="connect_utility_hydro_methods-error" class="error" for="connect_utility_hydro_methods"></label>
+      		</form>
+      	</div>
+  	</div>
+
+  	<div class="" id="connect_utilities_step3" style="display: none;">
+      	<div>
+      		<strong>Hydro, Electricity and Gas</strong>
+       		<div>
+       		 <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Have these handy, before this call</strong>
+       		  <div>
+       		   <div>Your full name</div>
+       		   <div>Old and new address</div>
+       		   <div>Old and new postal code</div>
+       		  </div>
+       		 </div>
+       		 <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Opening Hours </strong>
+       		  <div>
+       		   <div> Monday to Friday, 07:00 AM - 11:00 PM ET </div>
+       		   <div> Saturday and Sunday, 09:00 AM - 09:00 PM ET </div>
+       		  </div>
+       		 </div>
+       		 <div class="col-sm-3 col-md-3 col-lg-3"> <strong> Phone Numbers </strong>
+       		  <div>
+       		   <div><span>Inside of Canada:</span> 1-866-607-6301</div>
+       		   <div><span>Outside of Canada:</span> 416-979-3033</div>
+       		  </div>
+       		 </div>
+       		</div>
+      	</div>
+  	</div>
+
+  	<div class="" id="connect_utilities_step4" style="display: none;">
+      	<div>
+      		<strong>Hydro, Electricity and Gas</strong>
+       		<div>
+       			<strong>Do it here online</strong>
+       			<div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+       		</div>
+       	</div>
+    </div>
+
+    <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="connect_utilities_step5" style="display: none;">
       <div> <strong>Water, Waste and Recycle Bins</strong>
        <p>If you are moving in or moving out, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
       </div>
@@ -1106,36 +1069,7 @@ function calculateRoute(from, to) {
        </div>
       </div>
      </div>
-     
-     <!-- <div class="col-sm-9 col-md-9 col-lg-9" id="connect_utilities_step5" style="width: 500px; height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="connect_utilities" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="connect_utilities" id="0">No</button>
-		      			</div>
-		     </div> --> 
-     
-    </div>
-    <div class="row" style="display:none;">
-     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
-      <div class="helpful-box">
-       <label>Is this helpful to you?</label>
-       <a href="javascript:void(0);" id="1" data-activity="connect_utilities" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="connect_utilities" class="activity_feedback">No</a> </div>
-     </div> -->
-     <div class="col-sm-9 col-md-9 col-lg-9">
-      <div class="col-md-4">
-       <p> I need to start new service at a new address (open new account) </p>
-      </div>
-      <div class="col-md-4">
-       <p> I need to stop service at one address and start service at a new address (transfer account) </p>
-      </div>
-      <div class="col-md-4">
-       <p> I need to stop service or cancel account (account cancel) </p>
-      </div>
-     </div>
+
     </div>
     <div class="row">
      <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
