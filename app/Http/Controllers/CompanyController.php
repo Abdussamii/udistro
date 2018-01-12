@@ -1000,6 +1000,27 @@ class CompanyController extends Controller
                 $response['primary_no']                                 = $homeServiceArray->primary_no;
                 $response['secondary_no']                               = $homeServiceArray->secondary_no;
                 $response['additional_information']                     = ucfirst( strtolower( $homeServiceArray->additional_information ) );
+
+                // Get the selected Steaming carpet cleaning services by mover
+                $steamingServices = DB::table('home_cleaning_steaming_service_requests as t1')
+                					->join('home_cleaning_steaming_services as t2', 't1.steaming_service_id', '=', 't2.id')
+                					->where(['t1.service_request_id' => $homeServiceId])
+                					->select('t1.id', 't2.steaming_service_for')
+                					->get();
+
+                // Get the selected Other places to clean by mover
+               	$otherPlacesToClean = DB::table('home_cleaning_other_place_service_requests as t1')
+                					->join('home_cleaning_other_places as t2', 't1.other_place_id', '=', 't2.id')
+                					->where(['t1.service_request_id' => $homeServiceId])
+                					->select('t1.id', 't2.other_places')
+                					->get();
+
+                // Get the Additional Services selected by mover
+               	$additional_services = DB::table('home_cleaning_additional_service_requests as t1')
+                					->join('home_cleaning_additional_services as t2', 't1.additional_request_id', '=', 't2.id')
+                					->where(['t1.service_request_id' => $homeServiceId])
+                					->select('t1.id', 't1.quantity', 't2.additional_service')
+                					->get();
             }
         }
         return response()->json($response);

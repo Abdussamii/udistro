@@ -1,0 +1,117 @@
+/*Landing Pages Responsiveness Media*/
+
+@media (max-width: 990px) {
+/*Footer*/
+	.footer-main.section-pd {
+		padding: 20px 0px;
+	}
+	.foot_logo ,
+	.footer_social_icon,
+	.footerAdditional	{
+		text-align: center;
+	}
+	.footerAdditional-item--copyright {
+		margin-top: 10px;
+		color: #999;
+		width: 100%;
+	}
+	address ul li {
+		display: inline-block;
+		border-right: 1px solid #333;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	address {
+		background: #111;
+		padding: 0 10px;
+	}
+	.reg-image {
+		margin: 0px 0;
+	}
+	.free-trail-box .title-bg2small {
+		font-size: 24px;
+		line-height: normal;
+	}
+	.input-box .number, .input-box .livechat, .input-box .email {
+		font-size: 24px;
+	}
+	.login-bg {
+	background-size: cover;
+	min-height: 500px;
+	}
+	.h2, h2 {
+		font-size: 30px;
+	}
+}
+
+@media (max-width: 768px) {
+/*Nav Top*/
+	.navbar-header.logo {
+		text-align: center;
+	}
+	.nav.navbar-nav.navbar-right.navbar-top-link {
+		text-align: center;
+		padding: 0;
+	}
+	.navbar-top-link li a {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+/*Mid Content*/
+	.about-udistro h2,
+	.mid-udistro h2,
+	.faq-udistro h2,
+	.mid-udistro h2	{
+		padding-top: 20px;
+	}
+	.about-para p {
+		font-size: 16px;
+		line-height: 24px;
+	}
+	.about-para,
+	.FAQ-Tabs,
+	.help-center-box {
+		padding: 20px 0;
+	}
+	.free-trail-box{
+		margin: 20px 0;
+	}
+
+}
+
+@media (max-width: 640px) {
+
+	.demo-gallery > ul > li {																									
+		width: 33%;
+	}
+	.mem-detail {
+		position: relative;
+	}	
+
+}
+
+
+@media (max-width: 460px) {
+
+	address ul li {
+		border-right: 0px solid #333;
+		padding-right: 0;
+		padding-left: 0;
+		width: 100%;
+	}
+	.demo-gallery > ul > li {																									
+		width: 50%;
+	}
+	.login-box-foot {
+		top: 10px;
+		left: 10px;
+		right: 10px;
+		bottom: 10px;
+		height: 190px;
+		width: auto;
+	}
+	.h2-login {
+		font-size: 30px;
+	}
+
+}

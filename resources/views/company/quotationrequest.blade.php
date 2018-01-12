@@ -125,6 +125,19 @@
 									</tr>
 								</table>
 							</div>
+
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<table class="table table-striped">
+									<tr>
+										<th>Items</th>
+										<th>User Input</th>
+										<th>Quantity</th>
+										<th>Time Estimate</th>
+										<th>Budget Estimate</th>
+									</tr>
+								</table>
+							</div>
+
 							<div class="clearfix"></div>
 						</form>
 					</div>

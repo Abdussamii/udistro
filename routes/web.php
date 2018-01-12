@@ -57,6 +57,41 @@ Route::get('/getinvitation', 'HomeController@getInvitation');
 // Save the invitation details
 Route::post('/saveinvitationdetails', 'HomeController@saveInvitationDetails');
 
+// About us page
+Route::get('/aboutus', function () {
+    return view('aboutUs');
+});
+
+// About us page
+Route::get('/events', function () {
+    return view('events');
+});
+
+// FAQ's
+Route::get('/faqs', function () {
+    return view('faqs');
+});
+
+// Free trial
+Route::get('/freetrial', function () {
+    return view('freeTrial');
+});
+
+// Help center
+Route::get('/helpcenter', function () {
+    return view('helpCenter');
+});
+
+// login
+Route::get('/login', function () {
+    return view('login');
+});
+
+// Out team
+Route::get('/ourteam', function () {
+    return view('ourTeam');
+});
+
 ////////// Home Pages Routes //////////
 
 // To test email template view

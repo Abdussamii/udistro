@@ -763,7 +763,7 @@ $(document).ready(function(){
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchquotationrequest',
         
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 2, 3] }
+            { "className": "dt-center", "targets": [0, 4] }
         ],
         
         "aoColumns": [
