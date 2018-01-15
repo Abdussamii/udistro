@@ -1905,7 +1905,7 @@ function calculateRoute(from, to) {
 						                        		{
 						                        		?>
 						                        			<div class="">
-						                        				{{ ucwords( strtolower( $otherDetails->details ) ) }}
+						                        				{{ ucfirst( strtolower( $otherDetails->details ) ) }}
 						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value="1"> Yes</label>
 						                        				<label> <input type="radio" name="tech_concierge_details[{{ $otherDetails->id }}]" value="0"> No</label>
 						                        			</div>

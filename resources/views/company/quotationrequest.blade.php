@@ -226,132 +226,162 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
-								<form name="frm_cable_internet_services" id="frm_cable_internet_services" novalidate="novalidate">
-							        <div class="panel-group" id="accordion_internet_service">
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse1" aria-expanded="false" class="collapsed">Moving From</a>
-							                    </h4>
-							                </div>
-							                <div id="cable_internet_services_collapse1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-							               		<div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Type:&nbsp;&nbsp;</label><span id="moving_from_house_type"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Floor Level:&nbsp;&nbsp;</label><span id="moving_from_floor"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>No of bedrooms:&nbsp;&nbsp;</label><span id="moving_from_bedroom_count"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Did you own or rent this property:&nbsp;&nbsp;</label><span id="moving_from_property_type"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2" class="collapsed" aria-expanded="false">Moving To</a>
-							                    </h4>
-							                </div>
-							                <div id="cable_internet_services_collapse2" class="panel-collapse collapse" aria-expanded="false">
-							                	<div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Type:&nbsp;&nbsp;</label><span id="moving_to_house_type"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Floor Level:&nbsp;&nbsp;</label><span id="moving_to_floor"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>No of bedrooms:&nbsp;&nbsp;</label><span id="moving_to_bedroom_count"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Did you own or rent this property:&nbsp;&nbsp;</label><span id="moving_to_property_type"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse3" class="collapsed" aria-expanded="false">Detailed Job Description</a>
-							                    </h4>
-							                </div>
-							                <div id="cable_internet_services_collapse3" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Do you have cable &amp; internet service before:&nbsp;&nbsp;</label><span id="have_cable_internet_already"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Employment Status:&nbsp;&nbsp;</label><span id="employment_status"></span>
-							                        </div>
+								<form id="frm_cable_internet_services" name="frm_cable_internet_services">
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td style="width: 30%;">Moving from</td>
+												<td id="moving_from_address"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td style="width: 30%;">Moving to</td>
+												<td id="moving_to_address"></td>
+											</tr>
+										</table>
+									</div>
 
-							                        <div class="form-group">
-							                        	<label>What service(s) are applying for</label>
-							                        	<br>
-								                        							                        		<label> <input type="checkbox" name="cable_internet_service_type[]" class="cable_internet_service_types" value="1"> TV</label>
-								                        								                        		<label> <input type="checkbox" name="cable_internet_service_type[]" class="cable_internet_service_types" value="2"> Internet</label>
-								                        								                        		<label> <input type="checkbox" name="cable_internet_service_type[]" class="cable_internet_service_types" value="3"> Phone</label>
-								                        								                        		<label> <input type="checkbox" name="cable_internet_service_type[]" class="cable_internet_service_types" value="4"> Fax</label>
-								                        								                        		<label> <input type="checkbox" name="cable_internet_service_type[]" class="cable_internet_service_types" value="5"> Security system	</label>
-								                        								                        <label id="cable_internet_service_type[]-error" class="error" for="cable_internet_service_type[]">Please select atleast one service</label>
-							                        </div>
+									<div class="clearfix"></div>
 
-							                        <div class="form-group">
-							                        	<label>Would you like to receive your bill electronically:&nbsp;&nbsp;</label><span id="want_to_receive_electronic_bill"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Would you consider any contract plan:&nbsp;&nbsp;</label><span id="want_to_contract_plan"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Would you want to setup pre-authorise payment:&nbsp;&nbsp;</label><span id="want_to_setup_preauthorise_payment"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Callback option:&nbsp;&nbsp;</label><span id="callback_option"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label></label>
-							                        	<label>Call back time:&nbsp;&nbsp;</label><span id="callback_time"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Call me on?</label><br />
-							                        	<label>Primary Number:&nbsp;&nbsp;</label><span id="primary_no"></span><br />
-							                        	<label>Additional Number:&nbsp;&nbsp;</label><span id="secondary_no"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse4" class="collapsed" aria-expanded="false">Additional Information</a>
-							                    </h4>
-							                </div>
-							                <div id="cable_internet_services_collapse4" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <div class="form-group">
-							                        	<label></label>
-							                        	<br>
-								                        							                        		<div><label><input type="checkbox" name="cable_internet_additional_service[]" class="cable_internet_additional_service" value="1"> I would like to buy my equipment</label></div>
-								                        								                        		<div><label><input type="checkbox" name="cable_internet_additional_service[]" class="cable_internet_additional_service" value="2"> I would like a special offer or promotion</label></div>
-								                        								                        		<div><label><input type="checkbox" name="cable_internet_additional_service[]" class="cable_internet_additional_service" value="3"> I like to book a tech today</label></div>
-								                        								                        		<div><label><input type="checkbox" name="cable_internet_additional_service[]" class="cable_internet_additional_service" value="4"> I like to get special promotion emails</label></div>
-								                        							                        </div>
-							                    </div>
-							                    <div class="panel-body">
-							                    	<label>additional Information:&nbsp;&nbsp;</label><span id="additional_information"></span>
-							                    </div>
-							                </div>
-							            </div>
-							        </div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<th style="width:70%">Items</th>
+												<th>User Input</th>
+											</tr>
+											<tr>
+												<td>Moving from house type</td>
+												<td id="moving_from_house_type"></td>
+											</tr>
+											<tr>
+												<td>Moving from floor level</td>
+												<td id="moving_from_floor"></td>
+											</tr>
+											<tr>
+												<td>Moving from no of bedroom</td>
+												<td id="moving_from_bedroom_count"></td>
+											</tr>
+											<tr>
+												<td>Moving from property type</td>
+												<td id="moving_from_property_type"></td>
+											</tr>
+											<tr>
+												<td>Moving to house type</td>
+												<td id="moving_to_house_type"></td>
+											</tr>
+											<tr>
+												<td>Moving to floor level</td>
+												<td id="moving_to_floor"></td>
+											</tr>
+											<tr>
+												<td>Moving to no of bedroom</td>
+												<td id="moving_to_bedroom_count"></td>
+											</tr>
+											<tr>
+												<td>Moving to property type</td>
+												<td id="moving_to_property_type"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<th style="width:70%">Items</th>
+												<th>User Input</th>
+											</tr>
+											<tr>
+												<td>Do you have cable &amp; internet service before</td>
+												<td id="have_cable_internet_already"></td>
+											</tr>
+											<tr>
+												<td>Employment Status</td>
+												<td id="employment_status"></td>
+											</tr>
+											<tr>
+												<td>Would you like to receive your bill electronically</td>
+												<td id="want_to_receive_electronic_bill"></td>
+											</tr>
+											<tr>
+												<td>Would you consider any contract plan</td>
+												<td id="want_to_contract_plan"></td>
+											</tr>
+											<tr>
+												<td>Would you want to setup pre-authorise payment</td>
+												<td id="want_to_setup_preauthorise_payment"></td>
+											</tr>
+											<tr>
+												<td>Additional Information</td>
+												<td id="additional_information"></td>
+											</tr>
+										</table>
+									</div>
 
-							        <div>
-							        	<button type="submit" class="btn btn-info" name="btn_cable_internet_submit_query" id="btn_cable_internet_submit_query">Submit</button>
-							        </div>
-							    </form>
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<th style="width: 30%">Items</th>
+													<th style="width: 40%">User Input</th>
+													<th style="width: 10%">Quantity</th>
+													<th style="width: 10%">Time Estimate</th>
+													<th style="width: 10%">Budget Estimate</th>
+												</tr>
+											</thead>
+											<tbody id="user_requested_cable_internet_services">
+												
+											</tbody>
+										</table>
+									</div>
+
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<td colspan="4" style="width: 80%;">PST</td>
+													<td id="pst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">GST</td>
+													<td id="gst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">HST</td>
+													<td id="hst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Discount</td>
+													<td>
+														<input type="text" name="discount" id="discount">
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Sub Total</td>
+													<td id="subtotal"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Service Charge</td>
+													<td id="service_charge"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Total</td>
+													<td id="total"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;"></td>
+													<td>
+														<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
+														<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+													</td>
+												</tr>
+											</thead>
+										</table>
+									</div>
+
+									<div class="clearfix"></div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -373,238 +403,144 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
-								<form name="frm_tech_concierge" id="frm_tech_concierge" autocomplete="off" novalidate="novalidate">
-							        <div class="panel-group" id="accordion_concierge">
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse2" aria-expanded="false" class="collapsed">Moving To</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-							                	<div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Type:&nbsp;&nbsp;</label><span id="moving_from_house_type"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Floor Level:&nbsp;&nbsp;</label><span id="moving_from_floor"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>No of bedrooms:&nbsp;&nbsp;</label><span id="moving_from_bedroom_count"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Did you own or rent this property:&nbsp;&nbsp;</label><span id="moving_from_property_type"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse3" class="collapsed" aria-expanded="false">Other Places to install appliances in</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse3" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Other place to install appliances in</label>
-							                        	<div>
-								                        								                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_places[]" value="3"> Basement
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_places[]" value="2"> Bed Room(s)
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_places[]" value="4"> Kitchen
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_places[]" value="1"> Living Room
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_places[]" value="5"> Office Room
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_places[]" value="6"> Recreation Room
-								                        				</label>
-								                        			</div>
-								                        								                        	</div>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse4" class="collapsed" aria-expanded="false">Job description</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse4" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Which of these appliances you plan to install</label>
-							                        	<div>
-								                        								                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="3"> Dish Washer
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="1"> Fridge
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="6"> Home Theatre
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="2"> Oven / Otr
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="7"> Security System
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="5"> Tv
-								                        				</label>
-								                        			</div>
-								                        									                        			<div class="col-lg-4 col-md-2 col-sm-1">
-								                        				<label class="form-group">
-								                        					<input type="checkbox" name="tech_concierge_appliances[]" value="4"> Washer &amp; Dryer
-								                        				</label>
-								                        			</div>
-								                        								                        	</div>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse5" class="collapsed" aria-expanded="false">Other details about the job</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse5" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <div class="form-group">
-							                        							                        			<div class="">
-							                        				Do You Have Water Connection Ready For Fridge?
-							                        				<label> <input type="radio" name="tech_concierge_details[1]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[1]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Do You Have Water Connection Ready For Dish Washer?
-							                        				<label> <input type="radio" name="tech_concierge_details[2]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[2]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Do You Have Water Connection Ready For Laundry?
-							                        				<label> <input type="radio" name="tech_concierge_details[3]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[3]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Do You Have To Mount Tv On Brackets?
-							                        				<label> <input type="radio" name="tech_concierge_details[4]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[4]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Do You Have To Bore Hole For Over The Range Oven?
-							                        				<label> <input type="radio" name="tech_concierge_details[5]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[5]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Do You Have Installations Kit For Laundry Machines?
-							                        				<label> <input type="radio" name="tech_concierge_details[6]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[6]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Do You Have All Installation Pipe Ready For Fridge?
-							                        				<label> <input type="radio" name="tech_concierge_details[7]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[7]" value="0"> No</label>
-							                        			</div>
-							                        								                        			<div class="">
-							                        				Are All The Appliances Moved In And Ready For Installations?
-							                        				<label> <input type="radio" name="tech_concierge_details[8]" value="1"> Yes</label>
-							                        				<label> <input type="radio" name="tech_concierge_details[8]" value="0"> No</label>
-							                        			</div>
-							                        								                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse6" class="collapsed" aria-expanded="false">Availability</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse6" class="panel-collapse collapse" aria-expanded="false">
-							              		<div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Day1:&nbsp;&nbsp;</label><span id="availability_date1"></span>&nbsp;&nbsp;<span id="availability_time_from1"></span>&nbsp;&nbsp;<span id="availability_time_upto1"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Day2:&nbsp;&nbsp;</label><span id="availability_date2"></span>&nbsp;&nbsp;<span id="availability_time_from2"></span>&nbsp;&nbsp;<span id="availability_time_upto2"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Day3:&nbsp;&nbsp;</label><span id="availability_date3"></span>&nbsp;&nbsp;<span id="availability_time_from2"></span>&nbsp;&nbsp;<span id="availability_time_upto3"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse7" class="collapsed" aria-expanded="false">Call me on</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse7" class="panel-collapse collapse" aria-expanded="false">
-							                	<div class="panel-body">
-							                    	<div class="form-group">
-							                        	<label>Primary Number:&nbsp;&nbsp;</label><span id="primary_no"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Additional Number:&nbsp;&nbsp;</label><span id="secondary_no"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse8" class="collapsed" aria-expanded="false">Additional Information</a>
-							                    </h4>
-							                </div>
-							                <div id="tech_concierge_collapse8" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                    	<div class="form-group">
-							                        	<label>additional Information:&nbsp;&nbsp;</label><span id="additional_information"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							        </div>
+								<form id="frm_tech_concierge" name="frm_tech_concierge">
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td style="width: 30%;">Moving from</td>
+												<td id="moving_from_address"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td style="width: 30%;">Moving to</td>
+												<td id="moving_to_address"></td>
+											</tr>
+										</table>
+									</div>
 
-							        <div>
-							        	<button type="submit" class="btn btn-info" name="btn_submit_tech_concierge_query" id="btn_submit_tech_concierge_query">Submit</button>
-							        </div>
-							    </form>
+									<div class="clearfix"></div>
+
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td>Moving to house type</td>
+												<td id="moving_to_house_type"></td>
+											</tr>
+											<tr>
+												<td>Moving to floor level</td>
+												<td id="moving_to_floor"></td>
+											</tr>
+											<tr>
+												<td>Moving to no of bedroom</td>
+												<td id="moving_to_bedroom_count"></td>
+											</tr>
+											<tr>
+												<td>Moving to property type</td>
+												<td id="moving_to_property_type"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td>Availability 1</td>
+												<td id="availability_day1"></td>
+											</tr>
+											<tr>
+												<td>Availability 2</td>
+												<td id="availability_day2"></td>
+											</tr>
+											<tr>
+												<td>Availability 3</td>
+												<td id="availability_day3"></td>
+											</tr>
+											<tr>
+												<td>Additional Information</td>
+												<td id="additional_information"></td>
+											</tr>
+										</table>
+									</div>
+
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<th>Items</th>
+													<th>User Input</th>
+												</tr>
+											</thead>
+											<tbody id="user_requested_tech_concierge_other_details">
+												
+											</tbody>
+										</table>
+									</div>
+
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<th style="width: 30%">Items</th>
+													<th style="width: 40%">User Input</th>
+													<th style="width: 10%">Quantity</th>
+													<th style="width: 10%">Time Estimate</th>
+													<th style="width: 10%">Budget Estimate</th>
+												</tr>
+											</thead>
+											<tbody id="user_requested_tech_concierge_services">
+												
+											</tbody>
+										</table>
+									</div>
+
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<td colspan="4" style="width: 80%;">PST</td>
+													<td id="pst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">GST</td>
+													<td id="gst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">HST</td>
+													<td id="hst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Discount</td>
+													<td>
+														<input type="text" name="discount" id="discount">
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Sub Total</td>
+													<td id="subtotal"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Service Charge</td>
+													<td id="service_charge"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Total</td>
+													<td id="total"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;"></td>
+													<td>
+														<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
+														<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+													</td>
+												</tr>
+											</thead>
+										</table>
+									</div>
+
+									<div class="clearfix"></div>
+								</form>
 							</div>
 						</div>
 					</div>
