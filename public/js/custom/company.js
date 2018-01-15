@@ -343,8 +343,7 @@ $(document).ready(function(){
     });
 
 
-    $(document).on('click', '.edit_cable_internet_service', function()
-    {
+    $(document).on('click', '.edit_cable_internet_service', function(){
         var cableInternetId = $(this).attr('id');
 
         if( cableInternetId != '' )
@@ -359,6 +358,9 @@ $(document).ready(function(){
                 success: function(response){
    
                     // Auto-fill the form
+                    $('#frm_cable_internet_services #moving_from_address').text(response.moving_from_address);
+                    $('#frm_cable_internet_services #moving_to_address').text(response.moving_to_address);
+
                     $('#frm_cable_internet_services #moving_from_house_type').text(response.moving_from_house_type);
                     $('#frm_cable_internet_services #moving_from_floor').text(response.moving_from_floor);
                     $('#frm_cable_internet_services #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
@@ -367,16 +369,21 @@ $(document).ready(function(){
                     $('#frm_cable_internet_services #moving_to_floor').text(response.moving_to_floor);
                     $('#frm_cable_internet_services #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
                     $('#frm_cable_internet_services #moving_to_property_type').text(response.moving_to_property_type);
+
                     $('#frm_cable_internet_services #have_cable_internet_already').text(response.have_cable_internet_already);
                     $('#frm_cable_internet_services #employment_status').text(response.employment_status);
                     $('#frm_cable_internet_services #want_to_receive_electronic_bill').text(response.want_to_receive_electronic_bill);
                     $('#frm_cable_internet_services #want_to_contract_plan').text(response.want_to_contract_plan);
                     $('#frm_cable_internet_services #want_to_setup_preauthorise_payment').text(response.want_to_setup_preauthorise_payment);
+
                     $('#frm_cable_internet_services #callback_option').text(response.callback_option);
                     $('#frm_cable_internet_services #callback_time').text(response.callback_time);
                     $('#frm_cable_internet_services #primary_no').text(response.primary_no);
                     $('#frm_cable_internet_services #secondary_no').text(response.secondary_no);
                     $('#frm_cable_internet_services #additional_information').text(response.additional_information);
+
+                    // Requested services
+					$('#frm_cable_internet_services #user_requested_cable_internet_services').html(response.request_services_details);
 
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');

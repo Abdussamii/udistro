@@ -1116,57 +1116,103 @@ class CompanyController extends Controller
         $cableInternetId = Input::get('cableInternetId');
 
         $response = array();
-        $response['employment_status']                  = "Unemployeed";
-        $response['callback_time']                      = "AnyTime";
-        $response['callback_option']                    = "No";
-        $response['want_to_setup_preauthorise_payment'] = "No";
-        $response['want_to_contract_plan']              = "No";
-        $response['want_to_receive_electronic_bill']    = "No";
-        $response['employment_status']                  = "No";
-        $response['have_cable_internet_already']        = "No";
-
         if( $cableInternetId != '' )
         {
-            $cableInternetArray = DigitalServiceRequest::find($cableInternetId);
+        	$cableInternetServiceDetails = DigitalServiceRequest::find($cableInternetId);
 
-            if( count( $cableInternetArray ) > 0 )
-            {
-                $response['moving_from_house_type']                     = $cableInternetArray->moving_from_house_type;
-                $response['moving_from_floor']                          = $cableInternetArray->moving_from_floor;
-                $response['moving_from_bedroom_count']                  = $cableInternetArray->moving_from_bedroom_count;
-                $response['moving_from_property_type']                  = $cableInternetArray->moving_from_property_type;
-                $response['moving_to_house_type']                       = $cableInternetArray->moving_to_house_type;
-                $response['moving_to_floor']                            = $cableInternetArray->moving_to_floor;
-                $response['moving_to_bedroom_count']                    = $cableInternetArray->moving_to_bedroom_count;
-                $response['moving_to_property_type']                    = $cableInternetArray->moving_to_property_type;
-                $response['primary_no']                                 = $cableInternetArray->primary_no;
-                $response['secondary_no']                               = $cableInternetArray->secondary_no;
-                $response['additional_information']                     = $cableInternetArray->additional_information;
+        	$response['moving_from_house_type'] 	= ucwords( strtolower( $cableInternetServiceDetails['moving_from_house_type'] ) );
+        	$response['moving_from_floor'] 			= $cableInternetServiceDetails['moving_from_floor'];
+        	$response['moving_from_bedroom_count'] 	= $cableInternetServiceDetails['moving_from_bedroom_count'];
+        	$response['moving_from_property_type'] 	= ucwords( strtolower( $cableInternetServiceDetails['moving_from_property_type'] ) );
 
-                if($cableInternetArray->have_cable_internet_already == 1)
-                    $response['have_cable_internet_already']            = "Yes";
-                if($cableInternetArray->employment_status == 1)
-                    $response['employment_status']                      = "Yes";
-                if($cableInternetArray->want_to_receive_electronic_bill == 1)
-                    $response['want_to_receive_electronic_bill']        = "Yes";
-                if($cableInternetArray->want_to_contract_plan == 1)
-                    $response['want_to_contract_plan']                  = "Yes";
-                if($cableInternetArray->want_to_setup_preauthorise_payment == 1)
-                    $response['want_to_setup_preauthorise_payment']     = "Yes";
-                if($cableInternetArray->callback_option == 1)
-                    $response['callback_option']                        = "Yes";
-                if($cableInternetArray->callback_time == 1)
-                    $response['callback_time']                          = "DayTime";
-                elseif ($cableInternetArray->callback_time == 2)
-                    $response['callback_time']                          = "Evening";
-                if($cableInternetArray->employment_status == 1)
-                    $response['employment_status']                      = "Employeed";
-                elseif ($cableInternetArray->employment_status == 2)
-                    $response['employment_status']                      = "Self Employeed";
+        	$response['moving_to_house_type'] 		= ucwords( strtolower( $cableInternetServiceDetails['moving_to_house_type'] ) );
+        	$response['moving_to_floor'] 			= $cableInternetServiceDetails['moving_to_floor'];
+        	$response['moving_to_bedroom_count'] 	= $cableInternetServiceDetails['moving_to_bedroom_count'];
+        	$response['moving_to_property_type'] 	= ucwords( strtolower( $cableInternetServiceDetails['moving_to_property_type'] ) );
 
-                
-            }
+			$response['have_cable_internet_already']		= ( $cableInternetServiceDetails['have_cable_internet_already'] == 1 ) ? 'Yes' : 'No';
+			$response['employment_status'] 					= ( $cableInternetServiceDetails['employment_status'] == 1 ) ? 'Yes' : 'No';
+			$response['want_to_receive_electronic_bill']	= ( $cableInternetServiceDetails['want_to_receive_electronic_bill'] == 1 ) ? 'Yes' : 'No';
+			$response['want_to_contract_plan'] 				= ( $cableInternetServiceDetails['want_to_contract_plan'] == 1 ) ? 'Yes' : 'No';
+			$response['want_to_setup_preauthorise_payment']	= ( $cableInternetServiceDetails['want_to_setup_preauthorise_payment'] == 1 ) ? 'Yes' : 'No';
+
+			$response['additional_information']				= ucfirst( strtolower( $cableInternetServiceDetails['additional_information'] ) );
+
+            // Get the moving from address
+            $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+                					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                					->join('cities as t4', 't2.city_id', '=', 't4.id')
+                					->join('countries as t5', 't2.country_id', '=', 't5.id')
+                					->where(['t1.id' => $cableInternetId, 't1.status' => '1'])
+                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                					->first();
+
+            // Get the moving to address
+            $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+                					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                					->join('cities as t4', 't2.city_id', '=', 't4.id')
+                					->join('countries as t5', 't2.country_id', '=', 't5.id')
+                					->where(['t1.id' => $cableInternetId, 't1.status' => '1'])
+                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                					->first();
+
+            $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
+
+	        $response['moving_to_address'] 	= $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
+
+	        // Get the selected services
+	        $services = DB::table('digital_service_type_requests as t1')
+    					->join('digital_service_types as t2', 't1.digital_service_type_id', '=', 't2.id')
+    					->where(['t1.digital_service_request_id' => $cableInternetId])
+    					->select('t1.id as service_request_id', 't2.id as service_id', 't2.service')
+    					->get();
+
+			$html = '';
+	        if( count( $services ) > 0 )
+	        {
+	        	foreach( $services as $service )
+	        	{
+	        		$html .= '<tr>';
+
+	        		$html .= '<td>Services</td>';
+	        		$html .= '<td>'. ucwords( strtolower( $service->service ) ) .'</td>';
+	        		$html .= '<td>NA</td>';
+	        		$html .= '<td><input name="service_time_estimate['. $service->service_id .']" class="service_time_estimate" style="width: 100px;"></td>';
+	        		$html .= '<td><input name="service_budget_estimate['. $service->service_id .']" class="service_budget_estimate" style="width: 100px;"></td>';
+
+	        		$html .= '</tr>';
+	        	}
+	        }
+
+	        // Get the selected additional services
+	        $additionalServices = DB::table('digital_additional_service_type_requests as t1')
+    					->join('digital_additional_services as t2', 't1.digital_additional_service_type_id', '=', 't2.id')
+    					->where(['t1.digital_service_request_id' => $cableInternetId])
+    					->select('t1.id as service_request_id', 't2.id as additional_service_id', 't2.additional_service')
+    					->get();
+
+	        if( count( $additionalServices ) > 0 )
+	        {
+	        	foreach( $additionalServices as $additionalService )
+	        	{
+	        		$html .= '<tr>';
+
+	        		$html .= '<td>Additional Services</td>';
+	        		$html .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
+	        		$html .= '<td>NA</td>';
+	        		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="additional_service_time_estimate" style="width: 100px;"></td>';
+	        		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="additional_service_budget_estimate" style="width: 100px;"></td>';
+
+	        		$html .= '</tr>';
+	        	}
+	        }
+
+	        $response['request_services_details'] = $html;
+
         }
+        
         return response()->json($response);
     }
 
