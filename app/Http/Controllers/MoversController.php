@@ -1696,6 +1696,162 @@ class MoversController extends Controller
     }
 
     /**
+     * Function for Quotation Response
+     * @param void
+     * @return array
+     */
+    public function quotationResponse()
+    {
+        return view('movers/quotationResponse');
+    }
+
+
+    /**
+     * Function to return the datatable of Quotation Response
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function getQuotationResponse()
+    {
+        $start      = Input::get('iDisplayStart');      // Offset
+        $length     = Input::get('iDisplayLength');     // Limit
+        $sSearch    = Input::get('sSearch');            // Search string
+        $col        = Input::get('iSortCol_0');         // Column number for sorting
+        $sortType   = Input::get('sSortDir_0');         // Sort type
+
+        $clientId = 1;
+        $invitationId = 3;
+        $techConciergeArray = DB::table('tech_concierge_service_requests')
+                                ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
+                                ->leftJoin('companies', 'tech_concierge_service_requests.company_id', '=', 'companies.id')
+                                ->where('tech_concierge_service_requests.agent_client_id', '=', $clientId)
+                                ->where('tech_concierge_service_requests.invitation_id', '=', $invitationId)
+                                ->select('tech_concierge_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->get();
+
+        $homeCleaningArray = DB::table('home_cleaning_service_requests')
+                                ->leftJoin('agent_clients', 'home_cleaning_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
+                                ->leftJoin('companies', 'home_cleaning_service_requests.company_id', '=', 'companies.id')
+                                ->where('home_cleaning_service_requests.agent_client_id', '=', $clientId)
+                                ->where('home_cleaning_service_requests.invitation_id', '=', $invitationId)
+                                ->select('home_cleaning_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->get();
+
+        $movingItemArray = DB::table('moving_item_service_requests')
+                                ->leftJoin('agent_clients', 'moving_item_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
+                                ->leftJoin('companies', 'moving_item_service_requests.mover_company_id', '=', 'companies.id')
+                                ->where('moving_item_service_requests.agent_client_id', '=', $clientId)
+                                ->where('moving_item_service_requests.invitation_id', '=', $invitationId)
+                                ->select('moving_item_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->get();
+
+        $digitalArray = DB::table('digital_service_requests')
+                                ->leftJoin('agent_clients', 'digital_service_requests.agent_client_id', '=', 'agent_clients.id')
+                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
+                                ->leftJoin('companies', 'digital_service_requests.digital_service_company_id', '=', 'companies.id')
+                                ->where('digital_service_requests.agent_client_id', '=', $clientId)
+                                ->where('digital_service_requests.invitation_id', '=', $invitationId)
+                                ->select('digital_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->get();
+
+        // Assign it to the datatable pagination variable
+        $iTotal = count($techConciergeArray) + count($homeCleaningArray) + count($movingItemArray) + count($digitalArray);
+        //echo '<pre>'; print_r($digitalArray); print_r($movingItemArray); print_r($techConciergeArray); print_r($homeCleaningArray); die();
+        //$iTotal = count($activityFeedback);
+
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $techConciergeArray ) > 0 )
+        {
+            foreach ($techConciergeArray as $Array)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $k+1,
+                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
+                    2 => $Array->email,
+                    3 => $Array->contact_number,
+                    4 => $Array->company_name,
+                    5 => "Tech Concierge Request",
+                    6 => '<a href="javascript:void(0);" id="1@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        if ( count( $homeCleaningArray ) > 0 )
+        {
+            foreach ($homeCleaningArray as $Array)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $k+1,
+                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
+                    2 => $Array->email,
+                    3 => $Array->contact_number,
+                    4 => $Array->company_name,
+                    5 => "Home Cleaning Request",
+                    6 => '<a href="javascript:void(0);" id="2@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        if ( count( $movingItemArray ) > 0 )
+        {
+            foreach ($movingItemArray as $Array)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $k+1,
+                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
+                    2 => $Array->email,
+                    3 => $Array->contact_number,
+                    4 => $Array->company_name,
+                    5 => "Moving Item Request",
+                    6 => '<a href="javascript:void(0);" id="3@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        if ( count( $digitalArray ) > 0 )
+        {
+            foreach ($digitalArray as $Array)
+            {
+                $response['aaData'][$k] = array(
+                    0 => $k+1,
+                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
+                    2 => $Array->email,
+                    3 => $Array->contact_number,
+                    4 => $Array->company_name,
+                    5 => "Digital Request",
+                    6 => '<a href="javascript:void(0);" id="4@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to get the Home Service Request
+     * @param void
+     * @return array
+     */
+    public function getRequestType()
+    {
+        $response = 1;
+        return response()->json($response);
+    }
+
+    /**
 	 * To get the list of cable & internet companies satisfying all the criteria to get the mover's quotations
 	 *
 	 * 		- Rules

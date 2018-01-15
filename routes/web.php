@@ -537,6 +537,15 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To save the user's home cleaning query detail
 	Route::post('/savehomecleaningquery', 'MoversController@saveHomeCleaningQuery');
+
+	// To get the list of quotation response
+	Route::get('/quotationresponse', 'MoversController@quotationResponse');
+
+	// To get the list of datatable quotation response
+	Route::get('/getquotationresponse', 'MoversController@getQuotationResponse');
+
+	// To get the data of request type
+	Route::get('/getrequesttype', 'MoversController@getRequestType');
 	
 });
 
