@@ -981,6 +981,9 @@ class CompanyController extends Controller
 
             if( count( $homeServiceArray ) > 0 )
             {
+            	$response['move_out_cleaning']                     		= $homeServiceArray->move_out_cleaning;
+            	$response['move_in_cleaning']                     		= $homeServiceArray->move_in_cleaning;
+
                 $response['moving_from_house_type']                     = ucwords( strtolower( $homeServiceArray->moving_from_house_type ) );
                 $response['moving_from_floor']                          = $homeServiceArray->moving_from_floor;
                 $response['moving_from_bedroom_count']                  = $homeServiceArray->moving_from_bedroom_count;
@@ -996,31 +999,104 @@ class CompanyController extends Controller
                 $response['home_cleaning_pet_count']                    = $homeServiceArray->home_cleaning_pet_count;
                 $response['home_cleaning_bathroom_count']               = $homeServiceArray->home_cleaning_bathroom_count;
                 $response['cleaning_behind_refrigerator_and_stove']     = $homeServiceArray->cleaning_behind_refrigerator_and_stove;
-                $response['baseboard_to_be_washed']                  	= $homeServiceArray->baseboard_to_be_washed ;
-                $response['primary_no']                                 = $homeServiceArray->primary_no;
-                $response['secondary_no']                               = $homeServiceArray->secondary_no;
+                $response['baseboard_to_be_washed']                  	= $homeServiceArray->baseboard_to_be_washed;
                 $response['additional_information']                     = ucfirst( strtolower( $homeServiceArray->additional_information ) );
+
+                // Get the moving from address
+                $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+	                					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+	                					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+	                					->join('cities as t4', 't2.city_id', '=', 't4.id')
+	                					->join('countries as t5', 't2.country_id', '=', 't5.id')
+	                					->where(['t1.id' => $homeServiceId, 't1.status' => '1'])
+	                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+	                					->first();
+
+                // Get the moving to address
+                $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+	                					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+	                					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+	                					->join('cities as t4', 't2.city_id', '=', 't4.id')
+	                					->join('countries as t5', 't2.country_id', '=', 't5.id')
+	                					->where(['t1.id' => $homeServiceId, 't1.status' => '1'])
+	                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+	                					->first();
 
                 // Get the selected Steaming carpet cleaning services by mover
                 $steamingServices = DB::table('home_cleaning_steaming_service_requests as t1')
                 					->join('home_cleaning_steaming_services as t2', 't1.steaming_service_id', '=', 't2.id')
                 					->where(['t1.service_request_id' => $homeServiceId])
-                					->select('t1.id', 't2.steaming_service_for')
+                					->select('t1.id as service_request_id', 't2.id as service_id', 't2.steaming_service_for')
                 					->get();
 
                 // Get the selected Other places to clean by mover
                	$otherPlacesToClean = DB::table('home_cleaning_other_place_service_requests as t1')
                 					->join('home_cleaning_other_places as t2', 't1.other_place_id', '=', 't2.id')
                 					->where(['t1.service_request_id' => $homeServiceId])
-                					->select('t1.id', 't2.other_places')
+                					->select('t1.id as service_request_id', 't2.id as places_id', 't2.other_places')
                 					->get();
 
                 // Get the Additional Services selected by mover
-               	$additional_services = DB::table('home_cleaning_additional_service_requests as t1')
+               	$additionalServices = DB::table('home_cleaning_additional_service_requests as t1')
                 					->join('home_cleaning_additional_services as t2', 't1.additional_request_id', '=', 't2.id')
                 					->where(['t1.service_request_id' => $homeServiceId])
-                					->select('t1.id', 't1.quantity', 't2.additional_service')
+                					->select('t1.id as service_request_id', 't2.id as additional_service_id', 't1.quantity', 't2.additional_service')
                 					->get();
+
+                $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
+
+	            $response['moving_to_address'] 	= $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
+
+                $html = '';
+                if( count( $steamingServices ) > 0 )
+                {
+                	foreach( $steamingServices as $steamingService )
+                	{
+                		$html .= '<tr>';
+
+                		$html .= '<td>Steaming carpet cleaning</td>';
+                		$html .= '<td>'. ucwords( strtolower( $steamingService->steaming_service_for ) ) .'</td>';
+                		$html .= '<td>NA</td>';
+                		$html .= '<td><input name="steaming_service_time_estimate['. $steamingService->service_id .']" class="steaming_service_time_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="steaming_service_budget_estimate['. $steamingService->service_id .']" class="steaming_service_budget_estimate" style="width: 100px;"></td>';
+
+                		$html .= '</tr>';
+                	}
+                }
+
+                if( count( $otherPlacesToClean ) > 0 )
+                {
+                	foreach( $otherPlacesToClean as $otherPlace )
+                	{
+                		$html .= '<tr>';
+
+                		$html .= '<td>Other places to clean</td>';
+                		$html .= '<td>'. ucwords( strtolower( $otherPlace->other_places ) ) .'</td>';
+                		$html .= '<td>NA</td>';
+                		$html .= '<td><input name="other_place_to_clean_time_estimate['. $otherPlace->places_id .']" class="other_place_to_clean_time_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="other_place_to_clean_budget_estimate['. $otherPlace->places_id .']" class="other_place_to_clean_budget_estimate" style="width: 100px;"></td>';
+
+                		$html .= '</tr>';
+                	}
+                }
+
+                if( count( $additionalServices ) > 0 )
+                {
+                	foreach( $additionalServices as $additionalService )
+                	{
+                		$html .= '<tr>';
+
+                		$html .= '<td>Additional services</td>';
+                		$html .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
+                		$html .= '<td>'. $additionalService->quantity .'</td>';
+                		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="additional_service_time_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="additional_service_budget_estimate" style="width: 100px;"></td>';
+
+                		$html .= '</tr>';
+                	}
+                }
+
+                $response['request_services_details'] = $html;
             }
         }
         return response()->json($response);

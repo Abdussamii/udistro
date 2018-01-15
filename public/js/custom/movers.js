@@ -800,6 +800,8 @@ $(document).ready(function(){
 		ignore: "not:hidden",
 		rules: 
 		{
+			home_cleaning_moveout: { required: true },
+			home_cleaning_movein: { required: true },
 			home_cleaning_house_from_type: { required: true },
 			home_cleaning_house_from_level: { required: true },
 			home_cleaning_house_from_bedroom_count: { required: true },
@@ -815,6 +817,8 @@ $(document).ready(function(){
 		},
 		messages: 
 		{
+			home_cleaning_moveout: { required: 'Please select an option' },
+			home_cleaning_movein: { required: 'Please select an option' },
 			home_cleaning_house_from_type: { required: 'Select the type' },
 			home_cleaning_house_from_level: { required: 'Please select floor level' },
 			home_cleaning_house_from_bedroom_count: { required: 'Please select bedroom count' },

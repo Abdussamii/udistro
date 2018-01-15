@@ -301,6 +301,11 @@ $(document).ready(function(){
                 success: function(response){
 
                     // Auto-fill the form
+                    $('#frm_home_cleaning_services #home_cleaning_service_request_id').val(homeServiceId);
+
+                    $('#frm_home_cleaning_services #moving_from_address').text( ( response.move_out_cleaning == '1' ) ? response.moving_from_address : 'NA' );
+                    $('#frm_home_cleaning_services #moving_to_address').text( ( response.move_in_cleaning == '1' ) ? response.moving_to_address : 'NA' );
+
                     $('#frm_home_cleaning_services #moving_from_house_type').text(response.moving_from_house_type);
                     $('#frm_home_cleaning_services #moving_from_floor').text(response.moving_from_floor);
                     $('#frm_home_cleaning_services #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
@@ -321,10 +326,10 @@ $(document).ready(function(){
                     $('#frm_home_cleaning_services #cleaning_behind_refrigerator_and_stove').text( (response.cleaning_behind_refrigerator_and_stove) ? 'Yes' : 'No' );
                     $('#frm_home_cleaning_services #baseboard_to_be_washed').text( (response.baseboard_to_be_washed) ? 'Yes' : 'No' );
 
-                    $('#frm_home_cleaning_services #calling_numbers').text( ( response.primary_no != '' ) ? response.primary_no : '' );
-                    $('#frm_home_cleaning_services #calling_numbers').append( ( response.primary_no != '' && response.secondary_no != '' ) ? ', ' + response.secondary_no : response.secondary_no );
-
                     $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
+
+                    // Requested services
+					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);                    
 
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');
@@ -773,6 +778,35 @@ $(document).ready(function(){
             { 'bSortable' : true },
             { 'bSortable' : false, "width": "10%" }
         ]
+    });
+
+    // To update the home cleaning request quotation price related data
+    $('#frm_home_cleaning_services').submit(function(e) {
+    	e.preventDefault();
+    });
+    $('#btn_update_home_cleaning_service_request').click(function(){
+    	
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/updatehomecleaningservicerequest',
+			method: 'post',
+			data: {
+				frmData: $('#frm_company_additional_details').serialize()
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		alertify.success( response.errMsg );
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+
     });
 
 });

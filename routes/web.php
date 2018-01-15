@@ -627,6 +627,9 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To get the details for the selected Quotation Request
 	Route::get('/getquotationrequest', 'CompanyController@getQuotationRequest');
+
+	// To update the home cleaning request quotation price related data
+	Route::post('/updatehomecleaningservicerequest', 'CompanyController@updateHomeCleaningServiceRequest');
 	
 });
 

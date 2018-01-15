@@ -34,8 +34,27 @@
 						<h4 class="modal-title">Home Cleaning Services Request</h4>
 					</div>
 
-					<div class="modal-body">
+					<div class="modal-body" style="height: 800px; overflow-y: auto;">
 						<form id="frm_home_cleaning_services" name="frm_home_cleaning_services">
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<table class="table table-striped">
+									<tr>
+										<td style="width: 30%;">Moving from</td>
+										<td id="moving_from_address"></td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<table class="table table-striped">
+									<tr>
+										<td style="width: 30%;">Moving to</td>
+										<td id="moving_to_address"></td>
+									</tr>
+								</table>
+							</div>
+
+							<div class="clearfix"></div>
+
 							<div class="col-lg-6 col-md-6 col-sm-6">
 								<table class="table table-striped">
 									<tr>
@@ -58,7 +77,6 @@
 										<td>Moving from property type</td>
 										<td id="moving_from_property_type"></td>
 									</tr>
-
 									<tr>
 										<td>Moving to house type</td>
 										<td id="moving_to_house_type"></td>
@@ -74,6 +92,10 @@
 									<tr>
 										<td>Moving to property type</td>
 										<td id="moving_to_property_type"></td>
+									</tr>
+									<tr>
+										<td>Moving from address</td>
+										<td id="distance"></td>
 									</tr>
 									<tr>
 										<td>Home Condition</td>
@@ -116,10 +138,6 @@
 										<td id="baseboard_to_be_washed"></td>
 									</tr>
 									<tr>
-										<td>Call me on</td>
-										<td id="calling_numbers"></td>
-									</tr>
-									<tr>
 										<td>Additional Information</td>
 										<td id="additional_information"></td>
 									</tr>
@@ -128,13 +146,62 @@
 
 							<div class="col-lg-12 col-md-12 col-sm-12">
 								<table class="table table-striped">
-									<tr>
-										<th>Items</th>
-										<th>User Input</th>
-										<th>Quantity</th>
-										<th>Time Estimate</th>
-										<th>Budget Estimate</th>
-									</tr>
+									<thead>
+										<tr>
+											<th style="width: 30%">Items</th>
+											<th style="width: 40%">User Input</th>
+											<th style="width: 10%">Quantity</th>
+											<th style="width: 10%">Time Estimate</th>
+											<th style="width: 10%">Budget Estimate</th>
+										</tr>
+									</thead>
+									<tbody id="user_requested_home_cleaning_services">
+										
+									</tbody>
+								</table>
+							</div>
+
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<td colspan="4" style="width: 80%;">PST</td>
+											<td id="pst"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">GST</td>
+											<td id="gst"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">HST</td>
+											<td id="hst"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">Discount</td>
+											<td>
+												<input type="text" name="discount" id="discount">
+											</td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">Sub Total</td>
+											<td id="subtotal"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">Service Charge</td>
+											<td id="service_charge"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">Total</td>
+											<td id="total"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;"></td>
+											<td>
+												<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
+												<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+											</td>
+										</tr>
+									</thead>
 								</table>
 							</div>
 

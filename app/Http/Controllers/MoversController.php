@@ -1565,6 +1565,9 @@ class MoversController extends Controller
  					$homeCleaningServiceRequest->invitation_id 	= $invitationId;
  					$homeCleaningServiceRequest->company_id = $filterCompany->company_id;
 
+ 					$homeCleaningServiceRequest->move_out_cleaning 	= $homeCleaningDetails['home_cleaning_moveout'];
+ 					$homeCleaningServiceRequest->move_in_cleaning 	= $homeCleaningDetails['home_cleaning_movein'];
+
  					$homeCleaningServiceRequest->moving_from_house_type = $homeCleaningDetails['home_cleaning_house_from_type'];
  					$homeCleaningServiceRequest->moving_from_floor = $homeCleaningDetails['home_cleaning_house_from_level'];
  					$homeCleaningServiceRequest->moving_from_bedroom_count = $homeCleaningDetails['home_cleaning_house_from_bedroom_count'];
