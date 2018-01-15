@@ -1044,10 +1044,11 @@ class MoversController extends Controller
 					$techConciergeRequest->invitation_id = $invitationId;
 					$techConciergeRequest->company_id = $filterCompany->company_id;
 
-					$techConciergeRequest->moving_from_house_type = $techConciergeDetails['moving_house_to_type'];
-					$techConciergeRequest->moving_from_floor = $techConciergeDetails['moving_house_to_level'];
-					$techConciergeRequest->moving_from_bedroom_count = $techConciergeDetails['moving_house_to_bedroom_count'];
-					$techConciergeRequest->moving_from_property_type = $techConciergeDetails['moving_house_to_property_type'];
+					$techConciergeRequest->moving_to_house_type = $techConciergeDetails['moving_house_to_type'];
+					$techConciergeRequest->moving_to_floor = $techConciergeDetails['moving_house_to_level'];
+					$techConciergeRequest->moving_to_bedroom_count = $techConciergeDetails['moving_house_to_bedroom_count'];
+					$techConciergeRequest->moving_to_property_type = $techConciergeDetails['moving_house_to_property_type'];
+					
 					$techConciergeRequest->primary_no = $techConciergeDetails['tech_concierge_callback_primary_no'];
 					$techConciergeRequest->secondary_no = $techConciergeDetails['tech_concierge_callback_secondary_no'];
 					$techConciergeRequest->additional_information = $techConciergeDetails['tech_concierge_additional_information'];

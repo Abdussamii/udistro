@@ -413,22 +413,25 @@ $(document).ready(function(){
                 success: function(response){
    
                     // Auto-fill the form
-                    $('#frm_tech_concierge #moving_from_house_type').text(response.moving_from_house_type);
-                    $('#frm_tech_concierge #moving_from_floor').text(response.moving_from_floor);
-                    $('#frm_tech_concierge #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
-                    $('#frm_tech_concierge #moving_from_property_type').text(response.moving_from_property_type);
-                    $('#frm_tech_concierge #primary_no').text(response.primary_no);
-                    $('#frm_tech_concierge #secondary_no').text(response.secondary_no);
-                    $('#frm_tech_concierge #availability_date1').text(response.availability_date1);
-                    $('#frm_tech_concierge #availability_time_from1').text(response.availability_time_from1);
-                    $('#frm_tech_concierge #availability_time_upto1').text(response.availability_time_upto1);
-                    $('#frm_tech_concierge #availability_date2').text(response.availability_date2);
-                    $('#frm_tech_concierge #availability_time_from2').text(response.availability_time_from2);
-                    $('#frm_tech_concierge #availability_time_upto2').text(response.availability_time_upto2);
-                    $('#frm_tech_concierge #availability_date3').text(response.availability_date3);
-                    $('#frm_tech_concierge #availability_time_from3').text(response.availability_time_from3);
-                    $('#frm_tech_concierge #availability_time_upto3').text(response.availability_time_upto3);
+                    $('#frm_tech_concierge #moving_from_address').text(response.moving_from_address);
+                    $('#frm_tech_concierge #moving_to_address').text(response.moving_to_address);
+
+                    $('#frm_tech_concierge #moving_to_house_type').text(response.moving_to_house_type);
+                    $('#frm_tech_concierge #moving_to_floor').text(response.moving_to_floor);
+                    $('#frm_tech_concierge #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
+                    $('#frm_tech_concierge #moving_to_property_type').text(response.moving_to_property_type);
+
+                    $('#frm_tech_concierge #availability_day1').text( response.availability_date1 + ' (' + response.availability_time_from1 + ' to ' + response.availability_time_upto1 + ')' );
+                    $('#frm_tech_concierge #availability_day2').text( response.availability_date2 + ' (' + response.availability_time_from2 + ' to ' + response.availability_time_upto2 + ')' );
+                    $('#frm_tech_concierge #availability_day3').text( response.availability_date3 + ' (' + response.availability_time_from3 + ' to ' + response.availability_time_upto3 + ')' );
+                    
                     $('#frm_tech_concierge #additional_information').text(response.additional_information);
+
+                    // Requested services
+					$('#frm_tech_concierge #user_requested_tech_concierge_services').html(response.request_services_details);
+
+					// Reqested additional services
+					$('#frm_tech_concierge #user_requested_tech_concierge_other_details').html(response.request_other_details);
 
                     // Show the modal
                     $('#modal_tech_concierge_service_request').modal('show');
