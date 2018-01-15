@@ -38,6 +38,9 @@ use App\HomeCleaningServiceRequest;
 use App\DigitalServiceRequest;
 use App\TechConciergeServiceRequest;
 use App\MovingItemServiceRequest;
+use App\HomeCleaningAdditionalServiceRequest;
+use App\HomeCleaningOtherPlaceServiceRequest;
+use App\HomeCleaningSteamingServiceRequest;
 
 use Validator;
 use Helper;
@@ -2842,7 +2845,105 @@ class CompanyController extends Controller
 
 		return response()->json($response);
     }
+
+    /**
+     * Function to update the home cleaning request quotation price related data
+     * @param void
+     * @return array
+     */
+    public function updateHomeCleaningServiceRequest()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$homeCleaningDetails = array();
+    	parse_str($frmData, $homeCleaningDetails);
+
+    	/*Array
+    	(
+    	    [steaming_service_time_estimate] => Array
+    	        (
+    	            [1] => 5
+    	            [2] => 5
+    	            [4] => 5
+    	        )
+
+    	    [steaming_service_budget_estimate] => Array
+    	        (
+    	            [1] => 5
+    	            [2] => 5
+    	            [4] => 5
+    	        )
+
+    	    [other_place_to_clean_time_estimate] => Array
+    	        (
+    	            [1] => 5
+    	            [5] => 5
+    	            [6] => 5
+    	            [7] => 5
+    	            [9] => 5
+    	            [11] => 5
+    	        )
+
+    	    [other_place_to_clean_budget_estimate] => Array
+    	        (
+    	            [1] => 5
+    	            [5] => 5
+    	            [6] => 5
+    	            [7] => 5
+    	            [9] => 5
+    	            [11] => 5
+    	        )
+
+    	    [additional_service_time_estimate] => Array
+    	        (
+    	            [1] => 5
+    	            [2] => 5
+    	            [3] => 5
+    	        )
+
+    	    [additional_service_budget_estimate] => Array
+    	        (
+    	            [1] => 5
+    	            [2] => 5
+    	            [3] => 5
+    	        )
+
+    	    [discount] => 10
+    	    [home_cleaning_service_request_id] => 1
+    	)*/
+
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+		// Update the hours and amount in home_cleaning_additional_service_requests table
+		foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
+		{
+			HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'additional_request_id' => $key])->update([
+				'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
+				'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
+			]);
+		}
+
+		// Update the hours and amount in home_cleaning_other_place_service_requests table
+		foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
+		{
+			HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
+				'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
+				'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
+			]);
+		}
+
+
+		// Update the hours and amount in home_cleaning_steaming_service_requests table
+		foreach( $homeCleaningDetails['steaming_service_time_estimate'] as $key => $value )
+		{
+			HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'steaming_service_id' => $key])->update([
+				'amount' => $homeCleaningDetails['steaming_service_time_estimate'][$key],
+				'hour_to_complete' => $homeCleaningDetails['steaming_service_budget_estimate'][$key]
+			]);
+		}
+
+		// Add the Other details like PST, GST, HST, Discount, Service Charge, Total for the requested services
+
+    }
 }
-// echo '<pre>';
-// print_r( $paymentPlans->toArray() );
-// exit;

@@ -790,7 +790,7 @@ $(document).ready(function(){
 			url: $('meta[name="route"]').attr('content') + '/company/updatehomecleaningservicerequest',
 			method: 'post',
 			data: {
-				frmData: $('#frm_company_additional_details').serialize()
+				frmData: $('#frm_home_cleaning_services').serialize()
 			},
 			headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

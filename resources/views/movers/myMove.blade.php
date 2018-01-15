@@ -2183,7 +2183,7 @@ function calculateRoute(from, to) {
 							                        	}
 							                        }
 							                        ?>
-							                        <label id="cable_internet_service_type[]-error" class="error" for="cable_internet_service_type[]">Please select atleast one service</label>
+							                        <label id="cable_internet_service_type[]-error" class="error" for="cable_internet_service_type[]"></label>
 						                        </div>
 
 						                        <div class="form-group">
