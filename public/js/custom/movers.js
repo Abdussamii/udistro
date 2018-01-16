@@ -180,6 +180,58 @@ $(document).ready(function(){
 		$('#update_address_step7').hide();
 	});
 
+	// To show the client list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_quotation').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/movers/getquotationresponse',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 1, 2, 3 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false }
+        ]
+    });
+
+    $(document).on('click', '.view_quotation_response', function()
+    {
+        var array = $(this).attr('id').split('@@@@');
+        var type = array[0];
+        var id = array[1];
+
+        if( id != '' && type != '' )
+        {
+            // Get the details of selected payment plan
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/movers/getrequesttype',
+                method: 'get',
+                data: {
+                    id: id, type: type
+                },
+                success: function(response){
+   					
+                    // Auto-fill the form
+                    //$('#frm_cable_internet_services #moving_from_house_type').text(response.moving_from_house_type);
+
+                    // Show the modal
+                    $('#modal_add_activity').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing id');
+        }
+    });
+
 	// Update address activity form validation
     $('#frm_update_address').validate({
         rules: {
