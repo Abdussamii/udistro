@@ -38,17 +38,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // uDistro home
 Route::get('/', function () {
-    return view('landing_page1');
+    return view('landingPage1');
 });
 
 // uDistro agent home
 Route::get('/agent/home', function () {
-    return view('landing_page2');
+    return view('landingPage2');
 });
 
 // uDistro business home
 Route::get('/company/home', function () {
-    return view('landing_page3');
+    return view('landingPage3');
 });
 
 // uDistro get invitation route

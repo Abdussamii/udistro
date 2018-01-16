@@ -162,37 +162,37 @@
 							</div>
 
 							<div class="col-lg-12 col-md-12 col-sm-12">
-								<table class="table table-striped">
+								<table class="table table-striped" id="home_cleaning_calculations">
 									<thead>
-										<tr>
-											<td colspan="4" style="width: 80%;">PST</td>
-											<td id="pst"></td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">GST</td>
-											<td id="gst"></td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">HST</td>
-											<td id="hst"></td>
-										</tr>
 										<tr>
 											<td colspan="4" style="width: 80%;">Discount</td>
 											<td>
-												<input type="text" name="discount" id="discount">
+												<input type="text" name="discount" id="discount"  class="form-control home_cleaning_discount">
 											</td>
 										</tr>
 										<tr>
-											<td colspan="4" style="width: 80%;">Sub Total</td>
-											<td id="subtotal"></td>
+											<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+											<td id="pst_amount"></td>
 										</tr>
 										<tr>
-											<td colspan="4" style="width: 80%;">Service Charge</td>
-											<td id="service_charge"></td>
+											<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+											<td id="gst_amount"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+											<td id="hst_amount"></td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">Sub Total</td>
+											<td id="subtotal">$0</td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+											<td id="service_charge_amount"></td>
 										</tr>
 										<tr>
 											<td colspan="4" style="width: 80%;">Total</td>
-											<td id="total"></td>
+											<td id="total">$0</td>
 										</tr>
 										<tr>
 											<td colspan="4" style="width: 80%;"></td>
@@ -563,990 +563,165 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
-								<form name="frm_home_moving_companies" id="frm_home_moving_companies" autocomplete="off" novalidate="novalidate">
-							        <div class="panel-group" id="accordion_home_moving_companies">
-							        	<div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse3" aria-expanded="false" class="collapsed">Moving From</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse3" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-							                	<div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Type:&nbsp;&nbsp;</label><span id="moving_from_house_type"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Floor Level:&nbsp;&nbsp;</label><span id="moving_from_floor"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>No of bedrooms:&nbsp;&nbsp;</label><span id="moving_from_bedroom_count"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Did you own or rent this property:&nbsp;&nbsp;</label><span id="moving_from_property_type"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse2" class="collapsed" aria-expanded="false">Moving To</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse2" class="panel-collapse collapse" aria-expanded="false">
-							                	<div class="panel-body">
-							                        <div class="form-group">
-							                        	<label>Type:&nbsp;&nbsp;</label><span id="moving_to_house_type"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Floor Level:&nbsp;&nbsp;</label><span id="moving_to_floor"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>No of bedrooms:&nbsp;&nbsp;</label><span id="moving_to_bedroom_count"></span>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Did you own or rent this property:&nbsp;&nbsp;</label><span id="moving_to_property_type"></span>
-							                        </div>
-							                    </div>
-							                </div>
-							            </div>
-							            
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse4" class="collapsed" aria-expanded="false">Detailed Job Description</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse4" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                    							                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse1">Living Room</a></label></div>
+								<form id="frm_home_moving_companies" name="frm_home_moving_companies">
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td style="width: 30%;">Moving from</td>
+												<td id="moving_from_address"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<td style="width: 30%;">Moving to</td>
+												<td id="moving_to_address"></td>
+											</tr>
+										</table>
+									</div>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse1" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Piano</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">600 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[1]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Bookcase</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">120 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[2]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Bookshelf</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">70 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[3]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Small Bookshelf</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[4]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair - Arm</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[5]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair - Overstuffed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[6]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair - Rocker</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[7]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Aquarium</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">80 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[8]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Desk + Chair (sm)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[9]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Desk + Chair (lg)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[10]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Fireplace Equipment</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">35 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[11]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Fireplace</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[12]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Lamp - Floor</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">15 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[13]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Footstool</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">35 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[14]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Mirror</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[15]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Clock - Grandfather</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">160 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[16]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Rug or Pad (sm)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[17]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Rug or Pad (lg)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[18]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Sofa - Loveseat</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[19]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Sofa - 3 Cushion</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">250 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[20]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Sofa - Hidabed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">300 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[21]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Tables - Sofa</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[22]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Tables - End</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">35 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[23]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Tables - Coffee</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[24]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse2">Dining Room</a></label></div>
+									<div class="clearfix"></div>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse2" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Buffet</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[25]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Cabinet - China 1 pc</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[26]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Cabinet - Corner</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">125 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[27]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair - Arm</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[28]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair - Straight</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[29]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Hutch (top)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">125 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[30]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Server / Tea Cart</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[31]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Table - Dining</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[32]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Table - Extension</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">175 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[33]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse3">Bedroom(s)</a></label></div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<th style="width:70%">Items</th>
+												<th>User Input</th>
+											</tr>
+											<tr>
+												<td>Moving from house type</td>
+												<td id="moving_from_house_type"></td>
+											</tr>
+											<tr>
+												<td>Moving from floor level</td>
+												<td id="moving_from_floor"></td>
+											</tr>
+											<tr>
+												<td>Moving from no of bedroom</td>
+												<td id="moving_from_bedroom_count"></td>
+											</tr>
+											<tr>
+												<td>Moving from property type</td>
+												<td id="moving_from_property_type"></td>
+											</tr>
+											<tr>
+												<td>Moving to house type</td>
+												<td id="moving_to_house_type"></td>
+											</tr>
+											<tr>
+												<td>Moving to floor level</td>
+												<td id="moving_to_floor"></td>
+											</tr>
+											<tr>
+												<td>Moving to no of bedroom</td>
+												<td id="moving_to_bedroom_count"></td>
+											</tr>
+											<tr>
+												<td>Moving to property type</td>
+												<td id="moving_to_property_type"></td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-6">
+										<table class="table table-striped">
+											<tr>
+												<th style="width:70%">Items</th>
+												<th>User Input</th>
+											</tr>
+											<tr>
+												<td>Transportation vehicle type</td>
+												<td id="transportation_vehicle_type"></td>
+											</tr>
+											<tr>
+												<td>Moving date</td>
+												<td id="moving_date"></td>
+											</tr>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse3" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">King Bed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">400 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[34]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Captain Bed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">400 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[35]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Queen Bed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">350 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[36]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Double Bed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">325 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[37]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Single Bed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[38]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Water Bed</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">350 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[39]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dresser - Single - Vanity</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">125 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[40]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dresser - Double - Mirror</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[41]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dresser - Triple - Mirror</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">250 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[42]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Cedar Chest</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">80 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[43]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Armoire / Highboy</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[44]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Night Table</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[45]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Wardrobe (sm)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[46]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Wardrobe (lg)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">300 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[47]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse4">Nursery</a></label></div>
+											<tr>
+												<td>Additional Information</td>
+												<td id="additional_information"></td>
+											</tr>
+										</table>
+									</div>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse4" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Car Seat</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[48]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Change Table</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[49]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Crib</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">70 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[50]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">High Chair</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">35 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[51]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Large Toys</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[52]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Play Pen</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[53]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Stroller</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[54]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse5">Kitchen</a></label></div>
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<th>Items</th>
+													<th>User Input</th>
+												</tr>
+											</thead>
+											<tbody id="user_requested_moving_other_services">
+												
+											</tbody>
+										</table>
+									</div>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse5" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Bakers Rack</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[55]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair(s)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[56]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Ironing Board</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">10 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[57]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Kitchen Cupboard</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">125 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[58]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Microwave</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[59]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Stool(s)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">15 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[60]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Table - 4 or less</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[61]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Table - 5-6</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">80 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[62]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">T.V. Tables</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[63]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse6">Appliances</a></label></div>
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<th style="width: 30%">Items</th>
+													<th style="width: 40%">User Input</th>
+													<th style="width: 10%">Quantity/Weight</th>
+													<th style="width: 10%">Time Estimate</th>
+													<th style="width: 10%">Budget Estimate</th>
+												</tr>
+											</thead>
+											<tbody id="user_requested_moving_services">
+												
+											</tbody>
+										</table>
+									</div>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse6" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Water Cooler</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">75 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[64]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dehumidifier / Humidifier</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[65]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Air Conditioner</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[66]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Freezer - 10 or less</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">225 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[67]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Freezer - 11-15</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">300 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[68]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Freezer - 16 + over</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">400 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[69]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Microwave Stand</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">70 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[70]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Range</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[71]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Refrigerator - 6 or less</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[72]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Refrigerator - 7-10</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">225 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[73]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Refrigerator - 11 + over</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">325 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[74]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Sewing Machine - Cabinet</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">90 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[75]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Sewing Machine - Portable</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[76]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dishwasher</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[77]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dehumidifier / Humidifier</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">200 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[78]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Washing Machine</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">175 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[79]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Dryer</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">175 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[80]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse7">Electronics</a></label></div>
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
+													<td colspan="4" style="width: 80%;">PST</td>
+													<td id="pst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">GST</td>
+													<td id="gst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">HST</td>
+													<td id="hst"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Discount</td>
+													<td>
+														<input type="text" name="discount" id="discount">
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Sub Total</td>
+													<td id="subtotal"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Service Charge</td>
+													<td id="service_charge"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Total</td>
+													<td id="total"></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;"></td>
+													<td>
+														<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
+														<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+													</td>
+												</tr>
+											</thead>
+										</table>
+									</div>
 
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse7" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Entertainment Centre</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[81]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Computer System</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[82]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Speaker(s) (ea)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[83]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Stereo Component (ea)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">25 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[84]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Stereo Stand</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">80 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[85]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">T.V. Lg Screen</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[86]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">T.V. Flat Screen</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">80 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[87]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">T.V. Stand</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[88]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">CD Rack</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">20 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[89]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse8">Patio</a></label></div>
-
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse8" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">BBQ</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[90]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Chair(s) - Lawn (ea)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">20 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[91]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Lawn Mower</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[92]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Ladder - Step</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[93]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Snow Blower</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[94]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse9">Miscellaneous</a></label></div>
-
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse9" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Trash Cans</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">20 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[95]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Bicycle</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[96]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Treadmill</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">225 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[97]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Exercise Bike</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[98]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Exercise Machine</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[99]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Filing Cabinet - 2 Drawer</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[100]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Filing Cabinet - 4 Drawer</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">125 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[101]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Hamper</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">15 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[102]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Heater - Gas/Electric</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">20 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[103]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Fan</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">15 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[104]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Suitcase(s)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[105]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Patio Table / 6 Chairs / Umbrella</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[106]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Patio Bench</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">80 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[107]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Power Tool (floor model)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[108]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Wood Shelf</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">45 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[109]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Shelves - Metal</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[110]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Tool Chest - Large</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">90 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[111]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Tool Chest - Small</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[112]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Trunk - Large</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[113]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Trunk - Small</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[114]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Air Hockey Table</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[115]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Fuseball Table</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">100 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[116]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Lawn Ornaments</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[117]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Utility / Gun Cabinet</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">125 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[118]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Work Bench</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">150 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[119]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Bathroom Toilet Cabinet</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">50 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[120]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Garden Hose - Tool Bundle</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">35 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[121]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Pool Table</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">400 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[122]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Mops / Pails / Brooms</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">5 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[123]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Vacuum Cleaner</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">25 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[124]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    			<div class="form-group">
-							                        			<!-- Collapse Title -->
-							                        			<div><label><a data-toggle="collapse" href="#collapse10">Containers</a></label></div>
-
-							                        			<!-- Collapse Body -->
-							                        			<div id="collapse10" class="panel-collapse collapse">
-							                        				<div>
-								                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
-								                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
-								                        				<div class="col-sm-2 col-md-2 col-lg-2"><strong>Quantity</strong></div>
-							                        				</div>
-								                        										                        						<div class="col-sm-6 col-md-6 col-lg-6">Boxes</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[125]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Pictures / Mirrors (small)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[126]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Pictures / Mirrors (large)</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">40 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[127]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Plastic Stacker Drawers</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">30 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[128]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Totes / Rubbermaid Containers</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">45 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[129]" value="">
-								                        						</div>
-								                        												                        						<div class="col-sm-6 col-md-6 col-lg-6">Wardrobe Boxes</div>
-								                        						<div class="col-sm-4 col-md-4 col-lg-4">60 LBS</div>
-								                        						<div class="col-sm-2 col-md-2 col-lg-2">
-								                        							<input class="form-control" type="number" min="0" name="item_quantity[130]" value="">
-								                        						</div>
-								                        											                        			</div>
-							                        		</div>
-							                        		<div class="clearfix"></div>
-							                    								                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse5" class="collapsed" aria-expanded="false">Special Instructions</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse5" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                    							                    				<div class="form-group">
-							                    					<label>I have all items already in boxes and locked?</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[1]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[1]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>You need to move stuff from the basement?</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[2]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[2]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>You need to move stuff from the garage?</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[3]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[3]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>You need to move play structure from the nursery?</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[4]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[4]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>You need to move children swing set?</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[5]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_special_instruction[5]" value="0">No</label>
-							                    				</div>
-							                    									                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse6" class="collapsed" aria-expanded="false">Additional Services</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse6" class="panel-collapse collapse" aria-expanded="false">
-							                	<div class="panel-body">
-							                								                    				<div class="form-group">
-							                    					<label>I need packaging services?</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[6]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[6]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>I need packaging boxes?</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[7]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[7]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>I need to disassemble and re-assemble items?</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[8]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[8]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>I need storage service?</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[9]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[9]" value="0">No</label>
-							                    				</div>
-							                    									                    				<div class="form-group">
-							                    					<label>Any packing issue in the house?</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[10]" value="1">Yes</label>
-							                    					<label> <input type="radio" name="moving_house_additional_service[10]" value="0">No</label>
-							                    				</div>
-							                    			
-							                		<div class="form-group">
-							                								                    			<label>Transportation Vehicle</label>
-							                    			<br>
-								                        	<label><input type="radio" name="moving_house_vehicle_type" value="pickup">Pickup</label>
-								                        	<label><input type="radio" name="moving_house_vehicle_type" value="cargo van">Cargo Van</label>
-								                        	<label><input type="radio" name="moving_house_vehicle_type" value="10' truck">10' Truck</label>
-								                        	<label><input type="radio" name="moving_house_vehicle_type" value="15' truck">15' Truck</label>
-								                        	<label><input type="radio" name="moving_house_vehicle_type" value="17' truck">17' Truck</label>
-								                        	<label><input type="radio" name="moving_house_vehicle_type" value="26' Truck">26' Truck</label>
-								                        	<div><label id="moving_house_vehicle_type-error" class="error" for="moving_house_vehicle_type"></label></div>
-							                    								                        </div>
-
-							                        <div class="form-group">
-							                        	<label>Call back option?</label>
-							                        	<label> <input type="radio" name="moving_house_callback_option" value="1">Yes</label>
-							                        	<label> <input type="radio" name="moving_house_callback_option" value="0">No</label>
-							                        	<div><label id="moving_house_callback_option-error" class="error" for="moving_house_callback_option"></label></div>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Call back time?</label>
-							                        	<label> <input type="radio" name="moving_house_callback_time" value="0">Anytime</label>
-							                        	<label> <input type="radio" name="moving_house_callback_time" value="1">Daytime</label>
-							                        	<label> <input type="radio" name="moving_house_callback_time" value="2">Evening</label>
-							                        	<div><label id="moving_house_callback_time-error" class="error" for="moving_house_callback_time"></label></div>
-							                        </div>
-							                        <div class="form-group">
-							                        	<label>Call me on?</label>
-							                        	<input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
-							                        	<input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
-							                        </div>
-
-							                	</div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse7" class="collapsed" aria-expanded="false">Additional Information (If Any)</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse7" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <textarea class="form-control" name="moving_house_additional_information" id="moving_house_additional_information"></textarea>
-							                    </div>
-							                </div>
-							            </div>
-							            <div class="panel panel-default">
-							                <div class="panel-heading">
-							                    <h4 class="panel-title">
-							                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse8" class="collapsed" aria-expanded="false">Moving Date</a>
-							                    </h4>
-							                </div>
-							                <div id="home_moving_companies_collapse8" class="panel-collapse collapse" aria-expanded="false">
-							                    <div class="panel-body">
-							                        <input type="text" name="moving_house_date" id="moving_house_date" class="form-control datepicker hasDatepicker">
-							                    </div>
-							                </div>
-							            </div>
-							        </div>
-
-							        <div>
-							        	<button type="submit" class="btn btn-info" name="btn_submit_moving_query" id="btn_submit_moving_query">Submit</button>
-							        </div>
-							    </form>
+									<div class="clearfix"></div>
+								</form>
 							</div>
 						</div>
 					</div>

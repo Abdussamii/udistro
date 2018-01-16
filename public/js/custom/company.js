@@ -320,8 +320,11 @@ $(document).ready(function(){
                     $('#frm_home_cleaning_services #home_cleaning_people_count').text(response.home_cleaning_people_count);
                     $('#frm_home_cleaning_services #home_cleaning_pet_count').text(response.home_cleaning_pet_count);
                     $('#frm_home_cleaning_services #home_cleaning_bathroom_count').text(response.home_cleaning_bathroom_count);
-                    $('#frm_home_cleaning_services #primary_no').text(response.primary_no);
-                    $('#frm_home_cleaning_services #secondary_no').text(response.secondary_no);
+                    
+                    $('#frm_home_cleaning_services #pst_percenateg').text(response.pst);
+                    $('#frm_home_cleaning_services #gst_percentage').text(response.gst);
+                    $('#frm_home_cleaning_services #hst_percentage').text(response.hst);
+                    $('#frm_home_cleaning_services #service_charge_percetage').text(response.service_charge);
 
                     $('#frm_home_cleaning_services #cleaning_behind_refrigerator_and_stove').text( (response.cleaning_behind_refrigerator_and_stove) ? 'Yes' : 'No' );
                     $('#frm_home_cleaning_services #baseboard_to_be_washed').text( (response.baseboard_to_be_washed) ? 'Yes' : 'No' );
@@ -329,7 +332,7 @@ $(document).ready(function(){
                     $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
 
                     // Requested services
-					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);                    
+					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);                  
 
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');
@@ -465,20 +468,21 @@ $(document).ready(function(){
                     $('#frm_home_moving_companies #moving_from_floor').text(response.moving_from_floor);
                     $('#frm_home_moving_companies #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
                     $('#frm_home_moving_companies #moving_from_property_type').text(response.moving_from_property_type);
+
                     $('#frm_home_moving_companies #moving_to_house_type').text(response.moving_to_house_type);
                     $('#frm_home_moving_companies #moving_to_floor').text(response.moving_to_floor);
                     $('#frm_home_moving_companies #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
                     $('#frm_home_moving_companies #moving_to_property_type').text(response.moving_to_property_type);
-                    $('#frm_home_moving_companies #have_cable_internet_already').text(response.have_cable_internet_already);
-                    $('#frm_home_moving_companies #employment_status').text(response.employment_status);
-                    $('#frm_home_moving_companies #want_to_receive_electronic_bill').text(response.want_to_receive_electronic_bill);
-                    $('#frm_home_moving_companies #want_to_contract_plan').text(response.want_to_contract_plan);
-                    $('#frm_home_moving_companies #want_to_setup_preauthorise_payment').text(response.want_to_setup_preauthorise_payment);
-                    $('#frm_home_moving_companies #callback_option').text(response.callback_option);
-                    $('#frm_home_moving_companies #callback_time').text(response.callback_time);
-                    $('#frm_home_moving_companies #primary_no').text(response.primary_no);
-                    $('#frm_home_moving_companies #secondary_no').text(response.secondary_no);
+                    
                     $('#frm_home_moving_companies #additional_information').text(response.additional_information);
+                    $('#frm_home_moving_companies #transportation_vehicle_type').text(response.transportation_vehicle_type);
+                    $('#frm_home_moving_companies #moving_date').text(response.moving_date);
+
+                    // Requested services
+					$('#frm_home_moving_companies #user_requested_moving_services').html(response.request_services_details);
+
+					// Reqested additional services
+					$('#frm_home_moving_companies #user_requested_moving_other_services').html(response.request_other_details);
 
                     // Show the modal
                     $('#modal_moving_companies_service_request').modal('show');
@@ -816,6 +820,48 @@ $(document).ready(function(){
 		    	}
 		    }
 		});
+
+    });
+
+    // Home cleaning services request amount calculation
+    $('#frm_home_cleaning_services').on('blur', '.home_cleaning_amount', function(){
+
+    	var subtotal = 0;
+    	var discount = 0;
+    	$('.home_cleaning_amount').each(function(){
+    		if( $(this).val() != '' )
+    		{
+    			subtotal += parseFloat( $(this).val() );
+    		}
+    	});
+
+    	discount = ( $('.home_cleaning_discount').val() != '' ) ? parseFloat( $('.home_cleaning_discount').val() ) : 0;
+
+    	$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal - discount ) );
+
+    });
+
+    $('.home_cleaning_discount').blur(function(){
+
+    	var subtotal = 0;
+    	var discount = 0;
+    	$('.home_cleaning_amount').each(function(){
+    		if( $(this).val() != '' )
+    		{
+    			subtotal += parseFloat( $(this).val() );
+    		}
+    	});
+
+    	discount = ( $('.home_cleaning_discount').val() != '' ) ? parseFloat( $('.home_cleaning_discount').val() ) : 0;
+
+    	if( subtotal != 0 )
+    	{
+    		$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal - discount ) );
+    	}
+    	else
+    	{
+    		$('#frm_home_cleaning_services #subtotal').text( '$0' );
+    	}
 
     });
 

@@ -1022,8 +1022,13 @@ class CompanyController extends Controller
 	                					->join('cities as t4', 't2.city_id', '=', 't4.id')
 	                					->join('countries as t5', 't2.country_id', '=', 't5.id')
 	                					->where(['t1.id' => $homeServiceId, 't1.status' => '1'])
-	                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+	                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.pst', 't3.gst', 't3.hst', 't3.service_charge')
 	                					->first();
+
+	            $response['pst'] 			= round($clientMovingToAddress->pst, 2) . '%';
+	            $response['gst'] 			= round($clientMovingToAddress->gst, 2) . '%';
+	            $response['hst'] 			= round($clientMovingToAddress->hst, 2) . '%';
+	            $response['service_charge']	= round($clientMovingToAddress->service_charge, 2) . '%';
 
                 // Get the selected Steaming carpet cleaning services by mover
                 $steamingServices = DB::table('home_cleaning_steaming_service_requests as t1')
@@ -1060,8 +1065,8 @@ class CompanyController extends Controller
                 		$html .= '<td>Steaming carpet cleaning</td>';
                 		$html .= '<td>'. ucwords( strtolower( $steamingService->steaming_service_for ) ) .'</td>';
                 		$html .= '<td>NA</td>';
-                		$html .= '<td><input name="steaming_service_time_estimate['. $steamingService->service_id .']" class="steaming_service_time_estimate" style="width: 100px;"></td>';
-                		$html .= '<td><input name="steaming_service_budget_estimate['. $steamingService->service_id .']" class="steaming_service_budget_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="steaming_service_time_estimate['. $steamingService->service_id .']" class="form-control steaming_service_time_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="steaming_service_budget_estimate['. $steamingService->service_id .']" class="form-control steaming_service_budget_estimate home_cleaning_amount" style="width: 100px;"></td>';
 
                 		$html .= '</tr>';
                 	}
@@ -1076,8 +1081,8 @@ class CompanyController extends Controller
                 		$html .= '<td>Other places to clean</td>';
                 		$html .= '<td>'. ucwords( strtolower( $otherPlace->other_places ) ) .'</td>';
                 		$html .= '<td>NA</td>';
-                		$html .= '<td><input name="other_place_to_clean_time_estimate['. $otherPlace->places_id .']" class="other_place_to_clean_time_estimate" style="width: 100px;"></td>';
-                		$html .= '<td><input name="other_place_to_clean_budget_estimate['. $otherPlace->places_id .']" class="other_place_to_clean_budget_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="other_place_to_clean_time_estimate['. $otherPlace->places_id .']" class="form-control other_place_to_clean_time_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="other_place_to_clean_budget_estimate['. $otherPlace->places_id .']" class="form-control other_place_to_clean_budget_estimate home_cleaning_amount" style="width: 100px;"></td>';
 
                 		$html .= '</tr>';
                 	}
@@ -1092,8 +1097,8 @@ class CompanyController extends Controller
                 		$html .= '<td>Additional services</td>';
                 		$html .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
                 		$html .= '<td>'. $additionalService->quantity .'</td>';
-                		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="additional_service_time_estimate" style="width: 100px;"></td>';
-                		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="additional_service_budget_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="form-control additional_service_time_estimate" style="width: 100px;"></td>';
+                		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="form-control additional_service_budget_estimate home_cleaning_amount" style="width: 100px;"></td>';
 
                 		$html .= '</tr>';
                 	}
@@ -1276,7 +1281,6 @@ class CompanyController extends Controller
     	        $response['moving_to_address'] 	= $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
 
     	        $html = '';
-
     	        // Get the Other Places to install appliances in
     	        $otherPlaces = DB::table('tech_concierge_place_service_requests as t1')
         					->join('tech_concierge_places as t2', 't1.place_id', '=', 't2.id')
@@ -1374,30 +1378,86 @@ class CompanyController extends Controller
      */
     public function getMovingCompaniesRequest()
     {
-        $movingCompaniesId = Input::get('movingCompaniesId');
+        $movingCompanyId = Input::get('movingCompaniesId');
 
         $response = array();
-        if( $movingCompaniesId != '' )
+        if( $movingCompanyId != '' )
         {
-            $movingCompaniesArray = MovingItemServiceRequest::find($movingCompaniesId);
+            $movingCompaniesArray = MovingItemServiceRequest::find($movingCompanyId);
 
             if( count( $movingCompaniesArray ) > 0 )
             {
-                $response['moving_from_house_type']                     = $movingCompaniesArray->moving_from_house_type;
+                $response['moving_from_house_type']                     = ucfirst( strtolower( $movingCompaniesArray->moving_from_house_type ) );
                 $response['moving_from_floor']                          = $movingCompaniesArray->moving_from_floor;
                 $response['moving_from_bedroom_count']                  = $movingCompaniesArray->moving_from_bedroom_count;
-                $response['moving_from_property_type']                  = $movingCompaniesArray->moving_from_property_type;
-                $response['moving_to_house_type']                       = $movingCompaniesArray->moving_to_house_type;
+                $response['moving_from_property_type']                  = ucfirst( strtolower($movingCompaniesArray->moving_from_property_type ) );
+
+                $response['moving_to_house_type']                       = ucfirst( strtolower($movingCompaniesArray->moving_to_house_type ) );
                 $response['moving_to_floor']                            = $movingCompaniesArray->moving_to_floor;
                 $response['moving_to_bedroom_count']                    = $movingCompaniesArray->moving_to_bedroom_count;
-                $response['moving_to_property_type']                    = $movingCompaniesArray->moving_to_property_type;
+                $response['moving_to_property_type']                    = ucfirst( strtolower($movingCompaniesArray->moving_to_property_type ) );
+
                 $response['transportation_vehicle_type']                = $movingCompaniesArray->transportation_vehicle_type;
-                $response['callback_option']                            = $movingCompaniesArray->callback_option;
-                $response['callback_time']                              = $movingCompaniesArray->callback_time;
-                $response['primary_no']                                 = $movingCompaniesArray->primary_no;
-                $response['secondary_no']                               = $movingCompaniesArray->secondary_no;
-                $response['moving_date']                                = $movingCompaniesArray->moving_date;
+                $response['moving_date']                                = date('m-d-Y', strtotime( $movingCompaniesArray->moving_date ) );
                 $response['additional_information']                     = $movingCompaniesArray->additional_information;
+
+    	        $html = '';
+    	        // Get the Other Places to install appliances in
+    	        $itemDetails = DB::table('moving_item_detail_service_requests as t1')
+        					->join('moving_item_details as t2', 't1.moving_items_details_id', '=', 't2.id')
+        					->where(['t1.moving_items_service_id' => $movingCompanyId])
+        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.item_name', 't2.item_weight')
+        					->get();
+
+    	        if( count( $itemDetails ) > 0 )
+    	        {
+    	        	foreach( $itemDetails as $itemDetail )
+    	        	{
+    	        		$html .= '<tr>';
+
+    	        		$html .= '<td>Detail job description</td>';
+    	        		$html .= '<td>'. ucwords( strtolower( $itemDetail->item_name ) ) .'</td>';
+    	        		$html .= '<td>'. $itemDetail->item_weight .'</td>';
+    	        		$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate" style="width: 100px;"></td>';
+
+    	        		$html .= '</tr>';
+    	        	}
+    	        }
+
+    	        $response['request_services_details'] = $html;
+
+    	        // Get the list of other related things
+    	        $otherDetailHtml = '';
+    	        // List of other details
+    	        $otherDetails = DB::table('moving_other_item_services as t1')->select('id', 'other_moving_items_services_details')->get();
+
+        		if( count( $otherDetails ) > 0 )
+    	        {
+    	        	foreach( $otherDetails as $otherDetail )
+    	        	{
+    	        		$status = 'No';
+    	        		$selectedService = DB::table('moving_other_item_service_requests as t1')
+				        					->leftJoin('moving_other_item_services as t2', 't1.moving_items_service_id', '=', 't2.id')
+				        					->where(['t1.moving_items_service_id' => $movingCompanyId, 'other_moving_items_services_id' => $otherDetail->id])
+				        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.other_moving_items_services_details')
+					        				->first();
+
+				        if( count( $selectedService ) > 0 )
+				        {
+				        	$status = 'Yes';
+				        }
+
+    	        		$otherDetailHtml .= '<tr>';
+
+    	        		$otherDetailHtml .= '<td>'. ucwords( strtolower( $otherDetail->other_moving_items_services_details ) ) .'</td>';
+    	        		$otherDetailHtml .= '<td>'. $status .'</td>';
+
+    	        		$otherDetailHtml .= '</tr>';
+    	        	}
+    	        }
+
+    	        $response['request_other_details'] = $otherDetailHtml;
             }
         }
         return response()->json($response);
