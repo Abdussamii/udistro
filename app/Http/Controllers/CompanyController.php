@@ -3177,20 +3177,37 @@ class CompanyController extends Controller
      */
     public function fetchProvinceTaxes()
     {
-    	$serviceRequestId = Input::get('serviceRequestId');
+    	$serviceRequestId 	= Input::get('serviceRequestId');
+    	$serviceType 		= Input::get('serviceType');
 
-        // Get the moving to address
-        $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
-            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
-            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
-            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])
-            					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
-            					->first();
+    	if( $serviceType == 'home_cleaning' )
+    	{
+        	$clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+	            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+	            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+	            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])
+	            					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+	            					->first();
 
-        $response['pst'] 			= $clientMovingToAddress->pst;
-        $response['gst'] 			= $clientMovingToAddress->gst;
-        $response['hst'] 			= $clientMovingToAddress->hst;
-        $response['service_charge']	= $clientMovingToAddress->service_charge;
+	        $response['pst'] 			= $clientMovingToAddress->pst;
+	        $response['gst'] 			= $clientMovingToAddress->gst;
+	        $response['hst'] 			= $clientMovingToAddress->hst;
+	        $response['service_charge']	= $clientMovingToAddress->service_charge;
+    	}
+    	else if( $serviceType == 'tech_concierge' )
+    	{
+        	$clientMovingToAddress = DB::table('tech_concierge_service_requests as t1')
+	            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+	            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+	            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])
+	            					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+	            					->first();
+
+	        $response['pst'] 			= $clientMovingToAddress->pst;
+	        $response['gst'] 			= $clientMovingToAddress->gst;
+	        $response['hst'] 			= $clientMovingToAddress->hst;
+	        $response['service_charge']	= $clientMovingToAddress->service_charge;
+    	}
 
         return response()->json($response);
     }

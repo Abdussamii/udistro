@@ -840,7 +840,8 @@ $(document).ready(function(){
 			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
 			method: 'get',
 			data: {
-				serviceRequestId: serviceRequestId
+				serviceRequestId: serviceRequestId,
+				serviceType: 'home_cleaning'
 			},
 			beforeSend: function(){
 				// Show loader
@@ -919,7 +920,8 @@ $(document).ready(function(){
 			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
 			method: 'get',
 			data: {
-				serviceRequestId: serviceRequestId
+				serviceRequestId: serviceRequestId,
+				serviceType: 'tech_concierge'
 			},
 			beforeSend: function(){
 				// Show loader
