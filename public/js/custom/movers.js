@@ -181,7 +181,7 @@ $(document).ready(function(){
 	});
 
 	// To show the client list in datatable
-    $.fn.dataTableExt.errMode = 'ignore';
+    /*$.fn.dataTableExt.errMode = 'ignore';
     $('#datatable_quotation').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
@@ -207,7 +207,7 @@ $(document).ready(function(){
             { 'bSortable' : false },
             { 'bSortable' : false }
         ]
-    });
+    });*/
 
     $(document).on('click', '.view_quotation_response', function()
     {

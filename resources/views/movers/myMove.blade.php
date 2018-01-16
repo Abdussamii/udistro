@@ -1576,10 +1576,10 @@ function calculateRoute(from, to) {
 						                    		?>
 						                    			<div class="form-group">
 						                        			<!-- Collapse Title -->
-						                        			<div><label><a data-toggle="collapse" href="#collapse{{ $step }}">{{ $movingItemCategory->item_name }}</a></label></div>
+						                        			<div><label><a data-toggle="collapse" href="#collapsable{{ $step }}">{{ $movingItemCategory->item_name }}</a></label></div>
 
 						                        			<!-- Collapse Body -->
-						                        			<div id="collapse{{ $step }}" class="panel-collapse collapse">
+						                        			<div id="collapsable{{ $step }}" class="panel-collapse collapse">
 						                        				<div>
 							                        				<div class="col-sm-6 col-md-6 col-lg-6"><strong>Item</strong></div>
 							                        				<div class="col-sm-4 col-md-4 col-lg-4"><strong>Weight</strong></div>
