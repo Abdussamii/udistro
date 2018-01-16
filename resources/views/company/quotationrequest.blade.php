@@ -2,6 +2,131 @@
 @section('title', 'Udistro | Quotation Request')
 
 @section('content')
+	<style type="text/css">
+		/* Absolute Center Spinner */
+		.loading {
+		  position: fixed;
+		  z-index: 100000;
+		  height: 2em;
+		  width: 2em;
+		  overflow: show;
+		  margin: auto;
+		  top: 0;
+		  left: 0;
+		  bottom: 0;
+		  right: 0;
+		}
+
+		/* Transparent Overlay */
+		.loading:before {
+		  content: '';
+		  display: block;
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  background-color: rgba(0,0,0,0.3);
+		}
+
+		/* :not(:required) hides these rules from IE9 and below */
+		.loading:not(:required) {
+		  /* hide "loading..." text */
+		  font: 0/0 a;
+		  color: transparent;
+		  text-shadow: none;
+		  background-color: transparent;
+		  border: 0;
+		}
+
+		.loading:not(:required):after {
+		  content: '';
+		  display: block;
+		  font-size: 10px;
+		  width: 1em;
+		  height: 1em;
+		  margin-top: -0.5em;
+		  -webkit-animation: spinner 1500ms infinite linear;
+		  -moz-animation: spinner 1500ms infinite linear;
+		  -ms-animation: spinner 1500ms infinite linear;
+		  -o-animation: spinner 1500ms infinite linear;
+		  animation: spinner 1500ms infinite linear;
+		  border-radius: 0.5em;
+		  -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+		  box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+		}
+
+		/* Animation */
+
+		@-webkit-keyframes spinner {
+		  0% {
+		    -webkit-transform: rotate(0deg);
+		    -moz-transform: rotate(0deg);
+		    -ms-transform: rotate(0deg);
+		    -o-transform: rotate(0deg);
+		    transform: rotate(0deg);
+		  }
+		  100% {
+		    -webkit-transform: rotate(360deg);
+		    -moz-transform: rotate(360deg);
+		    -ms-transform: rotate(360deg);
+		    -o-transform: rotate(360deg);
+		    transform: rotate(360deg);
+		  }
+		}
+		@-moz-keyframes spinner {
+		  0% {
+		    -webkit-transform: rotate(0deg);
+		    -moz-transform: rotate(0deg);
+		    -ms-transform: rotate(0deg);
+		    -o-transform: rotate(0deg);
+		    transform: rotate(0deg);
+		  }
+		  100% {
+		    -webkit-transform: rotate(360deg);
+		    -moz-transform: rotate(360deg);
+		    -ms-transform: rotate(360deg);
+		    -o-transform: rotate(360deg);
+		    transform: rotate(360deg);
+		  }
+		}
+		@-o-keyframes spinner {
+		  0% {
+		    -webkit-transform: rotate(0deg);
+		    -moz-transform: rotate(0deg);
+		    -ms-transform: rotate(0deg);
+		    -o-transform: rotate(0deg);
+		    transform: rotate(0deg);
+		  }
+		  100% {
+		    -webkit-transform: rotate(360deg);
+		    -moz-transform: rotate(360deg);
+		    -ms-transform: rotate(360deg);
+		    -o-transform: rotate(360deg);
+		    transform: rotate(360deg);
+		  }
+		}
+		@keyframes spinner {
+		  0% {
+		    -webkit-transform: rotate(0deg);
+		    -moz-transform: rotate(0deg);
+		    -ms-transform: rotate(0deg);
+		    -o-transform: rotate(0deg);
+		    transform: rotate(0deg);
+		  }
+		  100% {
+		    -webkit-transform: rotate(360deg);
+		    -moz-transform: rotate(360deg);
+		    -ms-transform: rotate(360deg);
+		    -o-transform: rotate(360deg);
+		    transform: rotate(360deg);
+		  }
+		}
+	</style>
+	
+	<!-- Loading Spinner -->
+	<div class="loading" style="display: none;">Loading&#8230;</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Quotation Request</h1>
@@ -171,24 +296,24 @@
 											</td>
 										</tr>
 										<tr>
-											<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
-											<td id="pst_amount"></td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
-											<td id="gst_amount"></td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
-											<td id="hst_amount"></td>
-										</tr>
-										<tr>
 											<td colspan="4" style="width: 80%;">Sub Total</td>
 											<td id="subtotal">$0</td>
 										</tr>
 										<tr>
+											<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+											<td id="gst_amount">$0</td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+											<td id="hst_amount">$0</td>
+										</tr>
+										<tr>
+											<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+											<td id="pst_amount">$0</td>
+										</tr>
+										<tr>
 											<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
-											<td id="service_charge_amount"></td>
+											<td id="service_charge_amount">$0</td>
 										</tr>
 										<tr>
 											<td colspan="4" style="width: 80%;">Total</td>
@@ -496,43 +621,43 @@
 									</div>
 
 									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
+										<table class="table table-striped" id="tech_concierge_calculations">
 											<thead>
-												<tr>
-													<td colspan="4" style="width: 80%;">PST</td>
-													<td id="pst"></td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">GST</td>
-													<td id="gst"></td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">HST</td>
-													<td id="hst"></td>
-												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Discount</td>
 													<td>
-														<input type="text" name="discount" id="discount">
+														<input type="text" name="discount" id="discount"  class="form-control tech_concierge_discount">
 													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Sub Total</td>
-													<td id="subtotal"></td>
+													<td id="subtotal">$0</td>
 												</tr>
 												<tr>
-													<td colspan="4" style="width: 80%;">Service Charge</td>
-													<td id="service_charge"></td>
+													<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+													<td id="gst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+													<td id="hst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+													<td id="pst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+													<td id="service_charge_amount">$0</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Total</td>
-													<td id="total"></td>
+													<td id="total">$0</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;"></td>
 													<td>
-														<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
-														<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+														<input type="hidden" name="tech_concierge_service_request_id" id="tech_concierge_service_request_id">
+														<input type="button" name="btn_update_tech_concierge_service_request" id="btn_update_tech_concierge_service_request" value="Submit" class="btn btn-info">
 													</td>
 												</tr>
 											</thead>

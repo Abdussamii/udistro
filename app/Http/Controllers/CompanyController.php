@@ -1273,8 +1273,13 @@ class CompanyController extends Controller
                     					->join('cities as t4', 't2.city_id', '=', 't4.id')
                     					->join('countries as t5', 't2.country_id', '=', 't5.id')
                     					->where(['t1.id' => $techConciergeId, 't1.status' => '1'])
-                    					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                    					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.pst', 't3.gst', 't3.hst', 't3.service_charge')
                     					->first();
+
+                $response['pst'] 			= round($clientMovingToAddress->pst, 2) . '%';
+                $response['gst'] 			= round($clientMovingToAddress->gst, 2) . '%';
+                $response['hst'] 			= round($clientMovingToAddress->hst, 2) . '%';
+                $response['service_charge']	= round($clientMovingToAddress->service_charge, 2) . '%';
 
                 $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
 
@@ -1297,8 +1302,8 @@ class CompanyController extends Controller
     	        		$html .= '<td>Other Places to install appliances</td>';
     	        		$html .= '<td>'. ucwords( strtolower( $otherPlace->places ) ) .'</td>';
     	        		$html .= '<td>NA</td>';
-    	        		$html .= '<td><input name="other_place_time_estimate['. $otherPlace->service_id .']" class="other_place_time_estimate" style="width: 100px;"></td>';
-    	        		$html .= '<td><input name="other_place_budget_estimate['. $otherPlace->service_id .']" class="other_place_budget_estimate" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="other_place_time_estimate['. $otherPlace->service_id .']" class="other_place_time_estimate form-control" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="other_place_budget_estimate['. $otherPlace->service_id .']" class="other_place_budget_estimate form-control tech_concierge_amount" style="width: 100px;"></td>';
 
     	        		$html .= '</tr>';
     	        	}
@@ -1320,8 +1325,8 @@ class CompanyController extends Controller
     	        		$html .= '<td>Appliances you plan to install</td>';
     	        		$html .= '<td>'. ucwords( strtolower( $appliance->appliances ) ) .'</td>';
     	        		$html .= '<td>NA</td>';
-    	        		$html .= '<td><input name="appliance_time_estimate['. $appliance->service_id .']" class="appliance_time_estimate" style="width: 100px;"></td>';
-    	        		$html .= '<td><input name="appliance_budget_estimate['. $appliance->service_id .']" class="appliance_budget_estimate" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="appliance_time_estimate['. $appliance->service_id .']" class="appliance_time_estimate form-control" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="appliance_budget_estimate['. $appliance->service_id .']" class="appliance_budget_estimate form-control tech_concierge_amount" style="width: 100px;"></td>';
 
     	        		$html .= '</tr>';
     	        	}
@@ -3163,5 +3168,30 @@ class CompanyController extends Controller
 
 		// Add the Other details like PST, GST, HST, Discount, Service Charge, Total for the requested services
 
+    }
+
+    /**
+     * Function to get the pst, gst, hst, service charge values
+     * @param void
+     * @return array
+     */
+    public function fetchProvinceTaxes()
+    {
+    	$serviceRequestId = Input::get('serviceRequestId');
+
+        // Get the moving to address
+        $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])
+            					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+            					->first();
+
+        $response['pst'] 			= $clientMovingToAddress->pst;
+        $response['gst'] 			= $clientMovingToAddress->gst;
+        $response['hst'] 			= $clientMovingToAddress->hst;
+        $response['service_charge']	= $clientMovingToAddress->service_charge;
+
+        return response()->json($response);
     }
 }
