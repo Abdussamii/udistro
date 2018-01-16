@@ -639,6 +639,9 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To update the home cleaning request quotation price related data
 	Route::post('/updatehomecleaningservicerequest', 'CompanyController@updateHomeCleaningServiceRequest');
+
+	// To get the pst, gst, hst, service charge values
+	Route::get('/fetchprovincetaxes', 'CompanyController@fetchProvinceTaxes');
 	
 });
 

@@ -416,6 +416,8 @@ $(document).ready(function(){
                 success: function(response){
    
                     // Auto-fill the form
+                    $('#frm_tech_concierge #tech_concierge_service_request_id').val(techConciergeId);
+
                     $('#frm_tech_concierge #moving_from_address').text(response.moving_from_address);
                     $('#frm_tech_concierge #moving_to_address').text(response.moving_to_address);
 
@@ -435,6 +437,11 @@ $(document).ready(function(){
 
 					// Reqested additional services
 					$('#frm_tech_concierge #user_requested_tech_concierge_other_details').html(response.request_other_details);
+
+					$('#frm_tech_concierge #pst_percenateg').text(response.pst);
+                    $('#frm_tech_concierge #gst_percentage').text(response.gst);
+                    $('#frm_tech_concierge #hst_percentage').text(response.hst);
+                    $('#frm_tech_concierge #service_charge_percetage').text(response.service_charge);
 
                     // Show the modal
                     $('#modal_tech_concierge_service_request').modal('show');
@@ -824,44 +831,160 @@ $(document).ready(function(){
     });
 
     // Home cleaning services request amount calculation
-    $('#frm_home_cleaning_services').on('blur', '.home_cleaning_amount', function(){
+    $('#frm_home_cleaning_services').on('blur', '.home_cleaning_amount, .home_cleaning_discount', function(){
 
-    	var subtotal = 0;
-    	var discount = 0;
-    	$('.home_cleaning_amount').each(function(){
-    		if( $(this).val() != '' )
-    		{
-    			subtotal += parseFloat( $(this).val() );
-    		}
-    	});
+    	// Ajax call to get the pst, gst, hst, service charge values
+    	let serviceRequestId = $('#home_cleaning_service_request_id').val();
+    	
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
+			method: 'get',
+			data: {
+				serviceRequestId: serviceRequestId
+			},
+			beforeSend: function(){
+				// Show loader
+				$('.loading').show();
+			},
+		    success: function(response){
 
-    	discount = ( $('.home_cleaning_discount').val() != '' ) ? parseFloat( $('.home_cleaning_discount').val() ) : 0;
+		    	// Hide loader
+		    	$('.loading').hide();
 
-    	$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal - discount ) );
+		    	var subtotal 		= 0;
+		    	var serviceTotal 	= 0;
+		    	var discount 		= 0;
+		    	var gstAmount 		= 0;
+		    	var hstAmount 		= 0;
+		    	var pstAmount 		= 0;
+		    	var serviceCharge 	= 0;
+
+		    	$('.home_cleaning_amount').each(function(){
+		    		if( $(this).val() != '' )
+		    		{
+		    			serviceTotal += parseFloat( $(this).val() );
+		    		}
+		    	});
+
+		    	discount = ( $('.home_cleaning_discount').val() != '' ) ? parseFloat( $('.home_cleaning_discount').val() ) : 0;
+
+		    	// Subtotal value
+		    	subtotal = serviceTotal - discount;
+
+		    	// GST value
+		    	if( response.gst != 0 )
+		    	{
+		    		gstAmount = ( response.gst / 100 ) * subtotal;
+		    	}
+
+		    	// HST value
+		    	if( response.hst != 0 )
+		    	{
+		    		hstAmount = ( response.hst / 100 ) * subtotal;
+		    	}
+
+		    	// PST value
+		    	if( response.pst != 0 )
+		    	{
+		    		pstAmount = ( response.pst / 100 ) * subtotal;
+		    	}
+
+		    	// Service charge
+		    	if( response.service_charge != 0 )
+		    	{
+		    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+		    	}
+
+		    	$('#frm_home_cleaning_services #gst_amount').text( '$' + ( gstAmount ) );
+		    	$('#frm_home_cleaning_services #hst_amount').text( '$' + ( hstAmount ) );
+		    	$('#frm_home_cleaning_services #pst_amount').text( '$' + ( pstAmount ) );
+		    	$('#frm_home_cleaning_services #service_charge_amount').text( '$' + ( serviceCharge ) );
+
+		    	$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal ) );
+
+		    	$('#frm_home_cleaning_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ) );
+
+		    }
+		});
 
     });
 
-    $('.home_cleaning_discount').blur(function(){
+    // Tech concierge request amount calculation
+    $('#frm_tech_concierge').on('blur', '.tech_concierge_amount, .tech_concierge_discount', function(){
 
-    	var subtotal = 0;
-    	var discount = 0;
-    	$('.home_cleaning_amount').each(function(){
-    		if( $(this).val() != '' )
-    		{
-    			subtotal += parseFloat( $(this).val() );
-    		}
-    	});
+    	// Ajax call to get the pst, gst, hst, service charge values
+    	let serviceRequestId = $('#tech_concierge_service_request_id').val();
+    	
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
+			method: 'get',
+			data: {
+				serviceRequestId: serviceRequestId
+			},
+			beforeSend: function(){
+				// Show loader
+				$('.loading').show();
+			},
+		    success: function(response){
 
-    	discount = ( $('.home_cleaning_discount').val() != '' ) ? parseFloat( $('.home_cleaning_discount').val() ) : 0;
+		    	// Hide loader
+		    	$('.loading').hide();
 
-    	if( subtotal != 0 )
-    	{
-    		$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal - discount ) );
-    	}
-    	else
-    	{
-    		$('#frm_home_cleaning_services #subtotal').text( '$0' );
-    	}
+		    	var subtotal 		= 0;
+		    	var serviceTotal 	= 0;
+		    	var discount 		= 0;
+		    	var gstAmount 		= 0;
+		    	var hstAmount 		= 0;
+		    	var pstAmount 		= 0;
+		    	var serviceCharge 	= 0;
+
+		    	$('.tech_concierge_amount').each(function(){
+		    		if( $(this).val() != '' )
+		    		{
+		    			serviceTotal += parseFloat( $(this).val() );
+		    		}
+		    	});
+
+		    	discount = ( $('.tech_concierge_discount').val() != '' ) ? parseFloat( $('.tech_concierge_discount').val() ) : 0;
+
+		    	// Subtotal value
+		    	subtotal = serviceTotal - discount;
+
+		    	// GST value
+		    	if( response.gst != 0 )
+		    	{
+		    		gstAmount = ( response.gst / 100 ) * subtotal;
+		    	}
+
+		    	// HST value
+		    	if( response.hst != 0 )
+		    	{
+		    		hstAmount = ( response.hst / 100 ) * subtotal;
+		    	}
+
+		    	// PST value
+		    	if( response.pst != 0 )
+		    	{
+		    		pstAmount = ( response.pst / 100 ) * subtotal;
+		    	}
+
+		    	// Service charge
+		    	if( response.service_charge != 0 )
+		    	{
+		    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+		    	}
+
+		    	$('#frm_tech_concierge #gst_amount').text( '$' + ( gstAmount ) );
+		    	$('#frm_tech_concierge #hst_amount').text( '$' + ( hstAmount ) );
+		    	$('#frm_tech_concierge #pst_amount').text( '$' + ( pstAmount ) );
+		    	$('#frm_tech_concierge #service_charge_amount').text( '$' + ( serviceCharge ) );
+
+		    	$('#frm_tech_concierge #subtotal').text( '$' + ( subtotal ) );
+
+		    	$('#frm_tech_concierge #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ) );
+
+		    }
+		});
 
     });
 
