@@ -1760,9 +1760,7 @@ class MoversController extends Controller
 
         // Assign it to the datatable pagination variable
         $iTotal = count($techConciergeArray) + count($homeCleaningArray) + count($movingItemArray) + count($digitalArray);
-        //echo '<pre>'; print_r($digitalArray); print_r($movingItemArray); print_r($techConciergeArray); print_r($homeCleaningArray); die();
-        //$iTotal = count($activityFeedback);
-
+        
         $response = array(
             'iTotalRecords' => $iTotal,
             'iTotalDisplayRecords' => $iTotal,
