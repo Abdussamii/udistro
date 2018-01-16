@@ -72,9 +72,8 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12 top-buffer">
-                        <!-- Table to show all the activity -->
-                        <input type="hidden" name="activity_id" id="activity_id">
-                        <input type="hidden" name="activity_id" id="activity_id">
+                        <input type="hidden" id="client_id" value="1">
+                        <input type="hidden" id="invitation_id" value="3">
                         <table id="datatable_quotation" class="table table-striped">
                             <thead>
                                 <tr>
@@ -90,18 +89,62 @@
                         </table>
                     </div>
 
-                    <!-- Modal to add / edit activity -->
-                    <div id="modal_add_activity" class="modal fade" role="dialog">
+
+                    <div id="modal_tech_concierge" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add Activity</h4>
+                                    <h4 class="modal-title">1</h4>
                                 </div>
 
-                                <div class="modal-body">
-                                    
+                                <div class="modal-body">       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modal_home_cleaning" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">2</h4>
+                                </div>
+
+                                <div class="modal-body">       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modal_moving_item" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">3</h4>
+                                </div>
+
+                                <div class="modal-body">       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modal_digital" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">4</h4>
+                                </div>
+
+                                <div class="modal-body">       
                                 </div>
                             </div>
                         </div>

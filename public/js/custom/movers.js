@@ -186,9 +186,17 @@ $(document).ready(function(){
         "sServerMethod": "get", 
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": $('meta[name="route"]').attr('content') + '/movers/getquotationresponse',
+        "searching": false,
+        "paging": false,
+        "ajax": {
+            "url": $('meta[name="route"]').attr('content') + '/movers/getquotationresponse',
+            "data": function ( d ) {
+                d.clientId = $('#client_id').val();
+                d.invitationId = $('#invitation_id').val();
+            }
+        },
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 1, 2, 3 ] }
+            { "className": "dt-center", "targets": [ 0, 1, 2, 3, 4, 5, 6 ] }
         ],
         "aoColumns": [
             { 'bSortable' : false },
@@ -218,11 +226,22 @@ $(document).ready(function(){
                 },
                 success: function(response){
    					
-                    // Auto-fill the form
-                    //$('#frm_cable_internet_services #moving_from_house_type').text(response.moving_from_house_type);
-
-                    // Show the modal
-                    $('#modal_add_activity').modal('show');
+   					if(type == 1)
+   					{
+                    	$('#modal_tech_concierge').modal('show');
+   					} 
+   					else if (type == 2) 
+   					{
+   						$('#modal_home_cleaning').modal('show');
+   					}
+   					else if (type == 3)
+   					{
+   						$('#modal_moving_item').modal('show');
+   					} 
+   					else if (type == 4)
+   					{
+   						$('#modal_digital').modal('show');
+   					}
                 }
             });
         }
