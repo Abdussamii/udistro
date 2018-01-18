@@ -179,36 +179,7 @@ $(document).ready(function(){
 		$('#update_address_step6').hide();
 		$('#update_address_step7').hide();
 	});
-
-	// To show the client list in datatable
-    /*$.fn.dataTableExt.errMode = 'ignore';
-    $('#datatable_quotation').dataTable({
-        "sServerMethod": "get", 
-        "bProcessing": true,
-        "bServerSide": true,
-        "searching": false,
-        "paging": false,
-        "ajax": {
-            "url": $('meta[name="route"]').attr('content') + '/movers/getquotationresponse',
-            "data": function ( d ) {
-                d.clientId = $('#client_id').val();
-                d.invitationId = $('#invitation_id').val();
-            }
-        },
-        "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 1, 2, 3, 4, 5, 6 ] }
-        ],
-        "aoColumns": [
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false }
-        ]
-    });*/
-
+	
     $(document).on('click', '.view_quotation_response', function()
     {
         var array = $(this).attr('id').split('@@@@');
