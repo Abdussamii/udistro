@@ -41,6 +41,9 @@ use App\MovingItemServiceRequest;
 use App\HomeCleaningAdditionalServiceRequest;
 use App\HomeCleaningOtherPlaceServiceRequest;
 use App\HomeCleaningSteamingServiceRequest;
+use App\MovingTransportation;
+use App\TechConciergeAppliancesServiceRequest;
+use App\ServiceRequestResponse;
 
 use Validator;
 use Helper;
@@ -60,7 +63,8 @@ class CompanyController extends Controller
     	// Get the company categories
     	$companyCategories = CompanyCategory::where(['status' => '1'])->select('id', 'category')->orderBy('category', 'asc')->get();
 
-    	return view('company/register', ['provinces' => $provinces, 'companyCategories' => $companyCategories]);
+    	// return view('company/register', ['provinces' => $provinces, 'companyCategories' => $companyCategories]);
+    	return view('freeTrial', ['provinces' => $provinces, 'companyCategories' => $companyCategories]);
     }
 
     /**
@@ -1286,29 +1290,6 @@ class CompanyController extends Controller
     	        $response['moving_to_address'] 	= $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
 
     	        $html = '';
-    	        // Get the Other Places to install appliances in
-    	        $otherPlaces = DB::table('tech_concierge_place_service_requests as t1')
-        					->join('tech_concierge_places as t2', 't1.place_id', '=', 't2.id')
-        					->where(['t1.service_request_id' => $techConciergeId])
-        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.places')
-        					->get();
-
-    	        if( count( $otherPlaces ) > 0 )
-    	        {
-    	        	foreach( $otherPlaces as $otherPlace )
-    	        	{
-    	        		$html .= '<tr>';
-
-    	        		$html .= '<td>Other Places to install appliances</td>';
-    	        		$html .= '<td>'. ucwords( strtolower( $otherPlace->places ) ) .'</td>';
-    	        		$html .= '<td>NA</td>';
-    	        		$html .= '<td><input name="other_place_time_estimate['. $otherPlace->service_id .']" class="other_place_time_estimate form-control" style="width: 100px;"></td>';
-    	        		$html .= '<td><input name="other_place_budget_estimate['. $otherPlace->service_id .']" class="other_place_budget_estimate form-control tech_concierge_amount" style="width: 100px;"></td>';
-
-    	        		$html .= '</tr>';
-    	        	}
-    	        }
-
     	        // Get the list of appliances to install
     	        $appliances = DB::table('tech_concierge_appliances_service_requests as t1')
         					->join('tech_concierge_appliances as t2', 't1.appliance_id', '=', 't2.id')
@@ -1369,6 +1350,26 @@ class CompanyController extends Controller
     	        	}
     	        }
 
+    	        // Get the Other Places to install appliances in
+    	        $otherPlaces = DB::table('tech_concierge_place_service_requests as t1')
+        					->join('tech_concierge_places as t2', 't1.place_id', '=', 't2.id')
+        					->where(['t1.service_request_id' => $techConciergeId])
+        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.places')
+        					->get();
+
+    	        if( count( $otherPlaces ) > 0 )
+    	        {
+    	        	foreach( $otherPlaces as $otherPlace )
+    	        	{
+    	        		$otherDetailHtml .= '<tr>';
+
+    	        		$otherDetailHtml .= '<td>Other Places to install appliances</td>';
+    	        		$otherDetailHtml .= '<td>'. ucwords( strtolower( $otherPlace->places ) ) .'</td>';
+
+    	        		$otherDetailHtml .= '</tr>';
+    	        	}
+    	        }
+
     	        $response['request_other_details'] = $otherDetailHtml;
             }
         }
@@ -1403,8 +1404,38 @@ class CompanyController extends Controller
                 $response['moving_to_property_type']                    = ucfirst( strtolower($movingCompaniesArray->moving_to_property_type ) );
 
                 $response['transportation_vehicle_type']                = $movingCompaniesArray->transportation_vehicle_type;
+                
                 $response['moving_date']                                = date('m-d-Y', strtotime( $movingCompaniesArray->moving_date ) );
                 $response['additional_information']                     = $movingCompaniesArray->additional_information;
+
+                // Get the moving from address
+                $clientMovingFromAddress = DB::table('moving_item_service_requests as t1')
+                    					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                    					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                    					->join('cities as t4', 't2.city_id', '=', 't4.id')
+                    					->join('countries as t5', 't2.country_id', '=', 't5.id')
+                    					->where(['t1.id' => $movingCompanyId, 't1.status' => '1'])
+                    					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                    					->first();
+
+                // Get the moving to address
+                $clientMovingToAddress = DB::table('moving_item_service_requests as t1')
+                    					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                    					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                    					->join('cities as t4', 't2.city_id', '=', 't4.id')
+                    					->join('countries as t5', 't2.country_id', '=', 't5.id')
+                    					->where(['t1.id' => $movingCompanyId, 't1.status' => '1'])
+                    					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+                    					->first();
+
+                $response['pst'] 			= round($clientMovingToAddress->pst, 2) . '%';
+                $response['gst'] 			= round($clientMovingToAddress->gst, 2) . '%';
+                $response['hst'] 			= round($clientMovingToAddress->hst, 2) . '%';
+                $response['service_charge']	= round($clientMovingToAddress->service_charge, 2) . '%';
+
+                $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
+
+    	        $response['moving_to_address'] 	= $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
 
     	        $html = '';
     	        // Get the Other Places to install appliances in
@@ -1423,11 +1454,33 @@ class CompanyController extends Controller
     	        		$html .= '<td>Detail job description</td>';
     	        		$html .= '<td>'. ucwords( strtolower( $itemDetail->item_name ) ) .'</td>';
     	        		$html .= '<td>'. $itemDetail->item_weight .'</td>';
-    	        		$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate" style="width: 100px;"></td>';
-    	        		$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate form-control" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
 
     	        		$html .= '</tr>';
     	        	}
+    	        }
+
+    	        if( $response['transportation_vehicle_type'] != '' && !is_null( $response['transportation_vehicle_type'] ) )
+    	        {
+	    	        // Get the moving transportations
+	    	        $movingTransportations = MovingTransportation::get();
+
+	    	        if( count( $movingTransportations ) > 0 )
+	    	        {
+	    	        	foreach( $movingTransportations as $movingTransportation )
+	    	        	{
+	    	        		$html .= '<tr>';
+
+	    	        		$html .= '<td>'. $movingTransportation->transportation_type .'</td>';
+	    	        		$html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
+	    	        		$html .= '<td>NA</td>';
+	    	        		$html .= '<td><input name="transportation_vehicle_time_estimate" class="transportation_vehicle_type form-control" style="width: 100px;"></td>';
+	    	        		$html .= '<td><input name="transportation_vehicle_budget_estimate" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
+
+	    	        		$html .= '</tr>';
+	    	        	}
+	    	        }
     	        }
 
     	        $response['request_services_details'] = $html;
@@ -1463,6 +1516,28 @@ class CompanyController extends Controller
     	        }
 
     	        $response['request_other_details'] = $otherDetailHtml;
+
+    	        // Get the latitude, longitude of the mover from the Google Map API
+    	        $clientMovingFromAddressCoordinates = array();
+    	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    	        $mapApiResponse = json_decode(file_get_contents($url), true);
+    	        if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+    	        {
+    	        	$clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+    	        }
+
+    	        $clientMovingToAddressCoordinates = array();
+    	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    	        $mapApiResponse = json_decode(file_get_contents($url), true);
+    	        if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+    	        {
+    	        	$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+    	        }
+
+    	        // Calculate the distance between the two address
+    	        $distance = Helper::distance($clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+
+    	        $response['distance'] = round($distance, 2) . 'KM';
             }
         }
         return response()->json($response);
@@ -3081,93 +3156,263 @@ class CompanyController extends Controller
     	$homeCleaningDetails = array();
     	parse_str($frmData, $homeCleaningDetails);
 
-    	/*Array
-    	(
-    	    [steaming_service_time_estimate] => Array
-    	        (
-    	            [1] => 5
-    	            [2] => 5
-    	            [4] => 5
-    	        )
+    	/*
+			Array
+			(
+			    [steaming_service_time_estimate] => Array
+			        (
+			            [1] => 2
+			            [2] => 2
+			            [4] => 2
+			        )
 
-    	    [steaming_service_budget_estimate] => Array
-    	        (
-    	            [1] => 5
-    	            [2] => 5
-    	            [4] => 5
-    	        )
+			    [steaming_service_budget_estimate] => Array
+			        (
+			            [1] => 10
+			            [2] => 10
+			            [4] => 10
+			        )
 
-    	    [other_place_to_clean_time_estimate] => Array
-    	        (
-    	            [1] => 5
-    	            [5] => 5
-    	            [6] => 5
-    	            [7] => 5
-    	            [9] => 5
-    	            [11] => 5
-    	        )
+			    [other_place_to_clean_time_estimate] => Array
+			        (
+			            [1] => 2
+			            [5] => 2
+			            [6] => 2
+			            [7] => 2
+			            [9] => 2
+			            [11] => 2
+			        )
 
-    	    [other_place_to_clean_budget_estimate] => Array
-    	        (
-    	            [1] => 5
-    	            [5] => 5
-    	            [6] => 5
-    	            [7] => 5
-    	            [9] => 5
-    	            [11] => 5
-    	        )
+			    [other_place_to_clean_budget_estimate] => Array
+			        (
+			            [1] => 10
+			            [5] => 10
+			            [6] => 10
+			            [7] => 10
+			            [9] => 10
+			            [11] => 10
+			        )
 
-    	    [additional_service_time_estimate] => Array
-    	        (
-    	            [1] => 5
-    	            [2] => 5
-    	            [3] => 5
-    	        )
+			    [additional_service_time_estimate] => Array
+			        (
+			            [1] => 2
+			            [2] => 2
+			            [3] => 2
+			        )
 
-    	    [additional_service_budget_estimate] => Array
-    	        (
-    	            [1] => 5
-    	            [2] => 5
-    	            [3] => 5
-    	        )
+			    [additional_service_budget_estimate] => Array
+			        (
+			            [1] => 10
+			            [2] => 10
+			            [3] => 10
+			        )
 
-    	    [discount] => 10
-    	    [home_cleaning_service_request_id] => 1
-    	)*/
+			    [discount] => 20
+			    [comment] => We are expert in this kind of work
+			    [home_cleaning_service_request_id] => 1
+			)
+    	*/
 
     	// Get the logged-in user id
-		$userId = Auth::id();
+		// $userId = Auth::id();
 
 		// Update the hours and amount in home_cleaning_additional_service_requests table
-		foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
-		{
-			HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'additional_request_id' => $key])->update([
-				'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
-				'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
-			]);
-		}
+		// foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
+		// {
+		// 	HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'additional_request_id' => $key])->update([
+		// 		'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
+		// 		'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
+		// 	]);
+		// }
 
 		// Update the hours and amount in home_cleaning_other_place_service_requests table
-		foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
-		{
-			HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
-				'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
-				'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
-			]);
-		}
+		// foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
+		// {
+		// 	HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
+		// 		'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
+		// 		'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
+		// 	]);
+		// }
 
 
 		// Update the hours and amount in home_cleaning_steaming_service_requests table
-		foreach( $homeCleaningDetails['steaming_service_time_estimate'] as $key => $value )
-		{
-			HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'steaming_service_id' => $key])->update([
-				'amount' => $homeCleaningDetails['steaming_service_time_estimate'][$key],
-				'hour_to_complete' => $homeCleaningDetails['steaming_service_budget_estimate'][$key]
-			]);
-		}
+		// foreach( $homeCleaningDetails['steaming_service_time_estimate'] as $key => $value )
+		// {
+		// 	HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'steaming_service_id' => $key])->update([
+		// 		'amount' => $homeCleaningDetails['steaming_service_time_estimate'][$key],
+		// 		'hour_to_complete' => $homeCleaningDetails['steaming_service_budget_estimate'][$key]
+		// 	]);
+		// }
 
 		// Add the Other details like PST, GST, HST, Discount, Service Charge, Total for the requested services
 
+    }
+
+    /**
+     * Function to update the tech concierge quotation price related data
+     * @param void
+     * @return array
+     */
+    public function updateTechConciergeServiceRequest()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$techConciergeDetails = array();
+    	parse_str($frmData, $techConciergeDetails);
+
+		// Get the logged-in user id
+		$userId = Auth::id();
+
+		// Get the province gst, hst, pst, service charge for the requested service
+    	$requestDetails = DB::table('tech_concierge_service_requests as t1')
+    					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+    					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+    					->where(['t1.id' => $techConciergeDetails['tech_concierge_service_request_id'], 't1.status' => '1'])
+    					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.company_id')
+    					->first();
+
+        $gstPercentage 	= 0;
+        $hstPercentage 	= 0;
+        $pstPercentage 	= 0;
+        $serviceChargePercentage = 0;
+        $response = array();
+        if( count( $requestDetails ) > 0 )
+        {
+        	// Check if there is an entry for response already exist
+
+        	$quotationRespone = ServiceRequestResponse::where(['request_id' => $techConciergeDetails['tech_concierge_service_request_id'], 'company_id' => $requestDetails->company_id])->first();
+
+        	if( count( $quotationRespone ) == 0 )
+        	{
+		        $pstPercentage 	= $requestDetails->pst;
+		        $gstPercentage 	= $requestDetails->gst;
+		        $hstPercentage 	= $requestDetails->hst;
+		        $serviceChargePercentage = $requestDetails->service_charge;
+
+		        // Calculate the gst, hst, pst, service charge amount for the requested services
+		        $gstAmount 		= 0;
+		        $hstAmount 		= 0;
+		        $pstAmount 		= 0;
+		        $serviceCharge 	= 0;
+		        $subTotal 		= 0;
+		        $insurance 		= 0;
+		        $totalAmount 	= 0;
+		        $totalRemittance= 0;
+
+		        foreach( $techConciergeDetails['appliance_budget_estimate'] as $amount )
+		        {
+		        	$subTotal += $amount;
+		        }
+
+		        // Deduct the discount
+		        if( $techConciergeDetails['discount'] != '' && $techConciergeDetails['discount'] != 0 )
+		        {
+		        	$subTotal -= $techConciergeDetails['discount'];
+		        }
+
+		        if( $gstPercentage != 0 )
+		        {
+		        	$gstAmount = round(( $gstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $hstPercentage != 0 )
+		        {
+		        	$hstAmount = round(( $hstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $pstPercentage != 0 )
+		        {
+		        	$pstAmount = round(( $pstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $serviceChargePercentage != 0 )
+		        {
+		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+
+		        // Start transaction
+		        DB::beginTransaction();
+
+		    	// Update the tech concierge application service request
+		    	if( is_array( $techConciergeDetails['appliance_budget_estimate'] ) && count( $techConciergeDetails['appliance_budget_estimate'] ) )
+		    	{
+		    		foreach( $techConciergeDetails['appliance_budget_estimate'] as $applianceId => $amount )
+		    		{
+		    			TechConciergeAppliancesServiceRequest::where([
+		    				'service_request_id' => $techConciergeDetails['tech_concierge_service_request_id'], 
+		    				'appliance_id' => $applianceId
+		    			])
+		    			->update([
+		    				'service_hours' => $techConciergeDetails['appliance_time_estimate'][$applianceId], 
+		    				'amount' => $amount,
+		    				'updated_by' => $userId
+		    			]);
+		    		}
+		    	}
+
+		    	// Add the total amount, gst, hst, pst, service tax, insurance, comments which are applicable
+				$serviceRequestResponse = new ServiceRequestResponse;
+
+				$serviceRequestResponse->request_id 	= $techConciergeDetails['tech_concierge_service_request_id'];
+				$serviceRequestResponse->company_id 	= $requestDetails->company_id;
+				$serviceRequestResponse->gst_amount 	= $gstAmount;
+				$serviceRequestResponse->hst_amount 	= $hstAmount;
+				$serviceRequestResponse->pst_amount 	= $pstAmount;
+				$serviceRequestResponse->service_charge = $serviceCharge;
+				$serviceRequestResponse->insurance 		= $insurance;
+				$serviceRequestResponse->discount 		= $techConciergeDetails['discount'];
+				$serviceRequestResponse->total_amount 	= $totalAmount;
+				$serviceRequestResponse->total_remittance = $totalRemittance;
+				$serviceRequestResponse->comment 		= $techConciergeDetails['comment'];
+				$serviceRequestResponse->created_by 	= $userId;
+
+				if( $serviceRequestResponse->save() )
+				{
+					// Commit the transaction
+					DB::commit();
+
+					$response['errCode'] 	= 0;
+	        		$response['errMsg'] 	= 'Response saved successfully';
+				}
+				else
+				{
+					// Rollback the transaction
+					DB::rollBack();
+
+					$response['errCode'] 	= 2;
+	        		$response['errMsg'] 	= 'Some issue in updating the response';
+				}
+        	}
+        	else
+        	{
+        		$response['errCode'] 	= 3;
+	        	$response['errMsg'] 	= 'You cannot enter response on the same query again!';
+        	}
+        }
+        else
+        {
+        	$response['errCode'] 	= 1;
+        	$response['errMsg'] 	= 'Some issue';
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to update the moving request quotation price related data
+     * @param void
+     * @return array
+     */
+    public function updateMovingServiceRequest()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$movingDetails = array();
+    	parse_str($frmData, $movingDetails);
     }
 
     /**
@@ -3197,6 +3442,20 @@ class CompanyController extends Controller
     	else if( $serviceType == 'tech_concierge' )
     	{
         	$clientMovingToAddress = DB::table('tech_concierge_service_requests as t1')
+	            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+	            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+	            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])
+	            					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+	            					->first();
+
+	        $response['pst'] 			= $clientMovingToAddress->pst;
+	        $response['gst'] 			= $clientMovingToAddress->gst;
+	        $response['hst'] 			= $clientMovingToAddress->hst;
+	        $response['service_charge']	= $clientMovingToAddress->service_charge;
+    	}
+    	else if( $serviceType == 'moving_company' )
+    	{
+        	$clientMovingToAddress = DB::table('moving_item_service_requests as t1')
 	            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
 	            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
 	            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])

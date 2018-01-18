@@ -3,25 +3,18 @@
 
 @section('content')
 
-	<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
-	
 	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
-	  <div class="navbar-header">
-	  	<a class="navbar-brand" href="#">
-	  		<!-- <img src="images/logo.png" alt="Udistro" /> -->
-	  		<img src="{{ url('/images/logo.png') }}" alt="" />
-	  	</a>
-	  </div>
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
 	   <li>
 	   		<a href="{{ url('/') }}">
-	    		<button type="button" class="btn top-btn1">I Am Moving</button>
+	    		<button type="button" class="btn top-btn1">I'm Moving</button>
 	    	</a>
 	    </li>
 	   <li><a href="{{ url('/agent/home') }}">
-	    <button type="button" class="btn top-btn1">I Help Others Move</button>
+	    <button type="button" class="btn top-btn1">I’m a Real-Estate Agent</button>
 	    </a></li>
 	  </ul>
 	 </div>
@@ -46,10 +39,10 @@
 	     	<!-- <img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro"> -->
 	     	<img src="{{ url('/images/banner-logo.png') }}" class="center-block img-responsive" alt="" />
 	     </div>
-	     <h1 class="title_banner">Improving relocation experience for 4 million household movers in Canada every year.</h1>
+	     <h1 class="title_banner">Receive project requests for few cents a day from people who are actively seeking to use your service. </h1>
 	     <div class="banner_btn-group center-block">
 	      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am a business</button> -->
-	      <a class="btn banner_btn btn-lg skyBlue_btn" href="{{ url('/company') }}">I am a business</a>
+	      <a class="btn banner_btn btn-lg skyBlue_btn" href="{{ url('/company') }}">I'm a Business</a>
 	      <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
 	     </div>
 	    </div>
@@ -65,8 +58,8 @@
 	  <div class="row">
 	   <div class="col-md-12">
 	    <div class="section-organise">
-	     <h2 class="center-block title-main">uDistro For Local Businesses</h2>
-	     <p class="discretion">Udistro is a powerful contextual marketing application that is reinventing advertising experience for all stakeholders in the relocation ecosystem, including moving, cleaning and storage companies, cable, satelite and internet service providers.</p>
+	     <h2 class="center-block title-main">uDistro for Local Businesses</h2>
+	     <p class="discretion">Udistro is a powerful contextual marketing application that is reinventing advertising experience for all stakeholders in the relocation ecosystem, including moving, cleaning and storage companies, cable, satellite and internet service providers.</p>
 	     <div class="videopart-2 row">
 	      <div class="col-md-7">
 	       <div class="video_box">
@@ -80,19 +73,19 @@
 	          <p>With uDistro, you are only going to get business requests from people who are actively seeking to use your services.</p>
 	         </li>
 	         <li><span>2</span>
-	          <p>We make sure that you have everything you need to get the next job offer. From tips, to prodcutivity features all avalable at your finger tips.</p>
+	          <p>We make sure that you have everything you need to get the next job offer. From tips, to productivity features all available at your fingertips.</p>
 	         </li>
 	         <li><span>3</span>
-	          <p>Standout in your local market, engage your new lead one on one, bargain and send then quotes all within uDistro for few cents per day.</p>
+	          <p>Standout in your local market, engage your new lead one on one, bargain and send them quotes all within uDistro for few cents per day.</p>
 	         </li>
 	         <li><span>4</span>
-	          <p>uDistro gives you complete control to manage your your review and rating and correct the impresion of customer if you ever get back review.</p>
+	          <p>uDistro gives you complete control to manage your review and rating and correct the impression of customer if you ever get bad review.</p>
 	         </li>
 	        </ul>
 	       </div>
 	       <div class="banner_btn-group center-block">
 	        <!-- <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button> -->
-	        <a href="{{ url('/company/registration') }}" class="btn try_btn btn-lg blue_btn">Start your free trial today!</a>
+	        <a href="{{ url('/freetrial') }}" class="btn try_btn btn-lg blue_btn">Start your free trial today!</a>
 	       </div>
 	      </div>
 	     </div>
@@ -108,8 +101,8 @@
 	  <div class="row">
 	   <div class="col-md-12">
 	    <div class="section-organise">
-	     <h2 class="center-block title-main">Get to the market before your customer does!</h2>
-	     <p class="discretion">Our end to end moving application helps you organize all your moving related task into few manageable recommended steps performed from a single location.</p>
+	     <h2 class="center-block title-main">Get to the market place before your customer does!</h2>
+	     <p class="discretion">uDistro leads could bring in additional $50,000 of business each month from people who are actively seeking to use your services</p>
 
 	     <div class="row">
 	      <div class="col-md-12 local_b_3">
@@ -119,7 +112,7 @@
 	      				<img src="{{ url('/images/landing_image/leaves.png') }}" alt="" />
 	      			</div>
 	         <div class="heading2">Get New Leads</div>
-	         <p>uDistro furnel technology provides you with the tools to succeed, the only thing that can stop you on our market place is your attitute.</p>
+	         <p>uDistro funnel technology provides you with the tools to succeed, the only thing that can stop you on our market place is your attitude.</p>
 	      </div>
 	      <div class="col-md-4 box-border">
 	      			<div class="udistro_client">
@@ -127,7 +120,7 @@
 	      				<img src="{{ url('/images/landing_image/engage.png') }}" alt="" />
 	      			</div>
 	         <div class="heading2">Engage your customer</div>
-	         <p>Repeat customers are a product of relationships. Become a recommended business on uDistro by engaging in a meaningful relation with your customers.</p>
+	         <p>Repeat customers are a product of relationships. Become a recommended five-star rated business on uDistro by engaging in a meaningful relationship with your customers.</p>
 	      </div>
 	      <div class="col-md-4 box-border">
 	      			<div class="udistro_client">
@@ -135,13 +128,13 @@
 	      				<img src="{{ url('/images/landing_image/business.png') }}" alt="" />
 	      			</div>
 	         <div class="heading2">Expose your business</div>
-	         <p>uDistro will expose your business an entire new markets full of people who are ready to buy. Just create a profile, relax, seat back and respond to quotes requests.</p>
+	         <p>uDistro will expose your business to an entire new markets full of people who are ready to buy. Just create a profile, relax, seat back and respond to quotes requests.</p>
 	      </div>
 	      </div>
 	      <div class="clearfix"></div>
 	      <div class="banner_btn-group text-center">
 	       <!-- <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button> -->
-	       <a href="{{ url('/company/registration') }}" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</a>
+	       <a href="{{ url('/freetrial') }}" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</a>
 	      </div>
 	     </div>
 	    </div>

@@ -160,7 +160,7 @@
 					</div>
 
 					<div class="modal-body" style="height: 800px; overflow-y: auto;">
-						<form id="frm_home_cleaning_services" name="frm_home_cleaning_services">
+						<form id="frm_home_cleaning_services" name="frm_home_cleaning_services" autocomplete="off">
 							<div class="col-lg-6 col-md-6 col-sm-6">
 								<table class="table table-striped">
 									<tr>
@@ -320,6 +320,16 @@
 											<td id="total">$0</td>
 										</tr>
 										<tr>
+											<td colspan="4" style="width: 80%;">Total Remittance</td>
+											<td id="total_remittance">$0</td>
+										</tr>
+										<tr>
+											<td>Comment</td>
+											<td>
+												<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
+											</td>
+										</tr>
+										<tr>
 											<td colspan="4" style="width: 80%;"></td>
 											<td>
 												<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
@@ -351,7 +361,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
-								<form id="frm_cable_internet_services" name="frm_cable_internet_services">
+								<form id="frm_cable_internet_services" name="frm_cable_internet_services" autocomplete="off">
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
 											<tr>
@@ -528,7 +538,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
-								<form id="frm_tech_concierge" name="frm_tech_concierge">
+								<form id="frm_tech_concierge" name="frm_tech_concierge" autocomplete="off">
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
 											<tr>
@@ -654,6 +664,16 @@
 													<td id="total">$0</td>
 												</tr>
 												<tr>
+													<td colspan="4" style="width: 80%;">Total Remittance</td>
+													<td id="total_remittance">$0</td>
+												</tr>
+												<tr>
+													<td>Comment</td>
+													<td>
+														<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
+													</td>
+												</tr>
+												<tr>
 													<td colspan="4" style="width: 80%;"></td>
 													<td>
 														<input type="hidden" name="tech_concierge_service_request_id" id="tech_concierge_service_request_id">
@@ -688,7 +708,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12">
-								<form id="frm_home_moving_companies" name="frm_home_moving_companies">
+								<form id="frm_home_moving_companies" name="frm_home_moving_companies" autocomplete="off">
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
 											<tr>
@@ -755,14 +775,13 @@
 												<th>User Input</th>
 											</tr>
 											<tr>
-												<td>Transportation vehicle type</td>
-												<td id="transportation_vehicle_type"></td>
-											</tr>
-											<tr>
 												<td>Moving date</td>
 												<td id="moving_date"></td>
 											</tr>
-
+											<tr>
+												<td>Distance</td>
+												<td id="distance"></td>
+											</tr>
 											<tr>
 												<td>Additional Information</td>
 												<td id="additional_information"></td>
@@ -802,43 +821,59 @@
 									</div>
 
 									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
+										<table class="table table-striped" id="moving_service_calculations">
 											<thead>
 												<tr>
-													<td colspan="4" style="width: 80%;">PST</td>
-													<td id="pst"></td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">GST</td>
-													<td id="gst"></td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">HST</td>
-													<td id="hst"></td>
+													<td colspan="4" style="width: 80%;">Insurance</td>
+													<td>
+														<input type="text" name="insurance" id="insurance"  class="form-control moving_service_insurance">
+													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Discount</td>
 													<td>
-														<input type="text" name="discount" id="discount">
+														<input type="text" name="discount" id="discount"  class="form-control moving_service_discount">
 													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Sub Total</td>
-													<td id="subtotal"></td>
+													<td id="subtotal">$0</td>
 												</tr>
 												<tr>
-													<td colspan="4" style="width: 80%;">Service Charge</td>
-													<td id="service_charge"></td>
+													<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+													<td id="gst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+													<td id="hst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+													<td id="pst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+													<td id="service_charge_amount">$0</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Total</td>
-													<td id="total"></td>
+													<td id="total">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Total Remittance</td>
+													<td id="total_remittance">$0</td>
+												</tr>
+												<tr>
+													<td>Comment</td>
+													<td>
+														<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
+													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;"></td>
 													<td>
-														<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
-														<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+														<input type="hidden" name="moving_service_request_id" id="moving_service_request_id" value="">
+														<input type="submit" name="btn_update_moving_service_request" id="btn_update_moving_service_request" value="Submit" class="btn btn-info">
 													</td>
 												</tr>
 											</thead>

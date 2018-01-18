@@ -1696,6 +1696,12 @@ function calculateRoute(from, to) {
 						                        </div>
 
 						                        <div class="form-group">
+						                        	<label>Need insurance?</label>
+						                        	<label> <input type="radio" name="moving_house_need_insurance" value="1">Yes</label>
+						                        	<label> <input type="radio" name="moving_house_need_insurance" value="0">No</label>
+						                        	<div><label id="moving_house_need_insurance-error" class="error" for="moving_house_need_insurance"></label></div>
+						                        </div>
+						                        <div class="form-group">
 						                        	<label>Call back option?</label>
 						                        	<label> <input type="radio" name="moving_house_callback_option" value="1">Yes</label>
 						                        	<label> <input type="radio" name="moving_house_callback_option" value="0">No</label>

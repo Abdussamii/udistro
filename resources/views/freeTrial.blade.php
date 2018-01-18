@@ -1,11 +1,125 @@
 @extends('layouts.app')
-@section('title', 'Udistro | Events')
+@section('title', 'Udistro | Free Trial')
 
 @section('content')
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+	<!-- JQuery Validation -->
+	<script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
+
+	<!-- JS Alert Plug-in -->
+	<script type="text/javascript" src="{{ URL::asset('js/alertify.min.js') }}"></script>
+	<link rel="stylesheet" href="{{ URL::asset('css/alertify.min.css') }}" />
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#frm_company_registration').submit(function(e){
+		    e.preventDefault();
+		});
+		$('#frm_company_registration').validate({
+		    rules: {
+		    	rep_fname: {
+		    		required: true
+		    	},
+		    	rep_lname: {
+		    		required: true
+		    	},
+		    	rep_designation: {
+		    		required: true
+		    	},
+		    	email: {
+		            required: true,
+		            email: true
+		        },
+		        password: {
+		            required: true,
+		            minlength: 6
+		        },
+		    	phone_no: {
+		    		required: true,
+		    		number: true
+		    	},
+		    	company_name: {
+		    		required: true
+		    	},
+		    	company_province: {
+		    		required: true
+		    	},
+		    	company_type: {
+		    		required: true
+		    	}
+		    },
+		    messages: {
+		    	rep_fname: {
+		    		required: 'Please enter first name'
+		    	},
+		    	rep_lname: {
+		    		required: 'Please enter last name'
+		    	},
+		    	rep_designation: {
+		    		required: 'Please enter job title'
+		    	},
+		    	email: {
+		            required: 'Please enter email',
+		            email: 'Please enter valid email'
+		        },
+		        password: {
+		            required: 'Please enter password',
+		            minlength: 'Password must contain atleat 6 characters'
+		        },
+		    	phone_no: {
+		    		required: 'Please enter phone number',
+		    		number: 'Please enter a valid number'
+		    	},
+		    	company_name: {
+		    		required: 'Please enter company name'
+		    	},
+		    	company_province: {
+		    		required: 'Please select province'
+		    	},
+		    	company_type: {
+		    		required: 'Please select industry type'
+		    	}
+		    }
+		});
+		$('#btn_company_registration').click(function(){
+	    	if( $('#frm_company_registration').valid() )
+	    	{
+	    		$.ajax({
+	    			url: $('meta[name="route"]').attr('content') + '/company/registercompany',
+	    			method: 'post',
+	    			data: {
+	    				frmData: $('#frm_company_registration').serialize()
+	    			},
+	    			headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    success: function(response){
+				    	if( response.errCode == 0 )
+				    	{
+				    		alertify.success( response.errMsg );
+
+				    		// Refresh the form
+				    		$('#frm_company_registration')[0].reset();
+				    	}
+				    	else
+				    	{
+				    		alertify.error( response.errMsg );
+				    	}
+				    }
+	    		});
+	    	}
+	    });
+	});
+	</script>
+
 	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
-	  <div class="navbar-header logo"> <a href="#"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
 	   <li><a href="#">
 	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>
@@ -41,6 +155,9 @@
 	                <input placeholder="Enter Your First Name" name="rep_fname" id="rep_fname" class="form-control" type="text">
 	            </div>
 	            <div class="form-group">
+	                <input placeholder="Last name" name="rep_lname" id="rep_lname" type="text" class="form-control" />
+	            </div>
+	            <div class="form-group">
 	                <input placeholder="Enter Your Job Title" name="rep_designation" id="rep_designation" class="form-control" type="text">
 	            </div>
 	            <div class="form-group">
@@ -58,12 +175,30 @@
 	            <div class="form-group">
 	                <select name="company_province" id="company_province" class="form-control">
 	                	<option value="">Select Province</option>
-	                	<option value="1">Alberta</option><option value="2">British Columbia</option><option value="3">Manitoba</option><option value="4">New Brunswick</option><option value="5">Newfoundland And Labrador</option><option value="6">Northwest Territories</option><option value="7">Nova Scotia</option><option value="8">Nunavut</option><option value="9">Ontario</option><option value="10">Prince Edward Island</option><option value="11">Quebec</option><option value="12">Saskatchewan</option><option value="13">Yukon</option>                </select>
+	                	<?php
+	                	if( count( $provinces ) > 0 )
+	                	{
+	                		foreach ($provinces as $province)
+	                		{
+	                			echo '<option value="'. $province->id .'">'. ucwords( strtolower( $province->name ) ) .'</option>';
+	                		}
+	                	}
+	                	?>
+	                </select>
 	            </div>
 	            <div class="form-group">
 	                <select name="company_type" id="company_type" class="form-control">
 	                	<option value="">Select Industry Type</option>
-	                	<option value="2">Home Service Company</option><option value="4">Internet &amp; Cable Service Provider</option><option value="3">Moving Company</option><option value="1">Real Estate Company</option><option value="5">Tech Concierge</option><option value="6">Utility Company</option>                </select>
+	                	<?php
+	                	if( count( $companyCategories ) > 0 )
+	                	{
+	                		foreach ($companyCategories as $category)
+	                		{
+	                			echo '<option value="'. $category->id .'">'. ucwords( strtolower( $category->category ) ) .'</option>';
+	                		}
+	                	}
+	                	?>
+	                </select>
 	            </div>
 	            <div class="form-group">
 	                <input class="btn btn-default" id="btn_company_registration" name="btn_company_registration" value="Start Free Trail" type="submit">

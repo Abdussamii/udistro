@@ -73,9 +73,11 @@ Route::get('/faqs', function () {
 });
 
 // Free trial
-Route::get('/freetrial', function () {
+/*Route::get('/freetrial', function () {
     return view('freeTrial');
-});
+});*/
+
+Route::get('/freetrial', 'CompanyController@register');
 
 // Help center
 Route::get('/helpcenter', function () {
@@ -639,6 +641,12 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To update the home cleaning request quotation price related data
 	Route::post('/updatehomecleaningservicerequest', 'CompanyController@updateHomeCleaningServiceRequest');
+
+	// To update the moving request quotation price related data
+	Route::post('/updatemovingservicerequest', 'CompanyController@updateMovingServiceRequest');
+
+	// To update the tech concierge quotation price related data
+	Route::post('/updatetechconciergeservicerequest', 'CompanyController@updateTechConciergeServiceRequest');
 
 	// To get the pst, gst, hst, service charge values
 	Route::get('/fetchprovincetaxes', 'CompanyController@fetchProvinceTaxes');

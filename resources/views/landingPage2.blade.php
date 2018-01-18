@@ -3,26 +3,19 @@
 
 @section('content')
 
-	<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
-	
 	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
-	  <div class="navbar-header">
-	  	<a class="navbar-brand" href="#">
-	  		<!-- <img src="images/logo.png" alt="Udistro" /> -->
-	  		<img src="{{ url('/images/landing_image/logo.png') }}" alt="Udistro" />
-	  	</a>
-	  </div>
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
 	   <li>
 	   		<a href="{{ url('/') }}">
-	    		<button type="button" class="btn top-btn1">I Am Moving</button>
+	    		<button type="button" class="btn top-btn1">I'm Moving</button>
 	    	</a>
 	    </li>
 	   <li>
 	   		<a href="{{ url('/company/home') }}">
-	    		<button type="button" class="btn top-btn1">I Am a Business</button>
+	    		<button type="button" class="btn top-btn1">I'm a Business</button>
 	    	</a>
 	    </li>
 	  </ul>
@@ -48,10 +41,10 @@
 	     	<!-- <img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro"> -->
 	     	<img src="{{ url('/images/landing_image/banner-logo.png') }}" class="center-block img-responsive" alt="udistro">
 	     </div>
-	     <h1 class="title_banner">Improving relocation experience for 4 million household movers in Canada every year.</h1>
+	     <h1 class="title_banner">Use our customizable, branded email templates to engage your clients in a radically new way</h1>
 	     <div class="banner_btn-group center-block">
 	      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I Help Others Move</button> -->
-	      <a href="{{ url('/agent') }}" class="btn banner_btn btn-lg skyBlue_btn">I Help Others Move</a>
+	      <a href="{{ url('/agent') }}" class="btn banner_btn btn-lg skyBlue_btn">I’m a Real-Estate Agent</a>
 	      <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
 	     </div>
 	    </div>
@@ -67,8 +60,8 @@
 	  <div class="row">
 	   <div class="col-md-12">
 	    <div class="section-organise">
-	     <h2 class="center-block title-main">uDistro For Realtors and Property Managers</h2>
-	     <p class="discretion">Udistro is a powerful moving application that is helping realtors and property managers streamline moving process and provide end-to-end moving experience to millins of Canadians who are on the move.</p>
+	     <h2 class="center-block title-main">uDistro for Realtors and Property Managers</h2>
+	     <p class="discretion">Udistro is a powerful moving application that is helping realtors and property managers update their brands and streamline moving process for clients who are moving.</p>
 	     <div class="videopart-2 row">
 	      <div class="col-md-7">
 	       <div class="video_box">
@@ -79,22 +72,23 @@
 	       <div class="bullet-point">
 	        <ul>
 	         <li><span>1</span>
-	          <p>When you invite your clients to use uDistro for free, they not only feel obligated to refer you to others but our software encourage them to do so.</p>
+	          <p>When you invite your clients to use uDistro for free, they feel obligated to refer you to others; not only that, the software encourages them to do so.</p>
 	         </li>
 	         <li><span>2</span>
-	          <p>uDistro will help you improve customer experience initiatives, and in turn, you will get more refferals and increase your buttonlines.</p>
+	          <p>uDistro will help you improve customer experience initiatives, and in turn, you will get more referrals and increase your bottom lines.</p>
 	         </li>
 	         <li><span>3</span>
-	          <p>Standout in your local market, engage your clients with news letter, monthly or annual renewal notices and custom greeting emails branded for you.</p>
+	          <p>Standout in your local market, engage your clients with easy to use contact management and responsive email templates designs branded for just you.</p>
 	         </li>
 	         <li><span>4</span>
-	          <p> uDistro is a gift of time, the more time your clients get back to talk to friends, families and coleagues, the more they talk about you.</p>
+	          <p>uDistro is a gift of time, the more time your clients get back to talk to friends, families and colleagues, the more they are likely to talk about you.</p>
 	         </li>
 	        </ul>
 	       </div>
 	       <div class="banner_btn-group center-block">
 	       	<!-- The url is for agent registration -->
-	        <button type="button" class="btn try_btn btn-lg blue_btn">Start your free trial today!</button>
+	        <!-- <button type="button" class="btn try_btn btn-lg blue_btn">Try uDistro for 60 days free</button> -->
+	        <a href="{{ url('freetrial') }}" class="btn try_btn btn-lg blue_btn">Try uDistro for 60 days free</a>
 	       </div>
 	      </div>
 	     </div>
@@ -120,7 +114,7 @@
 	      				<img src="{{ url('/images/landing_image/time-save.png') }}" alt=""/>
 	      			</div>
 	         <div class="heading2">You save them time</div>
-	         <p>uDistro is a time saving machine for residential and commercial moves. Your clients  can complete each recommneded moving task in minutes, saving them hours!</p>
+	         <p>uDistro is a time saving tool for residential and commercial moves. Your clients can complete each recommended moving task in minutes, saving them hours!</p>
 	      </div>
 	      <div class="col-md-4 box-border">
 	      			<div class="udistro_client">
@@ -128,7 +122,7 @@
 	      				<img src="{{ url('/images/landing_image/money-save.png') }}" alt=""/>
 	      			</div>
 	         <div class="heading2">You save them money</div>
-	         <p>uDistro compares hundreds of quotes from different service providers allowing your clients to seat back and choose the best </p>
+	         <p>uDistro compares hundreds of quotes from different service providers allowing your clients to seat back and make a good choice</p>
 	      </div>
 	      <div class="col-md-4 box-border">
 	      			<div class="udistro_client">
@@ -136,13 +130,13 @@
 	      				<img src="{{ url('/images/landing_image/move-save.png') }}" alt=""/>
 	      			</div>
 	         <div class="heading2">You help them move everything!</div>
-	         <p>uDistro helps your clients move everthing they need to move from one easy to use platform including mails and utility services.</p>
+	         <p>uDistro helps your clients move everything they need to move from one easy to use platform including mails and utility services.</p>
 	      </div>
 	      </div>
 	      <div class="clearfix"></div>
 	      <div class="banner_btn-group text-center">
 	       <!-- <button type="button" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</button> -->
-	       	<a href="{{ url('company/registration') }}" class="btn banner_btn btn-lg blue_btn">Try uDistro today for free</a>
+	       	<a href="{{ url('company/registration') }}" class="btn banner_btn btn-lg blue_btn">Try uDistro for 60 days free</a>
 	      </div>
 	     </div>
 	    </div>
