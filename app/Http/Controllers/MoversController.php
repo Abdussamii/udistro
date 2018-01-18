@@ -2154,6 +2154,134 @@ class MoversController extends Controller
     }
 
     /**
+     * Function to get the Cable Service Request
+     * @param void
+     * @return array
+     */
+    public function getCableServiceRequest()
+    {
+        $cableInternetId = Input::get('cableInternetId');
+        $companyId = Input::get('companyId');
+
+        $response = array();
+        if( $cableInternetId != '' )
+        {
+            $cableInternetServiceDetails = DigitalServiceRequest::find($cableInternetId);
+
+            $response['moving_from_house_type']     = ucwords( strtolower( $cableInternetServiceDetails['moving_from_house_type'] ) );
+            $response['moving_from_floor']          = $cableInternetServiceDetails['moving_from_floor'];
+            $response['moving_from_bedroom_count']  = $cableInternetServiceDetails['moving_from_bedroom_count'];
+            $response['moving_from_property_type']  = ucwords( strtolower( $cableInternetServiceDetails['moving_from_property_type'] ) );
+
+            $response['moving_to_house_type']       = ucwords( strtolower( $cableInternetServiceDetails['moving_to_house_type'] ) );
+            $response['moving_to_floor']            = $cableInternetServiceDetails['moving_to_floor'];
+            $response['moving_to_bedroom_count']    = $cableInternetServiceDetails['moving_to_bedroom_count'];
+            $response['moving_to_property_type']    = ucwords( strtolower( $cableInternetServiceDetails['moving_to_property_type'] ) );
+
+            $response['have_cable_internet_already']        = ( $cableInternetServiceDetails['have_cable_internet_already'] == 1 ) ? 'Yes' : 'No';
+            $response['employment_status']                  = ( $cableInternetServiceDetails['employment_status'] == 1 ) ? 'Yes' : 'No';
+            $response['want_to_receive_electronic_bill']    = ( $cableInternetServiceDetails['want_to_receive_electronic_bill'] == 1 ) ? 'Yes' : 'No';
+            $response['want_to_contract_plan']              = ( $cableInternetServiceDetails['want_to_contract_plan'] == 1 ) ? 'Yes' : 'No';
+            $response['want_to_setup_preauthorise_payment'] = ( $cableInternetServiceDetails['want_to_setup_preauthorise_payment'] == 1 ) ? 'Yes' : 'No';
+
+            $response['additional_information']             = ucfirst( strtolower( $cableInternetServiceDetails['additional_information'] ) );
+
+            // Get the moving from address
+            $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+                                    ->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                                    ->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                                    ->join('cities as t4', 't2.city_id', '=', 't4.id')
+                                    ->join('countries as t5', 't2.country_id', '=', 't5.id')
+                                    ->where(['t1.id' => $cableInternetId, 't1.status' => '1'])
+                                    ->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                                    ->first();
+
+            // Get the moving to address
+            $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+                                    ->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                                    ->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                                    ->join('cities as t4', 't2.city_id', '=', 't4.id')
+                                    ->join('countries as t5', 't2.country_id', '=', 't5.id')
+                                    ->where(['t1.id' => $cableInternetId, 't1.status' => '1'])
+                                    ->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.gst', 't3.hst', 't3.pst', 't3.service_charge')
+                                    ->first();
+
+            $response['pst']            = round($clientMovingToAddress->pst, 2) . '%';
+            $response['gst']            = round($clientMovingToAddress->gst, 2) . '%';
+            $response['hst']            = round($clientMovingToAddress->hst, 2) . '%';
+            $response['service_charge'] = round($clientMovingToAddress->service_charge, 2) . '%';
+
+            $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
+
+            $response['moving_to_address']  = $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
+
+            // Get the selected services
+            $services = DB::table('digital_service_type_requests as t1')
+                        ->join('digital_service_types as t2', 't1.digital_service_type_id', '=', 't2.id')
+                        ->where(['t1.digital_service_request_id' => $cableInternetId])
+                        ->select('t1.id as service_request_id', 't2.id as service_id', 't2.service', 't1.service_hours', 't1.amount')
+                        ->get();
+
+            $html = '';
+            if( count( $services ) > 0 )
+            {
+                foreach( $services as $service )
+                {
+                    $html .= '<tr>';
+
+                    $html .= '<td>Services</td>';
+                    $html .= '<td>'. ucwords( strtolower( $service->service ) ) .'</td>';
+                    $html .= '<td>NA</td>';
+                    $html .= '<td>'. ucwords( strtolower( $service->service_hours ) ) .'</td>';
+                    $html .= '<td>'. ucwords( strtolower( $service->amount ) ) .'</td>';
+
+                    $html .= '</tr>';
+                }
+            }
+
+            $response['request_services_details'] = $html;
+
+            $additionalServiceHtml = '';
+            // Get the selected additional services
+            $additionalServices = DB::table('digital_additional_service_type_requests as t1')
+                        ->join('digital_additional_services as t2', 't1.digital_additional_service_type_id', '=', 't2.id')
+                        ->where(['t1.digital_service_request_id' => $cableInternetId])
+                        ->select('t1.id as service_request_id', 't2.id as additional_service_id', 't2.additional_service')
+                        ->get();
+
+            if( count( $additionalServices ) > 0 )
+            {
+                foreach( $additionalServices as $additionalService )
+                {
+                    $additionalServiceHtml .= '<tr>';
+
+                    $additionalServiceHtml .= '<td>Additional Services</td>';
+                    $additionalServiceHtml .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
+
+                    $additionalServiceHtml .= '</tr>';
+                }
+            }
+
+            $response['request_additional_services_details'] = $additionalServiceHtml;
+
+            $taxDetails = DB::table('service_request_responses')->where(['request_id' => $cableInternetId, 'company_id' => $companyId])->first();
+
+            if( count( $taxDetails ) > 0 )
+            {
+                $response['gst_amount']     = $taxDetails->gst_amount;
+                $response['hst_amount']     = $taxDetails->hst_amount;
+                $response['pst_amount']     = $taxDetails->pst_amount;
+                $response['service_charge'] = $taxDetails->service_charge;
+                $response['total_amount']   = $taxDetails->total_amount;
+                $response['discount']       = $taxDetails->discount;
+            }
+
+        }
+        
+        return response()->json($response);
+    }
+
+    /**
 	 * To get the list of cable & internet companies satisfying all the criteria to get the mover's quotations
 	 *
 	 * 		- Rules
