@@ -45,6 +45,8 @@ use App\MovingTransportation;
 use App\TechConciergeAppliancesServiceRequest;
 use App\ServiceRequestResponse;
 use App\DigitalServiceTypeRequest;
+use App\MovingItemDetailServiceRequest;
+use App\MovingTransportationTypeRequest;
 
 use Validator;
 use Helper;
@@ -1467,7 +1469,7 @@ class CompanyController extends Controller
     	        	}
     	        }
 
-    	        if( $response['transportation_vehicle_type'] != '' && !is_null( $response['transportation_vehicle_type'] ) )
+    	        if( $movingCompaniesArray['transportation_vehicle_type'] != '' && !is_null( $movingCompaniesArray['transportation_vehicle_type'] ) )
     	        {
 	    	        // Get the moving transportations
 	    	        $movingTransportations = MovingTransportation::get();
@@ -1481,8 +1483,8 @@ class CompanyController extends Controller
 	    	        		$html .= '<td>'. $movingTransportation->transportation_type .'</td>';
 	    	        		$html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
 	    	        		$html .= '<td>NA</td>';
-	    	        		$html .= '<td><input name="transportation_vehicle_time_estimate" class="transportation_vehicle_type form-control" style="width: 100px;"></td>';
-	    	        		$html .= '<td><input name="transportation_vehicle_budget_estimate" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
+	    	        		$html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;"></td>';
+	    	        		$html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
 
 	    	        		$html .= '</tr>';
 	    	        	}
@@ -3540,9 +3542,9 @@ class CompanyController extends Controller
 		        }
 
 		        // Add the transportation charge
-		        if( $movingDetails['transportation_vehicle_budget_estimate'] != '' && $movingDetails['transportation_vehicle_budget_estimate'] != 0 )
+		        if( $movingDetails['transportation_vehicle_budget_estimate'][1] != '' && $movingDetails['transportation_vehicle_budget_estimate'][1] != 0 )
 		        {
-		        	$subTotal += $movingDetails['transportation_vehicle_budget_estimate'];
+		        	$subTotal += $movingDetails['transportation_vehicle_budget_estimate'][1];
 		        }
 
 		        // Add the insurance
@@ -3583,40 +3585,56 @@ class CompanyController extends Controller
 
 		       	
 		        // Start transaction
-		        /*DB::beginTransaction();
+		        DB::beginTransaction();
 
-		    	// Update the tech concierge application service request
+		    	// Update the moving_item_detail_service_requests request
 		    	if( is_array( $movingDetails['detail_job_budget_estimate'] ) && count( $movingDetails['detail_job_budget_estimate'] ) )
 		    	{
 		    		foreach( $movingDetails['detail_job_budget_estimate'] as $applianceId => $amount )
 		    		{
-		    			TechConciergeAppliancesServiceRequest::where([
-		    				'service_request_id' => $techConciergeDetails['tech_concierge_service_request_id'], 
-		    				'appliance_id' => $applianceId
+		    			MovingItemDetailServiceRequest::where([
+		    				'moving_items_service_id' => $movingDetails['moving_service_request_id'], 
+		    				'moving_items_details_id' => $applianceId
 		    			])
 		    			->update([
-		    				'service_hours' => $techConciergeDetails['appliance_time_estimate'][$applianceId], 
+		    				'move_hours' => $movingDetails['detail_job_time_estimate'][$applianceId], 
 		    				'amount' => $amount,
 		    				'updated_by' => $userId
 		    			]);
 		    		}
-		    	}*/
+		    	}
 
-		    	/*
+		    	// Update the moving_transportation_type_requests request
+		    	if( $movingDetails['transportation_vehicle_budget_estimate'] != '' && $movingDetails['transportation_vehicle_budget_estimate'] != 0 )
+		    	{
+		    		foreach( $movingDetails['transportation_vehicle_budget_estimate'] as $transportId => $amount )
+		    		{
+		    			MovingTransportationTypeRequest::where([
+		    				'moving_items_services_id' => $movingDetails['moving_service_request_id'], 
+		    				'transportation_id' => $transportId
+		    			])
+		    			->update([
+		    				'hour_to_complete' => $movingDetails['transportation_vehicle_time_estimate'][$transportId], 
+		    				'amount' => $amount,
+		    				'updated_by' => $userId
+		    			]);
+		    		}
+		    	}
+		    	
 		    	// Add the total amount, gst, hst, pst, service tax, insurance, comments which are applicable
 				$serviceRequestResponse = new ServiceRequestResponse;
 
-				$serviceRequestResponse->request_id 	= $techConciergeDetails['tech_concierge_service_request_id'];
+				$serviceRequestResponse->request_id 	= $movingDetails['moving_service_request_id'];
 				$serviceRequestResponse->company_id 	= $requestDetails->company_id;
 				$serviceRequestResponse->gst_amount 	= $gstAmount;
 				$serviceRequestResponse->hst_amount 	= $hstAmount;
 				$serviceRequestResponse->pst_amount 	= $pstAmount;
 				$serviceRequestResponse->service_charge = $serviceCharge;
 				$serviceRequestResponse->insurance 		= $insurance;
-				$serviceRequestResponse->discount 		= $techConciergeDetails['discount'];
+				$serviceRequestResponse->discount 		= $movingDetails['discount'];
 				$serviceRequestResponse->total_amount 	= $totalAmount;
 				$serviceRequestResponse->total_remittance = $totalRemittance;
-				$serviceRequestResponse->comment 		= $techConciergeDetails['comment'];
+				$serviceRequestResponse->comment 		= $movingDetails['comment'];
 				$serviceRequestResponse->created_by 	= $userId;
 
 				if( $serviceRequestResponse->save() )
@@ -3635,7 +3653,6 @@ class CompanyController extends Controller
 					$response['errCode'] 	= 2;
 	        		$response['errMsg'] 	= 'Some issue in updating the response';
 				}
-				*/
         	}
         	else
         	{

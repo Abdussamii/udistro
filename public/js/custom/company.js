@@ -862,6 +862,8 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
+		    		$('#modal_home_cleaning_service_request').modal('hide');
+		    		
 		    		alertify.success( response.errMsg );
 		    	}
 		    	else
@@ -891,6 +893,8 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
+		    		$('#modal_moving_companies_service_request').modal('hide');
+
 		    		alertify.success( response.errMsg );
 		    	}
 		    	else
