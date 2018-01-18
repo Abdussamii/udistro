@@ -3156,96 +3156,170 @@ class CompanyController extends Controller
     	$homeCleaningDetails = array();
     	parse_str($frmData, $homeCleaningDetails);
 
-    	/*
-			Array
-			(
-			    [steaming_service_time_estimate] => Array
-			        (
-			            [1] => 2
-			            [2] => 2
-			            [4] => 2
-			        )
-
-			    [steaming_service_budget_estimate] => Array
-			        (
-			            [1] => 10
-			            [2] => 10
-			            [4] => 10
-			        )
-
-			    [other_place_to_clean_time_estimate] => Array
-			        (
-			            [1] => 2
-			            [5] => 2
-			            [6] => 2
-			            [7] => 2
-			            [9] => 2
-			            [11] => 2
-			        )
-
-			    [other_place_to_clean_budget_estimate] => Array
-			        (
-			            [1] => 10
-			            [5] => 10
-			            [6] => 10
-			            [7] => 10
-			            [9] => 10
-			            [11] => 10
-			        )
-
-			    [additional_service_time_estimate] => Array
-			        (
-			            [1] => 2
-			            [2] => 2
-			            [3] => 2
-			        )
-
-			    [additional_service_budget_estimate] => Array
-			        (
-			            [1] => 10
-			            [2] => 10
-			            [3] => 10
-			        )
-
-			    [discount] => 20
-			    [comment] => We are expert in this kind of work
-			    [home_cleaning_service_request_id] => 1
-			)
-    	*/
-
     	// Get the logged-in user id
-		// $userId = Auth::id();
+		$userId = Auth::id();
 
-		// Update the hours and amount in home_cleaning_additional_service_requests table
-		// foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
-		// {
-		// 	HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'additional_request_id' => $key])->update([
-		// 		'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
-		// 		'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
-		// 	]);
-		// }
+		// Get the province gst, hst, pst, service charge for the requested service
+    	$requestDetails = DB::table('home_cleaning_service_requests as t1')
+    					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+    					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+    					->where(['t1.id' => $homeCleaningDetails['home_cleaning_service_request_id'], 't1.status' => '1'])
+    					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.company_id')
+    					->first();
 
-		// Update the hours and amount in home_cleaning_other_place_service_requests table
-		// foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
-		// {
-		// 	HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
-		// 		'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
-		// 		'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
-		// 	]);
-		// }
+        $gstPercentage 	= 0;
+        $hstPercentage 	= 0;
+        $pstPercentage 	= 0;
+        $serviceChargePercentage = 0;
+        
+        $response = array();
+        if( count( $requestDetails ) > 0 )
+        {
+        	// Check if there is an entry for response already exist
 
+        	$quotationRespone = ServiceRequestResponse::where(['request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'company_id' => $requestDetails->company_id])->first();
 
-		// Update the hours and amount in home_cleaning_steaming_service_requests table
-		// foreach( $homeCleaningDetails['steaming_service_time_estimate'] as $key => $value )
-		// {
-		// 	HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'steaming_service_id' => $key])->update([
-		// 		'amount' => $homeCleaningDetails['steaming_service_time_estimate'][$key],
-		// 		'hour_to_complete' => $homeCleaningDetails['steaming_service_budget_estimate'][$key]
-		// 	]);
-		// }
+        	if( count( $quotationRespone ) == 0 )
+        	{
+		        $pstPercentage 	= $requestDetails->pst;
+		        $gstPercentage 	= $requestDetails->gst;
+		        $hstPercentage 	= $requestDetails->hst;
+		        $serviceChargePercentage = $requestDetails->service_charge;
 
-		// Add the Other details like PST, GST, HST, Discount, Service Charge, Total for the requested services
+		        // Calculate the gst, hst, pst, service charge amount for the requested services
+		        $gstAmount 		= 0;
+		        $hstAmount 		= 0;
+		        $pstAmount 		= 0;
+		        $serviceCharge 	= 0;
+		        $subTotal 		= 0;
+		        $insurance 		= 0;
+		        $totalAmount 	= 0;
+		        $totalRemittance= 0;
 
+		        // Steaming Service Charge
+		        foreach( $homeCleaningDetails['steaming_service_budget_estimate'] as $amount )
+		        {
+		        	$subTotal += $amount;
+		        }
+
+		        // Other Places Cleaning Service Charge
+		        foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $amount )
+		        {
+		        	$subTotal += $amount;
+		        }
+
+		        // Additional Service Charge
+		        foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $amount )
+		        {
+		        	$subTotal += $amount;
+		        }
+
+		        // Deduct the discount
+		        if( $homeCleaningDetails['discount'] != '' && $homeCleaningDetails['discount'] != 0 )
+		        {
+		        	$subTotal -= $homeCleaningDetails['discount'];
+		        }
+
+		        if( $gstPercentage != 0 )
+		        {
+		        	$gstAmount = round(( $gstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $hstPercentage != 0 )
+		        {
+		        	$hstAmount = round(( $hstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $pstPercentage != 0 )
+		        {
+		        	$pstAmount = round(( $pstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $serviceChargePercentage != 0 )
+		        {
+		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+
+		        // Start transaction
+		        DB::beginTransaction();
+
+		        // Update the hours and amount in home_cleaning_additional_service_requests table
+		        foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
+		        {
+		        	HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'additional_request_id' => $key])->update([
+		        		'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
+		        		'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
+		        	]);
+		        }
+
+		        // Update the hours and amount in home_cleaning_other_place_service_requests table
+		        foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
+		        {
+		        	HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
+		        		'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
+		        		'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
+		        	]);
+		        }
+
+		        // Update the hours and amount in home_cleaning_steaming_service_requests table
+		        foreach( $homeCleaningDetails['steaming_service_time_estimate'] as $key => $value )
+		        {
+		        	HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'steaming_service_id' => $key])->update([
+		        		'amount' => $homeCleaningDetails['steaming_service_time_estimate'][$key],
+		        		'hour_to_complete' => $homeCleaningDetails['steaming_service_budget_estimate'][$key]
+		        	]);
+		        }
+
+    	    	// Add the total amount, gst, hst, pst, service tax, insurance, comments which are applicable
+    			$serviceRequestResponse = new ServiceRequestResponse;
+
+    			$serviceRequestResponse->request_id 	= $homeCleaningDetails['home_cleaning_service_request_id'];
+    			$serviceRequestResponse->company_id 	= $requestDetails->company_id;
+    			$serviceRequestResponse->gst_amount 	= $gstAmount;
+    			$serviceRequestResponse->hst_amount 	= $hstAmount;
+    			$serviceRequestResponse->pst_amount 	= $pstAmount;
+    			$serviceRequestResponse->service_charge = $serviceCharge;
+    			$serviceRequestResponse->insurance 		= $insurance;
+    			$serviceRequestResponse->discount 		= $homeCleaningDetails['discount'];
+    			$serviceRequestResponse->total_amount 	= $totalAmount;
+    			$serviceRequestResponse->total_remittance = $totalRemittance;
+    			$serviceRequestResponse->comment 		= $homeCleaningDetails['comment'];
+    			$serviceRequestResponse->created_by 	= $userId;
+
+    			if( $serviceRequestResponse->save() )
+    			{
+    				// Commit the transaction
+    				DB::commit();
+
+    				$response['errCode'] 	= 0;
+            		$response['errMsg'] 	= 'Response saved successfully';
+    			}
+    			else
+    			{
+    				// Rollback the transaction
+    				DB::rollBack();
+
+    				$response['errCode'] 	= 2;
+            		$response['errMsg'] 	= 'Some issue in updating the response';
+    			}
+		    }
+		    else
+        	{
+        		$response['errCode'] 	= 3;
+	        	$response['errMsg'] 	= 'You cannot enter response on the same query again!';
+        	}
+		}
+		else
+		{
+			$response['errCode'] 	= 1;
+	        $response['errMsg'] 	= 'Some issue';
+		}
+
+		return response()->json($response);
     }
 
     /**
