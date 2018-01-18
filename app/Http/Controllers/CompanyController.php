@@ -44,6 +44,7 @@ use App\HomeCleaningSteamingServiceRequest;
 use App\MovingTransportation;
 use App\TechConciergeAppliancesServiceRequest;
 use App\ServiceRequestResponse;
+use App\DigitalServiceTypeRequest;
 
 use Validator;
 use Helper;
@@ -1164,8 +1165,13 @@ class CompanyController extends Controller
                 					->join('cities as t4', 't2.city_id', '=', 't4.id')
                 					->join('countries as t5', 't2.country_id', '=', 't5.id')
                 					->where(['t1.id' => $cableInternetId, 't1.status' => '1'])
-                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                					->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.gst', 't3.hst', 't3.pst', 't3.service_charge')
                 					->first();
+
+            $response['pst'] 			= round($clientMovingToAddress->pst, 2) . '%';
+            $response['gst'] 			= round($clientMovingToAddress->gst, 2) . '%';
+            $response['hst'] 			= round($clientMovingToAddress->hst, 2) . '%';
+            $response['service_charge']	= round($clientMovingToAddress->service_charge, 2) . '%';
 
             $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
 
@@ -1188,13 +1194,16 @@ class CompanyController extends Controller
 	        		$html .= '<td>Services</td>';
 	        		$html .= '<td>'. ucwords( strtolower( $service->service ) ) .'</td>';
 	        		$html .= '<td>NA</td>';
-	        		$html .= '<td><input name="service_time_estimate['. $service->service_id .']" class="service_time_estimate" style="width: 100px;"></td>';
-	        		$html .= '<td><input name="service_budget_estimate['. $service->service_id .']" class="service_budget_estimate" style="width: 100px;"></td>';
+	        		$html .= '<td><input name="service_time_estimate['. $service->service_id .']" class="service_time_estimate form-control cable_internet_service_budget" style="width: 100px;"></td>';
+	        		$html .= '<td><input name="service_budget_estimate['. $service->service_id .']" class="service_budget_estimate form-control cable_internet_service_amount" style="width: 100px;"></td>';
 
 	        		$html .= '</tr>';
 	        	}
 	        }
 
+	        $response['request_services_details'] = $html;
+
+	        $additionalServiceHtml = '';
 	        // Get the selected additional services
 	        $additionalServices = DB::table('digital_additional_service_type_requests as t1')
     					->join('digital_additional_services as t2', 't1.digital_additional_service_type_id', '=', 't2.id')
@@ -1206,19 +1215,16 @@ class CompanyController extends Controller
 	        {
 	        	foreach( $additionalServices as $additionalService )
 	        	{
-	        		$html .= '<tr>';
+	        		$additionalServiceHtml .= '<tr>';
 
-	        		$html .= '<td>Additional Services</td>';
-	        		$html .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
-	        		$html .= '<td>NA</td>';
-	        		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="additional_service_time_estimate" style="width: 100px;"></td>';
-	        		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="additional_service_budget_estimate" style="width: 100px;"></td>';
+	        		$additionalServiceHtml .= '<td>Additional Services</td>';
+	        		$additionalServiceHtml .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
 
-	        		$html .= '</tr>';
+	        		$additionalServiceHtml .= '</tr>';
 	        	}
 	        }
 
-	        $response['request_services_details'] = $html;
+	        $response['request_additional_services_details'] = $additionalServiceHtml;
 
         }
         
@@ -3487,6 +3493,319 @@ class CompanyController extends Controller
 
     	$movingDetails = array();
     	parse_str($frmData, $movingDetails);
+
+		
+		// Get the logged-in user id
+		$userId = Auth::id();
+
+		// Get the province gst, hst, pst, service charge for the requested service
+    	$requestDetails = DB::table('moving_item_service_requests as t1')
+    					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+    					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+    					->where(['t1.id' => $movingDetails['moving_service_request_id'], 't1.status' => '1'])
+    					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.mover_company_id as company_id')
+    					->first();
+
+        $gstPercentage 	= 0;
+        $hstPercentage 	= 0;
+        $pstPercentage 	= 0;
+        $serviceChargePercentage = 0;
+        $response = array();
+        if( count( $requestDetails ) > 0 )
+        {
+        	// Check if there is an entry for response already exist
+
+        	$quotationRespone = ServiceRequestResponse::where(['request_id' => $movingDetails['moving_service_request_id'], 'company_id' => $requestDetails->company_id])->first();
+
+        	if( count( $quotationRespone ) == 0 )
+        	{
+		        $pstPercentage 	= $requestDetails->pst;
+		        $gstPercentage 	= $requestDetails->gst;
+		        $hstPercentage 	= $requestDetails->hst;
+		        $serviceChargePercentage = $requestDetails->service_charge;
+
+		        // Calculate the gst, hst, pst, service charge amount for the requested services
+		        $gstAmount 		= 0;
+		        $hstAmount 		= 0;
+		        $pstAmount 		= 0;
+		        $serviceCharge 	= 0;
+		        $subTotal 		= 0;
+		        $insurance 		= 0;
+		        $totalAmount 	= 0;
+		        $totalRemittance= 0;
+
+		        foreach( $movingDetails['detail_job_budget_estimate'] as $amount )
+		        {
+		        	$subTotal += $amount;
+		        }
+
+		        // Add the transportation charge
+		        if( $movingDetails['transportation_vehicle_budget_estimate'] != '' && $movingDetails['transportation_vehicle_budget_estimate'] != 0 )
+		        {
+		        	$subTotal += $movingDetails['transportation_vehicle_budget_estimate'];
+		        }
+
+		        // Add the insurance
+		        if( $movingDetails['insurance'] != '' && $movingDetails['insurance'] != 0 )
+		        {
+		        	$subTotal += $movingDetails['insurance'];
+		        }
+
+		        // Deduct the discount
+		        if( $movingDetails['discount'] != '' && $movingDetails['discount'] != 0 )
+		        {
+		        	$subTotal -= $movingDetails['discount'];
+		        }
+
+		        if( $gstPercentage != 0 )
+		        {
+		        	$gstAmount = round(( $gstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $hstPercentage != 0 )
+		        {
+		        	$hstAmount = round(( $hstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $pstPercentage != 0 )
+		        {
+		        	$pstAmount = round(( $pstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $serviceChargePercentage != 0 )
+		        {
+		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+
+		       	
+		        // Start transaction
+		        /*DB::beginTransaction();
+
+		    	// Update the tech concierge application service request
+		    	if( is_array( $movingDetails['detail_job_budget_estimate'] ) && count( $movingDetails['detail_job_budget_estimate'] ) )
+		    	{
+		    		foreach( $movingDetails['detail_job_budget_estimate'] as $applianceId => $amount )
+		    		{
+		    			TechConciergeAppliancesServiceRequest::where([
+		    				'service_request_id' => $techConciergeDetails['tech_concierge_service_request_id'], 
+		    				'appliance_id' => $applianceId
+		    			])
+		    			->update([
+		    				'service_hours' => $techConciergeDetails['appliance_time_estimate'][$applianceId], 
+		    				'amount' => $amount,
+		    				'updated_by' => $userId
+		    			]);
+		    		}
+		    	}*/
+
+		    	/*
+		    	// Add the total amount, gst, hst, pst, service tax, insurance, comments which are applicable
+				$serviceRequestResponse = new ServiceRequestResponse;
+
+				$serviceRequestResponse->request_id 	= $techConciergeDetails['tech_concierge_service_request_id'];
+				$serviceRequestResponse->company_id 	= $requestDetails->company_id;
+				$serviceRequestResponse->gst_amount 	= $gstAmount;
+				$serviceRequestResponse->hst_amount 	= $hstAmount;
+				$serviceRequestResponse->pst_amount 	= $pstAmount;
+				$serviceRequestResponse->service_charge = $serviceCharge;
+				$serviceRequestResponse->insurance 		= $insurance;
+				$serviceRequestResponse->discount 		= $techConciergeDetails['discount'];
+				$serviceRequestResponse->total_amount 	= $totalAmount;
+				$serviceRequestResponse->total_remittance = $totalRemittance;
+				$serviceRequestResponse->comment 		= $techConciergeDetails['comment'];
+				$serviceRequestResponse->created_by 	= $userId;
+
+				if( $serviceRequestResponse->save() )
+				{
+					// Commit the transaction
+					DB::commit();
+
+					$response['errCode'] 	= 0;
+	        		$response['errMsg'] 	= 'Response saved successfully';
+				}
+				else
+				{
+					// Rollback the transaction
+					DB::rollBack();
+
+					$response['errCode'] 	= 2;
+	        		$response['errMsg'] 	= 'Some issue in updating the response';
+				}
+				*/
+        	}
+        	else
+        	{
+        		$response['errCode'] 	= 3;
+	        	$response['errMsg'] 	= 'You cannot enter response on the same query again!';
+        	}
+        }
+        else
+        {
+        	$response['errCode'] 	= 1;
+        	$response['errMsg'] 	= 'Some issue';
+        }
+
+        return response()->json($response);
+    }
+
+    /**
+     * Function to update the cable internet request quotation price related data
+     * @param void
+     * @return array
+     */
+    public function updateCableInternetServiceRequest()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$cableInternetDetails = array();
+    	parse_str($frmData, $cableInternetDetails);
+		
+		// Get the logged-in user id
+		$userId = Auth::id();
+
+		// Get the province gst, hst, pst, service charge for the requested service
+    	$requestDetails = DB::table('moving_item_service_requests as t1')
+    					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+    					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+    					->where(['t1.id' => $cableInternetDetails['cable_internet_service_request_id'], 't1.status' => '1'])
+    					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.mover_company_id as company_id')
+    					->first();
+
+        $gstPercentage 	= 0;
+        $hstPercentage 	= 0;
+        $pstPercentage 	= 0;
+        $serviceChargePercentage = 0;
+        $response = array();
+        if( count( $requestDetails ) > 0 )
+        {
+        	// Check if there is an entry for response already exist
+
+        	$quotationRespone = ServiceRequestResponse::where(['request_id' => $cableInternetDetails['cable_internet_service_request_id'], 'company_id' => $requestDetails->company_id])->first();
+
+        	if( count( $quotationRespone ) == 0 )
+        	{
+		        $pstPercentage 	= $requestDetails->pst;
+		        $gstPercentage 	= $requestDetails->gst;
+		        $hstPercentage 	= $requestDetails->hst;
+		        $serviceChargePercentage = $requestDetails->service_charge;
+
+		        // Calculate the gst, hst, pst, service charge amount for the requested services
+		        $gstAmount 		= 0;
+		        $hstAmount 		= 0;
+		        $pstAmount 		= 0;
+		        $serviceCharge 	= 0;
+		        $subTotal 		= 0;
+		        $insurance 		= 0;
+		        $totalAmount 	= 0;
+		        $totalRemittance= 0;
+
+		        foreach( $cableInternetDetails['service_budget_estimate'] as $amount )
+		        {
+		        	$subTotal += $amount;
+		        }
+
+		        // Deduct the discount
+		        if( $cableInternetDetails['discount'] != '' && $cableInternetDetails['discount'] != 0 )
+		        {
+		        	$subTotal -= $cableInternetDetails['discount'];
+		        }
+
+		        if( $gstPercentage != 0 )
+		        {
+		        	$gstAmount = round(( $gstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $hstPercentage != 0 )
+		        {
+		        	$hstAmount = round(( $hstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $pstPercentage != 0 )
+		        {
+		        	$pstAmount = round(( $pstPercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        if( $serviceChargePercentage != 0 )
+		        {
+		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
+		        }
+
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+
+    	        // Start transaction
+    	        DB::beginTransaction();
+
+    	    	// Update the cable internet application service request
+    	    	if( is_array( $cableInternetDetails['service_budget_estimate'] ) && count( $cableInternetDetails['service_budget_estimate'] ) )
+    	    	{
+    	    		foreach( $cableInternetDetails['service_budget_estimate'] as $applianceId => $amount )
+    	    		{
+    	    			DigitalServiceTypeRequest::where([
+    	    				'digital_service_request_id' => $cableInternetDetails['cable_internet_service_request_id'], 
+    	    				'digital_service_type_id' => $applianceId
+    	    			])
+    	    			->update([
+    	    				'service_hours' => $cableInternetDetails['service_time_estimate'][$applianceId], 
+    	    				'amount' => $amount,
+    	    				'updated_by' => $userId
+    	    			]);
+    	    		}
+    	    	}
+
+    	    	
+    	    	// Add the total amount, gst, hst, pst, service tax, insurance, comments which are applicable
+    			$serviceRequestResponse = new ServiceRequestResponse;
+
+    			$serviceRequestResponse->request_id 	= $cableInternetDetails['cable_internet_service_request_id'];
+    			$serviceRequestResponse->company_id 	= $requestDetails->company_id;
+    			$serviceRequestResponse->gst_amount 	= $gstAmount;
+    			$serviceRequestResponse->hst_amount 	= $hstAmount;
+    			$serviceRequestResponse->pst_amount 	= $pstAmount;
+    			$serviceRequestResponse->service_charge = $serviceCharge;
+    			$serviceRequestResponse->insurance 		= $insurance;
+    			$serviceRequestResponse->discount 		= $cableInternetDetails['discount'];
+    			$serviceRequestResponse->total_amount 	= $totalAmount;
+    			$serviceRequestResponse->total_remittance = $totalRemittance;
+    			$serviceRequestResponse->comment 		= $cableInternetDetails['comment'];
+    			$serviceRequestResponse->created_by 	= $userId;
+
+    			if( $serviceRequestResponse->save() )
+    			{
+    				// Commit the transaction
+    				DB::commit();
+
+    				$response['errCode'] 	= 0;
+            		$response['errMsg'] 	= 'Response saved successfully';
+    			}
+    			else
+    			{
+    				// Rollback the transaction
+    				DB::rollBack();
+
+    				$response['errCode'] 	= 2;
+            		$response['errMsg'] 	= 'Some issue in updating the response';
+    			}
+    			
+        	}
+        	else
+        	{
+        		$response['errCode'] 	= 3;
+	        	$response['errMsg'] 	= 'You cannot enter response on the same query again!';
+        	}
+        }
+        else
+        {
+        	$response['errCode'] 	= 1;
+        	$response['errMsg'] 	= 'Some issue';
+        }
+
+        return response()->json($response);
     }
 
     /**
@@ -3530,6 +3849,20 @@ class CompanyController extends Controller
     	else if( $serviceType == 'moving_company' )
     	{
         	$clientMovingToAddress = DB::table('moving_item_service_requests as t1')
+	            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+	            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
+	            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])
+	            					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+	            					->first();
+
+	        $response['pst'] 			= $clientMovingToAddress->pst;
+	        $response['gst'] 			= $clientMovingToAddress->gst;
+	        $response['hst'] 			= $clientMovingToAddress->hst;
+	        $response['service_charge']	= $clientMovingToAddress->service_charge;
+    	}
+    	else if( $serviceType == 'cable_internet' )
+    	{
+        	$clientMovingToAddress = DB::table('digital_service_requests as t1')
 	            					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
 	            					->join('provinces as t3', 't2.province_id', '=', 't3.id')
 	            					->where(['t1.id' => $serviceRequestId, 't1.status' => '1'])

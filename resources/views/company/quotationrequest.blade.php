@@ -458,6 +458,20 @@
 										<table class="table table-striped">
 											<thead>
 												<tr>
+													<th>Items</th>
+													<th>User Input</th>
+												</tr>
+											</thead>
+											<tbody id="user_requested_cable_internet_additional_services">
+												
+											</tbody>
+										</table>
+									</div>
+
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<table class="table table-striped">
+											<thead>
+												<tr>
 													<th style="width: 30%">Items</th>
 													<th style="width: 40%">User Input</th>
 													<th style="width: 10%">Quantity</th>
@@ -472,43 +486,53 @@
 									</div>
 
 									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
+										<table class="table table-striped" id="cable_internet_calculations">
 											<thead>
-												<tr>
-													<td colspan="4" style="width: 80%;">PST</td>
-													<td id="pst"></td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">GST</td>
-													<td id="gst"></td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">HST</td>
-													<td id="hst"></td>
-												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Discount</td>
 													<td>
-														<input type="text" name="discount" id="discount">
+														<input type="text" name="discount" id="discount"  class="form-control cable_internet_discount">
 													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Sub Total</td>
-													<td id="subtotal"></td>
+													<td id="subtotal">$0</td>
 												</tr>
 												<tr>
-													<td colspan="4" style="width: 80%;">Service Charge</td>
-													<td id="service_charge"></td>
+													<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+													<td id="gst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+													<td id="hst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+													<td id="pst_amount">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+													<td id="service_charge_amount">$0</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Total</td>
-													<td id="total"></td>
+													<td id="total">$0</td>
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Total Remittance</td>
+													<td id="total_remittance">$0</td>
+												</tr>
+												<tr>
+													<td>Comment</td>
+													<td>
+														<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
+													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;"></td>
 													<td>
-														<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
-														<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+														<input type="hidden" name="cable_internet_service_request_id" id="cable_internet_service_request_id">
+														<input type="submit" name="btn_update_cable_internet_service_request" id="btn_update_cable_internet_service_request" value="Submit" class="btn btn-info">
 													</td>
 												</tr>
 											</thead>

@@ -368,6 +368,8 @@ $(document).ready(function(){
                 success: function(response){
    
                     // Auto-fill the form
+                    $('#frm_cable_internet_services #cable_internet_service_request_id').val(cableInternetId);
+
                     $('#frm_cable_internet_services #moving_from_address').text(response.moving_from_address);
                     $('#frm_cable_internet_services #moving_to_address').text(response.moving_to_address);
 
@@ -394,6 +396,14 @@ $(document).ready(function(){
 
                     // Requested services
 					$('#frm_cable_internet_services #user_requested_cable_internet_services').html(response.request_services_details);
+
+					// Requested Addotional services
+					$('#frm_cable_internet_services #user_requested_cable_internet_additional_services').html(response.request_additional_services_details);
+
+					$('#frm_cable_internet_services #pst_percenateg').text(response.pst);
+                    $('#frm_cable_internet_services #gst_percentage').text(response.gst);
+                    $('#frm_cable_internet_services #hst_percentage').text(response.hst);
+                    $('#frm_cable_internet_services #service_charge_percetage').text(response.service_charge);
 
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');
@@ -923,6 +933,37 @@ $(document).ready(function(){
 
     });
 
+    // To update the cable internet request quotation price related data
+    $('#frm_cable_internet_services').submit(function(e) {
+    	e.preventDefault();
+    });
+    $('#btn_update_cable_internet_service_request').click(function(){
+    	
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/updatecableinternetservicerequest',
+			method: 'post',
+			data: {
+				frmData: $('#frm_cable_internet_services').serialize()
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		alertify.success( response.errMsg );
+
+		    		$('#modal_cable_internet_service_request').modal('hide');
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+
+    });
+
     // Home cleaning services request amount calculation
     $('#frm_home_cleaning_services').on('blur', '.home_cleaning_amount, .home_cleaning_discount', function(){
 
@@ -1093,8 +1134,8 @@ $(document).ready(function(){
 
     });
 
-    // Tech concierge request amount calculation
-    $('#frm_home_moving_companies').on('blur', '.moving_service_amount, .moving_service_discount', function(){
+    // Home moving request amount calculation
+    $('#frm_home_moving_companies').on('blur', '.moving_service_amount, .moving_service_discount, .moving_service_insurance', function() {
 
     	// Ajax call to get the pst, gst, hst, service charge values
     	let serviceRequestId = $('#moving_service_request_id').val();
@@ -1118,6 +1159,7 @@ $(document).ready(function(){
 		    	var subtotal 		= 0;
 		    	var serviceTotal 	= 0;
 		    	var discount 		= 0;
+		    	var insurance 		= 0;
 		    	var gstAmount 		= 0;
 		    	var hstAmount 		= 0;
 		    	var pstAmount 		= 0;
@@ -1132,10 +1174,12 @@ $(document).ready(function(){
 
 		    	discount = ( $('.moving_service_discount').val() != '' ) ? parseFloat( $('.moving_service_discount').val() ) : 0;
 
+		    	insurance = ( $('.moving_service_insurance').val() != '' ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
+
 		    	if( serviceTotal > 0 )
 		    	{
 			    	// Subtotal value
-			    	subtotal = serviceTotal - discount;
+			    	subtotal = ( serviceTotal + insurance ) - discount;
 
 			    	// GST value
 			    	if( response.gst != 0 )
@@ -1172,6 +1216,91 @@ $(document).ready(function(){
 
 			    	$('#frm_home_moving_companies #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
 		    	}
+
+		    }
+		});
+
+    });
+
+    // Cable internet services request amount calculation
+    $('#frm_cable_internet_services').on('blur', '.cable_internet_service_amount, .cable_internet_discount', function(){
+
+    	// Ajax call to get the pst, gst, hst, service charge values
+    	let serviceRequestId = $('#cable_internet_service_request_id').val();
+    	
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
+			method: 'get',
+			data: {
+				serviceRequestId: serviceRequestId,
+				serviceType: 'cable_internet'
+			},
+			beforeSend: function(){
+				// Show loader
+				$('.loading').show();
+			},
+		    success: function(response){
+
+		    	// Hide loader
+		    	$('.loading').hide();
+
+		    	var subtotal 		= 0;
+		    	var serviceTotal 	= 0;
+		    	var discount 		= 0;
+		    	var gstAmount 		= 0;
+		    	var hstAmount 		= 0;
+		    	var pstAmount 		= 0;
+		    	var serviceCharge 	= 0;
+
+		    	$('.cable_internet_service_amount').each(function(){
+		    		if( $(this).val() != '' )
+		    		{
+		    			serviceTotal += parseFloat( $(this).val() );
+		    		}
+		    	});
+
+		    	discount = ( $('.cable_internet_discount').val() != '' ) ? parseFloat( $('.cable_internet_discount').val() ) : 0;
+
+		    	if( serviceTotal > 0 )
+		    	{
+			    	// Subtotal value
+			    	subtotal = serviceTotal - discount;
+
+			    	// GST value
+			    	if( response.gst != 0 )
+			    	{
+			    		gstAmount = ( response.gst / 100 ) * subtotal;
+			    	}
+
+			    	// HST value
+			    	if( response.hst != 0 )
+			    	{
+			    		hstAmount = ( response.hst / 100 ) * subtotal;
+			    	}
+
+			    	// PST value
+			    	if( response.pst != 0 )
+			    	{
+			    		pstAmount = ( response.pst / 100 ) * subtotal;
+			    	}
+
+			    	// Service charge
+			    	if( response.service_charge != 0 )
+			    	{
+			    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+			    	}
+
+			    	$('#frm_cable_internet_services #gst_amount').text( '$' + ( gstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #hst_amount').text( '$' + ( hstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #pst_amount').text( '$' + ( pstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #service_charge_amount').text( '$' + ( serviceCharge ).toFixed(2) );
+
+			    	$('#frm_cable_internet_services #subtotal').text( '$' + ( subtotal ).toFixed(2) );
+
+			    	$('#frm_cable_internet_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+
+			    	$('#frm_cable_internet_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    }
 
 		    }
 		});
