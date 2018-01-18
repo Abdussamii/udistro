@@ -546,6 +546,20 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To get the data of request type
 	Route::get('/getrequesttype', 'MoversController@getRequestType');
+
+	// To get the details for the selected Home Service Request
+	Route::get('/gethomeservicerequest', 'MoversController@getHomeServiceRequest');
+
+	// To get the details for the selected Cable Service Request
+	Route::get('/getcableservicerequest', 'MoversController@getCableServiceRequest');
+
+	// To get the details for the selected Tech Concierge Request
+	Route::get('/gettechconciergerequest', 'MoversController@getTechConciergeRequest');
+
+	// To get the details for the selected Moving Companies Request
+	Route::get('/getmovingcompaniesrequest', 'MoversController@getMovingCompaniesRequest');
+
+
 	
 });
 

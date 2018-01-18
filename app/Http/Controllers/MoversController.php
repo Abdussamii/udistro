@@ -1728,7 +1728,7 @@ class MoversController extends Controller
                                 ->leftJoin('companies', 'tech_concierge_service_requests.company_id', '=', 'companies.id')
                                 ->where('tech_concierge_service_requests.agent_client_id', '=', $clientId)
                                 ->where('tech_concierge_service_requests.invitation_id', '=', $invitationId)
-                                ->select('tech_concierge_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->select('tech_concierge_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
                                 ->get();
 
         $homeCleaningArray = DB::table('home_cleaning_service_requests')
@@ -1737,7 +1737,7 @@ class MoversController extends Controller
                                 ->leftJoin('companies', 'home_cleaning_service_requests.company_id', '=', 'companies.id')
                                 ->where('home_cleaning_service_requests.agent_client_id', '=', $clientId)
                                 ->where('home_cleaning_service_requests.invitation_id', '=', $invitationId)
-                                ->select('home_cleaning_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->select('home_cleaning_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
                                 ->get();
 
         $movingItemArray = DB::table('moving_item_service_requests')
@@ -1746,7 +1746,7 @@ class MoversController extends Controller
                                 ->leftJoin('companies', 'moving_item_service_requests.mover_company_id', '=', 'companies.id')
                                 ->where('moving_item_service_requests.agent_client_id', '=', $clientId)
                                 ->where('moving_item_service_requests.invitation_id', '=', $invitationId)
-                                ->select('moving_item_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->select('moving_item_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
                                 ->get();
 
         $digitalArray = DB::table('digital_service_requests')
@@ -1755,7 +1755,7 @@ class MoversController extends Controller
                                 ->leftJoin('companies', 'digital_service_requests.digital_service_company_id', '=', 'companies.id')
                                 ->where('digital_service_requests.agent_client_id', '=', $clientId)
                                 ->where('digital_service_requests.invitation_id', '=', $invitationId)
-                                ->select('digital_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name')
+                                ->select('digital_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
                                 ->get();
 
         // Assign it to the datatable pagination variable
@@ -1779,7 +1779,7 @@ class MoversController extends Controller
                     3 => $Array->contact_number,
                     4 => $Array->company_name,
                     5 => "Tech Concierge Request",
-                    6 => '<a href="javascript:void(0);" id="1@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1796,7 +1796,7 @@ class MoversController extends Controller
                     3 => $Array->contact_number,
                     4 => $Array->company_name,
                     5 => "Home Cleaning Request",
-                    6 => '<a href="javascript:void(0);" id="2@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1813,7 +1813,7 @@ class MoversController extends Controller
                     3 => $Array->contact_number,
                     4 => $Array->company_name,
                     5 => "Moving Item Request",
-                    6 => '<a href="javascript:void(0);" id="3@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1830,7 +1830,7 @@ class MoversController extends Controller
                     3 => $Array->contact_number,
                     4 => $Array->company_name,
                     5 => "Digital Request",
-                    6 => '<a href="javascript:void(0);" id="4@@@@'. $Array->id .'" class="view_quotation_response"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1840,13 +1840,165 @@ class MoversController extends Controller
     }
 
     /**
-     * Function to get the Home Service Request
+     * Function to get the Tech Concierge Request
      * @param void
      * @return array
      */
-    public function getRequestType()
+    public function getTechConciergeRequest()
     {
-        $response = 1;
+        $techConciergeId = Input::get('techConciergeId');
+        $companyId = Input::get('companyId');
+
+        $response = array();
+        if( $techConciergeId != '' )
+        {
+            $techConciergeArray = TechConciergeServiceRequest::find($techConciergeId);
+
+            if( count( $techConciergeArray ) > 0 )
+            {
+                $response['moving_to_house_type']       = ucwords( strtolower( $techConciergeArray->moving_to_house_type ) );
+                $response['moving_to_floor']            = $techConciergeArray->moving_to_floor;
+                $response['moving_to_bedroom_count']    = $techConciergeArray->moving_to_bedroom_count;
+                $response['moving_to_property_type']    = ucwords( strtolower( $techConciergeArray->moving_to_property_type ) );
+
+                $response['availability_date1']         = date('d-m-Y', strtotime( $techConciergeArray->availability_date1 ) );
+                $response['availability_date2']         = date('d-m-Y', strtotime( $techConciergeArray->availability_date2 ) );
+                $response['availability_date3']         = date('d-m-Y', strtotime( $techConciergeArray->availability_date3 ) );
+
+                $response['availability_time_from1']    = $techConciergeArray->availability_time_from1;
+                $response['availability_time_upto1']    = $techConciergeArray->availability_time_upto1;
+                $response['availability_time_from2']    = $techConciergeArray->availability_time_from2;
+                $response['availability_time_upto2']    = $techConciergeArray->availability_time_upto2;
+                $response['availability_time_from3']    = $techConciergeArray->availability_time_from3;
+                $response['availability_time_upto3']    = $techConciergeArray->availability_time_upto3;
+
+                $response['additional_information']     = $techConciergeArray->additional_information;
+
+                // Get the moving from address
+                $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+                                        ->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                                        ->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                                        ->join('cities as t4', 't2.city_id', '=', 't4.id')
+                                        ->join('countries as t5', 't2.country_id', '=', 't5.id')
+                                        ->where(['t1.id' => $techConciergeId, 't1.status' => '1'])
+                                        ->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                                        ->first();
+
+                // Get the moving to address
+                $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+                                        ->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                                        ->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                                        ->join('cities as t4', 't2.city_id', '=', 't4.id')
+                                        ->join('countries as t5', 't2.country_id', '=', 't5.id')
+                                        ->where(['t1.id' => $techConciergeId, 't1.status' => '1'])
+                                        ->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+                                        ->first();
+
+                $response['pst']            = round($clientMovingToAddress->pst, 2) . '%';
+                $response['gst']            = round($clientMovingToAddress->gst, 2) . '%';
+                $response['hst']            = round($clientMovingToAddress->hst, 2) . '%';
+                $response['service_charge'] = round($clientMovingToAddress->service_charge, 2) . '%';
+
+                $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
+
+                $response['moving_to_address']  = $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
+
+                $html = '';
+                // Get the Other Places to install appliances in
+                $otherPlaces = DB::table('tech_concierge_place_service_requests as t1')
+                            ->join('tech_concierge_places as t2', 't1.place_id', '=', 't2.id')
+                            ->where(['t1.service_request_id' => $techConciergeId])
+                            ->select('t1.id as service_request_id', 't2.id as service_id', 't2.places', 't1.service_hours', 't1.amount')
+                            ->get();
+
+                if( count( $otherPlaces ) > 0 )
+                {
+                    foreach( $otherPlaces as $otherPlace )
+                    {
+                        $html .= '<tr>';
+
+                        $html .= '<td>Other Places to install appliances</td>';
+                        $html .= '<td>'. ucwords( strtolower( $otherPlace->places ) ) .'</td>';
+                        $html .= '<td>NA</td>';
+                        $html .= '<td>'. ucwords( strtolower( $otherPlace->service_hours ) ) .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $otherPlace->amount ) ) .'</td>';
+
+                        $html .= '</tr>';
+                    }
+                }
+
+                // Get the list of appliances to install
+                $appliances = DB::table('tech_concierge_appliances_service_requests as t1')
+                            ->join('tech_concierge_appliances as t2', 't1.appliance_id', '=', 't2.id')
+                            ->where(['t1.service_request_id' => $techConciergeId])
+                            ->select('t1.id as service_request_id', 't2.id as service_id', 't2.appliances', 't1.service_hours', 't1.amount')
+                            ->get();
+
+                if( count( $appliances ) > 0 )
+                {
+                    foreach( $appliances as $appliance )
+                    {
+                        $html .= '<tr>';
+
+                        $html .= '<td>Appliances you plan to install</td>';
+                        $html .= '<td>'. ucwords( strtolower( $appliance->appliances ) ) .'</td>';
+                        $html .= '<td>NA</td>';
+                        $html .= '<td>'. ucwords( strtolower( $appliance->service_hours ) ) .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $appliance->amount ) ) .'</td>';
+
+                        $html .= '</tr>';
+                    }
+                }
+                
+                $response['request_services_details'] = $html;
+
+                $otherDetailHtml = '';
+                // List of other details
+                $otherDetails = DB::table('tech_concierge_other_details as t1')->select('id', 'details')->get();
+
+                // Get the list of other details
+                $otherSelectedDetails = DB::table('tech_concierge_other_detail_service_requests as t1')
+                                        ->leftJoin('tech_concierge_other_details as t2', 't1.other_detail_id', '=', 't2.id')
+                                        ->where(['t1.service_request_id' => $techConciergeId])
+                                        ->select('t1.id as service_request_id', 't2.id as service_id', 't2.details')
+                                        ->get();
+
+                if( count( $otherDetails ) > 0 )
+                {
+                    foreach( $otherDetails as $otherDetail )
+                    {
+                        $status = 'No';
+                        $selectedService = DB::table('tech_concierge_other_detail_service_requests as t1')
+                                            ->leftJoin('tech_concierge_other_details as t2', 't1.other_detail_id', '=', 't2.id')
+                                            ->where(['t1.service_request_id' => $techConciergeId, 't2.id' => $otherDetail->id])
+                                            ->first();
+
+                        if( count( $selectedService ) > 0 )
+                        {
+                            $status = 'Yes';
+                        }
+
+                        $otherDetailHtml .= '<tr>';
+
+                        $otherDetailHtml .= '<td>'. ucwords( strtolower( $otherDetail->details ) ) .'</td>';
+                        $otherDetailHtml .= '<td>'. $status .'</td>';
+
+                        $otherDetailHtml .= '</tr>';
+                    }
+                }
+
+                $response['request_other_details'] = $otherDetailHtml;
+
+                $taxDetails = DB::table('service_request_responses')->where(['request_id' => $techConciergeId, 'company_id' => $companyId])->first();
+
+                $response['gst_amount']     = $taxDetails->gst_amount;
+                $response['hst_amount']     = $taxDetails->hst_amount;
+                $response['pst_amount']     = $taxDetails->pst_amount;
+                $response['service_charge'] = $taxDetails->service_charge;
+                $response['total_amount']   = $taxDetails->total_amount;
+                $response['discount']       = $taxDetails->discount;
+            }
+        }
         return response()->json($response);
     }
 

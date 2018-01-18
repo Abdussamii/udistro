@@ -199,7 +199,7 @@ $(document).ready(function(){
    					
    					if(type == 1)
    					{
-                    	$('#modal_tech_concierge').modal('show');
+                    	$('#modal_tech_concierge_service_request').modal('show');
    					} 
    					else if (type == 2) 
    					{
@@ -213,6 +213,131 @@ $(document).ready(function(){
    					{
    						$('#modal_digital').modal('show');
    					}
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing id');
+        }
+    });
+
+    $(document).on('click', '.view_home_cleaning_service', function()
+    {
+    	var array = $(this).attr('id').split('@@@@');
+        var companyId = array[0];
+        var homeServiceId = array[1];
+
+        if( homeServiceId != '' )
+        {
+            // Get the details of selected payment plan
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/movers/gethomeservicerequest',
+                method: 'get',
+                data: {
+                    homeServiceId: homeServiceId, companyId: companyId
+                },
+                success: function(response){
+
+                    // Auto-fill the form
+                    $('#frm_home_cleaning_services #home_cleaning_service_request_id').val(homeServiceId);
+
+                    $('#frm_home_cleaning_services #moving_from_address').text( ( response.move_out_cleaning == '1' ) ? response.moving_from_address : 'NA' );
+                    $('#frm_home_cleaning_services #moving_to_address').text( ( response.move_in_cleaning == '1' ) ? response.moving_to_address : 'NA' );
+
+                    $('#frm_home_cleaning_services #moving_from_house_type').text(response.moving_from_house_type);
+                    $('#frm_home_cleaning_services #moving_from_floor').text(response.moving_from_floor);
+                    $('#frm_home_cleaning_services #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
+                    $('#frm_home_cleaning_services #moving_from_property_type').text(response.moving_from_property_type);
+                    $('#frm_home_cleaning_services #moving_to_house_type').text(response.moving_to_house_type);
+                    $('#frm_home_cleaning_services #moving_to_floor').text(response.moving_to_floor);
+                    $('#frm_home_cleaning_services #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
+                    $('#frm_home_cleaning_services #moving_to_property_type').text(response.moving_to_property_type);
+                    $('#frm_home_cleaning_services #home_condition').text(response.home_condition);
+                    $('#frm_home_cleaning_services #home_cleaning_level').text(response.home_cleaning_level);
+                    $('#frm_home_cleaning_services #home_cleaning_area').text(response.home_cleaning_area);
+                    $('#frm_home_cleaning_services #home_cleaning_people_count').text(response.home_cleaning_people_count);
+                    $('#frm_home_cleaning_services #home_cleaning_pet_count').text(response.home_cleaning_pet_count);
+                    $('#frm_home_cleaning_services #home_cleaning_bathroom_count').text(response.home_cleaning_bathroom_count);
+                    
+                    $('#frm_home_cleaning_services #pst_percenateg').text(response.pst);
+                    $('#frm_home_cleaning_services #gst_percentage').text(response.gst);
+                    $('#frm_home_cleaning_services #hst_percentage').text(response.hst);
+                    $('#frm_home_cleaning_services #service_charge_percetage').text(response.service_charge);
+
+                    $('#frm_home_cleaning_services #cleaning_behind_refrigerator_and_stove').text( (response.cleaning_behind_refrigerator_and_stove) ? 'Yes' : 'No' );
+                    $('#frm_home_cleaning_services #baseboard_to_be_washed').text( (response.baseboard_to_be_washed) ? 'Yes' : 'No' );
+
+                    $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
+
+                    // Requested services
+					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);                  
+
+                    // Show the modal
+                    $('#modal_home_cleaning_service_request').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing id');
+        }
+    });
+
+    $(document).on('click', '.view_tech_concierge_service', function()
+    {
+        var array = $(this).attr('id').split('@@@@');
+        var companyId = array[0];
+        var techConciergeId = array[1];
+
+        if( techConciergeId != '' )
+        {
+            // Get the details of selected payment plan
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/movers/gettechconciergerequest',
+                method: 'get',
+                data: {
+                    techConciergeId: techConciergeId, companyId: companyId
+                },
+                success: function(response){
+   
+                    // Auto-fill the form
+                    $('#frm_tech_concierge #tech_concierge_service_request_id').val(techConciergeId);
+
+                    $('#frm_tech_concierge #moving_from_address').text(response.moving_from_address);
+                    $('#frm_tech_concierge #moving_to_address').text(response.moving_to_address);
+
+                    $('#frm_tech_concierge #moving_to_house_type').text(response.moving_to_house_type);
+                    $('#frm_tech_concierge #moving_to_floor').text(response.moving_to_floor);
+                    $('#frm_tech_concierge #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
+                    $('#frm_tech_concierge #moving_to_property_type').text(response.moving_to_property_type);
+
+                    $('#frm_tech_concierge #availability_day1').text( response.availability_date1 + ' (' + response.availability_time_from1 + ' to ' + response.availability_time_upto1 + ')' );
+                    $('#frm_tech_concierge #availability_day2').text( response.availability_date2 + ' (' + response.availability_time_from2 + ' to ' + response.availability_time_upto2 + ')' );
+                    $('#frm_tech_concierge #availability_day3').text( response.availability_date3 + ' (' + response.availability_time_from3 + ' to ' + response.availability_time_upto3 + ')' );
+                    
+                    $('#frm_tech_concierge #additional_information').text(response.additional_information);
+
+                    // Requested services
+					$('#frm_tech_concierge #user_requested_tech_concierge_services').html(response.request_services_details);
+
+					// Reqested additional services
+					$('#frm_tech_concierge #user_requested_tech_concierge_other_details').html(response.request_other_details);
+
+					$('#frm_tech_concierge #pst_percenateg').text(response.pst);
+                    $('#frm_tech_concierge #gst_percentage').text(response.gst);
+                    $('#frm_tech_concierge #hst_percentage').text(response.hst);
+                    $('#frm_tech_concierge #service_charge_percetage').text(response.service_charge);
+
+                    $('#frm_tech_concierge #gst_amount').text('$'+response.gst_amount);
+                    $('#frm_tech_concierge #hst_amount').text('$'+response.hst_amount);
+                    $('#frm_tech_concierge #pst_amount').text('$'+response.pst_amount);
+                    $('#frm_tech_concierge #service_charge_amount').text('$'+response.service_charge);
+                    $('#frm_tech_concierge #total').text('$'+response.total_amount);
+                    $('#frm_tech_concierge #discount').text('$'+response.discount);
+
+                    // Show the modal
+                    $('#modal_tech_concierge_service_request').modal('show');
                 }
             });
         }
