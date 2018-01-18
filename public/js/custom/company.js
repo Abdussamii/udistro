@@ -5,7 +5,7 @@ $(document).ready(function(){
 	alertify.set('notifier','position', 'top-center');
 
     // Company registration form validation
-    $('#frm_company_registration').submit(function(e){
+    /*$('#frm_company_registration').submit(function(e){
         e.preventDefault();
     });
     $('#frm_company_registration').validate({
@@ -73,10 +73,10 @@ $(document).ready(function(){
         		required: 'Please select industry type'
         	}
         }
-    });
+    });*/
 
     // Register the company
-    $('#btn_company_registration').click(function(){
+    /*$('#btn_company_registration').click(function(){
     	if( $('#frm_company_registration').valid() )
     	{
     		$.ajax({
@@ -103,7 +103,7 @@ $(document).ready(function(){
 			    }
     		});
     	}
-    });
+    });*/
 
     /* ----- Company profile related functionality ----- */
 
@@ -298,7 +298,14 @@ $(document).ready(function(){
                 data: {
                     homeServiceId: homeServiceId
                 },
+                beforeSend: function(){
+                	// Show loader
+                	$('.loading').show();
+                },
                 success: function(response){
+
+                	// Show loader
+                	$('.loading').hide();
 
                     // Auto-fill the form
                     $('#frm_home_cleaning_services #home_cleaning_service_request_id').val(homeServiceId);
@@ -361,6 +368,8 @@ $(document).ready(function(){
                 success: function(response){
    
                     // Auto-fill the form
+                    $('#frm_cable_internet_services #cable_internet_service_request_id').val(cableInternetId);
+
                     $('#frm_cable_internet_services #moving_from_address').text(response.moving_from_address);
                     $('#frm_cable_internet_services #moving_to_address').text(response.moving_to_address);
 
@@ -388,6 +397,14 @@ $(document).ready(function(){
                     // Requested services
 					$('#frm_cable_internet_services #user_requested_cable_internet_services').html(response.request_services_details);
 
+					// Requested Addotional services
+					$('#frm_cable_internet_services #user_requested_cable_internet_additional_services').html(response.request_additional_services_details);
+
+					$('#frm_cable_internet_services #pst_percenateg').text(response.pst);
+                    $('#frm_cable_internet_services #gst_percentage').text(response.gst);
+                    $('#frm_cable_internet_services #hst_percentage').text(response.hst);
+                    $('#frm_cable_internet_services #service_charge_percetage').text(response.service_charge);
+
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');
                 }
@@ -413,7 +430,14 @@ $(document).ready(function(){
                 data: {
                     techConciergeId: techConciergeId
                 },
+                beforeSend: function(){
+                	// Show loader
+                	$('.loading').show();
+                },
                 success: function(response){
+
+                	// Show loader
+                	$('.loading').hide();
    
                     // Auto-fill the form
                     $('#frm_tech_concierge #tech_concierge_service_request_id').val(techConciergeId);
@@ -468,9 +492,18 @@ $(document).ready(function(){
                 data: {
                     movingCompaniesId: movingCompaniesId
                 },
+                beforeSend: function(){
+                	// Show loader
+                	$('.loading').show();
+                },
                 success: function(response){
+
+                	// Show loader
+                	$('.loading').hide();
    
                     // Auto-fill the form
+                    $('#frm_home_moving_companies #moving_service_request_id').val(movingCompaniesId);
+
                     $('#frm_home_moving_companies #moving_from_house_type').text(response.moving_from_house_type);
                     $('#frm_home_moving_companies #moving_from_floor').text(response.moving_from_floor);
                     $('#frm_home_moving_companies #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
@@ -482,14 +515,24 @@ $(document).ready(function(){
                     $('#frm_home_moving_companies #moving_to_property_type').text(response.moving_to_property_type);
                     
                     $('#frm_home_moving_companies #additional_information').text(response.additional_information);
-                    $('#frm_home_moving_companies #transportation_vehicle_type').text(response.transportation_vehicle_type);
                     $('#frm_home_moving_companies #moving_date').text(response.moving_date);
+
+                    $('#frm_home_moving_companies #moving_from_address').text(response.moving_from_address);
+                    $('#frm_home_moving_companies #moving_to_address').text(response.moving_to_address);
 
                     // Requested services
 					$('#frm_home_moving_companies #user_requested_moving_services').html(response.request_services_details);
 
 					// Reqested additional services
 					$('#frm_home_moving_companies #user_requested_moving_other_services').html(response.request_other_details);
+
+					$('#frm_home_moving_companies #pst_percenateg').text(response.pst);
+					$('#frm_home_moving_companies #gst_percentage').text(response.gst);
+					$('#frm_home_moving_companies #hst_percentage').text(response.hst);
+					$('#frm_home_moving_companies #service_charge_percetage').text(response.service_charge);
+
+					// Distance between two addresses
+					$('#frm_home_moving_companies #distance').text(response.distance);
 
                     // Show the modal
                     $('#modal_moving_companies_service_request').modal('show');
@@ -830,6 +873,97 @@ $(document).ready(function(){
 
     });
 
+    // To update the moving request quotation price related data
+    $('#frm_home_moving_companies').submit(function(e) {
+    	e.preventDefault();
+    });
+    $('#btn_update_moving_service_request').click(function(){
+    	
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/updatemovingservicerequest',
+			method: 'post',
+			data: {
+				frmData: $('#frm_home_moving_companies').serialize()
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		alertify.success( response.errMsg );
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+
+    });
+
+    // To update the tech concierge request quotation price related data
+    $('#frm_tech_concierge').submit(function(e) {
+    	e.preventDefault();
+    });
+    $('#btn_update_tech_concierge_service_request').click(function(){
+    	
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/updatetechconciergeservicerequest',
+			method: 'post',
+			data: {
+				frmData: $('#frm_tech_concierge').serialize()
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		alertify.success( response.errMsg );
+
+		    		$('#modal_tech_concierge_service_request').modal('hide');
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+
+    });
+
+    // To update the cable internet request quotation price related data
+    $('#frm_cable_internet_services').submit(function(e) {
+    	e.preventDefault();
+    });
+    $('#btn_update_cable_internet_service_request').click(function(){
+    	
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/updatecableinternetservicerequest',
+			method: 'post',
+			data: {
+				frmData: $('#frm_cable_internet_services').serialize()
+			},
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		alertify.success( response.errMsg );
+
+		    		$('#modal_cable_internet_service_request').modal('hide');
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+
+    });
+
     // Home cleaning services request amount calculation
     $('#frm_home_cleaning_services').on('blur', '.home_cleaning_amount, .home_cleaning_discount', function(){
 
@@ -869,41 +1003,46 @@ $(document).ready(function(){
 
 		    	discount = ( $('.home_cleaning_discount').val() != '' ) ? parseFloat( $('.home_cleaning_discount').val() ) : 0;
 
-		    	// Subtotal value
-		    	subtotal = serviceTotal - discount;
-
-		    	// GST value
-		    	if( response.gst != 0 )
+		    	if( serviceTotal > 0 )
 		    	{
-		    		gstAmount = ( response.gst / 100 ) * subtotal;
-		    	}
+			    	// Subtotal value
+			    	subtotal = serviceTotal - discount;
 
-		    	// HST value
-		    	if( response.hst != 0 )
-		    	{
-		    		hstAmount = ( response.hst / 100 ) * subtotal;
-		    	}
+			    	// GST value
+			    	if( response.gst != 0 )
+			    	{
+			    		gstAmount = ( response.gst / 100 ) * subtotal;
+			    	}
 
-		    	// PST value
-		    	if( response.pst != 0 )
-		    	{
-		    		pstAmount = ( response.pst / 100 ) * subtotal;
-		    	}
+			    	// HST value
+			    	if( response.hst != 0 )
+			    	{
+			    		hstAmount = ( response.hst / 100 ) * subtotal;
+			    	}
 
-		    	// Service charge
-		    	if( response.service_charge != 0 )
-		    	{
-		    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
-		    	}
+			    	// PST value
+			    	if( response.pst != 0 )
+			    	{
+			    		pstAmount = ( response.pst / 100 ) * subtotal;
+			    	}
 
-		    	$('#frm_home_cleaning_services #gst_amount').text( '$' + ( gstAmount ) );
-		    	$('#frm_home_cleaning_services #hst_amount').text( '$' + ( hstAmount ) );
-		    	$('#frm_home_cleaning_services #pst_amount').text( '$' + ( pstAmount ) );
-		    	$('#frm_home_cleaning_services #service_charge_amount').text( '$' + ( serviceCharge ) );
+			    	// Service charge
+			    	if( response.service_charge != 0 )
+			    	{
+			    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+			    	}
 
-		    	$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal ) );
+			    	$('#frm_home_cleaning_services #gst_amount').text( '$' + ( gstAmount ).toFixed(2) );
+			    	$('#frm_home_cleaning_services #hst_amount').text( '$' + ( hstAmount ).toFixed(2) );
+			    	$('#frm_home_cleaning_services #pst_amount').text( '$' + ( pstAmount ).toFixed(2) );
+			    	$('#frm_home_cleaning_services #service_charge_amount').text( '$' + ( serviceCharge ).toFixed(2) );
 
-		    	$('#frm_home_cleaning_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ) );
+			    	$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal ).toFixed(2) );
+
+			    	$('#frm_home_cleaning_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+
+			    	$('#frm_home_cleaning_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    }
 
 		    }
 		});
@@ -949,41 +1088,219 @@ $(document).ready(function(){
 
 		    	discount = ( $('.tech_concierge_discount').val() != '' ) ? parseFloat( $('.tech_concierge_discount').val() ) : 0;
 
-		    	// Subtotal value
-		    	subtotal = serviceTotal - discount;
-
-		    	// GST value
-		    	if( response.gst != 0 )
+		    	if( serviceTotal > 0 )
 		    	{
-		    		gstAmount = ( response.gst / 100 ) * subtotal;
+			    	// Subtotal value
+			    	subtotal = serviceTotal - discount;
+
+			    	// GST value
+			    	if( response.gst != 0 )
+			    	{
+			    		gstAmount = ( response.gst / 100 ) * subtotal;
+			    	}
+
+			    	// HST value
+			    	if( response.hst != 0 )
+			    	{
+			    		hstAmount = ( response.hst / 100 ) * subtotal;
+			    	}
+
+			    	// PST value
+			    	if( response.pst != 0 )
+			    	{
+			    		pstAmount = ( response.pst / 100 ) * subtotal;
+			    	}
+
+			    	// Service charge
+			    	if( response.service_charge != 0 )
+			    	{
+			    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+			    	}
+
+			    	$('#frm_tech_concierge #gst_amount').text( '$' + ( gstAmount ).toFixed(2) );
+			    	$('#frm_tech_concierge #hst_amount').text( '$' + ( hstAmount ).toFixed(2) );
+			    	$('#frm_tech_concierge #pst_amount').text( '$' + ( pstAmount ).toFixed(2) );
+			    	$('#frm_tech_concierge #service_charge_amount').text( '$' + ( serviceCharge ).toFixed(2) );
+
+			    	$('#frm_tech_concierge #subtotal').text( '$' + ( subtotal ).toFixed(2) );
+
+			    	$('#frm_tech_concierge #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+
+			    	$('#frm_tech_concierge #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    }
+
+		    }
+		});
+
+    });
+
+    // Home moving request amount calculation
+    $('#frm_home_moving_companies').on('blur', '.moving_service_amount, .moving_service_discount, .moving_service_insurance', function() {
+
+    	// Ajax call to get the pst, gst, hst, service charge values
+    	let serviceRequestId = $('#moving_service_request_id').val();
+    	
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
+			method: 'get',
+			data: {
+				serviceRequestId: serviceRequestId,
+				serviceType: 'moving_company'
+			},
+			beforeSend: function(){
+				// Show loader
+				$('.loading').show();
+			},
+		    success: function(response){
+
+		    	// Hide loader
+		    	$('.loading').hide();
+
+		    	var subtotal 		= 0;
+		    	var serviceTotal 	= 0;
+		    	var discount 		= 0;
+		    	var insurance 		= 0;
+		    	var gstAmount 		= 0;
+		    	var hstAmount 		= 0;
+		    	var pstAmount 		= 0;
+		    	var serviceCharge 	= 0;
+
+		    	$('.moving_service_amount').each(function(){
+		    		if( $(this).val() != '' )
+		    		{
+		    			serviceTotal += parseFloat( $(this).val() );
+		    		}
+		    	});
+
+		    	discount = ( $('.moving_service_discount').val() != '' ) ? parseFloat( $('.moving_service_discount').val() ) : 0;
+
+		    	insurance = ( $('.moving_service_insurance').val() != '' ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
+
+		    	if( serviceTotal > 0 )
+		    	{
+			    	// Subtotal value
+			    	subtotal = ( serviceTotal + insurance ) - discount;
+
+			    	// GST value
+			    	if( response.gst != 0 )
+			    	{
+			    		gstAmount = ( response.gst / 100 ) * subtotal;
+			    	}
+
+			    	// HST value
+			    	if( response.hst != 0 )
+			    	{
+			    		hstAmount = ( response.hst / 100 ) * subtotal;
+			    	}
+
+			    	// PST value
+			    	if( response.pst != 0 )
+			    	{
+			    		pstAmount = ( response.pst / 100 ) * subtotal;
+			    	}
+
+			    	// Service charge
+			    	if( response.service_charge != 0 )
+			    	{
+			    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+			    	}
+
+			    	$('#frm_home_moving_companies #gst_amount').text( '$' + ( gstAmount.toFixed(2) ) );
+			    	$('#frm_home_moving_companies #hst_amount').text( '$' + ( hstAmount.toFixed(2) ) );
+			    	$('#frm_home_moving_companies #pst_amount').text( '$' + ( pstAmount.toFixed(2) ) );
+			    	$('#frm_home_moving_companies #service_charge_amount').text( '$' + ( serviceCharge.toFixed(2) ) );
+
+			    	$('#frm_home_moving_companies #subtotal').text( '$' + ( subtotal.toFixed(2) ) );
+
+			    	$('#frm_home_moving_companies #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+
+			    	$('#frm_home_moving_companies #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
 		    	}
 
-		    	// HST value
-		    	if( response.hst != 0 )
+		    }
+		});
+
+    });
+
+    // Cable internet services request amount calculation
+    $('#frm_cable_internet_services').on('blur', '.cable_internet_service_amount, .cable_internet_discount', function(){
+
+    	// Ajax call to get the pst, gst, hst, service charge values
+    	let serviceRequestId = $('#cable_internet_service_request_id').val();
+    	
+    	$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/company/fetchprovincetaxes',
+			method: 'get',
+			data: {
+				serviceRequestId: serviceRequestId,
+				serviceType: 'cable_internet'
+			},
+			beforeSend: function(){
+				// Show loader
+				$('.loading').show();
+			},
+		    success: function(response){
+
+		    	// Hide loader
+		    	$('.loading').hide();
+
+		    	var subtotal 		= 0;
+		    	var serviceTotal 	= 0;
+		    	var discount 		= 0;
+		    	var gstAmount 		= 0;
+		    	var hstAmount 		= 0;
+		    	var pstAmount 		= 0;
+		    	var serviceCharge 	= 0;
+
+		    	$('.cable_internet_service_amount').each(function(){
+		    		if( $(this).val() != '' )
+		    		{
+		    			serviceTotal += parseFloat( $(this).val() );
+		    		}
+		    	});
+
+		    	discount = ( $('.cable_internet_discount').val() != '' ) ? parseFloat( $('.cable_internet_discount').val() ) : 0;
+
+		    	if( serviceTotal > 0 )
 		    	{
-		    		hstAmount = ( response.hst / 100 ) * subtotal;
-		    	}
+			    	// Subtotal value
+			    	subtotal = serviceTotal - discount;
 
-		    	// PST value
-		    	if( response.pst != 0 )
-		    	{
-		    		pstAmount = ( response.pst / 100 ) * subtotal;
-		    	}
+			    	// GST value
+			    	if( response.gst != 0 )
+			    	{
+			    		gstAmount = ( response.gst / 100 ) * subtotal;
+			    	}
 
-		    	// Service charge
-		    	if( response.service_charge != 0 )
-		    	{
-		    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
-		    	}
+			    	// HST value
+			    	if( response.hst != 0 )
+			    	{
+			    		hstAmount = ( response.hst / 100 ) * subtotal;
+			    	}
 
-		    	$('#frm_tech_concierge #gst_amount').text( '$' + ( gstAmount ) );
-		    	$('#frm_tech_concierge #hst_amount').text( '$' + ( hstAmount ) );
-		    	$('#frm_tech_concierge #pst_amount').text( '$' + ( pstAmount ) );
-		    	$('#frm_tech_concierge #service_charge_amount').text( '$' + ( serviceCharge ) );
+			    	// PST value
+			    	if( response.pst != 0 )
+			    	{
+			    		pstAmount = ( response.pst / 100 ) * subtotal;
+			    	}
 
-		    	$('#frm_tech_concierge #subtotal').text( '$' + ( subtotal ) );
+			    	// Service charge
+			    	if( response.service_charge != 0 )
+			    	{
+			    		serviceCharge = ( response.service_charge / 100 ) * subtotal;
+			    	}
 
-		    	$('#frm_tech_concierge #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ) );
+			    	$('#frm_cable_internet_services #gst_amount').text( '$' + ( gstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #hst_amount').text( '$' + ( hstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #pst_amount').text( '$' + ( pstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #service_charge_amount').text( '$' + ( serviceCharge ).toFixed(2) );
+
+			    	$('#frm_cable_internet_services #subtotal').text( '$' + ( subtotal ).toFixed(2) );
+
+			    	$('#frm_cable_internet_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+
+			    	$('#frm_cable_internet_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    }
 
 		    }
 		});

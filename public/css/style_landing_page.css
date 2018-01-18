@@ -13,6 +13,14 @@ h5 {
     color: #000;
 }
 /*Video banner */
+.logo_banner {
+	text-align:center;
+}
+.logo_banner img {
+	margin: 50px 0;
+	display: inline-block;
+	width: 350px;
+}
 section {
     width: 100%;
     position: relative;
@@ -23,9 +31,10 @@ section {
     overflow: hidden;
 }
 .video-section .video_bg {
-    position: relative;
-    padding: 159px 0 32px;
-    min-height: 945px;/* Incase of overlay problems just increase the min-height*/
+	position: relative;
+	padding: 159px 0 32px;
+	min-height: 945px;
+	background: #000;
 }
 .video-section .video_bg video {
     position: absolute;
@@ -65,8 +74,11 @@ section {
     margin: 70px auto 0px;
     text-align: center;
 }
+.banner_btn-group a {
+    line-height: 32px;
+}
 .banner_btn-group .banner_btn {
-    width: 218px;
+    min-width: 218px;
     min-height: 60px;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
@@ -95,7 +107,7 @@ section {
 .banner_btn-group .banner_btn.blue_btn {
 	background-color: #44bae6;
 	color: #fff;
-	width: 270px;
+	min-width: 270px;
 	text-transform: capitalize;
 }
 .banner_btn-group .banner_btn.blue_btn:hover {
@@ -165,9 +177,9 @@ section {
     text-align: center;
 }
 .section-organise h2.title-main {
-    font-size: 48px;
-    padding-bottom: 35px;
-    margin-top: 0px;
+	font-size: 48px;
+	padding-bottom: 35px;
+	margin-top: 0px;
 }
 section.content-section.ready-yourBusiness .section-organise h2.title-main {
     color: #000;
@@ -178,7 +190,7 @@ section.content-section.ready-yourBusiness .section-organise h2.title-main {
     line-height: 30px;
 }
 .banner_btn-group .banner_btn.skyBlue_btn {
-    max-width: 218px;
+    min-width: 218px;
     min-height: 60px;
     -webkit-border-radius: 11px;
     -moz-border-radius: 11px;
@@ -394,7 +406,59 @@ address ul li i {
 }
 .box-border {
     border: 1px solid #ccc;
-    min-height: 280px;
+    min-height: 300px;
 }
 .box-border p { text-align: justify; }
 .local_b_3 { margin-top:15px;}
+/*4-1-2018*/
+.topic-banner {
+	background: url('../images/getinvitation-banner.png') no-repeat center center;
+	background: #b0effe;
+}
+.btn-default {
+	color: #fff !important;
+	background-color: #00bcea !important;
+	border-color: #04a6ce !important;
+	font-size: 16px !important;
+	padding: 10px 25px !important;
+}
+.btn-default:hover, .btn-default:hover:active {
+	color: #7e869d !important;
+	background-color: #f8f8f8 !important;
+	border-color: #00bcea !important;
+}
+.inputBOXs { position:relation; }
+.inputBOXs i {
+	position: absolute;
+	left: 30px;
+	color: #00bcea;
+	top: 12px;
+}
+.inputBOXs input {
+	height: auto;
+	padding: 10px 14px 10px 50px;
+	color: #7e869d;
+	border: 1px solid #c3e1e9;
+	text-transform: capitalize;
+}
+.container.invitation-wrapper {
+	width: 100%;
+}
+.getInvitation-wrap {
+	width: 600px;
+	margin: auto;
+}
+#frm_get_invitation label {
+	width: 100%;
+	text-align: left;
+	font-size: 14px;
+}
+.topic-banner img {
+	width: 100%;
+}
+/*responsive*/
+@media only screen and (max-width: 900px) {
+.getInvitation-wrap {
+	width: 100%;
+}
+}

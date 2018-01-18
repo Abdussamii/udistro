@@ -730,6 +730,8 @@ class MoversController extends Controller
 
 				    	$movingServiceRequest->transportation_vehicle_type = isset( $details['moving_house_vehicle_type'] ) ? $details['moving_house_vehicle_type'] : null;
 
+				    	$movingServiceRequest->insurance = isset( $details['moving_house_need_insurance'] ) ? $details['moving_house_need_insurance'] : null;
+
 				    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
 				    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
 				    	

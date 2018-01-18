@@ -1,6 +1,62 @@
 /*Landing Pages Responsiveness Media*/
-
+@media (max-width: 1700px) {
+	.video-section .video_bg {
+		position: relative;
+		padding: 100px 0;
+		min-height: auto;
+	}
+	
+	.scroll-down { display:none; }
+}
+@media (max-width: 1500px) {
+	.video-section .video_bg {
+		padding: 50px 0;
+	}
+	.banner_btn-group {
+		margin-top: 30px;
+	}
+}
+@media (max-width: 1500px) {
+	.video-section .video_bg {
+		padding: 30px 0;
+	}
+	.video-section h1 {
+		font-size: 35px;
+	}
+}
 @media (max-width: 990px) {
+/*Landing Pages*/
+	.video-section h1,
+	.section-organise h2.title-main 	{
+		font-size: 30px;
+	}
+	.banner_btn-group .banner_btn.skyBlue_btn {
+		margin-bottom: 15px;
+	}
+	.section-organise h2.title-main {
+		font-size: 40px;
+	}
+	.bullet-point {
+		margin-top: 20px;
+	}
+	.videopart-2 {
+		margin-top: 30px;
+	}
+	.btn.try_btn.btn-lg.blue_btn {
+		float: none;
+	}
+	.banner_btn-group {
+		margin: 30px auto 0px;
+	}
+	.software_content {
+		padding: 30px 0;
+	}
+	.section-pd {
+		padding: 30px 0px;
+	}
+	.software_content img {
+		width: 100%;
+	}
 /*Footer*/
 	.footer-main.section-pd {
 		padding: 20px 0px;
@@ -42,6 +98,13 @@
 	.h2, h2 {
 		font-size: 30px;
 	}
+	.box-border {
+		margin-bottom: 15px;
+		border-radius: 5px;
+	}
+	.logo_banner img {
+		width: 250px;
+	}
 }
 
 @media (max-width: 768px) {
@@ -76,6 +139,16 @@
 	.free-trail-box{
 		margin: 20px 0;
 	}
+	.logo_banner img {
+		width: 200px;
+		margin: 10px auto;
+	}
+	.video-section h1, .section-organise h2.title-main {
+		font-size: 20px;
+	}
+	.section-organise h2.title-main {
+		font-size: 30px;
+	}
 
 }
 
@@ -86,6 +159,13 @@
 	}
 	.mem-detail {
 		position: relative;
+	}
+
+	/*Login Company*/
+	.login-box {
+		width: 100%;
+		padding: 100px 10px;
+		margin: 0;
 	}	
 
 }

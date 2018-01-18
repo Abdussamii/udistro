@@ -1097,8 +1097,7 @@ $(document).ready(function(){
 			moving_house_packing_issue: { required: true },
 			moving_house_callback_option: { required: true },
 
-			moving_house_callback_primary_no: { mobileNoValidate: true },
-			moving_house_callback_secondary_no: { mobileNoValidate: true },
+			moving_house_need_insurance: { required: true }
 		},
 		messages: 
 		{
@@ -1122,9 +1121,10 @@ $(document).ready(function(){
 			moving_house_description_9:  { required: 'Please select a option' },
 			moving_house_description_10: { required: 'Please select a option' },
 
-			moving_house_vehicle_type: { required: 'Please select a option' },
 			moving_house_packing_issue: { required: 'Please select a option' },
-			moving_house_callback_option: { required: 'Please select a option' }
+			moving_house_callback_option: { required: 'Please select a option' },
+
+			moving_house_need_insurance: { required: 'Please select an option' }
 		}
 	});
 

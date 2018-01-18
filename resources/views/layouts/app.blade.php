@@ -42,6 +42,7 @@
    	
     <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('css/style_other_pages.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('css/media.css') }}" />
     
     <!-- Fonts -->
@@ -57,6 +58,14 @@
     <style type="text/css">
     .error {
     	color: red;
+    }
+    .cot_tl_fixed {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+    }
+    div#PureChatWidget {
+        left: 10px;
     }
     </style>
 
@@ -81,7 +90,7 @@
 	   <div class="col-md-4">
 	    <div class="foot_logo">
 	    	<!-- <img src="images/logo-foot.png" alt=""/> -->
-	    	<img src="http://www.udistro.ca/images/landing_image/logo-foot.png" alt="">
+	    	<img src="{{ url('/images/landing_image/logo-foot.png') }}" alt="">
 	    </div>
 	    <ul class="footer_social_icon">
 	     <li><a href="https://www.facebook.com/udistro.rakoomi" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
@@ -89,7 +98,7 @@
 	     <li><a href="https://twitter.com/udistroca" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
 	     <li><a href="https://plus.google.com/" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
 	     <li><a href="https://www.instagram.com/udistroca" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-	     <li><a href="" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
+	     <!-- <li><a href="" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></li> -->
 	    </ul>
 	    <address>
 	    <h4></h4>
@@ -138,18 +147,26 @@
 	  <!-- -->
 	  <div class="footerAdditional">
 	   <ul>
-	    <li> <a href="faquestions.html">FAQs</a> </li>
+	    <li> <a href="{{ url('/faqs') }}">FAQs</a> </li>
 	    <li> <a href="https://termsfeed.com/privacy-policy/78d745deeed0b145a84dbc4b46e88912" target="_blank">Privacy</a> </li>
 	    <li> <a href="https://termsfeed.com/terms-conditions/ecb999172c16298afdddc8eb94b9a21b" target="_blank">Terms</a> </li>
 	    <li> <a href="{{ url('/agent/home') }}">I’m a Real-Estate Agent</a> </li>
 	    <li> <a href="{{ url('/getinvitation') }}">I'm a Moving</a> </li>
-	    <li class="footerAdditional-item--copyright"> © uDistro 2017 All Rights Reserved </li>
+	    <li class="footerAdditional-item--copyright"> © uDistro {{ date('Y') }} All Rights Reserved </li>
 	   </ul>
 	  </div>
 	  <!-- --> 
 	  
 	 </div>
+
+	 <!-- SSL Secure Site Seal -->
+	 <div class="cot_tl_fixed">
+	 	<a href="https://www.positivessl.com/trusted-ssl-site-seal.php" style="font-family: arial; font-size: 10px; color: #212121; text-decoration: none;"><img src="https://www.positivessl.com/images-new/comodo_secure_seal_113x59_transp.png" alt="Trusted Site Seal" title="Trusted Site Seal for Transparent background" border="0" /></a>
+	 </div>
+
 	</footer>
+
+	<script type='text/javascript' data-cfasync='false'>window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: '743df154-40f7-48ac-ad35-2a40f16d2ab2', f: true }); done = true; } }; })();</script>
 
 </body>
 
