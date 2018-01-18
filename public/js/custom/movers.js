@@ -179,48 +179,6 @@ $(document).ready(function(){
 		$('#update_address_step6').hide();
 		$('#update_address_step7').hide();
 	});
-	
-    $(document).on('click', '.view_quotation_response', function()
-    {
-        var array = $(this).attr('id').split('@@@@');
-        var type = array[0];
-        var id = array[1];
-
-        if( id != '' && type != '' )
-        {
-            // Get the details of selected payment plan
-            $.ajax({
-                url: $('meta[name="route"]').attr('content') + '/movers/getrequesttype',
-                method: 'get',
-                data: {
-                    id: id, type: type
-                },
-                success: function(response){
-   					
-   					if(type == 1)
-   					{
-                    	$('#modal_tech_concierge_service_request').modal('show');
-   					} 
-   					else if (type == 2) 
-   					{
-   						$('#modal_home_cleaning').modal('show');
-   					}
-   					else if (type == 3)
-   					{
-   						$('#modal_moving_item').modal('show');
-   					} 
-   					else if (type == 4)
-   					{
-   						$('#modal_digital').modal('show');
-   					}
-                }
-            });
-        }
-        else
-        {
-            alertify.error('Missing id');
-        }
-    });
 
     $(document).on('click', '.view_home_cleaning_service', function()
     {
@@ -271,7 +229,14 @@ $(document).ready(function(){
                     $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
 
                     // Requested services
-					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);                  
+					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);
+
+					$('#frm_home_cleaning_services #gst_amount').text('$'+response.gst_amount);
+                    $('#frm_home_cleaning_services #hst_amount').text('$'+response.hst_amount);
+                    $('#frm_home_cleaning_services #pst_amount').text('$'+response.pst_amount);
+                    $('#frm_home_cleaning_services #service_charge_amount').text('$'+response.service_charge);
+                    $('#frm_home_cleaning_services #total').text('$'+response.total_amount);
+                    $('#frm_home_cleaning_services #discount').text('$'+response.discount);                 
 
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');

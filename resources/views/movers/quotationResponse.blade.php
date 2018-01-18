@@ -326,27 +326,27 @@
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Sub Total</td>
-                                                                <td id="subtotal">$0</td>
+                                                                <td id="subtotal"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
-                                                                <td id="gst_amount">$0</td>
+                                                                <td id="gst_amount"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
-                                                                <td id="hst_amount">$0</td>
+                                                                <td id="hst_amount"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
-                                                                <td id="pst_amount">$0</td>
+                                                                <td id="pst_amount"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
-                                                                <td id="service_charge_amount">$0</td>
+                                                                <td id="service_charge_amount"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Total</td>
-                                                                <td id="total">$0</td>
+                                                                <td id="total"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;"></td>
@@ -512,9 +512,7 @@
                                                 <thead>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">Discount</td>
-                                                        <td>
-                                                            <input type="text" name="discount" id="discount"  class="form-control home_cleaning_discount">
-                                                        </td>
+                                                        <td id="discount"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">Sub Total</td>
@@ -522,23 +520,23 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
-                                                        <td id="gst_amount">$0</td>
+                                                        <td id="gst_amount"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
-                                                        <td id="hst_amount">$0</td>
+                                                        <td id="hst_amount"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
-                                                        <td id="pst_amount">$0</td>
+                                                        <td id="pst_amount"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
-                                                        <td id="service_charge_amount">$0</td>
+                                                        <td id="service_charge_amount"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;">Total</td>
-                                                        <td id="total">$0</td>
+                                                        <td id="total"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="width: 80%;"></td>

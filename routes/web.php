@@ -546,9 +546,6 @@ Route::group(['prefix' => 'movers'], function() {
 	// To get the list of datatable quotation response
 	Route::get('/getquotationresponse', 'MoversController@getQuotationResponse');
 
-	// To get the data of request type
-	Route::get('/getrequesttype', 'MoversController@getRequestType');
-
 	// To get the details for the selected Home Service Request
 	Route::get('/gethomeservicerequest', 'MoversController@getHomeServiceRequest');
 
