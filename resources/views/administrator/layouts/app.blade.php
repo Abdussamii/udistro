@@ -419,6 +419,9 @@
                             <a href="{{ url('administrator/provincialagencies') }}"><i class="fa fa-dashboard fa-fw"></i> Provincial Agencies</a>
                         </li>
                         <li>
+                            <a href="{{ url('administrator/generateinvoice') }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Generate Invoice</a>
+                        </li>
+                        <li>
                             <a href="{{ url('administrator/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>

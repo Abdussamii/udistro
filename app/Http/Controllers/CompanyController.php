@@ -520,7 +520,8 @@ class CompanyController extends Controller
 					$companyRep->fname 		= $companyData['rep_fname'];
 					$companyRep->lname 		= $companyData['rep_lname'];
 					$companyRep->password 	= Hash::make($companyData['password']);
-					$companyRep->status 	= '0'; 										// Initially the account is not active
+					$companyRep->status 	= '1';
+					// $companyRep->status 	= '0'; 										// Initially the account is not active
 
 					if( $companyRep->save() )
 					{
@@ -534,7 +535,8 @@ class CompanyController extends Controller
 						$company->company_category_id 	= $companyData['company_province'];
 						$company->province_id 			= $companyData['company_type'];
 						$company->created_by			= $companyRep->id;									// Id of newly created user
-						$company->status 				= '0';												// Initially the account is not active
+						$company->status 				= '1';
+						// $company->status 				= '0';												// Initially the account is not active
 
 						if( $company->save() )
 						{

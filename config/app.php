@@ -184,7 +184,7 @@ return [
         */
         Laratrust\LaratrustServiceProvider::class,
 
-
+        // DOM PDF
         Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
@@ -243,6 +243,8 @@ return [
 
         // custom helper class
         'Helper' => App\Helpers\Helper::class,
+
+        // DOM PDF
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],

@@ -348,13 +348,6 @@
                                                                 <td colspan="4" style="width: 80%;">Total</td>
                                                                 <td id="total"></td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="4" style="width: 80%;"></td>
-                                                                <td>
-                                                                    <input type="hidden" name="tech_concierge_service_request_id" id="tech_concierge_service_request_id">
-                                                                    <input type="button" name="btn_update_tech_concierge_service_request" id="btn_update_tech_concierge_service_request" value="Submit" class="btn btn-info">
-                                                                </td>
-                                                            </tr>
                                                         </thead>
                                                     </table>
                                                 </div>
@@ -538,13 +531,6 @@
                                                         <td colspan="4" style="width: 80%;">Total</td>
                                                         <td id="total"></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td colspan="4" style="width: 80%;"></td>
-                                                        <td>
-                                                            <input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
-                                                            <input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
-                                                        </td>
-                                                    </tr>
                                                 </thead>
                                             </table>
                                         </div>
@@ -723,13 +709,6 @@
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Comment</td>
                                                                 <td id="comment">Comment</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="4" style="width: 80%;"></td>
-                                                                <td>
-                                                                    <input type="hidden" name="moving_service_request_id" id="moving_service_request_id" value="">
-                                                                    <input type="submit" name="btn_update_moving_service_request" id="btn_update_moving_service_request" value="Submit" class="btn btn-info">
-                                                                </td>
                                                             </tr>
                                                         </thead>
                                                     </table>
@@ -917,13 +896,6 @@
                                                             <tr>
                                                                 <td>Comment</td>
                                                                 <td id="comment"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="4" style="width: 80%;"></td>
-                                                                <td>
-                                                                    <input type="hidden" name="cable_internet_service_request_id" id="cable_internet_service_request_id">
-                                                                    <input type="submit" name="btn_update_cable_internet_service_request" id="btn_update_cable_internet_service_request" value="Submit" class="btn btn-info">
-                                                                </td>
                                                             </tr>
                                                         </thead>
                                                     </table>

@@ -319,6 +319,12 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get the details of selected email template
 	Route::get('/getemailtemplatedetails', 'AdminController@getEmailTemplateDetails');
 
+	// To return the generate invoice page
+	Route::get('/generateinvoice', 'AdminController@generateInvoice');
+
+	// To convert html to dompdf
+	Route::get('htmltopdfview', array('as'=>'htmltopdfview','uses'=>'AdminController@htmltopdfview'));
+
 
 	/* ---------- Company related functionality ---------- */
 

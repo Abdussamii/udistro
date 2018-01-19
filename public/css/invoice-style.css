@@ -1,0 +1,63 @@
+/*body { background: #363B4D !important; }*/
+#invoice-wrapper {
+	width: 927px;
+	margin: auto;
+	position: relative;
+}
+#invoice { position: relative; left: 80px; opacity: 0.99; width: 820px; min-height: 500px; padding: 45px 65px; overflow:hidden; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; border: 1px solid white; -webkit-box-shadow: -1px -1px 5px rgba(0,0,0,0.7); -moz-box-shadow: 0px 0px 5px rgba(0,0,0,0.7); box-shadow: 0px 0px 5px rgba(0,0,0,0.7); margin: 50px auto; }
+#company { font-size: 25px; font-weight: bold; padding-top: 15px; line-height: 56px; height: 56px; }
+input#title { font-size: 35px; font-weight: bold; height: 50px; margin-bottom: 0; text-align: right; }
+input { border: 0; border: 1px; background: none; padding: 0; font-size: 15px; color: #222; font-family: "Helvetica Neue", arial, sans; line-height: 23px; }
+#header { display: inline-block; width: 100%; }
+#meta input { display: inline-block; width: 100%; text-align: right; }
+#address input { display: inline-block; width: 100%; }
+.client { font-weight: bold; font-size: 18px; line-height: 24px; }
+textarea.notes { padding: 20px 50px 0px 50px; font-size: 14px; background: none; line-height: 21px; border: 0; resize: none; font-size: 15px; margin: 10px auto 0px auto; width: 100%; height: 10px; margin-bottom: 50px; }
+.table.table-hover { border: 1px solid #ccc; background: #eee; }
+.invoice-controller {
+	display: inline-block;
+	position: absolute;
+	left: 0px;
+	background: #fff;
+	padding: 5px 10px;
+	border-top-left-radius: 4px;
+	color: #fff;
+	font-size: 18px;
+	border-bottom-left-radius: 4px;
+	top: 200px;
+	line-height: 40px;
+}
+.pdf-download { background: #ff6633; color: #fff; padding: 0px 10px; border-radius: 3px; cursor: pointer; margin: 5px 0; }
+.pdf-download:hover  { background: #363B4D; }
+.add-row,
+.delete-row { background: #363B4D; color: #fff; padding: 0px 10px; border-radius: 3px; cursor: pointer; margin: 5px 0; }
+.add-row:hover,
+.delete-row:hover { background: #ff6633; }
+.unpaid-tag {
+	background: #f00e0e;
+	padding: 10px;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 18px;
+	font-weight: 600;
+	text-align: center;
+	position: absolute;
+	top: 13px;
+	right: -50px;
+	-ms-transform: rotate(35deg);
+	-webkit-transform: rotate(35deg);
+	transform: rotate(35deg);
+	width: 200px;
+}
+.table > thead > tr > th {
+	vertical-align: bottom;
+	border-bottom: 2px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+	padding: 8px;
+	line-height: 1.42857143;
+	vertical-align: top;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
