@@ -558,20 +558,193 @@
 
 
 
-                    <div id="modal_moving_item" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
+                    <!-- Modal to Moving Companies Service Request -->
+                    <div id="modal_moving_companies_service_request" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">3</h4>
+                                    <h4 class="modal-title">Moving Companies Services Request</h4>
                                 </div>
 
-                                <div class="modal-body">       
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <form id="frm_home_moving_companies" name="frm_home_moving_companies" autocomplete="off">
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width: 30%;">Moving from</td>
+                                                            <td id="moving_from_address"></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td style="width: 30%;">Moving to</td>
+                                                            <td id="moving_to_address"></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                                <div class="clearfix"></div>
+
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <th style="width:70%">Items</th>
+                                                            <th>User Input</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving from house type</td>
+                                                            <td id="moving_from_house_type"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving from floor level</td>
+                                                            <td id="moving_from_floor"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving from no of bedroom</td>
+                                                            <td id="moving_from_bedroom_count"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving from property type</td>
+                                                            <td id="moving_from_property_type"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving to house type</td>
+                                                            <td id="moving_to_house_type"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving to floor level</td>
+                                                            <td id="moving_to_floor"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving to no of bedroom</td>
+                                                            <td id="moving_to_bedroom_count"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving to property type</td>
+                                                            <td id="moving_to_property_type"></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <th style="width:70%">Items</th>
+                                                            <th>User Input</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Moving date</td>
+                                                            <td id="moving_date"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Distance</td>
+                                                            <td id="distance"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Additional Information</td>
+                                                            <td id="additional_information"></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Items</th>
+                                                                <th>User Input</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="user_requested_moving_other_services">
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 30%">Items</th>
+                                                                <th style="width: 40%">User Input</th>
+                                                                <th style="width: 10%">Quantity/Weight</th>
+                                                                <th style="width: 10%">Time Estimate</th>
+                                                                <th style="width: 10%">Budget Estimate</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="user_requested_moving_services">
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                    <table class="table table-striped" id="moving_service_calculations">
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Insurance</td>
+                                                                <td>
+                                                                    <input type="text" name="insurance" id="insurance"  class="form-control moving_service_insurance">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Discount</td>
+                                                                <td id="discount"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Sub Total</td>
+                                                                <td id="subtotal"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+                                                                <td id="gst_amount"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+                                                                <td id="hst_amount"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+                                                                <td id="pst_amount"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+                                                                <td id="service_charge_amount"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Total</td>
+                                                                <td id="total"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Comment</td>
+                                                                <td id="comment">Comment</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;"></td>
+                                                                <td>
+                                                                    <input type="hidden" name="moving_service_request_id" id="moving_service_request_id" value="">
+                                                                    <input type="submit" name="btn_update_moving_service_request" id="btn_update_moving_service_request" value="Submit" class="btn btn-info">
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
 
                     <!-- Modal to Cable & Internet Service Request -->
                     <div id="modal_cable_internet_service_request" class="modal fade" role="dialog">

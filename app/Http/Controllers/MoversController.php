@@ -2282,6 +2282,185 @@ class MoversController extends Controller
     }
 
     /**
+     * Function to get the Moving Companies Request
+     * @param void
+     * @return array
+     */
+    public function getMovingCompaniesRequest()
+    {
+        $movingCompanyId = Input::get('movingCompaniesId');
+        $companyId = Input::get('companyId');
+
+        $response = array();
+        if( $movingCompanyId != '' )
+        {
+            $movingCompaniesArray = MovingItemServiceRequest::find($movingCompanyId);
+
+            if( count( $movingCompaniesArray ) > 0 )
+            {
+                $response['moving_from_house_type']                     = ucfirst( strtolower( $movingCompaniesArray->moving_from_house_type ) );
+                $response['moving_from_floor']                          = $movingCompaniesArray->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $movingCompaniesArray->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = ucfirst( strtolower($movingCompaniesArray->moving_from_property_type ) );
+
+                $response['moving_to_house_type']                       = ucfirst( strtolower($movingCompaniesArray->moving_to_house_type ) );
+                $response['moving_to_floor']                            = $movingCompaniesArray->moving_to_floor;
+                $response['moving_to_bedroom_count']                    = $movingCompaniesArray->moving_to_bedroom_count;
+                $response['moving_to_property_type']                    = ucfirst( strtolower($movingCompaniesArray->moving_to_property_type ) );
+
+                $response['transportation_vehicle_type']                = $movingCompaniesArray->transportation_vehicle_type;
+                
+                $response['moving_date']                                = date('m-d-Y', strtotime( $movingCompaniesArray->moving_date ) );
+                $response['additional_information']                     = $movingCompaniesArray->additional_information;
+
+                // Get the moving from address
+                $clientMovingFromAddress = DB::table('moving_item_service_requests as t1')
+                                        ->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                                        ->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                                        ->join('cities as t4', 't2.city_id', '=', 't4.id')
+                                        ->join('countries as t5', 't2.country_id', '=', 't5.id')
+                                        ->where(['t1.id' => $movingCompanyId, 't1.status' => '1'])
+                                        ->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country')
+                                        ->first();
+
+                // Get the moving to address
+                $clientMovingToAddress = DB::table('moving_item_service_requests as t1')
+                                        ->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
+                                        ->join('provinces as t3', 't2.province_id', '=', 't3.id')
+                                        ->join('cities as t4', 't2.city_id', '=', 't4.id')
+                                        ->join('countries as t5', 't2.country_id', '=', 't5.id')
+                                        ->where(['t1.id' => $movingCompanyId, 't1.status' => '1'])
+                                        ->select('t2.address1', 't3.name as province', 't4.name as city', 't5.name as country', 't3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+                                        ->first();
+
+                $response['pst']            = round($clientMovingToAddress->pst, 2) . '%';
+                $response['gst']            = round($clientMovingToAddress->gst, 2) . '%';
+                $response['hst']            = round($clientMovingToAddress->hst, 2) . '%';
+                $response['service_charge'] = round($clientMovingToAddress->service_charge, 2) . '%';
+
+                $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
+
+                $response['moving_to_address']  = $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
+
+                $html = '';
+                // Get the Other Places to install appliances in
+                $itemDetails = DB::table('moving_item_detail_service_requests as t1')
+                            ->join('moving_item_details as t2', 't1.moving_items_details_id', '=', 't2.id')
+                            ->where(['t1.moving_items_service_id' => $movingCompanyId])
+                            ->select('t1.id as service_request_id', 't2.id as service_id', 't2.item_name', 't2.item_weight', 't1.move_hours', 't1.amount')
+                            ->get();
+
+                if( count( $itemDetails ) > 0 )
+                {
+                    foreach( $itemDetails as $itemDetail )
+                    {
+                        $html .= '<tr>';
+
+                        $html .= '<td>Detail job description</td>';
+                        $html .= '<td>'. ucwords( strtolower( $itemDetail->item_name ) ) .'</td>';
+                        $html .= '<td>'. $itemDetail->item_weight .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $itemDetail->move_hours ) ) .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $itemDetail->amount ) ) .'</td>';
+
+                        $html .= '</tr>';
+                    }
+                }
+
+                if( $movingCompaniesArray['transportation_vehicle_type'] != '' && !is_null( $movingCompaniesArray['transportation_vehicle_type'] ) )
+                {
+                    // Get the moving transportations
+                    $movingTransportations = MovingTransportation::get();
+
+                    if( count( $movingTransportations ) > 0 )
+                    {
+                        foreach( $movingTransportations as $movingTransportation )
+                        {
+                            $html .= '<tr>';
+
+                            $html .= '<td>'. $movingTransportation->transportation_type .'</td>';
+                            $html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
+                            $html .= '<td>NA</td>';
+                            $html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;"></td>';
+                            $html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
+
+                            $html .= '</tr>';
+                        }
+                    }
+                }
+
+                $response['request_services_details'] = $html;
+
+                // Get the list of other related things
+                $otherDetailHtml = '';
+                // List of other details
+                $otherDetails = DB::table('moving_other_item_services as t1')->select('id', 'other_moving_items_services_details')->get();
+
+                if( count( $otherDetails ) > 0 )
+                {
+                    foreach( $otherDetails as $otherDetail )
+                    {
+                        $status = 'No';
+                        $selectedService = DB::table('moving_other_item_service_requests as t1')
+                                            ->leftJoin('moving_other_item_services as t2', 't1.moving_items_service_id', '=', 't2.id')
+                                            ->where(['t1.moving_items_service_id' => $movingCompanyId, 'other_moving_items_services_id' => $otherDetail->id])
+                                            ->select('t1.id as service_request_id', 't2.id as service_id', 't2.other_moving_items_services_details')
+                                            ->first();
+
+                        if( count( $selectedService ) > 0 )
+                        {
+                            $status = 'Yes';
+                        }
+
+                        $otherDetailHtml .= '<tr>';
+
+                        $otherDetailHtml .= '<td>'. ucwords( strtolower( $otherDetail->other_moving_items_services_details ) ) .'</td>';
+                        $otherDetailHtml .= '<td>'. $status .'</td>';
+
+                        $otherDetailHtml .= '</tr>';
+                    }
+                }
+
+                $response['request_other_details'] = $otherDetailHtml;
+
+                // Get the latitude, longitude of the mover from the Google Map API
+                $clientMovingFromAddressCoordinates = array();
+                $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+                $mapApiResponse = json_decode(file_get_contents($url), true);
+                if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+                {
+                    $clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+                }
+
+                $clientMovingToAddressCoordinates = array();
+                $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+                $mapApiResponse = json_decode(file_get_contents($url), true);
+                if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
+                {
+                    $clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
+                }
+
+                // Calculate the distance between the two address
+                $distance = Helper::distance($clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+
+                $response['distance'] = round($distance, 2) . 'KM';
+
+                $taxDetails = DB::table('service_request_responses')->where(['request_id' => $movingCompanyId, 'company_id' => $companyId])->first();
+
+                if( count( $taxDetails ) > 0 )
+                {
+                    $response['gst_amount']     = $taxDetails->gst_amount;
+                    $response['hst_amount']     = $taxDetails->hst_amount;
+                    $response['pst_amount']     = $taxDetails->pst_amount;
+                    $response['service_charge'] = $taxDetails->service_charge;
+                    $response['total_amount']   = $taxDetails->total_amount;
+                    $response['discount']       = $taxDetails->discount;
+                }
+            }
+        }
+        return response()->json($response);
+    }
+
+    /**
 	 * To get the list of cable & internet companies satisfying all the criteria to get the mover's quotations
 	 *
 	 * 		- Rules

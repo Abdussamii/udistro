@@ -385,6 +385,83 @@ $(document).ready(function(){
         }
     });
 
+	
+	$(document).on('click', '.view_moving_item_service', function()
+    {
+        var array = $(this).attr('id').split('@@@@');
+        var companyId = array[0];
+        var movingCompaniesId = array[1];
+
+        if( movingCompaniesId != '' )
+        {
+            // Get the details of selected payment plan
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/movers/getmovingcompaniesrequest',
+                method: 'get',
+                data: {
+                    movingCompaniesId: movingCompaniesId, companyId: companyId
+                },
+                beforeSend: function(){
+                	// Show loader
+                	$('.loading').show();
+                },
+                success: function(response){
+
+                	// Show loader
+                	$('.loading').hide();
+   
+                    // Auto-fill the form
+                    $('#frm_home_moving_companies #moving_service_request_id').val(movingCompaniesId);
+
+                    $('#frm_home_moving_companies #moving_from_house_type').text(response.moving_from_house_type);
+                    $('#frm_home_moving_companies #moving_from_floor').text(response.moving_from_floor);
+                    $('#frm_home_moving_companies #moving_from_bedroom_count').text(response.moving_from_bedroom_count);
+                    $('#frm_home_moving_companies #moving_from_property_type').text(response.moving_from_property_type);
+
+                    $('#frm_home_moving_companies #moving_to_house_type').text(response.moving_to_house_type);
+                    $('#frm_home_moving_companies #moving_to_floor').text(response.moving_to_floor);
+                    $('#frm_home_moving_companies #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
+                    $('#frm_home_moving_companies #moving_to_property_type').text(response.moving_to_property_type);
+                    
+                    $('#frm_home_moving_companies #additional_information').text(response.additional_information);
+                    $('#frm_home_moving_companies #moving_date').text(response.moving_date);
+
+                    $('#frm_home_moving_companies #moving_from_address').text(response.moving_from_address);
+                    $('#frm_home_moving_companies #moving_to_address').text(response.moving_to_address);
+
+                    // Requested services
+					$('#frm_home_moving_companies #user_requested_moving_services').html(response.request_services_details);
+
+					// Reqested additional services
+					$('#frm_home_moving_companies #user_requested_moving_other_services').html(response.request_other_details);
+
+					$('#frm_home_moving_companies #pst_percenateg').text(response.pst);
+					$('#frm_home_moving_companies #gst_percentage').text(response.gst);
+					$('#frm_home_moving_companies #hst_percentage').text(response.hst);
+					$('#frm_home_moving_companies #service_charge_percetage').text(response.service_charge);
+
+					// Distance between two addresses
+					$('#frm_home_moving_companies #distance').text(response.distance);
+
+					$('#frm_home_moving_companies #gst_amount').text('$'+response.gst_amount);
+                    $('#frm_home_moving_companies #hst_amount').text('$'+response.hst_amount);
+                    $('#frm_home_moving_companies #pst_amount').text('$'+response.pst_amount);
+                    $('#frm_home_moving_companies #service_charge_amount').text('$'+response.service_charge);
+                    $('#frm_home_moving_companies #total').text('$'+response.total_amount);
+                    $('#frm_home_moving_companies #discount').text('$'+response.discount);
+
+                    // Show the modal
+                    $('#modal_moving_companies_service_request').modal('show');
+                }
+            });
+        }
+        else
+        {
+            alertify.error('Missing id');
+        }
+    });
+
+
 	// Update address activity form validation
     $('#frm_update_address').validate({
         rules: {
