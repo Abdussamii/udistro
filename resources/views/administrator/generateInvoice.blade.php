@@ -119,6 +119,54 @@
 		$('#download_invoice').click(function(){
 
 			// Fill all the entered data in the form and submit the form
+
+			$('#invoiceType').val( $('input[name="invoice_type"]:checked').val() );
+			$('#companyName').val( $('.company_name').text() );
+			$('#invoiceTitle').val( $('.invoice_title').text() );
+			$('#invoiceDate').val( $('.invoice_date').text() );
+			$('#invoiceNo1').val( $('.invoice_no1').text() );
+			$('#invoiceNo2').val( $('.invoice_no2').text() );
+			$('#invoiceRecipientName').val( $('.invoice_recipient_name').text() );
+			$('#invoiceRecipientCompanyName').val( $('.invoice_recipient_company_name').text() );
+			
+			$('#address1').val( $('.address_1').text() );
+			$('#address2').val( $('.address_2').text() );
+			$('#address3').val( $('.address_3').text() );
+			$('#contactNo').val( $('.contact_no').text() );
+			$('#emailId').val( $('.email_id').text() );
+			
+			$('#invoiceMessage').val( $('.invoice_message').html().trim() );
+
+			// Iterate over the table header rows
+			var colCount = 1;
+			$('#table_invoice_details thead tr th').each(function(){
+				$('#tableHeader' + colCount).val( $(this).text() );
+
+				colCount++;
+			});
+
+			// Iterate over the table body rows
+			var rowCount = 1;
+			$('#table_invoice_details tbody tr').each(function(){
+				
+				var colCount = 1;
+				$(this).find('td').each(function(){
+					$('#tableRow'+ rowCount +'Col' + colCount).val( $(this).text() );
+
+					colCount++;
+				});
+
+				rowCount++;
+
+			});
+
+			$('#tableSubtotal').val( $('.subtotal').text() );
+			$('#tableTaxPercentage').val( $('.tax_percentage').text() );
+			$('#tableTaxAmount').val( $('.tax_amount').text() );
+			$('#tableTotalAmount').val( $('.total_amount').text() );
+
+			$('#closingMessage').val( $('#closing_message').text() );
+
 			$('#frm_invoive_data').submit();
 
 		});
@@ -140,25 +188,25 @@
 		// To calculate row wise amount sum
 		$('.row_quantity, .row_price, .tax_amount, .tax_percentage').blur(function(){
 
-			let quantity = parseFloat( $(this).closest('tr').find('.row_quantity').text() );
-			let rowPrice = parseFloat( $(this).closest('tr').find('.row_price').text() );
+			let quantity = ( $(this).closest('tr').find('.row_quantity').text() != '' ) ? parseFloat( $(this).closest('tr').find('.row_quantity').text() ) : 0;
+			let rowPrice = ( $(this).closest('tr').find('.row_price').text() != '' ) ? parseFloat( $(this).closest('tr').find('.row_price').text() ) : 0;
 
 			$(this).closest('tr').find('.invoice_amout').text( (quantity * rowPrice).toFixed(2) );
 
 			var subTotal = 0;
 			$('.invoice_amout').each(function(){
-				subTotal += parseFloat( $(this).text() );
+				subTotal += ( $(this).text() != '' ) ? parseFloat( $(this).text() ) : 0;
 			});
 
 			$('.subtotal').text( subTotal.toFixed(2) );
 
-			var taxPercentage = parseFloat( $('.tax_percentage').text() );
+			var taxPercentage = ( $('.tax_percentage').text() != '' ) ? parseFloat( $('.tax_percentage').text() ) : 0;
 
 			var taxCalc = ( taxPercentage / 100 ) * subTotal;
 
 			$('.tax_amount').text( taxCalc.toFixed(2) );
 
-			var taxAmount = parseFloat( $('.tax_amount').text() );
+			var taxAmount = ( $('.tax_amount').text() != '' ) ? parseFloat( $('.tax_amount').text() ) : 0;
 
 			$('.total_amount').text( ( subTotal + taxAmount ).toFixed(2) );
 
@@ -185,22 +233,22 @@
 		   		<label><input type="radio" name="invoice_type" class="invoice_type" value="2">Payment Received</label>
 		   	</div>
 			<div class="top-row">
-				  <div contenteditable="true" id="company" id="company_name">Your Company Name</div>
-				  <div contenteditable="true" id="title" id="invoice_title">INVOICE</div>
-			 </div>
+				<div contenteditable="true" id="company" class="company_name">Your Company Name</div>
+				<div contenteditable="true" id="title" class="invoice_title">INVOICE</div>
+			</div>
 			<div id="address" class="col-sm-6">
-				<div contenteditable="true" id="address1">123 Your Street</div>
-				<div contenteditable="true" id="address2">Your Town</div>
-				<div contenteditable="true" id="address3">Address Line 3</div>
-				<div contenteditable="true" id="contact_no">(123) 456 789</div>
-				<div contenteditable="true" id="email_id">email@yourcompany.com</div>
+				<div contenteditable="true" class="address_1">123 Your Street</div>
+				<div contenteditable="true" class="address_2">Your Town</div>
+				<div contenteditable="true" class="address_3">Address Line 3</div>
+				<div contenteditable="true" class="contact_no">(123) 456 789</div>
+				<div contenteditable="true" class="email_id">email@yourcompany.com</div>
 			</div>
 			<div id="meta" class="col-sm-6">
-				<div contenteditable="true" id="invoice_date">12/11/2010</div>
-				<div contenteditable="true" id="invoice_no1">Invoice #2334889</div>
-				<div contenteditable="true" id="invoice_no2">PO 456001200</div>
-				<div contenteditable="true" id="invoice_recipient_fname" class="bold">Att: Ms. Jane Doe</div>
-				<div contenteditable="true" id="invoice_recipient_lname" class="bold">Client Company Name</div>
+				<div contenteditable="true" class="invoice_date">12/11/2010</div>
+				<div contenteditable="true" class="invoice_no1">Invoice #2334889</div>
+				<div contenteditable="true" class="invoice_no2">PO 456001200</div>
+				<div contenteditable="true" class="invoice_recipient_name" class="bold">Att: Ms. Jane Doe</div>
+				<div contenteditable="true" class="invoice_recipient_company_name" class="bold">Client Company Name</div>
 			</div>
 		</div>
 
@@ -209,7 +257,7 @@
 		<hr>
 
 		<!-- Message Starts -->
-			<div contenteditable="true" class="messageBox" id="invoice_message">
+			<div contenteditable="true" class="messageBox invoice_message">
 				<span class="message">Dear Ms. Jane Doe,</span>
 				<p>Please find below a cost-breakdown for the recent work completed. Please make payment at your earliest convenience, and do not hesitate to contact me with any questions.</p>
 				<span class="message">Many thanks,</span> <span class="message">Your Name</span>
@@ -220,11 +268,11 @@
 		<table id="table_invoice_details">
 			<thead>
 				<tr>
-					<th>#</th>
-					<th>Item Description</th>
-					<th>Quotes</th>
-					<th>Unit Price</th>
-					<th>Total</th>
+					<th contenteditable="true">#</th>
+					<th contenteditable="true">Item Description</th>
+					<th contenteditable="true">Quotes</th>
+					<th contenteditable="true">Unit Price</th>
+					<th contenteditable="true">Total</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -300,9 +348,74 @@
 
 		<!-- Form to hold the data entered by user -->
 		<form name="frm_invoive_data" id="frm_invoive_data" action="{{ url('/administrator/htmltopdfview') }}" style="display: none;">
-			<input type="hidden" name="download" value="pdf">
+			<!-- This is for URL purpose -->
+			<input type="hidden" name="download" id="download" value="pdf">
 
 			<!-- PDF fields -->
+			<input type="hidden" name="invoiceType" id="invoiceType" value="">
+
+			<!-- PDF header fields -->
+			<input type="hidden" name="companyName" id="companyName" value="">
+			<input type="hidden" name="invoiceTitle" id="invoiceTitle" value="">
+			<input type="hidden" name="invoiceDate" id="invoiceDate" value="">
+			<input type="hidden" name="invoiceNo1" id="invoiceNo1" value="">
+			<input type="hidden" name="invoiceNo2" id="invoiceNo2" value="">
+			<input type="hidden" name="invoiceRecipientName" id="invoiceRecipientName" value="">
+			<input type="hidden" name="invoiceRecipientCompanyName" id="invoiceRecipientCompanyName" value="">
+			<input type="hidden" name="address1" id="address1" value="">
+			<input type="hidden" name="address2" id="address2" value="">
+			<input type="hidden" name="address3" id="address3" value="">
+			<input type="hidden" name="contactNo" id="contactNo" value="">
+			<input type="hidden" name="emailId" id="emailId" value="">
+
+			<!-- Invoice Message -->
+			<input type="hidden" name="invoiceMessage" id="invoiceMessage" value="">
+
+			<!-- Table calculation part -->
+			<input type="hidden" name="tableHeader1" id="tableHeader1" value="">
+			<input type="hidden" name="tableHeader2" id="tableHeader2" value="">
+			<input type="hidden" name="tableHeader3" id="tableHeader3" value="">
+			<input type="hidden" name="tableHeader4" id="tableHeader4" value="">
+			<input type="hidden" name="tableHeader5" id="tableHeader5" value="">
+
+			<input type="hidden" name="tableRow1Col1" id="tableRow1Col1" value="">
+			<input type="hidden" name="tableRow1Col2" id="tableRow1Col2" value="">
+			<input type="hidden" name="tableRow1Col3" id="tableRow1Col3" value="">
+			<input type="hidden" name="tableRow1Col4" id="tableRow1Col4" value="">
+			<input type="hidden" name="tableRow1Col5" id="tableRow1Col5" value="">
+
+			<input type="hidden" name="tableRow2Col1" id="tableRow2Col1" value="">
+			<input type="hidden" name="tableRow2Col2" id="tableRow2Col2" value="">
+			<input type="hidden" name="tableRow2Col3" id="tableRow2Col3" value="">
+			<input type="hidden" name="tableRow2Col4" id="tableRow2Col4" value="">
+			<input type="hidden" name="tableRow2Col5" id="tableRow2Col5" value="">
+
+			<input type="hidden" name="tableRow3Col1" id="tableRow3Col1" value="">
+			<input type="hidden" name="tableRow3Col2" id="tableRow3Col2" value="">
+			<input type="hidden" name="tableRow3Col3" id="tableRow3Col3" value="">
+			<input type="hidden" name="tableRow3Col4" id="tableRow3Col4" value="">
+			<input type="hidden" name="tableRow3Col5" id="tableRow3Col5" value="">
+
+			<input type="hidden" name="tableRow4Col1" id="tableRow4Col1" value="">
+			<input type="hidden" name="tableRow4Col2" id="tableRow4Col2" value="">
+			<input type="hidden" name="tableRow4Col3" id="tableRow4Col3" value="">
+			<input type="hidden" name="tableRow4Col4" id="tableRow4Col4" value="">
+			<input type="hidden" name="tableRow4Col5" id="tableRow4Col5" value="">
+
+			<input type="hidden" name="tableRow5Col1" id="tableRow5Col1" value="">
+			<input type="hidden" name="tableRow5Col2" id="tableRow5Col2" value="">
+			<input type="hidden" name="tableRow5Col3" id="tableRow5Col3" value="">
+			<input type="hidden" name="tableRow5Col4" id="tableRow5Col4" value="">
+			<input type="hidden" name="tableRow5Col5" id="tableRow5Col5" value="">
+
+			<input type="hidden" name="tableSubtotal" id="tableSubtotal" value="">
+			<input type="hidden" name="tableTaxPercentage" id="tableTaxPercentage" value="">
+			<input type="hidden" name="tableTaxAmount" id="tableTaxAmount" value="">
+			<input type="hidden" name="tableTotalAmount" id="tableTotalAmount" value="">
+
+			<!-- Invoice Message -->
+			<input type="" name="closingMessage" id="closingMessage" value="">
+
 		</form>
 
 	</div>

@@ -4195,16 +4195,18 @@ class AdminController extends Controller
      * @param void
      * @return array
      */
-    public function htmltopdfview(Request $request) 
+    public function htmltopdfview(Request $request)
     {
-        if($request->has('download')){
-            $pdf = PDF::loadView('htmltopdfview');
+    	if($request->has('download')){
+
+    		// Pass the data to the view
+            $pdf = PDF::loadView('htmltopdfview', ['userInput' => Input::get()]);
             
             // To download the file in browser
-            // return $pdf->download('htmltopdfview');
+            return $pdf->download('htmltopdfview');
             
             // To save the pdf into a directory
-            $pdf->save(base_path().'/storage/pdf/invoice_'. time() .'.pdf','F');
+           // $pdf->save(base_path().'/storage/pdf/invoice_'. time() .'.pdf','F');
         }
 
         // return view('htmltopdfview');

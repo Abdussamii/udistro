@@ -44,6 +44,22 @@
 	    transform: rotate(35deg);
 	    width: 200px;
 	}
+	.paid-tag {
+	    background: #008000;
+	    padding: 10px;
+	    color: #fff;
+	    text-transform: uppercase;
+	    font-size: 18px;
+	    font-weight: 600;
+	    text-align: center;
+	    position: absolute;
+	    top: 15px;
+	    right: -65px;
+	    -ms-transform: rotate(35deg);
+	    -webkit-transform: rotate(35deg);
+	    transform: rotate(35deg);
+	    width: 200px;
+	}
 	table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; margin: 50px 0px; }
 	td,
 	th { border: 1px solid #aaa; text-align: left; padding: 8px; }
@@ -64,137 +80,104 @@
 	
 	<div id="invoice-wrapper">
 		<div id="invoice"> 
-		<!--Unpaid Starts-->
-		<div class="unpaid-tag">Unpaid</div>
-		<!--Unpaid Ends--> 
-		<!-- Company Logo Starts -->
-		<div class="logo">
-			<img src="{{ url('/images/logo.png') }}" alt="Company Logo">
-		</div>
-		<!-- Company Logo Ends -->
-		<!-- Header Starts -->
-		<div id="header">
-			<div class="top-row">
-				  <div contenteditable="true" id="company">Your Company Name</div>
-				  <div contenteditable="true" id="title">INVOICE</div>
-			 </div>
-			<div id="address" class="col-sm-6">
-				<div contenteditable="true">123 Your Street</div>
-				<div contenteditable="true">Your Town</div>
-				<div contenteditable="true">Address Line 3</div>
-				<div contenteditable="true">(123) 456 789</div>
-				<div contenteditable="true">email@yourcompany.com</div>
-			</div>
-			<div id="meta" class="col-sm-6">
-				<div contenteditable="true">12/11/2010</div>
-				<div contenteditable="true">Invoice #2334889</div>
-				<div contenteditable="true">PO 456001200</div>
-				<div contenteditable="true" class="bold">Att: Ms. Jane Doe</div>
-				<div contenteditable="true" class="bold">Client Company Name</div>
-			</div>
-		</div>
+			<!--Unpaid Starts-->
+				<?php
+				if( isset( $userInput['invoiceType'] ) && ( $userInput['invoiceType'] == 1 ) )	// Unpaid
+				{
+					echo '<div class="unpaid-tag">Unpaid</div>';
+				}
+				else 																			// Paid
+				{
+					echo '<div class="paid-tag" contenteditable="true">Paid</div>';
+				}
+				?>
+			<!--Unpaid Ends--> 
 
-		<!-- Header Starts -->
+			<!-- Company Logo Starts -->
+			<div class="logo">
+				<img src="{{ url('/images/logo.png') }}" alt="Company Logo">
+			</div>
+			<!-- Company Logo Ends -->
+
+			<!-- Header Starts -->
+			<div id="header">
+				<div class="top-row">
+					  <div contenteditable="true" id="company">{{ $userInput['companyName'] }}</div>
+					  <div contenteditable="true" id="title">{{ $userInput['invoiceTitle'] }}</div>
+				 </div>
+				<div id="address" class="col-sm-6">
+					<div contenteditable="true">{{ $userInput['address1'] }}</div>
+					<div contenteditable="true">{{ $userInput['address2'] }}</div>
+					<div contenteditable="true">{{ $userInput['address3'] }}</div>
+					<div contenteditable="true">{{ $userInput['contactNo'] }}</div>
+					<div contenteditable="true">{{ $userInput['emailId'] }}</div>
+				</div>
+				<div id="meta" class="col-sm-6">
+					<div contenteditable="true">{{ $userInput['invoiceDate'] }}</div>
+					<div contenteditable="true">{{ $userInput['invoiceNo1'] }}</div>
+					<div contenteditable="true">{{ $userInput['invoiceNo2'] }}</div>
+					<div contenteditable="true" class="bold">{{ $userInput['invoiceRecipientName'] }}</div>
+					<div contenteditable="true" class="bold">{{ $userInput['invoiceRecipientCompanyName'] }}</div>
+				</div>
+			</div>
+			<!-- Header Starts -->
 
 		<hr>
 
 		<!-- Message Starts -->
 			<div contenteditable="true" class="messageBox">
-				<span class="message">Dear Ms. Jane Doe,</span>
-				<p>Please find below a cost-breakdown for the recent work completed. Please make payment at your earliest convenience, and do not hesitate to contact me with any questions.</p>
-				<span class="message">Many thanks,</span> <span class="message">Your Name</span>
+				{!! $userInput['invoiceMessage'] !!}
 			</div>
-		<!-- Message Starts --> 
+		<!-- Message Starts -->
 
 		<!-- Table Starts -->
 		<table contenteditable="true">
 		<thead>
 			<tr>
-				<th>#</th>
-				<th>Item Description</th>
-				<th>Quantity</th>
-				<th>Unit price</th>
-				<th>Total</th>
+				<th>{{ $userInput['tableHeader1'] }}</th>
+				<th>{{ $userInput['tableHeader2'] }}</th>
+				<th>{{ $userInput['tableHeader3'] }}</th>
+				<th>{{ $userInput['tableHeader4'] }}</th>
+				<th>{{ $userInput['tableHeader5'] }}</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">1</td>
-				<td>Supporting of in-house project (hours worked)</td>
-				<td>40</td>
-				<td>125</td>
-				<td class="noteditable" title="This field is done automatically">5000.00</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">2</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">3</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">4</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">5</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">6</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">7</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
-			<tr>
-				<td class="noteditable" title="This field is done automatically">8</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td class="noteditable" title="This field is done automatically">-</td>
-			</tr>
+			<?php
+			for( $row=1; $row<=5; $row++ )
+			{
+				if( $userInput['tableRow'. $row .'Col1'] != '' && $userInput['tableRow'. $row .'Col2'] != '' && $userInput['tableRow'. $row .'Col3'] != '' && $userInput['tableRow'. $row .'Col4'] != '' && $userInput['tableRow'. $row .'Col5'] != '' )
+				{
+				?>
+					<tr>
+						<td class="noteditable" title="This field is done automatically">{{ $userInput['tableRow'. $row .'Col1'] }}</td>
+						<td>{{ $userInput['tableRow'. $row .'Col2'] }}</td>
+						<td>{{ $userInput['tableRow'. $row .'Col3'] }}</td>
+						<td>{{ $userInput['tableRow'. $row .'Col4'] }}</td>
+						<td class="noteditable" title="This field is done automatically">{{ $userInput['tableRow'. $row .'Col5'] }}</td>
+					</tr>
+				<?php
+				}
+			}
+			?>
 		</tbody>
 		<tfoot>
 			<tr>
 				<th id="subtotallabel" colspan="4">Subtotal</th>
-				<th id="formsubtotal" class="span-4 noteditable">5000.00</th>
+				<th id="formsubtotal" class="span-4 noteditable">{{ $userInput['tableSubtotal'] }}</th>
 			</tr>
 			<tr>
-				<th id="taxrate" colspan="4">Sales Tax (20%)</th>
-				<th id="formtax" class="span-4 noteditable">1000.00</th>
+				<th id="taxrate" colspan="4">Sales Tax ({{ $userInput['tableTaxPercentage'] }}%)</th>
+				<th id="formtax" class="span-4 noteditable">{{ $userInput['tableTaxAmount'] }}</th>
 			</tr>
 			<tr id="total">
 				<th id="totallabel" colspan="4">Total</th>
-				<th id="formtotal" class="span-4 noteditable">6000.00</th>
+				<th id="formtotal" class="span-4 noteditable">{{ $userInput['tableTotalAmount'] }}</th>
 			</tr>
 		</tfoot>
 		</table>
 		<!-- Table Ends -->
 
-		<div contenteditable="true"> Many thanks for your custom! I look forward to doing business with you again in due course.
-
-		Payment terms: to be received within 60 days. </div>
+		<div contenteditable="true">{!! $userInput['closingMessage'] !!}</div>
 		</div>
 
 </div>
