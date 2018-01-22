@@ -443,6 +443,7 @@ $(document).ready(function(){
 					// Distance between two addresses
 					$('#frm_home_moving_companies #distance').text(response.distance);
 
+					$('#frm_home_moving_companies #insurance').text('$'+response.insurance);
 					$('#frm_home_moving_companies #gst_amount').text('$'+response.gst_amount);
                     $('#frm_home_moving_companies #hst_amount').text('$'+response.hst_amount);
                     $('#frm_home_moving_companies #pst_amount').text('$'+response.pst_amount);

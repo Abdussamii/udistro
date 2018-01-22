@@ -674,8 +674,8 @@
                                                         <thead>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Insurance</td>
-                                                                <td>
-                                                                    <input type="text" name="insurance" id="insurance"  class="form-control moving_service_insurance">
+                                                                <td id="insurance">
+                                                                    
                                                                 </td>
                                                             </tr>
                                                             <tr>

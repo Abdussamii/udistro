@@ -1705,6 +1705,12 @@ class MoversController extends Controller
      */
     public function quotationResponse()
     {
+    	$agentId 		= base64_decode(Input::get('agent_id'));
+       	$clientId 		= base64_decode(Input::get('client_id'));
+       	$invitationId 	= base64_decode(Input::get('invitation_id'));
+
+       	session(['agentId' => $agentId,'clientId' => $clientId, 'invitationId' => $invitationId]);
+
         return view('movers/quotationResponse');
     }
 
@@ -1722,8 +1728,10 @@ class MoversController extends Controller
         $col        = Input::get('iSortCol_0');         // Column number for sorting
         $sortType   = Input::get('sSortDir_0');         // Sort type
 
-        $clientId = 1;
-        $invitationId = 3;
+        // Get the client and invitation id from session
+    	$clientId 		= Session::get('clientId');
+    	$invitationId 	= Session::get('invitationId');
+        
         $techConciergeArray = DB::table('tech_concierge_service_requests')
                                 ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
                                 ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
@@ -1906,28 +1914,6 @@ class MoversController extends Controller
                 $response['moving_to_address']  = $clientMovingToAddress->address1 . ', ' . $clientMovingToAddress->city . ', ' . $clientMovingToAddress->province . ', ' . $clientMovingToAddress->country;
 
                 $html = '';
-                // Get the Other Places to install appliances in
-                $otherPlaces = DB::table('tech_concierge_place_service_requests as t1')
-                            ->join('tech_concierge_places as t2', 't1.place_id', '=', 't2.id')
-                            ->where(['t1.service_request_id' => $techConciergeId])
-                            ->select('t1.id as service_request_id', 't2.id as service_id', 't2.places', 't1.service_hours', 't1.amount')
-                            ->get();
-
-                if( count( $otherPlaces ) > 0 )
-                {
-                    foreach( $otherPlaces as $otherPlace )
-                    {
-                        $html .= '<tr>';
-
-                        $html .= '<td>Other Places to install appliances</td>';
-                        $html .= '<td>'. ucwords( strtolower( $otherPlace->places ) ) .'</td>';
-                        $html .= '<td>NA</td>';
-                        $html .= '<td>'. ucwords( strtolower( $otherPlace->service_hours ) ) .'</td>';
-                        $html .= '<td>'. ucwords( strtolower( $otherPlace->amount ) ) .'</td>';
-
-                        $html .= '</tr>';
-                    }
-                }
 
                 // Get the list of appliances to install
                 $appliances = DB::table('tech_concierge_appliances_service_requests as t1')
@@ -1984,6 +1970,26 @@ class MoversController extends Controller
 
                         $otherDetailHtml .= '<td>'. ucwords( strtolower( $otherDetail->details ) ) .'</td>';
                         $otherDetailHtml .= '<td>'. $status .'</td>';
+
+                        $otherDetailHtml .= '</tr>';
+                    }
+                }
+
+                // Get the Other Places to install appliances in
+                $otherPlaces = DB::table('tech_concierge_place_service_requests as t1')
+                            ->join('tech_concierge_places as t2', 't1.place_id', '=', 't2.id')
+                            ->where(['t1.service_request_id' => $techConciergeId])
+                            ->select('t1.id as service_request_id', 't2.id as service_id', 't2.places', 't1.service_hours', 't1.amount')
+                            ->get();
+
+                if( count( $otherPlaces ) > 0 )
+                {
+                    foreach( $otherPlaces as $otherPlace )
+                    {
+                        $otherDetailHtml .= '<tr>';
+
+                        $otherDetailHtml .= '<td>Other Places to install appliances</td>';
+                        $otherDetailHtml .= '<td>'. ucwords( strtolower( $otherPlace->places ) ) .'</td>';
 
                         $otherDetailHtml .= '</tr>';
                     }
@@ -2369,7 +2375,13 @@ class MoversController extends Controller
                 if( $movingCompaniesArray['transportation_vehicle_type'] != '' && !is_null( $movingCompaniesArray['transportation_vehicle_type'] ) )
                 {
                     // Get the moving transportations
-                    $movingTransportations = MovingTransportation::get();
+                    // $movingTransportations = MovingTransportation::get();
+
+                    $movingTransportations = DB::table('moving_transportation_type_requests as t1')
+				                            ->join('moving_transportations as t2', 't1.moving_items_services_id', '=', 't2.id')
+				                            ->where(['t1.transportation_id' => $movingCompanyId])
+				                            ->select('t1.id as service_request_id', 't2.id as transportation_id', 't2.transportation_type', 't1.hour_to_complete', 't1.amount')
+				                            ->get();
 
                     if( count( $movingTransportations ) > 0 )
                     {
@@ -2380,8 +2392,8 @@ class MoversController extends Controller
                             $html .= '<td>'. $movingTransportation->transportation_type .'</td>';
                             $html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
                             $html .= '<td>NA</td>';
-                            $html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;"></td>';
-                            $html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
+                            $html .= '<td>'. $movingTransportation->hour_to_complete .'</td>';
+                            $html .= '<td>'. $movingTransportation->amount .'</td>';
 
                             $html .= '</tr>';
                         }
@@ -2452,6 +2464,7 @@ class MoversController extends Controller
                     $response['hst_amount']     = $taxDetails->hst_amount;
                     $response['pst_amount']     = $taxDetails->pst_amount;
                     $response['service_charge'] = $taxDetails->service_charge;
+                    $response['insurance'] 		= $taxDetails->insurance;
                     $response['total_amount']   = $taxDetails->total_amount;
                     $response['discount']       = $taxDetails->discount;
                 }
