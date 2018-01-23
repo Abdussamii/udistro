@@ -133,50 +133,42 @@ function calculateRoute(from, to) {
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
- <div class="container-fluid">
-  <div class="navbar-header"> 
-   <!-- Company image --> 
-   <a class="navbar-brand" href="{{ url('/') }}"> <img src="{{ url('/images/logo.png') }}" height="" width="" alt="Udistro" /> 
-   <!-- <img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" /> --> 
-   </a> 
-   <!-- <div class="user-name-section">
-	          	<a href="javascript:void(0);">
-	          		<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
-	          	</a>
-	          	<div class="username">
-	          		<h3>{{ $agentName }}</h3>
-	          	</div>
-          	</div> --> 
-  </div>
-  <div class="nav navbar-nav navbar-right user-page">
-   <div class="dropdown user-dropdown">
-    <div class="user-short-name"> <span>{{ $clientInitials }}</span> </div>
-    <button class="btnbg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ucwords( strtolower( $clientName ) ) }}<span class="caret"></span></button>
-    <ul class="dropdown-menu" aria-labelledby="dLabel">
-     <li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Logout</span> </a> </li>
-    </ul>
-   </div>
-  </div>
- </div>
+	<div class="container-fluid">
+		<div class="navbar-header"> 
+			<!-- Company image --> 
+			<a class="navbar-brand" href="{{ url('/') }}"> <img src="{{ url('/images/logo.png') }}" height="" width="" alt="Udistro" /> </a> 
+		</div>
+		<div class="nav navbar-nav navbar-right user-page">
+			<div class="dropdown user-dropdown">
+				<div class="user-short-name"> <span>{{ $clientInitials }}</span> </div>
+				<button class="btnbg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ucwords( strtolower( $clientName ) ) }}<span class="caret"></span></button>
+				<ul class="dropdown-menu" aria-labelledby="dLabel">
+					<li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Logout</span> </a> </li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </nav>
 <!-- End Navbar -->
+
 <!-- Map Section -->
 <!-- url('/images/movers/map-bg.jpg') -->
 <section class="content-section map-bg" style="background:url('{{ ( $clientMovingToProvince->image != '' ) ? url('/images/province/' . $clientMovingToProvince->image) : url('/images/movers/map-bg.jpg') }}') no-repeat center center;position: relative;display: block; max-width: 100%; background-size:cover; padding: 50px 0; ">
- <div class="container-fluid">
-  <div class="row">
-   <div class="col-md-4">
-    <div class="contry-name">
-     <h2>{{ ucwords( strtolower( $clientMovingToProvince->abbreviation ) ) }}</h2>
-     <span>{{ ucwords( strtolower( $clientMovingToProvince->name ) ) }}</span> </div>
-   </div>
-   <div class="col-md-4"> </div>
-   <div class="col-md-4"> 
-    <!-- Google map here -->
-    <div class="map-area" id="map" style="overflow: hidden; border-radius: 0; height: 330px; width: 330px; border: 5px solid #fff;"> </div>
-   </div>
-  </div>
- </div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="contry-name">
+					<h2>{{ ucwords( strtolower( $clientMovingToProvince->abbreviation ) ) }}</h2>
+					<span>{{ ucwords( strtolower( $clientMovingToProvince->name ) ) }}</span>
+				</div>
+			</div>
+			<div class="col-md-4"> </div>
+			<div class="col-md-4"> 
+				<!-- Google map here -->
+				<div class="map-area" id="map" style="overflow: hidden; border-radius: 0; height: 330px; width: 330px; border: 5px solid #fff;"> </div>
+			</div>
+		</div>
+	</div>
 </section>
 <!-- Map Section Ends Here--> 
 
@@ -295,7 +287,7 @@ function calculateRoute(from, to) {
 		</div>
 	</div>
 	<div class="comment-section">
-		<form name="frm_agent_feedback" id="frm_agent_feedback">
+		<form name="frm_agent_feedback" id="frm_agent_feedback" autocomplete="off">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="comment-area">
@@ -345,152 +337,150 @@ function calculateRoute(from, to) {
 </div>
 
 <footer class="footer-main section-pd">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="media-body client-achive-step">
-          <h2 class="media-heading">Company</h2>
-        </div>
-        <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <div class="media-body client-achive-step">
-          <h2 class="media-heading">Important Links</h2>
-        </div>
-        <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <div class="media-body client-achive-step">
-          <h2 class="media-heading">Follow Us</h2>
-        </div>
-        <ul class="list-group custom-listgroup">
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
-          <li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="media-body client-achive-step">
+					<h2 class="media-heading">Company</h2>
+				</div>
+				<ul class="list-group custom-listgroup">
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<div class="media-body client-achive-step">
+					<h2 class="media-heading">Important Links</h2>
+				</div>
+				<ul class="list-group custom-listgroup">
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<div class="media-body client-achive-step">
+					<h2 class="media-heading">Follow Us</h2>
+				</div>
+				<ul class="list-group custom-listgroup">
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
+					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </footer>
 
 <!-- Forward Mail Modal -->
 <div id="forward_mail_modal" class="modal fade mover-modal" role="dialog">
- <div class="modal-dialog modal-lg"> 
-  <!-- Modal content-->
-  <div class="modal-content">
-   <div class="modal-body">
-    <div class="close close-btn close_modal" data-activity="forward_mail" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
-    <div class="model-WrapCont">
-     <h2>Mail Forwarding</h2>
-    </div>
-    <div class="row">
-     <div class="col-sm-3 col-md-3 col-lg-3">
-      <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-      <div>&nbsp;</div>
-     </div>
-     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="forward_mail_step1">
-      <div class="row">
-       <div class="col-sm-12">
-        <p>Canada Post’s Mail Forwarding service ensures all your important mail reaches you at your new address.</p>
-       </div>
-      </div>
-      <div class="clearfix"></div>
-      <div class="row">
-       <div class="col-sm-12 mailfarwd_wrap_radio">
-        <form name="frm_forward_mail" id="frm_forward_mail">
-         <label class="mailfarw_radio-lb">
-          <input type="radio" name="forward_mail_method" value="1">
-          Do it here online</label>
-         <label class="mailfarw_radio-lb">
-          <input type="radio" name="forward_mail_method" value="2">
-          Do it at Canada post office</label>
-         <label id="forward_mail_method-error" class="error" for="forward_mail_method"></label>
-        </form>
-       </div>
-      </div>
-     </div>
-     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="forward_mail_step2" style="display: none;">
-      <div class="row">
-       <div class="col-sm-12">
-        <p> When you buy a Mail Forwarding before you moves, with your permission, Canada Post will share your updated address information with companies who have an existing relationship with you and who are subscribed to Canada post NCOA Mover Data Service. Choose the 12-month service for the most convenience and savings. </p>
-       </div>
-      </div>
-      <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-     </div>
-     <div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="forward_mail_step3" style="display: none;">
-      <div class="row">
-       <div class="col-sm-12">
-        <p>Search Canada post office closest to you</p>
-       </div>
-      </div>
-      <div>
-       <form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices">
-        <div class="col-sm-9 col-md-9 col-lg-9 row">
-         <input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office">
-        </div>
-        <div class="col-sm-3 col-md-3 col-lg-3 row"> 
-         <!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
-         <a href="javascript:void(0);" onclick="" id="forward_mail_search_postoffice">Go</a> </div>
-       </form>
-      </div>
-     </div>
-    </div>
-    <div class="row" style="display:none;">
-     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
-      <div class="helpful-box">
-       <label>Is this helpful to you?</label>
-       <a href="javascript:void(0);" id="1" data-activity="forward_mail" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="forward_mail" class="activity_feedback">No</a> </div>
-     </div> -->
-     <div class="col-sm-9 col-md-9 col-lg-9">
-      <div class="row">
-       <div class="col-md-4">
-        <div class="lightbox-mailfarwd">
-         <h3>Peace of mind</h3>
-         <p>Ensure you don't miss important email</p>
-        </div>
-       </div>
-       <div class="col-md-4">
-        <div class="lightbox-mailfarwd">
-         <h3>Security</h3>
-         <p>Keep your valuable mail private</p>
-        </div>
-       </div>
-       <div class="col-md-4">
-        <div class="lightbox-mailfarwd">
-         <h3>Reliability</h3>
-         <p>More dependable than neighbours</p>
-        </div>
-       </div>
-      </div>
-     </div>
-    </div>
-    <div class="row">
-     <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
-     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> <a href="javascript:void(0);" id="btn_prev_forward_mail" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a> <a href="javascript:void(0);" id="btn_next_forward_mail" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a> </div>
-    </div>
-   </div>
-   <!-- <div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div> --> 
-  </div>
- </div>
+	<div class="modal-dialog modal-lg"> 
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="close close-btn close_modal" data-activity="forward_mail" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+				<div class="model-WrapCont">
+					<h2>Mail Forwarding</h2>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 col-md-3 col-lg-3">
+						<div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
+						<div>&nbsp;</div>
+					</div>
+					<div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="forward_mail_step1">
+						<div class="row">
+							<div class="col-sm-12">
+								<p>Canada Post’s Mail Forwarding service ensures all your important mail reaches you at your new address.</p>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="row">
+							<div class="col-sm-12 mailfarwd_wrap_radio">
+								<form name="frm_forward_mail" id="frm_forward_mail" autocomplete="off">
+								<label class="mailfarw_radio-lb">
+								<input type="radio" name="forward_mail_method" value="1">
+								Do it here online</label>
+								<label class="mailfarw_radio-lb">
+								<input type="radio" name="forward_mail_method" value="2">
+								Do it at Canada post office</label>
+								<label id="forward_mail_method-error" class="error" for="forward_mail_method"></label>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="forward_mail_step2" style="display: none;">
+						<div class="row">
+							<div class="col-sm-12">
+								<p> When you buy a Mail Forwarding before you moves, with your permission, Canada Post will share your updated address information with companies who have an existing relationship with you and who are subscribed to Canada post NCOA Mover Data Service. Choose the 12-month service for the most convenience and savings.
+								</p>
+							</div>
+						</div>
+						<div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/web/en/products/details.page?article=forward_your_mail_wh', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+						</div>
+					</div>
+					<div class="col-sm-9 col-md-9 col-lg-9 box-H-250" id="forward_mail_step3" style="display: none;">
+						<div class="row">
+							<div class="col-sm-12">
+								<p>Search Canada post office closest to you</p>
+							</div>
+						</div>
+						<div>
+							<form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices" autocomplete="off">
+								<div class="col-sm-9 col-md-9 col-lg-9 row">
+									<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office">
+								</div>
+								<div class="col-sm-3 col-md-3 col-lg-3 row"> 
+									<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
+									<a href="javascript:void(0);" onclick="" id="forward_mail_search_postoffice">Go</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="display:none;">
+					<div class="col-sm-9 col-md-9 col-lg-9">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="lightbox-mailfarwd">
+									<h3>Peace of mind</h3>
+									<p>Ensure you don't miss important email</p>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="lightbox-mailfarwd">
+									<h3>Security</h3>
+									<p>Keep your valuable mail private</p>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="lightbox-mailfarwd">
+									<h3>Reliability</h3>
+									<p>More dependable than neighbours</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+					<div class="col-sm-4 col-md-4 col-lg-4 text-right">
+						<a href="javascript:void(0);" id="btn_prev_forward_mail" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
+						<a href="javascript:void(0);" id="btn_next_forward_mail" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- Forward Mail Modal End -->
 
@@ -525,7 +515,7 @@ function calculateRoute(from, to) {
         <div class="clearfix"></div>
         <div class="col-sm-12">
          <div class="row">
-          <form name="frm_update_address" id="frm_update_address">
+          <form name="frm_update_address" id="frm_update_address" autocomplete="off">
            <div class="col-md-4">
             <div class="model-box-YN"> <span> Do you have full access to your CRA? </span>
              <label>
@@ -650,7 +640,7 @@ function calculateRoute(from, to) {
         <h3>Change of address with provintial agencies</h3>
        </div>
        <div>
-			<form name="frm_update_address_provintial" id="frm_update_address_provintial">
+			<form name="frm_update_address_provintial" id="frm_update_address_provintial" autocomplete="off">
 				<label class="mailfarw_radio-lb">
 				<input type="radio" name="update_address_provintial_method" value="1">
 				Do it here online</label>
@@ -678,11 +668,6 @@ function calculateRoute(from, to) {
      <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
        <!-- HSA 1 -->
        <h2>Update Address On Phone</h2>
-	       <!-- <div class="col-sm-3 col-md-3 col-lg-3">
-	        <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-	        <div>&nbsp;</div>
-	       </div> -->
-
 			<div class="col-sm-12 col-md-12 col-lg-12 box-H-250">
 			  <div class="panel-group" id="provincial_health_agencies">
 			  	<?php
@@ -791,80 +776,9 @@ function calculateRoute(from, to) {
 			  		}
 			  	}
 			  	?>
-
-			    <!-- <div class="panel panel-default">
-			      <div class="panel-heading">
-			        <h4 class="panel-title">
-			          <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse2">Collapsible Group 2</a>
-			        </h4>
-			      </div>
-			      <div id="collapse2" class="panel-collapse collapse">
-			        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-			        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-			      </div>
-			    </div> -->
-
 			  </div> 
 			</div>
-
-
       </div>
-
-     <!-- <div class="model-WrapCont" id="update_address_step5" style="display: none;"> 
-      <h2>Update Address</h2>
-      <div class="col-sm-3 col-md-3 col-lg-3">
-       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-       <div>&nbsp;</div>
-      </div>
-      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
-       <div class="block-head">
-        <h3>Update address with Driver's License Agency</h3>
-       </div>
-       <div class="row">
-        <div class="col-sm-12">
-         <p>You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410</p>
-        </div>
-        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-       </div>
-      </div>
-     </div> -->
-     <!-- <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
-      <h2>Update Address</h2>
-      <div class="col-sm-3 col-md-3 col-lg-3">
-       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-       <div>&nbsp;</div>
-      </div>
-      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
-       <div class="block-head">
-        <h3>Update address with Driver's License Agency</h3>
-       </div>
-       <div class="row">
-        <div class="col-sm-12">
-         <p>You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410</p>
-        </div>
-        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-       </div>
-      </div>
-     </div> -->
-     <!-- <div class="model-WrapCont" id="update_address_step7" style="display: none;"> 
-      <h2>Update Address</h2>
-      <div class="col-sm-3 col-md-3 col-lg-3">
-       <div> <img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" /> </div>
-       <div>&nbsp;</div>
-      </div>
-      <div class="col-sm-9 col-md-9 col-lg-9 box-H-250">
-       <div class="row">
-        <div class="block-head">
-         <h3>Update address with Driver's License Agency</h3>
-        </div>
-        <div class="col-sm-12">
-         <p>You are required to report changes in your name or address in person within 15 days to your Autopac Agency. At that time, a new photo will be taken. Visit or call any Autopac Agent closest to you, or contact Manitoba Public Insurance at 204-985-7000 in the Winnipeg calling area or toll-free at 1-800-665-2410</p>
-        </div>
-        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.google.co.in/maps/search/autopac+agency+in+canada/@49.0633977,-115.1102883,5z/data=!3m1!4b1', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-       </div>
-      </div>
-     </div> -->
     </div>
     <div class="row">
      <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
@@ -872,9 +786,6 @@ function calculateRoute(from, to) {
     </div>
    </div>
   </div>
-  <!--<div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div>--> 
  </div>
 </div>
 <!-- Update Address Modal End -->
@@ -901,7 +812,7 @@ function calculateRoute(from, to) {
       </div>
       <div class="clearfix"></div>
       <div class="col-sm-12 mailfarwd_wrap_radio">
-       <form name="frm_mailbox_keys" id="frm_mailbox_keys">
+       <form name="frm_mailbox_keys" id="frm_mailbox_keys" autocomplete="off">
         <label class="mailfarw_radio-lb">
          <input type="radio" name="mailbox_keys_method" value="2">
          Do it here online</label>
@@ -964,23 +875,7 @@ function calculateRoute(from, to) {
       <div class="get_started_LB"><a href="javascript:void(0);" onclick="window.open('https://www.canadapost.ca/cpo/mc/app/cmb/existing_state.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a></div>
      </div>
     </div>
-    
-    <!-- <div class="col-sm-9 col-md-9 col-lg-9" id="mailbox_keys_step4" style="width: 500px; height: 300px; display: none;">
-		      			<strong>Have you completed this task?</strong>
-		      			<br>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="mailbox_keys" id="1">Yes</button>
-		      			</div>
-		      			<div class="col-sm-6 col-md-6 col-lg-6">
-		      				<button type="button" class="btn btn-primary btn_activity_user_response" data-dismiss="modal" data-activity="mailbox_keys" id="0">No</button>
-		      			</div>
-		      		</div> -->
     <div class="row" style="display:none;">
-     <!-- <div class="col-sm-3 col-md-3 col-lg-3">
-      <div class="helpful-box">
-       <label>Is this helpful to you?</label>
-       <a href="javascript:void(0);" id="1" data-activity="mailbox_keys" class="activity_feedback">Yes</a> <a href="javascript:void(0);" id="0" data-activity="mailbox_keys" class="activity_feedback">No</a> </div>
-     </div> -->
      <div class="col-sm-9 col-md-9 col-lg-9">
       <div class="col-md-4">
        <p> Canada post will inform you of your community mailbox location </p>
@@ -999,9 +894,6 @@ function calculateRoute(from, to) {
     </div>
    </div>
   </div>
-  <!-- <div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div> --> 
  </div>
 </div>
 <!-- Mailbox keys Modal End -->
@@ -1438,9 +1330,6 @@ function calculateRoute(from, to) {
 		      		</div>
 		      	</div>
 	      	</div>
-	      	<!-- <div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div> -->
 	    </div>
   	</div>
 </div>
@@ -1757,9 +1646,6 @@ function calculateRoute(from, to) {
 		      		</div>
 		      	</div>
 	      	</div>
-	      	<!-- <div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div> -->
 	    </div>
   	</div>
 </div>
@@ -1934,10 +1820,6 @@ function calculateRoute(from, to) {
 						                    	<div>
 						                    		<div class="col-lg-2">Day 1</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date1" id="availability_date1" class="form-control datepicker"></div>
-						                    		
-						                    		<!-- <div class="col-lg-3"><input type="text" name="availability_time_from1" id="availability_time_from1" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="" name="availability_time_upto1" id="availability_time_upto1" class="form-control" placeholder="To hours"></div> -->
-
 						                    		<div class="col-lg-3">
 						                    			<select class="form-control" name="availability_time_from1" id="availability_time_from1">
 						                    				<option value="">Select</option>
@@ -1954,10 +1836,6 @@ function calculateRoute(from, to) {
 						                    	<div>
 						                    		<div class="col-lg-2">Day 2</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date2" id="availability_date2" class="form-control datepicker"></div>
-						                    		
-						                    		<!-- <div class="col-lg-3"><input type="text" name="availability_time_from2" id="availability_time_from2" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control" placeholder="To hours"></div> -->
-
 						                    		<div class="col-lg-3">
 						                    			<select class="form-control" name="availability_time_from2" id="availability_time_from2">
 						                    				<option value="">Select</option>
@@ -1974,10 +1852,6 @@ function calculateRoute(from, to) {
 						                    	<div>
 						                    		<div class="col-lg-2">Day 3</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date3" id="availability_date3" class="form-control datepicker"></div>
-						                    		
-						                    		<!-- <div class="col-lg-3"><input type="text" name="availability_time_from3" id="availability_date3_day_from_hour" class="form-control" placeholder="From hours"></div>
-						                    		<div class="col-lg-3"><input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control" placeholder="To hours"></div> -->
-
 						                    		<div class="col-lg-3">
 						                    			<select class="form-control" name="availability_time_from3" id="availability_time_from3">
 						                    				<option value="">Select</option>
@@ -2029,9 +1903,6 @@ function calculateRoute(from, to) {
 		      		</div>
 		      	</div>
 	      	</div>
-	      	<!-- <div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div> -->
 	    </div>
   	</div>
 </div>
@@ -2283,7 +2154,7 @@ function calculateRoute(from, to) {
 	    </div>
   	</div>
 </div>
-<!-- Tech Concierge Modal End -->
+<!-- Cable & Internet Service Modal End -->
 
 <!-- Share Announcement Modal -->
 <div id="share_announcement_modal" class="modal fade">
@@ -2355,7 +2226,6 @@ function calculateRoute(from, to) {
 							<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 						</ul>
 		      		</div>
-		      		<!-- <div class="col-sm-4 col-md-4 col-lg-4">&nbsp;</div> -->
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			Share this on: 
 		      			<a href="https://www.facebook.com/sharer/sharer.php?u=http://udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>

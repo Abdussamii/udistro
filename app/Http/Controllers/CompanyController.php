@@ -859,13 +859,15 @@ class CompanyController extends Controller
         $col        = Input::get('iSortCol_0');         // Column number for sorting
         $sortType   = Input::get('sSortDir_0');         // Sort type
 
+        // Logged-in user id
         $userId = Auth::user()->id;
+
         $companyArray = DB::table('company_user')
                             ->leftJoin('companies', 'companies.id', '=', 'company_user.company_id')
                             ->select('companies.company_category_id', 'companies.id')
                             ->where('user_id', '=', $userId)
                             ->first();
-        //echo '<pre>'; print_r($companyArray->id); die();
+        
         // Datatable column number to table column name mapping
         $arr = array(
             0 => 'id',
@@ -3250,9 +3252,9 @@ class CompanyController extends Controller
 		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
 		        }
 
-		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
 
-		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount - $serviceCharge ), 2);
 
 		        // Start transaction
 		        DB::beginTransaction();
@@ -3414,9 +3416,9 @@ class CompanyController extends Controller
 		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
 		        }
 
-		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
 
-		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount - $serviceCharge ), 2);
 
 		        // Start transaction
 		        DB::beginTransaction();
@@ -3497,7 +3499,6 @@ class CompanyController extends Controller
 
     	$movingDetails = array();
     	parse_str($frmData, $movingDetails);
-
 		
 		// Get the logged-in user id
 		$userId = Auth::id();
@@ -3581,9 +3582,9 @@ class CompanyController extends Controller
 		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
 		        }
 
-		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
 
-		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount - $serviceCharge ), 2);
 
 		       	
 		        // Start transaction
@@ -3632,7 +3633,7 @@ class CompanyController extends Controller
 				$serviceRequestResponse->hst_amount 	= $hstAmount;
 				$serviceRequestResponse->pst_amount 	= $pstAmount;
 				$serviceRequestResponse->service_charge = $serviceCharge;
-				$serviceRequestResponse->insurance 		= $insurance;
+				$serviceRequestResponse->insurance 		= $movingDetails['insurance'];
 				$serviceRequestResponse->discount 		= $movingDetails['discount'];
 				$serviceRequestResponse->total_amount 	= $totalAmount;
 				$serviceRequestResponse->total_remittance = $totalRemittance;
@@ -3687,11 +3688,11 @@ class CompanyController extends Controller
 		$userId = Auth::id();
 
 		// Get the province gst, hst, pst, service charge for the requested service
-    	$requestDetails = DB::table('moving_item_service_requests as t1')
+    	$requestDetails = DB::table('digital_service_requests as t1')
     					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
     					->join('provinces as t3', 't2.province_id', '=', 't3.id')
     					->where(['t1.id' => $cableInternetDetails['cable_internet_service_request_id'], 't1.status' => '1'])
-    					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.mover_company_id as company_id')
+    					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.digital_service_company_id as company_id')
     					->first();
 
         $gstPercentage 	= 0;
@@ -3753,9 +3754,9 @@ class CompanyController extends Controller
 		        	$serviceCharge = round(( $serviceChargePercentage / 100 ) * $subTotal, 2);
 		        }
 
-		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount + $serviceCharge ), 2);
+		        $totalAmount = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
 
-		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount ), 2);
+		        $totalRemittance = round(( $subTotal + $gstAmount + $hstAmount + $pstAmount - $serviceCharge ), 2);
 
     	        // Start transaction
     	        DB::beginTransaction();

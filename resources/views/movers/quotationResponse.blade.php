@@ -348,6 +348,10 @@
                                                                 <td colspan="4" style="width: 80%;">Total</td>
                                                                 <td id="total"></td>
                                                             </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="width: 80%;">Total</td>
+                                                                <td id="comment"></td>
+                                                            </tr>
                                                         </thead>
                                                     </table>
                                                 </div>
@@ -531,6 +535,10 @@
                                                         <td colspan="4" style="width: 80%;">Total</td>
                                                         <td id="total"></td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="width: 80%;">Comment</td>
+                                                        <td id="comment"></td>
+                                                    </tr>
                                                 </thead>
                                             </table>
                                         </div>
@@ -708,7 +716,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Comment</td>
-                                                                <td id="comment">Comment</td>
+                                                                <td id="comment"></td>
                                                             </tr>
                                                         </thead>
                                                     </table>
@@ -894,7 +902,7 @@
                                                                 <td id="total"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Comment</td>
+                                                                <td colspan="4" style="width: 80%;">Comment</td>
                                                                 <td id="comment"></td>
                                                             </tr>
                                                         </thead>
@@ -933,7 +941,7 @@
                 }
             },
             "columnDefs": [
-                { "className": "dt-center", "targets": [ 0, 1, 2, 3, 4, 5, 6 ] }
+                { "className": "dt-center", "targets": [ 0, 3, 6 ] }
             ],
             "aoColumns": [
                 { 'bSortable' : false },

@@ -1043,9 +1043,9 @@ $(document).ready(function(){
 
 			    	$('#frm_home_cleaning_services #subtotal').text( '$' + ( subtotal ).toFixed(2) );
 
-			    	$('#frm_home_cleaning_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+			    	$('#frm_home_cleaning_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
 
-			    	$('#frm_home_cleaning_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    	$('#frm_home_cleaning_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount - serviceCharge ).toFixed(2) );
 			    }
 
 		    }
@@ -1128,9 +1128,9 @@ $(document).ready(function(){
 
 			    	$('#frm_tech_concierge #subtotal').text( '$' + ( subtotal ).toFixed(2) );
 
-			    	$('#frm_tech_concierge #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+			    	$('#frm_tech_concierge #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
 
-			    	$('#frm_tech_concierge #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    	$('#frm_tech_concierge #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount - serviceCharge ).toFixed(2) );
 			    }
 
 		    }
@@ -1216,9 +1216,9 @@ $(document).ready(function(){
 
 			    	$('#frm_home_moving_companies #subtotal').text( '$' + ( subtotal.toFixed(2) ) );
 
-			    	$('#frm_home_moving_companies #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+			    	$('#frm_home_moving_companies #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
 
-			    	$('#frm_home_moving_companies #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    	$('#frm_home_moving_companies #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount - serviceCharge ).toFixed(2) );
 		    	}
 
 		    }
@@ -1301,9 +1301,9 @@ $(document).ready(function(){
 
 			    	$('#frm_cable_internet_services #subtotal').text( '$' + ( subtotal ).toFixed(2) );
 
-			    	$('#frm_cable_internet_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount + serviceCharge ).toFixed(2) );
+			    	$('#frm_cable_internet_services #total').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
 
-			    	$('#frm_cable_internet_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount ).toFixed(2) );
+			    	$('#frm_cable_internet_services #total_remittance').text( '$' + ( subtotal + gstAmount + hstAmount + pstAmount - serviceCharge ).toFixed(2) );
 			    }
 
 		    }

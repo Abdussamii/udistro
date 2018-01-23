@@ -231,12 +231,15 @@ $(document).ready(function(){
                     // Requested services
 					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);
 
+					$('#frm_home_cleaning_services #subtotal').text('$'+response.subtotal);
 					$('#frm_home_cleaning_services #gst_amount').text('$'+response.gst_amount);
                     $('#frm_home_cleaning_services #hst_amount').text('$'+response.hst_amount);
                     $('#frm_home_cleaning_services #pst_amount').text('$'+response.pst_amount);
-                    $('#frm_home_cleaning_services #service_charge_amount').text('$'+response.service_charge);
+                    $('#frm_home_cleaning_services #service_charge_amount').text('$'+response.service_charge_amount);
                     $('#frm_home_cleaning_services #total').text('$'+response.total_amount);
-                    $('#frm_home_cleaning_services #discount').text('$'+response.discount);                 
+                    $('#frm_home_cleaning_services #discount').text('$'+response.discount);
+
+                    $('#frm_home_cleaning_services #comment').text(response.comment);
 
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');
@@ -294,12 +297,15 @@ $(document).ready(function(){
                     $('#frm_tech_concierge #hst_percentage').text(response.hst);
                     $('#frm_tech_concierge #service_charge_percetage').text(response.service_charge);
 
+                    $('#frm_tech_concierge #subtotal').text('$'+response.subtotal);
                     $('#frm_tech_concierge #gst_amount').text('$'+response.gst_amount);
                     $('#frm_tech_concierge #hst_amount').text('$'+response.hst_amount);
                     $('#frm_tech_concierge #pst_amount').text('$'+response.pst_amount);
                     $('#frm_tech_concierge #service_charge_amount').text('$'+response.service_charge);
                     $('#frm_tech_concierge #total').text('$'+response.total_amount);
                     $('#frm_tech_concierge #discount').text('$'+response.discount);
+
+                    $('#frm_tech_concierge #comment').text(response.comment);
 
                     // Show the modal
                     $('#modal_tech_concierge_service_request').modal('show');
@@ -367,12 +373,15 @@ $(document).ready(function(){
                     $('#frm_cable_internet_services #hst_percentage').text(response.hst);
                     $('#frm_cable_internet_services #service_charge_percetage').text(response.service_charge);
 
+                    $('#frm_cable_internet_services #subtotal').text('$'+response.subtotal);
                     $('#frm_cable_internet_services #gst_amount').text('$'+response.gst_amount);
                     $('#frm_cable_internet_services #hst_amount').text('$'+response.hst_amount);
                     $('#frm_cable_internet_services #pst_amount').text('$'+response.pst_amount);
-                    $('#frm_cable_internet_services #service_charge_amount').text('$'+response.service_charge);
+                    $('#frm_cable_internet_services #service_charge_amount').text('$'+response.service_charge_amount);
                     $('#frm_cable_internet_services #total').text('$'+response.total_amount);
                     $('#frm_cable_internet_services #discount').text('$'+response.discount);
+
+                    $('#frm_cable_internet_services #comment').text(response.comment);
 
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');
@@ -447,9 +456,13 @@ $(document).ready(function(){
 					$('#frm_home_moving_companies #gst_amount').text('$'+response.gst_amount);
                     $('#frm_home_moving_companies #hst_amount').text('$'+response.hst_amount);
                     $('#frm_home_moving_companies #pst_amount').text('$'+response.pst_amount);
-                    $('#frm_home_moving_companies #service_charge_amount').text('$'+response.service_charge);
+                    $('#frm_home_moving_companies #service_charge_amount').text('$'+response.service_charge_amount);
                     $('#frm_home_moving_companies #total').text('$'+response.total_amount);
                     $('#frm_home_moving_companies #discount').text('$'+response.discount);
+
+                    $('#frm_home_moving_companies #subtotal').text('$'+response.subtotal);
+
+                    $('#frm_home_moving_companies #comment').text(response.comment);
 
                     // Show the modal
                     $('#modal_moving_companies_service_request').modal('show');

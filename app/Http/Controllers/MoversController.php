@@ -877,7 +877,7 @@ class MoversController extends Controller
 					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
 					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
 					->where(['t2.id' => $companyCategory])							// company category must match
-					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+					->where(['t3.plan_type_id' => '2', 't3.status' => '1'])								// for company payment plan
 					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
 					->get();
 
@@ -1787,7 +1787,7 @@ class MoversController extends Controller
                     1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
                     2 => $Array->email,
                     3 => $Array->contact_number,
-                    4 => $Array->company_name,
+                    4 => ucfirst( strtolower($Array->company_name) ),
                     5 => "Tech Concierge Request",
                     6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
@@ -1804,7 +1804,7 @@ class MoversController extends Controller
                     1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
                     2 => $Array->email,
                     3 => $Array->contact_number,
-                    4 => $Array->company_name,
+                    4 => ucfirst( strtolower($Array->company_name) ),
                     5 => "Home Cleaning Request",
                     6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
@@ -1821,7 +1821,7 @@ class MoversController extends Controller
                     1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
                     2 => $Array->email,
                     3 => $Array->contact_number,
-                    4 => $Array->company_name,
+                    4 => ucfirst( strtolower($Array->company_name) ),
                     5 => "Moving Item Request",
                     6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
@@ -1838,7 +1838,7 @@ class MoversController extends Controller
                     1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
                     2 => $Array->email,
                     3 => $Array->contact_number,
-                    4 => $Array->company_name,
+                    4 => ucfirst( strtolower($Array->company_name) ),
                     5 => "Digital Request",
                     6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
@@ -1999,12 +1999,22 @@ class MoversController extends Controller
 
                 $taxDetails = DB::table('service_request_responses')->where(['request_id' => $techConciergeId, 'company_id' => $companyId])->first();
 
-                $response['gst_amount']     = $taxDetails->gst_amount;
-                $response['hst_amount']     = $taxDetails->hst_amount;
-                $response['pst_amount']     = $taxDetails->pst_amount;
-                $response['service_charge'] = $taxDetails->service_charge;
-                $response['total_amount']   = $taxDetails->total_amount;
-                $response['discount']       = $taxDetails->discount;
+                if( count( $taxDetails ) > 0 )
+                {
+                	// Calculate the subtotal
+                	$subtotal = number_format( ( $taxDetails->total_amount - $taxDetails->gst_amount - $taxDetails->hst_amount - $taxDetails->pst_amount ) , 2, '.', '');
+
+	                $response['gst_amount']     		= $taxDetails->gst_amount;
+	                $response['hst_amount']     		= $taxDetails->hst_amount;
+	                $response['pst_amount']     		= $taxDetails->pst_amount;
+	                $response['service_charge_amount'] 	= $taxDetails->service_charge;
+	                $response['total_amount']   		= $taxDetails->total_amount;
+	                $response['discount']       		= $taxDetails->discount;
+	                $response['subtotal']       		= $subtotal;
+
+	                $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
+                }
+
             }
         }
         return response()->json($response);
@@ -2123,8 +2133,8 @@ class MoversController extends Controller
                         $html .= '<td>Other places to clean</td>';
                         $html .= '<td>'. ucwords( strtolower( $otherPlace->other_places ) ) .'</td>';
                         $html .= '<td>NA</td>';
-                        $html .= '<td>'. ucwords( strtolower( $otherPlace->amount ) ) .'</td>';
                         $html .= '<td>'. ucwords( strtolower( $otherPlace->hour_to_complete ) ) .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $otherPlace->amount ) ) .'</td>';
                         $html .= '</tr>';
                     }
                 }
@@ -2138,8 +2148,8 @@ class MoversController extends Controller
                         $html .= '<td>Additional services</td>';
                         $html .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
                         $html .= '<td>'. $additionalService->quantity .'</td>';
-                        $html .= '<td>'. ucwords( strtolower( $additionalService->amount ) ) .'</td>';
                         $html .= '<td>'. ucwords( strtolower( $additionalService->hour_to_complete ) ) .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $additionalService->amount ) ) .'</td>';
                         $html .= '</tr>';
                     }
                 }
@@ -2148,12 +2158,21 @@ class MoversController extends Controller
 
                 $taxDetails = DB::table('service_request_responses')->where(['request_id' => $homeServiceId, 'company_id' => $companyId])->first();
 
-                $response['gst_amount']     = $taxDetails->gst_amount;
-                $response['hst_amount']     = $taxDetails->hst_amount;
-                $response['pst_amount']     = $taxDetails->pst_amount;
-                $response['service_charge'] = $taxDetails->service_charge;
-                $response['total_amount']   = $taxDetails->total_amount;
-                $response['discount']       = $taxDetails->discount;
+                if( count( $taxDetails ) > 0 )
+                {
+                	// Calculate the subtotal
+                	$subtotal = number_format( ( $taxDetails->total_amount - $taxDetails->gst_amount - $taxDetails->hst_amount - $taxDetails->pst_amount ) , 2, '.', '');
+
+                	$response['subtotal']       		= $subtotal;
+	                $response['gst_amount']     		= $taxDetails->gst_amount;
+	                $response['hst_amount']     		= $taxDetails->hst_amount;
+	                $response['pst_amount']     		= $taxDetails->pst_amount;
+	                $response['service_charge_amount'] 	= $taxDetails->service_charge;
+	                $response['total_amount']   		= $taxDetails->total_amount;
+	                $response['discount']       		= $taxDetails->discount;
+
+	                $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
+                }
             }
         }
         return response()->json($response);
@@ -2193,7 +2212,7 @@ class MoversController extends Controller
             $response['additional_information']             = ucfirst( strtolower( $cableInternetServiceDetails['additional_information'] ) );
 
             // Get the moving from address
-            $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+            $clientMovingFromAddress = DB::table('digital_service_requests as t1')
                                     ->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                                     ->join('provinces as t3', 't2.province_id', '=', 't3.id')
                                     ->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -2203,7 +2222,7 @@ class MoversController extends Controller
                                     ->first();
 
             // Get the moving to address
-            $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+            $clientMovingToAddress = DB::table('digital_service_requests as t1')
                                     ->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                                     ->join('provinces as t3', 't2.province_id', '=', 't3.id')
                                     ->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -2274,12 +2293,18 @@ class MoversController extends Controller
 
             if( count( $taxDetails ) > 0 )
             {
-                $response['gst_amount']     = $taxDetails->gst_amount;
-                $response['hst_amount']     = $taxDetails->hst_amount;
-                $response['pst_amount']     = $taxDetails->pst_amount;
-                $response['service_charge'] = $taxDetails->service_charge;
-                $response['total_amount']   = $taxDetails->total_amount;
-                $response['discount']       = $taxDetails->discount;
+            	//  Calculate the subtotal
+            	$subtotal = number_format( ( $taxDetails->total_amount - $taxDetails->gst_amount - $taxDetails->hst_amount - $taxDetails->pst_amount ) , 2, '.', '');
+
+                $response['subtotal']     			= $subtotal;
+
+                $response['gst_amount']     		= $taxDetails->gst_amount;
+                $response['hst_amount']     		= $taxDetails->hst_amount;
+                $response['pst_amount']     		= $taxDetails->pst_amount;
+                $response['service_charge_amount'] 	= $taxDetails->service_charge;
+                $response['total_amount']   		= $taxDetails->total_amount;
+                $response['discount']       		= $taxDetails->discount;
+                $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
             }
 
         }
@@ -2460,13 +2485,19 @@ class MoversController extends Controller
 
                 if( count( $taxDetails ) > 0 )
                 {
-                    $response['gst_amount']     = $taxDetails->gst_amount;
-                    $response['hst_amount']     = $taxDetails->hst_amount;
-                    $response['pst_amount']     = $taxDetails->pst_amount;
-                    $response['service_charge'] = $taxDetails->service_charge;
-                    $response['insurance'] 		= $taxDetails->insurance;
-                    $response['total_amount']   = $taxDetails->total_amount;
-                    $response['discount']       = $taxDetails->discount;
+                	// Calculate the subtotal
+                	$subtotal = number_format( ( $taxDetails->total_amount - $taxDetails->gst_amount - $taxDetails->hst_amount - $taxDetails->pst_amount ) , 2, '.', '');
+
+                    $response['gst_amount']     		= $taxDetails->gst_amount;
+                    $response['hst_amount']     		= $taxDetails->hst_amount;
+                    $response['pst_amount']     		= $taxDetails->pst_amount;
+                    $response['service_charge_amount'] 	= $taxDetails->service_charge;
+                    $response['insurance'] 				= $taxDetails->insurance;
+                    $response['total_amount']   		= $taxDetails->total_amount;
+                    $response['discount']       		= $taxDetails->discount;
+                    $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
+
+                    $response['subtotal']       		= $subtotal;
                 }
             }
         }
