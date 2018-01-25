@@ -55,6 +55,7 @@ use App\HomeCleaningAdditionalServiceRequest;
 use App\HomeCleaningOtherPlaceServiceRequest;
 use App\HomeCleaningSteamingServiceRequest;
 use App\ProvincialAgencyDetail;
+use App\ServiceRequestResponse;
 
 use Helper;
 use Session;
@@ -1732,40 +1733,32 @@ class MoversController extends Controller
     	$clientId 		= Session::get('clientId');
     	$invitationId 	= Session::get('invitationId');
         
-        $techConciergeArray = DB::table('tech_concierge_service_requests')
-                                ->leftJoin('agent_clients', 'tech_concierge_service_requests.agent_client_id', '=', 'agent_clients.id')
-                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
-                                ->leftJoin('companies', 'tech_concierge_service_requests.company_id', '=', 'companies.id')
-                                ->where('tech_concierge_service_requests.agent_client_id', '=', $clientId)
-                                ->where('tech_concierge_service_requests.invitation_id', '=', $invitationId)
-                                ->select('tech_concierge_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
+        $techConciergeArray = DB::table('tech_concierge_service_requests as t1')
+                                ->leftJoin('companies as t2', 't1.company_id', '=', 't2.id')
+                                ->where('t1.agent_client_id', '=', $clientId)
+                                ->where('t1.invitation_id', '=', $invitationId)
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
                                 ->get();
 
-        $homeCleaningArray = DB::table('home_cleaning_service_requests')
-                                ->leftJoin('agent_clients', 'home_cleaning_service_requests.agent_client_id', '=', 'agent_clients.id')
-                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
-                                ->leftJoin('companies', 'home_cleaning_service_requests.company_id', '=', 'companies.id')
-                                ->where('home_cleaning_service_requests.agent_client_id', '=', $clientId)
-                                ->where('home_cleaning_service_requests.invitation_id', '=', $invitationId)
-                                ->select('home_cleaning_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
+        $homeCleaningArray = DB::table('home_cleaning_service_requests as t1')
+                                ->leftJoin('companies as t2', 't1.company_id', '=', 't2.id')
+                                ->where('t1.agent_client_id', '=', $clientId)
+                                ->where('t1.invitation_id', '=', $invitationId)
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
                                 ->get();
 
-        $movingItemArray = DB::table('moving_item_service_requests')
-                                ->leftJoin('agent_clients', 'moving_item_service_requests.agent_client_id', '=', 'agent_clients.id')
-                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
-                                ->leftJoin('companies', 'moving_item_service_requests.mover_company_id', '=', 'companies.id')
-                                ->where('moving_item_service_requests.agent_client_id', '=', $clientId)
-                                ->where('moving_item_service_requests.invitation_id', '=', $invitationId)
-                                ->select('moving_item_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
+        $movingItemArray = DB::table('moving_item_service_requests as t1')
+                                ->leftJoin('companies as t2', 't1.mover_company_id', '=', 't2.id')
+                                ->where('t1.agent_client_id', '=', $clientId)
+                                ->where('t1.invitation_id', '=', $invitationId)
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
                                 ->get();
 
-        $digitalArray = DB::table('digital_service_requests')
-                                ->leftJoin('agent_clients', 'digital_service_requests.agent_client_id', '=', 'agent_clients.id')
-                                ->leftJoin('users', 'agent_clients.agent_id', '=', 'users.id')
-                                ->leftJoin('companies', 'digital_service_requests.digital_service_company_id', '=', 'companies.id')
-                                ->where('digital_service_requests.agent_client_id', '=', $clientId)
-                                ->where('digital_service_requests.invitation_id', '=', $invitationId)
-                                ->select('digital_service_requests.id', 'users.fname', 'users.lname', 'users.email', 'agent_clients.contact_number', 'companies.company_name', 'companies.id as company_id')
+        $digitalArray = DB::table('digital_service_requests as t1')
+                                ->leftJoin('companies as t2', 't1.digital_service_company_id', '=', 't2.id')
+                                ->where('t1.agent_client_id', '=', $clientId)
+                                ->where('t1.invitation_id', '=', $invitationId)
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
                                 ->get();
 
         // Assign it to the datatable pagination variable
@@ -1782,14 +1775,28 @@ class MoversController extends Controller
         {
             foreach ($techConciergeArray as $Array)
             {
+            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
+
+            	// Get the review count
+            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
+
+            	$reviewCount = 0;
+            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	{
+            		foreach ($reviews as $review)
+            		{
+            			$reviewCount += $review->rating;
+            		}
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
-                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
-                    2 => $Array->email,
-                    3 => $Array->contact_number,
-                    4 => ucfirst( strtolower($Array->company_name) ),
-                    5 => "Tech Concierge Request",
-                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    1 => ucfirst( strtolower($Array->company_name) ),
+                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
+                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    4 => $reviewCount,
+                    5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="tech_concierge_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1799,14 +1806,28 @@ class MoversController extends Controller
         {
             foreach ($homeCleaningArray as $Array)
             {
+            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
+
+            	// Get the review count
+            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
+
+            	$reviewCount = 0;
+            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	{
+            		foreach ($reviews as $review)
+            		{
+            			$reviewCount += $review->rating;
+            		}
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
-                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
-                    2 => $Array->email,
-                    3 => $Array->contact_number,
-                    4 => ucfirst( strtolower($Array->company_name) ),
-                    5 => "Home Cleaning Request",
-                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    1 => ucfirst( strtolower($Array->company_name) ),
+                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
+                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    4 => $reviewCount,
+                    5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="home_cleaning_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1816,14 +1837,28 @@ class MoversController extends Controller
         {
             foreach ($movingItemArray as $Array)
             {
+            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
+
+            	// Get the review count
+            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
+
+            	$reviewCount = 0;
+            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	{
+            		foreach ($reviews as $review)
+            		{
+            			$reviewCount += $review->rating;
+            		}
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
-                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
-                    2 => $Array->email,
-                    3 => $Array->contact_number,
-                    4 => ucfirst( strtolower($Array->company_name) ),
-                    5 => "Moving Item Request",
-                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    1 => ucfirst( strtolower($Array->company_name) ),
+                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
+                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    4 => $reviewCount,
+                    5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1833,14 +1868,28 @@ class MoversController extends Controller
         {
             foreach ($digitalArray as $Array)
             {
+            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
+
+            	// Get the review count
+            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
+
+            	$reviewCount = 0;
+            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	{
+            		foreach ($reviews as $review)
+            		{
+            			$reviewCount += $review->rating;
+            		}
+            	}
+            	
                 $response['aaData'][$k] = array(
                     0 => $k+1,
-                    1 => ucfirst( strtolower($Array->fname." ".$Array->lname) ),
-                    2 => $Array->email,
-                    3 => $Array->contact_number,
-                    4 => ucfirst( strtolower($Array->company_name) ),
-                    5 => "Digital Request",
-                    6 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    1 => ucfirst( strtolower($Array->company_name) ),
+                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
+                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    4 => $reviewCount,
+                    5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="cable_internet_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2588,6 +2637,96 @@ class MoversController extends Controller
 
 		return $filteredCompanies;
 	}
+
+	/**
+     * Function to get the quotation response details
+     * @param void
+     * @return array
+     */
+    public function getqQuotationResponseDetails()
+    {
+    	$requestId 	= Input::get('requestId');
+    	$serviceType= Input::get('serviceType');
+
+    	$response = array();
+    	if( $requestId != '' && $serviceType != '' )
+    	{
+    		if( $serviceType == 'tech_concierge_service' )
+    		{
+    			$details = 	DB::table('service_request_responses as t1')
+    						->leftJoin('tech_concierge_service_requests as t2', 't1.company_id', '=', 't2.company_id')
+    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    						->leftJoin('companies as t4', 't2.company_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
+    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    						->where(['t1.id' => $requestId, 't4.status' => '1'])
+    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->first();
+
+    		}
+    		else if( $serviceType == 'home_cleaning_service' )
+    		{
+    			$details = 	DB::table('service_request_responses as t1')
+    						->leftJoin('home_cleaning_service_requests as t2', 't1.company_id', '=', 't2.company_id')
+    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    						->leftJoin('companies as t4', 't2.company_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
+    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    						->where(['t1.id' => $requestId, 't4.status' => '1'])
+    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->first();
+    		}
+    		else if( $serviceType == 'moving_service' )
+    		{
+    			$details = 	DB::table('service_request_responses as t1')
+    						->leftJoin('moving_item_service_requests as t2', 't1.company_id', '=', 't2.mover_company_id')
+    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    						->leftJoin('companies as t4', 't2.mover_company_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
+    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    						->where(['t1.id' => $requestId, 't4.status' => '1'])
+    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->first();
+    		}
+    		else if( $serviceType == 'cable_internet_service' )
+    		{
+    			$details = 	DB::table('service_request_responses as t1')
+    						->leftJoin('digital_service_requests as t2', 't1.company_id', '=', 't2.digital_service_company_id')
+    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    						->leftJoin('companies as t4', 't2.digital_service_company_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
+    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    						->where(['t1.id' => $requestId, 't4.status' => '1'])
+    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->first();
+    		}
+
+    		if( isset( $details ) && count( $details ) > 0 )
+    		{
+    			$response['errCode'] 	= 0;
+    			$response['errMsg'] 	= 'Success';
+    			$response['details'] 	= array(
+    				'amount' 		=> $details->total_amount,
+    				// 'clientId' 		=> $details->clientId,
+    				'fname' 		=> $details->fname,
+    				'lname' 		=> $details->lname,
+    				'email' 		=> $details->email,
+    				'contactNumber' => $details->contact_number,
+    				'address1' 		=> $details->address1,
+    				'address2' 		=> $details->address2,
+    				'postal_code' 	=> $details->postal_code,
+    				'city' 			=> $details->city
+    			);
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 1;
+    			$response['errMsg'] 	= 'Some Issue';
+    		}
+    	}
+
+    	return response()->json($response);
+    }
 
     /**
 	 * Return the first letter of each word in uppercase - if it's too long.

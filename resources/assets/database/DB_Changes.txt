@@ -136,3 +136,9 @@ ALTER TABLE `moving_transportation_type_request` DROP `created_at`, DROP `update
 ALTER TABLE `moving_transportation_type_request` ADD `created_at` DATETIME NOT NULL AFTER `amount`, ADD `created_by` INT(10) NOT NULL AFTER `created_at`, ADD `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP() AFTER `created_by`, ADD `updated_by` INT(10) NULL AFTER `updated_at`;
 
 ALTER TABLE `moving_transportation_type_request` CHANGE `amount` `amount` DECIMAL(10,2) NULL;
+
+
+
+24-01-2018: 
+
+ALTER TABLE `tech_concierge_service_requests` CHANGE `created_at` `created_at` DATETIME NOT NULL;

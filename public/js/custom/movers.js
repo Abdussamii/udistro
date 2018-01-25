@@ -1785,6 +1785,57 @@ $(document).ready(function(){
 		}
 	});
 
+	// To show the make payment nodal
+	$(document).on('click', '.make_payment', function() {
+
+		// Get the quotation response details
+		let requestId 	= $(this).attr('id');
+		let serviceType = $(this).attr('data-service');
+		
+		// Get the reference of element
+		var $this = $(this);
+
+		// ajax call to get payment related details
+		$.ajax({
+			url: $('meta[name="route"]').attr('content') + '/movers/getquotationresponsedetails',
+			method: 'get',
+			data: {
+				requestId: requestId,
+				serviceType: serviceType
+			},
+			beforeSend: function() {
+		        $this.html('<i class="fa fa-spinner" aria-hidden="true"></i>');
+		    },
+		    complete: function()
+		    {
+		    	$this.html('<i class="fa fa-paypal" aria-hidden="true"></i>');
+		    },
+		    success: function(response){
+		    	if( response.errCode == 0 )
+		    	{
+		    		$('#make_payment_modal').modal('show');
+
+		    		// Autofill the form
+		    		$('#paypal #payment_amount').val( '$' + response.details.amount );
+
+		    		$('#paypal #first_name').val( response.details.fname );
+		    		$('#paypal #last_name').val( response.details.lname );
+		    		$('#paypal #email').val( response.details.email );
+		    		$('#paypal #address1').val( response.details.address1 );
+		    		$('#paypal #address2').val( response.details.address2 );
+		    		$('#paypal #city').val( response.details.city );
+		    		$('#paypal #zip').val( response.details.postal_code );
+		    		$('#paypal #day_phone_a').val( response.details.contactNumber );
+		    		$('#paypal #day_phone_b').val( response.details.amount );
+		    	}
+		    	else
+		    	{
+		    		alertify.error( response.errMsg );
+		    	}
+		    }
+		});
+	});
+
 	// To set active class according to the user response on click of confirmation buttons
 	/*$('.btn_activity_user_response').click(function(){
 		var finalStatus = $(this).attr('id');

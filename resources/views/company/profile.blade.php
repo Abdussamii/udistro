@@ -133,333 +133,356 @@
 	}
 	</style>
 
-	<div class="row">
-    	<div class="col-lg-6 center-box">
-    	  	<div class="col-lg-12">
-    	   		<h1 class="page-header">Profile</h1>
-    	  	</div>
-    	  	<div class="col-lg-12 profile-box">
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#details">Company Details</a></li>
-					<li><a data-toggle="tab" href="#settings">Settings</a></li>
-					<li><a data-toggle="tab" href="#logo">Logo</a></li>
-				</ul>
-    	   		<div class="tab-content">
-	    	    	<div id="details" class="tab-pane fade in active">
-	    	     		<div class="row top-buffer"> 
-			    	      	<!-- left column -->
-			    	      	<div class="col-md-12">
-								<form class="form-horizontal accordian" role="form" name="frm_company_details" id="frm_company_details" autocomplete="off">
-									<fieldset>
-										<legend>Company Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
-										<div class="collapsbox" style="display:block;">
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Company Name:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_name" id="company_name" type="text" placeholder="Company Name" value="{{ $companyDetails->company_name or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Email:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_email" id="company_email" type="text" placeholder="Company Email" value="{{ $companyDetails->email or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Phone No:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_phone" id="company_phone" type="text" placeholder="Company Phone No" value="{{ $companyDetails->contact_number or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Fax:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_fax" id="company_fax" type="text" placeholder="Company Fax" value="{{ $companyDetails->fax or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Website:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_website" id="company_website" type="text" placeholder="Company Website" value="{{ $companyDetails->website or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">&nbsp;</label>
-												<div class="col-lg-8">
-													<div class="ui-select">
-														<button type="submit" class="btn btn-primary" name="btn_update_company_details" id="btn_update_company_details">Submit</button>
-													</div>
-												</div>
-											</div>
+	<div class="container-fluid text-center">
+	  <div class="col-lg-6 center-box">
+	      <div class="col-lg-12">
+	        <h1 class="page-header">Profile</h1>
+	      </div>
+	      <div class="col-lg-12 profile-box">
+	        <ul class="nav nav-tabs">
+	          <li class="active"><a data-toggle="tab" href="#profile">Company Details</a></li>
+	          <li><a data-toggle="tab" href="#message">Settings</a></li>
+	          <li><a data-toggle="tab" href="#template">Logo</a></li>
+	        </ul>
+	        <div class="tab-content">
+	          <div id="profile" class="tab-pane fade in active">
+	            <div class="row top-buffer"> 
+	                <!-- left column -->
+	                <div class="col-md-12">
+	                  <!-- -->
+	                  	<form class="form-horizontal accordian" role="form" name="frm_company_details" id="frm_company_details" autocomplete="off">
+							<fieldset>
+							<legend>Company Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
+								<div class="collapsbox" style="display:block;">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Company Name:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_name" id="company_name" type="text" placeholder="Company Name" value="{{ $companyDetails->company_name or '' }}">
 										</div>
-									</fieldset>
-								</form>
-
-								<form class="form-horizontal accordian" role="form" name="frm_company_address_details" id="frm_company_address_details" novalidate>
-									<fieldset>
-										<legend>Address Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
-										<div class="collapsbox" style="display:block;">
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Address Line 1:</label>
-												<div class="col-lg-8 input-line">
-													<input id="street-address" name="company_address1" type="text" class="form-control" placeholder="Street address" value="{{ $companyDetails->address1 or '' }}" />
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Address Line 2:</label>
-												<div class="col-lg-8 input-line">
-													<input id="street-address2" name="company_address2" type="text" class="form-control" placeholder="Street address" value="{{ $companyDetails->address2 or '' }}" />
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">City:</label>
-												<div class="col-lg-8 input-line">
-													<!-- <input id="city" type="text" class="form-control" placeholder="City" /> -->
-													<select name="company_city" id="company_city" class="form-control">
-														<option value="">Select</option>
-														<?php
-														if( isset( $cities ) && count( $cities ) > 0 )
-														{
-															foreach($cities as $city)
-															{
-																$selected = '';
-																if( $city->id ==  $companyDetails->city_id )
-																{
-																	$selected = 'selected="selected"';
-																}
-
-																echo '<option value="'. $city->id .'" '. $selected .'>'. $city->name .'</option>';
-															}
-														}
-														?>
-													</select>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Province:</label>
-												<div class="col-lg-8 input-line">
-													<select name="company_province" id="company_province" class="form-control">
-														<option value="">Select</option>
-														<?php
-														if( isset( $provinces ) && count( $provinces ) > 0 )
-														{
-															foreach($provinces as $province)
-															{
-																$selected = '';
-																if( $province->id ==  $companyDetails->province_id )
-																{
-																	$selected = 'selected="selected"';
-																}
-
-																echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'" '. $selected .'>'. $province->name .'</option>';
-															}
-														}
-														?>
-													</select>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Postalcode:</label>
-												<div class="col-lg-8 input-line">
-													<input id="postcode" name="company_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" value="{{ $companyDetails->postal_code or '' }}" />
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Country:</label>
-												<div class="col-lg-8 input-line">
-													<!-- <input id="country" type="text" class="form-control" placeholder="Country" /> -->
-													<select name="company_country" id="company_country" class="form-control">
-														<option value="">Select</option>
-														<?php
-														if( isset( $countries ) && count( $countries ) > 0 )
-														{
-															foreach($countries as $country)
-															{
-																$selected = '';
-																if( $country->id ==  $companyDetails->country_id )
-																{
-																	$selected = 'selected="selected"';
-																}
-
-																echo '<option value="'. $country->id .'" '. $selected .'>'. $country->name .'</option>';
-															}
-														}
-														?>
-													</select>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">&nbsp;</label>
-												<div class="col-lg-8">
-													<div class="ui-select">
-														<button type="submit" class="btn btn-primary" name="btn_update_company_address_details" id="btn_update_company_address_details">Submit</button>
-													</div>
-												</div>
-											</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Email:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_email" id="company_email" type="text" placeholder="Company Email" value="{{ $companyDetails->email or '' }}">
 										</div>
-									</fieldset>
-								</form>
-
-								<form class="form-horizontal accordian" role="form" name="frm_company_social_details" id="frm_company_social_details" novalidate>
-									<fieldset>
-										<legend>Social Network Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
-										<div class="collapsbox" style="display:block;">
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Facebook:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_facebook" id="company_facebook" type="text" value="{{ $companyDetails->facebook or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Google Plus:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_google_plus" id="company_google_plus" type="text" value="{{ $companyDetails->google_plus or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Instagram:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_instagram" id="company_instagram" type="text" value="{{ $companyDetails->instagram or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Linkedin:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_linkedin" id="company_linkedin" type="text" value="{{ $companyDetails->linkedin or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Skype:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_skype" id="company_skype" type="text" value="{{ $companyDetails->skype or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">Twitter:</label>
-												<div class="col-lg-8">
-													<input class="form-control" name="company_twitter" id="company_twitter" type="text" value="{{ $companyDetails->twitter or '' }}">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-lg-3 control-label">&nbsp;</label>
-												<div class="col-lg-8">
-													<div class="ui-select">
-														<button type="submit" class="btn btn-primary" name="btn_update_company_social_details" id="btn_update_company_social_details">Submit</button>
-													</div>
-												</div>
-											</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Phone No:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_phone" id="company_phone" type="text" placeholder="Company Phone No" value="{{ $companyDetails->contact_number or '' }}">
 										</div>
-									</fieldset>
-								</form>
-
-	    	      			</div>
-	    	     		</div>
-	    	    	</div>
-					<div id="settings" class="tab-pane fade">
-						<div class="profile-wrap top-buffer">
-							<form class="form-horizontal" role="form" name="frm_company_additional_details" id="frm_company_additional_details" autocomplete="off">
-								<fieldset>
-									<legend>Settings: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
-									<div class="collapsbox" style="display:block;">
-										<div class="form-group">
-											<label class="col-lg-3 control-label">Industry Type:</label>
-											<div class="col-lg-8">
-												<select name="company_industry_type" id="company_industry_type" class="form-control">
-														<option value="">Select</option>
-														<?php
-														if( isset( $companyCategories ) && count( $companyCategories ) > 0 )
-														{
-															foreach($companyCategories as $category)
-															{
-																$selected = '';
-																if( $category->id ==  $companyDetails->company_category_id )
-																{
-																	$selected = 'selected="selected"';
-																}
-
-																echo '<option value="'. $category->id .'" '. $selected .'>'. $category->category .'</option>';
-															}
-														}
-														?>
-													</select>
-											</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Fax:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_fax" id="company_fax" type="text" placeholder="Company Fax" value="{{ $companyDetails->fax or '' }}">
 										</div>
-										<div class="form-group">
-											<label class="col-lg-3 control-label">Services:</label>
-											<div class="col-lg-8">
-												<select name="company_services[]" id="company_services" multiple="true">
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Website:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_website" id="company_website" type="text" placeholder="Company Website" value="{{ $companyDetails->website or '' }}">
+										</div>
+									</div>
+									<div class="form-group">
+									<label class="col-lg-3 control-label">&nbsp;</label>
+									<div class="col-lg-8">
+									<div class="ui-select">
+									<button type="submit" class="btn btn-primary" name="btn_update_company_details" id="btn_update_company_details">Submit</button>
+									</div>
+									</div>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+	                  <!-- -->
+						<form class="form-horizontal accordian" role="form" name="frm_company_address_details" id="frm_company_address_details" novalidate>
+							<fieldset>
+								<legend>Address Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
+								<div class="collapsbox" style="display:block;">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Address Line 1:</label>
+										<div class="col-lg-8 input-line">
+											<input id="street-address" name="company_address1" type="text" class="form-control" placeholder="Street address" value="{{ $companyDetails->address1 or '' }}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Address Line 2:</label>
+										<div class="col-lg-8 input-line">
+											<input id="street-address2" name="company_address2" type="text" class="form-control" placeholder="Street address" value="{{ $companyDetails->address2 or '' }}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">City:</label>
+										<div class="col-lg-8 input-line">
+											<!-- <input id="city" type="text" class="form-control" placeholder="City" /> -->
+											<select name="company_city" id="company_city" class="form-control">
+												<option value="">Select</option>
 												<?php
-												if( isset( $categoryServices ) && count( $categoryServices ) > 0 )
+												if( isset( $cities ) && count( $cities ) > 0 )
 												{
-													foreach ($categoryServices as $service)
+													foreach($cities as $city)
 													{
 														$selected = '';
-														if( in_array($service->id, $companyServices) )
+														if( $city->id ==  $companyDetails->city_id )
 														{
 															$selected = 'selected="selected"';
 														}
 
-														echo '<option value="'. $service->id .'" '. $selected .'>'. $service->service .'</option>';
+														echo '<option value="'. $city->id .'" '. $selected .'>'. $city->name .'</option>';
 													}
 												}
 												?>
-												</select>
-												<label id="company_services-error" class="error" for="company_services"></label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-lg-3 control-label">Target Area:</label>
-											<div class="col-lg-8">
-												<input type="text" name="company_target_area" id="company_target_area" class="form-control" placeholder="In KM" {{ ( $companyDetails['working_globally'] == 1 ) ? 'disabled' : '' }} value="{{ $companyDetails['target_area'] or '' }}" />
-												<label>
-													<input type="checkbox" name="company_target_global" id="company_target_global" value="1" {{ ( $companyDetails['working_globally'] == 1 ) ? 'checked' : '' }}> I am working on multiple locations
-												</label>
-												<div><label id="company_target_area-error" class="error" for="company_target_area" style=""></label></div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-lg-3 control-label">Availability Mode:</label>
-											<div class="col-lg-8">
-												<label class="switch">
-												  <input type="checkbox" name="company_availability_mode" id="company_availability_mode" value="1" checked="">
-												  <span class="slider round"></span>
-												</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-lg-3 control-label">&nbsp;</label>
-											<div class="col-lg-8">
-												<div class="ui-select">
-													<button type="submit" class="btn btn-primary" name="btn_update_company_additional_details" id="btn_update_company_additional_details">Submit</button>
-												</div>
-											</div>
+											</select>
 										</div>
 									</div>
-								</fieldset>
-							</form>
-						</div>
-					</div>
-		    	    <div id="logo" class="tab-pane fade">
-						<!-- <h3>Email Template</h3> -->
-						<div class="email-template-wrap top-buffer">
-							<form class="form-horizontal" role="form" name="frm_company_logo" id="frm_company_logo">
-								<div class="profile-pic-box">
-									<!-- <img src="{{ url('/images/company/' . $companyDetails->image) }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo"> -->
-									<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/company_icon.png') }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo">
-									<div class="edit-profile-pic">
-										<label for="company_image_upload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
-										<input type="file" id="company_image_upload" name="company_image_upload" accept="image/*" style="display: none">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Province:</label>
+										<div class="col-lg-8 input-line">
+											<select name="company_province" id="company_province" class="form-control">
+												<option value="">Select</option>
+												<?php
+												if( isset( $provinces ) && count( $provinces ) > 0 )
+												{
+													foreach($provinces as $province)
+													{
+														$selected = '';
+														if( $province->id ==  $companyDetails->province_id )
+														{
+															$selected = 'selected="selected"';
+														}
+
+														echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'" '. $selected .'>'. $province->name .'</option>';
+													}
+												}
+												?>
+											</select>
+										</div>
 									</div>
-									<div class="sub-can-box">
-										<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
-										<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Postalcode:</label>
+										<div class="col-lg-8 input-line">
+											<input id="postcode" name="company_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" value="{{ $companyDetails->postal_code or '' }}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Country:</label>
+										<div class="col-lg-8 input-line">
+											<!-- <input id="country" type="text" class="form-control" placeholder="Country" /> -->
+											<select name="company_country" id="company_country" class="form-control">
+												<option value="">Select</option>
+												<?php
+												if( isset( $countries ) && count( $countries ) > 0 )
+												{
+													foreach($countries as $country)
+													{
+														$selected = '';
+														if( $country->id ==  $companyDetails->country_id )
+														{
+															$selected = 'selected="selected"';
+														}
+
+														echo '<option value="'. $country->id .'" '. $selected .'>'. $country->name .'</option>';
+													}
+												}
+												?>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">&nbsp;</label>
+										<div class="col-lg-8">
+											<div class="ui-select">
+												<button type="submit" class="btn btn-primary" name="btn_update_company_address_details" id="btn_update_company_address_details">Submit</button>
+											</div>
+										</div>
 									</div>
 								</div>
-							</form>
+							</fieldset>
+						</form>
+	                 <!-- -->
+	                 <form class="form-horizontal accordian" role="form" name="frm_company_social_details" id="frm_company_social_details" novalidate>
+						<fieldset>
+							<legend>Social Network Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
+							<div class="collapsbox" style="display:block;">
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Facebook:</label>
+									<div class="col-lg-8">
+										<input class="form-control" name="company_facebook" id="company_facebook" type="text" value="{{ $companyDetails->facebook or '' }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Google Plus:</label>
+									<div class="col-lg-8">
+										<input class="form-control" name="company_google_plus" id="company_google_plus" type="text" value="{{ $companyDetails->google_plus or '' }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Instagram:</label>
+									<div class="col-lg-8">
+										<input class="form-control" name="company_instagram" id="company_instagram" type="text" value="{{ $companyDetails->instagram or '' }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Linkedin:</label>
+									<div class="col-lg-8">
+										<input class="form-control" name="company_linkedin" id="company_linkedin" type="text" value="{{ $companyDetails->linkedin or '' }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Skype:</label>
+									<div class="col-lg-8">
+										<input class="form-control" name="company_skype" id="company_skype" type="text" value="{{ $companyDetails->skype or '' }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Twitter:</label>
+									<div class="col-lg-8">
+										<input class="form-control" name="company_twitter" id="company_twitter" type="text" value="{{ $companyDetails->twitter or '' }}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">&nbsp;</label>
+									<div class="col-lg-8">
+										<div class="ui-select">
+											<button type="submit" class="btn btn-primary" name="btn_update_company_social_details" id="btn_update_company_social_details">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+	              <!-- -->
+	            </div>
+	          </div>
+	        </div>
+
+	        <div id="message" class="tab-pane fade">
+	            <div class="message-box">
+					<!-- -->
+					<form class="form-horizontal" role="form" name="frm_company_additional_details" id="frm_company_additional_details" autocomplete="off">
+						<fieldset>
+							<!--<legend>Settings: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>-->
+							<div class="collapsbox1 top-buffer">
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Industry Type:</label>
+									<div class="col-lg-8">
+										<select name="company_industry_type" id="company_industry_type" class="form-control">
+												<option value="">Select</option>
+												<?php
+												if( isset( $companyCategories ) && count( $companyCategories ) > 0 )
+												{
+													foreach($companyCategories as $category)
+													{
+														$selected = '';
+														if( $category->id ==  $companyDetails->company_category_id )
+														{
+															$selected = 'selected="selected"';
+														}
+
+														echo '<option value="'. $category->id .'" '. $selected .'>'. $category->category .'</option>';
+													}
+												}
+												?>
+											</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Services:</label>
+									<div class="col-lg-8">
+										<select name="company_services[]" id="company_services" multiple="true">
+										<?php
+										if( isset( $categoryServices ) && count( $categoryServices ) > 0 )
+										{
+											foreach ($categoryServices as $service)
+											{
+												$selected = '';
+												if( in_array($service->id, $companyServices) )
+												{
+													$selected = 'selected="selected"';
+												}
+
+												echo '<option value="'. $service->id .'" '. $selected .'>'. $service->service .'</option>';
+											}
+										}
+										?>
+										</select>
+										<label id="company_services-error" class="error" for="company_services"></label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Target Area:</label>
+									<div class="col-lg-8">
+										<input type="text" name="company_target_area" id="company_target_area" class="form-control" placeholder="In KM" {{ ( $companyDetails['working_globally'] == 1 ) ? 'disabled' : '' }} value="{{ $companyDetails['target_area'] or '' }}" />
+										<label>
+											<input type="checkbox" name="company_target_global" id="company_target_global" value="1" {{ ( $companyDetails['working_globally'] == 1 ) ? 'checked' : '' }}> I am working on multiple locations
+										</label>
+										<div><label id="company_target_area-error" class="error" for="company_target_area" style=""></label></div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Availability Mode:</label>
+									<div class="col-lg-8">
+										<label class="switch">
+										  <input type="checkbox" name="company_availability_mode" id="company_availability_mode" value="1" checked="">
+										  <span class="slider round"></span>
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">&nbsp;</label>
+									<div class="col-lg-8">
+										<div class="ui-select">
+											<button type="submit" class="btn btn-primary" name="btn_update_company_additional_details" id="btn_update_company_additional_details">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+					<!-- -->
+
+	            </div>
+	          </div>
+
+	          <div id="template" class="tab-pane fade">
+	            <div class="email-template-wrap">
+	              <!-- -->
+	              <form class="form-horizontal" role="form" name="frm_company_logo" id="frm_company_logo">
+					<div class="profile-pic-box">
+						<!-- <img src="{{ url('/images/company/' . $companyDetails->image) }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo"> -->
+						<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/company_icon.png') }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo">
+						<div class="edit-profile-pic">
+							<label for="company_image_upload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
+							<input type="file" id="company_image_upload" name="company_image_upload" accept="image/*" style="display: none">
 						</div>
-		    	    </div>
-    	   		</div>
-    	  	</div>
-    	</div>
-    </div>
+						<div class="sub-can-box">
+							<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
+							<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
+						</div>
+					</div>
+				</form>
+	              <!-- -->
+	          </div>
+	        </div>
+
+	        <br />
+	      </div>
+	    </div>
+	  </div>
+	</div>
+  
+<script type="text/javascript">
+/*Toggle*/
+ $(document).ready(function(){
+    $('.tab-content .collapsbox').hide();
+    $('.tab-content legend:first').addClass('active').next().slideDown('slow');
+    $('.tab-content legend').click(function() {
+        if($(this).next().is(':hidden')) {
+            $('.tab-content legend').removeClass('active').next().slideUp('slow');
+            $(this).toggleClass('active').next().slideDown('slow');
+        }
+    });
+});
+</script>
 @endsection

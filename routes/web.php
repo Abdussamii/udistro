@@ -564,7 +564,8 @@ Route::group(['prefix' => 'movers'], function() {
 	// To get the details for the selected Moving Companies Request
 	Route::get('/getmovingcompaniesrequest', 'MoversController@getMovingCompaniesRequest');
 
-
+	// To get the quotation response details
+	Route::get('/getquotationresponsedetails', 'MoversController@getqQuotationResponseDetails');
 	
 });
 

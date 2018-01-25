@@ -47,7 +47,7 @@
   <div class="container-fluid text-center">
     <div class="col-lg-6 center-box">
         <div class="col-lg-12">
-          <h1 class="page-header">Invite</h1>
+          <h1 class="page-header">Profile</h1>
         </div>
         <div class="col-lg-12 profile-box">
           <ul class="nav nav-tabs">

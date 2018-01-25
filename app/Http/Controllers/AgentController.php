@@ -203,7 +203,7 @@ class AgentController extends Controller
      */
     public function getchangepassword()
     {
-        return view('administrator/changepassword');
+        return view('agent/changepassword');
     }
 
     /**

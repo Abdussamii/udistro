@@ -199,18 +199,16 @@
                             <thead>
                                 <tr>
                                     <td>#</td>
-                                    <td>Agent Name</td>
-                                    <td>Agent Email</td>
-                                    <td>Agent Contact Number</td>
                                     <td>Company Name</td>
-                                    <td>Type</td>
+                                    <td>Budget</td>
+                                    <td>Response Time</td>
+                                    <td>Rating</td>
+                                    <td>Review</td>
                                     <td>Action</td>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-
-
 
                     <!-- Modal to Tech Concierge Service Request -->
                     <div id="modal_tech_concierge_service_request" class="modal fade" role="dialog">
@@ -923,9 +921,72 @@
         </div>
     </body>
 
+    <!-- Modal to show the payment options -->
+    <div class="modal fade" id="make_payment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Make Payment</h4>
+				</div>
+				<form action="https://secure.paypal.com/uk/cgi-bin/webscr" method="post" name="paypal" id="paypal">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="payment_against">Payment Against</label>
+							<input type="text" name="payment_against" id="payment_against" class="form-control" placeholder="Payment against" value="Service Request" disabled="true">
+						</div>
+						<div class="form-group">
+							<label for="payment_amount">Amount</label>
+							<input type="text" name="payment_amount" id="payment_amount" class="form-control" placeholder="Amount" disabled="true">
+						</div>
+
+					    <!-- Prepopulate the PayPal checkout page with customer details, -->
+					    <input type="text" name="first_name" id="first_name" value="">
+					    <input type="text" name="last_name" id="last_name" value="">
+					    <input type="text" name="email" id="email" value="">
+					    <input type="text" name="address1" id="address1" value="">
+					    <input type="text" name="address2" id="address2" value="">
+					    <input type="text" name="city" id="city" value="">
+					    <input type="text" name="zip" id="zip" value="">
+					    <input type="text" name="day_phone_a" id="day_phone_a" value="">
+					    <input type="text" name="day_phone_b" id="day_phone_b" value="">
+
+					    <!-- We don't need to use _ext-enter anymore to prepopulate pages -->
+					    <!-- cmd = _xclick will automatically pre populate pages -->
+					    <!-- More information: https://www.x.com/docs/DOC-1332 -->
+					    <input type="text" name="cmd" value="_xclick" />
+					    <input type="text" name="business" value="paypal@email.com" />
+					    <input type="text" name="cbt" value="Return to Your Business Name" />
+					    <input type="text" name="currency_code" value="GBP" />
+
+					    <!-- Allow the customer to enter the desired quantity -->
+					    <input type="text" name="quantity" value="1" />
+					    <input type="text" name="item_name" value="Name of Item" />
+
+					    <!-- Custom value you want to send and process back in the IPN -->
+					    <input type="text" name="custom" value="" />
+
+					    <input type="text" name="shipping" value="" />
+					    <input type="text" name="invoice" value="" />
+					    <input type="text" name="amount" value="" />
+					    <input type="text" name="return" value=""/>
+					    <input type="text" name="cancel_return" value="" />
+
+					    <!-- Where to send the PayPal IPN to. -->
+					    <input type="text" name="notify_url" value="" />
+					</div>
+					<div class="modal-footer">
+						<!-- <button type="submit" class="btn btn-primary">Payment</button> -->
+						<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online"> 
+						<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" > 
+					</div>
+				</form>
+			</div>
+		</div>
+    </div>
+
 <script type="text/javascript">
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         $.fn.dataTableExt.errMode = 'ignore';
         $('#datatable_quotation').dataTable({
             "sServerMethod": "get", 
@@ -941,7 +1002,7 @@
                 }
             },
             "columnDefs": [
-                { "className": "dt-center", "targets": [ 0, 3, 6 ] }
+                { "className": "dt-center", "targets": [ 0, 3, 4, 5, 6 ] }
             ],
             "aoColumns": [
                 { 'bSortable' : false },
