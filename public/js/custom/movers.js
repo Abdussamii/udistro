@@ -503,17 +503,35 @@ $(document).ready(function(){
     });
 
     // Update address provintial method validation
-    $('#frm_update_address_provintial').validate({
+    /*$('#frm_update_address_provintial').validate({
     	rules: {
     		update_address_provintial_method: { required: true }
     	},
     	messages: {
     		update_address_provintial_method: { required: 'Please select an option' }
     	}
-    });
+    });*/
 
     // Update address next button functionality
-    $('#btn_next_update_address').click(function(){
+    $('#update_address_agency1').click(function(){
+    	$('#update_address_step1').hide();
+    	$('#update_address_step3').show();
+    	$('#update_address_step6').hide();
+    });
+    $('#update_address_agency2').click(function(){
+    	$('#update_address_step1').hide();
+    	$('#update_address_step6').show();
+    	$('#update_address_step3').hide();
+    });
+
+    // On click of close, show the first screen
+    $('.btn_prev_update_address').click(function(){
+    	$('#update_address_step1').show();
+    	$('#update_address_step6').hide();
+    	$('#update_address_step3').hide();
+    });
+
+    /*$('#btn_next_update_address').click(function(){
     	if( updateAddressStep == 1 )
     	{
     		if( $('#frm_update_address').valid() )
@@ -599,10 +617,10 @@ $(document).ready(function(){
     	{
     		$(this).closest('.modal-body').find('.close_modal').click();
     	}
-    });
+    });*/
 
     // Update address previous button functionality
-    $('#btn_prev_update_address').click(function(){
+    /*$('#btn_prev_update_address').click(function(){
     	if( updateAddressStep == 4 )
     	{
     		$('#update_address_step1').hide();
@@ -656,7 +674,7 @@ $(document).ready(function(){
 
     		updateAddressStep--;
     	}
-    });
+    });*/
 
 	/* ---------- Update Address functionality ends ---------- */
 
@@ -1816,6 +1834,7 @@ $(document).ready(function(){
 		    		$('#make_payment_modal').modal('show');
 
 		    		// Autofill the form
+		    		$('#paypal #payment_against').val( response.details.paymentAgainst );
 		    		$('#paypal #payment_amount').val( '$' + response.details.amount );
 
 		    		$('#paypal #first_name').val( response.details.fname );
@@ -1826,7 +1845,12 @@ $(document).ready(function(){
 		    		$('#paypal #city').val( response.details.city );
 		    		$('#paypal #zip').val( response.details.postal_code );
 		    		$('#paypal #day_phone_a').val( response.details.contactNumber );
-		    		$('#paypal #day_phone_b').val( response.details.amount );
+		    		$('#paypal #day_phone_b').val( response.details.contactNumber );
+		    		$('#paypal #amount').val( response.details.amount );
+
+		    		$('#paypal #item_name').val( response.details.paymentAgainst );
+
+		    		$('#paypal #invoice').val( response.details.invoiceNo );
 		    	}
 		    	else
 		    	{

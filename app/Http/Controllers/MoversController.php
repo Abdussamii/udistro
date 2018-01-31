@@ -56,6 +56,7 @@ use App\HomeCleaningOtherPlaceServiceRequest;
 use App\HomeCleaningSteamingServiceRequest;
 use App\ProvincialAgencyDetail;
 use App\ServiceRequestResponse;
+use App\PaymentTransactionDetail;
 
 use Helper;
 use Session;
@@ -2648,11 +2649,14 @@ class MoversController extends Controller
     	$requestId 	= Input::get('requestId');
     	$serviceType= Input::get('serviceType');
 
-    	$response = array();
+    	$response 		= array();
+    	$paymentAgainst = '';
     	if( $requestId != '' && $serviceType != '' )
     	{
     		if( $serviceType == 'tech_concierge_service' )
     		{
+    			$paymentAgainst = 'Tech Concierge Service';
+
     			$details = 	DB::table('service_request_responses as t1')
     						->leftJoin('tech_concierge_service_requests as t2', 't1.company_id', '=', 't2.company_id')
     						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
@@ -2660,12 +2664,14 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
     						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
     						->first();
 
     		}
     		else if( $serviceType == 'home_cleaning_service' )
     		{
+    			$paymentAgainst = 'Home Cleaning Service';
+
     			$details = 	DB::table('service_request_responses as t1')
     						->leftJoin('home_cleaning_service_requests as t2', 't1.company_id', '=', 't2.company_id')
     						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
@@ -2673,11 +2679,13 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
     						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
     						->first();
     		}
     		else if( $serviceType == 'moving_service' )
     		{
+    			$paymentAgainst = 'Moving Service';
+
     			$details = 	DB::table('service_request_responses as t1')
     						->leftJoin('moving_item_service_requests as t2', 't1.company_id', '=', 't2.mover_company_id')
     						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
@@ -2685,11 +2693,13 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
     						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
     						->first();
     		}
     		else if( $serviceType == 'cable_internet_service' )
     		{
+    			$paymentAgainst = 'Cable Internet Service';
+
     			$details = 	DB::table('service_request_responses as t1')
     						->leftJoin('digital_service_requests as t2', 't1.company_id', '=', 't2.digital_service_company_id')
     						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
@@ -2697,30 +2707,48 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
     						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
     						->first();
     		}
 
     		if( isset( $details ) && count( $details ) > 0 )
     		{
-    			$response['errCode'] 	= 0;
-    			$response['errMsg'] 	= 'Success';
-    			$response['details'] 	= array(
-    				'amount' 		=> $details->total_amount,
-    				// 'clientId' 		=> $details->clientId,
-    				'fname' 		=> $details->fname,
-    				'lname' 		=> $details->lname,
-    				'email' 		=> $details->email,
-    				'contactNumber' => $details->contact_number,
-    				'address1' 		=> $details->address1,
-    				'address2' 		=> $details->address2,
-    				'postal_code' 	=> $details->postal_code,
-    				'city' 			=> $details->city
-    			);
+    			// Generate the Invoice No and make an entry into transaction table
+    			$invoiceNo = strtoupper( str_random(20) );
+
+    			$paymentTransactionDetail = new PaymentTransactionDetail;
+
+    			$paymentTransactionDetail->service_request_response_id = $details->service_request_response_id;
+    			$paymentTransactionDetail->invoice_no = $invoiceNo;
+    			$paymentTransactionDetail->created_at = date('Y-m-d H:i:s');
+
+    			if( $paymentTransactionDetail->save() )
+    			{
+	    			$response['errCode'] 	= 0;
+	    			$response['errMsg'] 	= 'Success';
+	    			$response['details'] 	= array(
+	    				'amount' 		=> $details->total_amount,
+	    				'paymentAgainst'=> $paymentAgainst,
+	    				'fname' 		=> $details->fname,
+	    				'lname' 		=> $details->lname,
+	    				'email' 		=> $details->email,
+	    				'contactNumber' => $details->contact_number,
+	    				'address1' 		=> $details->address1,
+	    				'address2' 		=> $details->address2,
+	    				'postal_code' 	=> $details->postal_code,
+	    				'city' 			=> $details->city,
+	    				'invoiceNo' 	=> $invoiceNo
+	    			);
+    			}
+    			else
+    			{
+    				$response['errCode'] 	= 1;
+    				$response['errMsg'] 	= 'Some Issue';
+    			}
     		}
     		else
     		{
-    			$response['errCode'] 	= 1;
+    			$response['errCode'] 	= 2;
     			$response['errMsg'] 	= 'Some Issue';
     		}
     	}

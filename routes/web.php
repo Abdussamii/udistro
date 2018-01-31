@@ -674,6 +674,20 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 	
 });
 
+// Paypal payment related routes
+Route::group(['prefix' => 'paypal'], function() {
+
+	// Payment is successfully done
+	Route::get('/success', 'PaymentController@success');
+
+	// Payment is cancelled
+	Route::get('/cancel', 'PaymentController@cancel');
+
+	// To check the paypal payment status by using IPN
+	Route::post('/paymentstatus', 'PaymentController@paymentStatus');
+
+});
+
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
