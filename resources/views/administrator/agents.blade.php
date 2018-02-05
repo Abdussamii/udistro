@@ -2,26 +2,39 @@
 @section('title', 'Udistro | Company Agents')
 
 @section('content')
-	<script type="text/javascript">
-	$(document).ready(function(){
-		// To pot a space after user enters 3 characters like (123 456)
-		$('#frm_add_agent #agent_postalcode').keyup(function() {
-		  	var postalCode = $(this).val().split(" ").join("");
-		  	if (postalCode.length > 0) {
-		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
-		  	}
-		  	$(this).val(postalCode);
-		});
+	
+	<!-- Canada Post API -->
+	<script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=kp88-mx67-ff25-xd59"></script>
+	<link rel="stylesheet" type="text/css" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.30.min.css?key=kp88-mx67-ff25-xd59" />
 
-		$('#frm_edit_agent #agent_postalcode').keyup(function() {
-		  	var postalCode = $(this).val().split(" ").join("");
-		  	if (postalCode.length > 0) {
-		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
-		  	}
-		  	$(this).val(postalCode);
-		});
-	});
+	<script type="text/javascript">
+		var fields = [
+		{ element: "agent_address1", field: "Line1" },
+		{ element: "agent_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+		{ element: "agent_city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "agent_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "agent_postalcode", field: "PostalCode" },
+		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+		],
+		options = {
+			key: "kp88-mx67-ff25-xd59"
+		},
+		control = new pca.Address(fields, options);
+
+		var fields = [
+		{ element: "agent_edit_address1", field: "Line1" },
+		{ element: "agent_edit_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+		{ element: "agent_edit_city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "agent_edit_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "agent_edit_postalcode", field: "PostalCode" },
+		{ element: "agent_edit_country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+		],
+		options = {
+			key: "kp88-mx67-ff25-xd59"
+		},
+		control = new pca.Address(fields, options);
 	</script>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Company Agents</h1>
@@ -105,36 +118,48 @@
 							</div>
 							<div class="form-group">
 								<label for="agent_address">Address</label>
-								<textarea name="agent_address" id="agent_address" placeholder="Enter address" class="form-control"></textarea>
+								<input name="agent_address1" id="agent_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 							</div>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="agent_province">Province</label>
-								  		<select name="agent_province" id="agent_province" class="form-control">
-								  			<option value="">Select</option>
-								  			<?php
-								  			if( isset( $provinces ) && count( $provinces ) > 0 )
-								  			{
-								  				foreach ($provinces as $province)
-								  				{
-								  					echo '<option value="'. $province->id .'">'. ucwords( strtolower( $province->name ) ) .'</option>';
-								  				}
-								  			}
-								  			?>
-								  		</select>
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="agent_city">City</label>
-								  		<select name="agent_city" id="agent_city" class="form-control">
-								  			<option value="">Select</option>
-								  		</select>
-								  	</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="agent_postalcode">Postalcode</label>
-								<input type="text" name="agent_postalcode" id="agent_postalcode" class="form-control">
+
+							<div id="add_agent_address" style="display: none;">
+								<input name="agent_address2" id="agent_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+					            <select id="agent_city" class="form-control" name="agent_city">
+									<option value="">Select</option>
+										<?php
+										if( isset( $cities ) && count( $cities ) > 0 )
+										{
+											foreach($cities as $city)
+											{
+												echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+											}
+										}
+										?>
+					            </select>
+		                        <select id="agent_province" class="form-control" name="agent_province">
+		            				<option value="">Select</option>
+		            					<?php
+		            					if( isset( $provinces ) && count( $provinces ) > 0 )
+		            					{
+		            						foreach($provinces as $province)
+		            						{
+		            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+		            						}
+		            					}
+		            					?>
+		                        </select>
+		                        <input id="agent_postalcode" name="agent_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+                                <select name="agent_country" id="agent_country" class="form-control">
+                    				<option value="">Select</option>
+                    					<?php
+                    					if( isset( $countries ) && count( $countries ) > 0 )
+                    					{
+                    						foreach($countries as $country)
+                    						{
+                    							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+                    						}
+                    					}
+                    					?>
+                                </select>
 							</div>
 							<div class="form-group">
 								<label for="agent_status">Status</label>
@@ -201,39 +226,53 @@
 								  	</div>
 								</div>
 							</div>
+							
 							<div class="form-group">
 								<label for="agent_address">Address</label>
-								<textarea name="agent_address" id="agent_address" placeholder="Enter address" class="form-control"></textarea>
+								<input name="agent_edit_address1" id="agent_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 							</div>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="agent_province">Province</label>
-								  		<select name="agent_province" id="agent_province" class="form-control">
-								  			<option value="">Select</option>
-								  			<?php
-								  			if( isset( $provinces ) && count( $provinces ) > 0 )
-								  			{
-								  				foreach ($provinces as $province)
-								  				{
-								  					echo '<option value="'. $province->id .'">'. ucwords( strtolower( $province->name ) ) .'</option>';
-								  				}
-								  			}
-								  			?>
-								  		</select>
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="agent_city">City</label>
-								  		<select name="agent_city" id="agent_city" class="form-control">
-								  			<option value="">Select</option>
-								  		</select>
-								  	</div>
-								</div>
+
+							<div id="add_agent_address" style="display: none;">
+								<input name="agent_edit_address2" id="agent_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+					            <select id="agent_edit_city" class="form-control" name="agent_edit_city">
+									<option value="">Select</option>
+										<?php
+										if( isset( $cities ) && count( $cities ) > 0 )
+										{
+											foreach($cities as $city)
+											{
+												echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+											}
+										}
+										?>
+					            </select>
+		                        <select id="agent_edit_province" class="form-control" name="agent_edit_province">
+		            				<option value="">Select</option>
+		            					<?php
+		            					if( isset( $provinces ) && count( $provinces ) > 0 )
+		            					{
+		            						foreach($provinces as $province)
+		            						{
+		            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+		            						}
+		            					}
+		            					?>
+		                        </select>
+		                        <input id="agent_edit_postalcode" name="agent_edit_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+                                <select name="agent_edit_country" id="agent_edit_country" class="form-control">
+                    				<option value="">Select</option>
+                    					<?php
+                    					if( isset( $countries ) && count( $countries ) > 0 )
+                    					{
+                    						foreach($countries as $country)
+                    						{
+                    							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+                    						}
+                    					}
+                    					?>
+                                </select>
 							</div>
-							<div class="form-group">
-								<label for="agent_postalcode">Postalcode</label>
-								<input type="text" name="agent_postalcode" id="agent_postalcode" class="form-control">
-							</div>
+							
 							<div class="form-group">
 								<label for="agent_status">Status</label>
 								<div class="radio">

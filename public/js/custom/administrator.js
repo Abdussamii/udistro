@@ -3266,21 +3266,17 @@ $(document).ready(function(){
 			    	$('#frm_edit_agent #agent_fname').val(response.fname);
 			    	$('#frm_edit_agent #agent_lname').val(response.lname);
 			    	$('#frm_edit_agent #agent_email').val(response.email);
-			    	$('#frm_edit_agent #agent_address').val(response.address);
-			    	$('#frm_edit_agent #agent_province').val(response.province_id);
-			    	$('#frm_edit_agent #agent_postalcode').val(response.postalcode);
+			    	$('#frm_edit_agent #agent_edit_address1').val(response.address1);
+			    	$('#frm_edit_agent #agent_edit_province').val(response.province_id);
+			    	$('#frm_edit_agent #agent_edit_postalcode').val(response.postalcode);
+			    	$('#frm_edit_agent #agent_edit_country').val(response.country_id);
 			    	$('#frm_edit_agent #agent_company').val(response.company_id);
 			    	
 			    	// Fill the cities
-			    	var cities = '<option value="">Select</option>';
-			    	for (var key in response.cities)
-			    	{
-			    	  	cities += '<option value="'+response.cities[key].id+'">'+response.cities[key].city+'</option>';
-			    	}
-			    	$('#frm_edit_agent #agent_city').html(cities);
+			    	$('#frm_edit_agent #agent_edit_city').html(response.cities);
 					
 					// Make the city selected 
-					$('#frm_edit_agent #agent_city').val(response.city_id);
+					$('#frm_edit_agent #agent_edit_city').val(response.city_id);
 
 			    	$('#frm_edit_agent input[name="agent_status"][value="'+ response.status +'"]').prop('checked', true);
 

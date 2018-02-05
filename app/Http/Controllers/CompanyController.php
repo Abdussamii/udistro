@@ -2680,9 +2680,19 @@ class CompanyController extends Controller
     	$companies = Company::where(['status' => '1'])->select('id', 'company_name')->orderBy('company_name', 'asc')->get();
 
     	// Get province list
-    	$provinces = Province::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+    	$provinces = Province::where(['status' => '1'])->select('id', 'name', 'abbreviation')->orderBy('name', 'asc')->get();
 
-    	return view('administrator/agents', ['companies' => $companies, 'provinces' => $provinces]);
+    	// Get cities list
+    	$cities = City::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+    	// Get the countries
+    	$countries = Country::get();
+
+    	// echo '<pre>';
+    	// print_r( $countries->toArray() );
+    	// exit;
+
+    	return view('administrator/agents', ['companies' => $companies, 'provinces' => $provinces, 'cities' => $cities, 'countries' => $countries]);
     }
 
     /**
@@ -2711,7 +2721,7 @@ class CompanyController extends Controller
 		        'agent_lname'		=> $agentData['agent_lname'],
 		        'agent_email'		=> $agentData['agent_email'],
 		        'agent_password'	=> $agentData['agent_password'],
-		        'agent_address'		=> $agentData['agent_address'],
+		        'agent_address1'	=> $agentData['agent_address1'],
 		        'agent_province'	=> $agentData['agent_province'],
 		        'agent_city'		=> $agentData['agent_city'],
 		        'agent_postalcode'	=> $agentData['agent_postalcode'],
@@ -2723,7 +2733,7 @@ class CompanyController extends Controller
 		        'agent_lname' 		=> array('required'),
 		        'agent_email' 		=> array('required', 'email'),
 		        'agent_password'	=> array('required', 'min:6', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%^&]).*$/'),
-		        'agent_address'		=> array('required'),
+		        'agent_address1'		=> array('required'),
 		        'agent_province'	=> array('required'),
 		        'agent_city' 		=> array('required'),
 		        'agent_postalcode' 	=> array('required'),
@@ -2738,7 +2748,7 @@ class CompanyController extends Controller
 		        'agent_password.required' 	=> 'Please enter password',
 		        'agent_password.min' 		=> 'Password must contain atleat 6 characters',
 		        'agent_password.regex' 		=> 'Password must contain a lower case, upper case, a number, and a special symbol in it',
-		        'agent_address.required' 	=> 'Please enter address',
+		        'agent_address1.required' 	=> 'Please enter address',
 		        'agent_province.required' 	=> 'Please select province',
 		        'agent_city.required' 		=> 'Please select city',
 		        'agent_postalcode.required'	=> 'Please enter postal code',
@@ -2772,7 +2782,8 @@ class CompanyController extends Controller
 				$user->password 	= Hash::make($agentData['agent_password']);
 				$user->fname 		= $agentData['agent_fname'];
 				$user->lname 		= $agentData['agent_lname'];
-				$user->address 		= $agentData['agent_address'];
+				$user->address1 	= $agentData['agent_address1'];
+				$user->address2 	= $agentData['agent_address2'];
 				$user->province_id 	= $agentData['agent_province'];
 				$user->city_id 		= $agentData['agent_city'];
 				$user->postalcode 	= $agentData['agent_postalcode'];
@@ -2837,7 +2848,7 @@ class CompanyController extends Controller
 
         $agents 	= DB::select(
                         DB::raw(
-                        	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.address, t1.postalcode, t1.status, 
+                        	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.address1, t1.postalcode, t1.status, 
                         	t3.name as province, t4.name as city, t6.company_name
 							FROM users AS t1 
 							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
@@ -2884,7 +2895,7 @@ class CompanyController extends Controller
    	                1 => ucwords( strtolower( $agent->company_name ) ),
    	                2 => ucwords( strtolower( $agent->agent_name ) ),
    	                3 => $agent->email,
-   	                4 => $agent->address,
+   	                4 => $agent->address1,
    	                5 => ucwords( strtolower( $agent->province) ),
    	                6 => ucwords( strtolower( $agent->city ) ),
    	                7 => $agent->postalcode,
@@ -2919,10 +2930,12 @@ class CompanyController extends Controller
 	        	'email' 		=> $agentDetails->email,
 	        	'fname' 		=> $agentDetails->fname,
 	        	'lname' 		=> $agentDetails->lname,
-	        	'address' 		=> $agentDetails->address,
+	        	'address1' 		=> $agentDetails->address1,
+	        	'address2' 		=> $agentDetails->address2,
 	        	'province_id' 	=> $agentDetails->province_id,
 	        	'city_id' 		=> $agentDetails->city_id,
 	        	'postalcode' 	=> $agentDetails->postalcode,
+	        	'country_id' 	=> $agentDetails->country_id,
 	        	'company_id' 	=> $agentCompanyDetails[0]->id,
 	        	'status' 		=> $agentDetails->status,
 	        );
@@ -2932,13 +2945,12 @@ class CompanyController extends Controller
 
     		if( count( $cities ) > 0 )
     		{
+    			$html = '';
     			foreach ($cities as $city)
     			{
-	    			$response['cities'][] = array(
-	    				'id' 	=> $city->id,
-	    				'city' 	=> ucwords( strtolower( $city->name ) ),
-	    			);
+	    			$html .= '<option value="'. $city->id .'">'. $city->name .'</option>';
     			}
+    			$response['cities'] = $html;
     		}
 		}
 
@@ -2970,10 +2982,10 @@ class CompanyController extends Controller
 		        'agent_fname'		=> $agentData['agent_fname'],
 		        'agent_lname'		=> $agentData['agent_lname'],
 		        'agent_email'		=> $agentData['agent_email'],
-		        'agent_address'		=> $agentData['agent_address'],
-		        'agent_province'	=> $agentData['agent_province'],
-		        'agent_city'		=> $agentData['agent_city'],
-		        'agent_postalcode'	=> $agentData['agent_postalcode'],
+		        'agent_address1'	=> $agentData['agent_edit_address1'],
+		        'agent_province'	=> $agentData['agent_edit_province'],
+		        'agent_city'		=> $agentData['agent_edit_city'],
+		        'agent_postalcode'	=> $agentData['agent_edit_postalcode'],
 		        'agent_status'		=> $agentData['agent_status']
 		    ),
 		    array(
@@ -2981,7 +2993,7 @@ class CompanyController extends Controller
 		        'agent_fname' 		=> array('required'),
 		        'agent_lname' 		=> array('required'),
 		        'agent_email' 		=> array('required', 'email'),
-		        'agent_address'		=> array('required'),
+		        'agent_address1'	=> array('required'),
 		        'agent_province'	=> array('required'),
 		        'agent_city' 		=> array('required'),
 		        'agent_postalcode' 	=> array('required'),
@@ -2993,7 +3005,7 @@ class CompanyController extends Controller
 		        'agent_lname.required' 		=> 'Please enter last name',
 		        'agent_email.required' 		=> 'Please enter email',
 		        'agent_email.email' 		=> 'Please enter valid email',
-		        'agent_address.required' 	=> 'Please enter address',
+		        'agent_address1.required' 	=> 'Please enter address',
 		        'agent_province.required' 	=> 'Please select province',
 		        'agent_city.required' 		=> 'Please select city',
 		        'agent_postalcode.required'	=> 'Please enter postal code',
@@ -3020,10 +3032,12 @@ class CompanyController extends Controller
 			$user->email 		= $agentData['agent_email'];
 			$user->fname 		= $agentData['agent_fname'];
 			$user->lname 		= $agentData['agent_lname'];
-			$user->address 		= $agentData['agent_address'];
-			$user->province_id 	= $agentData['agent_province'];
-			$user->city_id 		= $agentData['agent_city'];
-			$user->postalcode 	= $agentData['agent_postalcode'];
+			$user->address1		= $agentData['agent_edit_address1'];
+			$user->address2		= $agentData['agent_edit_address2'];
+			$user->province_id 	= $agentData['agent_edit_province'];
+			$user->city_id 		= $agentData['agent_edit_city'];
+			$user->postalcode 	= $agentData['agent_edit_postalcode'];
+			$user->country_id 	= $agentData['agent_edit_country'];
 			$user->status 		= $agentData['agent_status'];
 			$user->updated_by 	= $userId;
 

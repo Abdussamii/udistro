@@ -143,9 +143,10 @@ function calculateRoute(from, to) {
 				<div class="user-short-name"> <span>{{ $clientInitials }}</span> </div>
 				<button class="btnbg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ucwords( strtolower( $clientName ) ) }}<span class="caret"></span></button>
 				<ul class="dropdown-menu" aria-labelledby="dLabel">
-					<li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Inbox</span> </a> </li>
-					<li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Language</span> </a> </li>
-					<li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Help Centre</span> </a> </li>
+					<li> <a href="javascript:void(0);"><i class="fa fa-inbox" aria-hidden="true"></i> <span class="text">Inbox</span> </a> </li>
+					<li> <a href="javascript:void(0);"><i class="fa fa-language" aria-hidden="true"></i> <span class="text">English</span> </a> </li>
+					<li> <a href="javascript:void(0);"><i class="fa fa-question-circle-o" aria-hidden="true"></i> <span class="text">Help Centre</span> </a> </li>
+					<li> <a href="javascript:void(0);"><i class="fa fa-key" aria-hidden="true"></i> <span class="text">Privacy</span> </a> </li>
 					<li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Logout</span> </a> </li>
 				</ul>
 			</div>
@@ -197,6 +198,7 @@ function calculateRoute(from, to) {
 
 	<div class="container">
 		<div class="row">
+			<div class="col-md-12"> <h1 class="mover-steps-head">Moving Recommended Steps</h1></div>
 			<div class="col-md-10 col-md-offset-1">
 				<?php
 				if( isset( $activities ) && count( $activities ) > 0 )
@@ -550,66 +552,80 @@ function calculateRoute(from, to) {
       </div>
      </div> -->
 
-     <div class="model-WrapCont" id="update_address_step3" style="display: none;"> 
-      <!-- HSA 1 -->
-      <h2>Update Address</h2>
-      <div class="col-sm-12 box-H-250 box-P-100">
-       <div class="block-head">
-        <h3>Update address with Canada Revenue Agency</h3>
-       </div>
+ 	<div class="model-WrapCont" id="update_address_step3" style="display: none;"> 
+	       <!-- HSA 1 -->
+	      	<div class="model-WrapCont">
+	       		<h2>Update Address On Phone</h2>
+	      	</div>
+	      		<div class="col-sm-12 box-H-250 box-P-100">
+				  <div class="panel-group" id="provincial_health_agencies">
+				  	<div class="panel panel-default">
+				  	  <div class="panel-heading">
+				  	    <h4 class="panel-title">
+				  	      <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse_revenew">Update address with Canada Revenue Agency</a>
+				  	    </h4>
+				  	  </div>
+				  	  <div id="collapse_revenew" class="panel-collapse collapse in">
+				  	    <div class="panel-body">
+				  	    	<div class="row">
+				  	    		<div>
+				  	    			<div class="col-lg-6 col-md-6 col-sm-6">
+				  	    				<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
+				  	    			</div>
+				  	    			<div class="col-lg-6 col-md-6 col-sm-6">
+				  	    				<div class="get_started_LB">
+			  	    						<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Do it online</a>
+			  	    					</div>
+				  	    			</div>
+				  	    		</div>
+				  	    		<div class="col-md-12">
+				  	    			<div class="block-head">
+				  	    				<h3>Have these handy, before this call </h3>
+				  	    			</div>
+				  	    			<div class="up_add_li">
+				  	    				<ul>
+				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
+				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
+				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
+				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your SIN#</li>
+				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Phone contact, name and DOB of children</li>
+				  	    				</ul>
+				  	    			</div>
+				  	    		</div>
+				  	    		<div class="col-sm-12 col-md-6 col-lg-6">
+				  	    			<div class="block-head">
+				  	    				<h3> Opening Hours </h3>
+				  	    			</div>
+				  	    			<div class="up_add_li">
+				  	    				<ul>
+				  	    					<li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
+				  	    					<li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
+				  	    				</ul>
+				  	    			</div>
+				  	    		</div>
+				  	    		<div class="col-sm-12 col-md-6 col-lg-6">
+				  	    			<div class="block-head">
+				  	    				<h3> Phone Numbers </h3>
+				  	    			</div>
+				  	    			<div class="up_add_li">
+				  	    				<ul>
+				  	    					<li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>1-800-959-8281</li>
+				  	    					<li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>613-940-8495</li>
+				  	    				</ul>
+				  	    			</div>
+				  	    		</div>
+				  	    	</div>
+				  		</div>
+				  	  </div>
+				  	</div>
+				  </div> 
 
-       <div class="get_started_LB">
-       		<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Do it online</a>
-       </div>
+				  <div class="pull-right">
+				  	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+				  </div>
 
-       <div class="row">
-        <div class="col-sm-12">
-         <p> If you have don't have full access to your CRA account, here is what you do, call CRA:</p>
-        </div>
-        <div class="col-md-12">
-         <div class="block-head">
-          <h3> Have these handy, before this call </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your SIN#</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Phone contact, name and DOB of children</li>
-          </ul>
-         </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
-         <div class="block-head">
-          <h3> Opening Hours </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-           <li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
-          </ul>
-         </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
-         <div class="block-head">
-          <h3> Phone Numbers </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>1-800-959-8281</li>
-           <li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>613-940-8495</li>
-          </ul>
-         </div>
-        </div>
-       </div>
-      </div>
-
-      <div class="pull-right">
-      	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
-      </div>
-
-     </div>
+				</div>
+	      </div>
 
      <!-- <div class="model-WrapCont" id="update_address_step4" style="display: none;"> 
       <h2>Update Address</h2>
@@ -896,92 +912,97 @@ function calculateRoute(from, to) {
        </div>
       </div>
       <div class="clearfix"></div>
-      <form name="frm_connect_utilities" id="frm_connect_utilities">
-	      <div class="col-sm-12 up_add_li">
-	       <ul>
-	        <li><label><input type="checkbox" name="connect_utilities_services_type1" id="connect_utilities_services_type1" value="1"> Hydro, Electricity and Gas</label></li>
-	        <li><label><input type="checkbox" name="connect_utilities_services_type2" id="connect_utilities_services_type2" value="2"> Water, Waste and Recycle</label></li>
-	       </ul>
-	      </div>
-	  	  <div class="clearfix"></div>
-	    </form>
+      
+      	<div class="get_started_LB">
+			<a href="javascript:void(0);" id="connect_utility_agency1">Federal Agencies</a>
+			<a href="javascript:void(0);" id="connect_utility_agency2">Provincial Agencies</a>
+		</div>
+
      </div>
     </div>
 	<!-- model box 1 ends -->
 	
 	<!-- model box 2 starts -->
-    <div id="connect_utilities_step2"  class="model-WrapCont">
-     <h2>Connect Utilities</h2>
-    <div class="col-sm-12 box-H-250 box-P-100">
-		<div class="block-head">
-			<h3>Hydro, Electricity and Gas</h3>
-		</div>
-		<div class="row">
-      	<div class="col-sm-12">
-       		<p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
-      	</div>
-      	<div class="col-sm-12">
-      		<form name="frm_connect_utility_hydro_methods" id="frm_connect_utility_hydro_methods">
-				<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="1"> Call utility services</label>
-				<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="2"> Do it here online</label>
-				<label id="connect_utility_hydro_methods-error" class="error" for="connect_utility_hydro_methods"></label>
-      		</form>
-      	</div>
-		</div>
-  	</div>
-    </div>
+    <!-- <div id="connect_utilities_step2"  class="model-WrapCont">
+     	<h2>Connect Utilities</h2>
+	    <div class="col-sm-12 box-H-250 box-P-100">
+			<div class="block-head">
+				<h3>Hydro, Electricity and Gas</h3>
+			</div>
+			<div class="row">
+	      	<div class="col-sm-12">
+	       		<p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
+	      	</div>
+	      	<div class="col-sm-12">
+	      		<form name="frm_connect_utility_hydro_methods" id="frm_connect_utility_hydro_methods">
+					<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="1"> Call utility services</label>
+					<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="2"> Do it here online</label>
+					<label id="connect_utility_hydro_methods-error" class="error" for="connect_utility_hydro_methods"></label>
+	      		</form>
+	      	</div>
+			</div>
+	  	</div>
+    </div> -->
 	<!-- model box 2 ends -->
 	
 	<!-- model box 3 starts -->
     <div id="connect_utilities_step3" class="model-WrapCont">
-     <h2>Connect Utilities</h2>
-  	<div class="col-sm-12 box-H-250 box-P-100">
-	<div class="row">
-        <div class="col-sm-12">
-         <p> Hydro, Electricity and Gas</p>
-        </div>
-        <div class="col-md-12">
-         <div class="block-head">
-          <h3> Have these handy, before this call </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-          </ul>
-         </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
-         <div class="block-head">
-          <h3> Opening Hours </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-           <li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
-          </ul>
-         </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
-         <div class="block-head">
-          <h3> Phone Numbers </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 1-866-607-6301</li>
-           <li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 416-979-3033</li>
-          </ul>
-         </div>
-        </div>
-       </div>
-	
-  	</div>
+     	<h2>Connect Utilities</h2>
+	  	<div class="col-sm-12 box-H-250 box-P-100">
+			<div class="row">
+		        <div class="col-sm-12">
+		         <p> Hydro, Electricity and Gas</p>
+		        </div>
+		        <div class="col-sm-12"> 
+		        	<div class="get_started_LB">      			
+		        		<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+		        </div>
+		        <div class="col-md-12">
+		         <div class="block-head">
+		          <h3> Have these handy, before this call </h3>
+		         </div>
+		         <div class="up_add_li">
+		          <ul>
+		           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
+		           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
+		           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
+		          </ul>
+		         </div>
+		        </div>
+		        <div class="col-sm-12 col-md-6 col-lg-6">
+		         <div class="block-head">
+		          <h3> Opening Hours </h3>
+		         </div>
+		         <div class="up_add_li">
+		          <ul>
+		           <li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
+		           <li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
+		          </ul>
+		         </div>
+		        </div>
+		        <div class="col-sm-12 col-md-6 col-lg-6">
+		         <div class="block-head">
+		          <h3> Phone Numbers </h3>
+		         </div>
+		         <div class="up_add_li">
+		          <ul>
+		           <li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 1-866-607-6301</li>
+		           <li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 416-979-3033</li>
+		          </ul>
+		         </div>
+		        </div>
+		    </div>
+	  	</div>
+
+	  	<div class="pull-right">
+			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+		</div>
+
     </div>
 	<!-- model box 3 ends -->
 	
 	<!-- model box 4 starts -->
-    <div id="connect_utilities_step4" class="model-WrapCont">
+    <!-- <div id="connect_utilities_step4" class="model-WrapCont">
      <h2>Connect Utilities</h2>
 	<div class="col-sm-12 box-H-250 box-P-100">
 			<div class="block-head">
@@ -998,7 +1019,7 @@ function calculateRoute(from, to) {
 			</div>
 		
 		</div>
-    </div>
+    </div> -->
 	<!-- model box 4 ends -->
 	
 	<!-- model box 5 starts -->
@@ -1011,6 +1032,12 @@ function calculateRoute(from, to) {
       <div class="col-sm-12 up_add_li">
       </div>
       <div class="row">
+
+      	<div class="col-sm-12"> 
+      		<div class="get_started_LB">
+      		<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+      	</div>
+
        <div class="col-sm-12 col-md-12 col-lg-12">
         <div class="up_add_li">
          <div class="block-head">
@@ -1048,16 +1075,23 @@ function calculateRoute(from, to) {
        </div>
       </div>
      </div>
+
+    <div class="pull-right">
+		<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+	</div>
+
     </div>
 	<!-- model box 5 ends -->
 
     </div>
     <div class="row">
      <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
-     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> 
+
+    <!-- <div class="col-sm-4 col-md-4 col-lg-4 text-right"> 
      	<a href="javascript:void(0);" id="btn_prev_connect_utilities" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
      	<a href="javascript:void(0);" id="btn_next_connect_utilities" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-	</div>
+	</div> -->
+
     </div>
    </div>
    <!-- <div class="modal-footer">

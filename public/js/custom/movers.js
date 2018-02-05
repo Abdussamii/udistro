@@ -531,151 +531,6 @@ $(document).ready(function(){
     	$('#update_address_step3').hide();
     });
 
-    /*$('#btn_next_update_address').click(function(){
-    	if( updateAddressStep == 1 )
-    	{
-    		if( $('#frm_update_address').valid() )
-    		{
-	    		// Yes, No, No case
-	    		if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '0'  && $('input[name="update_address_method3"]:checked').val() == '0' )
-	    		{
-	    			$('#update_address_step1').hide();
-	    			$('#update_address_step2').show();
-	    			$('#update_address_step3').hide();
-	    			$('#update_address_step4').hide();
-	    			$('#update_address_step5').hide();
-	    			$('#update_address_step6').hide();
-	    			$('#update_address_step7').hide();
-
-	    			// Change the next button to close
-	    			$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-	    		}
-	    		else
-	    		{
-	    			$('#update_address_step1').hide();
-	    			$('#update_address_step2').hide();
-	    			$('#update_address_step3').show();
-	    			$('#update_address_step4').hide();
-	    			$('#update_address_step5').hide();
-	    			$('#update_address_step6').hide();
-	    			$('#update_address_step7').hide();
-	    		}
-
-	    		updateAddressStep++;
-    		}
-    	}
-    	else if( updateAddressStep == 2 )	// This step ends here
-    	{
-    		if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '0'  && $('input[name="update_address_method3"]:checked').val() == '0' )
-    		{
-    			$(this).closest('.modal-body').find('.close_modal').click();
-    		}
-    		else
-    		{
-	    		$('#update_address_step1').hide();
-				$('#update_address_step2').hide();
-				$('#update_address_step3').hide();
-				$('#update_address_step4').show();
-				$('#update_address_step5').hide();
-				$('#update_address_step6').hide();
-				$('#update_address_step7').hide();
-
-				updateAddressStep++;
-    		}
-    	}
-    	else if( updateAddressStep == 3 )
-    	{
-    		if( $('#frm_update_address_provintial').valid() )
-    		{
-    			if( $('input[name="update_address_provintial_method"]:checked').val() == '1' )	// Do it here online
-    			{
-		    		$('#update_address_step1').hide();
-					$('#update_address_step2').hide();
-					$('#update_address_step3').hide();
-					$('#update_address_step4').hide();
-					$('#update_address_step5').show();
-					$('#update_address_step6').hide();
-					$('#update_address_step7').hide();
-    			}
-    			else 																			// Call Canada Post
-    			{
-    				$('#update_address_step1').hide();
-					$('#update_address_step2').hide();
-					$('#update_address_step3').hide();
-					$('#update_address_step4').hide();
-					$('#update_address_step5').hide();
-					$('#update_address_step6').show();
-					$('#update_address_step7').hide();
-    			}
-
-    			updateAddressStep++;
-
-    			$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-    		}
-    	}
-    	else if( updateAddressStep == 4 )	// Last step, on click of next button click close the popup
-    	{
-    		$(this).closest('.modal-body').find('.close_modal').click();
-    	}
-    });*/
-
-    // Update address previous button functionality
-    /*$('#btn_prev_update_address').click(function(){
-    	if( updateAddressStep == 4 )
-    	{
-    		$('#update_address_step1').hide();
-			$('#update_address_step2').hide();
-			$('#update_address_step3').hide();
-			$('#update_address_step4').show();
-			$('#update_address_step5').hide();
-			$('#update_address_step6').hide();
-			$('#update_address_step7').hide();
-
-			updateAddressStep--;
-
-			$(this).next('#btn_next_update_address').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-    	}
-    	else if( updateAddressStep == 3 )
-    	{
-    		$('#update_address_step1').hide();
-			$('#update_address_step2').hide();
-			$('#update_address_step3').show();
-			$('#update_address_step4').hide();
-			$('#update_address_step5').hide();
-			$('#update_address_step6').hide();
-			$('#update_address_step7').hide();
-
-			updateAddressStep--;
-    	}
-    	else if( updateAddressStep == 2 )
-    	{
-    		if( $('input[name="update_address_method1"]:checked').val() == '1' && $('input[name="update_address_method2"]:checked').val() == '0'  && $('input[name="update_address_method3"]:checked').val() == '0' )
-    		{
-    			$('#update_address_step1').show();
-				$('#update_address_step2').hide();
-				$('#update_address_step3').hide();
-				$('#update_address_step4').hide();
-				$('#update_address_step5').hide();
-				$('#update_address_step6').hide();
-				$('#update_address_step7').hide();
-
-				$(this).next('#btn_next_update_address').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-    		}
-    		else
-    		{
-    			$('#update_address_step1').show();
-				$('#update_address_step2').hide();
-				$('#update_address_step3').hide();
-				$('#update_address_step4').hide();
-				$('#update_address_step5').hide();
-				$('#update_address_step6').hide();
-				$('#update_address_step7').hide();
-    		}
-
-    		updateAddressStep--;
-    	}
-    });*/
-
 	/* ---------- Update Address functionality ends ---------- */
 
 	/* ---------- Mail box functionality ---------- */
@@ -765,7 +620,7 @@ $(document).ready(function(){
 
 	/* ---------- Connect Utilities functionality ---------- */
 
-	$('#frm_connect_utilities').validate({
+	/*$('#frm_connect_utilities').validate({
 		rules: {
 			update_address_method1: {
 				required: true
@@ -788,16 +643,16 @@ $(document).ready(function(){
 				required: 'Please select an option'
 			}
 		}
-	});
+	});*/
 
-	$('#frm_connect_utility_hydro_methods').validate({
+	/*$('#frm_connect_utility_hydro_methods').validate({
 		rules: {
 			connect_utility_hydro_methods: { required: true }
 		},
 		messages: {
 			connect_utility_hydro_methods: { required: 'Please select an option' }
 		}
-	});
+	});*/
 
 	var connectUtilitiesStep = 1;
 	$('.connect_utilities').click(function(){
@@ -820,235 +675,23 @@ $(document).ready(function(){
 		connectUtilitiesStep = 1;
 	});
 
-    // Connect utilities next step functionality
-    $('#btn_next_connect_utilities').click(function(){
-    	if( connectUtilitiesStep == 1 )
-    	{
-	    	// Check if both the services are selected or an individual is selected
-	    	if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').hide();
-				$('#connect_utilities_step2').show();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
+	// Connect Utilities
+	$('#connect_utility_agency1').click(function(){
+		$('#connect_utilities_step1').hide();
+		$('#connect_utilities_step3').show();
+	});
 
-				connectUtilitiesStep++;
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').hide();
-				$('#connect_utilities_step2').show();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
+	$('#connect_utility_agency2').click(function(){
+		$('#connect_utilities_step1').hide();
+		$('#connect_utilities_step5').show();
+	});
 
-	    		connectUtilitiesStep++;
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').hide();
-				$('#connect_utilities_step2').hide();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').show();
+	$('.btn_prev_connect_utilities').click(function(){
+		$('#connect_utilities_step1').show();
+		$('#connect_utilities_step3').hide();
+		$('#connect_utilities_step5').hide();
 
-	    		connectUtilitiesStep++;
-
-	    		// Change the next button to close
-				$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-	    	}
-	    	else
-	    	{
-	    		alertify.error('Please select atleast one service');
-	    	}
-    	}
-    	else if( connectUtilitiesStep == 2 )
-    	{
-    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		if( $('#frm_connect_utility_hydro_methods').valid() )
-	    		{
-	    			if( $('input[name="connect_utility_hydro_methods"]:checked').val() == '1' )		// Call utility service
-	    			{
-	    				$('#connect_utilities_step1').hide();
-						$('#connect_utilities_step2').hide();
-						$('#connect_utilities_step3').show();
-						$('#connect_utilities_step4').hide();
-						$('#connect_utilities_step5').hide();
-
-						connectUtilitiesStep++;
-	    			}
-	    			else 																			// Do it here online
-	    			{
-	    				$('#connect_utilities_step1').hide();
-						$('#connect_utilities_step2').hide();
-						$('#connect_utilities_step3').hide();
-						$('#connect_utilities_step4').show();
-						$('#connect_utilities_step5').hide();
-
-						connectUtilitiesStep++;
-	    			}
-	    		}
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
-	    	{
-	    		if( $('#frm_connect_utility_hydro_methods').valid() )
-	    		{
-	    			if( $('input[name="connect_utility_hydro_methods"]:checked').val() == '1' )		// Call utility service
-	    			{
-	    				$('#connect_utilities_step1').hide();
-						$('#connect_utilities_step2').hide();
-						$('#connect_utilities_step3').show();
-						$('#connect_utilities_step4').hide();
-						$('#connect_utilities_step5').hide();
-
-						connectUtilitiesStep++;
-	    			}
-	    			else 																			// Do it here online
-	    			{
-	    				$('#connect_utilities_step1').hide();
-						$('#connect_utilities_step2').hide();
-						$('#connect_utilities_step3').hide();
-						$('#connect_utilities_step4').show();
-						$('#connect_utilities_step5').hide();
-
-						connectUtilitiesStep++;
-	    			}
-
-	    			// Change the next button to close
-					$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-	    		}
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$(this).closest('.modal-body').find('.close_modal').click();
-	    	}
-    	}
-    	else if( connectUtilitiesStep == 3 )
-    	{
-    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').hide();
-				$('#connect_utilities_step2').hide();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').show();
-
-				connectUtilitiesStep++;
-
-				// Change the next button to close
-				$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
-	    	{
-	    		$(this).closest('.modal-body').find('.close_modal').click();
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$(this).closest('.modal-body').find('.close_modal').click();
-	    	}
-    	}
-    	else if( connectUtilitiesStep == 4 )
-    	{
-    		$(this).closest('.modal-body').find('.close_modal').click();
-    	}
-    });
-
-    // Connect utilities previous step functionality
-    $('#btn_prev_connect_utilities').click(function(){
-    	if( connectUtilitiesStep == 4 )
-    	{
-    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		if( $('input[name="connect_utility_hydro_methods"]:checked').val() == '1' )		// Call utility service
-    			{
-    				$('#connect_utilities_step1').hide();
-					$('#connect_utilities_step2').hide();
-					$('#connect_utilities_step3').show();
-					$('#connect_utilities_step4').hide();
-					$('#connect_utilities_step5').hide();
-
-					connectUtilitiesStep--;
-    			}
-    			else 																			// Do it here online
-    			{
-    				$('#connect_utilities_step1').hide();
-					$('#connect_utilities_step2').hide();
-					$('#connect_utilities_step3').hide();
-					$('#connect_utilities_step4').show();
-					$('#connect_utilities_step5').hide();
-
-					connectUtilitiesStep--;
-    			}
-
-    			// Change the close button to next
-				$(this).next('#btn_next_connect_utilities').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-	    	}
-    	}
-    	else if( connectUtilitiesStep == 3 )
-    	{
-    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-    			$('#connect_utilities_step1').hide();
-				$('#connect_utilities_step2').show();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
-
-				connectUtilitiesStep--;
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').hide();
-				$('#connect_utilities_step2').show();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
-
-				// Change the close button to next
-				$(this).next('#btn_next_connect_utilities').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-
-				connectUtilitiesStep--;
-	    	}
-    	}
-    	else if( connectUtilitiesStep == 2 )
-    	{
-    		if( $('input[name="connect_utilities_services_type1"]').is(':checked') && $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').show();
-				$('#connect_utilities_step2').hide();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
-
-				connectUtilitiesStep--;
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type1"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').show();
-				$('#connect_utilities_step2').hide();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
-
-				connectUtilitiesStep--;
-	    	}
-	    	else if( $('input[name="connect_utilities_services_type2"]').is(':checked') )
-	    	{
-	    		$('#connect_utilities_step1').show();
-				$('#connect_utilities_step2').hide();
-				$('#connect_utilities_step3').hide();
-				$('#connect_utilities_step4').hide();
-				$('#connect_utilities_step5').hide();
-
-				// Change the close button to next
-				$(this).next('#btn_next_connect_utilities').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-
-				connectUtilitiesStep--;
-	    	}
-    	}
-    });
+	});
 
     // Show the different method details
     $('input[name="connect_utilities_method_type"]').click(function(){
