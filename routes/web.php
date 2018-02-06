@@ -373,6 +373,18 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update company image
 	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
 
+	// To show response time listing page
+	Route::get('/responsetime', 'AdminController@responsetime');
+
+	// To save response time
+	Route::post('/saveresponsetime', 'AdminController@saveResponseTime');
+
+	// To get the response time slot listing
+	Route::get('/fetchresponsetimeslots', 'AdminController@fetchResponseTimeSlots');
+
+	// To get response time slot details
+	Route::get('/getresponsetimeslotdetails', 'AdminController@getResponseTimeSlotDetails');
+
 	/* ---------- Company related functionality ---------- */
 
 	// To return the provincial agency details page

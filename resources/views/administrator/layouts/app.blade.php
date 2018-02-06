@@ -422,6 +422,9 @@
                             <a href="{{ url('administrator/generateinvoice') }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Generate Invoice</a>
                         </li>
                         <li>
+                            <a href="{{ url('administrator/responsetime') }}"><i class="fa fa-clock-o"></i> Response Time</a>
+                        </li>
+                        <li>
                             <a href="{{ url('administrator/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>

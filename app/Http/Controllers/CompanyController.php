@@ -2733,7 +2733,7 @@ class CompanyController extends Controller
 		        'agent_lname' 		=> array('required'),
 		        'agent_email' 		=> array('required', 'email'),
 		        'agent_password'	=> array('required', 'min:6', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%^&]).*$/'),
-		        'agent_address1'		=> array('required'),
+		        'agent_address1'	=> array('required'),
 		        'agent_province'	=> array('required'),
 		        'agent_city' 		=> array('required'),
 		        'agent_postalcode' 	=> array('required'),
@@ -2787,6 +2787,7 @@ class CompanyController extends Controller
 				$user->province_id 	= $agentData['agent_province'];
 				$user->city_id 		= $agentData['agent_city'];
 				$user->postalcode 	= $agentData['agent_postalcode'];
+				$user->country_id 	= $agentData['agent_country'];
 				$user->status 		= $agentData['agent_status'];
 				$user->created_by 	= $userId;
 

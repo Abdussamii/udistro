@@ -37,6 +37,8 @@ class HourlyUpdate extends Command
      */
     public function handle()
     {
-        //
+    	// Functionality here
+    	
+        $this->info('Cron Job working Fine');
     }
 }

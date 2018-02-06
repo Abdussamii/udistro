@@ -3551,6 +3551,133 @@ $(document).ready(function(){
     	}
     });
 
+    // To add new response time
+    $('#btn_modal_response_time').click(function(){
+    	$('#modal_response_time').find('.modal-title').text('Add Response Time');
+    	$('#modal_response_time').modal('show');
+    });
+
+    // Response time form validation
+    $('#frm_response_time').submit(function(e){
+        e.preventDefault();
+    });
+
+    $('#frm_response_time').validate({
+        rules: {
+            slot_title: {
+                required: true
+            },
+    		slot_time: {
+            	required: true	
+            }
+        },
+        messages: {
+            slot_title: {
+                required: 'Please enter slot title'
+            },
+    		slot_time: {
+            	required: 'Please enter slot time'
+            }
+        }
+    });
+
+    // Save the data
+    $('#btn_add_response_time').click(function(){
+    	if( $('#frm_response_time').valid() )
+    	{
+    		var $this = $(this);
+
+    		$.ajax({
+    		    url: $('meta[name="route"]').attr('content') + '/administrator/saveresponsetime',
+    		    method: 'post',
+    		    data: {
+    		        frmData: $('#frm_response_time').serialize()
+    		    },
+    		    beforeSend: function() {
+    		        // Show the loading button
+    		        $this.button('loading');
+    		    },
+    		    headers: {
+    		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    		    },
+    		    complete: function()
+    		    {
+    		        // Change the button to previous
+    		        $this.button('reset');
+    		    },
+    		    success: function(response)
+    		    {
+    		        if( response.errCode == 0 )
+    		        {
+    		            alertify.success( response.errMsg );
+
+    		            // Refresh the form and close the modal
+    		            $('#frm_response_time')[0].reset();
+
+    		            // Open the modal
+    		            $('#modal_response_time').modal('hide');
+
+    		            // Refresh the datatable
+			    		$('#datatable_time_response').DataTable().ajax.reload();
+    		        }
+    		        else
+    		        {
+    		            alertify.error( response.errMsg );
+    		        }
+    		    }
+    		});
+    	}
+    });
+
+    // Datatable to show the resposne time slots
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_time_response').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchresponsetimeslots',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [0, 3, 4] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false, 'width': '10%' }
+        ]
+    });
+
+    // Tp update the response time slot details
+    $(document).on('click', '.edit_time_slot', function(){
+    	
+    	var slotId = $(this).attr('id');
+
+    	if( slotId != '' )
+    	{
+    		// Get the details of selected email template
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getresponsetimeslotdetails',
+				method: 'get',
+				data: {
+					slotId: slotId
+				},
+			    success: function(response){
+			    	// Auto-fill the form
+			    	$('#frm_response_time #slot_id').val(slotId);
+                    $('#frm_response_time #slot_title').val(response.slot_title);
+			    	$('#frm_response_time #slot_time').val(response.slot_time);
+			    	$('#frm_response_time input[name="slot_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Show the modal
+			    	$('#modal_response_time').find('.modal-title').text('Edit Response Time');
+    				$('#modal_response_time').modal('show');
+			    }
+			});
+    	}
+    });
+
 });
 
 /**

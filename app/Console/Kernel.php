@@ -24,7 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('email:send')->hourly();
+    	// To store the cron output in a file
+    	$filePath = storage_path('cron.txt');
+
+    	// Run the cron on every 10 minutes
+        $schedule->command('email:send')->everyTenMinutes()->appendOutputTo($filePath);
     }
 
     /**

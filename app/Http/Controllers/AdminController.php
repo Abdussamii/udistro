@@ -38,6 +38,7 @@ use App\MovingItemDetail;
 use App\ProvincialAgencyDetail;
 use App\ForgotPassword;
 use App\EmailTemplateCategory;
+use App\ResponseTimeSlot;
 
 use Validator;
 use Helper;
@@ -4212,5 +4213,187 @@ class AdminController extends Controller
         // return view('htmltopdfview');
 
        	return redirect('/administrator/generateinvoice');
+    }
+
+    /**
+     * Function to show response time listing page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function responsetime()
+    {
+        return view('administrator/responseTime');
+    }
+
+    /**
+     * Function to save response time
+     * @param void
+     * @return array
+     */
+    public function saveResponseTime()
+    {
+    	$frmData = Input::get('frmData');
+
+    	$responseDetails = array();
+    	parse_str( $frmData, $responseDetails );
+
+    	// Get the logged-in user id
+    	$userId = Auth::id();
+
+    	// Server Side Validation
+    	$response =array();
+
+    	$validation = Validator::make(
+    	    array(
+    	        'slot_title'	=> $responseDetails['slot_title'],
+    	        'slot_time'		=> $responseDetails['slot_time'],
+    	        'slot_status' 	=> $responseDetails['slot_status']
+    	    ),
+    	    array(
+    	        'slot_title'	=> array('required'),
+    	        'slot_time'		=> array('required'),
+    	        'slot_status'	=> array('required')
+    	    ),
+    	    array(
+    	        'slot_title.required'	=> 'Please enter slot title',
+    	        'slot_time.required'	=> 'Please enter slot time',
+    	        'slot_status.required'	=> 'Please select status'
+    	    )
+    	);
+
+    	if ( $validation->fails() )     // Some data is not valid as per the defined rules
+    	{
+    	    $error = $validation->errors()->first();
+
+    	    if( isset( $error ) && !empty( $error ) )
+    	    {
+    	        $response['errCode']    = 1;
+    	        $response['errMsg']     = $error;
+    	    }
+    	}
+    	else 
+    	{
+    		// Check if the the response slot id is available
+    		if( $responseDetails['slot_id'] == '' )
+    		{
+    			$slot = new ResponseTimeSlot;
+
+    			$slot->slot_title 	= $responseDetails['slot_title'];
+    			$slot->slot_time 	= $responseDetails['slot_time'];
+    			$slot->status 		= $responseDetails['slot_status'];
+    			$slot->created_by 	= $userId;
+
+    			if( $slot->save() )
+    			{
+    				$response['errCode']    = 0;
+    	        	$response['errMsg']     = 'Response time saved successfully';
+    			}
+    			else
+    			{
+    				$response['errCode']    = 2;
+    	        	$response['errMsg']     = 'Some issue in saving the response time';
+    			}
+    		}
+    		else
+    		{
+    			$slot = ResponseTimeSlot::find( $responseDetails['slot_id'] );
+
+    			$slot->slot_title 	= $responseDetails['slot_title'];
+    			$slot->slot_time 	= $responseDetails['slot_time'];
+    			$slot->status 		= $responseDetails['slot_status'];
+    			$slot->updated_by 	= $userId;
+
+    			if( $slot->update() )
+    			{
+    				$response['errCode']    = 0;
+    	        	$response['errMsg']     = 'Response time updated successfully';
+    			}
+    			else
+    			{
+    				$response['errCode']    = 2;
+    	        	$response['errMsg']     = 'Some issue in saving the response time';
+    			}
+    		}
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to show the response time slots in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchResponseTimeSlots()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+            1 => 'slot_title',
+            2 => 'slot_time',
+            3 => 'status',
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $timeSlots = ResponseTimeSlot::where('slot_title','like', '%'.$sSearch.'%')
+	                    ->orderBy($sortBy, $sortType)
+	                    ->limit($length)
+	                    ->offset($start)
+	                    ->select('id', 'slot_title', 'slot_time', 'status')
+	                    ->get();
+
+        $iTotal = ResponseTimeSlot::where('slot_title','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $timeSlots ) > 0 )
+        {
+            foreach ($timeSlots as $timeSlots)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $timeSlots->id,
+                    1 => ucfirst( strtolower( $timeSlots->slot_title ) ),
+                    2 => $timeSlots->slot_time,
+                    3 => Helper::getStatusText($timeSlots->status),
+                    4 => '<a href="javascript:void(0);" id="'. $timeSlots->id .'" class="edit_time_slot"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to get response time slot details
+     * @param void
+     * @return array
+     */
+    public function getResponseTimeSlotDetails()
+    {
+    	$slotId = Input::get('slotId');
+
+    	$response = array();
+    	if( $slotId != '' )
+    	{
+    		$response = ResponseTimeSlot::find($slotId);
+    	}
+
+    	return response()->json($response);
     }
 }
