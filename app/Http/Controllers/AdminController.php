@@ -1604,6 +1604,7 @@ class AdminController extends Controller
     {
     	$agencyId 	= Input::get('agencyId');
 
+    	$agencyType = Input::get('agencyType');
     	$agencyName = Input::get('agencyName');
     	$provinceId = Input::get('province');
 
@@ -1661,6 +1662,7 @@ class AdminController extends Controller
 	        	        	$provincialDetail = new ProvincialAgencyDetail;
 
     						$provincialDetail->province_id 	= $provinceId;
+    						$provincialDetail->agency_type 	= $agencyType;
 	        	    		$provincialDetail->agency_name 	= $agencyName;
 
 	        	    		$provincialDetail->label1 		= $label1;
@@ -1718,6 +1720,7 @@ class AdminController extends Controller
 	        	$provincialDetail = new ProvincialAgencyDetail;
 
 	    		$provincialDetail->province_id 	= $provinceId;
+	    		$provincialDetail->agency_type 	= $agencyType;
 				$provincialDetail->agency_name 	= $agencyName;
 
 	    		$provincialDetail->label1 		= $label1;
@@ -1782,6 +1785,7 @@ class AdminController extends Controller
 	        	        	$provincialDetail = ProvincialAgencyDetail::find($agencyId);
 
 	        	    		$provincialDetail->province_id 	= $provinceId;
+	        	    		$provincialDetail->agency_type 	= $agencyType;
 							$provincialDetail->agency_name 	= $agencyName;
 
 	        	    		$provincialDetail->label1 		= $label1;
@@ -1839,6 +1843,7 @@ class AdminController extends Controller
 	        	$provincialDetail = ProvincialAgencyDetail::find($agencyId);
 
 	    		$provincialDetail->province_id 	= $provinceId;
+	    		$provincialDetail->agency_type 	= $agencyType;
 				$provincialDetail->agency_name 	= $agencyName;
 
 	    		$provincialDetail->label1 		= $label1;
@@ -2490,7 +2495,9 @@ class AdminController extends Controller
 
         // Datatable column number to table column name mapping
         $arr = array(
-            0 => 'id'
+            0 => 'id',
+            1 => 'agency_name',
+            2 => 'agency_type',
         );
 
         // Map the sorting column index to the column name
@@ -2500,7 +2507,7 @@ class AdminController extends Controller
         					->orderBy($sortBy, $sortType)
 	                        ->limit($length)
 	                        ->offset($start)
-	                        ->select('id', 'province_id', 'agency_name')
+	                        ->select('id', 'province_id', 'agency_type', 'agency_name')
                         	->get();
 
         $iTotal = ProvincialAgencyDetail::count();
@@ -2522,8 +2529,9 @@ class AdminController extends Controller
                 $response['aaData'][$k] = array(
                     0 => $provincialAgency->id,
                     1 => ucfirst(strtolower($provincialAgency->agency_name)),
-                    2 => ucwords( strtolower( $province->name ) ),
-                    3 => '<a href="javascript:void(0);" id="'. $provincialAgency->id .'" class="edit_provincial_agency_details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    2 => ( $provincialAgency->agency_type == 1 ) ? 'Provincial Agencies' : 'Provincial Utility',
+                    3 => ucwords( strtolower( $province->name ) ),
+                    4 => '<a href="javascript:void(0);" id="'. $provincialAgency->id .'" class="edit_provincial_agency_details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }

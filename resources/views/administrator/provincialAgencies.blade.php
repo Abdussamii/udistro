@@ -19,6 +19,7 @@
 					<tr>
 						<td>#</td>
 						<td>Agency Name</td>
+						<td>Agency Type</td>
 						<td>Province</td>
 						<td>Action</td>
 					</tr>
@@ -39,6 +40,19 @@
 					<div class="modal-body">
 						<div class="row">
 							<form name="frm_add_provincial_agency" id="frm_add_provincial_agency" autocomplete="off">
+								<div>
+									<div class="col-lg-12">
+										<div class="form-group">
+											<label for="agency_type">Agency Type</label>
+											<div class="radio">
+											 	<label><input type="radio" name="agency_type" value="1" checked="true">Provincial Agencies</label>
+											</div>
+											<div class="radio">
+											 	<label><input type="radio" name="agency_type" value="2">Provincial Utility</label>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div>
 									<div class="col-lg-6">
 										<div class="form-group">

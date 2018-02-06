@@ -1107,11 +1107,11 @@ $(document).ready(function(){
     $('#btn_add_address').click(function(){
         if( $('#frm_add_provincial_agency').valid() )
         {
-
         	let formData = new FormData();
 
         	formData.append('agencyId', $('#frm_add_provincial_agency #agency_id').val());
 			
+			formData.append('agencyType', $("input[name='agency_type']:checked").val());
 			formData.append('agencyName', $('#frm_add_provincial_agency #agency_name').val());
 			formData.append('province', $('#frm_add_provincial_agency #province').val());
 
@@ -1440,11 +1440,12 @@ $(document).ready(function(){
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchprovincialagencies',
         
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 3] }
+            { "className": "dt-center", "targets": [0, 4] }
         ],
         
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
+            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : false },
             { 'bSortable' : false, "width": "10%" }
@@ -1659,6 +1660,8 @@ $(document).ready(function(){
 
                     // Auto-fill the form
                     $('#frm_add_provincial_agency #agency_id').val(agencyId);
+
+                    $('#frm_add_provincial_agency input[name="agency_type"][value="'+ response.agency_type +'"]').prop('checked', true);
                     $('#frm_add_provincial_agency #agency_name').val(response.agency_name);
                     $('#frm_add_provincial_agency #province').val(response.province_id);
                     
