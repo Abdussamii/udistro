@@ -35,6 +35,7 @@ use App\AgentClientMovingFromAddress;
 use App\AgentClientMovingToAddress;
 use App\AgentClientInvite;
 use App\ForgotPassword;
+use App\EmailTemplateCategory;
 
 use Validator;
 use Helper;
@@ -1571,7 +1572,10 @@ class AgentController extends Controller
      */
     public function emailTemplates()
     {
-        return view('agent/emailTemplates');
+    	// Get the email template categories
+    	$emailTemplateCategories = EmailTemplateCategory::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+
+        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories]);
     }
 
     /**

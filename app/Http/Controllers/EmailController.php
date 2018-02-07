@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Input;
+
 use App\AgentClientInvite;
 use App\EmailTemplate;
 use App\User;
 use App\AgentClient;
 
 use Helper;
+use Mail;
 
 class EmailController extends Controller
 {
@@ -71,5 +74,38 @@ class EmailController extends Controller
     	Helper::sendClientInvitation($emailData);
 
     	// return view('emails/sendClientInvitation', $emailData);
+    }
+
+
+    /**
+     * Function to test email template
+     * @param void
+     * @return array
+     */
+    public function sendEmail()
+    {
+    	$recipientEmail = Input::get('recipientEmail');
+    	$content = Input::get('content');
+
+    	$emailData = array(
+    		/* Email data */
+    		'email' 	=> $recipientEmail,
+    		'name' 		=> 'Test User',
+    		'subject' 	=> 'Test Email',
+    		/* Template data */
+    		'content'	=> $content
+    		
+    	);
+
+    	Mail::send('emails.testEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+            $m->from('info@udistro.ca', 'Udistro');
+            
+            $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+        });
+
+        $response['errCode']    = 0;
+		$response['errMsg']     = 'Email Sent';
+
+		return response()->json($response);
     }
 }

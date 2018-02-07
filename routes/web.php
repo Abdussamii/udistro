@@ -97,7 +97,9 @@ Route::get('/ourteam', function () {
 ////////// Home Pages Routes //////////
 
 // To test email template view
-Route::get('/email', 'EmailController@renderEmailTemplate');
+// Route::get('/email', 'EmailController@renderEmailTemplate');
+
+Route::post('/email', 'EmailController@sendEmail');
 
 // Administrator openly access routes
 Route::group(['prefix' => 'administrator'], function() {
