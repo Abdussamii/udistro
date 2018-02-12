@@ -142,3 +142,5 @@ ALTER TABLE `moving_transportation_type_request` CHANGE `amount` `amount` DECIMA
 24-01-2018: 
 
 ALTER TABLE `tech_concierge_service_requests` CHANGE `created_at` `created_at` DATETIME NOT NULL;
+
+12-02-2018: 
