@@ -209,7 +209,33 @@
 	    	// Check if email template name is available or not
 	    	if( templateName != '' )
 	    	{
-		    	let htmlContent = $('#table_email_container').wrap('<div/>').parent().html();
+	    		// Html content to show the email template
+		    	let htmlContentToView = $('#table_email_container').wrap('<div/>').parent().html();
+
+		    	// Html content to send over the email
+		    	let htmlContent = $('#table_email_container').wrap('<div/>').parent().clone();
+
+		    	$(htmlContent).find('.email_component').each(function(){
+
+		    		// Get the top and left css property values
+		    		var top 	= $(this).css('top');
+		    		var left 	= $(this).css('left');
+
+		    		// Remove the dashed border from all elements
+		    		$(this).css('border', 'none');
+
+		    		// Add the css
+		    		$(this).css({
+		    			'margin-top' : top,
+		    			'margin-left' : left
+		    		});
+
+		    		// Remove the dashed border
+
+		    		$(this).wrap( '<div class="wrapper"></div>' );
+		    	});
+
+		    	let htmlContentToSend = $(htmlContent).html();
 
 	    		$.ajax({
 	    			url: $('meta[name="route"]').attr('content') + '/agent/saveemailtemplate',
@@ -217,7 +243,8 @@
 	    			data: {
 	    				emailCategoryId: emailCategoryId,
 	    				templateName: templateName,
-	    				content: htmlContent
+	    				htmlContentToView: htmlContentToView,
+	    				htmlContentToSend: htmlContentToSend
 	    			},
 	    			headers: {
 				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

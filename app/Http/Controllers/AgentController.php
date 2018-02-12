@@ -461,7 +461,7 @@ class AgentController extends Controller
 
         $response['errCode'] 	= 0;
         $response['errMsg']  	= 'Success';
-        $response['preview']	= $array->template_content; 
+        $response['preview']	= $array->template_content_to_view;
 
         return response()->json($response);
     }
@@ -1685,8 +1685,10 @@ class AgentController extends Controller
     public function saveEmailTemplate()
     {
         $emailCategoryId 	= Input::get('emailCategoryId');
-        $templateName 	= Input::get('templateName');
-        $content 		= Input::get('content');
+        $templateName 		= Input::get('templateName');
+        
+        $htmlContentToView 	= Input::get('htmlContentToView');
+        $htmlContentToSend 	= Input::get('htmlContentToSend');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -1697,7 +1699,7 @@ class AgentController extends Controller
         $validation = Validator::make(
             array(
                 'email_template_name'   => $templateName,
-                'email_template_content'=> $content
+                'email_template_content'=> $htmlContentToSend
             ),
             array(
                 'email_template_name'   => array('required'),
@@ -1729,7 +1731,8 @@ class AgentController extends Controller
                 $emailTemplate = new EmailTemplate;
 
                 $emailTemplate->template_name   = $templateName;
-                $emailTemplate->template_content= $content;  
+                $emailTemplate->template_content_to_send = $htmlContentToSend;
+                $emailTemplate->template_content_to_view = $htmlContentToView;
                 $emailTemplate->category_id 	= $emailCategoryId;
                 $emailTemplate->status          = '1';
                 $emailTemplate->created_by      = $userId;
