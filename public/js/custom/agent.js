@@ -242,25 +242,14 @@ $(document).ready(function(){
     $('#btn_add_client').click(function(){
     	if( $('#frm_add_client').valid() )
     	{
-    		var $this = $(this);
-
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/agent/saveclient',
     			method: 'post',
     			data: {
     				frmData: $('#frm_add_client').serialize()
     			},
-    			beforeSend: function() {
-    				// Show the loading button
-			        $this.button('loading');
-			    },
     			headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-			    complete: function()
-			    {
-			    	// Change the button to previous
-			    	$this.button('reset');
 			    },
 			    success: function(response){
 			    	if( response.errCode == 0 )
@@ -748,12 +737,14 @@ $(document).ready(function(){
         }
     });
 
+    // Invite client next button functionality
     $('#btn_next_invitation').click(function()
     {
         $('#invite_client_step1').addClass('hide');
         $('#invite_client_step2').removeClass('hide');
     });
 
+    // Invite client previous button functionality
     $('#btn_previous_invitation').click(function()
     {
         $('#invite_client_step1').removeClass('hide');
@@ -766,7 +757,7 @@ $(document).ready(function(){
 
     	if( clientId != '' )
     	{
-    		// Fetch the client details as well as its associated message and template details to show in popup
+    		// Fetch the client details and email template details
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/agent/createinvitation',
     			method: 'get',
@@ -883,22 +874,7 @@ $(document).ready(function(){
             success: function(response){
                 if( response.errCode == 0 )
                 {
-                    var text = response.errMsg;
-                    $('#email_previeww').html(text.replace('[TEMPLATE_CONTENT]', '<textarea class="form-control" name="email_template_content" id="email_template_content"></textarea>'));
-                    
-                    tinymce.init({
-                        selector: "#email_template_content",
-                        height: 400,
-                        theme: "modern",
-                        paste_data_images: true,
-                        plugins: [
-                          "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-                          "searchreplace wordcount visualblocks visualchars code fullscreen",
-                          "insertdatetime media nonbreaking save table contextmenu directionality",
-                          "emoticons template paste textcolor colorpicker textpattern"
-                        ],
-                        toolbar1: "styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"
-                    });
+                    $('#email_preview').html( response.preview );
                 }
                 else
                 {

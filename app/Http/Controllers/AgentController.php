@@ -459,8 +459,9 @@ class AgentController extends Controller
         $id = Input::get('id');
         $array = EmailTemplate::where(['id' => $id])->first();
 
-        $response['errCode'] = 0;
-        $response['errMsg']  = $array->template_content; 
+        $response['errCode'] 	= 0;
+        $response['errMsg']  	= 'Success';
+        $response['preview']	= $array->template_content; 
 
         return response()->json($response);
     }
@@ -590,24 +591,35 @@ class AgentController extends Controller
 
 				if( $userId == $agentClient->agent_id )
 				{
-					$agentClient->agent_id 		= $userId;
-					$agentClient->fname 			= $clientData['client_fname'];
-					$agentClient->lname 			= $clientData['client_mname'];
-					$agentClient->oname 			= $clientData['client_lname'];
-					$agentClient->email 			= $clientData['client_email'];
-					$agentClient->contact_number 	= $clientData['client_number'];
-					$agentClient->status 			= $clientData['client_status'];
-					$agentClient->updated_by 		= $userId;
+					// Check if the email id already exist
+					$emailExist = AgentClient::where('id', '!=', $clientData['client_id'])->where(['email' => $clientData['client_email']])->first();
 
-					if( $agentClient->save() )
+					if( count( $emailExist ) == 0 )
 					{
-						$response['errCode']    = 0;
-					    $response['errMsg']     = 'Client added successfully';
+						$agentClient->agent_id 			= $userId;
+						$agentClient->fname 			= $clientData['client_fname'];
+						$agentClient->lname 			= $clientData['client_mname'];
+						$agentClient->oname 			= $clientData['client_lname'];
+						$agentClient->email 			= $clientData['client_email'];
+						$agentClient->contact_number 	= $clientData['client_number'];
+						$agentClient->status 			= $clientData['client_status'];
+						$agentClient->updated_by 		= $userId;
+
+						if( $agentClient->save() )
+						{
+							$response['errCode']    = 0;
+						    $response['errMsg']     = 'Client added successfully';
+						}
+						else
+						{
+							$response['errCode']    = 1;
+						    $response['errMsg']     = 'Some issue in adding the client';
+						}
 					}
 					else
 					{
-						$response['errCode']    = 1;
-					    $response['errMsg']     = 'Some issue in adding the client';
+						$response['errCode']    = 3;
+						$response['errMsg']     = 'Email id already exist';
 					}
 				}
 				else
@@ -1763,66 +1775,64 @@ class AgentController extends Controller
     		// The basic information include the name, address and the default message, as well as the email template
 
     		// Fetch the agent details
-    		$agentDetails = User::find($userId);
+    		// $agentDetails = User::find($userId);
 
     		// Fetch the agent message detail
-    		$agentMessage = Message::where(['agent_id' => $userId])->select('id')->first();
+    		// $agentMessage = Message::where(['agent_id' => $userId])->select('id')->first();
 
     		// Fetch the agent email template detail
     		$agent = User::find($userId);
-    		$agentEmailTemplate = $agent->emailTemplate->first();
 
-    		if( $agentDetails->fname == '' || $agentDetails->address1 == '' || $agentDetails->province_id == '' || $agentDetails->city_id == '' || $agentDetails->postalcode == '' || $agentDetails->country_id == '' || $agentMessage == '' || $agentEmailTemplate == '' )
-    		{
-    			$response['errCode']    = 1;
-		        $response['errMsg']     = 'Please fill the basic information including name, address, image and add the default message and email template!';
-    		}
-    		else
-    		{
-	    		// Get the message for the user
-	    		$message = Message::where(['agent_id' => $userId, 'status' => '1'])->select('message')->first();
+    		// $agentEmailTemplate = $agent->emailTemplate->first();
 
-	    		// Get the client details
-	    		$clientDetails = AgentClient::find($clientId);
+    		// Get the message for the user
+    		// $message = Message::where(['agent_id' => $userId, 'status' => '1'])->select('message')->first();
 
-	    		// From the client details, get the client name
-	    		$clientName = trim( ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) ) );
+    		// Get the client details
+    		$clientDetails = AgentClient::find($clientId);
 
-	    		// Replace the [User Name] with the clinet name
-	    		$clientMessage = str_replace('[User Name]', $clientName, $message->message);
+    		// From the client details, get the client name
+    		// $clientName = trim( ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname . ' ' . $clientDetails->lname ) ) );
 
-	    		// Get the Moving from & Moving to addresses
-	    		$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->select('address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id')->first();
-    			$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->select('address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id', 'moving_date')->first();
+    		// Replace the [User Name] with the clinet name
+    		// $clientMessage = str_replace('[User Name]', $clientName, $message->message);
 
-    			// Get the default selected email template, if available
-    			$user = User::find($userId);
-    			$agentEmailTemplate = $user->emailTemplate->first();
+    		// Get the Moving from & Moving to addresses
+    		$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->select('address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id')->first();
 
-	    		$response['errCode']    = 0;
-		        $response['errMsg']     = 'Success';
-		        $response['message']    = $clientMessage;
-		        $response['oldAddress'] = $movingFromAddress;
+			$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->select('address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id', 'moving_date')->first();
 
-		        if( count( $movingToAddress ) > 0 )
-		        {
-			        $response['newAddress'] = array(
-			        	'address1' 		=> $movingToAddress->address1,
-                        'address2'       => $movingToAddress->address2,
-			        	'province_id' 	=> $movingToAddress->province_id,
-			        	'city_id' 		=> $movingToAddress->city_id,
-			        	'postal_code' 	=> $movingToAddress->postal_code,
-			        	'country_id' 	=> $movingToAddress->country_id,
-			        	'moving_date' 	=> date('d-m-Y', strtotime($movingToAddress->moving_date))
-			        );
-		        }
+			// Get the default selected email template, if available
+			// $user = User::find($userId);
+			// $agentEmailTemplate = $user->emailTemplate->first();
 
-		        $response['emailTemplate'] = 0;
-		        if( count( $agentEmailTemplate ) > 0 )
-		        {
-		        	$response['emailTemplate'] = $agentEmailTemplate->id;
-		        }
-    		}
+    		$response['errCode']    = 0;
+	        $response['errMsg']     = 'Success';
+
+	        if( count( $movingFromAddress ) > 0 )
+	        {
+		        $response['oldAddress'] = array(
+		        	'address1' 		=> $movingFromAddress->address1,
+                    'address2'   	=> $movingFromAddress->address2,
+		        	'province_id' 	=> $movingFromAddress->province_id,
+		        	'city_id' 		=> $movingFromAddress->city_id,
+		        	'postal_code' 	=> $movingFromAddress->postal_code,
+		        	'country_id' 	=> $movingFromAddress->country_id,
+		        );
+	        }
+
+	        if( count( $movingToAddress ) > 0 )
+	        {
+		        $response['newAddress'] = array(
+		        	'address1' 		=> $movingToAddress->address1,
+                    'address2'      => $movingToAddress->address2,
+		        	'province_id' 	=> $movingToAddress->province_id,
+		        	'city_id' 		=> $movingToAddress->city_id,
+		        	'postal_code' 	=> $movingToAddress->postal_code,
+		        	'country_id' 	=> $movingToAddress->country_id,
+		        	'moving_date' 	=> date('d-m-Y', strtotime($movingToAddress->moving_date))
+		        );
+	        }
     	}
 
     	return response()->json($response);
@@ -1863,7 +1873,6 @@ class AgentController extends Controller
 		        'client_new_postalcode'	=> $inviteDetails['client_new_postalcode'],
 		        'client_new_country'	=> $inviteDetails['client_new_country'],
 		        'client_moving_date'	=> $inviteDetails['client_moving_date'],
-		        'client_message'		=> $inviteDetails['client_message'],
 		        'client_email_template'	=> $inviteDetails['client_email_template']
 		    ),
 		    array(
@@ -1878,7 +1887,6 @@ class AgentController extends Controller
 		        'client_new_postalcode'	=> array('required'),
 		        'client_new_country'	=> array('required'),
 		        'client_moving_date'	=> array('required'),
-		        'client_message'		=> array('required'),
 		        'client_email_template'	=> array('required')
 		    ),
 		    array(
@@ -1893,7 +1901,6 @@ class AgentController extends Controller
 		        'client_new_postalcode.required'=> 'Please enter postalcode',
 		        'client_new_country.required'	=> 'Please select country',
 		        'client_moving_date.required'	=> 'Please enter moving date',
-		        'client_message.required'		=> 'Please enter message',
 		        'client_email_template.required'=> 'Please select template'
 		    )
 		);
@@ -1990,7 +1997,7 @@ class AgentController extends Controller
 			$agentClientInvite->agent_id 			= $userId;
 			$agentClientInvite->client_id 			= $inviteDetails['client_id'];
 			$agentClientInvite->email_template_id 	= $inviteDetails['client_email_template'];
-			$agentClientInvite->message_content 	= $inviteDetails['client_message'];
+			$agentClientInvite->message_content 	= '';
 			$agentClientInvite->email_url 			= '';
 			if( $inviteDetails['client_invitation_schedule_date'] != '' )
 			{

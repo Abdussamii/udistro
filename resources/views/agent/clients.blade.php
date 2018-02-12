@@ -17,10 +17,10 @@
 	var fields = [
 		{ element: "client_old_address1", field: "Line1" },
 		{ element: "client_old_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
-		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
-		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "client_old_city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "client_old_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
 		{ element: "client_old_postalcode", field: "PostalCode" },
-		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+		{ element: "client_old_country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
 	],
 	options = {
 		key: "kp88-mx67-ff25-xd59"
@@ -42,10 +42,10 @@
 	var fields1 = [
 		{ element: "client_new_address1", field: "Line1" },
 		{ element: "client_new_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
-		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
-		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "client_new_city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "client_new_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
 		{ element: "client_new_postalcode", field: "PostalCode" },
-		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+		{ element: "client_new_country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
 	],
 	options1 = {
 		key: "kp88-mx67-ff25-xd59"
@@ -80,40 +80,6 @@
 		$('#client_invitation_schedule_date').datepicker({
 			dateFormat: 'dd-mm-yy'
 		});
-
-		/*
-		tinymce.init({
-			selector: "#email_template_content",
-			height: 400,
-    		// width: 750,
-			theme: "modern",
-			paste_data_images: true,
-			plugins: [
-			  "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-			  "searchreplace wordcount visualblocks visualchars code fullscreen",
-			  "insertdatetime media nonbreaking save table contextmenu directionality",
-			  "emoticons template paste textcolor colorpicker textpattern"
-			],
-			toolbar1: "code fullpage insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-			toolbar2: "print preview media | forecolor backcolor emoticons",
-			image_advtab: true,
-			file_picker_callback: function(callback, value, meta) {
-			  if (meta.filetype == 'image') {
-			    $('#upload').trigger('click');
-			    $('#upload').on('change', function() {
-			      var file = this.files[0];
-			      var reader = new FileReader();
-			      reader.onload = function(e) {
-			        callback(e.target.result, {
-			          alt: ''
-			        });
-			      };
-			      reader.readAsDataURL(file);
-			    });
-			  }
-			}
-		});
-		*/
 
 	});
 	</script>
@@ -220,75 +186,80 @@
 								<div>
 									<fieldset>
 										<div class="form-group">
-											<label for="client_fname">Old Address Line 1</label>
+											<label for="client_fname">Old Address</label>
 											<input type="text" class="form-control" name="client_old_address1" id="client_old_address1" value="">
 											<input type="hidden" name="client_id" id="client_id">
 										</div>
-										<div class="form-group">
-											<label for="client_fname">Old Address Line 2</label>
-											<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
-										</div>
 
-										<!-- Old address related fields -->
-										<div id="container_old_address_fields">
-											<div class="row">
-												<div class="col-sm-6">
-											  		<label for="">Province</label>
-											  		<select class="form-control" name="client_old_province" id="client_old_province">
-											  			<option value="">Select</option>
-												  		<?php
-												  		if( isset( $provinces ) && count( $provinces ) > 0 )
-												  		{
-												  			foreach ($provinces as $province)
-												  			{
-												  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
-												  			}
-												  		}
-												  		?>
-											  		</select>
-											  	</div>
-											  	<div class="col-sm-6">
-											  		<label for="">City</label>
-											  		<select class="form-control" name="client_old_city" id="client_old_city">
-											  			<option value="">Select</option>
-												  		<?php
-												  		if( isset( $cities ) && count( $cities ) > 0 )
-												  		{
-												  			foreach ($cities as $city)
-												  			{
-												  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
-												  			}
-												  		}
-												  		?>
-											  		</select>
-											  	</div>
+										<!-- Address Container -->
+										<div style="display: none;">
+
+											<div class="form-group">
+												<label for="client_fname">Old Address</label>
+												<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
 											</div>
-											<div class="row">
-												<div class="col-sm-6">
-											  		<label for="client_new_country">Postal Code</label>
-											  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="">
-											  	</div>
-												<div class="col-sm-6">
-											  		<label for="">Country</label>
-											  		<select class="form-control" name="client_old_country" id="client_old_country">
-											  			<option value="">Select</option>
-												  		<?php
-												  		if( isset( $countries ) && count( $countries ) > 0 )
-												  		{
-												  			foreach ($countries as $country)
-												  			{
-												  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-												  			}
-												  		}
-												  		?>
-											  		</select>
-											  	</div>
+
+											<!-- Old address related fields -->
+											<div id="container_old_address_fields">
+												<div class="row">
+													<div class="col-sm-6">
+												  		<label for="">Province</label>
+												  		<select class="form-control" name="client_old_province" id="client_old_province">
+												  			<option value="">Select</option>
+													  		<?php
+													  		if( isset( $provinces ) && count( $provinces ) > 0 )
+													  		{
+													  			foreach ($provinces as $province)
+													  			{
+													  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
+													  			}
+													  		}
+													  		?>
+												  		</select>
+												  	</div>
+												  	<div class="col-sm-6">
+												  		<label for="">City</label>
+												  		<select class="form-control" name="client_old_city" id="client_old_city">
+												  			<option value="">Select</option>
+													  		<?php
+													  		if( isset( $cities ) && count( $cities ) > 0 )
+													  		{
+													  			foreach ($cities as $city)
+													  			{
+													  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+													  			}
+													  		}
+													  		?>
+												  		</select>
+												  	</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-6">
+												  		<label for="client_new_country">Postal Code</label>
+												  		<input type="text" class="form-control" name="client_old_postalcode" id="client_old_postalcode" value="">
+												  	</div>
+													<div class="col-sm-6">
+												  		<label for="">Country</label>
+												  		<select class="form-control" name="client_old_country" id="client_old_country">
+												  			<option value="">Select</option>
+													  		<?php
+													  		if( isset( $countries ) && count( $countries ) > 0 )
+													  		{
+													  			foreach ($countries as $country)
+													  			{
+													  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+													  			}
+													  		}
+													  		?>
+												  		</select>
+												  	</div>
+												</div>
 											</div>
+
 										</div>
 
 									</fieldset>
 								</div>
-								<br>
 								<div>
 									<fieldset>
 										<div class="form-group">
@@ -296,66 +267,71 @@
 											<input type="text" class="form-control" name="client_new_address1" id="client_new_address1" value="">
 										</div>
 
-										<div class="form-group">
-											<label for="client_fname">New Address</label>
-											<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
-										</div>
+										<!-- Address Container -->
+										<div style="display: none;">
 
-										<!-- New address related fields -->
-										<div id="container_new_address_fields">
-											<div class="row">
-												<div class="col-sm-6">
-											  		<label for="">Province</label>
-											  		<select class="form-control" name="client_new_province" id="client_new_province">
-											  			<option value="">Select</option>
-												  		<?php
-												  		if( isset( $provinces ) && count( $provinces ) > 0 )
-												  		{
-												  			foreach ($provinces as $province)
-												  			{
-												  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
-												  			}
-												  		}
-												  		?>
-											  		</select>
-											  	</div>
-											  	<div class="col-sm-6">
-											  		<label for="">City</label>
-											  		<select class="form-control" name="client_new_city" id="client_new_city">
-											  			<option value="">Select</option>
-												  		<?php
-												  		if( isset( $cities ) && count( $cities ) > 0 )
-												  		{
-												  			foreach ($cities as $city)
-												  			{
-												  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
-												  			}
-												  		}
-												  		?>
-											  		</select>
-											  	</div>
+											<div class="form-group">
+												<label for="client_fname">New Address</label>
+												<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
 											</div>
-											<div class="row">
-												<div class="col-sm-6">
-											  		<label for="client_new_country">Postal Code</label>
-											  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="">
-											  	</div>
-												<div class="col-sm-6">
-											  		<label for="">Country</label>
-											  		<select class="form-control" name="client_new_country" id="client_new_country">
-											  			<option value="">Select</option>
-												  		<?php
-												  		if( isset( $countries ) && count( $countries ) > 0 )
-												  		{
-												  			foreach ($countries as $country)
-												  			{
-												  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-												  			}
-												  		}
-												  		?>
-											  		</select>
-											  	</div>
+
+											<!-- New address related fields -->
+											<div id="container_new_address_fields">
+												<div class="row">
+													<div class="col-sm-6">
+												  		<label for="">Province</label>
+												  		<select class="form-control" name="client_new_province" id="client_new_province">
+												  			<option value="">Select</option>
+													  		<?php
+													  		if( isset( $provinces ) && count( $provinces ) > 0 )
+													  		{
+													  			foreach ($provinces as $province)
+													  			{
+													  				echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->abbreviation . ' - ' . $province->name .'</option>';
+													  			}
+													  		}
+													  		?>
+												  		</select>
+												  	</div>
+												  	<div class="col-sm-6">
+												  		<label for="">City</label>
+												  		<select class="form-control" name="client_new_city" id="client_new_city">
+												  			<option value="">Select</option>
+													  		<?php
+													  		if( isset( $cities ) && count( $cities ) > 0 )
+													  		{
+													  			foreach ($cities as $city)
+													  			{
+													  				echo '<option value="'. $city->id .'">'. $city->name .'</option>';
+													  			}
+													  		}
+													  		?>
+												  		</select>
+												  	</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-6">
+												  		<label for="client_new_country">Postal Code</label>
+												  		<input type="text" class="form-control" name="client_new_postalcode" id="client_new_postalcode" value="">
+												  	</div>
+													<div class="col-sm-6">
+												  		<label for="">Country</label>
+												  		<select class="form-control" name="client_new_country" id="client_new_country">
+												  			<option value="">Select</option>
+													  		<?php
+													  		if( isset( $countries ) && count( $countries ) > 0 )
+													  		{
+													  			foreach ($countries as $country)
+													  			{
+													  				echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+													  			}
+													  		}
+													  		?>
+												  		</select>
+												  	</div>
+												</div>
 											</div>
+
 										</div>
 
 									</fieldset>
@@ -387,14 +363,8 @@
 									<div><label id="client_email_template-error" class="error" for="client_email_template"></label></div>
 								</div>
 
-								<!--<div class="form-group">
-									<label for="email_template_content">Template Content <span class="alert-danger"> (Put [Content] for the content part, that is replaced with the actual content) </span></label>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="email_template_previeww">Preview</a>
-									<textarea class="form-control" name="email_template_content" id="email_template_content"></textarea>
-									<input name="image" type="file" id="upload" class="hidden" onchange="">
-								</div>-->
-
-								<div class="form-group" id="email_previeww">
-								</div>
+								<!-- To show the email template preview -->
+								<div class="form-group" id="email_preview"></div>
 
 								<div class="form-group" style="display: none;" id="client_invitation_scheduler">
 									<label for="">Schedule Date</label>
