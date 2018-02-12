@@ -511,8 +511,11 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To update Password
 	Route::post('/changepassword', 'AgentController@changePassword');
 
-	// To email preview
+	// To check email preview
 	Route::post('/emailpreview', 'AgentController@emailPreview');
+
+	// To uplaod the email template image
+	Route::post('/uploademailimage', 'AgentController@uploadEmailImage');
 
 });
 

@@ -1672,11 +1672,9 @@ class AgentController extends Controller
      */
     public function saveEmailTemplate()
     {
-        // Get the serialized form data
-        $frmData = Input::get('frmData');
-
-        // Parse the serialize form data to an array
-        parse_str($frmData, $templateData);
+        $emailCategoryId 	= Input::get('emailCategoryId');
+        $templateName 	= Input::get('templateName');
+        $content 		= Input::get('content');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -1686,19 +1684,16 @@ class AgentController extends Controller
         // Server side validation
         $validation = Validator::make(
             array(
-                'email_template_name'   => $templateData['email_template_name'],
-                'email_template_content'=> $templateData['email_template_content'],
-                'email_template_status' => $templateData['email_template_status']
+                'email_template_name'   => $templateName,
+                'email_template_content'=> $content
             ),
             array(
                 'email_template_name'   => array('required'),
-                'email_template_content'=> array('required'),
-                'email_template_status' => array('required')
+                'email_template_content'=> array('required')
             ),
             array(
                 'email_template_name.required'      => 'Please enter template name',
-                'email_template_content.required'   => 'Please enter some content',
-                'email_template_status.required'    => 'Please select status'
+                'email_template_content.required'   => 'Please enter some content'
             )
         );
 
@@ -1714,57 +1709,34 @@ class AgentController extends Controller
         }
         else
         {
-            // Check if email template id is present. If yes, update the content, otherwise add the content
-            if( $templateData['email_template_id'] == '' )  // Add the content
+            // Check if the same email template already exist
+            $templateExist = EmailTemplate::where(['template_name' => $templateName])->first();
+
+            if( count( $templateExist ) == 0 )
             {
-                // Check if the same email template already exist
-                $templateExist = EmailTemplate::where(['template_name' => $templateData['email_template_name']])->first();
+                $emailTemplate = new EmailTemplate;
 
-                if( count( $templateExist ) == 0 )
-                {
-                    $emailTemplate = new EmailTemplate;
-
-                    $emailTemplate->template_name   = $templateData['email_template_name'];
-                    $emailTemplate->template_content= $templateData['email_template_content'];              
-                    $emailTemplate->status          = $templateData['email_template_status'];
-                    $emailTemplate->created_by      = $userId;
-
-                    if( $emailTemplate->save() )
-                    {
-                        $response['errCode']    = 0;
-                        $response['errMsg']     = 'Email template added successfully';
-                    }
-                    else
-                    {
-                        $response['errCode']    = 2;
-                        $response['errMsg']     = 'Some error in saving email template';
-                    }
-                }
-                else
-                {
-                    $response['errCode']    = 3;
-                    $response['errMsg']     = 'Email template already exist with the same name';
-                }
-            }
-            else                                            // Update the content
-            {
-                $emailTemplate = EmailTemplate::find($templateData['email_template_id']);
-
-                $emailTemplate->template_name   = $templateData['email_template_name'];
-                $emailTemplate->template_content= $templateData['email_template_content'];              
-                $emailTemplate->status          = $templateData['email_template_status'];
-                $emailTemplate->updated_by      = $userId;
+                $emailTemplate->template_name   = $templateName;
+                $emailTemplate->template_content= $content;  
+                $emailTemplate->category_id 	= $emailCategoryId;
+                $emailTemplate->status          = '1';
+                $emailTemplate->created_by      = $userId;
 
                 if( $emailTemplate->save() )
                 {
                     $response['errCode']    = 0;
-                    $response['errMsg']     = 'Email template updated successfully';
+                    $response['errMsg']     = 'Email template saved successfully';
                 }
                 else
                 {
                     $response['errCode']    = 2;
-                    $response['errMsg']     = 'Some error in updating email template';
+                    $response['errMsg']     = 'Some error in saving email template';
                 }
+            }
+            else
+            {
+                $response['errCode']    = 3;
+                $response['errMsg']     = 'Email template already exist with the same name';
             }
         }
 
@@ -2062,5 +2034,86 @@ class AgentController extends Controller
 		}
 
 		return response()->json($response);
+    }
+
+    /**
+     * Function to uplaod the email template image
+     * @param void
+     * @return array
+     */
+    public function uploadEmailImage() 
+    {
+        $image 	= Input::file('image');
+    	$source = Input::get('source');
+
+    	// Get the logged in user id
+    	$userId = Auth::user()->id;
+
+    	// Server Side Validation
+    	$response = array();
+
+    	$validation = Validator::make(
+    	    array(
+    	        'image'=> $source
+    	    ),
+    	    array(
+    	        'image'=> array('required')
+    	    ),
+    	    array(
+    	        'image.required'  => 'Please select an image'
+    	    )
+    	);
+
+    	if ( $validation->fails() )
+    	{
+    	    $error = $validation->errors()->first();
+
+    	    if( isset( $error ) && !empty( $error ) )
+    	    {
+    	        $response['errCode']    = 1;
+    	        $response['errMsg']     = $error;
+    	    }
+    	}
+    	else
+    	{
+    		// Image destination folder
+		    $destinationPath = storage_path() . '/uploads/email_template';
+		    if( $image->isValid() )  // If the file is valid or not
+		    {
+		        $fileExt  = $image->getClientOriginalExtension();
+		        $fileType = $image->getMimeType();
+		        $fileSize = $image->getSize();
+
+		        if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+		        {
+		            // Rename the file
+		            $fileNewName = str_random(20) . '.' . $fileExt;
+
+		            if( $image->move( $destinationPath, $fileNewName ) )
+		            {
+		                $response['errCode']    = 0;
+						$response['errMsg']     = 'File uploaded successfully';
+						$response['fileName'] 	= url('/images/email_template/' . $fileNewName);
+		            }
+		            else
+		            {
+		                $response['errCode']    = 2;
+		                $response['errMsg']     = 'Some error in image upload';
+		            }
+		        }
+		        else
+		        {
+		            $response['errCode']    = 3;
+		            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+		        }
+		    }
+		    else
+		    {
+		        $response['errCode']    = 4;
+		        $response['errMsg']     = 'Invalid file';
+		    }
+    	}
+
+    	return response()->json($response);
     }
 }
