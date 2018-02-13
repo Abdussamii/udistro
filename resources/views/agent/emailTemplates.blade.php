@@ -161,6 +161,16 @@
 			placement: 'bottom'
 		});
 
+		// To hide the image upload button from x-editable popup when it is shown
+		$('.x_editable').on('shown', function(e, editable) {
+		    $('.btn').each(function(){
+		    	if( $(this).attr('data-wysihtml5-command') == 'insertImage' )
+		    	{
+		    		$(this).hide();
+		    	}
+		    });
+		});
+
 		// To make already existing placeholder draggable and resizable
 		$('.x_editable, .drag_resize').resizable().draggable({
 	        // Restrict the dragging to parent div only
