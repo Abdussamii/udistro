@@ -1304,7 +1304,189 @@ $(document).ready(function(){
             }
         }
     });
+	
+	//agent partner codes start here
+	// To add new partner
+    $('#btn_modal_partner').click(function(){
+    	// Set the title
+    	$('#modal_add_partner').find('.modal-title').html('Add Partner');
 
+    	// Refresh the partner_id value
+		$('#partner_id').val('');
+
+    	// Show the modal
+		$('#modal_add_partner').modal('show');
+    });
+
+    // partner Detail form validation
+    $('#frm_add_partner').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_partner').validate({
+        rules: {
+            business_name: {
+            	required: true
+            },
+            partner_email: {
+            	required: true,
+            	email: true
+            }, 
+			f_name: {
+            	required: true
+            },
+			l_name: {
+            	required: true
+            },
+            partner_status: {
+            	required: true
+            }
+			 
+        },
+        messages: {
+            business_name: {
+            	required: 'Please enter first name'
+            },
+            partner_email: {
+            	required: 'Please enter partner email',
+            	email: 'Please enter valid email'
+            }, 
+			f_name: {
+            	required: 'Please enter first name'
+            },
+			l_name: {
+            	required: 'Please enter last name'
+            },
+            partner_status: {
+            	required: 'Please select status'
+            }
+        }
+    });
+
+    // Save the partner details
+    $('#btn_add_partner').click(function(){
+    	if( $('#frm_add_partner').valid() )
+    	{
+    		// Ajax call to save the partner detail data
+            var $this = $(this);
+			var partner_id     	= $('#partner_id').val();
+			var business_name   = $('#business_name').val();
+            var f_name     		= $('#f_name').val();
+			var l_name     		= $('#l_name').val();
+            var partner_email   = $('#partner_email').val();
+            var partner_status	= $("input[name='partner_status']:checked").val();
+			
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+			formData.append('partner_id', partner_id);
+			formData.append('business_name', business_name);
+            formData.append('f_name', f_name);
+			formData.append('l_name', l_name);
+            formData.append('partner_email', partner_email);
+            formData.append('partner_status', partner_status);
+			
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/agent/savepartnerdetails',
+    			method: 'post',
+    			data: formData,
+                contentType : false,
+                processData : false,
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_partner')[0].reset();
+
+			    		$('#modal_add_partner').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_partners').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // To show the partner list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_partners').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchpartners',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 4, 5 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+			{ 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+			{ 'bSortable' : false }
+        ]
+    });
+
+
+    // To edit the partner details
+    $(document).on('click', '.edit_partner', function(){
+    	var partnerId = $(this).attr('id');
+
+    	if( partnerId != '' )
+    	{
+    		// Get the partner details for the selected partner
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/agent/getpartnerdetails',
+    			method: 'get',
+    			data: {
+    				partnerId: partnerId
+    			},
+			    success: function(response){
+			    	// Set the title
+				    $('#modal_add_partner').find('.modal-title').html('Edit partner');
+
+				    // Auto-fill the form
+				    $('#frm_add_partner #partner_id').val(partnerId);
+					$('#frm_add_partner #business_name').val(response.business_name);
+				    $('#frm_add_partner #f_name').val(response.f_name);
+					$('#frm_add_partner #l_name').val(response.l_name);
+				    $('#frm_add_partner #partner_email').val(response.partner_email);
+				    $('#frm_add_partner input[name="partner_status"][value="'+ response.partner_status +'"]').prop('checked', true);
+
+				    // Show the modal
+				    $('#modal_add_partner').modal('show');
+			    },
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText);
+				}
+				
+    		});
+    	}
+		else
+        {
+            alertify.error('Missing Partner id');
+        }
+    });
+	//agent partner code end here
 });
 
 /**
