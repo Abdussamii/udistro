@@ -388,6 +388,27 @@
                         <li>
                             <a href="{{ url('administrator/emailtemplates') }}"><i class="fa fa-envelope"></i> Email Templates</a>
                         </li>
+						<li>
+                            <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i> Authorization<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ url('/administrator/roles') }}">Roles</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/administrator/permissions') }}">Permissions</a>
+                                </li>
+								<li>
+                                    <a href="{{ url('/administrator/rolespermissions') }}">Role Permissions</a>
+                                </li>
+								<li>
+                                    <a href="{{ url('/administrator/rolesusers') }}">Users Roles</a>
+                                </li>
+								<li>
+                                    <a href="{{ url('/administrator/permissionsusers') }}">Users Permissions</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
                         <li>
                             <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i> Miscellaneous<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
