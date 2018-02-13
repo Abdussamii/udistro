@@ -734,6 +734,18 @@ $(document).ready(function(){
             province_status: {
             	required: true	
             },
+			pst: {
+            	required: true	
+            },
+			gst: {
+            	required: true	
+            },
+			hst: {
+            	required: true	
+            },
+			service_charge: {
+            	required: true	
+            },
             province_upload_image: {
                 required: true
             }
@@ -744,6 +756,18 @@ $(document).ready(function(){
             },
             province_status: {
                 required: 'Please select status'
+            },
+			pst: {
+            	required: 'Please enter PST'	
+            },
+			gst: {
+            	required: 'Please enter GST'
+            },
+			hst: {
+            	required: 'Please enter HST'	
+            },
+			service_charge: {
+            	required: 'Please enter the Service Charge'	
             },
             province_upload_image: {
                 required: 'Please select image to upload'
@@ -761,6 +785,10 @@ $(document).ready(function(){
             var countryId      = $('#country_id').val();
             var provinceName   = $('#province_name').val();
             var abbreviation   = $('#abbreviation').val();
+			var pst			   = $('#pst').val();
+			var gst			   = $('#gst').val();
+			var hst			   = $('#hst').val();
+			var serviceCharge  = $('#service_charge').val();
             var provinceStatus = $("input[name='province_status']:checked").val();
             var fileData       = $('#province_upload_image').prop('files')[0];
 
@@ -770,6 +798,10 @@ $(document).ready(function(){
             formData.append('country_id', countryId);
             formData.append('province_id', provinceId);
             formData.append('abbreviation', abbreviation);
+			formData.append('pst', pst);
+			formData.append('gst', gst);
+			formData.append('hst', hst);
+			formData.append('service_charge', serviceCharge);
             formData.append('province_name', provinceName);
             formData.append('province_status', provinceStatus);
 
@@ -1357,13 +1389,18 @@ $(document).ready(function(){
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchprovinces',
         
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 2, 3] }
+            { "className": "dt-center", "targets": [0, 6, 7] },
+			{ "className": "dt-right", "targets": [ 2, 3, 4, 5] }
         ],
         
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
-            { 'bSortable' : true },
+            { 'bSortable' : false },
+			{ 'bSortable' : false },
+			{ 'bSortable' : false },
+			{ 'bSortable' : false },
+			{ 'bSortable' : false },
             { 'bSortable' : false, "width": "10%" }
         ]
     });
@@ -3680,6 +3717,795 @@ $(document).ready(function(){
 			});
     	}
     });
+	
+	
+	//codes to manage laratrust added start here
+	// To add new role
+    $('#btn_modal_role').click(function(){
+    	// Set the title
+    	$('#modal_add_role').find('.modal-title').html('Add Role');
+
+    	// Refresh the role_id value
+		$('#role_id').val('');
+
+    	// Show the modal
+		$('#modal_add_role').modal('show');
+    });
+
+    // role form validation
+    $('#frm_add_role').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_role').validate({
+        rules: {
+            name: {
+            	required: true
+            },
+            display_name: {
+            	required: true
+            },
+            description: {
+            	required: true
+            }
+        },
+        messages: {
+            name: {
+            	required: 'Please enter role name'
+            },
+            display_name: {
+            	required: 'Please enter display name'
+            },
+            description: {
+            	required: 'Please enter description'
+            }
+        }
+    });
+
+    // Save the role details
+    $('#btn_add_role').click(function(){
+    	if( $('#frm_add_role').valid() )
+    	{
+    		// Ajax call to save the role detail data
+            var $this = $(this);
+			var role_id     	= $('#role_id').val();
+            var name     		= $('#name').val();
+            var display_name   	= $('#display_name').val();
+            var description		= $("#description").val();
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+			formData.append('role_id', role_id);
+            formData.append('name', name);
+            formData.append('display_name', display_name);
+            formData.append('description', description);
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/saverole',
+    			method: 'post',
+    			data: formData,
+                contentType : false,
+                processData : false,
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_role')[0].reset();
+
+			    		$('#modal_add_role').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_roles').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // To show the role list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_roles').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchroles',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 4 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+			{ 'bSortable' : false }
+            
+        ]
+    });
+
+
+    // To edit the role details
+    $(document).on('click', '.edit_role', function(){
+    	var roleId = $(this).attr('id');
+
+    	if( roleId != '' )
+    	{
+    		// Get the role details for the selected role
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/getselectedrole',
+    			method: 'get',
+    			data: {
+    				roleId: roleId
+    			},
+			    success: function(response){
+			    	// Set the title
+				    $('#modal_add_role').find('.modal-title').html('Edit Role');
+
+				    // Auto-fill the form
+				    $('#frm_add_role #role_id').val(roleId);
+
+				    $('#frm_add_role #name').val(response.name);
+				    $('#frm_add_role #display_name').val(response.display_name);
+				    $('#frm_add_role #description').val(response.description);
+				    
+				    // Show the modal
+				    $('#modal_add_role').modal('show');
+			    },
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText);
+				}
+				
+    		});
+    	}
+		else
+        {
+            alertify.error('Missing Role id');
+        }
+    });
+
+	// To add new permission
+    $('#btn_modal_permission').click(function(){
+    	// Set the title
+    	$('#modal_add_permission').find('.modal-title').html('Add Permission');
+
+    	// Refresh the permission_id value
+		$('#permission_id').val('');
+
+    	// Show the modal
+		$('#modal_add_permission').modal('show');
+    });
+
+    // permission form validation
+    $('#frm_add_permission').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_permission').validate({
+        rules: {
+            name: {
+            	required: true
+            },
+            display_name: {
+            	required: true
+            },
+            description: {
+            	required: true
+            }
+        },
+        messages: {
+            name: {
+            	required: 'Please enter permission name'
+            },
+            display_name: {
+            	required: 'Please enter display name'
+            },
+            description: {
+            	required: 'Please enter description'
+            }
+        }
+    });
+
+    // Save the permission details
+    $('#btn_add_permission').click(function(){
+    	if( $('#frm_add_permission').valid() )
+    	{
+    		// Ajax call to save the permission detail data
+            var $this = $(this);
+			var permission_id   = $('#permission_id').val();
+            var name     		= $('#name').val();
+            var display_name   	= $('#display_name').val();
+            var description		= $("#description").val();
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+			formData.append('permission_id', permission_id);
+            formData.append('name', name);
+            formData.append('display_name', display_name);
+            formData.append('description', description);
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savepermission',
+    			method: 'post',
+    			data: formData,
+                contentType : false,
+                processData : false,
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_permission')[0].reset();
+
+			    		$('#modal_add_permission').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_permissions').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    });
+
+    // To show the permission list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_permissions').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchpermissions',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 4 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+			{ 'bSortable' : false }
+            
+        ]
+    });
+
+
+    // To edit the permission details
+    $(document).on('click', '.edit_permission', function(){
+    	var permissionId = $(this).attr('id');
+
+    	if( permissionId != '' )
+    	{
+    		// Get the permission details for the selected permission
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/getselectedpermission',
+    			method: 'get',
+    			data: {
+    				permissionId: permissionId
+    			},
+			    success: function(response){
+			    	// Set the title
+				    $('#modal_add_permission').find('.modal-title').html('Edit Permission');
+
+				    // Auto-fill the form
+				    $('#frm_add_permission #permission_id').val(permissionId);
+
+				    $('#frm_add_permission #name').val(response.name);
+				    $('#frm_add_permission #display_name').val(response.display_name);
+				    $('#frm_add_permission #description').val(response.description);
+				    
+				    // Show the modal
+				    $('#modal_add_permission').modal('show');
+			    }
+				
+    		});
+    	}
+		else
+        {
+            alertify.error('Missing permission id');
+        }
+    });
+
+	// To attach new permission to role
+    $('#btn_modal_rolepermissions').click(function(){
+    	// Set the title
+    	$('#modal_add_rolepermissions').find('.modal-title').html('Add RolePermission');
+
+    	// Show the modal
+		$('#modal_add_rolepermissions').modal('show');
+    });
+
+    // rolepermissions form data validation
+    $('#frm_add_rolepermissions').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_rolepermissions').validate({
+        rules: {
+            role_name: {
+            	required: true
+            },
+            permission_name: {
+            	required: true
+            }
+        },
+        messages: {
+            role_name: {
+            	required: 'Please select role'
+            },
+            permission_name: {
+            	required: 'Please select permission'
+            }
+        }
+    });
+
+    // Save the rolepermissions details
+    $('#btn_add_rolepermissions').click(function(){
+    	if( $('#frm_add_rolepermissions').valid() )
+    	{
+    		// Ajax call to attach the rolepermissions detail data
+            var $this = $(this);
+			var role_name     		= $('#role_name').val();
+            var permission_name   	= $('#permission_name').val();
+            
+            // Create form data object and append the values into it
+            var formData = new FormData();
+			formData.append('role_name', role_name);
+            formData.append('permission_name', permission_name);
+            
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/saverolepermission',
+    			method: 'post',
+    			data: formData,
+                contentType : false,
+                processData : false,
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_rolepermissions')[0].reset();
+
+			    		$('#modal_add_rolepermissions').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_rolepermissions').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    },
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText);
+					
+				}
+    		});
+    	}
+    });
+
+    // To show the rolepermissions list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_rolepermissions').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchrolespermissions',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [2 ] }
+        ],
+        "aoColumns": [
+			
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+           	{ 'bSortable' : false }  
+        ]
+    });
+
+    // To detach the permission from role 
+    $(document).on('click', '.detach_permission_role', function(){
+		
+		// Show the modal
+		$('#deleteDialogModal').modal('show');
+		
+		var role_permission = $(this).attr('id');	 
+		var pos = role_permission.indexOf('+');
+		var role_id = role_permission.substring(0, pos);
+		var permission_id = role_permission.substring(pos + 1);
+		
+		 $(document).on('click', '#yes', function(){					
+		
+		if( role_id != ''  && permission_id != '')
+		{
+			// Detach permission from the role
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/detachrolepermission',
+				method: 'get',
+				data: {
+					role_id: role_id,
+					permission_id: permission_id
+				},
+				success: function(response){
+					if( response.errCode == 0 )
+					{
+						alertify.success( response.errMsg );
+						
+			    		// Refresh the datatable
+						$('#datatable_rolepermissions').DataTable().ajax.reload();
+					}
+					else
+					{
+						alertify.error( response.errMsg );
+					}
+				}
+				
+			});
+			
+		}
+		else
+		{
+			alertify.error('Missing permission and role');
+		}
+		})
+		
+	});
+	
+	
+	// To attach new role to user
+    $('#btn_modal_roleusers').click(function(){
+    	// Set the title
+    	$('#modal_add_roleuser').find('.modal-title').html('Add RoleUser');
+
+    	// Show the modal
+		$('#modal_add_roleusers').modal('show');
+    });
+
+    // roleusers form data validation
+    $('#frm_add_roleusers').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_roleusers').validate({
+        rules: {
+            role_name: {
+            	required: true
+            },
+            user_name: {
+            	required: true
+            }
+        },
+        messages: {
+            role_name: {
+            	required: 'Please select role'
+            },
+            user_name: {
+            	required: 'Please select user email'
+            }
+        }
+    });
+
+    // Save the roleusers details
+    $('#btn_add_roleusers').click(function(){
+    	if( $('#frm_add_roleusers').valid() )
+    	{
+    		// Ajax call to attach the roleusers detail data
+            var $this = $(this);
+			var role_name   = $('#role_name').val();
+            var user_name   = $('#user_name').val();
+            
+            // Create form data object and append the values into it
+            var formData = new FormData();
+			formData.append('role_name', role_name);
+            formData.append('user_name', user_name);
+            
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/saveroleuser',
+    			method: 'post',
+    			data: formData,
+                contentType : false,
+                processData : false,
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_roleusers')[0].reset();
+
+			    		$('#modal_add_roleusers').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_roleusers').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    },
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText);
+					
+				}
+    		});
+    	}
+    });
+
+    // To show the roleusers list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_roleusers').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchrolesusers',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [2 ] }
+        ],
+        "aoColumns": [
+			
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+           	{ 'bSortable' : false }  
+        ]
+    });
+
+    // To detach the role from user
+    $(document).on('click', '.detach_role_usser', function(){
+		
+		// Show the modal
+		$('#deleteDialogModal').modal('show');
+		
+		var role_user = $(this).attr('id');	 
+		var pos = role_user.indexOf('+');
+		var role_id = role_user.substring(0, pos);
+		var user_id = role_user.substring(pos + 1);
+		
+		 $(document).on('click', '#yes', function(){					
+		
+		if( role_id != ''  && user_id != '')
+		{
+			// Detach role from the user
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/detachroleuser',
+				method: 'get',
+				data: {
+					role_id: role_id,
+					user_id: user_id
+				},
+				success: function(response){
+					if( response.errCode == 0 )
+					{
+						alertify.success( response.errMsg );
+						
+			    		// Refresh the datatable
+						$('#datatable_roleusers').DataTable().ajax.reload();
+					}
+					else
+					{
+						alertify.error( response.errMsg );
+					}
+				}
+				
+			});
+			
+		}
+		else
+		{
+			alertify.error('Missing user and role id');
+		}
+		})
+		
+	});
+	
+	
+	// To attach new permission to user
+    $('#btn_modal_permissionusers').click(function(){
+    	// Set the title
+    	$('#modal_add_permissionuser').find('.modal-title').html('Add RoleUser');
+
+    	// Show the modal
+		$('#modal_add_permissionusers').modal('show');
+    });
+
+    // permissionusers form data validation
+    $('#frm_add_permissionusers').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_add_permissionusers').validate({
+        rules: {
+            permission_name: {
+            	required: true
+            },
+            user_name: {
+            	required: true
+            }
+        },
+        messages: {
+            permission_name: {
+            	required: 'Please select permission'
+            },
+            user_name: {
+            	required: 'Please select user email'
+            }
+        }
+    });
+
+    // Save the permissionusers details
+    $('#btn_add_permissionusers').click(function(){
+    	if( $('#frm_add_permissionusers').valid() )
+    	{
+    		// Ajax call to attach the permissionusers detail data
+            var $this = $(this);
+			var permission_name   = $('#permission_name').val();
+            var user_name   = $('#user_name').val();
+            
+            // Create form data object and append the values into it
+            var formData = new FormData();
+			formData.append('permission_name', permission_name);
+            formData.append('user_name', user_name);
+            
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savepermissionuser',
+    			method: 'post',
+    			data: formData,
+                contentType : false,
+                processData : false,
+    			beforeSend: function() {
+    				// Show the loading button
+			        $this.button('loading');
+			    },
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    complete: function()
+			    {
+			    	// Change the button to previous
+			    	$this.button('reset');
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_permissionusers')[0].reset();
+
+			    		$('#modal_add_permissionusers').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_permissionusers').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    },
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText);
+					
+				}
+    		});
+    	}
+    });
+
+    // To show the permissionusers list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_permissionusers').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchpermissionsusers',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 2 ] }
+        ],
+        "aoColumns": [
+			
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+           	{ 'bSortable' : false }  
+        ]
+    });
+
+    // To detach the permission from user
+    $(document).on('click', '.detach_permission_user', function(){
+		
+		// Show the modal
+		$('#deleteDialogModal').modal('show');
+		
+		var permission_user = $(this).attr('id');	 
+		var pos = permission_user.indexOf('+');
+		var permission_id = permission_user.substring(0, pos);
+		var user_id = permission_user.substring(pos + 1);
+		
+		 $(document).on('click', '#yes', function(){					
+		
+		if( permission_id != ''  && user_id != '')
+		{
+			// Detach permission from the user
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/detachpermissionuser',
+				method: 'get',
+				data: {
+					permission_id: permission_id,
+					user_id: user_id
+				},
+				success: function(response){
+					if( response.errCode == 0 )
+					{
+						alertify.success( response.errMsg );
+						
+			    		// Refresh the datatable
+						$('#datatable_permissionusers').DataTable().ajax.reload();
+					}
+					else
+					{
+						alertify.error( response.errMsg );
+					}
+				}
+				
+			});
+			
+		}
+		else
+		{
+			alertify.error('Missing user and permission id');
+		}
+		})
+		
+	});
+	
+	//code to manage laratrust end here
 
 });
 
