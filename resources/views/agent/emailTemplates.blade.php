@@ -381,6 +381,47 @@
     });
     </script>
 
+	<style type="text/css">
+	/* To manage the x-editable css confliction issues */
+		/*#wrapper .navbar .nav > li {
+			display: block;
+			float: none;
+		}
+
+		#wrapper .navbar .nav {
+			float: none;
+			margin:0;
+		}
+
+		#wrapper .navbar .nav > li > a {
+			color: #fff;
+			text-shadow: none;
+			padding: 10px 15px;
+		}
+
+		#wrapper .sidebar ul li a.active {
+			color: #888;
+		}
+		.hide {
+			display: block !important;
+		}
+		.modal {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		     bottom: auto; 
+		     margin: 0 auto;
+		    left: 0;
+		    z-index: 1050;
+		    display: none;
+		     overflow: visible; 
+		    outline: 0;
+		}
+
+		.modal-header .close {
+			line-height: 31px;
+		}*/
+	</style>
 </head>
 
 <body>
@@ -402,9 +443,6 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
                     <ul class="dropdown-menu dropdown-messages">
                         <li>
                             <a href="#">
@@ -453,9 +491,6 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
                     <ul class="dropdown-menu dropdown-tasks">
                         <li>
                             <a href="#">
@@ -532,9 +567,6 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
                     <ul class="dropdown-menu dropdown-alerts">
                         <li>
                             <a href="#">
@@ -592,9 +624,6 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
