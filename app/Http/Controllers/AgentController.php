@@ -2054,7 +2054,6 @@ class AgentController extends Controller
     public function uploadEmailImage() 
     {
         $image 	= Input::file('image');
-    	$source = Input::get('source');
 
     	// Get the logged in user id
     	$userId = Auth::user()->id;
@@ -2064,7 +2063,7 @@ class AgentController extends Controller
 
     	$validation = Validator::make(
     	    array(
-    	        'image'=> $source
+    	        'image'=> $image
     	    ),
     	    array(
     	        'image'=> array('required')

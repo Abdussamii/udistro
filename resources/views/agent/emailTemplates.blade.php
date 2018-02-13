@@ -272,7 +272,6 @@
 	    	let source 	= $(this).attr('data-source');
 
 	    	formData.append('image', image);
-	    	formData.append('source', source);
 
 	    	$.ajax({
 	    	    url: $('meta[name="route"]').attr('content') + '/agent/uploademailimage',
@@ -294,6 +293,58 @@
 	    	            {
 	    	            	$('#logo_image').attr('src', response.fileName);
 	    	            }             
+	    	        }
+	    	        else
+	    	        {
+	    	            alertify.error( response.errMsg );
+	    	        }
+	    	    }
+	    	});
+
+	    });
+
+	    // To add new images
+	    $('#file_image').change(function(){
+
+	    	var formData = new FormData();
+	    	
+	    	let image 	= $(this).prop('files')[0];
+	    	let source 	= $(this).attr('data-source');
+
+	    	formData.append('image', image);
+
+	    	$.ajax({
+	    	    url: $('meta[name="route"]').attr('content') + '/agent/uploademailimage',
+	    	    method: 'post',
+	    	    data: formData,
+	    	    contentType : false,
+	    	    processData : false,
+	    	    headers: {
+	    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    	    },
+	    	    success: function(response){
+	    	        if( response.errCode == 0 )
+	    	        {
+      		    		var placeHolder = $(document.createElement('div')).css({
+      						//border: '1px dashed',
+      						position: 'relative',
+      						// left: elementPos,
+      						//width: '400', 
+      						//height: '100', 
+      						//padding: '3', 
+      						margin: '0'
+      					});
+
+      					// Add the image
+      					$(placeHolder).html('<img src="'+ response.fileName +'">');
+
+      		    		// Add the class to manage the css while sending the email
+      					$(placeHolder).addClass('email_component');
+
+      		    		elementPos = elementPos + 25;
+
+      		    		// Initialize the draggable and resizable on newly created placeholder
+      		    		$(placeHolder).resizable().draggable().appendTo("#email_template_content");
 	    	        }
 	    	        else
 	    	        {
@@ -731,6 +782,11 @@
 	    								<div>
 	    									<a href="javascript:void(0);" id="add_logo_image" class="btn btn-primary" onclick="document.getElementById('file_logo_image').click();">Add Logo Image</a>
 	    									<input id="file_logo_image" name="file_logo_image" type="file" data-source="logo" style="display:none;">
+	    								</div>
+	    								<br>
+	    								<div>
+	    									<a href="javascript:void(0);" id="add_image" class="btn btn-primary" onclick="document.getElementById('file_image').click();">Add Image</a>
+	    									<input id="file_image" name="file_image" type="file" data-source="logo" style="display:none;">
 	    								</div>
 	    							</div>
 
