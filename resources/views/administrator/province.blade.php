@@ -19,6 +19,10 @@
 					<tr>
 						<td>#</td>
 						<td>Province</td>
+						<td>PST</td>
+						<td>GST</td>
+						<td>HST</td>
+						<td>Service Charge</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>
@@ -41,14 +45,24 @@
 							<div class="col-sm-9">
 								<form name="frm_add_province" id="frm_add_province" autocomplete="off">
 									<div class="form-group">
-										<label for="province_name">Province Name</label>
 										<input type="text" name="province_name" id="province_name" class="form-control" placeholder="Enter province name">
 										<input type="hidden" name="province_id" id="province_id">
 										<input type="hidden" name="country_id" id="country_id" value="1">
 									</div>
 									<div class="form-group">
-										<label for="abbreviation">Abbreviation</label>
 										<input type="text" name="abbreviation" id="abbreviation" class="form-control" placeholder="Enter Abbreviation">
+									</div>
+									<div class="form-group">
+										<input type="number" name="pst" id="pst" class="form-control" placeholder="Enter PST">
+									</div>
+									<div class="form-group">
+										<input type="number" name="gst" id="gst" class="form-control" placeholder="Enter GST">
+									</div>
+									<div class="form-group">
+										<input type="number" name="hst" id="hst" class="form-control" placeholder="Enter HST">
+									</div>
+									<div class="form-group">
+										<input type="number" name="service_charge" id="service_charge" class="form-control" placeholder="Enter Service Charge">
 									</div>
 									<div class="form-group">
 										<label for="province_status">Status</label>
@@ -61,7 +75,6 @@
 										<label id="province_status-error" class="error" for="province_status"></label>
 									</div>
 									<div class="form-group">
-										<label for="province_status">Image</label>
 										<img src="" id="province_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
 										<div class="top-buffer">
 											<!-- To upload image -->
