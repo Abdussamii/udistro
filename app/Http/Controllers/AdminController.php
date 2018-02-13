@@ -4404,4 +4404,920 @@ class AdminController extends Controller
 
     	return response()->json($response);
     }
+	
+	
+	// Abdul added code start here
+	/**
+     * Function to save the role
+     * @param void
+     * @return Array
+     */
+    public function saveRole(Request $request)
+    {
+		$role_id    	= $request->input('role_id');
+    	$name    		= $request->input('name');
+		$display_name   = $request->input('display_name');
+    	$description  	= $request->input('description');
+		
+        
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'name'			=> $name,
+		        'display_name'	=> $display_name,
+				'description'	=> $description
+				
+		    ),
+		    array(
+		        'name' 			=> array('required'),
+		        'display_name' 	=> array('required'),
+				'description' 	=> array('required')
+				
+		    ),
+		    array(
+		        'name.required'			=> 'Please enter the role name',
+		        'display_name.required' => 'Please enter the display name',
+				'description.required' 	=> 'Please enter the description'
+				
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if($role_id == '') 
+			{
+				$role 				= new Role();
+				$role->name			= $name;
+				$role->display_name	= $display_name;
+				$role->description	= $description;
+				
+				if( $role->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'New role saved successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in saving new role';
+				}
+			}
+			else 
+			{
+				$role 				= Role::find($role_id);
+				$role->name			= $name;
+				$role->display_name	= $display_name;
+				$role->description	= $description;
+				
+				if( $role->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Role updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the role';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+	
+	 /**
+     * Function to show the role list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchRoles()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping  
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+			2 => 'display_name',
+			3 => 'description'
+		    
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $roles = Role::where('name','like', '%'.$sSearch.'%')
+				->orWhere('display_name', 'like', '%'.$sSearch.'%')
+				->orWhere('description', 'like', '%'.$sSearch.'%')
+				->orderBy($sortBy, $sortType)
+				->limit($length)
+				->offset($start)
+				->select('id', 'name', 'display_name', 'description')
+				->get();
+
+        $iTotal = Role::where('name','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $roles ) > 0 )
+        {
+            foreach ($roles as $role)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $role->id,
+                    1 => $role->name,
+					2 => $role->display_name,
+					3 => $role->description,
+					4 => '<a href="javascript:void(0);" id="'. $role->id .'" class="edit_role"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to return the roles page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function roles()
+    {
+		return view('administrator/roles');
+    }
+	
+	
+	/**
+     * Function to get the details for the selected role
+     * @param void
+     * @return array
+     */
+    public function getSelectedRole()
+    {
+    	$roleId = Input::get('roleId');
+
+    	$response = array();
+    	if( $roleId != '' )
+    	{
+			
+			$role = Role::find($roleId);
+			if( count( $role ) > 0 )
+    		{
+				$response['name'] 			= $role->name;
+				$response['display_name'] 	= $role->display_name;
+				$response['description'] 	= $role->description;
+    		}
+    	}
+
+    	return response()->json($response);
+    }
+	
+	
+	/**
+     * Function to save the permission
+     * @param void
+     * @return Array
+     */
+    public function savePermission(Request $request)
+    {
+		$permission_id    	= $request->input('permission_id');
+    	$name    		= $request->input('name');
+		$display_name   = $request->input('display_name');
+    	$description  	= $request->input('description');
+		
+        
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'name'			=> $name,
+		        'display_name'	=> $display_name,
+				'description'	=> $description
+				
+		    ),
+		    array(
+		        'name' 			=> array('required'),
+		        'display_name' 	=> array('required'),
+				'description' 	=> array('required')
+				
+		    ),
+		    array(
+		        'name.required'			=> 'Please enter the permission name',
+		        'display_name.required' => 'Please enter the display name',
+				'description.required' 	=> 'Please enter the description'
+				
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if($permission_id == '') 
+			{
+				$permission 				= new Permission();
+				$permission->name			= $name;
+				$permission->display_name	= $display_name;
+				$permission->description	= $description;
+				
+				if( $permission->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'New permission saved successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in saving new permission';
+				}
+			}
+			else 
+			{
+				$permission 				= Permission::find($permission_id);
+				$permission->name			= $name;
+				$permission->display_name	= $display_name;
+				$permission->description	= $description;
+				
+				if( $permission->save() )
+				{
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'permission updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Some error in updating the permission';
+				}
+			}
+		}
+
+		return response()->json($response);
+    }
+	
+	 /**
+     * Function to show the permission list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchPermissions()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping  
+        $arr = array(
+            0 => 'id',
+            1 => 'name',
+			2 => 'display_name',
+			3 => 'description'
+		    
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $permissions = Permission::where('name','like', '%'.$sSearch.'%')
+						->orWhere('display_name', 'like', '%'.$sSearch.'%')
+						->orWhere('description', 'like', '%'.$sSearch.'%')
+						->orderBy($sortBy, $sortType)
+						->limit($length)
+						->offset($start)
+						->select('id', 'name', 'display_name', 'description')
+						->get();
+
+        $iTotal = Permission::where('name','like', '%'.$sSearch.'%')->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $permissions ) > 0 )
+        {
+            foreach ($permissions as $permission)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $permission->id,
+                    1 => $permission->name,
+					2 => $permission->display_name,
+					3 => $permission->description,
+					4 => '<a href="javascript:void(0);" id="'. $permission->id .'" class="edit_permission"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to return the roles page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function permissions()
+    {
+		return view('administrator/permissions');
+    }
+	
+	
+	/**
+     * Function to get the details for the selected permission
+     * @param void
+     * @return array
+     */
+    public function getSelectedPermission()
+    {
+    	$permissionId = Input::get('permissionId');
+
+    	$response = array();
+    	if( $permissionId != '' )
+    	{
+			
+			$permission = Permission::find($permissionId);
+			if( count( $permission ) > 0 )
+    		{
+				$response['name'] 			= $permission->name;
+				$response['display_name'] 	= $permission->display_name;
+				$response['description'] 	= $permission->description;
+    		}
+    	}
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to save the rolepermission
+     * @param void
+     * @return Array
+     */
+    public function saveRolePermission(Request $request)
+    {
+		$role_name    			= $request->input('role_name');
+		$permission_name   		= $request->input('permission_name');
+		        
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'role_name'			=> $role_name,
+		        'permission_name'	=> $permission_name
+				
+		    ),
+		    array(
+		        'role_name' 		=> array('required'),
+		        'permission_name' 	=> array('required')
+				
+		    ),
+		    array(
+		        'role_name.required'		=> 'Please select the role name',
+		        'permission_name.required' 	=> 'Please select the permission name'
+				
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			
+			$role = Role::find($role_name);
+			$permission = Permission::find($permission_name);
+			
+			if( $role->attachPermission($permission) )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = 'New RolePermission attached successfully';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+				$response['errMsg']     = 'Some error in attaching new RolePermission';
+			}
+			
+		}
+
+		return response()->json($response);
+    }
+	
+	 /**
+     * Function to show the rolepermission list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchRolesPermissions()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping  
+        $arr = array(
+            //0 => $i,
+            0 => 'role_name',
+			1 => 'permission_name'
+			
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $roles_permissions = DB::table('permission_role')
+									->join('roles', 'permission_role.role_id', '=', 'roles.id')
+									->join('permissions', 'permission_role.permission_id', '=', 'permissions.id')
+									->where('roles.name','like', '%'.$sSearch.'%')
+									->orWhere('permissions.name', 'like', '%'.$sSearch.'%')
+									->orderBy($sortBy, $sortType)
+									->limit($length)
+									->offset($start)
+									->select('roles.name as role_name', 'permissions.name as permission_name','roles.id as role_id', 'permissions.id as permission_id')
+									->get();
+
+        $iTotal = DB::table('permission_role')
+							->join('roles', 'permission_role.role_id', '=', 'roles.id')
+							->join('permissions', 'permission_role.permission_id', '=', 'permissions.id')
+							->where('roles.name','like', '%'.$sSearch.'%')
+							->orWhere('permissions.name', 'like', '%'.$sSearch.'%')
+						->count();
+
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+		
+        if ( count( $roles_permissions ) > 0 )
+        {
+            foreach ($roles_permissions as $role_permission)
+            {
+				
+            	$response['aaData'][$k] = array(
+					
+                    0 => $role_permission->role_name,
+					1 => $role_permission->permission_name,
+					2 => '<a href="javascript:void(0);" id="'. $role_permission->role_id .'+'. $role_permission->permission_id .'" class="detach_permission_role"><i class="fa fa-trash-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to return the rolesPermissions page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function rolesPermissions()
+    {
+		$roles = Role::orderBy('name', 'asc')->get(['id','name']);
+		$permissions = Permission::orderBy('name', 'asc')->get(['id','name']);
+		return view('administrator/rolespermissions', ['roleNames' => $roles, 'permissionNames' => $permissions]);
+    }
+	
+	
+	/**
+     * Function to detach permission from role
+     * @param void
+     * @return array
+     */
+    public function detachRolePermission()
+    {
+    	$role_id    		= Input::get('role_id');
+		$permission_id   	= Input::get('permission_id');
+		        
+       if ($role_id != '' && $permission_id != '')
+	   {
+			$role = Role::find($role_id);
+			$permission = Permission::find($permission_id);
+			
+			if( $role->detachPermission($permission) )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = 'Permission has been successfully detached from role';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+				$response['errMsg']     = 'Some error in detaching permission from role';
+			}
+			
+		}
+
+		return response()->json($response);
+    }
+	
+	
+	/**
+     * Function to save the roleuser
+     * @param void
+     * @return Array
+     */
+    public function saveRoleUser(Request $request)
+    {
+		$role_name   = $request->input('role_name');
+		$user_name   = $request->input('user_name');
+		        
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'role_name'		=> $role_name,
+		        'user_name'		=> $user_name
+				
+		    ),
+		    array(
+		        'role_name' 	=> array('required'),
+		        'user_name' 	=> array('required')
+				
+		    ),
+		    array(
+		        'role_name.required'	=> 'Please select the role name',
+		        'user_name.required' 	=> 'Please select the user name'
+				
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			
+			$role = Role::find($role_name);
+			$user = User::find($user_name);
+			
+			if( $user->attachRole($role) )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = 'New RoleUser attached successfully';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+				$response['errMsg']     = 'Some error in attaching new RoleUser';
+			}
+			
+		}
+
+		return response()->json($response);
+    }
+	
+	 /**
+     * Function to show the roleuser list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchRolesUsers()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping  
+        $arr = array(
+            0 => 'role_name',
+			1 => 'user_name'
+			
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+		$roles_users = DB::table('role_user')
+									->join('roles', 'role_user.role_id', '=', 'roles.id')
+									->join('users', 'role_user.user_id', '=', 'users.id')
+									->where('roles.name','like', '%'.$sSearch.'%')
+									->orWhere('users.email', 'like', '%'.$sSearch.'%')
+									->orderBy($sortBy, $sortType)
+									->limit($length)
+									->offset($start)
+									->select('roles.name as role_name', 'users.email as user_name','roles.id as role_id', 'users.id as user_id')
+									->get();
+
+        $iTotal = DB::table('role_user')
+							->join('roles', 'role_user.role_id', '=', 'roles.id')
+							->join('users', 'role_user.user_id', '=', 'users.id')
+							->where('roles.name','like', '%'.$sSearch.'%')
+							->orWhere('users.email', 'like', '%'.$sSearch.'%')
+						->count();
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+		
+        if ( count( $roles_users ) > 0 )
+        {
+            foreach ($roles_users as $role_user)
+            {
+				
+            	$response['aaData'][$k] = array(
+					
+                    0 => $role_user->role_name,
+					1 => $role_user->user_name,
+					2 => '<a href="javascript:void(0);" id="'. $role_user->role_id .'+'. $role_user->user_id .'" class="detach_role_usser"><i class="fa fa-trash-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to return the rolesusers page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function rolesUsers()
+    {
+		$roles = Role::orderBy('name', 'asc')->get(['id','name']);
+		$users = User::orderBy('email', 'asc')->get(['id','email']);
+		return view('administrator/rolesusers', ['roleNames' => $roles, 'userNames' => $users]);
+    }
+	
+	
+	/**
+     * Function to detach role from user
+     * @param void
+     * @return array
+     */
+    public function detachRoleUser()
+    {
+    	$role_id    = Input::get('role_id');
+		$user_id   	= Input::get('user_id');
+		        
+       if ($role_id != '' && $user_id != '')
+	   {
+			$role = Role::find($role_id);
+			$user = User::find($user_id);
+			
+			if( $user->detachRole($role) )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = 'Role has been successfully detached from User';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+				$response['errMsg']     = 'Some error in detaching role from user';
+			}
+			
+		}
+
+		return response()->json($response);
+    }
+	
+	
+	/**
+     * Function to save the permissionuser
+     * @param void
+     * @return Array
+     */
+    public function savePermissionUser(Request $request)
+    {
+		$permission_name	= $request->input('permission_name');
+		$user_name   		= $request->input('user_name');
+		        
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'permission_name'	=> $permission_name,
+		        'user_name'			=> $user_name
+				
+		    ),
+		    array(
+		        'permission_name' 	=> array('required'),
+		        'user_name' 		=> array('required')
+				
+		    ),
+		    array(
+		        'permission_name.required'	=> 'Please select the permission',
+		        'user_name.required' 		=> 'Please select the user name'
+				
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			
+			$permission = Permission::find($permission_name);
+			$user = User::find($user_name);
+			
+			if( $user->attachPermission($permission) )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = 'User permission attached successfully';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+				$response['errMsg']     = 'Some error in attaching new User permission';
+			}
+			
+		}
+
+		return response()->json($response);
+    }
+	
+	 /**
+     * Function to show the permissionuser list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchPermissionsUsers()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping  
+        $arr = array(
+            0 => 'user_name',
+			1 => 'permission_name',
+			
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+		$permissions_users = DB::table('permission_user')
+									->join('permissions', 'permission_user.permission_id', '=', 'permissions.id')
+									->join('users', 'permission_user.user_id', '=', 'users.id')
+									->where('permissions.name','like', '%'.$sSearch.'%')
+									->orWhere('users.email', 'like', '%'.$sSearch.'%')
+									->orderBy($sortBy, $sortType)
+									->limit($length)
+									->offset($start)
+									->select('users.email as user_name', 'permissions.name as permission_name', 'permissions.id as permission_id', 'users.id as user_id')
+									->get();
+
+        $iTotal = DB::table('permission_user')
+							->join('permissions', 'permission_user.permission_id', '=', 'permissions.id')
+							->join('users', 'permission_user.user_id', '=', 'users.id')
+							->where('permissions.name','like', '%'.$sSearch.'%')
+							->orWhere('users.email', 'like', '%'.$sSearch.'%')
+						->count();
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+		
+        if ( count( $permissions_users ) > 0 )
+        {
+            foreach ($permissions_users as $permission_user)
+            {
+            	$response['aaData'][$k] = array(
+					0 => $permission_user->user_name,
+                    1 => $permission_user->permission_name,
+					2 => '<a href="javascript:void(0);" id="'. $permission_user->permission_id .'+'. $permission_user->user_id .'" class="detach_permission_user"><i class="fa fa-trash-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to return the permissionsusers page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function permissionsUsers()
+    {
+		$permissions = Permission::orderBy('name', 'asc')->get(['id','name']);
+		$users = User::orderBy('email', 'asc')->get(['id','email']);
+		return view('administrator/permissionsusers', ['permissionNames' => $permissions, 'userNames' => $users]);
+    }
+	
+	
+	/**
+     * Function to detach permission from user
+     * @param void
+     * @return array
+     */
+    public function detachPermissionUser()
+    {
+    	$permission_id  = Input::get('permission_id');
+		$user_id   		= Input::get('user_id');
+		        
+       if ($permission_id != '' && $user_id != '')
+	   {
+			$permission = Permission::find($permission_id);
+			$user = User::find($user_id);
+			
+			if( $user->detachPermission($permission) )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = 'permission has been successfully detached from User';
+			}
+			else
+			{
+				$response['errCode']    = 2;
+				$response['errMsg']     = 'Some error in detaching permission from user';
+			}
+			
+		}
+
+		return response()->json($response);
+    }
+	
+	//Abdul Added code finished here
+	
+	
+	
+	
+	
 }
