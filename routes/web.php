@@ -326,8 +326,68 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 
 	// To convert html to dompdf
 	Route::get('htmltopdfview', array('as'=>'htmltopdfview','uses'=>'AdminController@htmltopdfview'));
+	
+	/* Newly added route start here */
+	
+	// To save new role
+	Route::post('/saverole', 'AdminController@saveRole');
 
+	// To show the role list in datatable
+	Route::get('/fetchroles', 'AdminController@fetchRoles');
 
+	// To get the details of selected role
+	Route::get('/getselectedrole', 'AdminController@getSelectedRole');
+	
+	// To return permission listing view
+	Route::get('/permissions', 'AdminController@permissions');
+
+	// To save new permission
+	Route::post('/savepermission', 'AdminController@savePermission');
+
+	// To show the permission list in datatable
+	Route::get('/fetchpermissions', 'AdminController@fetchPermissions');
+
+	// To detach permission from role
+	Route::get('/detachrolepermission', 'AdminController@detachRolePermission');
+
+	// To return rolespermissions listing view
+	Route::get('/rolespermissions', 'AdminController@rolesPermissions');
+
+	// To save new rolepermission
+	Route::post('/saverolepermission', 'AdminController@saveRolePermission');
+
+	// To show the rolespermissions list in datatable
+	Route::get('/fetchrolespermissions', 'AdminController@fetchRolesPermissions');
+
+	
+	// To detach role from user
+	Route::get('/detachroleuser', 'AdminController@detachRoleUser');
+
+	// To return rolesusers listing view
+	Route::get('/rolesusers', 'AdminController@rolesUsers');
+
+	// To save new roleuser
+	Route::post('/saveroleuser', 'AdminController@saveRoleUser');
+
+	// To show the rolesusers list in datatable
+	Route::get('/fetchrolesusers', 'AdminController@fetchRolesUsers');
+	
+	
+	// To detach permission from user
+	Route::get('/detachpermissionuser', 'AdminController@detachPermissionUser');
+
+	// To return permissionsusers listing view
+	Route::get('/permissionsusers', 'AdminController@permissionsUsers');
+
+	// To save new permissionuser
+	Route::post('/savepermissionuser', 'AdminController@savePermissionUser');
+
+	// To show the permissionsusers list in datatable
+	Route::get('/fetchpermissionsusers', 'AdminController@fetchPermissionsUsers');
+
+	/* -----------------  Newly added route end here ------------------*/
+	
+	
 	/* ---------- Company related functionality ---------- */
 
 	// To return the company categories view
@@ -516,6 +576,24 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// To uplaod the email template image
 	Route::post('/uploademailimage', 'AgentController@uploadEmailImage');
+	
+	/* -----------Newly added route for agent partner start here------------------*/
+	
+	// To save the partner details
+	Route::post('/savepartnerdetails', 'AgentController@savePartnerDetails');
+	
+	// To get the details of the selected partner
+	Route::get('/getpartnerdetails', 'AgentController@getPartnerDetails');
+	
+	// To fetch the partners and show in datatable
+	Route::get('/fetchpartners', 'AgentController@fetchPartners');
+	
+	// To show partner listing page
+	Route::get('/partners', 'AgentController@partners');
+	
+		
+	/* -----------Newly added route for agent partner end here------------------*/
+
 
 });
 
@@ -723,3 +801,8 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
     $response->header("Content-Type", $type);
     return $response;
 });
+
+
+// To fetch quotation for agent Partner
+	Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
+	fetchQuotationRequest
