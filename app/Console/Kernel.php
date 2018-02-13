@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\HourlyUpdate::class
+        Commands\SendInviteEmail::class
     ];
 
     /**
@@ -25,10 +25,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
     	// To store the cron output in a file
-    	$filePath = storage_path('cron.txt');
+    	$filePath = storage_path('cron_logs/cron.txt');
 
-    	// Run the cron on every 10 minutes
-        $schedule->command('email:send')->everyTenMinutes()->appendOutputTo($filePath);
+    	// Run the cron on every 10 minutes, to run it on terminal try: 
+    	// php artisan email:send
+    	// php artisan schedule:run
+    	
+        // $schedule->command('email:send')->everyTenMinutes()->appendOutputTo($filePath);
+
+        $schedule->command('email:send')->everyMinute()->appendOutputTo($filePath);
     }
 
     /**
