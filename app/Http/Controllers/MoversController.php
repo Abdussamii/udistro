@@ -61,6 +61,14 @@ use App\PaymentTransactionDetail;
 use Helper;
 use Session;
 
+//newly added header files
+use App\AgentPartner;
+use App\AgentPartnerDigitalServiceRequest;
+use App\AgentPartnerDigitalServiceTypeRequest;
+use App\AgentPartnerDigitalAdditionalServiceTypeRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Quotation;
+
 class MoversController extends Controller
 {
     /**
@@ -1305,7 +1313,99 @@ class MoversController extends Controller
 
 		$digitalServicesApplied = array();
 		$additionalDigitalServicesApplied = array();
-		if( count( $filteredCompanies ) > 0 )
+		
+		//Check whether agent has partner that can receive quotation
+		$agentPartners = AgentPartner::where(['status' => '1', 'agent_id' => $clientId])->select('id', 'partner_email')->get();
+		$agentPartnersNo = count( $agentPartners );
+		if( $agentPartnersNo > 0 )
+		{	
+			foreach ($agentPartnersNo as $agentPartner)
+			{
+				$digitalServiceRequest = new AgentPartnerDigitalServiceRequest;
+
+				$digitalServiceRequest->agent_client_id = $clientId;
+				$digitalServiceRequest->invitation_id = $invitationId;
+				$digitalServiceRequest->agent_partner_id = $agentPartner->id;
+
+				$digitalServiceRequest->moving_from_house_type = $cableInternetDetails['cable_internet_house_from_type'];
+				$digitalServiceRequest->moving_from_floor = $cableInternetDetails['cable_internet_house_from_level'];
+				$digitalServiceRequest->moving_from_bedroom_count = $cableInternetDetails['cable_internet_house_from_bedroom_count'];
+				$digitalServiceRequest->moving_from_property_type = $cableInternetDetails['cable_internet_from_property_type'];
+				$digitalServiceRequest->moving_to_house_type = $cableInternetDetails['cable_internet_house_to_type'];
+				$digitalServiceRequest->moving_to_floor = $cableInternetDetails['cable_internet_house_to_level'];
+				$digitalServiceRequest->moving_to_bedroom_count = $cableInternetDetails['cable_internet_house_to_bedroom_count'];
+				$digitalServiceRequest->moving_to_property_type = $cableInternetDetails['cable_internet_house_to_property_type'];
+				$digitalServiceRequest->have_cable_internet_already = $cableInternetDetails['cable_internet_service_before'];
+				$digitalServiceRequest->employment_status = $cableInternetDetails['cable_internet_employment_status'];
+				$digitalServiceRequest->want_to_receive_electronic_bill = $cableInternetDetails['cable_internet_bill_electronically'];
+				$digitalServiceRequest->want_to_contract_plan = $cableInternetDetails['cable_internet_contract_plan'];
+				$digitalServiceRequest->want_to_setup_preauthorise_payment = $cableInternetDetails['cable_internet_preauthorise_payment'];
+				$digitalServiceRequest->callback_option = $cableInternetDetails['cable_internet_callback_option'];
+				$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
+				$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
+				$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
+				$digitalServiceRequest->additional_information = $cableInternetDetails['cable_internet_additional_info'];
+				$digitalServiceRequest->status = '1';
+				$digitalServiceRequest->created_by = $clientId;
+
+				if( $digitalServiceRequest->save() )
+				{
+					// Commit transaction
+	    			DB::commit();
+
+					if( isset( $cableInternetDetails['cable_internet_service_type'] ) && count( $cableInternetDetails['cable_internet_service_type'] ) > 0 )
+					{
+						foreach( $cableInternetDetails['cable_internet_service_type'] as $serviceId )
+						{
+							$digitalServicesApplied[] = array(
+								'digital_service_request_id' => $digitalServiceRequest->id,
+								'digital_service_type_id' => $serviceId,
+								'created_at' => date('Y-m-d H:i:s'),
+								'status' => '1',
+								'created_by' => $clientId
+							);
+						}
+					}
+
+					if( isset( $cableInternetDetails['cable_internet_additional_service'] ) && count( $cableInternetDetails['cable_internet_additional_service'] ) > 0 )
+					{
+						foreach( $cableInternetDetails['cable_internet_additional_service'] as $additionalServiceId )
+						{
+							$additionalDigitalServicesApplied[] = array(
+								'digital_service_request_id' => $digitalServiceRequest->id,
+								'digital_additional_service_type_id' => $additionalServiceId,
+								'created_at' => date('Y-m-d H:i:s'),
+								'status' => '1',
+								'created_by' => $clientId
+							);
+						}
+					}
+
+					$successCount++;
+				}
+
+		    	if( $successCount > 0 )
+				{
+					AgentPartnerDigitalServiceTypeRequest::insert( $digitalServicesApplied );
+
+					AgentPartnerDigitalAdditionalServiceTypeRequest::insert( $additionalDigitalServicesApplied );
+
+					$response['errCode'] 	= 0;
+					$response['errMsg'] 	= 'Request added successfully';
+					
+					Mail::to( $agentPartner->partner_email )->send(new Quotation($agentPartner, $digitalServiceRequest));
+
+				}
+				else
+				{
+					$response['errCode'] 	= 1;
+					$response['errMsg'] 	= 'Error in adding the request to the server';
+				}
+
+			}
+
+		}		
+		elseif( count( $filteredCompanies ) > 0 )
 		{
 			foreach ($filteredCompanies as $filterCompany)
 			{
