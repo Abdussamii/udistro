@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="route" content="{{ url('/') }}">
 
-    <title>@yield('title')</title>
+    <title>Udistro | Email Templates</title>
 
     <!-- Bootstrap Core CSS -->
     <!-- <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -383,7 +383,7 @@
 
 	<style type="text/css">
 	/* To manage the x-editable css confliction issues */
-		/*#wrapper .navbar .nav > li {
+		#wrapper .navbar .nav > li {
 			display: block;
 			float: none;
 		}
@@ -420,7 +420,12 @@
 
 		.modal-header .close {
 			line-height: 31px;
-		}*/
+		}
+		.btn:hover, .btn:focus {
+		    color: #fff;
+		    text-decoration: none;
+		    background-position: 0 0px;
+		}
 	</style>
 </head>
 
