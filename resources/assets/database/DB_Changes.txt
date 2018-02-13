@@ -144,3 +144,87 @@ ALTER TABLE `moving_transportation_type_request` CHANGE `amount` `amount` DECIMA
 ALTER TABLE `tech_concierge_service_requests` CHANGE `created_at` `created_at` DATETIME NOT NULL;
 
 12-02-2018: 
+
+
+
+
+13-02-2018 Update from Abdul
+# DROP TABLE IF EXISTS `agent_partners`;
+CREATE TABLE IF NOT EXISTS `agent_partners` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `agent_id` int(10) UNSIGNED NOT NULL,
+  `fname` varchar(100) NOT NULL,
+  `lname` varchar(50) NOT NULL,
+  `partner_email` varchar(50) NOT NULL,
+  `status` enum('0','1','2') NOT NULL,
+  `business_name` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `agent_id` (`agent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+
+#DROP TABLE IF EXISTS `agent_partner_digital_service_requests`;
+CREATE TABLE IF NOT EXISTS `agent_partner_digital_service_requests` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `agent_client_id` int(10) NOT NULL,
+  `invitation_id` int(10) NOT NULL,
+  `agent_partner_id` int(10) UNSIGNED NOT NULL,
+  `moving_from_house_type` varchar(20) NOT NULL,
+  `moving_from_floor` varchar(20) NOT NULL,
+  `moving_from_bedroom_count` varchar(20) NOT NULL,
+  `moving_from_property_type` varchar(20) NOT NULL,
+  `moving_to_house_type` varchar(20) NOT NULL,
+  `moving_to_floor` varchar(20) NOT NULL,
+  `moving_to_bedroom_count` varchar(20) NOT NULL,
+  `moving_to_property_type` varchar(20) NOT NULL,
+  `have_cable_internet_already` enum('0','1') DEFAULT NULL COMMENT '0: No, 1: Yes',
+  `employment_status` enum('0','1','2') DEFAULT NULL COMMENT '0: Unemployed, 1: Employed, 2: Self Employed',
+  `want_to_receive_electronic_bill` enum('0','1') DEFAULT NULL COMMENT '0: No, 1: Yes',
+  `want_to_contract_plan` enum('0','1') DEFAULT NULL COMMENT '0: No, 1: Yes',
+  `want_to_setup_preauthorise_payment` enum('0','1') DEFAULT NULL COMMENT '0: No, 1: Yes',
+  `callback_option` enum('0','1') DEFAULT NULL COMMENT '0: No, 1: Yes',
+  `callback_time` enum('0','1','2') DEFAULT NULL COMMENT '0: Anytime, 1: Daytime, 2: Evening',
+  `primary_no` varchar(20) DEFAULT NULL,
+  `secondary_no` varchar(20) DEFAULT NULL,
+  `additional_information` text,
+  `status` enum('0','1','2') NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(10) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_by` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+#DROP TABLE IF EXISTS `agent_partner_digital_additional_service_type_requests`;
+CREATE TABLE IF NOT EXISTS `agent_partner_digital_additional_service_type_requests` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `digital_service_request_id` int(10) NOT NULL,
+  `digital_additional_service_type_id` int(10) NOT NULL,
+  `service_hours` tinyint(4) DEFAULT NULL,
+  `amount` tinyint(4) DEFAULT NULL,
+  `status` enum('0','1','2') NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(10) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_by` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+#DROP TABLE IF EXISTS `agent_partner_digital_service_type_requests`;
+CREATE TABLE IF NOT EXISTS `agent_partner_digital_service_type_requests` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `digital_service_request_id` int(10) NOT NULL,
+  `digital_service_type_id` int(10) NOT NULL,
+  `service_hours` tinyint(4) DEFAULT NULL,
+  `amount` tinyint(4) DEFAULT NULL,
+  `status` enum('0','1','2') NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(10) NOT NULL,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_by` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
