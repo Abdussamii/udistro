@@ -1308,6 +1308,10 @@ class AdminController extends Controller
     	$abbreviation    = $request->input('abbreviation');
     	$provinceName    = $request->input('province_name');
     	$provinceStatus  = $request->input('province_status');
+		$pst			 = $request->input('pst');
+		$gst			 = $request->input('gst');
+		$hst			 = $request->input('hst');
+		$serviceCharge	 = $request->input('service_charge');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -1319,17 +1323,29 @@ class AdminController extends Controller
 		    array(
 		        'province_name'		=> $provinceName,
 		        'province_status'	=> $provinceStatus,
-		        'abbreviation'		=> $abbreviation
+		        'abbreviation'		=> $abbreviation,
+				'pst'				=> $pst,
+				'gst'				=> $gst,
+				'hst'				=> $hst,
+				'service_charge'	=> $serviceCharge
 		    ),
 		    array(
 		        'province_name' 	=> array('required'),
 		        'province_status' 	=> array('required'),
-		        'abbreviation' 	    => array('required')
+		        'abbreviation' 	    => array('required'),
+				'pst' 	  			=> array('required','numeric'),
+				'gst' 	  			=> array('required','numeric'),
+				'hst' 	  			=> array('required','numeric'),
+				'service_charge' 	  			=> array('required','numeric'),
 		    ),
 		    array(
 		        'province_name.required'	=> 'Please enter the province name',
 		        'province_status.required' 	=> 'Please select status',
-		        'abbreviation.required' 	=> 'Please enter the abbreviation'
+		        'abbreviation.required' 	=> 'Please enter the abbreviation',
+				'pst.required' 				=> 'Please enter the PST',
+				'gst.required' 				=> 'Please enter the GST',
+				'hst.required' 				=> 'Please enter the HST',
+				'service_charge.required' 	=> 'Please enter the Service Charge',
 		    )
 		);
 
@@ -1386,18 +1402,22 @@ class AdminController extends Controller
 				$response['errCode']    = 2;
 			}
 
-			if($response['errCode'] == 1 || $response['errCode'] == 2)
+			if($response['errCode'] == 1 && $response['errCode'] == 2)
 			{
 				if( $provinceId == '' )	// Check if the province id is available or not, if not add the province
 				{
 					$province = new Province;
 
-					$province->name 		= $provinceName;
-					$province->status 		= $provinceStatus;
-					$province->country_id 	= $countryId;
-					$province->abbreviation = $abbreviation;
-					$province->updated_by 	= $userId;
-					$province->created_by 	= $userId;
+					$province->name 			= $provinceName;
+					$province->status 			= $provinceStatus;
+					$province->country_id 		= $countryId;
+					$province->abbreviation 	= $abbreviation;
+					$province->pst				= $pst;
+					$province->gst				= $gst;
+					$province->hst				= $hst;
+					$province->service_charge	= $serviceCharge;
+					$province->updated_by 		= $userId;
+					$province->created_by 		= $userId;
 					if($response['errCode'] == 1)
 					{
 						$province->image 	= $fileNewName;
@@ -1418,11 +1438,15 @@ class AdminController extends Controller
 				{
 					$province = Province::find($provinceId);
 
-					$province->name 		= $provinceName;
-					$province->status 		= $provinceStatus;
-					$province->country_id 	= $countryId;
-					$province->abbreviation = $abbreviation;
-					$province->created_by 	= $userId;
+					$province->name 			= $provinceName;
+					$province->status 			= $provinceStatus;
+					$province->country_id 		= $countryId;
+					$province->abbreviation 	= $abbreviation;
+					$province->pst				= $pst;
+					$province->gst				= $gst;
+					$province->hst				= $hst;
+					$province->service_charge	= $serviceCharge;
+					$province->created_by 		= $userId;
 					if($response['errCode'] == 1)
 					{
 						$province->image 	= $fileNewName;
@@ -2261,7 +2285,11 @@ class AdminController extends Controller
         $arr = array(
             0 => 'id',
             1 => 'name',
-            2 => 'status',
+			2 => 'pst',
+			3 => 'gst',
+			4 => 'hst',
+			5 => 'service_charge',
+            6 => 'status'
         );
 
         // Map the sorting column index to the column name
@@ -2272,7 +2300,7 @@ class AdminController extends Controller
                     ->orderBy($sortBy, $sortType)
                     ->limit($length)
                     ->offset($start)
-                    ->select('id', 'name', 'status')
+                    ->select('id', 'name', 'pst', 'gst', 'hst', 'service_charge', 'status')
                     ->get();
 
         $iTotal = Province::where('name','like', '%'.$sSearch.'%')->count();
@@ -2292,8 +2320,12 @@ class AdminController extends Controller
             	$response['aaData'][$k] = array(
                     0 => $province->id,
                     1 => ucfirst( strtolower( $province->name ) ),
-                    2 => Helper::getStatusText($province->status),
-                    3 => '<a href="javascript:void(0);" id="'. $province->id .'" class="edit_province"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+					2 => $province->pst,
+					3 => $province->gst,
+					4 => $province->hst,
+					5 => $province->service_charge,
+                    6 => Helper::getStatusText($province->status),
+                    7 => '<a href="javascript:void(0);" id="'. $province->id .'" class="edit_province"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2678,9 +2710,12 @@ class AdminController extends Controller
     		$response['image']  = URL::to('/').'/images/province/'.$province->image;
     		$response['country_id']  = $province->country_id;
     		$response['abbreviation'] = $province->abbreviation;
+			$response['pst'] = $province->pst;
+			$response['gst'] = $province->gst;
+			$response['hst'] = $province->hst;
+			$response['service_charge'] = $province->service_charge;
 
     	}
-
     	return response()->json($response);
     }
 
