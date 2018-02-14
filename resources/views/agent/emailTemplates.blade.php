@@ -325,7 +325,7 @@
 	    	    success: function(response){
 	    	        if( response.errCode == 0 )
 	    	        {
-      		    		var placeHolder = $(document.createElement('div')).css({
+      		    		var placeHolder = $(document.createElement('span')).css({
       						//border: '1px dashed',
       						position: 'relative',
       						// left: elementPos,
