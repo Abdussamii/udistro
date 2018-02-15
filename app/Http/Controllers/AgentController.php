@@ -18,6 +18,7 @@ use App\Permission;
 use App\Province;
 use App\UtilityServiceCategory;
 use App\Country;
+use App\AgentPartner;
 use App\State;
 use App\UtilityServiceType;
 use App\UtilityServiceProvider;
@@ -2121,6 +2122,218 @@ class AgentController extends Controller
 		        $response['errCode']    = 4;
 		        $response['errMsg']     = 'Invalid file';
 		    }
+    	}
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to save the partner details
+     * @param void
+     * @return Array
+     */
+    public function savePartnerDetails(Request $request)
+    {
+		$partner_id    		= $request->input('partner_id');
+    	$f_name    			= $request->input('f_name');
+		$l_name    			= $request->input('l_name');
+		$partner_email    	= $request->input('partner_email');
+    	$partner_status  	= $request->input('partner_status');
+		$business_name  	= $request->input('business_name');
+		
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Server side validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+				'business_name'		=> $business_name,
+		        'partner_email'		=> $partner_email,
+				'partner_status'	=> $partner_status
+				
+		    ),
+		    array(
+				'business_name' 	=> array('required'),
+		        'partner_email' 	=> array('required', 'email'),
+				'partner_status' 	=> array('required')
+				
+		    ),
+		    array(
+		        'business_name'				=> 'Please enter the business name',
+				'partner_email.required' 	=> 'Please enter the partner email',
+				'partner_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			if($partner_id == '') 
+			{
+				$agentPartner 							= new AgentPartner;
+				$agentPartner->agent_id 				= $userId;
+				$agentPartner->business_name			= $business_name;
+				$agentPartner->fname					= $f_name;
+				$agentPartner->lname					= $l_name;
+				$agentPartner->partner_email			= $partner_email;
+				$agentPartner->status					= $partner_status;
+				
+				if( $agentPartner->save() )
+				{
+					$response['errCode']    = 0;
+					$response['errMsg']     = 'Partner has been successfully added';
+								
+				}
+				else
+				{
+					$response['errCode']    = 2;
+					$response['errMsg']     = 'Some error in adding partner';
+				}			
+			}
+			else 
+			{
+				$agentPartner 							= AgentPartner::find($partner_id);
+				$agentPartner->agent_id 				= $userId;
+				$agentPartner->business_name			= $business_name;
+				$agentPartner->fname					= $f_name;
+				$agentPartner->lname					= $l_name;
+				$agentPartner->partner_email			= $partner_email;
+				$agentPartner->status					= $partner_status;
+				
+				if( $agentPartner->save() )
+				{
+					$response['errCode']    = 0;
+					$response['errMsg']     = 'Partner Detail updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 2;
+					$response['errMsg']     = 'Some error in updating the partner details';
+				}
+			}
+		}
+		return response()->json($response);
+		
+	}
+	
+	 /**
+     * Function to show the pertner list in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchPartners()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id',
+			1 => 'business_name',
+            2 => 'fname',
+			3 => 'lname',
+			4 => 'partner_email',
+			5 => 'status'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $agentPartners = DB::table('agent_partners')
+						->where('agent_partners.fname','like', '%'.$sSearch.'%')
+						->orWhere('agent_partners.business_name', 'like', '%'.$sSearch.'%')
+						->orWhere('agent_partners.partner_email', 'like', '%'.$sSearch.'%')
+						->orWhere('agent_partners.lname', 'like', '%'.$sSearch.'%')
+						->orderBy($sortBy, $sortType)
+						->limit($length)
+						->offset($start)
+						->select('agent_partners.id', 'agent_partners.business_name', 'agent_partners.fname', 'agent_partners.lname', 'agent_partners.partner_email',  'agent_partners.status')
+						->get();
+
+        $iTotal = DB::table('agent_partners')
+						->where('agent_partners.fname','like', '%'.$sSearch.'%')
+						->orWhere('agent_partners.business_name', 'like', '%'.$sSearch.'%')
+						->orWhere('agent_partners.partner_email', 'like', '%'.$sSearch.'%')
+						->orWhere('agent_partners.lname', 'like', '%'.$sSearch.'%')
+						->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $agentPartners ) > 0 )
+        {
+            foreach ($agentPartners as $agentPartner)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $agentPartner->id,
+					1 => ucfirst( strtolower( $agentPartner->business_name ) ),
+                    2 => ucfirst( strtolower( $agentPartner->fname ) ),
+					3 => ucfirst( strtolower( $agentPartner->lname ) ),
+					4 => $agentPartner->partner_email,
+					5 => Helper::getStatusText($agentPartner->status),
+                    6 => '<a href="javascript:void(0);" id="'. $agentPartner->id .'" class="edit_partner"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+	
+	/**
+     * Function to return the partners page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function partners()
+    {
+        return view('agent/partners');
+    }
+	
+	
+	/**
+     * Function to get the details for the selected partner
+     * @param void
+     * @return array
+     */
+    public function getPartnerDetails()
+    {
+    	$partnerId = Input::get('partnerId');
+
+    	$response = array();
+    	if( $partnerId != '' )
+    	{
+			
+			$agentPartner = AgentPartner::find($partnerId);
+			if( count( $agentPartner ) > 0 )
+    		{
+				$response['business_name'] 	= $agentPartner->business_name;
+				$response['f_name'] 		= $agentPartner->fname;
+				$response['l_name'] 		= $agentPartner->lname;
+				$response['partner_email'] 	= $agentPartner->partner_email;
+				$response['partner_status'] = $agentPartner->status;
+				
+    		}
     	}
 
     	return response()->json($response);

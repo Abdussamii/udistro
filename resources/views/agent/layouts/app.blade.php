@@ -335,6 +335,9 @@
                         <li>
                             <a href="{{ url('agent/invites') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Invites</a>
                         </li>
+						<li>
+                            <a href="{{ url('agent/partners') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Partners</a>
+                        </li>
                         <li>
                             <a href="{{ url('agent/emailtemplates') }}"><i class="fa fa-envelope" aria-hidden="true"></i>  Email Templates</a>
                         </li>

@@ -12,7 +12,7 @@ class AgentPartner extends Model
      * @var array
      */
     protected $fillable = [
-        'agent_id', 'fname', 'lname', 'partner_email', 'status'
+        'agent_id', 'business_name', 'fname', 'lname', 'partner_email', 'status'
     ];
 
     public $timestamps = true;

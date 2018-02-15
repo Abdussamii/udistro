@@ -350,6 +350,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To show the permission list in datatable
 	Route::get('/fetchpermissions', 'AdminController@fetchPermissions');
 
+	// To get the details of selected permission
+	Route::get('/getselectedpermission', 'AdminController@getSelectedPermission');
+	
 	// To detach permission from role
 	Route::get('/detachrolepermission', 'AdminController@detachRolePermission');
 
