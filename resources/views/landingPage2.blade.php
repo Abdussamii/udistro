@@ -15,7 +15,7 @@
 	    </li>
 	   <li>
 	   		<a href="{{ url('/company/home') }}">
-	    		<button type="button" class="btn top-btn1">I'm a Business</button>
+	    		<button type="button" class="btn top-btn1">I'm a Local Business</button>
 	    	</a>
 	    </li>
 	  </ul>

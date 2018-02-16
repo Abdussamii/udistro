@@ -10,12 +10,12 @@
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
 	   	<li>
 		   	<a href="{{ url('/agent/home') }}">
-		    	<button type="button" class="btn top-btn1">I’m a Real-Estate Agent</button>
+		    	<button type="button" class="btn top-btn1"> I’m a Real-Estate Agent</button>
 		    </a>
 		</li>
 	   <li>
 	   		<a href="{{ url('/company/home') }}">
-	    		<button type="button" class="btn top-btn1">I'm a Business</button>
+	    		<button type="button" class="btn top-btn1"> I'm a Local Business</button>
 	    	</a>
 		</li>
 	  </ul>

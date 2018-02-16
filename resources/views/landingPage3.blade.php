@@ -42,7 +42,7 @@
 	     <h1 class="title_banner">Receive project requests for few cents a day from people who are actively seeking to use your service. </h1>
 	     <div class="banner_btn-group center-block">
 	      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am a business</button> -->
-	      <a class="btn banner_btn btn-lg skyBlue_btn" href="{{ url('/company') }}">I'm a Business</a>
+	      <a class="btn banner_btn btn-lg skyBlue_btn" href="{{ url('/company') }}">I'm a Local Business</a>
 	      <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
 	     </div>
 	    </div>
