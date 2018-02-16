@@ -329,6 +329,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	
 	/* Newly added route start here */
 	
+	// To return role listing view
+	Route::get('/roles', 'AdminController@roles');
+	
 	// To save new role
 	Route::post('/saverole', 'AdminController@saveRole');
 
@@ -347,6 +350,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To show the permission list in datatable
 	Route::get('/fetchpermissions', 'AdminController@fetchPermissions');
 
+	// To get the details of selected permission
+	Route::get('/getselectedpermission', 'AdminController@getSelectedPermission');
+	
 	// To detach permission from role
 	Route::get('/detachrolepermission', 'AdminController@detachRolePermission');
 
@@ -812,4 +818,3 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
 
 // To fetch quotation for agent Partner
 Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
-// fetchQuotationRequest

@@ -31,10 +31,5 @@ $(document).ready(function(){
 
 	// Requested Addotional services
 	$('#user_requested_cable_internet_additional_services').html(response.request_additional_services_details);
-
-	$('#pst_percenateg').text(response.pst);
-    $('#gst_percentage').text(response.gst);
-    $('#hst_percentage').text(response.hst);
-    $('#service_charge_percetage').text(response.service_charge);
      
  });
