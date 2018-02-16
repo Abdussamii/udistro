@@ -114,16 +114,333 @@
 	<script type="text/javascript">
 	var elementPos = 20;
     $(document).ready(function(){
-    	$.fn.editable.defaults.mode = 'popup';
-    	$('.editable').editable({
+    	// $.fn.editable.defaults.mode = 'popup';
+    	
+    	$('#add_text_field').click(function()
+    	{
+    		var placeHolder = $(document.createElement('div')).css({
+				border: '1px dashed',
+				position: 'relative',
+				// left: elementPos,
+				width: '400', 
+				height: '100', 
+				padding: '3', 
+				margin: '0'
+			});
+
+    		// Add the class to manage the css while sending the email
+			$(placeHolder).addClass('email_component');
+
+    		elementPos = elementPos + 25;
+
+    		// Initialize the draggable and resizable on newly created placeholder
+    		$(placeHolder).resizable().draggable({
+		        // Restrict the dragging to parent div only
+		        // containment: "parent"
+    		}).append('Click here to enter text').appendTo("#email_template_content");
+
+    		// Initialize the x-editable on newly created placeholder
+    		$(placeHolder).editable({
+    			type: 'wysihtml5',
+				pk: 1,
+				row: 3,
+				placement: 'bottom'
+    		});
+    	});
+
+    	// To render the image preview
+		$("#file-input").change(function() {
+          	readURL(this);
+        });
+
+        // To make social icon editable
+        $('.x_editable').editable({
 			type: 'wysihtml5',
 			pk: 1,
 			row: 3,
 			placement: 'bottom'
 		});
 
-		// To make the table column resizable
-		$("table tr th, table tr td").resizable({handles: 'e'});
+		// To hide the image upload button from x-editable popup when it is shown
+		$('.x_editable').on('shown', function(e, editable) {
+		    $('.btn').each(function(){
+		    	if( $(this).attr('data-wysihtml5-command') == 'insertImage' )
+		    	{
+		    		$(this).hide();
+		    	}
+		    });
+		});
+
+		// To make already existing placeholder draggable and resizable
+		$('.x_editable, .drag_resize').resizable().draggable({
+	        // Restrict the dragging to parent div only
+	        // containment: "parent"
+		});
+
+		// Get the html
+		$('#btn_preview').click(function() {
+
+			let logo = $('#company_logo');
+			var position = logo.position();
+
+			console.log( position.left + ' : ' + position.top  );
+
+			$('#preview_dialog').html( $('#email_template_container').html() );
+			
+			$('#preview_dialog').dialog({
+				width: 800,
+                height: 'auto'
+			});
+
+		});
+
+		// To remove the div
+    	$('#trash').droppable({
+	        drop: function(event, ui) {
+                $(ui.draggable).remove();
+            }
+	    });
+
+
+	    // To send the testing email
+	    $('#btn_agent_send_email').click(function(){
+
+	    	let recipientEmail = $('#recipient_email').val();
+
+	    	if( recipientEmail == '' )
+	    	{
+	    		alertify.error('Please enter email id');
+	    		$('#recipient_email').focus();
+
+	    		return false;
+	    	}
+
+	    	let htmlContent = $('#table_email_container').wrap('<div/>').parent().clone();
+
+	    	$(htmlContent).find('.email_component').each(function(){
+
+	    		// Get the top and left css property values
+	    		var top 	= $(this).css('top');
+	    		var left 	= $(this).css('left');
+
+	    		// Remove the dashed border from all elements
+	    		$(this).css('border', 'none');
+
+	    		// Add the css
+	    		$(this).css({
+	    			'margin-top' : top,
+	    			'margin-left' : left
+	    		});
+
+	    		// Remove the dashed border
+
+	    		$(this).wrap( '<div class="wrapper"></div>' );
+	    	});
+
+	    	let content = $(htmlContent).html();
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/email',
+    			method: 'post',
+    			data: {
+    				recipientEmail: recipientEmail,
+    				content: content
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );	
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+
+	    });
+
+	    // To uplaod the email template image
+	    $('#file_banner_image ,#file_logo_image').change(function(){
+
+	    	var formData = new FormData();
+	    	
+	    	let image 	= $(this).prop('files')[0];
+	    	let source 	= $(this).attr('data-source');
+
+	    	formData.append('image', image);
+
+	    	$.ajax({
+	    	    url: $('meta[name="route"]').attr('content') + '/agent/uploademailimage',
+	    	    method: 'post',
+	    	    data: formData,
+	    	    contentType : false,
+	    	    processData : false,
+	    	    headers: {
+	    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    	    },
+	    	    success: function(response){
+	    	        if( response.errCode == 0 )
+	    	        {
+	    	            if( source == 'banner' )
+	    	            {
+	    	            	$('#banner_image').attr('src', response.fileName);
+	    	            }
+	    	            else
+	    	            {
+	    	            	$('#logo_image').attr('src', response.fileName);
+	    	            }             
+	    	        }
+	    	        else
+	    	        {
+	    	            alertify.error( response.errMsg );
+	    	        }
+	    	    }
+	    	});
+
+	    });
+
+	    // To add new images
+	    $('#file_image').change(function(){
+
+	    	var formData = new FormData();
+	    	
+	    	let image 	= $(this).prop('files')[0];
+	    	let source 	= $(this).attr('data-source');
+
+	    	formData.append('image', image);
+
+	    	$.ajax({
+	    	    url: $('meta[name="route"]').attr('content') + '/agent/uploademailimage',
+	    	    method: 'post',
+	    	    data: formData,
+	    	    contentType : false,
+	    	    processData : false,
+	    	    headers: {
+	    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    	    },
+	    	    success: function(response){
+	    	        if( response.errCode == 0 )
+	    	        {
+      		    		var placeHolder = $(document.createElement('span')).css({
+      						//border: '1px dashed',
+      						position: 'relative',
+      						display: 'block',
+      						// left: elementPos,
+      						// width: '400', 
+      						// height: '100', 
+      						// padding: '3', 
+      						margin: '0'
+      					});
+
+      					// Add the image
+      					$(placeHolder).html('<img src="'+ response.fileName +'">');
+
+      		    		// Add the class to manage the css while sending the email
+      					$(placeHolder).addClass('email_component');
+
+      		    		elementPos = elementPos + 25;
+
+      		    		// Initialize the draggable and resizable on newly created placeholder
+      		    		$(placeHolder).resizable().draggable().appendTo("#email_template_content");
+
+    		    		// Initialize the x-editable on newly created placeholder
+    		    		$(placeHolder).editable({
+    		    			type: 'wysihtml5',
+    						pk: 1,
+    						row: 3,
+    						placement: 'bottom'
+    		    		});
+
+    		    		// To make the place holder display inline block
+    		    		$(placeHolder).css('display', 'inline-block');
+	    	        }
+	    	        else
+	    	        {
+	    	            alertify.error( response.errMsg );
+	    	        }
+	    	    }
+	    	});
+
+	    });
+
+	    // To save the email template in case of Invitation
+	    $('#btn_agent_save_email_template').click(function(){
+
+	    	let emailCategoryId = $('#email_category_id').val();
+	    	let templateName 	= $('#email_template_name').val();
+
+	    	// Check if email template name is available or not
+	    	if( templateName != '' )
+	    	{
+	    		// Html content to show the email template
+		    	let htmlContentToView = $('#table_email_container').wrap('<div/>').parent().html();
+
+		    	// Html content to send over the email
+		    	let htmlContent = $('#table_email_container').wrap('<div/>').parent().clone();
+
+		    	$(htmlContent).find('.email_component').each(function(){
+
+		    		// Get the top and left css property values
+		    		var top 	= $(this).css('top');
+		    		var left 	= $(this).css('left');
+
+		    		// Remove the dashed border from all elements
+		    		$(this).css('border', 'none');
+
+		    		// Add the css
+		    		$(this).css({
+		    			'margin-top' : top,
+		    			'margin-left' : left
+		    		});
+
+		    		// Remove the dashed border
+
+		    		$(this).wrap( '<div class="wrapper"></div>' );
+		    	});
+
+		    	let htmlContentToSend = $(htmlContent).html();
+
+	    		$.ajax({
+	    			url: $('meta[name="route"]').attr('content') + '/agent/saveemailtemplate',
+	    			method: 'post',
+	    			data: {
+	    				emailCategoryId: emailCategoryId,
+	    				templateName: templateName,
+	    				htmlContentToView: htmlContentToView,
+	    				htmlContentToSend: htmlContentToSend
+	    			},
+	    			headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    success: function(response){
+				    	if( response.errCode == 0 )
+				    	{
+				    		alertify.success( response.errMsg );
+
+				    		$('#email_template_name').val('');
+				    	}
+				    	else
+				    	{
+				    		alertify.error( response.errMsg );
+				    	}
+				    }
+	    		});
+	    	}
+	    	else
+	    	{
+	    		alertify.error('Please provide email template name');
+
+	    		$('#email_template_name').focus();
+
+	    		return false;
+	    	}
+
+	    });
+
     });
     </script>
 
@@ -466,13 +783,27 @@
     								<div>
 	    								<h2>Control Panel</h2>
 	    								<div>
-	    									<a href="javascript:void(0);" style="width: 180px;" class="btn btn-primary add_more_row">Add More Row</a>
+	    									<a href="javascript:void(0);" id="add_text_field" class="btn btn-primary">Add New Text Field</a>
+	    								</div>
+	    								<!-- <br>
+	    								<div>
+	    									<a href="javascript:void(0);" id="add_banner_image" class="btn btn-primary" onclick="document.getElementById('file_banner_image').click();">Add Banner Image</a>
+	    									<input id="file_banner_image" name="file_banner_image" type="file" data-source="banner" style="display:none;">
 	    								</div>
 	    								<br>
 	    								<div>
-	    									<a href="javascript:void(0);" style="width: 180px;" class="btn btn-primary add_image">Add Image</a>
+	    									<a href="javascript:void(0);" id="add_logo_image" class="btn btn-primary" onclick="document.getElementById('file_logo_image').click();">Add Logo Image</a>
+	    									<input id="file_logo_image" name="file_logo_image" type="file" data-source="logo" style="display:none;">
+	    								</div> -->
+	    								<br>
+	    								<div>
+	    									<a href="javascript:void(0);" id="add_image" class="btn btn-primary" onclick="document.getElementById('file_image').click();">Add Image</a>
+	    									<input id="file_image" name="file_image" type="file" data-source="logo" style="display:none;">
 	    								</div>
 	    							</div>
+
+    								<div id="trash" style="height: 200px; width: 200px; background: url('https://thumb1.shutterstock.com/display_pic_with_logo/1176923/583110190/stock-vector-cartoon-crumpled-paper-and-trash-can-vector-illustration-583110190.jpg') no-repeat; background-size: cover;">
+    								</div>
 
     								<?php
     								// For invitation tab, provide the save email template functionality
@@ -492,7 +823,6 @@
     								else
     								{
     								?>
-    									<br>
     									<div>
     										<input type="email" name="recipient_email" id="recipient_email" placeholder="Email Id" value="">
     									</div>
@@ -513,159 +843,65 @@
     			?>
 
     			<!-- Email template creation panel -->
-			    <div class="col-sm-9 col-md-9 col-lg-9" style="margin-bottom: 50px;">
+			    <div class="col-sm-9 col-md-9 col-lg-9" style="margin-bottom: 50px;" id="email_container">
 
-			        <!-- Email template creation panel -->
-					<div class="element_container" id="email_container">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 320px;">
-							<tr>
-								<td align="center" bgcolor="#eff3f8" style="padding-bottom: 40px;">
+			        <div class="col-sm-12 col-md-12 col-lg-12" style="width: 100%;">
+                		<div class="text-center"><h3>Email Template</h3></div>
+                		<table style="width: 800px;" id="table_email_container">
+                			<tr>
+                				<td style="border: 1px dashed #cccccc;" id="email_template_container">
 
-								<!--[if gte mso 10]>
-								<table width="680" border="0" cellspacing="0" cellpadding="0">
-								<tr><td>
-								<![endif]-->
+                					<div id="email_template_content">
 
-								<table border="0" cellspacing="0" cellpadding="0" class="table_width_100" width="100%" style="max-width: 680px; min-width: 300px;">
-									<tr>
-										<td>
-											<div style="height: 80px; line-height: 80px; font-size: 20px; text-align: center;" id="table_header">Create Email Template</div>
-										</td>
-									</tr>
-									<tr>
-										<td bgcolor="#fbfcfd">
-											<table border="0" cellspacing="0" cellpadding="0" width="100%" style="margin-top:20px;">
-												<tr>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image1" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image2" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image3" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-												</tr>
-											</table>
-											<table border="0" cellspacing="0" cellpadding="0" id="table_editable">
-												<tr>
-													<td>
-														<table>
-															<tr>
-																<td style="padding:15px; width: 50%;">
-																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
-																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-																		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-																		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-																	</div>
-																</td>
-																<td style="padding:15px; width: 50%;">
-																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
-																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-																		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-																		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-																	</div>
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
+                						<!-- Email template banner -->
+                						<div class="drag_resize email_component" style="text-align: center;">
+                							<img id="banner_image" src="{{ url('images/email-template-banner.jpg') }}" style="max-width: 780px;" class="image_editable">
+                						</div>
 
-												<tr>
-													<td>
-														<table>
-															<tr>
-																<td style="padding:15px; width: 50%;">
-																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
-																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-																		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-																		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-																	</div>
-																</td>
-																<td style="padding:15px; width: 50%;">
-																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
-																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-																		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-																		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-																	</div>
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>  					
-											</table>
-											<table border="0" cellspacing="0" cellpadding="0" width="100%" style="margin:20px 0;">
-												<tr>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image4" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image5" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image6" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-												</tr>
-											</table>		
-										</td>
-									</tr>
-								</table>
-								<!--[if gte mso 10]>
-								</td></tr>
-								</table>
-								<![endif]-->
+                						<!-- Email template logo -->
+                						<div class="drag_resize email_component" style="text-align: center;">
+                							<img id="logo_image" src="{{ url('images/email-template-logo.jpg') }}" style="max-width: 780px;" class="image_editable">
+                						</div>
 
-								</td>
-							</tr>
-							<table width="80%" align="center" cellpadding="0" cellspacing="0">
-								<tr>
-									<td align="center" style="padding:20px 0;">
-										<div class="editable">
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
-										</div>
-									</td>
-									<td align="center" style="padding:20px 0;">
-										<div class="editable">
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
-										</div>
-									</td>
-									<td align="center" style="padding:20px 0;">
-										<div class="editable">
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
-										</div>
-									</td>
-								</tr>
-							</table>
+                						<!-- Email template text header -->
+                						<div id="email_heading" class="x_editable email_component" style="height: 100px; border: 1px dashed;">
+                							Header
+                						</div>
 
-							<table width="80%" align="center" cellpadding="0" cellspacing="0">
-								<tr>
-									<td align="center" valign="middle" style="font-size: 12px; line-height: 22px; padding:20px 0;">
-										<div>
-											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-facebook.png') }}" alt="|" />
-											</a>
-											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-twitter.png') }}" alt="|" />
-											</a>
-											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-linkedin.png') }}" alt="|" />
-											</a>
-											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-instagram.png') }}" alt="|" />
-											</a>
-										</div>
-									</td>
-								</tr>                                        
-							</table>
-						</table>
-					</div>
+                						<!-- Email template text content -->
+                						<div id="email_content" class="x_editable email_component" style="height: 200px; border: 1px dashed;">
+                							Content
+                						</div>
+
+                					</div>
+
+                					<div style="padding-top: 50px; text-align: center;" id="social_links">
+            							<div style="display: inline-block;">
+            								<a href="javascript:void(0);" style="text-decoration: none; display: inline-block;" class="x_editable email_component">
+            									<img src="https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-facebook.png" alt="|" />
+            								</a>
+            							</div>
+            							<div style="display: inline-block;">
+            								<a href="javascript:void(0);" style="text-decoration: none; display: inline-block;" class="x_editable email_component">
+            									<img src="https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-twitter.png" alt="|" />
+            								</a>
+            							</div>
+            							<div style="display: inline-block;">
+	            							<a href="javascript:void(0);" style="text-decoration: none; display: inline-block;" class="x_editable email_component">
+	            								<img src="https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-linkedin.png" alt="|" />
+	            							</a>
+            							</div>
+            							<div style="display: inline-block;">
+	            							<a href="javascript:void(0);" style="text-decoration: none; display: inline-block;" class="x_editable email_component">
+	            								<img src="https://cdnjs.cloudflare.com/ajax/libs/webicons/2.0.0/webicons/webicon-instagram.png" alt="|" />
+	            							</a>
+            							</div>
+            						</div>
+
+                				</td>
+                			</tr>
+                		</table>
+                	</div>
 
 			    </div>
 
@@ -680,274 +916,6 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- Add Image Modal -->
-    <div id="modal_add_image" class="modal fade" role="dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Uplaod Image</h4>
-			</div>
-			<div class="modal-body">
-				<form id="frm_upload_email_template_image" name="frm_upload_email_template_image">
-					<div class="form-group">
-						<label for="upload_image">Select Image:</label>
-						<input type="file" name="upload_image" id="upload_image">
-					</div>
-					<div id="container_email_template_image" style="display: none;">
-						<div class="form-group">
-							<label>Preview:</label>
-							<div>
-								<img src="" alt="Udistro" id="uploaded_image_preview">
-							</div>
-							<label>Image Path:</label>
-							<div>
-								<input type="text" name="uploaded_image_path" id="uploaded_image_path" class="form-control">
-							</div>
-						</div>
-						<div class="form-group">
-							<label>Placement:</label>
-							<label><input type="radio" name="image_placement" value="1">Top - Left</label>
-							<label><input type="radio" name="image_placement" value="2">Top - Middle</label>
-							<label><input type="radio" name="image_placement" value="3">Top - Right</label>
-							<label><input type="radio" name="image_placement" value="4">Bottom - Left</label>
-							<label><input type="radio" name="image_placement" value="5">Bottom - Middle</label>
-							<label><input type="radio" name="image_placement" value="6">Bottom - Right</label>
-						</div>
-						<div>
-							<label id="image_placement-error" class="error" for="image_placement"></label>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" id="add_image_to_placeholder">Add Image</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-        </div>
-    </div>
-
 </body>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	// To remove the table td
-	$(document).on('click', '.remove_editable', function(){
-		
-		// Check if it is the last td of the tr, then you cannot delete it
-		let tdCount = $(this).closest('tr').find('td').length;
-
-		if( tdCount > 1 )
-		{
-			$(this).closest('td').remove();
-		}
-		else
-		{
-			alertify.error('You cannot remove last editor in a row');
-		}
-
-	});
-
-	// Get the html of last row, and append it when required
-	var newRow = $('#table_editable tr:last').wrap('</tr>').parent().html();
-	// Add more row
-	$('.add_more_row').click(function(){
-		$('#table_editable tr:last').after(newRow);
-	});
-
-	// Add Image Modal
-	$('.add_image').click(function(){
-		$('#modal_add_image').modal();
-	});
-
-	$('#upload_image').change(function(){
-    	var formData = new FormData();
-    	let image 	= $(this).prop('files')[0];
-
-    	formData.append('image', image);
-
-    	$.ajax({
-    	    url: $('meta[name="route"]').attr('content') + '/agent/uploademailimage',
-    	    method: 'post',
-    	    data: formData,
-    	    contentType : false,
-    	    processData : false,
-    	    headers: {
-    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    	    },
-    	    success: function(response){
-    	        if( response.errCode == 0 )
-    	        {
-    	            // Show the image with the associated controls
-    	            $('#uploaded_image_preview').attr('src', response.filePath );
-    	            $('#uploaded_image_path').val( response.filePath );
-
-    	            $('#container_email_template_image').show();
-    	        }
-    	        else
-    	        {
-    	            alertify.error( response.errMsg );
-    	        }
-    	    }
-    	});
-    });
-
-	// Form validation
-	$('#frm_upload_email_template_image').validate({
-		rules: {
-			image_placement: {
-				required: true
-			}
-		},
-		messages: {
-			image_placement: {
-				required: 'Please select the placement'
-			}	
-		}
-	});
-
-    $('#add_image_to_placeholder').click(function(){
-    	if( $('#frm_upload_email_template_image').valid() )
-    	{
-    		// Get the selection value
-    		let placementId = $('input[name="image_placement"]:checked').val();
-
-    		// Assign it to respective image
-    		$('#logo_image' + placementId).attr('src', $('#uploaded_image_preview').attr('src'));
-
-    		// Change its custom attribute
-    		$('#logo_image' + placementId).attr('image-type', 'uploaded');
-
-    		// Hide the modal
-    		$('#modal_add_image').modal('hide');
-    	}
-    });
-
-    // To send the email
-    $('#btn_agent_send_email').click(function(){
-
-    	let recipientEmail = $('#recipient_email').val();
-
-    	if( recipientEmail == '' )
-    	{
-    		alertify.error('Please enter email id');
-    		$('#recipient_email').focus();
-
-    		return false;
-    	}
-
-    	// Clone the container
-    	let emailContent = $('#email_container').clone();
-
-    	// Remove the "Create Email Template" header
-    	$(emailContent).find('#table_header').text('');
-
-    	// Remove the "X" place holder from html
-    	$(emailContent).find('.remove_editable').remove();
-
-    	// Remove all dummy logo images
-    	$(emailContent).find('.logo_images').each(function(){
-    		if( $(this).attr('image-type') == 'dummy' )
-    		{
-    			$(this).remove();
-    		}
-    	});
-
-    	// Get the updated html
-    	let content = $(emailContent).html();
-
-		$.ajax({
-			url: $('meta[name="route"]').attr('content') + '/email',
-			method: 'post',
-			data: {
-				recipientEmail: recipientEmail,
-				content: content
-			},
-			headers: {
-		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    },
-		    success: function(response){
-		    	if( response.errCode == 0 )
-		    	{
-		    		alertify.success( response.errMsg );	
-		    	}
-		    	else
-		    	{
-		    		alertify.error( response.errMsg );
-		    	}
-		    }
-		});
-
-    });
-
-    // To save the email template in case of Invitation
-    $('#btn_agent_save_email_template').click(function(){
-
-    	let emailCategoryId = $('#email_category_id').val();
-    	let templateName 	= $('#email_template_name').val();
-
-    	// Check if email template name is available or not
-    	if( templateName != '' )
-    	{
-    		// Clone the container
-	    	let emailContent = $('#email_container').clone();
-
-	    	// Remove the "Create Email Template" header
-	    	$(emailContent).find('#table_header').text('');
-
-	    	// Remove the "X" place holder from html
-	    	$(emailContent).find('.remove_editable').remove();
-
-	    	// Remove all dummy logo images
-	    	$(emailContent).find('.logo_images').each(function(){
-	    		if( $(this).attr('image-type') == 'dummy' )
-	    		{
-	    			$(this).remove();
-	    		}
-	    	});
-
-	    	// Get the updated html
-	    	let htmlContentToSend = $(emailContent).html();
-
-    		$.ajax({
-    			url: $('meta[name="route"]').attr('content') + '/agent/saveemailtemplate',
-    			method: 'post',
-    			data: {
-    				emailCategoryId: emailCategoryId,
-    				templateName: templateName,
-    				htmlContentToView: htmlContentToSend,
-    				htmlContentToSend: htmlContentToSend
-    			},
-    			headers: {
-			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-			    success: function(response){
-			    	if( response.errCode == 0 )
-			    	{
-			    		alertify.success( response.errMsg );
-
-			    		$('#email_template_name').val('');
-			    	}
-			    	else
-			    	{
-			    		alertify.error( response.errMsg );
-			    	}
-			    }
-    		});
-    	}
-    	else
-    	{
-    		alertify.error('Please provide email template name');
-
-    		$('#email_template_name').focus();
-
-    		return false;
-    	}
-
-    });
-
-});
-</script>
 
 </html>

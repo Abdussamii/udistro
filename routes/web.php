@@ -783,6 +783,13 @@ Route::group(['prefix' => 'paypal'], function() {
 
 });
 
+// CRON URL's
+Route::group(['prefix' => 'scheduler'], function() {
+
+	// To send invitation email
+	Route::get('/sendinvitationemail', 'SchedulerController@sendInvitationEmail');
+
+});
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
@@ -804,5 +811,5 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
 
 
 // To fetch quotation for agent Partner
-	Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
-	fetchQuotationRequest
+Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
+// fetchQuotationRequest
