@@ -2103,7 +2103,7 @@ class AgentController extends Controller
 		            {
 		                $response['errCode']    = 0;
 						$response['errMsg']     = 'File uploaded successfully';
-						$response['fileName'] 	= url('/images/email_template/' . $fileNewName);
+						$response['filePath'] 	= url('/images/email_template/' . $fileNewName);
 		            }
 		            else
 		            {
