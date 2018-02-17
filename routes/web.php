@@ -36,6 +36,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 	uDistro For local business (I am business)
 */
 
+////////////////////////////////////////////////////////////// testing ////////////////
+
 // uDistro home
 Route::get('/', function () {
     return view('landingPage1');
@@ -50,6 +52,7 @@ Route::get('/agent/home', function () {
 Route::get('/company/home', function () {
     return view('landingPage3');
 });
+
 
 // un authorize access view
 Route::get('/unauthorize', function () {
@@ -102,9 +105,7 @@ Route::get('/ourteam', function () {
 ////////// Home Pages Routes //////////
 
 // To test email template view
-// Route::get('/email', 'EmailController@renderEmailTemplate');
-
-Route::post('/email', 'EmailController@sendEmail');
+Route::get('/email', 'EmailController@renderEmailTemplate');
 
 // Administrator openly access routes
 Route::group(['prefix' => 'administrator'], function() {
@@ -125,206 +126,218 @@ Route::group(['prefix' => 'administrator'], function() {
 // Administrator protected routes
 Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 
+  
 	// Logout
 	Route::get('/logout', 'HomeController@logout');
 	
 	// Admin dashboard
 	Route::get('/dashboard', 'AdminController@dashboard');
-
+	
+ //Route::group(['prefix' => 'administrator', 'middleware' => 'role:super_administrator'], function() {
+	 
 	// To return the navigation category view
-	Route::get('/navigationcategory', 'AdminController@navigationCategory');
+	Route::get('/navigationcategory', ['middleware' => ['permission:view_list-cms_navigation_categories'], 'uses' => 
+ 'AdminController@navigationCategory']);
 
 	// To save the navigation category
-	Route::post('/savenavigationcategory', 'AdminController@saveNavigationCategory');
+	Route::post('/savenavigationcategory', ['middleware' => ['permission:create-cms_navigation_categories'], 'uses' => 
+ 'AdminController@saveNavigationCategory']);
 
 	// To show the navigation category list in datatable
-	Route::get('/fetchnavigationcategories', 'AdminController@fetchNavigationCategories');
+	Route::get('/fetchnavigationcategories', ['middleware' => ['permission:view_list-cms_navigation_categories'], 'uses' =>  'AdminController@fetchNavigationCategories']);
 
 	// To get the details for the selected navigation category
-	Route::get('/getnavigationcategorydetails', 'AdminController@getNavigationCategoryDetails');
+	Route::get('/getnavigationcategorydetails', ['middleware' => ['permission:view-cms_navigation_categories'], 'uses' =>  'AdminController@getNavigationCategoryDetails']);
 
 	// To return the navigation view
-	Route::get('/navigation', 'AdminController@navigation');
+	Route::get('/navigation', ['middleware' => ['permission:view_list-cms_navigations'], 'uses' => 'AdminController@navigation']);
 
 	// To save the navigation details
-	Route::post('/savenavigation', 'AdminController@saveNavigation');
+	Route::post('/savenavigation', ['middleware' => ['permission:create-cms_navigations'], 'uses' => 'AdminController@saveNavigation']);
 
 	// To show the navigation list in datatable
-	Route::get('/fetchnavigation', 'AdminController@fetchNavigation');
+	Route::get('/fetchnavigation', ['middleware' => ['permission:view_list-cms_navigations'], 'uses' => 'AdminController@fetchNavigation']);
 
 	// To get the details for the selected navigation
-	Route::get('/getnavigationdetails', 'AdminController@getNavigationDetails');
+	Route::get('/getnavigationdetails', ['middleware' => ['permission:view-cms_navigations'], 'uses' => 'AdminController@getNavigationDetails']);
 
 	// To update the navigation details
-	Route::post('/updatenavigation', 'AdminController@updateNavigation');
+	Route::post('/updatenavigation', ['middleware' => ['permission:edit-cms_navigations'], 'uses' => 'AdminController@updateNavigation']);
 
 	// To return the page details
-	Route::get('/pages', 'AdminController@pages');
+	Route::get('/pages', ['middleware' => ['permission:view_list-cms_pages'], 'uses' => 'AdminController@pages']);
 
 	// To save the page content
-	Route::post('/savepage', 'AdminController@savePage');
+	Route::post('/savepage', ['middleware' => ['permission:create-cms_pages'], 'uses' => 'AdminController@savePage']);
 
 	// To show the page list in datatable
-	Route::get('/fetchpages', 'AdminController@fetchPages');
+	Route::get('/fetchpages', ['middleware' => ['permission:view_list-cms_pages'], 'uses' => 'AdminController@fetchPages']);
 
 	// To get the details for the selected page
-	Route::get('/getpagedetails', 'AdminController@getPageDetails');
+	Route::get('/getpagedetails', ['middleware' => ['permission:view-cms_pages'], 'uses' => 'AdminController@getPageDetails']);
 
 	// To return the provinces page
-	Route::get('/provinces', 'AdminController@provinces');
+	Route::get('/provinces', ['middleware' => ['permission:view_list-provinces'], 'uses' => 'AdminController@provinces']);
 
 	// To save the province details
-	Route::post('/saveprovince', 'AdminController@saveProvince');
+	Route::post('/saveprovince', ['middleware' => ['permission:create-provinces'], 'uses' => 'AdminController@saveProvince']);
 
 	// To show the province list in datatable
-	Route::get('/fetchprovinces', 'AdminController@fetchProvinces');
+	Route::get('/fetchprovinces', ['middleware' => ['permission:view_list-provinces'], 'uses' => 'AdminController@fetchProvinces']);
 
 	// To get the details for the selected province
-	Route::get('/getprovincedetails', 'AdminController@getProvinceDetails');
+	Route::get('/getprovincedetails', ['middleware' => ['permission:view-provinces'], 'uses' => 'AdminController@getProvinceDetails']);
 
 	// To return the moving Category page
-	Route::get('/movingcategory', 'AdminController@movingCategory');
+	Route::get('/movingcategory', ['middleware' => ['permission:view_list-moving_item_categories'], 'uses' => 'AdminController@movingCategory']);
 
 	// To save the moving Category details
-	Route::post('/savemovingcategory', 'AdminController@saveMovingCategory');
+	Route::post('/savemovingcategory', ['middleware' => ['permission:create-moving_item_categories'], 'uses' => 'AdminController@saveMovingCategory']);
 
 	// To show the moving Category list in datatable
-	Route::get('/fetchmovingcategory', 'AdminController@fetchMovingCategory');
+	Route::get('/fetchmovingcategory', ['middleware' => ['permission:view_list-moving_item_categories'], 'uses' => 'AdminController@fetchMovingCategory']);
 
 	// To get the details for the selected moving Category
-	Route::get('/getmovingcategory', 'AdminController@getMovingCategory');
+	Route::get('/getmovingcategory', ['middleware' => ['permission:view-moving_item_categories'], 'uses' => 'AdminController@getMovingCategory']);
 
 	// To return the moving Category details page
-	Route::get('/movingitemdetails', 'AdminController@movingItemDetails');
+	Route::get('/movingitemdetails', ['middleware' => ['permission:view_list-moving_item_details'], 'uses' => 'AdminController@movingItemDetails']);
 
 	// To save the moving Category details
-	Route::post('/savemovingitemdetails', 'AdminController@saveMovingItemDetails');
+	Route::post('/savemovingitemdetails', ['middleware' => ['permission:create-moving_item_details'], 'uses' => 'AdminController@saveMovingItemDetails']);
 
 	// To show the moving Category details list in datatable
-	Route::get('/fetchmovingitemdetails', 'AdminController@fetchMovingItemDetails');
+	Route::get('/fetchmovingitemdetails', ['middleware' => ['permission:view_list-moving_item_details'], 'uses' => 'AdminController@fetchMovingItemDetails']);
 
 	// To get the details for the selected moving Category details
-	Route::get('/getmovingitemdetails', 'AdminController@getMovingItemDetails');
+	Route::get('/getmovingitemdetails', ['middleware' => ['permission:edit-moving_item_details'], 'uses' => 'AdminController@getMovingItemDetails']);
 
 	// To return the activity feedback page
-	Route::get('/activityfeedback', 'AdminController@activityFeedback');
+	Route::get('/activityfeedback', ['middleware' => ['permission:view_list-client_activity_lists'], 'uses' => 'AdminController@activityFeedback']);
 
 	// To show the activity list in datatable
-	Route::get('/fetchactivityfeedback', 'AdminController@fetchActivityFeedback');
+	Route::get('/fetchactivityfeedback', ['middleware' => ['permission:view_list-client_activity_lists'], 'uses' => 'AdminController@fetchActivityFeedback']);
 
 	// To return the activity page
-	Route::get('/activity', 'AdminController@activity');
+	Route::get('/activity', ['middleware' => ['permission:view_list-client_activity_lists'], 'uses' => 'AdminController@activity']);
 
 	// To save the activity details
-	Route::post('/saveactivity', 'AdminController@saveActivity');
+	Route::post('/saveactivity', ['middleware' => ['permission:create-client_activity_lists'], 'uses' => 'AdminController@saveActivity']);
 
 	// To show the activity list in datatable
-	Route::get('/fetchactivity', 'AdminController@fetchActivity');
+	Route::get('/fetchactivity', ['middleware' => ['permission:view_list-client_activity_lists'], 'uses' => 'AdminController@fetchActivity']);
 
 	// To get the details for the selected activity
-	Route::get('/getactivitydetails', 'AdminController@getActivityDetails');
+	Route::get('/getactivitydetails', ['middleware' => ['permission:view-client_activity_lists'], 'uses' => 'AdminController@getActivityDetails']);
 
 	// To return the industry page
-	Route::get('/industrytype', 'AdminController@industryType');
+	Route::get('/industrytype', ['middleware' => ['permission:view_list-company_categories'], 'uses' => 'AdminController@industryType']);
 
 	// To save the industry details
-	Route::post('/saveindustrytype', 'AdminController@saveIndustryType');
+	Route::post('/saveindustrytype', ['middleware' => ['permission:create-company_categories'], 'uses' => 'AdminController@saveIndustryType']);
 
 	// To show the industry list in datatable
-	Route::get('/fetchindustrytype', 'AdminController@fetchIndustryType');
+	Route::get('/fetchindustrytype', ['middleware' => ['permission:view_list-company_categories'], 'uses' => 'AdminController@fetchIndustryType']);
 
 	// To get the details for the selected industry
-	Route::get('/getindustrytypedetails', 'AdminController@getIndustryTypeDetails');
+	Route::get('/getindustrytypedetails', ['middleware' => ['permission:view-company_categories'], 'uses' => 'AdminController@getIndustryTypeDetails']);
 
 	// To return the services page
-	Route::get('/services', 'AdminController@services');
+	Route::get('/services', ['middleware' => ['permission:view_list-category_services'], 'uses' => 'AdminController@services']);
 
 	// To save the services details
-	Route::post('/saveservices', 'AdminController@saveServices');
+	Route::post('/saveservices', ['middleware' => ['permission:create-category_services'], 'uses' => 'AdminController@saveServices']);
 
 	// To show the services list in datatable
-	Route::get('/fetchservices', 'AdminController@fetchServices');
+	Route::get('/fetchservices', ['middleware' => ['permission:view_list-category_services'], 'uses' => 'AdminController@fetchServices']);
 
 	// To get the details for the selected services
-	Route::get('/getservicesdetails', 'AdminController@getServicesDetails');
+	Route::get('/getservicesdetails', ['middleware' => ['permission:view-category_services'], 'uses' => 'AdminController@getServicesDetails']);
 
 	// To return the utility service categories page
-	Route::get('/utilityservicecategories', 'AdminController@utilityServiceCategories');
+	Route::get('/utilityservicecategories', ['middleware' => ['permission:view_list-utility_service_categories'], 'uses' =>  'AdminController@utilityServiceCategories']);
 
 	// To save the utility service categories details
-	Route::post('/saveutilityservicecategory', 'AdminController@saveUtilityServiceCategory');
+	Route::post('/saveutilityservicecategory', ['middleware' => ['permission:create-utility_service_categories'], 'uses' => 
+ 'AdminController@saveUtilityServiceCategory']);
 
 	// To show the utility service categories list in datatable
-	Route::get('/fetchutilityservicecategories', 'AdminController@fetchUtilityServiceCategories');
+	Route::get('/fetchutilityservicecategories', ['middleware' => ['permission:view_list-utility_service_categories'], 'uses' => 
+ 'AdminController@fetchUtilityServiceCategories']);
 
 	// To get the details for the selected utility service category
-	Route::get('/getutilityservicecategorydetails', 'AdminController@getUtilityServiceCategoryDetails');
+	Route::get('/getutilityservicecategorydetails', ['middleware' => ['permission:view-utility_service_categories'], 'uses' => 
+ 'AdminController@getUtilityServiceCategoryDetails']);
 
 	// To return the utility service types page
-	Route::get('/utilityservicetypes', 'AdminController@utilityServiceTypes');
+	Route::get('/utilityservicetypes', ['middleware' => ['permission:view_list-utility_service_types'], 'uses' => 'AdminController@utilityServiceTypes']);
 
 	// To save the utility service types
-	Route::post('/saveutilityservicetype', 'AdminController@saveUtilityServiceType');
+	Route::post('/saveutilityservicetype', ['middleware' => ['permission:create-utility_service_types'], 'uses' => 'AdminController@saveUtilityServiceType']);
 
 	// To show the utility service type list in datatable
-	Route::get('/fetchutilityservicetypes', 'AdminController@fetchUtilityServiceTypes');
+	Route::get('/fetchutilityservicetypes', ['middleware' => ['permission:view_list-utility_service_types'], 'uses' => 
+  'AdminController@fetchUtilityServiceTypes']);
 
 	// To get the details for the selected utility service type
-	Route::get('/getutilityservicetypedetails', 'AdminController@getUtilityServiceTypeDetails');
+	Route::get('/getutilityservicetypedetails', ['middleware' => ['permission:view-utility_service_types'], 'uses' => 
+ 'AdminController@getUtilityServiceTypeDetails']);
 
 	// To return the utility service page
-	Route::get('/utilityserviceproviders', 'AdminController@utilityServiceProviders');
+	Route::get('/utilityserviceproviders', ['middleware' => ['permission:view_list-utility_service_providers'], 'uses' => 'AdminController@utilityServiceProviders']);
 
 	// To get the service type on the basis of selected service category
-	Route::get('/getcategoryservicetypes', 'AdminController@getCategoryServiceTypes');
+	Route::get('/getcategoryservicetypes', ['middleware' => ['permission:view-utility_service_providers'], 'uses' => 
+'AdminController@getCategoryServiceTypes']);
 
 	// To get the cities on the basis of selected province
-	Route::get('/getprovincecities', 'AdminController@getProvinceCities');
+	Route::get('/getprovincecities', ['middleware' => ['permission:view_list-provinces'], 'uses' => 'AdminController@getProvinceCities']);
 
 	// To save the utility service provider details
-	Route::post('/saveserviceprovider', 'AdminController@saveServiceProvider');
+	Route::post('/saveserviceprovider', ['middleware' => ['permission:create-utility_service_providers'], 'uses' => 'AdminController@saveServiceProvider']);
 
 	// To show the utility service providers list in datatable
-	Route::get('/fetchserviceproviders', 'AdminController@fetchServiceProviders');
+	Route::get('/fetchserviceproviders', ['middleware' => ['permission:view_list-utility_service_providers|view_list-utility_service_types'], 'uses' => 
+'AdminController@fetchServiceProviders']);
 
 	// To get the details of the selected service provider
-	Route::get('/getserviceproviderdetails', 'AdminController@getServiceProviderDetails');
+	Route::get('/getserviceproviderdetails',  ['middleware' => ['permission:view-utility_service_providers'], 'uses' => 'AdminController@getServiceProviderDetails']);
 
 	// To return the payment plans view
-	Route::get('/paymentplans', 'AdminController@paymentPlans');
+	Route::get('/paymentplans', ['middleware' => ['permission:view_list-payment_plan'], 'uses' => 'AdminController@paymentPlans']);
 
 	// To save the payment plan details
-	Route::post('/savepaymentplan', 'AdminController@savePaymentPlan');
+	Route::post('/savepaymentplan', ['middleware' => ['permission:create-payment_plans'], 'uses' => 'AdminController@savePaymentPlan']);
 
 	// To show the payment plans list in datatable
-	Route::get('/fetchpaymentplans', 'AdminController@fetchPaymentPlans');
+	Route::get('/fetchpaymentplans', ['middleware' => ['permission:view_list-payment_plan'], 'uses' => 'AdminController@fetchPaymentPlans']);
 
 	// To get the details of the selected payment plan
-	Route::get('/getpaymentplandetails', 'AdminController@getPaymentPlanDetails');
+	Route::get('/getpaymentplandetails', ['middleware' => ['permission:view-payment_plan'], 'uses' => 'AdminController@getPaymentPlanDetails']);
 
 	// To return the cities listing view
-	Route::get('/cities', 'AdminController@cities');
+	Route::get('/cities', ['middleware' => ['permission:view_list-cities'], 'uses' => 'AdminController@cities']);
 
 	// To save the city details
-	Route::post('/savecity', 'AdminController@saveCity');
+	Route::post('/savecity', ['middleware' => ['permission:create-cities'], 'uses' => 'AdminController@saveCity']);
 
 	// To show the cities list in datatable
-	Route::get('/fetchcities', 'AdminController@fetchCities');
+	Route::get('/fetchcities', ['middleware' => ['permission:view_list-cities'], 'uses' => 'AdminController@fetchCities']);
 
 	// To get the details of the selected city
-	Route::get('/getcitydetails', 'AdminController@getCityDetails');
+	Route::get('/getcitydetails',['middleware' => ['permission:view-cities'], 'uses' =>  'AdminController@getCityDetails']);
 
 	// To return email template listing view
-	Route::get('/emailtemplates', 'AdminController@emailTemplates');
+	Route::get('/emailtemplates', ['middleware' => ['permission:view_list-email_templates'], 'uses' => 'AdminController@emailTemplates']);
 
 	// To save the email template details
-	Route::post('/saveemailtemplate', 'AdminController@saveEmailTemplate');
+	Route::post('/saveemailtemplate', ['middleware' => ['permission:create-email_templates'], 'uses' => 'AdminController@saveEmailTemplate']);
 
 	// To show the email template list in datatable
-	Route::get('/fetchemailtemplates', 'AdminController@fetchEmailTemplates');
+	Route::get('/fetchemailtemplates', ['middleware' => ['permission:view_list-email_templates'], 'uses' => 'AdminController@fetchEmailTemplates']);
 
 	// To get the details of selected email template
-	Route::get('/getemailtemplatedetails', 'AdminController@getEmailTemplateDetails');
+	Route::get('/getemailtemplatedetails', ['middleware' => ['permission:view-email_templates'], 'uses' => 'AdminController@getEmailTemplateDetails']);
 
 	// To return the generate invoice page
 	Route::get('/generateinvoice', 'AdminController@generateInvoice');
@@ -332,11 +345,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To convert html to dompdf
 	Route::get('htmltopdfview', array('as'=>'htmltopdfview','uses'=>'AdminController@htmltopdfview'));
 	
-	/* Newly added route start here */
-	
 	// To return role listing view
 	Route::get('/roles', 'AdminController@roles');
-	
+
 	// To save new role
 	Route::post('/saverole', 'AdminController@saveRole');
 
@@ -344,25 +355,27 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	Route::get('/fetchroles', 'AdminController@fetchRoles');
 
 	// To get the details of selected role
-	Route::get('/getselectedrole', 'AdminController@getSelectedRole');
+	Route::get('/getselectedrole',  'AdminController@getSelectedRole');
 	
 	// To return permission listing view
 	Route::get('/permissions', 'AdminController@permissions');
 
 	// To save new permission
-	Route::post('/savepermission', 'AdminController@savePermission');
+	Route::post('/savepermission',  'AdminController@savePermission');
 
 	// To show the permission list in datatable
 	Route::get('/fetchpermissions', 'AdminController@fetchPermissions');
 
+	
 	// To get the details of selected permission
-	Route::get('/getselectedpermission', 'AdminController@getSelectedPermission');
+	Route::get('/getselectedpermission',  'AdminController@getSelectedPermission');
+	
 	
 	// To detach permission from role
 	Route::get('/detachrolepermission', 'AdminController@detachRolePermission');
 
 	// To return rolespermissions listing view
-	Route::get('/rolespermissions', 'AdminController@rolesPermissions');
+	Route::get('/rolespermissions',  'AdminController@rolesPermissions');
 
 	// To save new rolepermission
 	Route::post('/saverolepermission', 'AdminController@saveRolePermission');
@@ -396,49 +409,48 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To show the permissionsusers list in datatable
 	Route::get('/fetchpermissionsusers', 'AdminController@fetchPermissionsUsers');
 
-	/* -----------------  Newly added route end here ------------------*/
 	
-	
+
 	/* ---------- Company related functionality ---------- */
 
 	// To return the company categories view
-	Route::get('/companycategories', 'CompanyController@companyCategories');
+	Route::get('/companycategories', ['middleware' => ['permission:view-company_categories|view_list-company_categories'], 'uses' => 'CompanyController@companyCategories']);
 
 	// To save the company category details
-	Route::post('/savecompanycategory', 'CompanyController@saveCompanyCategory');
+	Route::post('/savecompanycategory', ['middleware' => ['permission:create-company_categories'], 'uses' => 'CompanyController@saveCompanyCategory']);
 
 	// To show the company categories list in datatable
-	Route::get('/fetchcompanycategories', 'CompanyController@fetchCompanyCategories');
+	Route::get('/fetchcompanycategories', ['middleware' => ['permission:view_list-company_categories'], 'uses' => 'CompanyController@fetchCompanyCategories']);
 
 	// To get the details of the selected company category
-	Route::get('/getcompanycategorydetails', 'CompanyController@getCompanyCategoryDetails');
+	Route::get('/getcompanycategorydetails',['middleware' => ['permission:view-company_categories'], 'uses' => 'CompanyController@getCompanyCategoryDetails']);
 
 	// To return the company listing view
-	Route::get('/companies', 'CompanyController@companies');
+	Route::get('/companies', ['middleware' => ['permission:view_list-companies|view-companies'], 'uses' => 'CompanyController@companies']);
 
 	// To save the company details
-	Route::post('/savecompanydetails', 'CompanyController@saveCompanyDetails');
+	Route::post('/savecompanydetails', ['middleware' => ['permission:save-companies'], 'uses' => 'CompanyController@saveCompanyDetails']);
 
 	// To fetch the companies list and show in datatable
-	Route::get('/fetchcompanies', 'CompanyController@fetchCompanies');
+	Route::get('/fetchcompanies', ['middleware' => ['permission:view_list-companies'], 'uses' => 'CompanyController@fetchCompanies']);
 
 	// To get the details of the selected company
-	Route::get('/getcompanydetails', 'CompanyController@getCompanyDetails');
+	Route::get('/getcompanydetails', ['middleware' => ['permission:view-companies'], 'uses' => 'CompanyController@getCompanyDetails']);
 
 	// To update the company details
-	Route::post('/updatecompanydetails', 'CompanyController@updateCompanyDetails');
+	Route::post('/updatecompanydetails', ['middleware' => ['permission:edit-companies'], 'uses' => 'CompanyController@updateCompanyDetails']);
 
 	// To return the company agent view
-	Route::get('/agents', 'CompanyController@agents');
+	Route::get('/agents', ['middleware' => ['permission:view_list-agent_clients'], 'uses' => 'CompanyController@agents']);
 
 	// To save the agent details
-	Route::post('/saveagent', 'CompanyController@saveAgent');
+	Route::post('/saveagent', ['middleware' => ['permission:create-agent_clients'], 'uses' => 'CompanyController@saveAgent']);
 
 	// To fetch the agent list and show in datatable
-	Route::get('/fetchagents', 'CompanyController@fetchAgents');
+	Route::get('/fetchagents', ['middleware' => ['permission:view_list-agent_clients'], 'uses' => 'CompanyController@fetchAgents']);
 
 	// To get the agent details
-	Route::get('/getagentdetails', 'CompanyController@getAgentDetails');
+	Route::get('/getagentdetails', ['middleware' => ['permission:view-agent_clients'], 'uses' => 'CompanyController@getAgentDetails']);
 
 	// To update the agent details
 	Route::post('/updateagent', 'CompanyController@updateAgent');
@@ -446,39 +458,28 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update company image
 	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
 
-	// To show response time listing page
-	Route::get('/responsetime', 'AdminController@responsetime');
-
-	// To save response time
-	Route::post('/saveresponsetime', 'AdminController@saveResponseTime');
-
-	// To get the response time slot listing
-	Route::get('/fetchresponsetimeslots', 'AdminController@fetchResponseTimeSlots');
-
-	// To get response time slot details
-	Route::get('/getresponsetimeslotdetails', 'AdminController@getResponseTimeSlotDetails');
-
 	/* ---------- Company related functionality ---------- */
 
 	// To return the provincial agency details page
-	Route::get('/provincialagencies', 'AdminController@provincialAgencies');
+	Route::get('/provincialagencies', ['middleware' => ['permission:view_list-provincial_agency_details'], 'uses' => 'AdminController@provincialAgencies']);
 
 	// To save the provincial agency details
-	Route::post('/saveprovincialagency', 'AdminController@saveProvincialAgency');
+	Route::post('/saveprovincialagency', ['middleware' => ['permission:create-provincial_agency_details'], 'uses' => 'AdminController@saveProvincialAgency']);
 
 	// To show the provincial agency list in datatable
-	Route::get('/fetchprovincialagencies', 'AdminController@fetchProvincialAgencies');
+	Route::get('/fetchprovincialagencies', ['middleware' => ['permission:view_list-provincial_agency_details'], 'uses' => 'AdminController@fetchProvincialAgencies']);
 
 	// To get the details for the selected provincial agency
-	Route::get('/getprovincialagencydetails', 'AdminController@getProvincialAgencyDetails');
+	Route::get('/getprovincialagencydetails', ['middleware' => ['permission:view-provincial_agency_details'], 'uses' => 'AdminController@getProvincialAgencyDetails']);
 
 	// Change Password
 	Route::get('/changepassword', 'AdminController@getchangepassword');
 
 	// To update Password
-	Route::post('/changepassword', 'AdminController@changePassword');
+	Route::post('/changepassword', ['middleware' => ['permission:edit-password_resets'], 'uses' => 'AdminController@changePassword']);
 
 });
+//});
 
 /* ---------- Agent related functionality ---------- */
 
@@ -505,28 +506,40 @@ Route::group(['prefix' => 'agent'], function() {
 Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// Agent dashboard
-	Route::get('/dashboard', 'AgentController@dashboard');
+	Route::get('/dashboard', ['uses' => 'AgentController@dashboard']);
 
 	// To show agent clients listing page
-	Route::get('/clients', 'AgentController@clients');
+	Route::get('/clients', ['middleware' => ['permission:view_list-agent_clients'], 'uses' => 'AgentController@clients']);
 
 	// To show agent invite listing page
-	Route::get('/invites', 'AgentController@invites');
-
+	Route::get('/invites', ['middleware' => ['permission:view_list-agent_client_invites'], 'uses' => 'AgentController@invites']);
+	
 	// To save the client details
-	Route::post('/saveclient', 'AgentController@saveClient');
+	Route::post('/saveclient', ['middleware' => ['permission:create-agent_client_invites'], 'uses' => 'AgentController@saveClient']);
 
 	// To fetch the clients list and show in datatable
-	Route::get('/fetchclients', 'AgentController@fetchClients');
+	Route::get('/fetchclients', ['middleware' => ['permission:view_list-agent_client_invites'], 'uses' => 'AgentController@fetchClients']);
 
 	// To fetch the clients invites and show in datatable
-	Route::get('/fetchinvites', 'AgentController@fetchInvites');
-
+	Route::get('/fetchinvites', ['middleware' => ['permission:view_list-agent_client_invites'], 'uses' => 'AgentController@fetchInvites']);
+	
 	// To get the details of the selected client
-	Route::get('/getclientdetails', 'AgentController@getClientDetails');
+	Route::get('/getclientdetails', ['middleware' => ['permission:view-agent_clients'], 'uses' => 'AgentController@getClientDetails']);
 
 	// To get the details of the selected invite
-	Route::get('/getinvitedetails', 'AgentController@getInviteDetails');
+	Route::get('/getinvitedetails', ['middleware' => ['permission:view-agent_client_invites'], 'uses' => 'AgentController@getInviteDetails']);
+	
+	// To save the partner details
+	Route::post('/savepartnerdetails', ['middleware' => ['permission:create-agent_partners'], 'uses' => 'AgentController@savePartnerDetails']);
+	
+	// To get the details of the selected partner
+	Route::get('/getpartnerdetails', ['middleware' => ['permission:view-agent_partners'], 'uses' => 'AgentController@getPartnerDetails']);
+	
+	// To fetch the partners and show in datatable
+	Route::get('/fetchpartners', ['middleware' => ['permission:view_list-agent_partners'], 'uses' => 'AgentController@fetchPartners']);
+	
+	// To show partner listing page
+	Route::get('/partners', ['middleware' => ['permission:view_list-agent_partners'], 'uses' => 'AgentController@partners']);
 
 	// To show agent profile page
 	Route::get('/profile', 'AgentController@profile');
@@ -582,29 +595,8 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To update Password
 	Route::post('/changepassword', 'AgentController@changePassword');
 
-	// To check email preview
+	// To email preview
 	Route::post('/emailpreview', 'AgentController@emailPreview');
-
-	// To uplaod the email template image
-	Route::post('/uploademailimage', 'AgentController@uploadEmailImage');
-	
-	/* -----------Newly added route for agent partner start here------------------*/
-	
-	// To save the partner details
-	Route::post('/savepartnerdetails', 'AgentController@savePartnerDetails');
-	
-	// To get the details of the selected partner
-	Route::get('/getpartnerdetails', 'AgentController@getPartnerDetails');
-	
-	// To fetch the partners and show in datatable
-	Route::get('/fetchpartners', 'AgentController@fetchPartners');
-	
-	// To show partner listing page
-	Route::get('/partners', 'AgentController@partners');
-	
-		
-	/* -----------Newly added route for agent partner end here------------------*/
-
 
 });
 
@@ -780,27 +772,6 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 	
 });
 
-// Paypal payment related routes
-Route::group(['prefix' => 'paypal'], function() {
-
-	// Payment is successfully done
-	Route::get('/success', 'PaymentController@success');
-
-	// Payment is cancelled
-	Route::get('/cancel', 'PaymentController@cancel');
-
-	// To check the paypal payment status by using IPN
-	Route::post('/paymentstatus', 'PaymentController@paymentStatus');
-
-});
-
-// CRON URL's
-Route::group(['prefix' => 'scheduler'], function() {
-
-	// To send invitation email
-	Route::get('/sendinvitationemail', 'SchedulerController@sendInvitationEmail');
-
-});
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
@@ -819,7 +790,3 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
     $response->header("Content-Type", $type);
     return $response;
 });
-
-
-// To fetch quotation for agent Partner
-Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
