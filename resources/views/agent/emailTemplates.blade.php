@@ -526,11 +526,11 @@
 								<tr><td>
 								<![endif]-->
 
-								<table border="0" cellspacing="0" cellpadding="0" class="table_width_100" width="100%" style="max-width: 680px; min-width: 300px;">
+								<table border="0" cellspacing="0" cellpadding="0" class="table_width_100" width="100%" style="max-width: 680px; min-width: 300px;" id="table_email_template_container">
 									<tr>
 										<td align="center">
-											<span style="height: 80px; line-height: 80px; font-size: 20px; text-align: center;" id="table_header" class="editable">Email Template</span>
 											<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+											<span style="height: 80px; line-height: 80px; font-size: 20px; text-align: center;" id="table_header" class="editable">Email Template</span>
 										</td>
 									</tr>
 									<tr>
@@ -801,6 +801,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+	// To resize table columns
+	// $("table tr th, table tr td").resizable({handles: 'e'});
+
 	// To remove the table td
 	$(document).on('click', '.remove_editable', function(){
 		
@@ -970,21 +973,28 @@ $(document).ready(function(){
     	if( templateName != '' )
     	{
     		// Clone the container
-	    	let emailContent = $('#email_container').clone();
+    		let emailContent = $('#email_container').clone();
 
-	    	// Remove the "X" place holder from html
-	    	$(emailContent).find('.remove_editable').remove();
+    		// Keep the original html content to show it again for editing purpose
+    		let htmlContentToView = $(emailContent).html();
 
-	    	// Remove all dummy logo images
-	    	$(emailContent).find('.logo_images').each(function(){
-	    		if( $(this).attr('image-type') == 'dummy' )
-	    		{
-	    			$(this).remove();
-	    		}
-	    	});
+    		// Remove the "X" place holder from html
+    		$(emailContent).find('.remove_editable').remove();
 
-	    	// Get the updated html
-	    	let htmlContentToSend = $(emailContent).html();
+    		// Iterate over all images
+    		$(emailContent).find('img').each(function(){
+    			// Remove all dummy logo images
+    			if( $(this).attr('class') == 'logo_images' )
+    			{
+    				$(this).remove();
+    			}
+
+    			// Add max-width: 800 to all images
+    			$(this).css('max-width', '800px');
+    		});
+
+    		// Get the updated html, this is to be send over the email
+    		let htmlContentToSend = $(emailContent).html();
 
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/agent/saveemailtemplate',
@@ -992,7 +1002,7 @@ $(document).ready(function(){
     			data: {
     				emailCategoryId: emailCategoryId,
     				templateName: templateName,
-    				htmlContentToView: htmlContentToSend,
+    				htmlContentToView: htmlContentToView,
     				htmlContentToSend: htmlContentToSend
     			},
     			headers: {

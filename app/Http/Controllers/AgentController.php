@@ -443,10 +443,18 @@ class AgentController extends Controller
      */
     public function dashboard()
     {
-    	// Get the client count
-    	$clientCount = AgentClient::count();
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+    	
+    	// Get the client count associated with the logged-in agent
+    	$clientCount = AgentClient::where(['agent_id' => $userId])->count();
 
-    	return view('agent/dashboard', ['clientCount' => $clientCount]);
+    	// Get the invite count send by the logged-in agent
+    	$inviteCount = AgentClientInvite::where(['agent_id' => $userId])->count();
+
+    	// 
+
+    	return view('agent/dashboard', ['clientCount' => $clientCount, 'inviteCount' => $inviteCount]);
     }
 
     /**
@@ -462,7 +470,7 @@ class AgentController extends Controller
 
         $response['errCode'] 	= 0;
         $response['errMsg']  	= 'Success';
-        $response['preview']	= $array->template_content_to_view;
+        $response['preview']	= $array->template_content_to_send;
 
         return response()->json($response);
     }
@@ -2005,8 +2013,8 @@ class AgentController extends Controller
 			$agentClientInvite->email_url 			= '';
 			if( $inviteDetails['client_invitation_schedule_date'] != '' )
 			{
-				$agentClientInvite->schedule_status 	= '1';
-				$agentClientInvite->schedule_datetime 	= date('Y-m-d', strtotime($inviteDetails['client_invitation_schedule_date']));
+				$agentClientInvite->schedule_status = '1';
+				$agentClientInvite->schedule_date 	= date('Y-m-d', strtotime($inviteDetails['client_invitation_schedule_date']));
 			}
 			else
 			{

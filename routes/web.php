@@ -36,6 +36,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 	uDistro For local business (I am business)
 */
 
+// To test laratrust permission module
+// Route::get('/laratrust', 'ACLController@checkRolePermission');
+
 // uDistro home
 Route::get('/', function () {
     return view('landingPage1');
