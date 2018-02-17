@@ -54,6 +54,11 @@ Route::get('/company/home', function () {
     return view('landingPage3');
 });
 
+// un authorize access view
+Route::get('/unauthorize', function () {
+    return view('unauthorize');
+});
+
 // uDistro get invitation route
 Route::get('/getinvitation', 'HomeController@getInvitation');
 
