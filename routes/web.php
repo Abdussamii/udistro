@@ -590,6 +590,12 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// To uplaod the email template image
 	Route::post('/uploademailimage', 'AgentController@uploadEmailImage');
+
+	// To return agent review board page
+	Route::get('/reviews', 'AgentController@reviews');
+
+	// To fetch reviews and show in datatable
+	Route::get('/fetchreviews', 'AgentController@fetchReviews');
 	
 	/* -----------Newly added route for agent partner start here------------------*/
 	

@@ -320,11 +320,9 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchinvites',
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 1, 2] }
+            { "className": "dt-center", "targets": [0, 6] }
         ],
         "aoColumns": [
-            { 'bSortable' : true },
-            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -1487,6 +1485,29 @@ $(document).ready(function(){
         }
     });
 	//agent partner code end here
+
+	// To show the reviews in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_reviews').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchreviews',
+        
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 4 ] }
+        ],
+
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false }
+        ]
+    });
 });
 
 /**

@@ -1,4 +1,4 @@
-@extends('administrator.layouts.app')
+@extends('agent.layouts.app')
 @section('title', 'Udistro | Change Password')
 
 @section('content')
