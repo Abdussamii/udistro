@@ -132,6 +132,29 @@ class MoversController extends Controller
     	return view('movers/index', ['paymentPlan' => $paymentPlan, 'navigationArray' => $this->_navigationArray, 'url' => $url]);
     }
 
+    /**
+     * Function to return movers authentication page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function authenticate()
+    {
+    	$agentId 		= base64_decode(Input::get('agent_id'));
+    	$clientId 		= base64_decode(Input::get('client_id'));
+    	$invitationId 	= base64_decode(Input::get('invitation_id'));
+
+    	if( $agentId != '' && $clientId != '' && $invitationId != '')
+    	{
+    		// Return the view and check the user in authentic or not
+    		return view('movers/authenticate');
+    	}
+    	else
+    	{
+    		// Missing required parameters
+    		return 	redirect('/');
+    	}
+    }
+
 
     /**
      * Function to return my move view

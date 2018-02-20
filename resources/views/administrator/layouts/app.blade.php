@@ -319,7 +319,7 @@
                         <li>
                             <a href="{{ url('administrator/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#"><i class="fa fa-th-list"></i> Content Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -332,7 +332,6 @@
                                     <a href="{{ url('/administrator/pages') }}">Pages</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Utility Services<span class="fa arrow"></span></a>
@@ -347,8 +346,7 @@
                                     <a href="{{ url('/administrator/utilityserviceproviders') }}">Utility Service Providers</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                        </li> -->
                         <li>
                             <a href="#"><i class="fa fa-building-o" aria-hidden="true"></i> Company Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">

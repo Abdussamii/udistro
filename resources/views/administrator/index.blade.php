@@ -27,34 +27,110 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
-        <style>
-        body {
-            background: #eee !important;
+        <style type="text/css">
+        html, body {
+        	height: 100%;
+        	min-height: 100%;
         }
-        .error {
-        	color: red;
+        .backColor {
+        	background: #f7f7f7;
+        	padding: 20px 0;
+        	height: 100%;
+        	min-height: 100%;
+        }
+        .backColor {
+        	background: #f7f7f7;
+        	padding: 20px 0;
+        }
+
+        .backColor .classlogo_part {
+        	margin-bottom: 20px;
+        	text-align: center;
+        }
+        .field-section {
+        	background: #fff;
+        	border:1px solid #e2e2e2;
+        	padding: 20px;
+        }
+
+        .field-section h1 {
+        	border-bottom:1px solid #e2e2e2;
+        	padding-bottom: 15px;
+        	text-align: center;
+        	color: #2c80bc;
+        	margin-top: 0;
+        	font-size: 30px;
+        }
+        .field-section .form-control {
+        	box-shadow: none;
+        	border-radius: 0;
+        	border:1px solid #e2e2e2;
+        }
+        .field-section .form-group label {
+        	color:#a09fa4;
+        }
+
+        .field-section label.normal {
+        	color:#2c80bc;
+        	font-weight: normal;
+        }
+
+        .field-section .btn {
+        	border-radius: 0;
+        	font-weight: 600;
+        	font-size: 15px;
+        	padding: 15px 0;
+        	background: #3879cd;
+        	border:1px solid #3879cd;
+        }
+
+        .backColor .text-center {
+        	margin-top:20px;
+        }
+        .backColor .text-center a {
+        	font-size: 16px;
+        }
+        .center-copypart {
+        	margin-top:30px;
+        	color: #a9a9a9;
+        	font-size: 12px;
         }
         </style>
     </head>
     <body>
-        <div class="container col-md-offset-4">
-            <form class="col-sm-6 col-md-6 col-lg-6" name="frm_admin_login" id="frm_admin_login" autocomplete="off">
-            	<center><h2>Login</h2></center>
-                <div class="form-group">
-                    <label for="username">Email</label>
-                    <input type="email" class="form-control" id="username" name="username" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                </div>
-                
-                <div class="checkbox">
-                    <label><input type="checkbox" name="remember" id="remember" value="1"> Remember me</label>
-                </div>
-                
-                <button type="submit" class="btn btn-primary" id="btn_admin_login" name="btn_admin_login">Login</button>
-            </form>
+        <div class="backColor">
+        	<div class="container">
+        		<div class="col-md-4 col-md-push-4">
+        			<div class="classlogo_part">
+        				<img src="{{ url('images/udistro-logo.png') }}" alt="">
+        			</div>
+        			<div class="field-section">
+        				<h1>Please Login</h1>
+        				<form name="frm_admin_login" id="frm_admin_login" autocomplete="off">
+        				    <div class="form-group">
+        				        <label for="username">Username</label>
+        				        <input type="email" class="form-control" id="username" name="username" placeholder="Email">
+        				    </div>
+        				    <div class="form-group">
+        				        <label for="password">Password</label>
+        				        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        				    </div>
+        				    
+        				    <div class="checkbox">
+        				        <label><input type="checkbox" name="remember" id="remember" value="1"> Remember me</label>
+        				    </div>
+        				    
+        				    <button type="submit" class="btn btn-primary btn-block" id="btn_admin_login" name="btn_admin_login">Login</button>
+        				</form>
+        			</div>
+        			<div class="text-center">
+        				<a href="#">Forgot your password?</a>
+        			</div>
+        			<div class="center-copypart">
+        				<p>Copyright &copy; 2018 Udistro | All Rights Reserved.</p>
+        			</div>
+        		</div>
+        	</div>
         </div>
     </body>
 </html>

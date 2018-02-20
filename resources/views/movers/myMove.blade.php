@@ -85,12 +85,13 @@ $(function(){
 	});
 
     // Call the method to calculate the route between two addresses
-    calculateRoute('{{ $clientMovingFromAddress->address1 . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address1 . ' ' . $clientMovingToProvince->name }}');
+    calculateRoute('{{ $clientMovingFromAddress->address1 }}', '{{ $clientMovingToAddress->address1 }}');
 });
 
 // To create route between two addresses
 function calculateRoute(from, to) {
-  // Center initialized to Naples, Italy
+  // Center initialized
+  // console.log( 'Moving from: ' + from + ', Moving to: ' + to );
   var myOptions = {
     zoom: 10,
     center: new google.maps.LatLng(56.1304, 106.3468),
@@ -117,7 +118,7 @@ function calculateRoute(from, to) {
         });
       }
       else
-        alert('Unable to retrieve your route');
+        alertify.error('Unable to retrieve route map');
     }
   );
 }

@@ -629,7 +629,7 @@ Route::group(['prefix' => 'movers'], function() {
 	Route::get('/', 'MoversController@index');
 
 	// To check whether the user is authorized or not
-	Route::get('/authenticate', 'MoversController@myMove');
+	Route::get('/authenticate', 'MoversController@authenticate');
 
 	// Movers my move page
 	Route::get('/mymove', 'MoversController@myMove');

@@ -644,6 +644,13 @@
 											</table>		
 										</td>
 									</tr>
+									<tr>
+										<td align="center" style="padding-top: 20px; display: none;" id="get_started_link_container">
+											<a id="get_started_link" href="https://www.udistro.ca/">
+												<img src="{{ url('images/email_template/wH5yJUTpN1LE6Fbl9aZ2.jpg') }}">
+											</a>
+										</td>
+									</tr>
 								</table>
 								<!--[if gte mso 10]>
 								</td></tr>
@@ -716,39 +723,7 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- Add Image Modal -->
-    <!-- <div id="modal_add_image" class="modal fade" role="dialog">
-        <div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Uplaod Image</h4>
-			</div>
-			<div class="modal-body">
-				<form id="frm_upload_email_template_image" name="frm_upload_email_template_image">
-					<div class="form-group">
-						<label for="upload_image">Select Image:</label>
-						<input type="file" name="upload_image" id="upload_image">
-					</div>
-					<div id="container_email_template_image" style="display: none;">
-						<div class="form-group">
-							<label>Preview:</label>
-							<div>
-								<img src="" alt="Udistro" id="uploaded_image_preview">
-							</div>
-							<label>Image Path:</label>
-							<div>
-								<input type="text" name="uploaded_image_path" id="uploaded_image_path" class="form-control">
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-        </div>
-    </div> -->
-
+    <!-- Modal to add images -->
     <div id="modal_add_image" class="modal fade" role="dialog">
     	<div class="modal-content">
     		<div class="modal-header">
@@ -842,6 +817,7 @@ $(document).ready(function(){
 		$('#modal_add_image').modal();
 	});
 
+	// To uplaod an image
 	$('#upload_image').change(function(){
     	var formData = new FormData();
     	let image 	= $(this).prop('files')[0];
@@ -888,6 +864,7 @@ $(document).ready(function(){
 		}
 	});
 
+	// Add image to placeholder
     $('#add_image_to_placeholder').click(function(){
     	if( $('#frm_upload_email_template_image').valid() )
     	{
@@ -935,6 +912,9 @@ $(document).ready(function(){
     		// Add max-width: 800 to all images
     		$(this).css('max-width', '800px');
     	});
+
+    	// Remove the "Click here to get started link" as display none will not work on the email server
+    	$(emailContent).find('#get_started_link_container').closest('tr').remove();
 
     	// Get the updated html
     	let content = $(emailContent).html();
@@ -992,6 +972,9 @@ $(document).ready(function(){
     			// Add max-width: 800 to all images
     			$(this).css('max-width', '800px');
     		});
+
+    		// Show the get started button
+    		$(emailContent).find('#get_started_link_container').show();
 
     		// Get the updated html, this is to be send over the email
     		let htmlContentToSend = $(emailContent).html();

@@ -29,86 +29,110 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
-        <style>
-        .error {
-        	color: red;
+        <style type="text/css">
+        html, body {
+        	height: 100%;
+        	min-height: 100%;
         }
-        .loginPage_wrap {
-        position: absolute;
-        min-height: 100%;
-        width: 100%;
-        background: url(./images/video_bg.jpg);
+        .backColor {
+        	background: #f7f7f7;
+        	padding: 20px 0;
+        	height: 100%;
+        	min-height: 100%;
         }
-        .login-box {
-        width: 500px;
-        margin: 150px auto;
+        .backColor {
+        	background: #f7f7f7;
+        	padding: 20px 0;
         }
-        .login-box form {
-        background: #FFF;
-        padding: 30px;
-        border-radius: 4px;
+
+        .backColor .classlogo_part {
+        	margin-bottom: 20px;
+        	text-align: center;
         }
-        .login-head {
-        text-align: center;
-        margin-bottom: 30px;
-        color: #fff;
-        font-size: 36px;
-        font-weight: bold;
+        .field-section {
+        	background: #fff;
+        	border:1px solid #e2e2e2;
+        	padding: 20px;
         }
-        .logo_udistro {
-        text-align: center;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 15px;
-        margin-bottom: 15px;
+
+        .field-section h1 {
+        	border-bottom:1px solid #e2e2e2;
+        	padding-bottom: 15px;
+        	text-align: center;
+        	color: #2c80bc;
+        	margin-top: 0;
+        	font-size: 30px;
         }
-        .login-box input[type="email"],
-        .login-box input[type="password"] {
-        border: 1px solid #ccc;
-        box-shadow: unset;
-        height: 40px;
+        .field-section .form-control {
+        	box-shadow: none;
+        	border-radius: 0;
+        	border:1px solid #e2e2e2;
         }
-        .loginPage_wrap .checkbox {
-        position: relative;
-        display: block;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        color: #999;
-        font-size: 14px;
+        .field-section .form-group label {
+        	color:#a09fa4;
         }
-        .loginPage_wrap .btn-primary {
-        width: 100px;
-        border-radius: 40px;
-        margin: auto;
-        display: block;
+
+        .field-section label.normal {
+        	color:#2c80bc;
+        	font-weight: normal;
+        }
+
+        .field-section .btn {
+        	border-radius: 0;
+        	font-weight: 600;
+        	font-size: 15px;
+        	padding: 15px 0;
+        	background: #3879cd;
+        	border:1px solid #3879cd;
+        }
+
+        .backColor .text-center {
+        	margin-top:20px;
+        }
+        .backColor .text-center a {
+        	font-size: 16px;
+        }
+        .center-copypart {
+        	margin-top:30px;
+        	color: #a9a9a9;
+        	font-size: 12px;
         }
         </style>
     </head>
     <body>
-        <div class="loginPage_wrap">
-	        <div class="container">
-				<div class="login-box">
-					<div class="login-head">Login uDistro</div>
-		            <form name="frm_company_login" id="frm_company_login" autocomplete="off">
-					<div class="logo_udistro">
-						<img src="images/logo.png" />
-					</div>
-		                <div class="form-group">
-		                    <label for="username">Email</label>
-		                    <input type="email" class="form-control" id="username" name="username" placeholder="Email">
-		                </div>
-		                <div class="form-group">
-		                    <label for="password">Password</label>
-		                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-		                </div>
-		                
-		                <div class="checkbox">
-		                    <label><input type="checkbox" name="remember" id="remember" value="1"> Remember me</label>
-		                </div>
-		                
-		                <button type="submit" class="btn btn-primary" id="btn_company_login" name="btn_company_login">Login</button>
-		            </form>
-				</div>
-	        </div>
+        <div class="backColor">
+        	<div class="container">
+        		<div class="col-md-4 col-md-push-4">
+        			<div class="classlogo_part">
+        				<img src="images/udistro-logo.png" alt="">
+        			</div>
+        			<div class="field-section">
+        				<h1>Please Login</h1>
+        				<form name="frm_company_login" id="frm_company_login" autocomplete="off">
+        				    <div class="form-group">
+        				        <label for="username">Username</label>
+        				        <input type="email" class="form-control" id="username" name="username" placeholder="Email">
+        				    </div>
+        				    <div class="form-group">
+        				        <label for="password">Password</label>
+        				        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        				    </div>
+        				    
+        				    <div class="checkbox">
+        				        <label><input type="checkbox" name="remember" id="remember" value="1"> Remember me</label>
+        				    </div>
+        				    
+        				    <button type="submit" class="btn btn-primary btn-block" id="btn_company_login" name="btn_company_login">Login</button>
+        				</form>
+        			</div>
+        			<div class="text-center">
+        				<a href="#">Forgot your password?</a>
+        			</div>
+        			<div class="center-copypart">
+        				<p>Copyright &copy; 2018 Udistro | All Rights Reserved.</p>
+        			</div>
+        		</div>
+        	</div>
         </div>
     </body>
 </html>

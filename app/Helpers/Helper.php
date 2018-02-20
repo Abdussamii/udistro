@@ -141,9 +141,17 @@ class Helper
      */
     public static function getInviteStatus($status = 0)
     {
-    	$statusText = 'Send';
+    	$statusText = '';
 		
-		if( $status == '1' )
+		if( $status == '0' )
+		{
+			$statusText = 'Initial';
+		}
+		else if( $status == '1' )
+		{
+			$statusText = 'Send';
+		}
+		else if( $status == '2' )
 		{
 			$statusText = 'Read';
 		}

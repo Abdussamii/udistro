@@ -920,7 +920,7 @@ class AgentController extends Controller
     	if( count( $agentTemplate ) > 0 )
     	{
 	    	// Get the selected template content
-	    	$agentTemplateContent = EmailTemplate::where(['id' => $agentTemplate->id,'status' => '1'])->select('template_content')->first();
+	    	$agentTemplateContent = EmailTemplate::where(['id' => $agentTemplate->id,'status' => '1'])->select('template_content_to_send')->first();
     	}
 
     	return view('agent/profile', ['agentDetails' => $agentDetails, 'cityArray' => $cityArray, 'provinces' => $provinces, 'countries' => $countries, 'companyCategories' => $companyCategories, 'companyDetails' => $companyDetails, 'message' => $message, 'templates' => $templates, 'agentTemplate' => $agentTemplate, 'agentTemplateContent' => $agentTemplateContent]);
@@ -2042,7 +2042,7 @@ class AgentController extends Controller
 				}
 				else
 				{
-					$emailLink = config('constants.SERVER_APP_URL') . '/public/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
+					$emailLink = config('constants.SERVER_APP_URL') . '/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
 				}
 
 				// Update the email link
@@ -2051,6 +2051,17 @@ class AgentController extends Controller
 				$agentClientInvite->email_url = $emailLink;
 				
 				$agentClientInvite->save();
+
+				// Update this link in the html as well
+				$emailContent = EmailTemplate::find($agentClientInvite->email_template_id);
+
+				$contentToSend 	= $emailContent->template_content_to_send;
+
+				// Replace the "https://www.udistro.ca/" with the real link
+				$updatedContent = str_replace('href="https://www.udistro.ca/"', 'href="' . $emailLink . '"', $contentToSend);
+
+				// Update the content in the table
+				EmailTemplate::where(['id' => $agentClientInvite->email_template_id])->update(['template_content_to_send' => $updatedContent]);
 			}
 
 			$response['errCode']    = 0;
