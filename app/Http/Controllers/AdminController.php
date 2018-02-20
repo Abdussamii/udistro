@@ -1336,7 +1336,7 @@ class AdminController extends Controller
 				'pst' 	  			=> array('required','numeric'),
 				'gst' 	  			=> array('required','numeric'),
 				'hst' 	  			=> array('required','numeric'),
-				'service_charge' 	  			=> array('required','numeric'),
+				'service_charge' 	=> array('required','numeric'),
 		    ),
 		    array(
 		        'province_name.required'	=> 'Please enter the province name',
@@ -1402,7 +1402,7 @@ class AdminController extends Controller
 				$response['errCode']    = 2;
 			}
 
-			if($response['errCode'] == 1 && $response['errCode'] == 2)
+			if($response['errCode'] == 1 || $response['errCode'] == 2)
 			{
 				if( $provinceId == '' )	// Check if the province id is available or not, if not add the province
 				{

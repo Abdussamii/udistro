@@ -840,7 +840,11 @@ $(document).ready(function(){
 			    	{
 			    		alertify.error( response.errMsg );
 			    	}
-			    }
+			    },
+
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);	
+				}
 			});
 		}
     });
@@ -1565,6 +1569,10 @@ $(document).ready(function(){
 			    	$('#frm_add_province #province_id').val(provinceId);
 			    	$('#frm_add_province #province_name').val(response.name);
                     $('#frm_add_province #abbreviation').val(response.abbreviation);
+					$('#frm_add_province #pst').val(response.pst);
+					$('#frm_add_province #gst').val(response.gst);
+					$('#frm_add_province #hst').val(response.hst);
+					$('#frm_add_province #service_charge').val(response.service_charge);
                     $('#frm_add_province #province_profile_image').attr('src', response.image);
 			    	$('#frm_add_province input[name="province_status"][value="'+ response.status +'"]').prop('checked', true);
 
