@@ -2442,4 +2442,37 @@ class AgentController extends Controller
 
     	return response()->json($response);
     }
+
+    /**
+     * Function to return payment view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentPlan()
+    {
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+		$currDate = date('Y-m-d');
+
+    	// Get the payment plan list
+    	$paymentPlans 	= PaymentPlan::where(['plan_type_id' => '1', 'status' => '1'])	// plan_type_id : 1 is for agent
+    					->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')
+    					->get();
+
+    	// Get the selected payment plan details with the date validation
+    	$selectedPaymentPlan 	= DB::table('payment_plan_subscriptions as t1')
+    							->join('payment_plans as t2', 't1.plan_id', '=', 't2.id')
+    							->where(['t1.plan_type_id' => '1', 't1.subscriber_id' => $userId, 't1.status' => '1', 't2.status' => '1'])
+    							->where('t1.start_date', '<=', $currDate)
+    							->where('t1.end_date', '>=', $currDate)
+    							->select('t1.id', 't2.plan_name', 't2.plan_charges', 't2.validity_days', 't1.start_date', 't1.end_date', 't1.quota', 't1.remaining_qouta')
+    							->first();
+
+    	// echo '<pre>';
+    	// print_r( $selectedPaymentPlan );
+    	// exit;	
+
+    	return view('agent/payment', ['paymentPlans' => $paymentPlans, 'selectedPaymentPlan' => $selectedPaymentPlan]);
+    }
 }

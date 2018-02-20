@@ -36,6 +36,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 	uDistro For local business (I am business)
 */
 
+// To test laratrust permission module
+// Route::get('/laratrust', 'ACLController@checkRolePermission');
+
 // uDistro home
 Route::get('/', function () {
     return view('landingPage1');
@@ -49,6 +52,11 @@ Route::get('/agent/home', function () {
 // uDistro business home
 Route::get('/company/home', function () {
     return view('landingPage3');
+});
+
+// un authorize access view
+Route::get('/unauthorize', function () {
+    return view('unauthorize');
 });
 
 // uDistro get invitation route
@@ -588,6 +596,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// To fetch reviews and show in datatable
 	Route::get('/fetchreviews', 'AgentController@fetchReviews');
+
+	// To return payment view
+	Route::get('/paymentplan', 'AgentController@paymentplan');
 	
 	/* -----------Newly added route for agent partner start here------------------*/
 	
@@ -625,6 +636,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// Movers my move page
 	Route::get('/mymove', 'MoversController@myMove');
+
+	// Check the user authentication
+	Route::post('/checkuserauthentication', 'MoversController@checkUserAuthentication');
 
 	// To update the completed activity status
 	Route::post('/updateactivitystatus', 'MoversController@updateActivityStatus');
@@ -795,6 +809,13 @@ Route::group(['prefix' => 'paypal'], function() {
 
 });
 
+// CRON URL's
+Route::group(['prefix' => 'scheduler'], function() {
+
+	// To send invitation email
+	Route::get('/sendinvitationemail', 'SchedulerController@sendInvitationEmail');
+
+});
 
 // Logout
 Route::get('/logout', 'HomeController@logout');
@@ -816,4 +837,4 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
 
 
 // To fetch quotation for agent Partner
-	Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
+Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');

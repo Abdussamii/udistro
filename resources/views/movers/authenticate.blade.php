@@ -70,11 +70,83 @@ $(function(){
 	color: red;
 }
 </style>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	// Server side validation
+	$('#frm_authenticate_user').submit(function(e){
+		e.preventDefault();
+	});
+
+	$('#frm_authenticate_user').validate({
+		rules: {
+			mobile_no: {
+				required: true,
+				number: true
+			}
+		},
+		messages: {
+			mobile_no: {
+				required: 'Please enter your mobile number',
+				number: 'Please enter a valid mobile number'
+			}
+		}
+	});
+
+	$('#btn_authenticate_user').click(function(){
+		if( $('#frm_authenticate_user').valid() )
+		{
+			let mobileNo 	= $('#mobile_no').val();
+			let clientId 	= $('#client_id').val();
+			let invitationId= $('#invitation_id').val();
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/checkuserauthentication',
+    			method: 'post',
+    			data: {
+    				mobileNo: mobileNo,
+    				clientId: clientId,
+    				invitationId: invitationId
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Redirect the view
+                        setTimeout(function(){
+                            window.location.reload();
+                        }, 2000);
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
+	});
+});
+</script>
+
 </head>
 
 <body>
 
-	
+	<div class="col-sm-6 col-md-6 col-lg-6">
+		<form name="frm_authenticate_user" id="frm_authenticate_user" autocomplete="off">
+			<div class="form-group">
+				<label class="form-group">Enter your mobile number</label>
+				<input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Mobile number">
+				<input type="hidden" name="client_id" id="client_id" class="form-control" value="{{ $clientId }}">
+				<input type="hidden" name="invitation_id" id="invitation_id" class="form-control" value="{{ $invitationId }}">
+			</div>
+			<button type="submit" id="btn_authenticate_user" name="btn_authenticate_user" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
 
 </body>
 </html> 

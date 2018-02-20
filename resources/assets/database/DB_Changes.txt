@@ -145,8 +145,7 @@ ALTER TABLE `tech_concierge_service_requests` CHANGE `created_at` `created_at` D
 
 12-02-2018: 
 
-
-
+***************************************************************************************************
 
 13-02-2018 Update from Abdul
 # DROP TABLE IF EXISTS `agent_partners`;
@@ -228,3 +227,9 @@ CREATE TABLE IF NOT EXISTS `agent_partner_digital_service_type_requests` (
   `updated_by` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+***************************************************************************************************
+
+Mayank Changes:
+
+ALTER TABLE `agent_client_invites` ADD `authentication` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `schedule_date`;
