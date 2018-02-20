@@ -37,6 +37,7 @@ use App\AgentClientMovingToAddress;
 use App\AgentClientInvite;
 use App\ForgotPassword;
 use App\EmailTemplateCategory;
+use App\AgentClientRating;
 
 use Validator;
 use Helper;
@@ -452,9 +453,15 @@ class AgentController extends Controller
     	// Get the invite count send by the logged-in agent
     	$inviteCount = AgentClientInvite::where(['agent_id' => $userId])->count();
 
-    	// 
+    	// Get the total accepted invite
+		$acceptedInviteCount = AgentClientInvite::where(['agent_id' => $userId, 'status' => '2'])->count();		// status: 2 for email read or invitation accepted
 
-    	return view('agent/dashboard', ['clientCount' => $clientCount, 'inviteCount' => $inviteCount]);
+    	// Get the total move completed
+
+    	// Get the reviews count for the agent
+    	$agnetRating = AgentClientRating::where(['agent_id' => $userId])->groupBy('agent_id')->select(DB::raw('sum(rating) as rating'))->first();
+
+    	return view('agent/dashboard', ['clientCount' => $clientCount, 'inviteCount' => $inviteCount, 'acceptedInviteCount' => $acceptedInviteCount, 'agnetRating' => $agnetRating]);
     }
 
     /**
@@ -742,7 +749,7 @@ class AgentController extends Controller
 
         // Get the records after applying the datatable filters
        	$invites = DB::select(
-                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content, t1.status, t1.schedule_status, t3.template_name FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
+                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.status, t1.schedule_status FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
                     );
 
        	// Get the total count without any condition to maintian the pagination
@@ -769,11 +776,9 @@ class AgentController extends Controller
                     1 => ucfirst( strtolower( $invite->fname ) ),
                     2 => ucfirst( strtolower( $invite->lname ) ),
                     3 => ucfirst( strtolower( $invite->email ) ),
-                    4 => ucfirst( strtolower( $invite->template_name ) ),
-                    5 => Helper::getInviteStatus($invite->status),
-                    6 => Helper::getInviteScheduleStatus($invite->schedule_status),
-                    7 => Helper::getTrimText($invite->message_content),
-                    8 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="view_invite"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    4 => Helper::getInviteStatus($invite->status),
+                    5 => Helper::getInviteScheduleStatus($invite->schedule_status),
+                    6 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="view_invite"><i class="fa fa-eye" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2343,6 +2348,86 @@ class AgentController extends Controller
 				
     		}
     	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to return agent review board page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function reviews()
+    {
+        return view('agent/reviews');
+    }
+
+    /**
+     * Function to fetch reviews and show in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchReviews()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 't1.id',
+            1 => 't2.fname',
+            2 => 't2.lname',
+            4 => 't1.rating'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $reviews 	= DB::table('agent_client_ratings as t1')
+        			->join('agent_clients as t2', 't1.client_id', '=', 't2.id')
+        			->where('t1.agent_id','=', $userId)
+        			->where('t2.fname','like', '%'.$sSearch.'%')
+        			->orderBy($sortBy, $sortType)
+                    ->limit($length)
+                    ->offset($start)
+                    ->select('t1.id', 't2.fname', 't2.lname', 't2.email', 't1.rating', 't1.comment', 't1.helpful')
+                    ->get();
+
+        $iTotal = DB::table('agent_client_ratings as t1')
+        			->join('agent_clients as t2', 't1.client_id', '=', 't2.id')
+        			->where('t1.agent_id','=', $userId)
+                    ->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $reviews ) > 0 )
+        {
+            foreach ($reviews as $review)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $review->id,
+                    1 => ucfirst( strtolower( $review->fname ) ),
+                    2 => ucfirst( strtolower( $review->lname ) ),
+                    3 => $review->email,
+                    4 => $review->rating,
+                    5 => $review->comment,
+                    6 => ( $review->helpful == '1' ) ? 'Yes' : 'No'
+                );
+                $k++;
+            }
+        }
 
     	return response()->json($response);
     }
