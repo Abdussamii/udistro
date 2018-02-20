@@ -123,7 +123,7 @@
 		});
 
 		// To make the table column resizable
-		$("table tr th, table tr td").resizable({handles: 'e'});
+		// $("table tr th, table tr td").resizable({handles: 'e'});
     });
     </script>
 
@@ -517,7 +517,7 @@
 
 			        <!-- Email template creation panel -->
 					<div class="element_container" id="email_container">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 320px;">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 320px; font-size: 18px;">
 							<tr>
 								<td align="center" bgcolor="#eff3f8" style="padding-bottom: 40px;">
 
@@ -526,19 +526,35 @@
 								<tr><td>
 								<![endif]-->
 
-								<table border="0" cellspacing="0" cellpadding="0" class="table_width_100" width="100%" style="max-width: 680px; min-width: 300px;">
+								<table border="0" cellspacing="0" cellpadding="0" class="table_width_100" width="100%" style="max-width: 680px; min-width: 300px;" id="table_email_template_container">
 									<tr>
-										<td>
-											<div style="height: 80px; line-height: 80px; font-size: 20px; text-align: center;" id="table_header">Create Email Template</div>
+										<td align="center">
+											<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+											<span style="height: 80px; line-height: 80px; font-size: 20px; text-align: center;" id="table_header" class="editable">Email Template</span>
 										</td>
 									</tr>
 									<tr>
 										<td bgcolor="#fbfcfd">
 											<table border="0" cellspacing="0" cellpadding="0" width="100%" style="margin-top:20px;">
 												<tr>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image1" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image2" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image3" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
+													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
+														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+														<div class="editable">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+														</div>
+													</td>
+													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
+														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+														<div class="editable">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+														</div>
+													</td>
+													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
+														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+														<div class="editable">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+														</div>
+													</td>
 												</tr>
 											</table>
 											<table border="0" cellspacing="0" cellpadding="0" id="table_editable">
@@ -546,9 +562,9 @@
 													<td>
 														<table>
 															<tr>
-																<td style="padding:15px; width: 50%;">
+																<td style="padding:20px; width: 50%;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
+																	<div class="editable" style="text-align: justify;">
 																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -557,9 +573,9 @@
 																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 																	</div>
 																</td>
-																<td style="padding:15px; width: 50%;">
+																<td style="padding:20px; width: 50%;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
+																	<div class="editable" style="text-align: justify;">
 																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -577,9 +593,9 @@
 													<td>
 														<table>
 															<tr>
-																<td style="padding:15px; width: 50%;">
+																<td style="padding:20px; width: 50%;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
+																	<div class="editable" style="text-align: justify;">
 																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -588,9 +604,9 @@
 																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 																	</div>
 																</td>
-																<td style="padding:15px; width: 50%;">
+																<td style="padding:20px; width: 50%;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable">
+																	<div class="editable" style="text-align: justify;">
 																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -606,9 +622,24 @@
 											</table>
 											<table border="0" cellspacing="0" cellpadding="0" width="100%" style="margin:20px 0;">
 												<tr>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image4" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image5" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
-													<td align="center"><img src="{{ url('/images/logo_dummy.png') }}" id="logo_image6" class="logo_images" image-type="dummy" width="150" height="150" alt=""></td>
+													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
+														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+														<div class="editable">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+														</div>
+													</td>
+													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
+														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+														<div class="editable">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+														</div>
+													</td>
+													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
+														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+														<div class="editable">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+														</div>
+													</td>
 												</tr>
 											</table>		
 										</td>
@@ -623,22 +654,22 @@
 							</tr>
 							<table width="80%" align="center" cellpadding="0" cellspacing="0">
 								<tr>
-									<td align="center" style="padding:20px 0;">
+									<td align="center" style="padding:20px 0; width: 33%;">
+										<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 										<div class="editable">
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
+											Address
 										</div>
 									</td>
-									<td align="center" style="padding:20px 0;">
+									<td align="center" style="padding:20px 0; width: 33%;">
+										<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 										<div class="editable">
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
+											Website
 										</div>
 									</td>
-									<td align="center" style="padding:20px 0;">
+									<td align="center" style="padding:20px 0; width: 33%;">
+										<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 										<div class="editable">
-											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua.
+											Phone Number
 										</div>
 									</td>
 								</tr>
@@ -646,19 +677,24 @@
 
 							<table width="80%" align="center" cellpadding="0" cellspacing="0">
 								<tr>
+									<td colspan="3" align="center" style="border-top:1px solid #d9d9d9;">
+										<span class="editable">Connect with us</span>
+									</td>
+								</tr>
+								<tr>
 									<td align="center" valign="middle" style="font-size: 12px; line-height: 22px; padding:20px 0;">
 										<div>
 											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-facebook.png') }}" alt="|" />
+												<img src="{{ url('/images/facebook-icon.png') }}" alt="|" />
 											</a>
 											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-twitter.png') }}" alt="|" />
+												<img src="{{ url('/images/twitter-icon.png') }}" alt="|" />
 											</a>
 											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-linkedin.png') }}" alt="|" />
+												<img src="{{ url('/images/linkedin-icon.png') }}" alt="|" />
 											</a>
 											<a href="javascript:void(0);" target="_blank" class="editable" style="display: inline-block; padding: 5px;">
-												<img src="{{ url('/images/webicon-instagram.png') }}" alt="|" />
+												<img src="{{ url('/images/instagram-icon.png') }}" alt="|" />
 											</a>
 										</div>
 									</td>
@@ -681,8 +717,7 @@
     <!-- /#wrapper -->
 
     <!-- Add Image Modal -->
-    <div id="modal_add_image" class="modal fade" role="dialog">
-        <!-- Modal content-->
+    <!-- <div id="modal_add_image" class="modal fade" role="dialog">
         <div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -705,32 +740,69 @@
 								<input type="text" name="uploaded_image_path" id="uploaded_image_path" class="form-control">
 							</div>
 						</div>
-						<div class="form-group">
-							<label>Placement:</label>
-							<label><input type="radio" name="image_placement" value="1">Top - Left</label>
-							<label><input type="radio" name="image_placement" value="2">Top - Middle</label>
-							<label><input type="radio" name="image_placement" value="3">Top - Right</label>
-							<label><input type="radio" name="image_placement" value="4">Bottom - Left</label>
-							<label><input type="radio" name="image_placement" value="5">Bottom - Middle</label>
-							<label><input type="radio" name="image_placement" value="6">Bottom - Right</label>
-						</div>
-						<div>
-							<label id="image_placement-error" class="error" for="image_placement"></label>
-						</div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" id="add_image_to_placeholder">Add Image</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
         </div>
+    </div> -->
+
+    <div id="modal_add_image" class="modal fade" role="dialog">
+    	<div class="modal-content">
+    		<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Uplaod Image</h4>
+			</div>
+			<div class="modal-body">
+		    	<ul class="nav nav-tabs">
+		    	    <li class="active"><a data-toggle="tab" href="#home">Upload Image</a></li>
+		    	    <li><a data-toggle="tab" href="#menu1">Choose from Udistro</a></li>
+		    	</ul>
+
+		    	<div class="tab-content">
+		    	    <div id="home" class="tab-pane fade in active">
+		    	      	<form id="frm_upload_email_template_image" name="frm_upload_email_template_image">
+		    	      		<div class="form-group">
+		    	      			<label for="upload_image">Select Image:</label>
+		    	      			<input type="file" name="upload_image" id="upload_image">
+		    	      		</div>
+		    	      		<div id="container_email_template_image" style="display: none;">
+		    	      			<div class="form-group">
+		    	      				<label>Preview:</label>
+		    	      				<div>
+		    	      					<img src="" alt="Udistro" id="uploaded_image_preview">
+		    	      				</div>
+		    	      				<label>Image Path:</label>
+		    	      				<div>
+		    	      					<input type="text" name="uploaded_image_path" id="uploaded_image_path" class="form-control">
+		    	      				</div>
+		    	      			</div>
+		    	      		</div>
+		    	      	</form>
+		    	    </div>
+		    	    <div id="menu1" class="tab-pane fade">
+		    	      	<div class="form-group">
+		    	      		<img src="{{ url('images/email_template/wH5yJUTpN1LE6Fbl9aZ2.jpg') }}" width="200" height="200">
+		    	      		<input type="" name="" value="{{ url('images/email_template/wH5yJUTpN1LE6Fbl9aZ2.jpg') }}" class="form-control">
+		    	      	</div>
+		    	    </div>
+		    	</div>
+		    </div>
+		    <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+	    </div>
     </div>
 
 </body>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+	// To resize table columns
+	// $("table tr th, table tr td").resizable({handles: 'e'});
 
 	// To remove the table td
 	$(document).on('click', '.remove_editable', function(){
@@ -744,7 +816,10 @@ $(document).ready(function(){
 		}
 		else
 		{
-			alertify.error('You cannot remove last editor in a row');
+			if( confirm('Are you sure to remove this placeholder?') )
+			{
+				$(this).closest('td').remove();
+			}
 		}
 
 	});
@@ -758,6 +833,12 @@ $(document).ready(function(){
 
 	// Add Image Modal
 	$('.add_image').click(function(){
+		// Flush the contents
+		$('#upload_image').val('');
+		$('#uploaded_image_preview').attr('src', '');
+		$('#container_email_template_image').hide();
+
+		// Show the modal
 		$('#modal_add_image').modal();
 	});
 
@@ -840,18 +921,19 @@ $(document).ready(function(){
     	// Clone the container
     	let emailContent = $('#email_container').clone();
 
-    	// Remove the "Create Email Template" header
-    	$(emailContent).find('#table_header').text('');
-
     	// Remove the "X" place holder from html
     	$(emailContent).find('.remove_editable').remove();
 
-    	// Remove all dummy logo images
-    	$(emailContent).find('.logo_images').each(function(){
-    		if( $(this).attr('image-type') == 'dummy' )
+    	// Iterate over all images
+    	$(emailContent).find('img').each(function(){
+    		// Remove all dummy logo images
+    		if( $(this).attr('class') == 'logo_images' )
     		{
     			$(this).remove();
     		}
+
+    		// Add max-width: 800 to all images
+    		$(this).css('max-width', '800px');
     	});
 
     	// Get the updated html
@@ -891,24 +973,28 @@ $(document).ready(function(){
     	if( templateName != '' )
     	{
     		// Clone the container
-	    	let emailContent = $('#email_container').clone();
+    		let emailContent = $('#email_container').clone();
 
-	    	// Remove the "Create Email Template" header
-	    	$(emailContent).find('#table_header').text('');
+    		// Keep the original html content to show it again for editing purpose
+    		let htmlContentToView = $(emailContent).html();
 
-	    	// Remove the "X" place holder from html
-	    	$(emailContent).find('.remove_editable').remove();
+    		// Remove the "X" place holder from html
+    		$(emailContent).find('.remove_editable').remove();
 
-	    	// Remove all dummy logo images
-	    	$(emailContent).find('.logo_images').each(function(){
-	    		if( $(this).attr('image-type') == 'dummy' )
-	    		{
-	    			$(this).remove();
-	    		}
-	    	});
+    		// Iterate over all images
+    		$(emailContent).find('img').each(function(){
+    			// Remove all dummy logo images
+    			if( $(this).attr('class') == 'logo_images' )
+    			{
+    				$(this).remove();
+    			}
 
-	    	// Get the updated html
-	    	let htmlContentToSend = $(emailContent).html();
+    			// Add max-width: 800 to all images
+    			$(this).css('max-width', '800px');
+    		});
+
+    		// Get the updated html, this is to be send over the email
+    		let htmlContentToSend = $(emailContent).html();
 
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/agent/saveemailtemplate',
@@ -916,7 +1002,7 @@ $(document).ready(function(){
     			data: {
     				emailCategoryId: emailCategoryId,
     				templateName: templateName,
-    				htmlContentToView: htmlContentToSend,
+    				htmlContentToView: htmlContentToView,
     				htmlContentToSend: htmlContentToSend
     			},
     			headers: {
