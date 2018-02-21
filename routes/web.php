@@ -107,6 +107,7 @@ Route::get('/ourteam', function () {
 // To test email template view
 // Route::get('/email', 'EmailController@renderEmailTemplate');
 
+// To send the agent email
 Route::post('/email', 'EmailController@sendEmail');
 
 // Administrator openly access routes

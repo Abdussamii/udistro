@@ -1737,36 +1737,48 @@ class AgentController extends Controller
         }
         else
         {
-            // Check if the same email template already exist
-            $templateExist = EmailTemplate::where(['template_name' => $templateName])->first();
+        	// Get the logged-in user id
+			$userId = Auth::id();
 
-            if( count( $templateExist ) == 0 )
-            {
-                $emailTemplate = new EmailTemplate;
+			// Check check whether they have remaining email quota, if yes decrement the count by 1
+			if( Helper::manageEmailQuota($userId, 1) )
+			{
+	            // Check if the same email template already exist
+	            $templateExist = EmailTemplate::where(['template_name' => $templateName])->first();
 
-                $emailTemplate->template_name   = $templateName;
-                $emailTemplate->template_content_to_send = $htmlContentToSend;
-                $emailTemplate->template_content_to_view = $htmlContentToView;
-                $emailTemplate->category_id 	= $emailCategoryId;
-                $emailTemplate->status          = '1';
-                $emailTemplate->created_by      = $userId;
+	            if( count( $templateExist ) == 0 )
+	            {
+	                $emailTemplate = new EmailTemplate;
 
-                if( $emailTemplate->save() )
-                {
-                    $response['errCode']    = 0;
-                    $response['errMsg']     = 'Email template saved successfully';
-                }
-                else
-                {
-                    $response['errCode']    = 2;
-                    $response['errMsg']     = 'Some error in saving email template';
-                }
-            }
-            else
-            {
-                $response['errCode']    = 3;
-                $response['errMsg']     = 'Email template already exist with the same name';
-            }
+	                $emailTemplate->template_name   = $templateName;
+	                $emailTemplate->template_content_to_send = $htmlContentToSend;
+	                $emailTemplate->template_content_to_view = $htmlContentToView;
+	                $emailTemplate->category_id 	= $emailCategoryId;
+	                $emailTemplate->status          = '1';
+	                $emailTemplate->created_by      = $userId;
+
+	                if( $emailTemplate->save() )
+	                {
+	                    $response['errCode']    = 0;
+	                    $response['errMsg']     = 'Email template saved successfully';
+	                }
+	                else
+	                {
+	                    $response['errCode']    = 2;
+	                    $response['errMsg']     = 'Some error in saving email template';
+	                }
+	            }
+	            else
+	            {
+	                $response['errCode']    = 3;
+	                $response['errMsg']     = 'Email template already exist with the same name';
+	            }
+			}
+			else
+			{
+				$response['errCode']    = 3;
+	            $response['errMsg']     = 'Your payment plan subscription is expired';
+			}
         }
 
         return response()->json($response);
@@ -2469,10 +2481,6 @@ class AgentController extends Controller
     							->select('t1.id', 't2.plan_name', 't2.plan_charges', 't2.validity_days', 't1.start_date', 't1.end_date', 't1.quota', 't1.remaining_qouta')
     							->first();
 
-    	// echo '<pre>';
-    	// print_r( $selectedPaymentPlan );
-    	// exit;	
-
-    	return view('agent/payment', ['paymentPlans' => $paymentPlans, 'selectedPaymentPlan' => $selectedPaymentPlan]);
+    	return view('agent/paymentPlan', ['paymentPlans' => $paymentPlans, 'selectedPaymentPlan' => $selectedPaymentPlan]);
     }
 }
