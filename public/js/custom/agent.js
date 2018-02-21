@@ -1508,6 +1508,50 @@ $(document).ready(function(){
             { 'bSortable' : false }
         ]
     });
+
+    // Agent paypal payment
+    $('.agent_plan_selection').click(function(){
+    	
+    	let planId 	= $(this).attr('id');
+
+    	// ajax call to get payment related details
+    	$.ajax({
+    		url: $('meta[name="route"]').attr('content') + '/agent/getplandetails',
+    		method: 'get',
+    		data: {
+    			planId: planId
+    		},
+    	    success: function(response){
+    	    	if( response.errCode == 0 )
+    	    	{
+    	    		$('#make_payment_modal').modal('show');
+
+    	    		// Autofill the form
+    	    		$('#paypal #payment_against').val( response.details.paymentAgainst );
+    	    		$('#paypal #payment_amount').val( '$' + response.details.amount );
+
+    	    		$('#paypal #first_name').val( response.details.fname );
+    	    		$('#paypal #last_name').val( response.details.lname );
+    	    		$('#paypal #email').val( response.details.email );
+    	    		$('#paypal #address1').val( response.details.address1 );
+    	    		$('#paypal #address2').val( response.details.address2 );
+    	    		$('#paypal #city').val( response.details.city );
+    	    		$('#paypal #zip').val( response.details.postal_code );
+    	    		$('#paypal #day_phone_a').val( response.details.contactNumber );
+    	    		$('#paypal #day_phone_b').val( response.details.contactNumber );
+    	    		$('#paypal #amount').val( response.details.amount );
+
+    	    		$('#paypal #item_name').val( response.details.paymentAgainst );
+
+    	    		$('#paypal #invoice').val( response.details.invoiceNo );
+    	    	}
+    	    	else
+    	    	{
+    	    		alertify.error( response.errMsg );
+    	    	}
+    	    }
+    	});
+    });
 });
 
 /**

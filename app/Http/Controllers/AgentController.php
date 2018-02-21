@@ -2483,4 +2483,49 @@ class AgentController extends Controller
 
     	return view('agent/paymentPlan', ['paymentPlans' => $paymentPlans, 'selectedPaymentPlan' => $selectedPaymentPlan]);
     }
+
+    /**
+     * Function to get the payment plan details for paypal payment
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function getPlanDetails()
+    {
+    	$planId = Input::get('planId');
+
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+    	$response = array();
+    	
+    	if( $planId != '' && $planId != 0 )
+    	{
+    		// Get the payment plan details
+    		$paymentPlanDetails = PaymentPlan::find($planId);
+
+    		// Get the agent details
+    		$agentDetails = DB::table('users as t1')
+    						->join('cities as t2', 't1.city_id', '=', 't2.id')
+    						->where(['t1.id' => $userId, 't1.status' => '1'])
+    						->select('t1.fname', 't1.lname', 't1.email', 't1.address1', 't1.address2', 't1.postalcode', 't1.phone_number', 't2.name as city')
+    						->first();
+
+    		$response['errCode']    = 0;
+			$response['errMsg']     = 'Success';
+    		$response['details'] 	= array(
+    			'fname' 		=> ucwords( strtolower( $agentDetails->fname ) ),
+    			'lname' 		=> ucwords( strtolower( $agentDetails->lname ) ),
+    			'email' 		=> $agentDetails->email,
+    			'address1' 		=> $agentDetails->address1,
+    			'address2' 		=> $agentDetails->address2,
+    			'city' 			=> $agentDetails->city,
+    			'zip' 			=> $agentDetails->postalcode,
+    			'contactNumber'	=> $agentDetails->phone_number,
+    			'paymentAgainst'=> ucwords( strtolower( $paymentPlanDetails->plan_name ) ),
+    			'amount' => $paymentPlanDetails->plan_charges
+    		);
+    	}
+
+    	return response()->json($response);
+    }
 }

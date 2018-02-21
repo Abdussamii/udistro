@@ -614,7 +614,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	
 	// To show partner listing page
 	Route::get('/partners', 'AgentController@partners');
-	
+
+	// To get the payment plan details for paypal payment
+	Route::get('/getplandetails', 'AgentController@getPlanDetails');
 		
 	/* -----------Newly added route for agent partner end here------------------*/
 
