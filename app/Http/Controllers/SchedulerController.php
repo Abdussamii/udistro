@@ -10,6 +10,11 @@ use Helper;
 use App\EmailTemplate;
 use App\AgentClient;
 use App\AgentClientInvite;
+use App\HomeCleaningServiceRequest;
+use App\DigitalServiceRequest;
+use App\TechConciergeServiceRequest;
+use App\MovingItemServiceRequest;
+use App\ResponseTimeSlot;
 
 class SchedulerController extends Controller
 {
@@ -101,5 +106,192 @@ class SchedulerController extends Controller
     			}
     		}
     	}
+    }
+	
+	public function sendCompanyQuotationResponseEmail()
+	{
+		// For testing purpose
+		Log::useDailyFiles(storage_path().'/logs/cron.log');
+		// Log::info('Hello');
+
+    	// Working hours in Canada: 07:00 to 17:00
+    	$workingHourStartTime 	= '07:00:00';
+    	$workingHourEndTime 	= '17:00:00';
+
+    	// Check the current time of the server
+    	$currentDate = date('Y-m-d');
+    	$currentTime = date('H:i:s');
+
+    	// If the current time is between the working hours then get the scheduled email listing
+    	if( $currentTime >= $workingHourStartTime && $currentTime <= $workingHourEndTime )
+    	{
+    		// Check for the `digital_service_requests` email not sent scheduled for today's date
+    		$digitalServiceRequests = DigitalServiceRequest::where(['email_sent_status' => '0'])			//status = 0 means email has not been sent
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'digital_service_company_id As companyId', 'updated_at As responseDate')
+										->first();
+
+    		if( count( $digitalServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
+    		{
+    			// Get the response time slot
+    			$responseTimeSlots = ResponseTimeSlot::where(['status' => '1'])
+													->select('id', 'slot_title', 'slot_time');
+
+    			if( count( $responseTimeSlots ) > 0 )
+    			{
+					
+					//loop through the responseTimeSlots
+					foreach( $responseTimeSlots as $responseTimeSlot )
+					{
+						//loop through the serviceRequestResponses
+						foreach( $digitalServiceRequests as $digitalServiceRequest )
+						{
+							//
+							$nextTime = date('H:i:s', strtotime($digitalServiceRequest->responseDate));
+							$updatedTime = date('H:i:s', strtotime('+'. $responseTimeSlot->slot_time .' minutes', $nextTime));
+							
+							//echo $nextTime . '  ' . $updateTime;
+							//exit();
+							
+							if($currentTime >= $nextTime && $currentTime <= $updatedTime)
+							{
+								//get agent client detail
+								$agentClient = AgentClient::findOrFail($digitalServiceRequest->agent_client_id);
+								$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+								
+								//get company category id from company
+								$companyCategoryId = Company::where('id', $filterCompany->company_id)->get('company_category_id');
+								
+								 Mail::to($agentClient->email)->send(new CompanyQuotationResponse($agentClientName, $digitalServiceRequest->serviceRequestId, $digitalServiceRequest->companyId, $companyCategoryId, $digitalServiceRequest->agent_client_id, $digitalServiceRequest->invitation_id));
+							}
+						}
+					}
+	    			
+    			}
+    		}
+			
+			// Check for the `home_cleaning_service_requests` email not sent scheduled for today's date
+    		$homeCleaningServiceRequests = HomeCleaningServiceRequest::where(['email_sent_status' => '0'])			//status = 0 means email has not been sent
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'company_id As companyId', 'updated_at As responseDate')
+										->first();
+
+    		if( count( $homeCleaningServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
+    		{
+    			// Get the response time slot
+    			$responseTimeSlots = ResponseTimeSlot::where(['status' => '1'])
+													->select('id', 'slot_title', 'slot_time');
+
+    			if( count( $responseTimeSlots ) > 0 )
+    			{
+					
+					//loop through the responseTimeSlots
+					foreach( $responseTimeSlots as $responseTimeSlot )
+					{
+						//loop through the serviceRequestResponses
+						foreach( $homeCleaningServiceRequests as $homeCleaningServiceRequest )
+						{
+							//
+							$nextTime = date('H:i:s', strtotime($homeCleaningServiceRequest->responseDate));
+							$updatedTime = date('H:i:s', strtotime('+'. $responseTimeSlot->slot_time .' minutes', $nextTime));
+							
+							//echo $nextTime . '  ' . $updateTime;
+							//exit();
+							
+							if($currentTime >= $nextTime && $currentTime <= $updatedTime)
+							{
+								//get agent client detail
+								$agentClient = AgentClient::findOrFail($homeCleaningServiceRequest->agent_client_id);
+								$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+								
+								 Mail::to($agentClient->email)->send(new CompanyQuotationResponse($agentClientName, $homeCleaningServiceRequest->serviceRequestId, $homeCleaningServiceRequest->companyId));
+							}
+						}
+					}
+	    			
+    			}
+    		}
+			
+			// Check for the `moving_item_service_requests` email not sent scheduled for today's date
+    		$movingItemServiceRequests = MovingItemServiceRequest::where(['email_sent_status' => '0'])			//status = 0 means email has not been sent
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'mover_company_id As companyId', 'updated_at As responseDate')
+										->first();
+
+    		if( count( $movingItemServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
+    		{
+    			// Get the response time slot
+    			$responseTimeSlots = ResponseTimeSlot::where(['status' => '1'])
+													->select('id', 'slot_title', 'slot_time');
+
+    			if( count( $responseTimeSlots ) > 0 )
+    			{
+					
+					//loop through the responseTimeSlots
+					foreach( $responseTimeSlots as $responseTimeSlot )
+					{
+						//loop through the serviceRequestResponses
+						foreach( $movingItemServiceRequests as $movingItemServiceRequest )
+						{
+							//
+							$nextTime = date('H:i:s', strtotime($movingItemServiceRequest->responseDate));
+							$updatedTime = date('H:i:s', strtotime('+'. $responseTimeSlot->slot_time .' minutes', $nextTime));
+							
+							//echo $nextTime . '  ' . $updateTime;
+							//exit();
+							
+							if($currentTime >= $nextTime && $currentTime <= $updatedTime)
+							{
+								//get agent client detail
+								$agentClient = AgentClient::findOrFail($movingItemServiceRequest->agent_client_id);
+								$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+								
+								 Mail::to($agentClient->email)->send(new CompanyQuotationResponse($agentClientName, $movingItemServiceRequest->serviceRequestId, $movingItemServiceRequest->companyId));
+							}
+						}
+					}
+	    			
+    			}
+    		}
+			
+			// Check for the `tech_concierge_service_requests` email not sent scheduled for today's date
+    		$techConciergeServiceRequests = TechConciergeServiceRequest::where(['email_sent_status' => '0'])	//status = 0 means email has not been sent
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'company_id As companyId', 'updated_at As responseDate')
+										->first();
+
+    		if( count( $techConciergeServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
+    		{
+    			// Get the response time slot
+    			$responseTimeSlots = ResponseTimeSlot::where(['status' => '1'])
+													->select('id', 'slot_title', 'slot_time');
+
+    			if( count( $responseTimeSlots ) > 0 )
+    			{
+					
+					//loop through the responseTimeSlots
+					foreach( $responseTimeSlots as $responseTimeSlot )
+					{
+						//loop through the serviceRequestResponses
+						foreach( $techConciergeServiceRequests as $techConciergeServiceRequest )
+						{
+							//
+							$nextTime = date('H:i:s', strtotime($techConciergeServiceRequest->responseDate));
+							$updatedTime = date('H:i:s', strtotime('+'. $responseTimeSlot->slot_time .' minutes', $nextTime));
+							
+							//echo $nextTime . '  ' . $updateTime;
+							//exit();
+							
+							if($currentTime >= $nextTime && $currentTime <= $updatedTime)
+							{
+								//get agent client detail
+								$agentClient = AgentClient::findOrFail($techConciergeServiceRequest->agent_client_id);
+								$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+								
+								 Mail::to($agentClient->email)->send(new CompanyQuotationResponse($agentClientName, $techConciergeServiceRequest->serviceRequestId, $techConciergeServiceRequest->companyId));
+							}
+						}
+					}
+	    			
+    			}
+    		}
+		}
+		
     }
 }

@@ -62,12 +62,15 @@ use Helper;
 use Session;
 
 //newly added header files
+use App\Company;
 use App\AgentPartner;
 use App\AgentPartnerDigitalServiceRequest;
 use App\AgentPartnerDigitalServiceTypeRequest;
 use App\AgentPartnerDigitalAdditionalServiceTypeRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Quotation;
+use App\Mail\CompanyQuotationResponse;
+use App\Mail\MoverQuotationRequest;
 
 class MoversController extends Controller
 {
@@ -852,6 +855,15 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+				
+				//get company deatil
+				$companyDetail = Company::findOrFail($filterCompany->company_id);
+				
+				$agentClient = AgentClient::findOrFail($clientId);
+				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+				
+				//email needs to be sent to this company
+				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 	    	}
 	    	else
 	    	{
@@ -1186,6 +1198,16 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+				
+				//get company deatil
+				$companyDetail = Company::findOrFail($filterCompany->company_id);
+				
+				$agentClient = AgentClient::findOrFail($clientId);
+				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+				
+				//email needs to be sent to this company
+				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
+				
 	    	}
 	    	else
 	    	{
@@ -1337,8 +1359,12 @@ class MoversController extends Controller
 		$digitalServicesApplied = array();
 		$additionalDigitalServicesApplied = array();
 		
+		//get the agent id through agent client id
+		$agentClient = AgentClient::findOrFail($digitalServiceRequest->agent_client_id);
+		$agentId	 = $agentClient->agent_id;
+		
 		//Check whether agent has partner that can receive quotation
-		$agentPartners = AgentPartner::where(['status' => '1', 'agent_id' => $clientId])->select('id', 'partner_email')->get();
+		$agentPartners = AgentPartner::where(['status' => '1', 'agent_id' => $agentId])->select('id', 'partner_email')->get();
 		$agentPartnersNo = count( $agentPartners );
 		if( $agentPartnersNo > 0 )
 		{	
@@ -1531,6 +1557,15 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+				
+				//get company deatil
+				$companyDetail = Company::findOrFail($filterCompany->company_id);
+				
+				$agentClient = AgentClient::findOrFail($clientId);
+				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+				
+				//email needs to be sent to this company
+				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 	    	}
 	    	else
 	    	{
@@ -1812,6 +1847,15 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+				
+				//get company deatil
+				$companyDetail = Company::findOrFail($filterCompany->company_id);
+				
+				$agentClient = AgentClient::findOrFail($clientId);
+				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
+				
+				//email needs to be sent to this company
+				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 	    	}
 	    	else
 	    	{

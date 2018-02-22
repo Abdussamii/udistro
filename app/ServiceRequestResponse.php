@@ -12,7 +12,7 @@ class ServiceRequestResponse extends Model
      * @var array
      */
     protected $fillable = [
-        'request_id', 'company_id', 'gst_amount', 'gst_amount', 'pst_amount', 'service_charge', 'insurance', 'insurance', 'total_amount', 'total_remittance', 'comment'
+        'request_id', 'company_id', 'gst_amount', 'gst_amount', 'pst_amount', 'service_charge', 'insurance', 'insurance', 'total_amount', 'total_remittance', 'email_sent_status', 'comment'
     ];
 
     public $timestamps = true;
