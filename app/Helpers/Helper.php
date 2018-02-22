@@ -294,20 +294,35 @@ class Helper
      * @param int
      * @return bool
      */
-    public static function checkPaymentPlanSubscriptionQuota($companyId, $planTypeId)
+    public static function checkPaymentPlanSubscriptionQuota($subscriberId, $planTypeId)
     {
-    	if( !is_null( $companyId ) && ( $companyId != '' ) )
+    	if( !is_null( $subscriberId ) && ( $subscriberId != '' ) && !is_null( $planTypeId ) && ( $planTypeId != '' ) )
     	{
+    		// Get the current date
     		$date = date('Y-m-d');
 
-    		// Check if their is an active payment plan exist on the present date
-    		$paymentPlanSubscriptionQouta = PaymentPlanSubscription::where('subscriber_id', '=', $companyId)	// subscriber is either company / agent
-    										->where('plan_type_id', '=', $planTypeId)							// plan type is either for company / agent
-    										->where('start_date', '<=', $date)									// plan start date must lie between the today's date
-    										->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
-    										// ->where('remaining_qouta', '>', 0)	// plan remaining qouta count must not be zero (hold for now, as there is no limit)
-    										->where('status', '=', '1')
-    										->first();
+    		// For agent payment plan there is a count limit
+    		if( $planTypeId == 1 )
+    		{
+    			// Check if their is an active payment plan exist on the present date
+    			$paymentPlanSubscriptionQouta = PaymentPlanSubscription::where('subscriber_id', '=', $subscriberId)	// subscriber is either company / agent
+    											->where('plan_type_id', '=', $planTypeId)							// plan type is either for company / agent
+    											->where('start_date', '<=', $date)									// plan start date must lie between the today's date
+    											->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
+    											->where('remaining_qouta', '>', 0)									// plan remaining qouta count must not be zero
+    											->where('status', '=', '1')
+    											->first();
+    		}
+    		else 	// There is no count limit for company
+    		{
+    			// Check if their is an active payment plan exist on the present date
+    			$paymentPlanSubscriptionQouta = PaymentPlanSubscription::where('subscriber_id', '=', $subscriberId)	// subscriber is either company / agent
+    											->where('plan_type_id', '=', $planTypeId)							// plan type is either for company / agent
+    											->where('start_date', '<=', $date)									// plan start date must lie between the today's date
+    											->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
+    											->where('status', '=', '1')
+    											->first();
+    		}
 
     		if( count( $paymentPlanSubscriptionQouta ) > 0 )
     		{
@@ -322,6 +337,43 @@ class Helper
     	{
     		return false;
     	}
+    }
+
+    /**
+     * To check the email count available in selected payment plan, and decerement it by one on every email sent
+     * @param int
+     * @param int
+     * @return bool
+     */
+    public static function manageEmailQuota($subscriberId, $planTypeId)
+    {
+    	$response = array();
+    	if( !is_null( $subscriberId ) && ( $subscriberId != '' ) && !is_null( $planTypeId ) && ( $planTypeId != '' ) )
+    	{
+	    	// First check whether they have remaining email quota
+			if( Helper::checkPaymentPlanSubscriptionQuota($subscriberId, $planTypeId) )
+			{
+				// Decrement the remaining_qouta by 1
+				$paymentPlanSubscription = PaymentPlanSubscription::where(['subscriber_id' => $subscriberId, 'plan_type_id' => $planTypeId, 'status' => '1'])->first();
+
+				$paymentPlanSubscription->remaining_qouta = $paymentPlanSubscription->remaining_qouta - 1;
+
+				if( $paymentPlanSubscription->save() )
+				{
+					$response = true;
+				}
+				else
+				{
+					$response = false;
+				}
+			}
+    	}
+    	else
+    	{
+    		$response = false;	
+    	}
+
+    	return $response;
     }
 
     /**

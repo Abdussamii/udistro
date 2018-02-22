@@ -7,17 +7,14 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
 	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
-	   	<li>
-		   	<a href="{{ url('/agent/home') }}">
-		    	<button type="button" class="btn top-btn1"> I’m a Real-Estate Agent</button>
-		    </a>
-		</li>
-	   <li>
-	   		<a href="{{ url('/company/home') }}">
-	    		<button type="button" class="btn top-btn1"> I'm a Local Business</button>
-	    	</a>
-		</li>
+	   <li><a href="{{ url('/agent/home') }}">
+	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>
+	    </a></li>
+	   <li><a href="{{ url('/company/home') }}">
+	    <button type="button" class="btn top-btn1">I'm a Local Business</button>
+	    </a></li>
 	  </ul>
 	 </div>
 	</nav>
@@ -46,10 +43,30 @@
 	    </div>
 	   </div>
 	  </div>
-	  <a href="#" class="scroll-down" address="true"></a> </div>
+		<a href="#partnerBlock" class="scroll-down" address="true"></a> </div>
 	</section>
 	<!--Video Section Ends Here--> 
-
+	
+	<!--Partner Logo Section Starts Here--> 
+	<section class="content-section section-pd partner-wrap" id="partnerBlock">
+	 <div class="container">
+	  <div class="row">
+	   <div class="col-md-12">
+	     <h2 class="center-block title-main">Our Partners</h2>
+			<div class="owl-carousel owl-theme">
+				<div class="item partner-box"><img src="{{ url('/images/landing_image/chairmans_club.jpg') }}" alt="" /></div>
+				<div class="item partner-box"><img src="{{ url('/images/landing_image/remax-1.jpg') }}" alt="" /></div>
+				<div class="item partner-box"><img src="{{ url('/images/landing_image/remax.jpg') }}" alt="" /></div>
+				<div class="item partner-box"><img src="{{ url('/images/landing_image/tod_niblock.jpg') }}" alt="" /></div>
+				<div class="item partner-box"><img src="{{ url('/images/landing_image/PHD.jpg') }}" alt="" /></div>
+				<div class="item partner-box"><img src="{{ url('/images/landing_image/merry_maids.jpg') }}" alt="" /></div>
+			</div>
+	   </div>
+	  </div>
+	 </div>
+	</section>
+	<!--Partner Logo Section Ends Here--> 
+	   
 	<!-- Let’s Organize Your Move -->
 	<section class="content-section section-pd" id="learn_more">
 	 <div class="container">

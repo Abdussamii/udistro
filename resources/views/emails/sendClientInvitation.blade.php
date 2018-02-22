@@ -1,3 +1,3 @@
 <div>
-	{{ $emailData['content'] }}
+	{!! $emailData['content'] !!}
 </div>

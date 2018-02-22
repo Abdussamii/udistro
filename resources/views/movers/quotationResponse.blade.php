@@ -27,6 +27,9 @@
         <!-- dataTables -->
         <link rel="stylesheet" href="{{ URL::asset('css/dataTables.min.css.css') }}" />
 
+        <link rel="stylesheet" href="{{ URL::asset('css/style_other_pages.css') }}" />
+    	<link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -184,18 +187,53 @@
                 transform: rotate(360deg);
               }
             }
+            .navbar-fixed-bottom, .navbar-fixed-top {
+			    position: relative;
+			}
+			.cr-h1 {
+			    font-size: 35px;
+			    text-align: center;
+			    padding: 30px 0px;
+			    border-bottom: 1px solid #eee;
+			    font-weight: 700;
+			}
+			.company-response-data {
+			    margin-bottom: 80px;
+			}
         </style>
 
     </head>
 
     <body>
-        <div id="wrapper">
+
+<!-- Navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	 <div class="container-fluid">
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  <ul class="nav navbar-nav navbar-right navbar-top-link">
+	   	<li>
+		   	<a href="{{ url('/agent/home') }}">
+		    	<button type="button" class="btn top-btn1"> I’m a Real-Estate Agent</button>
+		    </a>
+		</li>
+	   <li>
+	   		<a href="{{ url('/company/home') }}">
+	    		<button type="button" class="btn top-btn1"> I'm a Local Business</button>
+	    	</a>
+		</li>
+	  </ul>
+	 </div>
+	</nav>
+	<!-- End Navbar --> 
+
+        <div id="wrapper" class="container-fluid">
+        	<div class="cr-h1">Company Response</div>
             <div id="page-wrapper">
-                <div class="row">
+                <div class="row company-response-data">
                     <div class="col-lg-12 top-buffer">
                         <input type="hidden" id="client_id" value="1">
                         <input type="hidden" id="invitation_id" value="3">
-                        <table id="datatable_quotation" class="table table-striped">
+                        <table id="datatable_quotation" class="table table-striped" style="width:100%;">
                             <thead>
                                 <tr>
                                     <td>#</td>
@@ -942,7 +980,7 @@
 						</div>
 
 					    <!-- Prepopulate the PayPal checkout page with customer details -->
-					    <div class="form-group">
+					    <div class="form-group" style="display: none;">
 						    <input type="text" name="first_name" id="first_name" value="">
 						    <input type="text" name="last_name" id="last_name" value="">
 						    <input type="text" name="email" id="email" value="">
@@ -957,7 +995,7 @@
 					    <!-- We don't need to use _ext-enter anymore to prepopulate pages -->
 					    <!-- cmd = _xclick will automatically pre populate pages -->
 					    <!-- More information: https://www.x.com/docs/DOC-1332 -->
-					    <div class="form-group">
+					    <div class="form-group" style="display: none;">
 						    <input type="text" name="cmd" value="_xclick" />
 						    <input type="text" name="business" value="info@udistro.ca" />
 						    <input type="text" name="cbt" value="Return to uDistro" />
@@ -965,13 +1003,13 @@
 						</div>
 
 					    <!-- Allow the customer to enter the desired quantity -->
-					    <div class="form-group">
+					    <div class="form-group" style="display: none;">
 						    <input type="text" name="quantity" id="quantity" value="1" />
 						    <input type="text" name="item_name" id="item_name" value="" />
 						</div>
 
 					    <!-- Custom value you want to send and process back in the IPN -->
-					    <div class="form-group">
+					    <div class="form-group" style="display: none;">
 						    <!-- <input type="text" name="custom" value="" />
 						    <input type="text" name="shipping" value="" /> -->
 						    <input type="text" name="invoice" id="invoice" value="" />
@@ -981,7 +1019,10 @@
 						</div>
 
 					    <!-- Where to send the PayPal IPN to. -->
-					    <input type="text" name="notify_url" value="{{ url('/paypal/paymentstatus') }}" />
+					    <input type="text" name="notify_url" value="{{ url('/paypal/paymentstatus') }}" style="display: none;" />
+
+					    <!-- Redirect the user to the billing page instead of paypal payment page -->
+					    <input type="hidden" name="landing_page" value="billing">
 					</div>
 					<div class="modal-footer">
 						<!-- For production -->
@@ -996,7 +1037,88 @@
 			</div>
 		</div>
     </div>
+<!-- Footer Starts -->
+	<footer class="footer-main section-pd">
+	 <div class="container">
+	  <div class="row">
+	   <div class="col-md-4">
+	    <div class="foot_logo">
+	    	<!-- <img src="images/logo-foot.png" alt=""/> -->
+	    	<img src="{{ url('/images/landing_image/logo-foot.png') }}" alt="">
+	    </div>
+	    <ul class="footer_social_icon">
+	     <li><a href="https://www.facebook.com/udistro.rakoomi" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+	     <li><a href="https://www.linkedin.com/in/udistro-rakoomi-043323153/" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+	     <li><a href="https://twitter.com/udistroca" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+	     <li><a href="https://plus.google.com/" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+	     <li><a href="https://www.instagram.com/udistroca" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+	     <!-- <li><a href="" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a></li> -->
+	    </ul>
+	    <address>
+	    <h4></h4>
+	    <ul>
+	     <li class="address-post">Winnipeg, Manitoba</li>
+	     <li><i class="fa fa-phone" aria-hidden="true"></i> Fongo Phone: 204-202-3377</li>
+	     <li><i class="fa fa-map-marker" aria-hidden="true"></i> 610 Kirkbridge Drive</li>
+	    </ul>
+	    </address>
+	   </div>
+	   <div class="col-md-3 col-sm-4">
+	    <div class="media-body client-achive-step">
+	     <h2 class="media-heading">Company</h2>
+	    </div>
+	    <ul class="list-group custom-listgroup">
+	     <li class="list-group-item"><a href="{{ url('/aboutus') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
+	     <li class="list-group-item"><a href="{{ url('/ourteam') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Our Team</a></li>
+	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Management</a></li>
+	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Our Customers</a></li>
+	    </ul>
+	   </div>
+	   <div class="col-md-3 col-sm-4">
+	    <div class="media-body client-achive-step">
+	     <h2 class="media-heading">Important Links</h2>
+	    </div>
+	    <ul class="list-group custom-listgroup">
+	     <li class="list-group-item"><a href="{{ url('/login') }}"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
+	     <li class="list-group-item"><a href="{{ url('/freetrial') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
+	     <li class="list-group-item"><a href="{{ url('/helpcenter') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
+	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
+	    </ul>
+	   </div>
+	   <div class="col-md-2 col-sm-4">
+	    <div class="media-body client-achive-step">
+	     <h2 class="media-heading">Resources</h2>
+	    </div>
+	    <ul class="list-group custom-listgroup">
+	     <li class="list-group-item"><a href="{{ url('/events') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Events</a></li>
+	     <li class="list-group-item"><a href="{{ url('/helpcenter') }}"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Help Center</a></li>
+	     <li class="list-group-item"><a href="https://udistro424000759.wordpress.com/" target="_blank"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Blog</a></li>
+	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Videos</a></li>
+	    </ul>
+	   </div>
+	  </div>
+	  
+	  <!-- -->
+	  <div class="footerAdditional">
+	   <ul>
+	    <li> <a href="{{ url('/faqs') }}">FAQs</a> </li>
+	    <li> <a href="https://termsfeed.com/privacy-policy/78d745deeed0b145a84dbc4b46e88912" target="_blank">Privacy</a> </li>
+	    <li> <a href="https://termsfeed.com/terms-conditions/ecb999172c16298afdddc8eb94b9a21b" target="_blank">Terms</a> </li>
+	    <li> <a href="{{ url('/agent/home') }}">I’m a Real-Estate Agent</a> </li>
+	    <li> <a href="{{ url('/getinvitation') }}">I'm a Moving</a> </li>
+	    <li class="footerAdditional-item--copyright"> © uDistro {{ date('Y') }} All Rights Reserved </li>
+	   </ul>
+	  </div>
+	  <!-- --> 
+	  
+	 </div>
 
+	 <!-- SSL Secure Site Seal -->
+	 <div class="cot_tl_fixed">
+	 	<a href="https://www.positivessl.com/trusted-ssl-site-seal.php" style="font-family: arial; font-size: 10px; color: #212121; text-decoration: none;"><img src="https://www.positivessl.com/images-new/comodo_secure_seal_113x59_transp.png" alt="Trusted Site Seal" title="Trusted Site Seal for Transparent background" border="0" /></a>
+	 </div>
+
+	</footer>
 <script type="text/javascript">
     $(document).ready(function() {
         $.fn.dataTableExt.errMode = 'ignore';

@@ -150,6 +150,7 @@
 	                <!-- left column -->
 	                <div class="col-md-12">
 	                  <!-- -->
+	                  <div class="message-box">
 	                  	<form class="form-horizontal accordian" role="form" name="frm_company_details" id="frm_company_details" autocomplete="off">
 							<fieldset>
 							<legend>Company Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
@@ -195,7 +196,9 @@
 								</div>
 							</fieldset>
 						</form>
+					</div>
 	                  <!-- -->
+	                  <div class="message-box">
 						<form class="form-horizontal accordian" role="form" name="frm_company_address_details" id="frm_company_address_details" novalidate>
 							<fieldset>
 								<legend>Address Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
@@ -300,58 +303,61 @@
 								</div>
 							</fieldset>
 						</form>
+					</div>
 	                 <!-- -->
-	                 <form class="form-horizontal accordian" role="form" name="frm_company_social_details" id="frm_company_social_details" novalidate>
-						<fieldset>
-							<legend>Social Network Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
-							<div class="collapsbox" style="display:block;">
-								<div class="form-group">
-									<label class="col-lg-3 control-label">Facebook:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="company_facebook" id="company_facebook" type="text" value="{{ $companyDetails->facebook or '' }}">
+	                <div class="message-box">
+		                 <form class="form-horizontal accordian" role="form" name="frm_company_social_details" id="frm_company_social_details" novalidate>
+							<fieldset>
+								<legend>Social Network Details: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
+								<div class="collapsbox" style="display:block;">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Facebook:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_facebook" id="company_facebook" type="text" value="{{ $companyDetails->facebook or '' }}">
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">Google Plus:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="company_google_plus" id="company_google_plus" type="text" value="{{ $companyDetails->google_plus or '' }}">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Google Plus:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_google_plus" id="company_google_plus" type="text" value="{{ $companyDetails->google_plus or '' }}">
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">Instagram:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="company_instagram" id="company_instagram" type="text" value="{{ $companyDetails->instagram or '' }}">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Instagram:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_instagram" id="company_instagram" type="text" value="{{ $companyDetails->instagram or '' }}">
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">Linkedin:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="company_linkedin" id="company_linkedin" type="text" value="{{ $companyDetails->linkedin or '' }}">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Linkedin:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_linkedin" id="company_linkedin" type="text" value="{{ $companyDetails->linkedin or '' }}">
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">Skype:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="company_skype" id="company_skype" type="text" value="{{ $companyDetails->skype or '' }}">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Skype:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_skype" id="company_skype" type="text" value="{{ $companyDetails->skype or '' }}">
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">Twitter:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="company_twitter" id="company_twitter" type="text" value="{{ $companyDetails->twitter or '' }}">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Twitter:</label>
+										<div class="col-lg-8">
+											<input class="form-control" name="company_twitter" id="company_twitter" type="text" value="{{ $companyDetails->twitter or '' }}">
+										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">&nbsp;</label>
-									<div class="col-lg-8">
-										<div class="ui-select">
-											<button type="submit" class="btn btn-primary" name="btn_update_company_social_details" id="btn_update_company_social_details">Submit</button>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">&nbsp;</label>
+										<div class="col-lg-8">
+											<div class="ui-select">
+												<button type="submit" class="btn btn-primary" name="btn_update_company_social_details" id="btn_update_company_social_details">Submit</button>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</fieldset>
-					</form>
+							</fieldset>
+						</form>
+					</div>
 	              <!-- -->
 	            </div>
 	          </div>
@@ -448,20 +454,22 @@
 	          <div id="template" class="tab-pane fade">
 	            <div class="email-template-wrap">
 	              <!-- -->
-	              <form class="form-horizontal" role="form" name="frm_company_logo" id="frm_company_logo">
-					<div class="profile-pic-box">
-						<!-- <img src="{{ url('/images/company/' . $companyDetails->image) }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo"> -->
-						<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/company_icon.png') }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo">
-						<div class="edit-profile-pic">
-							<label for="company_image_upload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
-							<input type="file" id="company_image_upload" name="company_image_upload" accept="image/*" style="display: none">
+	             <div class="message-box">
+	              	<form class="form-horizontal" role="form" name="frm_company_logo" id="frm_company_logo">
+						<div class="profile-pic-box">
+							<!-- <img src="{{ url('/images/company/' . $companyDetails->image) }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo"> -->
+							<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/company_icon.png') }}" id="company_logo" name="company_logo" height="150" width="150" class="avatar img-circle" alt="Company Logo">
+							<div class="edit-profile-pic">
+								<label for="company_image_upload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
+								<input type="file" id="company_image_upload" name="company_image_upload" accept="image/*" style="display: none">
+							</div>
+							<div class="sub-can-box">
+								<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
+								<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
+							</div>
 						</div>
-						<div class="sub-can-box">
-							<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
-							<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
-						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 	              <!-- -->
 	          </div>
 	        </div>

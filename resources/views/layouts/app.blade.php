@@ -19,7 +19,30 @@
 
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script type="text/javascript" src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
-
+	<script type="text/javascript" src="{{ URL::asset('js/owl.carousel.min.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+		$('.owl-carousel').owlCarousel({
+			loop:true,
+			margin:10,
+			nav:true,
+			autoplay:true,
+			autoplayTimeout:3000,
+			autoplayHoverPause:false,
+			responsive:{
+				0:{
+					items:2
+				},
+				600:{
+					items:4
+				},
+				1000:{
+					items:6
+				}
+			}
+		})
+    });
+    </script>
 	<script>
 	$(function() {
 		$('.scroll-down').click (function() {
@@ -44,6 +67,7 @@
     <link rel="stylesheet" href="{{ URL::asset('css/style_other_pages.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('css/style_landing_page.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('css/media.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('css/owl.carousel.min.css') }}" />
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
@@ -69,11 +93,15 @@
     }
     </style>
 
-    <script type="text/javascript">
-    $(document).ready(function(){
-    	
-    });
-    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109910967-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109910967-1');
+	</script>
 
 </head>
 
@@ -104,7 +132,7 @@
 	    <h4></h4>
 	    <ul>
 	     <li class="address-post">Winnipeg, Manitoba</li>
-	     <li><i class="fa fa-phone" aria-hidden="true"></i> Fongo Phone: 204-202-3377</li>
+	     <li><i class="fa fa-phone" aria-hidden="true"></i> Call Support: 204-202-3377</li>
 	     <li><i class="fa fa-map-marker" aria-hidden="true"></i> 610 Kirkbridge Drive</li>
 	    </ul>
 	    </address>
@@ -115,9 +143,9 @@
 	    </div>
 	    <ul class="list-group custom-listgroup">
 	     <li class="list-group-item"><a href="{{ url('/aboutus') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
+	     <li class="list-group-item"><a href="{{ url('/customers') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Our Customers</a></li>
 	     <li class="list-group-item"><a href="{{ url('/ourteam') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Our Team</a></li>
-	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Management</a></li>
-	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Our Customers</a></li>
+	     <!--<li class="list-group-item"><a href="javascript:void(0)"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Management</a></li>-->
 	    </ul>
 	   </div>
 	   <div class="col-md-3 col-sm-4">
@@ -128,7 +156,7 @@
 	     <li class="list-group-item"><a href="{{ url('/login') }}"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
 	     <li class="list-group-item"><a href="{{ url('/freetrial') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
 	     <li class="list-group-item"><a href="{{ url('/helpcenter') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
-	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
+	     <!--<li class="list-group-item"><a href="javascript:void(0)"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>-->
 	    </ul>
 	   </div>
 	   <div class="col-md-2 col-sm-4">
@@ -139,7 +167,7 @@
 	     <li class="list-group-item"><a href="{{ url('/events') }}"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Events</a></li>
 	     <li class="list-group-item"><a href="{{ url('/helpcenter') }}"> <i class="fa fa-angle-double-right" aria-hidden="true"></i>Help Center</a></li>
 	     <li class="list-group-item"><a href="https://udistro424000759.wordpress.com/" target="_blank"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Blog</a></li>
-	     <li class="list-group-item"><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Videos</a></li>
+	     <!--<li class="list-group-item"><a href="javascript:void(0)"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Videos</a></li>-->
 	    </ul>
 	   </div>
 	  </div>
@@ -151,7 +179,7 @@
 	    <li> <a href="https://termsfeed.com/privacy-policy/78d745deeed0b145a84dbc4b46e88912" target="_blank">Privacy</a> </li>
 	    <li> <a href="https://termsfeed.com/terms-conditions/ecb999172c16298afdddc8eb94b9a21b" target="_blank">Terms</a> </li>
 	    <li> <a href="{{ url('/agent/home') }}">I’m a Real-Estate Agent</a> </li>
-	    <li> <a href="{{ url('/getinvitation') }}">I'm a Moving</a> </li>
+	    <li> <a href="{{ url('/') }}">I'm Moving</a> </li>
 	    <li class="footerAdditional-item--copyright"> © uDistro {{ date('Y') }} All Rights Reserved </li>
 	   </ul>
 	  </div>

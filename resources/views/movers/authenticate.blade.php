@@ -67,14 +67,128 @@ $(function(){
 
 <style type="text/css">
 .error {
-	color: red;
+    color: red;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+    font-weight: normal;
 }
+</style>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	// Server side validation
+	$('#frm_authenticate_user').submit(function(e){
+		e.preventDefault();
+	});
+
+	$('#frm_authenticate_user').validate({
+		rules: {
+			mobile_no: {
+				required: true,
+				number: true
+			}
+		},
+		messages: {
+			mobile_no: {
+				required: 'Please enter your mobile number',
+				number: 'Please enter a valid mobile number'
+			}
+		}
+	});
+
+	$('#btn_authenticate_user').click(function(){
+		if( $('#frm_authenticate_user').valid() )
+		{
+			let mobileNo 	= $('#mobile_no').val();
+			let clientId 	= $('#client_id').val();
+			let invitationId= $('#invitation_id').val();
+
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/checkuserauthentication',
+    			method: 'post',
+    			data: {
+    				mobileNo: mobileNo,
+    				clientId: clientId,
+    				invitationId: invitationId
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Redirect the view
+                        setTimeout(function(){
+                            window.location.reload();
+                        }, 2000);
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
+	});
+});
+</script>
+<style>
+	form#frm_authenticate_user {
+	    text-align: center;
+	    margin: auto;
+	    position: absolute;
+	    left: 0;
+	    right: 0;
+	    top: 10%;
+	    width: 500px;
+	    height: 370px;
+	    background: #fff;
+	    border-radius: 4px;
+	    padding: 20px;
+	}
+	.mover-authentication {
+	    display: inline-block;
+	    width: 100%;
+	    height: 100%;
+	    background: #eee;
+	    position: fixed;
+	}
+	.classlogo_part {
+	    padding-bottom: 20px;
+	    border-bottom: 1px solid #eee;
+	    margin-bottom: 20px;
+	}
+	.ma_h1 {
+	    background: #eee;
+	    padding: 10px;
+	    font-size: 25px;
+	    margin-bottom: 20px;
+	    font-weight: bolder;
+	    color: #000;
+	}
 </style>
 </head>
 
 <body>
 
-	
+	<div class="mover-authentication">
+		<form name="frm_authenticate_user" id="frm_authenticate_user" autocomplete="off">
+			<div class="classlogo_part">
+				<img src="{{ url('images/udistro-logo.png') }}" alt="">
+			</div>
+			<div class="ma_h1">Mover Autentication</div>
+			<div class="form-group">
+				<label class="form-group">Enter your mobile number</label>
+				<input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Mobile number">
+				<input type="hidden" name="client_id" id="client_id" class="form-control" value="{{ $clientId }}">
+				<input type="hidden" name="invitation_id" id="invitation_id" class="form-control" value="{{ $invitationId }}">
+			</div>
+			<button type="submit" id="btn_authenticate_user" name="btn_authenticate_user" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
 
 </body>
 </html> 

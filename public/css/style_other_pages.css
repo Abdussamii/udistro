@@ -83,6 +83,11 @@ address .address-post { width: 100%;	padding: 0;	border: 0; font-size: 20px;	tex
 .photo-wrap {
 	margin-bottom: 15px;
 }
+.picture-box {
+	width: 100%;
+	min-height: 380px;
+	background: #eee;
+}
 /* FAQ */
 #accordion { padding: 30px 0; }
 .right-arrow.pull-right { background: #57cd67; color: #fff; padding: 0px 5px; }
@@ -151,8 +156,10 @@ address .address-post { width: 100%;	padding: 0;	border: 0; font-size: 20px;	tex
 .help-center-box { padding: 50px 0; display: inline-block; width: 100%; }
 .email-icon { text-align: center; font-size: 40px; color: #fff; width: 80px; height: 80px; background: rgba(0, 0, 0, 0.3); border-radius: 50%; margin: 20px auto 0px; line-height: 76px; }
 .input-box .number,
+.input-box .number a,
 .input-box .livechat,
-.input-box .email { text-align: center; font-size: 30px; color: #fff; font-weight: 900; }
+.input-box .email,
+.input-box .email a { text-align: center; font-size: 30px; color: #fff; font-weight: 900; }
 .input-box .top-btn1 { height: 50px; -webkit-border-radius: 19px; -moz-border-radius: 19px; border-radius: 4px; background-color: #44bae6; color: #fff; width: 200px; margin-top: 15px; text-transform: capitalize; font-size: 16px; }
 /*FREE TRAIL*/
 .free-trail-box { display: inline-block; width: 100%; margin: 50px 0; padding: 10px 0; background: #eee; border-radius: 3px; }

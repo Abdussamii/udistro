@@ -5,13 +5,14 @@
 	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
-	  <div class="navbar-header logo"> <a href="#"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
-	   <li><a href="#">
+	   <li><a href="{{ url('/agent/home') }}">
 	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>
 	    </a></li>
-	   <li><a href="#">
-	    <button type="button" class="btn top-btn1">I'm a Business</button>
+	   <li><a href="{{ url('/company/home') }}">
+	    <button type="button" class="btn top-btn1">I'm a Local Business</button>
 	    </a></li>
 	  </ul>
 	 </div>
@@ -28,14 +29,14 @@
 	     <div class="email-icon"><i class="fa fa-envelope-open" aria-hidden="true"></i></div>
 	     <div class="h3-box-head">Email Us</div>
 	     <div class="input-box">
-	      <div class="email">info@udistro.ca</div>
+	      <div class="email"><a href="mailto:info@udistro.ca" target="_top">info@udistro.ca</a></div>
 	     </div>
 	    </div>
 	    <div class="col-sm-4 call-help">
 	     <div class="email-icon"><i class="fa fa-phone" aria-hidden="true"></i></div>
 	     <div class="h3-box-head">Call Us</div>
 	     <div class="input-box">
-	      <div class="number">+91-256 526 5123</div>
+	      <div class="number"><a href="tel:204-202-3377" onclick="ga('send', 'event', 'skypecallUSA', 'callclick', '204-202-3377', 1);">204-202-3377</a></div>
 	     </div>
 	    </div>
 	    <div class="col-sm-4 chat-help">

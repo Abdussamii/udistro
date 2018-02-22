@@ -58,6 +58,7 @@ use App\ProvincialAgencyDetail;
 use App\ServiceRequestResponse;
 use App\PaymentTransactionDetail;
 
+use Validator;
 use Helper;
 use Session;
 
@@ -148,14 +149,100 @@ class MoversController extends Controller
 
     	if( $agentId != '' && $clientId != '' && $invitationId != '')
     	{
-    		// Return the view and check the user in authentic or not
-    		return view('movers/authenticate');
+    		// Check the user is authentic or not
+    		$inviteDetails = AgentClientInvite::find($invitationId);
+
+    		if( count( $inviteDetails ) > 0 )
+    		{
+    			if( $inviteDetails->authentication == '0' )		// Authentication is pending
+    			{
+    				return view('movers/authenticate', ['clientId' => $clientId, 'invitationId' => $invitationId]);
+    			}
+    			else 	// Authentication is done, redirect the user to my move page
+    			{
+    				return redirect('/movers/mymove?agent_id='. base64_encode( $agentId ) .'&client_id='. base64_encode( $clientId ) .'&invitation_id=​' . base64_encode( $invitationId ));
+    			}
+    		}
     	}
     	else
     	{
     		// Missing required parameters
-    		return 	redirect('/');
+    		return redirect('/');
     	}
+    }
+
+    /**
+     * Function to return my move view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function checkUserAuthentication()
+    {
+    	$mobileNo = Input::get('mobileNo');
+    	$clientId = Input::get('clientId');
+    	$invitationId = Input::get('invitationId');
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'mobileNo'	=> $mobileNo,
+		        'clientId' 	=> $clientId,
+		        'invitationId' => $invitationId
+		    ),
+		    array(
+		        'mobileNo' 	=> array('required', 'numeric'),
+		        'clientId'	=> array('required', 'numeric'),
+		        'invitationId' => array('required', 'numeric'),
+		    ),
+		    array(
+		        'mobileNo.required' 	=> 'Please enter your mobile number',
+		        'mobileNo.numeric'   	=> 'Please enter a valid mobile number',
+		        'clientId.required'		=> 'Invalid user',
+		        'clientId.numeric'		=> 'Invalid user',
+		        'invitationId.required'	=> 'Invalid user',
+		        'invitationId.numeric'	=> 'Invalid user',
+		    )
+		);
+
+		if ( $validation->fails() )		// Some data is not valid as per the defined rules
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else 							// The data is valid, go ahead and check the login credentials and do login
+		{
+			// Check if the mobile number is valid
+			$authenticate = AgentClient::where(['id' => $clientId, 'contact_number' => $mobileNo])->first();
+
+			if( count( $authenticate ) > 0 )
+			{
+				// Update the authentication status
+				if( AgentClientInvite::where(['id' => $invitationId])->update(['authentication' => '1']) )
+				{
+					$response['errCode'] 	= 0;
+					$response['errMsg'] 	= 'User verified successfully';
+				}
+				else
+				{
+					$response['errCode'] 	= 2;
+					$response['errMsg'] 	= 'Some issue in authentication';
+				}
+			}
+			else
+			{
+				$response['errCode'] 	= 3;
+				$response['errMsg'] 	= 'Invalid User';
+			}
+		}
+
+		return response()->json($response);
     }
 
 
@@ -169,6 +256,16 @@ class MoversController extends Controller
     	$agentId 		= base64_decode(Input::get('agent_id'));
     	$clientId 		= base64_decode(Input::get('client_id'));
     	$invitationId 	= base64_decode(Input::get('invitation_id'));
+
+    	// Check if the user is authenticated or not. If not redirect it to the home page
+    	$inviteDetails = AgentClientInvite::find($invitationId);
+    	if( count( $inviteDetails ) > 0 )
+    	{
+    		if( $inviteDetails->authentication == '0' )		// Authentication is pending
+    		{
+    			return redirect('/');
+    		}
+    	}
 
     	// Get the email template id & message detail
     	$inviteDetails = AgentClientInvite::find($invitationId);
@@ -703,7 +800,9 @@ class MoversController extends Controller
     	$specialInstructions 	= array();
     	$movingHouseVehicleType = array();
     	$response = array();
-    	if( count( $movingRequest ) == 0 )
+    	
+    	// if( count( $movingRequest ) == 0 )	// Hold it for now
+    	if( 1 )
     	{
     		// Check how many services request are raised
     		if( isset( $details['moving_house_additional_service'][6] ) && $details['moving_house_additional_service'][6] == 1 )
@@ -909,8 +1008,15 @@ class MoversController extends Controller
 
 		// Get the latitude, longitude of the mover from the Google Map API
 		$clientMovingFromAddressCoordinates = array();
+		// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		// $mapApiResponse = json_decode(file_get_contents($url), true);
+
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-		$mapApiResponse = json_decode(file_get_contents($url), true);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$mapApiResponse = json_decode(curl_exec($ch), true);
+
 		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 		{
 			$clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
@@ -1018,9 +1124,14 @@ class MoversController extends Controller
 					if( $company->working_globally != '1' )
 					{
 						// Get the latitude, longitude of the company address from the Google Map API
-						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						// $mapApiResponse = json_decode(file_get_contents($url), true);
 
-						$mapApiResponse = json_decode(file_get_contents($url), true);
+						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+						$mapApiResponse = json_decode(curl_exec($ch), true);
 
 						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 						{
@@ -1248,8 +1359,16 @@ class MoversController extends Controller
 
 		// Get the latitude, longitude of the mover from the Google Map API
 		$clientMovingToAddressCoordinates = array();
+		
+		// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		// $mapApiResponse = json_decode(file_get_contents($url), true);
+
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-		$mapApiResponse = json_decode(file_get_contents($url), true);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$mapApiResponse = json_decode(curl_exec($ch), true);
+
 		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 		{
 			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
@@ -1298,9 +1417,14 @@ class MoversController extends Controller
 					if( $company->working_globally != '1' )
 					{
 						// Get the latitude, longitude of the company address from the Google Map API
-						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						// $mapApiResponse = json_decode(file_get_contents($url), true);
 
-						$mapApiResponse = json_decode(file_get_contents($url), true);
+						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+						$mapApiResponse = json_decode(curl_exec($ch), true);
 
 						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 						{
@@ -1607,8 +1731,16 @@ class MoversController extends Controller
 
 		// Get the latitude, longitude of the mover from the Google Map API
 		$clientMovingToAddressCoordinates = array();
+		
+		// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		// $mapApiResponse = json_decode(file_get_contents($url), true);
+
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-		$mapApiResponse = json_decode(file_get_contents($url), true);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$mapApiResponse = json_decode(curl_exec($ch), true);
+		
 		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 		{
 			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
@@ -1657,9 +1789,14 @@ class MoversController extends Controller
 					if( $company->working_globally != '1' )
 					{
 						// Get the latitude, longitude of the company address from the Google Map API
-						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						// $mapApiResponse = json_decode(file_get_contents($url), true);
 
-						$mapApiResponse = json_decode(file_get_contents($url), true);
+						$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+						$mapApiResponse = json_decode(curl_exec($ch), true);
 
 						if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 						{
@@ -1863,6 +2000,11 @@ class MoversController extends Controller
 	    		$response['errMsg'] 	= 'No matching company found';
 	    	}
  		}
+ 		else
+ 		{
+ 			$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'No matching company found';
+ 		}
 
  		return response()->json($response);
     }
@@ -2023,10 +2165,10 @@ class MoversController extends Controller
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
                     2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
-                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    3 => round( abs( ( strtotime( $requestResponse['created_at'] ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $requestResponse['id'] .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2678,16 +2820,32 @@ class MoversController extends Controller
 
                 // Get the latitude, longitude of the mover from the Google Map API
                 $clientMovingFromAddressCoordinates = array();
+                
+                // $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+                // $mapApiResponse = json_decode(file_get_contents($url), true);
+
                 $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-                $mapApiResponse = json_decode(file_get_contents($url), true);
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $mapApiResponse = json_decode(curl_exec($ch), true);
+                
                 if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
                 {
                     $clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
                 }
 
                 $clientMovingToAddressCoordinates = array();
+                
+                // $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+                // $mapApiResponse = json_decode(file_get_contents($url), true);
+
                 $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-                $mapApiResponse = json_decode(file_get_contents($url), true);
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $mapApiResponse = json_decode(curl_exec($ch), true);
+                
                 if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
                 {
                     $clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
@@ -2750,8 +2908,16 @@ class MoversController extends Controller
 
 		// Get the latitude, longitude of the mover from the Google Map API
 		$clientMovingToAddressCoordinates = array();
+		
+		// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+		// $mapApiResponse = json_decode(file_get_contents($url), true);
+
 		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-		$mapApiResponse = json_decode(file_get_contents($url), true);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$mapApiResponse = json_decode(curl_exec($ch), true);
+		
 		if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 		{
 			$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
@@ -2780,9 +2946,15 @@ class MoversController extends Controller
 				if( $company->working_globally != '1' )
 				{
 					// Get the latitude, longitude of the company address from the Google Map API
-					$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+					
+					// $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+					// $mapApiResponse = json_decode(file_get_contents($url), true);
 
-					$mapApiResponse = json_decode(file_get_contents($url), true);
+					$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $company->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$mapApiResponse = json_decode(curl_exec($ch), true);
 
 					if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
 					{

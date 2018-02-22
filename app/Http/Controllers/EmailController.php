@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
 use App\AgentClientInvite;
 use App\EmailTemplate;
@@ -87,24 +88,36 @@ class EmailController extends Controller
     	$recipientEmail = Input::get('recipientEmail');
     	$content = Input::get('content');
 
-    	$emailData = array(
-    		/* Email data */
-    		'email' 	=> $recipientEmail,
-    		'name' 		=> 'Test User',
-    		'subject' 	=> 'Test Email',
-    		/* Template data */
-    		'content'	=> $content
-    		
-    	);
+    	// Get the logged-in user id
+		$userId = Auth::id();
 
-    	Mail::send('emails.testEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
-            $m->from('info@udistro.ca', 'Udistro');
-            
-            $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-        });
+		// Check check whether they have remaining email quota, if yes decrement the count by 1
+		if( Helper::manageEmailQuota($userId, 1) )
+		{
+	    	$emailData = array(
+	    		/* Email data */
+	    		'email' 	=> $recipientEmail,
+	    		'name' 		=> 'Test User',
+	    		'subject' 	=> 'Test Email',
+	    		/* Template data */
+	    		'content'	=> $content
+	    		
+	    	);
 
-        $response['errCode']    = 0;
-		$response['errMsg']     = 'Email Sent';
+	    	Mail::send('emails.testEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+	            $m->from('info@udistro.ca', 'Udistro');
+	            
+	            $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+	        });
+
+	        $response['errCode']    = 0;
+			$response['errMsg']     = 'Email Sent';
+		}
+		else
+		{
+			$response['errCode']    = 1;
+			$response['errMsg']     = 'Your payment plan subscription is expired';
+		}
 
 		return response()->json($response);
     }

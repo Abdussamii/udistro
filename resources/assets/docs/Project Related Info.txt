@@ -1,0 +1,17 @@
+
+Udistro:
+
+1. Laratrust is added to maintain the ACL.
+
+2. I have changed the Un-authorized route redirect from: '/login' -> '/'
+
+Go to: app\Exceptions and change the following:
+
+protected function unauthenticated($request, AuthenticationException $exception)
+{
+    if ($request->expectsJson()) {
+        return response()->json(['error' => 'Unauthenticated.'], 401);
+    }
+
+    return redirect()->guest(route('login')); 	// Change this line
+}

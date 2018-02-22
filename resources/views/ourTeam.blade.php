@@ -5,13 +5,14 @@
 	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
-	  <div class="navbar-header logo"><a href="#"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
-	   <li><a href="#">
+	   <li><a href="{{ url('/agent/home') }}">
 	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>
 	    </a></li>
-	   <li><a href="#">
-	    <button type="button" class="btn top-btn1">I'm a Business</button>
+	   <li><a href="{{ url('/company/home') }}">
+	    <button type="button" class="btn top-btn1">I'm a Local Business</button>
 	    </a></li>
 	  </ul>
 	 </div>
@@ -60,6 +61,56 @@
 	      </div>
 	     </div>
 	    </div>
+	   
+	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	    	<div class="picture-box">
+	     	<div class="photo">
+	      	<img src="{{ url('/images/.jpg') }}" alt="" />
+	      </div>
+	      <div class="mem-detail">
+	       <div class="name">Member 4</div>
+	       <div class="designation">Designation of member</div>
+	      </div>
+	     </div>
+	    </div>
+	   
+	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	    	<div class="picture-box">
+	     	<div class="photo">
+	      	<img src="{{ url('/images/.jpg') }}" alt="" />
+	      </div>
+	      <div class="mem-detail">
+	       <div class="name">Member 5</div>
+	       <div class="designation">Designation of member</div>
+	      </div>
+	     </div>
+	    </div>
+	   
+	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	    	<div class="picture-box">
+	     	<div class="photo">
+	      	<img src="{{ url('/images/.jpg') }}" alt="" />
+	      </div>
+	      <div class="mem-detail">
+	       <div class="name">Member 6</div>
+	       <div class="designation">Designation of member</div>
+	      </div>
+	     </div>
+	    </div>
+	   
+	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	    	<div class="picture-box">
+	     	<div class="photo">
+	      	<img src="{{ url('/images/.jpg') }}" alt="" />
+	      </div>
+	      <div class="mem-detail">
+	       <div class="name">Member 7</div>
+	       <div class="designation">Designation of member</div>
+	      </div>
+	     </div>
+	    </div>
+		
+		
 	   </div>
 	  </div>
 	  </div>

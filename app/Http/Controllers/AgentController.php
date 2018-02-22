@@ -1737,36 +1737,48 @@ class AgentController extends Controller
         }
         else
         {
-            // Check if the same email template already exist
-            $templateExist = EmailTemplate::where(['template_name' => $templateName])->first();
+        	// Get the logged-in user id
+			$userId = Auth::id();
 
-            if( count( $templateExist ) == 0 )
-            {
-                $emailTemplate = new EmailTemplate;
+			// Check check whether they have remaining email quota, if yes decrement the count by 1
+			if( Helper::manageEmailQuota($userId, 1) )
+			{
+	            // Check if the same email template already exist
+	            $templateExist = EmailTemplate::where(['template_name' => $templateName])->first();
 
-                $emailTemplate->template_name   = $templateName;
-                $emailTemplate->template_content_to_send = $htmlContentToSend;
-                $emailTemplate->template_content_to_view = $htmlContentToView;
-                $emailTemplate->category_id 	= $emailCategoryId;
-                $emailTemplate->status          = '1';
-                $emailTemplate->created_by      = $userId;
+	            if( count( $templateExist ) == 0 )
+	            {
+	                $emailTemplate = new EmailTemplate;
 
-                if( $emailTemplate->save() )
-                {
-                    $response['errCode']    = 0;
-                    $response['errMsg']     = 'Email template saved successfully';
-                }
-                else
-                {
-                    $response['errCode']    = 2;
-                    $response['errMsg']     = 'Some error in saving email template';
-                }
-            }
-            else
-            {
-                $response['errCode']    = 3;
-                $response['errMsg']     = 'Email template already exist with the same name';
-            }
+	                $emailTemplate->template_name   = $templateName;
+	                $emailTemplate->template_content_to_send = $htmlContentToSend;
+	                $emailTemplate->template_content_to_view = $htmlContentToView;
+	                $emailTemplate->category_id 	= $emailCategoryId;
+	                $emailTemplate->status          = '1';
+	                $emailTemplate->created_by      = $userId;
+
+	                if( $emailTemplate->save() )
+	                {
+	                    $response['errCode']    = 0;
+	                    $response['errMsg']     = 'Email template saved successfully';
+	                }
+	                else
+	                {
+	                    $response['errCode']    = 2;
+	                    $response['errMsg']     = 'Some error in saving email template';
+	                }
+	            }
+	            else
+	            {
+	                $response['errCode']    = 3;
+	                $response['errMsg']     = 'Email template already exist with the same name';
+	            }
+			}
+			else
+			{
+				$response['errCode']    = 3;
+	            $response['errMsg']     = 'Your payment plan subscription is expired';
+			}
         }
 
         return response()->json($response);
@@ -2439,6 +2451,80 @@ class AgentController extends Controller
                 $k++;
             }
         }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to return payment view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentPlan()
+    {
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+		$currDate = date('Y-m-d');
+
+    	// Get the payment plan list
+    	$paymentPlans 	= PaymentPlan::where(['plan_type_id' => '1', 'status' => '1'])	// plan_type_id : 1 is for agent
+    					->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')
+    					->get();
+
+    	// Get the selected payment plan details with the date validation
+    	$selectedPaymentPlan 	= DB::table('payment_plan_subscriptions as t1')
+    							->join('payment_plans as t2', 't1.plan_id', '=', 't2.id')
+    							->where(['t1.plan_type_id' => '1', 't1.subscriber_id' => $userId, 't1.status' => '1', 't2.status' => '1'])
+    							->where('t1.start_date', '<=', $currDate)
+    							->where('t1.end_date', '>=', $currDate)
+    							->select('t1.id', 't2.plan_name', 't2.plan_charges', 't2.validity_days', 't1.start_date', 't1.end_date', 't1.quota', 't1.remaining_qouta')
+    							->first();
+
+    	return view('agent/paymentPlan', ['paymentPlans' => $paymentPlans, 'selectedPaymentPlan' => $selectedPaymentPlan]);
+    }
+
+    /**
+     * Function to get the payment plan details for paypal payment
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function getPlanDetails()
+    {
+    	$planId = Input::get('planId');
+
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+    	$response = array();
+    	
+    	if( $planId != '' && $planId != 0 )
+    	{
+    		// Get the payment plan details
+    		$paymentPlanDetails = PaymentPlan::find($planId);
+
+    		// Get the agent details
+    		$agentDetails = DB::table('users as t1')
+    						->join('cities as t2', 't1.city_id', '=', 't2.id')
+    						->where(['t1.id' => $userId, 't1.status' => '1'])
+    						->select('t1.fname', 't1.lname', 't1.email', 't1.address1', 't1.address2', 't1.postalcode', 't1.phone_number', 't2.name as city')
+    						->first();
+
+    		$response['errCode']    = 0;
+			$response['errMsg']     = 'Success';
+    		$response['details'] 	= array(
+    			'fname' 		=> ucwords( strtolower( $agentDetails->fname ) ),
+    			'lname' 		=> ucwords( strtolower( $agentDetails->lname ) ),
+    			'email' 		=> $agentDetails->email,
+    			'address1' 		=> $agentDetails->address1,
+    			'address2' 		=> $agentDetails->address2,
+    			'city' 			=> $agentDetails->city,
+    			'zip' 			=> $agentDetails->postalcode,
+    			'contactNumber'	=> $agentDetails->phone_number,
+    			'paymentAgainst'=> ucwords( strtolower( $paymentPlanDetails->plan_name ) ),
+    			'amount' => $paymentPlanDetails->plan_charges
+    		);
+    	}
 
     	return response()->json($response);
     }
