@@ -128,7 +128,7 @@
         			<div class="text-center">
         				<a href="#">Forgot your password?</a>
         			</div>
-        			<div class="center-copypart">
+        			<div class="center-copypart text-center">
         				<p>Copyright &copy; 2018 Udistro | All Rights Reserved.</p>
         			</div>
         		</div>

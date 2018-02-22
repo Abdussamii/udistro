@@ -21,7 +21,8 @@ class SchedulerController extends Controller
 
     	// Working hours in Canada: 07:00 to 17:00
     	$workingHourStartTime 	= '07:00:00';
-    	$workingHourEndTime 	= '17:00:00';
+    	// $workingHourEndTime 	= '17:00:00';
+    	$workingHourEndTime 	= '24:00:00';
 
     	// Check the current time of the server
     	$currentDate = date('Y-m-d');

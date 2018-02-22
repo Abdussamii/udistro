@@ -168,6 +168,9 @@
 
 					    <!-- Where to send the PayPal IPN to. -->
 					    <input type="text" name="notify_url" value="{{ url('/paypal/paymentstatus') }}" style="display: none;"/>
+
+					    <!-- Redirect the user to the billing page instead of paypal payment page -->
+					    <input type="hidden" name="landing_page" value="billing">
 					</div>
 
 					<div class="modal-footer">

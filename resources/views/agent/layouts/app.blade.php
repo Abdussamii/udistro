@@ -90,6 +90,16 @@
     });
     </script>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109910967-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-109910967-1');
+    </script>
+
 </head>
 
 <body>
@@ -323,6 +333,9 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+                    	<li class="dash-logo">
+                    		<img src="https://www.udistro.ca/images/logo-dash.png" alt="Udistro">
+                    	</li>
                         <li>
                             <a href="{{ url('agent/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>

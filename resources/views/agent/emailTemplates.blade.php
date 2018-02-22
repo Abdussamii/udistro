@@ -31,8 +31,9 @@
     <link rel="stylesheet" href="{{ URL::asset('css/morris.css') }}" />
 
     <!-- Custom Fonts -->
-    <!-- <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <link rel="stylesheet" href="{{ URL::asset('css/font-awesome.min.css') }}" />
+    <!-- <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> 
+    <link rel="stylesheet" href="{{ URL::asset('css/font-awesome.min.css') }}" />-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 
     <!-- JQuery UI -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
@@ -50,10 +51,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-    <style type="text/css">
-    .top-buffer { margin-top:20px; }
-    </style>
 
     <!-- jQuery -->
     <!-- <script src="../vendor/jquery/jquery.min.js"></script> -->
@@ -98,11 +95,6 @@
 	<script src="https://vitalets.github.io/x-editable/assets/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"></script>
 	<script src="https://vitalets.github.io/x-editable/assets/x-editable/inputs-ext/wysihtml5/wysihtml5-0.0.2.js"></script>
 
-    <style type="text/css">
-    .error {
-    	color: red;
-    }
-    </style>
 
     <script type="text/javascript">
     $(document).ready(function(){
@@ -128,6 +120,10 @@
     </script>
 
 	<style type="text/css">
+    .top-buffer { margin-top:20px; }
+    .error {
+    	color: red;
+    }
 	/* To manage the x-editable css confliction issues */
 		#wrapper .navbar .nav > li {
 			display: block;
@@ -171,6 +167,75 @@
 		    color: #fff;
 		    text-decoration: none;
 		    background-position: 0 0px;
+		}
+		#exTab2 {
+			width: 700px;
+			margin: auto;
+			background: #fff;
+			padding: 10px;
+			border-radius: 4px;
+			border: 1px solid #eee;
+			position:relative;
+			border: 1px solid #eee;
+		}
+		.control-panel-box {
+			display: inline-block;
+			position: absolute;
+			left: -201px;
+			background: #fff;
+			padding: 10px;
+			width: 200px;
+		}
+		.control-panel-box h2 {
+			font-size: 20px;
+			font-weight: normal;
+			text-transform: uppercase;
+			border-bottom: 1px solid #ccc;
+			margin-top: 0;
+		}
+		#page-wrapper .nav-tabs > li > a {
+			padding: 10px 20px;
+		}
+		.btn.btn-info.add_more_row,
+		.btn.btn-info.add_image,
+		#btn_agent_send_email,
+		#btn_agent_save_email_template		{
+			padding: 10px;
+			margin-bottom: 10px;
+			font-size: 17px;
+			width: 100%;
+		}
+		.control-email input[type="email"] {
+			width: 100%;
+			padding: 10px 10px 10px 30px;
+			height: 40px;
+			margin-bottom: 10px;
+			font-size: 16px;
+		}
+		.control-buttons i {
+			position: absolute;
+			left: 20px;
+			line-height: 20px;
+			height: 40px;
+		}
+		.fa.fa-paper-plane.send-icon {
+			line-height: 40px;
+			color: #fff;
+		}
+		.fa.fa-envelope-open.email-icon {
+			line-height: 40px;
+			position: absolute;
+			left: 20px;
+		}
+		#exTab2 .tab-content {
+		    overflow: visible;
+		    display: inline-block;
+		}
+		#exTab2 .editable-buttons .btn-primary,
+		.editable-buttons .editable-cancel {
+		    padding: 0px !important;
+		    height: 30px;
+		    width: 30px;
 		}
 	</style>
 </head>
@@ -394,6 +459,9 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+						<li class="dash-logo">
+							<img src="https://www.udistro.ca/images/logo-dash.png" alt="Udistro">
+                        </li>
                         <li>
                             <a href="{{ url('agent/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
@@ -426,7 +494,7 @@
             
         	<div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Email Templates</h1>
+            <h1 class="page-header text-center">Email Templates</h1>
         </div>
     </div>
     <div class="row">
@@ -459,32 +527,28 @@
     				?>
     					<div class="tab-pane {{ ( $step == 1 ) ? 'active' : '' }}" id="{{ $step }}">
 							
-    						<div>
+    						<div class="control-panel-box">
     							
     							<!-- Email template control panel -->
-    							<div class="col-sm-3 col-md-3 col-lg-3">
-    								<div>
-	    								<h2>Control Panel</h2>
-	    								<div>
-	    									<a href="javascript:void(0);" style="width: 180px;" class="btn btn-primary add_more_row">Add More Row</a>
+	    								<!--<h2>Control Panel</h2>-->
+	    								<div class="control-buttons">
+	    									<a href="javascript:void(0);" style="width: 180px;" class="btn btn-info add_more_row"><i class="fa fa-plus" aria-hidden="true"></i> Add More Row</a>
+	    									<a href="javascript:void(0);" style="width: 180px;" class="btn btn-info add_image"><i class="fa fa-picture-o" aria-hidden="true"></i> Add Image</a>
 	    								</div>
-	    								<br>
-	    								<div>
-	    									<a href="javascript:void(0);" style="width: 180px;" class="btn btn-primary add_image">Add Image</a>
-	    								</div>
-	    							</div>
 
     								<?php
     								// For invitation tab, provide the save email template functionality
     								if( strtolower( $emailTemplateCategory->name ) == 'invite' )
     								{
     								?>
-    									<div>
+    									<div class="control-email">
+											<i class="fa fa-envelope-open email-icon" aria-hidden="true"></i>
     										<input type="email" name="email_template_name" id="email_template_name" placeholder="Template Name" value="">
     										<input type="hidden" name="email_category_id" id="email_category_id" value="{{ $emailTemplateCategory->id }}">
     									</div>
-    									<div>
-    										<input type="button" name="btn_agent_save_email_template" id="btn_agent_save_email_template" class="btn btn-primary" value="Save Email Template">
+    									<div class="control-buttons">
+											<i class="fa fa-paper-plane send-icon" aria-hidden="true"></i>
+    										<input type="button" name="btn_agent_save_email_template" id="btn_agent_save_email_template" class="btn btn-success" value="Save Template">
     									</div>
     								<?php
     								}
@@ -492,18 +556,18 @@
     								else
     								{
     								?>
-    									<br>
-    									<div>
+    									<div class="control-email">
+											<i class="fa fa-envelope-open email-icon" aria-hidden="true"></i>
     										<input type="email" name="recipient_email" id="recipient_email" placeholder="Email Id" value="">
     									</div>
 
-    									<div>
-    										<input type="button" name="btn_agent_send_email" id="btn_agent_send_email" class="btn btn-primary" value="Send Email">
+    									<div class="control-buttons">
+											<i class="fa fa-paper-plane send-icon" aria-hidden="true"></i>
+    										<input type="button" name="btn_agent_send_email" id="btn_agent_send_email" class="btn btn-success" value="Send Email">
     									</div>
     								<?php
     								}
     								?>
-    							</div>
     						</div>
 						</div>
     				<?php
@@ -513,7 +577,7 @@
     			?>
 
     			<!-- Email template creation panel -->
-			    <div class="col-sm-9 col-md-9 col-lg-9" style="margin-bottom: 50px;">
+			    <div class="col-sm-12" style="margin-bottom: 50px;">
 
 			        <!-- Email template creation panel -->
 					<div class="element_container" id="email_container">
@@ -540,19 +604,19 @@
 													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
 														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 														<div class="editable">
-															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 100%;">
 														</div>
 													</td>
 													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
 														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 														<div class="editable">
-															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 100%;">
 														</div>
 													</td>
 													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
 														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 														<div class="editable">
-															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 100%;">
 														</div>
 													</td>
 												</tr>
@@ -625,19 +689,19 @@
 													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
 														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 														<div class="editable">
-															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 100%;">
 														</div>
 													</td>
 													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
 														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 														<div class="editable">
-															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 100%;">
 														</div>
 													</td>
 													<td align="center" style="width: 33%; padding-left: 20px; padding-right: 20px;">
 														<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 														<div class="editable">
-															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 800px;">
+															<img src="{{ url('/images/dummy_image.png') }}" class="logo_images" image-type="dummy" alt="" style="max-width: 100%;">
 														</div>
 													</td>
 												</tr>
@@ -1017,6 +1081,17 @@ $(document).ready(function(){
     });
 
 });
+</script>
+<script type="text/javascript">
+	$(window).scroll(function() {    
+    var scroll = $(window).scrollTop();
+
+    if (scroll >= 10) {
+        $(".dash-logo").addClass("blue-bg");
+    } else {
+        $(".dash-logo").removeClass("blue-bg");
+    }
+	});
 </script>
 
 </html>

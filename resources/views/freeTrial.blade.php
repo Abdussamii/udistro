@@ -121,11 +121,11 @@
 	 <div class="container-fluid">
 	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
-	   <li><a href="#">
+	   <li><a href="{{ url('/agent/home') }}">
 	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>
 	    </a></li>
-	   <li><a href="#">
-	    <button type="button" class="btn top-btn1">I'm a Business</button>
+	   <li><a href="{{ url('/company/home') }}">
+	    <button type="button" class="btn top-btn1">I'm a Local Business</button>
 	    </a></li>
 	  </ul>
 	 </div>
@@ -203,7 +203,7 @@
 	            <div class="form-group">
 	                <input class="btn btn-default" id="btn_company_registration" name="btn_company_registration" value="Start Free Trail" type="submit">
 	            </div>
-	            <span class="instraction">No Risk. We won't charge your credit card until we get your permission</span>
+	            <span class="instraction"> No auto charge after the free trial ends. We ask you for your credit card to make sure you are not a robot. You won’t be charged unless you manually upgrade to a paid account.</span>
 	        </form>
 		</div>
 	   </div>

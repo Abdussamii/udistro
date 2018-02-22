@@ -53,7 +53,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#profile">Information</a></li>
             <li><a data-toggle="tab" href="#message">Brand</a></li>
-            <!--   <li><a data-toggle="tab" href="#template">Template</a></li>		-->
+            <li><a data-toggle="tab" href="#template">Template</a></li>
           </ul>
           <div class="tab-content">
             <div id="profile" class="tab-pane fade in active">
@@ -259,7 +259,6 @@
                       </fieldset>
                   </form>
 
-				  <!--
                   <form class="form-horizontal" role="form" name="frm_agent_social" id="frm_agent_social">
                       <fieldset>
                         <legend>Social: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
@@ -311,12 +310,10 @@
                     </div>
                     </fieldset>
                 </form>
-			-->
               </div>
             </div>
           </div>
-		
-		
+
           <div id="message" class="tab-pane fade">
               <div class="profile-wrap">
                   <form class="form-horizontal" role="form" name="frm_agent_image" id="frm_agent_image">
@@ -346,8 +343,6 @@
                     </div>
                   </form>
               </div>
-			  
-			  <!--
               <div class="message-box">
                   <h3>Message</h3>
                   <form class="form-horizontal" role="form" name="frm_agent_message" id="frm_agent_message" novalidate>
@@ -364,9 +359,7 @@
                   </form>
               </div>
             </div>
-			
-			-->
-		<!--
+
             <div id="template" class="tab-pane fade">
               <div class="email-template-wrap">
                 <form class="form-horizontal" role="form" name="frm_agent_email_template" id="frm_agent_email_template" novalidate>
@@ -408,7 +401,7 @@
                 </form>
             </div>
           </div>
-		-->
+
           <br />
         </div>
       </div>

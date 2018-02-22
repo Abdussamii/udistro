@@ -85,6 +85,7 @@ $(function(){
 	});
 
     // Call the method to calculate the route between two addresses
+    // calculateRoute('{{ $clientMovingFromAddress->address1 . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address1 . ' ' . $clientMovingToProvince->name }}');
     calculateRoute('{{ $clientMovingFromAddress->address1 }}', '{{ $clientMovingToAddress->address1 }}');
 });
 
@@ -510,9 +511,48 @@ function calculateRoute(from, to) {
 		</div>
         </div>
         <div class="clearfix"></div>
+        <!--<div class="col-sm-12">
+         <div class="row">
+          <form name="frm_update_address" id="frm_update_address" autocomplete="off">
+           <div class="col-md-4">
+            <div class="model-box-YN"> <span> Do you have full access to your CRA? </span>
+             <label><input type="radio" name="update_address_method1" value="1">Yes</label>
+             <label><input type="radio" name="update_address_method1" value="0">No</label>
+            </div>
+            <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
+           </div>
+           <div class="col-md-4">
+            <div class="model-box-YN"> <span> Do you have dependent children?</span>
+             <label><input type="radio" name="update_address_method2" value="1">Yes</label>
+             <label><input type="radio" name="update_address_method2" value="0">No</label>
+            </div>
+            <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
+           </div>
+           <div class="col-md-4">
+            <div class="model-box-YN"> <span>Do you receive child benefit?</span>
+             <label><input type="radio" name="update_address_method3" value="1">Yes</label>
+             <label><input type="radio" name="update_address_method3" value="0">No</label>
+            </div>
+            <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
+           </div>
+          </form>
+         </div>
+        </div> -->
        </div>
       </div>
      </div>
+     <!-- <div class="model-WrapCont" id="update_address_step2" style="display: none;"> 
+      <h2>Update Address Online</h2>
+      <div class="col-sm-12 box-H-250 box-P-100">
+       <div class="block-head">
+        <h3>Update address with Canada Revenue Agency</h3>
+       </div>
+       <div>
+        <p> Since you have full access to your CRA account, you will be redirected to CRA website and you can do it online by yourself in less than 2 to 3 minutes. Having full access means you have access code giving to you by CRA </p>
+        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+       </div>
+      </div>
+     </div> -->
 
  	<div class="model-WrapCont" id="update_address_step3" style="display: none;"> 
 	       <!-- HSA 1 -->
@@ -589,6 +629,36 @@ function calculateRoute(from, to) {
 				</div>
 	      </div>
 
+     <!-- <div class="model-WrapCont" id="update_address_step4" style="display: none;"> 
+      <h2>Update Address</h2>
+      <div class="col-sm-12 box-H-250 box-P-100">
+       <div class="block-head">
+        <h3>Change of address with provintial agencies</h3>
+       </div>
+       <div>
+			<form name="frm_update_address_provintial" id="frm_update_address_provintial" autocomplete="off">
+				<label class="mailfarw_radio-lb">
+				<input type="radio" name="update_address_provintial_method" value="1">
+				Do it here online</label>
+				<label class="mailfarw_radio-lb">
+				<input type="radio" name="update_address_provintial_method" value="2">
+				Call Provincial Agencies</label>
+				<label id="update_address_provintial_method-error" class="error" for="update_address_provintial_method"></label>
+			</form>
+       </div>
+      </div>
+     </div> -->
+
+     <!-- <div class="model-WrapCont" id="update_address_step5" style="display: none;"> 
+      <div class="model-WrapCont">
+		<h2>Update Address</h2>
+		</div>
+
+      <div class="col-sm-12 box-H-250 box-P-100">
+      	<div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('http://www.manitobaaddresschange.ca/', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+      </div>
+     </div> -->
+
      <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
        <!-- HSA 1 -->
       	<div class="model-WrapCont">
@@ -602,106 +672,103 @@ function calculateRoute(from, to) {
 			  	{
 			  		foreach ($provincialAgencyDetails as $provincialAgency)
 			  		{
-			  			if( $provincialAgency->agency_type == 1 )
-			  			{
-		  				?>
-		  					<div class="panel panel-default">
-		  					  <div class="panel-heading">
-		  					    <h4 class="panel-title">
-		  					      <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
-		  					    </h4>
-		  					  </div>
-		  					  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? 'in' : '' }}">
-		  					    <div class="panel-body">
-		  					    	
+			  		?>
+			  			<div class="panel panel-default">
+			  			  <div class="panel-heading">
+			  			    <h4 class="panel-title">
+			  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
+			  			    </h4>
+			  			  </div>
+			  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? 'in' : '' }}">
+			  			    <div class="panel-body">
+			  			    	
 
-		  					    	<div class="row">
-		  					    		<div>
-		  					    			<div class="col-lg-6 col-md-6 col-sm-6">
-		  					    				<?php
-		  					    				if( $provincialAgency->logo != '' )
-		  					    				{
-		  					    					echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
-		  					    				}
-		  					    				else
-		  					    				{
-		  					    					echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
-		  					    				}
-		  					    				?>
-		  					    			</div>
-		  					    			<div class="col-lg-6 col-md-6 col-sm-6">
-		  					    				<?php
-		  					    				if( $provincialAgency->link != '' )
-		  					    				{
-		  					    				?>
-		  					    					<div class="get_started_LB">
-		  					    						<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
-		  					    					</div>
-		  					    				<?php
-		  					    				}
-		  					    				?>
-		  					    			</div>
-		  					    		</div>
-		  					    		<div class="col-md-12">
-		  					    			<div class="block-head">
-		  					    				<h3>Have these handy, before this call </h3>
-		  					    			</div>
-		  					    			<div class="up_add_li">
-		  					    				<ul>
-		  					    				<?php
-		  					    				echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
-		  					    				echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
-		  					    				?>
-		  					    				</ul>
-		  					    			</div>
-		  					    		</div>
-		  					    		<div class="col-sm-12 col-md-6 col-lg-6">
-		  					    			<div class="block-head">
-		  					    				<h3> Opening Hours </h3>
-		  					    			</div>
-		  					    			<div class="up_add_li">
-		  					    				<ul>
-		  					    					<li>
-		  					    						<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
-		  					    					</li>
-		  					    					<li>
-		  					    						<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
-		  					    					</li>
-		  					    				</ul>
-		  					    			</div>
-		  					    		</div>
-		  					    		<div class="col-sm-12 col-md-6 col-lg-6">
-		  					    			<div class="block-head">
-		  					    				<h3> Phone Numbers </h3>
-		  					    			</div>
-		  					    			<div class="up_add_li">
-		  					    				<ul>
-		  					    					<li>
-		  					    						<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
-		  					    					</li>
-		  					    					<li>
-		  					    						<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
-		  					    					</li>
-		  					    				</ul>
-		  					    			</div>
-		  					    		</div>
-		  					    	</div>
+			  			    	<div class="row">
+			  			    		<div>
+			  			    			<div class="col-lg-6 col-md-6 col-sm-6">
+			  			    				<?php
+			  			    				if( $provincialAgency->logo != '' )
+			  			    				{
+			  			    					echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
+			  			    				}
+			  			    				else
+			  			    				{
+			  			    					echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
+			  			    				}
+			  			    				?>
+			  			    			</div>
+			  			    			<div class="col-lg-6 col-md-6 col-sm-6">
+			  			    				<?php
+			  			    				if( $provincialAgency->link != '' )
+			  			    				{
+			  			    				?>
+			  			    					<div class="get_started_LB">
+			  			    						<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
+			  			    					</div>
+			  			    				<?php
+			  			    				}
+			  			    				?>
+			  			    			</div>
+			  			    		</div>
+			  			    		<div class="col-md-12">
+			  			    			<div class="block-head">
+			  			    				<h3>Have these handy, before this call </h3>
+			  			    			</div>
+			  			    			<div class="up_add_li">
+			  			    				<ul>
+			  			    				<?php
+			  			    				echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
+			  			    				echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
+			  			    				?>
+			  			    				</ul>
+			  			    			</div>
+			  			    		</div>
+			  			    		<div class="col-sm-12 col-md-6 col-lg-6">
+			  			    			<div class="block-head">
+			  			    				<h3> Opening Hours </h3>
+			  			    			</div>
+			  			    			<div class="up_add_li">
+			  			    				<ul>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
+			  			    					</li>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
+			  			    					</li>
+			  			    				</ul>
+			  			    			</div>
+			  			    		</div>
+			  			    		<div class="col-sm-12 col-md-6 col-lg-6">
+			  			    			<div class="block-head">
+			  			    				<h3> Phone Numbers </h3>
+			  			    			</div>
+			  			    			<div class="up_add_li">
+			  			    				<ul>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
+			  			    					</li>
+			  			    					<li>
+			  			    						<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
+			  			    					</li>
+			  			    				</ul>
+			  			    			</div>
+			  			    		</div>
+			  			    	</div>
 
 
-		  						</div>
-		  					  </div>
-		  					</div>
-		  				<?php
-		  					$step++;
-			  			}
+			  				</div>
+			  			  </div>
+			  			</div>
+			  		<?php
+			  			$step++;
 			  		}
 			  	}
 			  	?>
@@ -714,6 +781,10 @@ function calculateRoute(from, to) {
 			</div>
       </div>
     </div>
+    <!-- <div class="row">
+     <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> <a href="javascript:void(0);" id="btn_prev_update_address" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a> <a href="javascript:void(0);" id="btn_next_update_address" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a> </div>
+    </div> -->
    </div>
   </div>
  </div>
@@ -853,6 +924,29 @@ function calculateRoute(from, to) {
     </div>
 	<!-- model box 1 ends -->
 	
+	<!-- model box 2 starts -->
+    <!-- <div id="connect_utilities_step2"  class="model-WrapCont">
+     	<h2>Connect Utilities</h2>
+	    <div class="col-sm-12 box-H-250 box-P-100">
+			<div class="block-head">
+				<h3>Hydro, Electricity and Gas</h3>
+			</div>
+			<div class="row">
+	      	<div class="col-sm-12">
+	       		<p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
+	      	</div>
+	      	<div class="col-sm-12">
+	      		<form name="frm_connect_utility_hydro_methods" id="frm_connect_utility_hydro_methods">
+					<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="1"> Call utility services</label>
+					<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="2"> Do it here online</label>
+					<label id="connect_utility_hydro_methods-error" class="error" for="connect_utility_hydro_methods"></label>
+	      		</form>
+	      	</div>
+			</div>
+	  	</div>
+    </div> -->
+	<!-- model box 2 ends -->
+	
 	<!-- model box 3 starts -->
     <div id="connect_utilities_step3" class="model-WrapCont">
      	<h2>Connect Utilities</h2>
@@ -907,123 +1001,82 @@ function calculateRoute(from, to) {
 		</div>
 
     </div>
+	<!-- model box 3 ends -->
+	
+	<!-- model box 4 starts -->
+    <!-- <div id="connect_utilities_step4" class="model-WrapCont">
+     <h2>Connect Utilities</h2>
+	<div class="col-sm-12 box-H-250 box-P-100">
+			<div class="block-head">
+				<h3>Hydro, Electricity and Gas</h3>
+			</div>
+			<div class="row">
+				<div class="col-sm-12"> 
+					<div class="get_started_LB">      			
+						<label class="mailfarw_radio-lb">
+							<input name="mailbox_keys_method" value="2" type="radio"> Do it here online
+						 </label>
+					<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+				</div>
+			</div>
+		
+		</div>
+    </div> -->
+	<!-- model box 4 ends -->
 	
 	<!-- model box 5 starts -->
     <div id="connect_utilities_step5" class="model-WrapCont">
      <h2>Connect Utilities</h2>
-  		<div class="col-sm-12 box-H-250 box-P-100">
-		  <div class="panel-group" id="provincial_utility_agencies">
-		  	<?php
-		  	$step = 1;
-		  	if( isset( $provincialAgencyDetails ) && count( $provincialAgencyDetails ) > 0 )
-		  	{
-		  		foreach ($provincialAgencyDetails as $provincialAgency)
-		  		{
-		  			if( $provincialAgency->agency_type == 2 )
-		  			{
-	  				?>
-	  					<div class="panel panel-default">
-	  					  <div class="panel-heading">
-	  					    <h4 class="panel-title">
-	  					      <a data-toggle="collapse" data-parent="#provincial_utility_agencies" href="#collapse_utility_agency{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
-	  					    </h4>
-	  					  </div>
-	  					  <div id="collapse_utility_agency{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? 'in' : '' }}">
-	  					    <div class="panel-body">
-	  					    	
+    <div class="col-sm-12 box-H-250 box-P-100">
+      <div> <strong>Water, Waste and Recycle Bins</strong>
+       <p>If you are moving in or moving out, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
+      </div>
+      <div class="col-sm-12 up_add_li">
+      </div>
+      <div class="row">
 
-	  					    	<div class="row">
-	  					    		<div>
-	  					    			<div class="col-lg-6 col-md-6 col-sm-6">
-	  					    				<?php
-	  					    				if( $provincialAgency->logo != '' )
-	  					    				{
-	  					    					echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
-	  					    				}
-	  					    				else
-	  					    				{
-	  					    					echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
-	  					    				}
-	  					    				?>
-	  					    			</div>
-	  					    			<div class="col-lg-6 col-md-6 col-sm-6">
-	  					    				<?php
-	  					    				if( $provincialAgency->link != '' )
-	  					    				{
-	  					    				?>
-	  					    					<div class="get_started_LB">
-	  					    						<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
-	  					    					</div>
-	  					    				<?php
-	  					    				}
-	  					    				?>
-	  					    			</div>
-	  					    		</div>
-	  					    		<div class="col-md-12">
-	  					    			<div class="block-head">
-	  					    				<h3>Have these handy, before this call </h3>
-	  					    			</div>
-	  					    			<div class="up_add_li">
-	  					    				<ul>
-	  					    				<?php
-	  					    				echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
-	  					    				echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
-	  					    				?>
-	  					    				</ul>
-	  					    			</div>
-	  					    		</div>
-	  					    		<div class="col-sm-12 col-md-6 col-lg-6">
-	  					    			<div class="block-head">
-	  					    				<h3> Opening Hours </h3>
-	  					    			</div>
-	  					    			<div class="up_add_li">
-	  					    				<ul>
-	  					    					<li>
-	  					    						<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
-	  					    					</li>
-	  					    					<li>
-	  					    						<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
-	  					    					</li>
-	  					    				</ul>
-	  					    			</div>
-	  					    		</div>
-	  					    		<div class="col-sm-12 col-md-6 col-lg-6">
-	  					    			<div class="block-head">
-	  					    				<h3> Phone Numbers </h3>
-	  					    			</div>
-	  					    			<div class="up_add_li">
-	  					    				<ul>
-	  					    					<li>
-	  					    						<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
-	  					    					</li>
-	  					    					<li>
-	  					    						<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
-	  					    					</li>
-	  					    				</ul>
-	  					    			</div>
-	  					    		</div>
-	  					    	</div>
+      	<div class="col-sm-12"> 
+      		<div class="get_started_LB">
+      		<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
+      	</div>
 
-
-	  						</div>
-	  					  </div>
-	  					</div>
-	  				<?php
-	  					$step++;
-		  			}
-		  		}
-		  	}
-		  	?>
-		  </div>
-		</div>
+       <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="up_add_li">
+         <div class="block-head">
+          <h3>We will require </h3>
+         </div>
+         <div class="up_add_li">
+          <ul>
+           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your name</li>
+           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Name of anyone financially responsible for the utility bill</li>
+           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Service Address</li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="block-head">
+         <h3> Hours </h3>
+        </div>
+        <div class="up_add_li">
+         <ul>
+          <li> <span>Monday to Thursday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 07:00 PM (except holidays) </li>
+          <li> <span>Friday and Saturday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 04:30 PM (except holiday long weekend) </li>
+         </ul>
+        </div>
+       </div>
+       <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="block-head">
+         <h3> Phone Numbers </h3>
+        </div>
+        <div class="up_add_li">
+         <ul>
+          <li><span>City Services:</span> <i class="fa fa-phone" aria-hidden="true"></i>3-1-1</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
 
     <div class="pull-right">
 		<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
@@ -1036,8 +1089,16 @@ function calculateRoute(from, to) {
     <div class="row">
      <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 
+    <!-- <div class="col-sm-4 col-md-4 col-lg-4 text-right"> 
+     	<a href="javascript:void(0);" id="btn_prev_connect_utilities" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
+     	<a href="javascript:void(0);" id="btn_next_connect_utilities" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+	</div> -->
+
     </div>
    </div>
+   <!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div> --> 
   </div>
  </div>
 </div>
@@ -2105,8 +2166,8 @@ function calculateRoute(from, to) {
 						                <div id="home_cleaning_services_collapse10" class="panel-collapse collapse in" aria-expanded="true" style="">
 						                    <div class="panel-body">
 						                        <div class="form-group panel-Box">
-						                        	<input name="home_cleaning_callback_primary_no" class="form-control accord-input" placeholder="Primary Number" type="text">
-						                        	<input name="home_cleaning_callback_secondary_no" class="form-control accord-input" placeholder="Additional Number" type="text">
+						                        	<input name="cable_internet_callback_primary_no" class="form-control accord-input" placeholder="Primary Number" type="text">
+						                        	<input name="cable_internet_callback_secondary_no" class="form-control accord-input" placeholder="Additional Number" type="text">
 						                        </div>
 						                    </div>
 						                </div>
@@ -2239,6 +2300,11 @@ function calculateRoute(from, to) {
 			      		</div>
 		      		</div>
 		      	</div>
+
+		      	<!--<div class="row">
+		      		<div class="col-sm-8 col-md-8 col-lg-8">
+		      		</div>
+		      	</div>-->
 
 		      	<div class="annou-modelfooter-wrap">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">

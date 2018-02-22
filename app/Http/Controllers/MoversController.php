@@ -797,7 +797,9 @@ class MoversController extends Controller
     	$specialInstructions 	= array();
     	$movingHouseVehicleType = array();
     	$response = array();
-    	if( count( $movingRequest ) == 0 )
+    	
+    	// if( count( $movingRequest ) == 0 )	// Hold it for now
+    	if( 1 )
     	{
     		// Check how many services request are raised
     		if( isset( $details['moving_house_additional_service'][6] ) && $details['moving_house_additional_service'][6] == 1 )
@@ -1954,6 +1956,11 @@ class MoversController extends Controller
 	    		$response['errMsg'] 	= 'No matching company found';
 	    	}
  		}
+ 		else
+ 		{
+ 			$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'No matching company found';
+ 		}
 
  		return response()->json($response);
     }
@@ -2114,10 +2121,10 @@ class MoversController extends Controller
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
                     2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
-                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    3 => round( abs( ( strtotime( $requestResponse['created_at'] ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $requestResponse['id'] .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
