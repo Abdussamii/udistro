@@ -233,3 +233,9 @@ CREATE TABLE IF NOT EXISTS `agent_partner_digital_service_type_requests` (
 Mayank Changes:
 
 ALTER TABLE `agent_client_invites` ADD `authentication` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `schedule_date`;
+
+***************************************************************************************************
+
+Semui Changes:
+
+email_sent_status  enum(0,1,2)

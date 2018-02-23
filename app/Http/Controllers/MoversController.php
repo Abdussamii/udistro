@@ -1484,7 +1484,7 @@ class MoversController extends Controller
 		$additionalDigitalServicesApplied = array();
 		
 		//get the agent id through agent client id
-		$agentClient = AgentClient::findOrFail($digitalServiceRequest->agent_client_id);
+		$agentClient = AgentClient::findOrFail($clientId);
 		$agentId	 = $agentClient->agent_id;
 		
 		//Check whether agent has partner that can receive quotation

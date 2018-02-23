@@ -107,6 +107,18 @@ Route::get('/ourteam', function () {
 // To test email template view
 // Route::get('/email', 'EmailController@renderEmailTemplate');
 
+// Forgot password view (for all types of users)
+Route::get('/forgotpassword', 'HomeController@forgotPassword');
+
+// Forgot password check the email and send the password reset link
+Route::post('/forgotpasswordemail', 'HomeController@forgotPasswordEmail');
+
+// Reset password view
+Route::get('/resetpassword/{token}', 'HomeController@resetPassword');
+
+// Update password
+Route::post('/updatepassword', 'HomeController@updatePassword');
+
 // To send the agent email
 Route::post('/email', 'EmailController@sendEmail');
 
@@ -817,6 +829,9 @@ Route::group(['prefix' => 'scheduler'], function() {
 
 	// To send invitation email
 	Route::get('/sendinvitationemail', 'SchedulerController@sendInvitationEmail');
+
+	// To send the company, mover emails
+	Route::get('/sendcompanyquotationresponseemail', 'SchedulerController@sendCompanyQuotationResponseEmail');
 
 });
 

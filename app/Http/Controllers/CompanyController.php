@@ -1155,7 +1155,7 @@ class CompanyController extends Controller
 			$response['additional_information']				= ucfirst( strtolower( $cableInternetServiceDetails['additional_information'] ) );
 
             // Get the moving from address
-            $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+            $clientMovingFromAddress = DB::table('digital_service_requests as t1')
                 					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                 					->join('provinces as t3', 't2.province_id', '=', 't3.id')
                 					->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -1165,7 +1165,7 @@ class CompanyController extends Controller
                 					->first();
 
             // Get the moving to address
-            $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+            $clientMovingToAddress = DB::table('digital_service_requests as t1')
                 					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                 					->join('provinces as t3', 't2.province_id', '=', 't3.id')
                 					->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -1273,7 +1273,7 @@ class CompanyController extends Controller
                 $response['additional_information'] 	= $techConciergeArray->additional_information;
 
                 // Get the moving from address
-                $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+                $clientMovingFromAddress = DB::table('tech_concierge_service_requests as t1')
                     					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                     					->join('provinces as t3', 't2.province_id', '=', 't3.id')
                     					->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -1283,7 +1283,7 @@ class CompanyController extends Controller
                     					->first();
 
                 // Get the moving to address
-                $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+                $clientMovingToAddress = DB::table('tech_concierge_service_requests as t1')
                     					->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                     					->join('provinces as t3', 't2.province_id', '=', 't3.id')
                     					->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -1538,16 +1538,24 @@ class CompanyController extends Controller
     	        	$clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
     	        }
 
-    	        $clientMovingToAddressCoordinates = array();
+    	        // $clientMovingToAddressCoordinates = array();
+    	        // $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    	        // $mapApiResponse = json_decode(file_get_contents($url), true);
+
     	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-    	        $mapApiResponse = json_decode(file_get_contents($url), true);
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				$mapApiResponse = json_decode(curl_exec($ch), true);
+
+				$distance = 0;
     	        if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
     	        {
     	        	$clientMovingToAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
-    	        }
 
-    	        // Calculate the distance between the two address
-    	        $distance = Helper::distance($clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+    	        	// Calculate the distance between the two address
+    	        	$distance = Helper::distance($clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+    	        }
 
     	        $response['distance'] = round($distance, 2) . 'KM';
             }
@@ -3228,6 +3236,9 @@ class CompanyController extends Controller
 		       	]);
 		    }
 
+		    // Update the home_cleaning_service_requests company_response column to 1
+		    HomeCleaningServiceRequest::where(['id' => $homeCleaningDetails['home_cleaning_service_request_id']])->update(['company_response' => '1']);
+
     	    // Commit the transaction
     		DB::commit();
 			//try and report server error here and call DB::commit() or DB::rollBack();
@@ -3286,6 +3297,9 @@ class CompanyController extends Controller
 		   			]);
 		   		}
 		    }
+
+		    // Update the tech_concierge_service_requests company_response column to 1
+		    TechConciergeServiceRequest::where(['id' => $techConciergeDetails['tech_concierge_service_request_id']])->update(['company_response' => '1']);
 
 			// Commit the transaction
 			DB::commit();
@@ -3362,6 +3376,9 @@ class CompanyController extends Controller
 		    		]);
 		    	}
 		    }
+
+		    // Update the moving_item_service_requests company_response column to 1
+		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1']);
 		    	
 		    // Commit the transaction
 			DB::commit();
@@ -3384,8 +3401,8 @@ class CompanyController extends Controller
 
     	$cableInternetDetails = array();
     	parse_str($frmData, $cableInternetDetails);
-		
-		// Get the logged-in user id
+
+    	// Get the logged-in user id
 		$userId = Auth::id();
 
 		// Get the province gst, hst, pst, service charge for the requested service
@@ -3395,7 +3412,6 @@ class CompanyController extends Controller
     					->where(['t1.id' => $cableInternetDetails['cable_internet_service_request_id'], 't1.status' => '1'])
     					->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge', 't1.digital_service_company_id as company_id', 't1.agent_client_id')
     					->first();
-
         
         $response = array();
         if( count( $requestDetails ) > 0 )
@@ -3420,6 +3436,8 @@ class CompanyController extends Controller
     	    	}
     	    }
 
+    	    // Update the digital_service_requests company_response column to 1
+    	    DigitalServiceRequest::where(['id' => $cableInternetDetails['cable_internet_service_request_id']])->update(['company_response' => '1']);
     	    
     		// Commit the transaction
     		DB::commit();

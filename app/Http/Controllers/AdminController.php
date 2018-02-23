@@ -39,6 +39,8 @@ use App\ProvincialAgencyDetail;
 use App\ForgotPassword;
 use App\EmailTemplateCategory;
 use App\ResponseTimeSlot;
+use App\AgentClient;
+use App\AgentClientInvite;
 
 use Validator;
 use Helper;
@@ -70,7 +72,16 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        return view('administrator/dashboard');
+		// Get the client count associated with the logged-in agent
+		$clientCount = AgentClient::count();
+
+		// Get the invite count send by the logged-in agent
+		$inviteCount = AgentClientInvite::count();
+
+		// Get the total accepted invite
+		$acceptedInviteCount = AgentClientInvite::where(['status' => '2'])->count();		// status: 2 for email read or invitation accepted
+
+        return view('administrator/dashboard', ['clientCount' => $clientCount, 'inviteCount' => $inviteCount, 'acceptedInviteCount' => $acceptedInviteCount]);
     }
 
     /**

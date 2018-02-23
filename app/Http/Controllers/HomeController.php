@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 use App\Country;
 use App\Province;
@@ -12,7 +14,7 @@ use App\City;
 use App\AgentClient;
 use App\AgentClientMovingFromAddress;
 use App\AgentClientMovingToAddress;
-use Illuminate\Support\Facades\DB;
+use App\User;
 
 use Helper;
 use Validator;
@@ -230,6 +232,150 @@ class HomeController extends Controller
 		        }
 			}
 		}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to return forgot password view
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function forgotPassword()
+    {
+    	return view('forgotPassword');
+    }
+
+    /**
+     * Function to check the email and send the password reset link
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function forgotPasswordEmail()
+    {
+    	$email = Input::get('email');
+
+    	$response = array();
+    	if( $email != '' )
+    	{
+    		// Check if it is a valid email. If valid send the password reset link on the same email
+    		$user = User::where(['email' => $email, 'status' => '1'])->first();
+
+    		if( count( $user ) == 1 )
+    		{
+    			// Save the entry in password_resets table and send the email
+    			$token = Hash::make($email);
+
+    			if( DB::table('password_resets')->insert(['email' => $email, 'token' => $token, 'created_at' => date('Y-m-d H:i:s')]) )
+				{
+					// Send the email
+					if( app()->env == 'local' )
+					{
+						$emailLink = config('constants.LOCAL_APP_URL') . '/public/resetpassword/' . base64_encode($token);
+					}
+					else
+					{
+						$emailLink = config('constants.SERVER_APP_URL') . '/public/resetpassword/' . base64_encode($token);
+					}
+
+					// Email send code here
+
+	    			$response['errCode']    = 0;
+				    $response['errMsg']     = 'Password reset link is send on your email id';
+				}
+				else
+				{
+					$response['errCode']    = 1;
+			    	$response['errMsg']     = 'Some issue in password reset';
+				}
+    		}
+    		else
+    		{
+	    		$response['errCode']    = 2;
+			    $response['errMsg']     = 'No such user exist';
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode']    = 3;
+		    $response['errMsg']     = 'Please provide the email id';
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to reset password
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword($token='')
+    {
+    	$response = array();
+    	if( $token != '' )
+    	{
+    		// Check if the token is valid or not
+    		$token = base64_decode($token);
+
+    		$validToken = DB::table('password_resets')->where(['token' => $token])->first();
+
+    		if( count( $validToken ) == 1 )
+    		{
+    			$response['errCode']    = 0;
+		    	$response['errMsg']     = 'valid token';
+		    	$response['token']     	= $token;
+    		}
+    		else
+    		{
+    			$response['errCode']    = 2;
+		    	$response['errMsg']     = 'Invalid token';
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode']    = 3;
+		    $response['errMsg']     = 'Missing token';
+    	}
+
+    	return view('resetPassword', ['response' => $response]);
+    }
+
+    /**
+     * Function to update password
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword()
+    {
+    	$token = Input::get('token');
+    	$password = Input::get('password');
+
+    	// Get the email from password_resets
+    	$user = DB::table('password_resets')->where(['token' => $token])->first();
+
+    	$response = array();
+
+    	if( count( $user ) == 1 )
+    	{
+    		// Update the password
+    		$hash = Hash::make($password);
+
+    		if(User::where(['email' => $user->email])->update(['password' => $hash]))
+    		{
+    			$response['errCode']    = 0;
+		    	$response['errMsg']     = 'Password updated successfully';
+    		}
+    		else
+    		{
+    			$response['errCode']    = 1;
+		    	$response['errMsg']     = 'Invalid token';
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode']    = 2;
+		    $response['errMsg']     = 'Invalid token';
+    	}
 
     	return response()->json($response);
     }
