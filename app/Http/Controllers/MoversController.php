@@ -962,7 +962,7 @@ class MoversController extends Controller
 				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
 				
 				//email needs to be sent to this company
-				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
+				// Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 	    	}
 	    	else
 	    	{
@@ -1317,7 +1317,7 @@ class MoversController extends Controller
 				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
 				
 				//email needs to be sent to this company
-				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
+				// Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 				
 	    	}
 	    	else
@@ -1566,7 +1566,7 @@ class MoversController extends Controller
 					$response['errCode'] 	= 0;
 					$response['errMsg'] 	= 'Request added successfully';
 					
-					Mail::to( $agentPartner->partner_email )->send(new Quotation($agentPartner, $digitalServiceRequest));
+					// Mail::to( $agentPartner->partner_email )->send(new Quotation($agentPartner, $digitalServiceRequest));
 
 				}
 				else
@@ -1689,7 +1689,7 @@ class MoversController extends Controller
 				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
 				
 				//email needs to be sent to this company
-				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
+				// Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 	    	}
 	    	else
 	    	{
@@ -1992,7 +1992,7 @@ class MoversController extends Controller
 				$agentClientName = $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname;
 				
 				//email needs to be sent to this company
-				Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
+				// Mail::to( $companyDetail->email )->send(new MoverQuotationRequest($agentClientName, $companyDetail->company_name, $filterCompany->company_id, $clientId, $invitationId));
 	    	}
 	    	else
 	    	{
@@ -2042,33 +2042,45 @@ class MoversController extends Controller
         // Get the client and invitation id from session
     	$clientId 		= Session::get('clientId');
     	$invitationId 	= Session::get('invitationId');
+
+    	// Get the gst, pst, hst, service charge for the client
+    	$clientProvinceCharges 	= DB::table('agent_clients as t1')
+    							->leftJoin('agent_client_moving_to_addresses as t2', 't1.id', '=', 't2.agent_client_id')
+    							->leftJoin('provinces as t3', 't2.province_id', 't3.id', '=', 't3.id')
+    							->where(['t1.id' => $clientId])
+    							->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
+    							->first();
         
         $techConciergeArray = DB::table('tech_concierge_service_requests as t1')
                                 ->leftJoin('companies as t2', 't1.company_id', '=', 't2.id')
-                                ->where('t1.agent_client_id', '=', $clientId)
-                                ->where('t1.invitation_id', '=', $invitationId)
-                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
+                                // ->where('t1.agent_client_id', '=', $clientId)
+                                // ->where('t1.invitation_id', '=', $invitationId)
+                                ->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId, 'company_response' => '1'])
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at', 't1.updated_at', 't1.discount')
                                 ->get();
 
         $homeCleaningArray = DB::table('home_cleaning_service_requests as t1')
                                 ->leftJoin('companies as t2', 't1.company_id', '=', 't2.id')
-                                ->where('t1.agent_client_id', '=', $clientId)
-                                ->where('t1.invitation_id', '=', $invitationId)
-                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
+                                // ->where('t1.agent_client_id', '=', $clientId)
+                                // ->where('t1.invitation_id', '=', $invitationId)
+                                ->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId, 'company_response' => '1'])
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at', 't1.updated_at', 't1.discount')
                                 ->get();
 
         $movingItemArray = DB::table('moving_item_service_requests as t1')
                                 ->leftJoin('companies as t2', 't1.mover_company_id', '=', 't2.id')
-                                ->where('t1.agent_client_id', '=', $clientId)
-                                ->where('t1.invitation_id', '=', $invitationId)
-                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
+                                // ->where('t1.agent_client_id', '=', $clientId)
+                                // ->where('t1.invitation_id', '=', $invitationId)
+                                ->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId, 'company_response' => '1'])
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at', 't1.updated_at', 't1.discount', 't1.insurance_amount')
                                 ->get();
 
         $digitalArray = DB::table('digital_service_requests as t1')
                                 ->leftJoin('companies as t2', 't1.digital_service_company_id', '=', 't2.id')
-                                ->where('t1.agent_client_id', '=', $clientId)
-                                ->where('t1.invitation_id', '=', $invitationId)
-                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at')
+                                // ->where('t1.agent_client_id', '=', $clientId)
+                                // ->where('t1.invitation_id', '=', $invitationId)
+                                ->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId, 'company_response' => '1'])
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at', 't1.updated_at', 't1.discount')
                                 ->get();
 
         // Assign it to the datatable pagination variable
@@ -2081,12 +2093,95 @@ class MoversController extends Controller
         );
 
         $k=0;
+
+        if ( count( $digitalArray ) > 0 )
+        {
+            foreach ($digitalArray as $Array)
+            {
+				// Get the review count
+            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
+
+            	$reviewCount = 0;
+            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	{
+            		foreach ($reviews as $review)
+            		{
+            			$reviewCount += $review->rating;
+            		}
+            	}
+
+            	// Calculate response time
+            	$createdAt = $Array->created_at;
+            	$updatedAt = $Array->updated_at;
+            	$createdAt 	= new \DateTime($Array->created_at);
+            	$updatedAt 	= new \DateTime($Array->updated_at);
+            	$interval 	= date_diff($createdAt,$updatedAt);
+            	$responseTime = $interval->format('%i');
+
+            	// Get all the values and calculate the total amount
+            	$digitalServiceTypeRequests = DigitalServiceTypeRequest::where(['digital_service_request_id' => $Array->id])->select('amount')->get();
+            	$digitalAdditionalServiceTypeRequests = DigitalAdditionalServiceTypeRequest::where(['digital_service_request_id' => $Array->id])->select('amount')->get();
+
+            	$totalAmount= 0;
+            	$discount 	= 0;
+            	$gst = 0;
+            	$hst = 0;
+            	$pst = 0;
+            	$serviceCharge = 0;
+            	if( count( $clientProvinceCharges ) > 0 )
+            	{
+            		if( count( $digitalServiceTypeRequests ) > 0 )
+            		{
+            			foreach( $digitalServiceTypeRequests as $digitalServiceTypeRequest )
+            			{
+            				$totalAmount += $digitalServiceTypeRequest->amount;
+            			}
+            		}
+
+            		if( count( $digitalAdditionalServiceTypeRequests ) > 0 )
+            		{
+            			foreach( $digitalAdditionalServiceTypeRequests as $digitalAdditionalServiceTypeRequest )
+            			{
+            				$totalAmount += $digitalAdditionalServiceTypeRequest->amount;
+            			}
+            		}
+
+            		// Substract the discount
+            		$discount = $Array->discount;
+            		$totalAmount = $totalAmount - $discount;
+
+            		// Calculate GST
+            		$gst = ( $totalAmount / 100 ) * $clientProvinceCharges->gst;
+
+            		// Calculate HST
+            		$hst = ( $totalAmount / 100 ) * $clientProvinceCharges->hst;
+
+            		// Calculate PST
+            		$pst = ( $totalAmount / 100 ) * $clientProvinceCharges->pst;
+
+            		// Calculate Service Charge
+            		$serviceCharge = ( $totalAmount / 100 ) * $clientProvinceCharges->service_charge;
+
+            		$totalAmount = $totalAmount + $gst + $hst + $pst + $serviceCharge;
+            	}
+            	
+                $response['aaData'][$k] = array(
+                    0 => $k+1,
+                    1 => ucfirst( strtolower($Array->company_name) ),
+                    2 => '$' . number_format($totalAmount, 2),
+                    3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
+                    4 => $reviewCount,
+                    5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="cable_internet_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
         if ( count( $techConciergeArray ) > 0 )
         {
-            foreach ($techConciergeArray as $Array)
+        	foreach ($techConciergeArray as $Array)
             {
-            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
-
             	// Get the review count
             	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
 
@@ -2099,14 +2194,69 @@ class MoversController extends Controller
             		}
             	}
 
+            	// Calculate response time
+            	$createdAt = $Array->created_at;
+            	$updatedAt = $Array->updated_at;
+            	$createdAt 	= new \DateTime($Array->created_at);
+            	$updatedAt 	= new \DateTime($Array->updated_at);
+            	$interval 	= date_diff($createdAt,$updatedAt);
+            	$responseTime = $interval->format('%i');
+
+            	// Get all the values and calculate the total amount
+            	$techConciergeAppliancesServiceRequests = TechConciergeAppliancesServiceRequest::where(['service_request_id' => $Array->id])->select('amount')->get();
+            	$techConciergePlaceServiceRequests = TechConciergePlaceServiceRequest::where(['service_request_id' => $Array->id])->select('amount')->get();
+
+            	$totalAmount= 0;
+            	$discount 	= 0;
+            	$gst = 0;
+            	$hst = 0;
+            	$pst = 0;
+            	$serviceCharge = 0;
+            	if( count( $clientProvinceCharges ) > 0 )
+            	{
+            		if( count( $techConciergeAppliancesServiceRequests ) > 0 )
+            		{
+            			foreach( $techConciergeAppliancesServiceRequests as $techConciergeAppliancesServiceRequest )
+            			{
+            				$totalAmount += $techConciergeAppliancesServiceRequest->amount;
+            			}
+            		}
+
+            		if( count( $techConciergePlaceServiceRequests ) > 0 )
+            		{
+            			foreach( $techConciergePlaceServiceRequests as $techConciergePlaceServiceRequest )
+            			{
+            				$totalAmount += $techConciergePlaceServiceRequest->amount;
+            			}
+            		}
+
+            		// Substract the discount
+            		$discount = $Array->discount;
+            		$totalAmount = $totalAmount - $discount;
+
+            		// Calculate GST
+            		$gst = ( $totalAmount / 100 ) * $clientProvinceCharges->gst;
+
+            		// Calculate HST
+            		$hst = ( $totalAmount / 100 ) * $clientProvinceCharges->hst;
+
+            		// Calculate PST
+            		$pst = ( $totalAmount / 100 ) * $clientProvinceCharges->pst;
+
+            		// Calculate Service Charge
+            		$serviceCharge = ( $totalAmount / 100 ) * $clientProvinceCharges->service_charge;
+
+            		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
-                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
-                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    2 => '$' . $totalAmount,
+                    3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="tech_concierge_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="tech_concierge_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2116,8 +2266,6 @@ class MoversController extends Controller
         {
             foreach ($homeCleaningArray as $Array)
             {
-            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
-
             	// Get the review count
             	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
 
@@ -2130,25 +2278,87 @@ class MoversController extends Controller
             		}
             	}
 
+            	// Calculate response time
+            	$createdAt = $Array->created_at;
+            	$updatedAt = $Array->updated_at;
+            	$createdAt 	= new \DateTime($Array->created_at);
+            	$updatedAt 	= new \DateTime($Array->updated_at);
+            	$interval 	= date_diff($createdAt,$updatedAt);
+            	$responseTime = $interval->format('%i');
+
+            	// Get all the values and calculate the total amount
+            	$homeCleaningAdditionalServiceRequests 	= HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $Array->id])->select('amount')->get();
+            	$homeCleaningOtherPlaceServiceRequests 	= HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $Array->id])->select('amount')->get();
+            	$homeCleaningSteamingServiceRequests 	= HomeCleaningSteamingServiceRequest::where(['service_request_id' => $Array->id])->select('amount')->get();
+
+            	$totalAmount= 0;
+            	$discount 	= 0;
+            	$gst = 0;
+            	$hst = 0;
+            	$pst = 0;
+            	$serviceCharge = 0;
+            	if( count( $clientProvinceCharges ) > 0 )
+            	{
+            		if( count( $homeCleaningAdditionalServiceRequests ) > 0 )
+            		{
+            			foreach( $homeCleaningAdditionalServiceRequests as $homeCleaningAdditionalServiceRequest )
+            			{
+            				$totalAmount += $homeCleaningAdditionalServiceRequest->amount;
+            			}
+            		}
+
+            		if( count( $homeCleaningOtherPlaceServiceRequests ) > 0 )
+            		{
+            			foreach( $homeCleaningOtherPlaceServiceRequests as $homeCleaningOtherPlaceServiceRequest )
+            			{
+            				$totalAmount += $homeCleaningOtherPlaceServiceRequest->amount;
+            			}
+            		}
+
+            		if( count( $homeCleaningSteamingServiceRequests ) > 0 )
+            		{
+            			foreach( $homeCleaningSteamingServiceRequests as $homeCleaningSteamingServiceRequest )
+            			{
+            				$totalAmount += $homeCleaningSteamingServiceRequest->amount;
+            			}
+            		}
+
+            		// Substract the discount
+            		$discount = $Array->discount;
+            		$totalAmount = $totalAmount - $discount;
+
+            		// Calculate GST
+            		$gst = ( $totalAmount / 100 ) * $clientProvinceCharges->gst;
+
+            		// Calculate HST
+            		$hst = ( $totalAmount / 100 ) * $clientProvinceCharges->hst;
+
+            		// Calculate PST
+            		$pst = ( $totalAmount / 100 ) * $clientProvinceCharges->pst;
+
+            		// Calculate Service Charge
+            		$serviceCharge = ( $totalAmount / 100 ) * $clientProvinceCharges->service_charge;
+
+            		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
-                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
-                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    2 => '$' . $totalAmount,
+                    3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="home_cleaning_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="home_cleaning_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
-        }
+        } 
 
         if ( count( $movingItemArray ) > 0 )
         {
             foreach ($movingItemArray as $Array)
             {
-            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
-
             	// Get the review count
             	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
 
@@ -2161,45 +2371,95 @@ class MoversController extends Controller
             		}
             	}
 
+            	// Calculate response time
+            	$createdAt = $Array->created_at;
+            	$updatedAt = $Array->updated_at;
+            	$createdAt 	= new \DateTime($Array->created_at);
+            	$updatedAt 	= new \DateTime($Array->updated_at);
+            	$interval 	= date_diff($createdAt,$updatedAt);
+            	$responseTime = $interval->format('%i');
+
+            	// Get all the values and calculate the total amount
+            	$movingItemDetailServiceRequests 	= MovingItemDetailServiceRequest::where(['moving_items_service_id' => $Array->id])->select('amount')->get();
+            	$movingOtherItemServiceRequests 	= MovingOtherItemServiceRequest::where(['moving_items_service_id' => $Array->id])->select('amount')->get();
+            	$movingTransportationTypeRequests 	= MovingTransportationTypeRequest::where(['moving_items_services_id' => $Array->id])->select('amount')->get();
+
+            	$totalAmount= 0;
+            	$discount 	= 0;
+            	$gst = 0;
+            	$hst = 0;
+            	$pst = 0;
+            	$serviceCharge = 0;
+            	if( count( $clientProvinceCharges ) > 0 )
+            	{
+            		if( count( $movingItemDetailServiceRequests ) > 0 )
+            		{
+            			foreach( $movingItemDetailServiceRequests as $movingItemDetailServiceRequest )
+            			{
+            				if( $movingItemDetailServiceRequest->amount != '' || !is_null( $movingItemDetailServiceRequest->amount ) )
+            				{
+            					$totalAmount += $movingItemDetailServiceRequest->amount;
+            				}
+            			}
+            		}
+
+            		if( count( $movingOtherItemServiceRequests ) > 0 )
+            		{
+            			foreach( $movingOtherItemServiceRequests as $movingOtherItemServiceRequest )
+            			{
+            				if( $movingOtherItemServiceRequest->amount != '' || !is_null( $movingOtherItemServiceRequest->amount ) )
+            				{
+            					$totalAmount += $movingOtherItemServiceRequest->amount;
+            				}
+            			}
+            		}
+
+            		if( count( $movingTransportationTypeRequests ) > 0 )
+            		{
+            			foreach( $movingTransportationTypeRequests as $movingTransportationTypeRequest )
+            			{
+            				if( $movingTransportationTypeRequest->amount != '' || !is_null( $movingTransportationTypeRequest->amount ) )
+            				{
+            					$totalAmount += $movingTransportationTypeRequest->amount;
+            				}
+            			}
+            		}
+
+            		// Add the amount value as well
+            		$insuranceAmount = 0;
+            		if( $Array->insurance_amount != '' && !is_null( $Array->insurance_amount ) )
+            		{
+            			$insuranceAmount = $Array->insurance_amount;
+            		}
+            		$totalAmount += $insuranceAmount;
+
+            		// Substract the discount
+            		$discount = $Array->discount;
+            		$totalAmount = $totalAmount - $discount;
+
+            		// Calculate GST
+            		$gst = ( $totalAmount / 100 ) * $clientProvinceCharges->gst;
+
+            		// Calculate HST
+            		$hst = ( $totalAmount / 100 ) * $clientProvinceCharges->hst;
+
+            		// Calculate PST
+            		$pst = ( $totalAmount / 100 ) * $clientProvinceCharges->pst;
+
+            		// Calculate Service Charge
+            		$serviceCharge = ( $totalAmount / 100 ) * $clientProvinceCharges->service_charge;
+
+            		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
-                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
-                    3 => round( abs( ( strtotime( $requestResponse['created_at'] ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
+                    2 => '$' . $totalAmount,
+                    3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $requestResponse['id'] .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
-                );
-                $k++;
-            }
-        }
-
-        if ( count( $digitalArray ) > 0 )
-        {
-            foreach ($digitalArray as $Array)
-            {
-            	$requestResponse = ServiceRequestResponse::where(['request_id' => $Array->request_id, 'company_id' => $Array->company_id])->select('id', 'total_amount', 'created_at')->first();
-
-            	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
-            	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
-            	}
-            	
-                $response['aaData'][$k] = array(
-                    0 => $k+1,
-                    1 => ucfirst( strtolower($Array->company_name) ),
-                    2 => ( isset( $requestResponse ) && count( $requestResponse ) > 0 ) ? '$' . $requestResponse->total_amount : '$0.00',
-                    3 => round( abs( ( strtotime( $requestResponse->created_at ) - strtotime( $Array->created_at ) )/(60*60) ), 2) . ' hours',
-                    4 => $reviewCount,
-                    5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="cable_internet_service" id="'. $requestResponse->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2477,8 +2737,8 @@ class MoversController extends Controller
                         $html .= '<td>Steaming carpet cleaning</td>';
                         $html .= '<td>'. ucwords( strtolower( $steamingService->steaming_service_for ) ) .'</td>';
                         $html .= '<td>NA</td>';
-                        $html .= '<td>'. ucwords( strtolower( $steamingService->amount ) ) .'</td>';
                         $html .= '<td>'. ucwords( strtolower( $steamingService->hour_to_complete ) ) .'</td>';
+                        $html .= '<td>'. ucwords( strtolower( $steamingService->amount ) ) .'</td>';
                         $html .= '</tr>';
                     }
                 }
@@ -2515,23 +2775,72 @@ class MoversController extends Controller
 
                 $response['request_services_details'] = $html;
 
-                $taxDetails = DB::table('service_request_responses')->where(['request_id' => $homeServiceId, 'company_id' => $companyId])->first();
+                // Get all the values and calculate the total amount
+            	$homeCleaningAdditionalServiceRequests 	= HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeServiceArray->id])->select('amount')->get();
+            	$homeCleaningOtherPlaceServiceRequests 	= HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeServiceArray->id])->select('amount')->get();
+            	$homeCleaningSteamingServiceRequests 	= HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeServiceArray->id])->select('amount')->get();
 
-                if( count( $taxDetails ) > 0 )
-                {
-                	// Calculate the subtotal
-                	$subtotal = number_format( ( $taxDetails->total_amount - $taxDetails->gst_amount - $taxDetails->hst_amount - $taxDetails->pst_amount ) , 2, '.', '');
+                $totalAmount= 0;
+                $discount 	= 0;
+                $gst = 0;
+                $hst = 0;
+                $pst = 0;
+                $serviceCharge = 0;
+                
+                if( count( $homeCleaningAdditionalServiceRequests ) > 0 )
+            	{
+            		foreach( $homeCleaningAdditionalServiceRequests as $homeCleaningAdditionalServiceRequest )
+            		{
+            			$totalAmount += $homeCleaningAdditionalServiceRequest->amount;
+            		}
+            	}
 
-                	$response['subtotal']       		= $subtotal;
-	                $response['gst_amount']     		= $taxDetails->gst_amount;
-	                $response['hst_amount']     		= $taxDetails->hst_amount;
-	                $response['pst_amount']     		= $taxDetails->pst_amount;
-	                $response['service_charge_amount'] 	= $taxDetails->service_charge;
-	                $response['total_amount']   		= $taxDetails->total_amount;
-	                $response['discount']       		= $taxDetails->discount;
+            	if( count( $homeCleaningOtherPlaceServiceRequests ) > 0 )
+            	{
+            		foreach( $homeCleaningOtherPlaceServiceRequests as $homeCleaningOtherPlaceServiceRequest )
+            		{
+            			$totalAmount += $homeCleaningOtherPlaceServiceRequest->amount;
+            		}
+            	}
 
-	                $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
-                }
+            	if( count( $homeCleaningSteamingServiceRequests ) > 0 )
+            	{
+            		foreach( $homeCleaningSteamingServiceRequests as $homeCleaningSteamingServiceRequest )
+            		{
+            			$totalAmount += $homeCleaningSteamingServiceRequest->amount;
+            		}
+            	}
+
+            	// Substract the discount
+            	$discount = number_format($homeServiceArray->discount, 2, '.', '');
+            	$totalAmount = $totalAmount - $discount;
+
+        		//  Calculate the subtotal
+        		$subtotal = number_format( ( $totalAmount ) , 2, '.', '');
+
+            	// Calculate GST
+            	$gst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->gst, 2, '.', '');
+
+            	// Calculate HST
+            	$hst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->hst, 2, '.', '');
+
+            	// Calculate PST
+            	$pst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->pst, 2, '.', '');
+
+            	// Calculate Service Charge
+            	$serviceCharge = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->service_charge, 2, '.', '');
+
+            	$totalAmount = number_format( $totalAmount + $gst + $hst + $pst + $serviceCharge, 2, '.', '');
+
+
+        	    $response['subtotal']     			= $subtotal;
+        	    $response['gst_amount']     		= $gst;
+        	    $response['hst_amount']     		= $hst;
+        	    $response['pst_amount']     		= $pst;
+        	    $response['service_charge_amount'] 	= $serviceCharge;
+        	    $response['total_amount']   		= $totalAmount;
+        	    $response['discount']       		= $discount;
+        	    $response['comment']       			= ucfirst( strtolower( $homeServiceArray->comment ) );
             }
         }
         return response()->json($response);
@@ -2648,23 +2957,63 @@ class MoversController extends Controller
 
             $response['request_additional_services_details'] = $additionalServiceHtml;
 
-            $taxDetails = DB::table('service_request_responses')->where(['request_id' => $cableInternetId, 'company_id' => $companyId])->first();
+            // Get all the values and calculate the total amount
+            $digitalServiceTypeRequests = DigitalServiceTypeRequest::where(['digital_service_request_id' => $cableInternetServiceDetails->id])->select('amount')->get();
+            $digitalAdditionalServiceTypeRequests = DigitalAdditionalServiceTypeRequest::where(['digital_service_request_id' => $cableInternetServiceDetails->id])->select('amount')->get();
 
-            if( count( $taxDetails ) > 0 )
-            {
-            	//  Calculate the subtotal
-            	$subtotal = number_format( ( $taxDetails->total_amount - $taxDetails->gst_amount - $taxDetails->hst_amount - $taxDetails->pst_amount ) , 2, '.', '');
+            $totalAmount= 0;
+            $discount 	= 0;
+            $gst = 0;
+            $hst = 0;
+            $pst = 0;
+            $serviceCharge = 0;
+            
+            if( count( $digitalServiceTypeRequests ) > 0 )
+        	{
+        		foreach( $digitalServiceTypeRequests as $digitalServiceTypeRequest )
+        		{
+        			$totalAmount += $digitalServiceTypeRequest->amount;
+        		}
+        	}
 
-                $response['subtotal']     			= $subtotal;
+        	if( count( $digitalAdditionalServiceTypeRequests ) > 0 )
+        	{
+        		foreach( $digitalAdditionalServiceTypeRequests as $digitalAdditionalServiceTypeRequest )
+        		{
+        			$totalAmount += $digitalAdditionalServiceTypeRequest->amount;
+        		}
+        	}
 
-                $response['gst_amount']     		= $taxDetails->gst_amount;
-                $response['hst_amount']     		= $taxDetails->hst_amount;
-                $response['pst_amount']     		= $taxDetails->pst_amount;
-                $response['service_charge_amount'] 	= $taxDetails->service_charge;
-                $response['total_amount']   		= $taxDetails->total_amount;
-                $response['discount']       		= $taxDetails->discount;
-                $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
-            }
+        	// Substract the discount
+        	$discount = number_format($cableInternetServiceDetails->discount, 2, '.', '');
+        	$totalAmount = $totalAmount - $discount;
+
+    		//  Calculate the subtotal
+    		$subtotal = number_format( ( $totalAmount ) , 2, '.', '');
+
+        	// Calculate GST
+        	$gst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->gst, 2, '.', '');
+
+        	// Calculate HST
+        	$hst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->hst, 2, '.', '');
+
+        	// Calculate PST
+        	$pst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->pst, 2, '.', '');
+
+        	// Calculate Service Charge
+        	$serviceCharge = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->service_charge, 2, '.', '');
+
+        	$totalAmount = number_format( $totalAmount + $gst + $hst + $pst + $serviceCharge, 2, '.', '');
+
+
+    	    $response['subtotal']     			= $subtotal;
+    	    $response['gst_amount']     		= $gst;
+    	    $response['hst_amount']     		= $hst;
+    	    $response['pst_amount']     		= $pst;
+    	    $response['service_charge_amount'] 	= $serviceCharge;
+    	    $response['total_amount']   		= $totalAmount;
+    	    $response['discount']       		= $discount;
+    	    $response['comment']       			= ucfirst( strtolower( $cableInternetServiceDetails->comment ) );
 
         }
         

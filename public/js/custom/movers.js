@@ -804,6 +804,8 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 				    {
 				    	alertify.success(response.errMsg);
+
+				    	$('#home_cleaning_services_modal').modal('hide');
 				    }
 				    else
 				    {
@@ -935,6 +937,8 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 				    {
 				    	alertify.success(response.errMsg);
+
+				    	$('#moving_companies_modal').modal('hide');
 				    }
 				    else
 				    {
@@ -1023,6 +1027,8 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 				    {
 				    	alertify.success(response.errMsg);
+
+				    	$('#tech_concierge_modal').modal('hide');
 				    }
 				    else
 				    {
@@ -1145,6 +1151,8 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 				    {
 				    	alertify.success(response.errMsg);
+
+				    	$('#cable_internet_services_modal').modal('hide');
 				    }
 				    else
 				    {

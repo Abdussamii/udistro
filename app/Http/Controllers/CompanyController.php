@@ -3231,18 +3231,16 @@ class CompanyController extends Controller
 		    foreach( $homeCleaningDetails['steaming_service_time_estimate'] as $key => $value )
 		    {
 		       	HomeCleaningSteamingServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'steaming_service_id' => $key])->update([
-		      		'amount' => $homeCleaningDetails['steaming_service_time_estimate'][$key],
-		       		'hour_to_complete' => $homeCleaningDetails['steaming_service_budget_estimate'][$key]
+		      		'amount' => $homeCleaningDetails['steaming_service_budget_estimate'][$key],
+		       		'hour_to_complete' => $homeCleaningDetails['steaming_service_time_estimate'][$key]
 		       	]);
 		    }
 
 		    // Update the home_cleaning_service_requests company_response column to 1
-		    HomeCleaningServiceRequest::where(['id' => $homeCleaningDetails['home_cleaning_service_request_id']])->update(['company_response' => '1']);
+		    HomeCleaningServiceRequest::where(['id' => $homeCleaningDetails['home_cleaning_service_request_id']])->update(['company_response' => '1', 'discount' => $homeCleaningDetails['discount'], 'comment' => $homeCleaningDetails['comment']]);
 
     	    // Commit the transaction
     		DB::commit();
-			//try and report server error here and call DB::commit() or DB::rollBack();
-			//I am making assumption that everything is updated
 			
 			$response['errCode'] 	= 0;
             $response['errMsg'] 	= 'Response saved successfully';
@@ -3298,14 +3296,11 @@ class CompanyController extends Controller
 		   		}
 		    }
 
-		    // Update the tech_concierge_service_requests company_response column to 1
-		    TechConciergeServiceRequest::where(['id' => $techConciergeDetails['tech_concierge_service_request_id']])->update(['company_response' => '1']);
+		    // Update the tech_concierge_service_requests company_response column to 1, discount, comment column as well
+		    TechConciergeServiceRequest::where(['id' => $techConciergeDetails['tech_concierge_service_request_id']])->update(['company_response' => '1', 'discount' => $techConciergeDetails['discount'], 'comment' => $techConciergeDetails['comment']]);
 
 			// Commit the transaction
 			DB::commit();
-
-			//try and report server error here and call DB::commit() or DB::rollBack();
-			//I am making assumption that everything is updated
 			
 			$response['errCode'] 	= 0;
 	        $response['errMsg'] 	= 'Response saved successfully';
@@ -3378,7 +3373,7 @@ class CompanyController extends Controller
 		    }
 
 		    // Update the moving_item_service_requests company_response column to 1
-		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1']);
+		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $movingDetails['insurance']]);
 		    	
 		    // Commit the transaction
 			DB::commit();
@@ -3436,8 +3431,9 @@ class CompanyController extends Controller
     	    	}
     	    }
 
-    	    // Update the digital_service_requests company_response column to 1
-    	    DigitalServiceRequest::where(['id' => $cableInternetDetails['cable_internet_service_request_id']])->update(['company_response' => '1']);
+    	    // Update the digital_service_requests company_response column to 1, discount, comment
+    	    DigitalServiceRequest::where(['id' => $cableInternetDetails['cable_internet_service_request_id']])
+    	    					->update(['company_response' => '1', 'discount' => $cableInternetDetails['discount'], 'comment' => $cableInternetDetails['comment']]);
     	    
     		// Commit the transaction
     		DB::commit();
