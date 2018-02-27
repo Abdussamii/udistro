@@ -1681,6 +1681,9 @@ class MoversController extends Controller
 						$quotation->save();						
 		    		}
 
+		    		// Add the company email entry
+		    		
+
 				}
 			}
 
@@ -3468,7 +3471,7 @@ class MoversController extends Controller
 					{
 						$companyCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
 
-						$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+						$distance = Helper::distance($companyCoordinates['lat'], $companyCoordinates['lng'], $clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], "K");
 
 						if( $distance <= $company->target_area )
 						{

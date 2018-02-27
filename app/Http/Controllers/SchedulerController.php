@@ -133,133 +133,233 @@ class SchedulerController extends Controller
     	if( $currentTime >= $workingHourStartTime && $currentTime <= $workingHourEndTime )
     	{
     		// Check for the `digital_service_requests` email not sent scheduled for today's date
-    		$digitalServiceRequests = DigitalServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1'])	// company_response = 1 means compeny response availeble 
-										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'digital_service_company_id As companyId', 'updated_at As updatedAt', 'created_at As createdAt')
-										->first();
-
-    		if( count( $digitalServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
-    		{
-    			// get agent client detail
-    			$agentClient = AgentClient::findOrFail($digitalServiceRequests->agent_client_id);
-
-    			$clientId 		= $agentClient->id;
-    			$clientEmail	= $agentClient->email;
-    			$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
-    			$invitationId 	= $digitalServiceRequests->invitation_id;
-
-    			$emailData = array(
-    				'name' 		=> $clientName,
-    				'subject' 	=> 'Quotation Response',
-    				'email' 	=> $clientEmail,
-    				'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
-    			);
-
-    			Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
-    			    $m->from('info@udistro.ca', 'Udistro');
-    			    
-    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-    			});
-
-    			// Update the email_sent_status to 1
-    			DigitalServiceRequest::where(['id' => $digitalServiceRequests->serviceRequestId])->update(['email_sent_status' => '1']);
-    		}
+    		$digitalServiceRequest = DigitalServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1'])	// company_response = 1 means company response available 
+									->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'digital_service_company_id As companyId', 'updated_at As responseDate')
+									->first();
 			
 			// Check for the `home_cleaning_service_requests` email not sent scheduled for today's date
-    		$homeCleaningServiceRequests = HomeCleaningServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1']) 
+    		$homeCleaningServiceRequest = HomeCleaningServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1']) 
 										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'company_id As companyId', 'updated_at As responseDate')
 										->first();
-
-    		if( count( $homeCleaningServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
-    		{
-    			// get agent client detail
-    			$agentClient = AgentClient::findOrFail($homeCleaningServiceRequests->agent_client_id);
-
-    			$clientId 		= $agentClient->id;
-    			$clientEmail	= $agentClient->email;
-    			$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
-    			$invitationId 	= $homeCleaningServiceRequests->invitation_id;
-
-    			$emailData = array(
-    				'name' 		=> $clientName,
-    				'subject' 	=> 'Quotation Response',
-    				'email' 	=> $clientEmail,
-    				'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
-    			);
-
-    			Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
-    			    $m->from('info@udistro.ca', 'Udistro');
-    			    
-    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-    			});
-
-    			// Update the email_sent_status to 1
-    			HomeCleaningServiceRequest::where(['id' => $homeCleaningServiceRequests->serviceRequestId])->update(['email_sent_status' => '1']);
-    		}
 			
 			// Check for the `moving_item_service_requests` email not sent scheduled for today's date
-    		$movingItemServiceRequest = MovingItemServiceRequest::where(['email_sent_status' => '0', 'company_response' => '0'])			//status = 0 means email has not been sent
+    		$movingItemServiceRequest = MovingItemServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1'])			//status = 0 means email has not been sent
 										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'mover_company_id As companyId', 'updated_at As responseDate')
 										->first();
-
-    		if( count( $movingItemServiceRequest ) > 0 )	// There is service request response that needs to send email to the mover
-    		{
-    			// get agent client detail
-    			$agentClient = AgentClient::findOrFail($movingItemServiceRequest->agent_client_id);
-
-    			$clientId 		= $agentClient->id;
-    			$clientEmail	= $agentClient->email;
-    			$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
-    			$invitationId 	= $movingItemServiceRequest->invitation_id;
-
-    			$emailData = array(
-    				'name' 		=> $clientName,
-    				'subject' 	=> 'Quotation Response',
-    				'email' 	=> $clientEmail,
-    				'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
-    			);
-
-    			Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
-    			    $m->from('info@udistro.ca', 'Udistro');
-    			    
-    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-    			});
-
-    			// Update the email_sent_status to 1
-    			MovingItemServiceRequest::where(['id' => $movingItemServiceRequest->serviceRequestId])->update(['email_sent_status' => '1']);
-    		}
 			
 			// Check for the `tech_concierge_service_requests` email not sent scheduled for today's date
-    		$techConciergeServiceRequests = TechConciergeServiceRequest::where(['email_sent_status' => '0', 'company_response' => '0'])	//status = 0 means email has not been sent
+    		$techConciergeServiceRequest = TechConciergeServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1'])	//status = 0 means email has not been sent
 										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'company_id As companyId', 'updated_at As responseDate')
 										->first();
 
-    		if( count( $techConciergeServiceRequests ) > 0 )	// There is service request response that needs to send email to the mover
+			// If any of the above resposne is having any entry after the time slot expire, send the email and update the email_sent_status to 1 of respective table
+			$timeSlot = ResponseTimeSlot::where(['status' => '1'])->select('id', 'slot_time')->first();
+
+			// Current time
+    		$currentTime= date('H:i:s');
+
+    		$digitalServiceResponseStatus = false;
+    		// Check if any response exist in the system for Cable & Internet
+    		if( count( $digitalServiceRequest ) > 0 )
     		{
-    			// get agent client detail
-    			$agentClient = AgentClient::findOrFail($techConciergeServiceRequests->agent_client_id);
+    			// Check for the slot expiration time
+    			$digitalServiceRequestTime = $digitalServiceRequest->createdAt;
 
-    			$clientId 		= $agentClient->id;
-    			$clientEmail	= $agentClient->email;
-    			$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
-    			$invitationId 	= $techConciergeServiceRequests->invitation_id;
+				$digitalServiceSlotExpireTime = date( 'H:i:s', strtotime( '+ '. $timeSlot->slot_time .' minutes', strtotime( $digitalServiceRequestTime ) ) );
 
-    			$emailData = array(
-    				'name' 		=> $clientName,
-    				'subject' 	=> 'Quotation Response',
-    				'email' 	=> $clientEmail,
-    				'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
-    			);
+				// Compare the current time with the slot expire time
+				if( $currentTime >= $digitalServiceSlotExpireTime )
+				{
+					// Update the status variable
+					$digitalServiceResponseStatus = true;
+				}
+    		}
 
-    			Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
-    			    $m->from('info@udistro.ca', 'Udistro');
-    			    
-    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-    			});
+    		$homeCleaningServiceResponseStatus = false;
+    		// Check if any response exist in the system for Cable & Internet
+    		if( count( $homeCleaningServiceRequest ) > 0 )
+    		{
+    			// Check for the slot expiration time
+    			$homeCleaningServiceRequestTime = $homeCleaningServiceRequest->createdAt;
 
-    			// Update the email_sent_status to 1
-    			TechConciergeServiceRequest::where(['id' => $techConciergeServiceRequests->serviceRequestId])->update(['email_sent_status' => '1']);
+				$homeCleaningServiceSlotExpireTime = date( 'H:i:s', strtotime( '+ '. $timeSlot->slot_time .' minutes', strtotime( $homeCleaningServiceRequestTime ) ) );
+
+				// Compare the current time with the slot expire time
+				if( $currentTime >= $homeCleaningServiceSlotExpireTime )
+				{
+					// Update the status variable
+					$homeCleaningServiceResponseStatus = true;
+				}
+    		}
+
+    		$movingItemServiceResponseStatus = false;
+    		// Check if any response exist in the system for Cable & Internet
+    		if( count( $movingItemServiceRequest ) > 0 )
+    		{
+    			// Check for the slot expiration time
+    			$movingItemServiceRequestTime = $movingItemServiceRequest->createdAt;
+
+				$movingItemServiceSlotExpireTime = date( 'H:i:s', strtotime( '+ '. $timeSlot->slot_time .' minutes', strtotime( $movingItemServiceRequestTime ) ) );
+
+				// Compare the current time with the slot expire time
+				if( $currentTime >= $movingItemServiceSlotExpireTime )
+				{
+					// Update the status variable
+					$movingItemServiceResponseStatus = true;
+				}
+    		}
+
+    		$techConciergeServiceResponseStatus = false;
+    		// Check if any response exist in the system for Cable & Internet
+    		if( count( $techConciergeServiceRequest ) > 0 )
+    		{
+    			// Check for the slot expiration time
+    			$techConciergeServiceRequestTime = $techConciergeServiceRequest->createdAt;
+
+				$techConciergeServiceSlotExpireTime = date( 'H:i:s', strtotime( '+ '. $timeSlot->slot_time .' minutes', strtotime( $techConciergeServiceRequestTime ) ) );
+
+				// Compare the current time with the slot expire time
+				if( $currentTime >= $techConciergeServiceSlotExpireTime )
+				{
+					// Update the status variable
+					$techConciergeServiceResponseStatus = true;
+				}
+    		}
+
+    		// If any of the above response exist, send the email
+    		if( $digitalServiceResponseStatus == true || $homeCleaningServiceResponseStatus == true || $movingItemServiceResponseStatus == true || $techConciergeServiceResponseStatus == true )
+    		{
+    			// Check if all the response are for same the same request, then send a single email. Otherwise individual email for every response
+    			if( $digitalServiceRequest['invitation_id'] == $homeCleaningServiceRequest['invitation_id'] && $homeCleaningServiceRequest['invitation_id'] == $movingItemServiceRequest['invitation_id'] && $techConciergeServiceRequest['invitation_id'] == $digitalServiceRequest['invitation_id'] )
+    			{
+    				// Send a common email
+    				$agentClient = AgentClient::findOrFail($digitalServiceRequest->agent_client_id);
+
+    				$clientId 		= $agentClient->id;
+    				$clientEmail	= $agentClient->email;
+    				$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+    				$invitationId 	= $digitalServiceRequest->invitation_id;
+
+    				$emailData = array(
+    					'name' 		=> $clientName,
+    					'subject' 	=> 'Quotation Response',
+    					'email' 	=> $clientEmail,
+    					'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+    				);
+
+    				Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+    				    $m->from('info@udistro.ca', 'Udistro');
+    				    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+    				});
+
+    				// Update the email_sent_status to 1 for all the requests
+    				DigitalServiceRequest::where(['id' => $digitalServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				HomeCleaningServiceRequest::where(['id' => $homeCleaningServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				MovingItemServiceRequest::where(['id' => $movingItemServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				TechConciergeServiceRequest::where(['id' => $techConciergeServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    			}
+    			else 	// Send individual email & update the status
+    			{
+    				if( $digitalServiceResponseStatus == true )
+    				{
+						$agentClient = AgentClient::findOrFail($digitalServiceRequest->agent_client_id);
+
+						$clientId 		= $agentClient->id;
+						$clientEmail	= $agentClient->email;
+						$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+						$invitationId 	= $digitalServiceRequest->invitation_id;
+
+						$emailData = array(
+							'name' 		=> $clientName,
+							'subject' 	=> 'Quotation Response',
+							'email' 	=> $clientEmail,
+							'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+						);
+
+						Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+						    $m->from('info@udistro.ca', 'Udistro');
+						    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+						});
+
+						DigitalServiceRequest::where(['id' => $digitalServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				}
+
+    				if( $homeCleaningServiceResponseStatus == true )
+    				{
+    					$agentClient = AgentClient::findOrFail($homeCleaningServiceRequest->agent_client_id);
+
+    					$clientId 		= $agentClient->id;
+    					$clientEmail	= $agentClient->email;
+    					$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+    					$invitationId 	= $homeCleaningServiceRequest->invitation_id;
+
+    					$emailData = array(
+    						'name' 		=> $clientName,
+    						'subject' 	=> 'Quotation Response',
+    						'email' 	=> $clientEmail,
+    						'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+    					);
+
+    					Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+    					    $m->from('info@udistro.ca', 'Udistro');
+    					    
+    					    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+    					});
+
+    					HomeCleaningServiceRequest::where(['id' => $homeCleaningServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				}
+
+    				if( $movingItemServiceResponseStatus == true )
+    				{
+    					$agentClient = AgentClient::findOrFail($movingItemServiceRequest->agent_client_id);
+
+    					$clientId 		= $agentClient->id;
+    					$clientEmail	= $agentClient->email;
+    					$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+    					$invitationId 	= $movingItemServiceRequest->invitation_id;
+
+    					$emailData = array(
+    						'name' 		=> $clientName,
+    						'subject' 	=> 'Quotation Response',
+    						'email' 	=> $clientEmail,
+    						'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+    					);
+
+    					Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+    					    $m->from('info@udistro.ca', 'Udistro');
+    					    
+    					    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+    					});
+
+    					MovingItemServiceRequest::where(['id' => $movingItemServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				}
+
+    				if( $techConciergeServiceResponseStatus == true )
+    				{
+    					$agentClient = AgentClient::findOrFail($techConciergeServiceRequest->agent_client_id);
+
+    					$clientId 		= $agentClient->id;
+    					$clientEmail	= $agentClient->email;
+    					$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+    					$invitationId 	= $techConciergeServiceRequest->invitation_id;
+
+    					$emailData = array(
+    						'name' 		=> $clientName,
+    						'subject' 	=> 'Quotation Response',
+    						'email' 	=> $clientEmail,
+    						'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+    					);
+
+    					Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+    					    $m->from('info@udistro.ca', 'Udistro');
+    					    
+    					    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+    					});
+
+    					TechConciergeServiceRequest::where(['id' => $techConciergeServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+    				}
+    			}
     		}
 		}
-		
     }
 }

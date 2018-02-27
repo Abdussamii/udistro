@@ -239,3 +239,9 @@ ALTER TABLE `agent_client_invites` ADD `authentication` ENUM('0','1') NOT NULL D
 Semui Changes:
 
 email_sent_status  enum(0,1,2)
+
+***************************************************************************************************
+
+27-02-2018
+
+CREATE TABLE `udistro`.`company_request_emails` ( `id` INT(10) NOT NULL AUTO_INCREMENT , `comapny_id` INT(10) NOT NULL , `client_id` INT(10) NOT NULL , `invitation_id` INT(10) NOT NULL , `email_status` ENUM('0','1') NOT NULL COMMENT '0: Initial, 1 : Email sent' , `created_at` DATETIME NOT NULL , `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP() NOT NULL DEFAULT CURRENT_TIMESTAMP() , PRIMARY KEY (`id`)) ENGINE = InnoDB;

@@ -1530,9 +1530,16 @@ class CompanyController extends Controller
     	        $response['request_other_details'] = $otherDetailHtml;
 
     	        // Get the latitude, longitude of the mover from the Google Map API
-    	        $clientMovingFromAddressCoordinates = array();
+    	        // $clientMovingFromAddressCoordinates = array();
+    	        // $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    	        // $mapApiResponse = json_decode(file_get_contents($url), true);
+
     	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
-    	        $mapApiResponse = json_decode(file_get_contents($url), true);
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				$mapApiResponse = json_decode(curl_exec($ch), true);
+
     	        if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
     	        {
     	        	$clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
