@@ -1799,6 +1799,9 @@ function calculateRoute(from, to) {
 							                        	}
 							                        	?>
 						                        	</div>
+						                        	<div>
+						                        		<label id="tech_concierge_places[]-error" class="error" for="tech_concierge_places[]"></label>
+						                        	</div>
 						                        </div>
 						                    </div>
 						                </div>
@@ -1828,6 +1831,9 @@ function calculateRoute(from, to) {
 							                        		}
 							                        	}
 							                        	?>
+						                        	</div>
+						                        	<div>
+						                        		<label id="tech_concierge_appliances[]-error" class="error" for="tech_concierge_appliances[]"></label>
 						                        	</div>
 						                        </div>
 						                    </div>

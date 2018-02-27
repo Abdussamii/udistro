@@ -720,6 +720,9 @@ $(document).ready(function(){
 			return false;
 		}
 
+		// Reset the form
+		$('#frm_home_cleaning_services')[0].reset();
+
 		$('#home_cleaning_services_modal').modal({ backdrop: 'static', keyboard: false });
 
 		// Reset the popup
@@ -828,6 +831,9 @@ $(document).ready(function(){
 			alertify.error('This activity is already completed');
 			return false;
 		}
+
+		// Reset the form
+		$('#frm_home_moving_companies')[0].reset();
 
 		$('#moving_companies_modal').modal({ backdrop: 'static', keyboard: false });
 
@@ -962,6 +968,9 @@ $(document).ready(function(){
 			return false;
 		}
 
+		// Reset the form
+		$('#frm_tech_concierge')[0].reset();
+
 		$('#tech_concierge_modal').modal({ backdrop: 'static', keyboard: false });
 	});
 
@@ -999,6 +1008,9 @@ $(document).ready(function(){
 			moving_house_to_bedroom_count : { required: true },
 			moving_house_to_property_type : { required: true },
 
+			'tech_concierge_places[]' : { required: true },
+			'tech_concierge_appliances[]' : { required: true },
+
 			tech_concierge_callback_primary_no: { mobileNoValidate: true },
 			tech_concierge_callback_secondary_no: { mobileNoValidate: true },
 		},
@@ -1008,6 +1020,9 @@ $(document).ready(function(){
 			moving_house_to_level: { required: 'Please select floor level' },
 			moving_house_to_bedroom_count: { required: 'Please select bedroom count' },
 			moving_house_to_property_type: { required: 'Please select property type' },
+
+			'tech_concierge_places[]' : { required: 'Please select atleast one option' },
+			'tech_concierge_appliances[]' : { required: 'Please select atleast one option' },
 		}
 	});
 
@@ -1070,6 +1085,9 @@ $(document).ready(function(){
 			alertify.error('This activity is already completed');
 			return false;
 		}
+
+		// Reset the already filled form
+		$('#frm_cable_internet_services')[0].reset();
 
 		$('#cable_internet_services_modal').modal({ backdrop: 'static', keyboard: false });
 
@@ -1458,8 +1476,9 @@ $(document).ready(function(){
 	$(document).on('click', '.make_payment', function() {
 
 		// Get the quotation response details
-		let requestId 	= $(this).attr('id');
-		let serviceType = $(this).attr('data-service');
+		let requestId 		= $(this).attr('id');
+		let serviceType 	= $(this).attr('data-service');
+		let paymentAmount 	= $(this).attr('data-amount');
 		
 		// Get the reference of element
 		var $this = $(this);
@@ -1470,7 +1489,8 @@ $(document).ready(function(){
 			method: 'get',
 			data: {
 				requestId: requestId,
-				serviceType: serviceType
+				serviceType: serviceType,
+				paymentAmount: paymentAmount
 			},
 			beforeSend: function() {
 		        $this.html('<i class="fa fa-spinner" aria-hidden="true"></i>');

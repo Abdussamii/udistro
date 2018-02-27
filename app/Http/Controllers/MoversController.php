@@ -1508,13 +1508,19 @@ class MoversController extends Controller
 				$digitalServiceRequest->moving_to_floor = $cableInternetDetails['cable_internet_house_to_level'];
 				$digitalServiceRequest->moving_to_bedroom_count = $cableInternetDetails['cable_internet_house_to_bedroom_count'];
 				$digitalServiceRequest->moving_to_property_type = $cableInternetDetails['cable_internet_house_to_property_type'];
-				$digitalServiceRequest->have_cable_internet_already = $cableInternetDetails['cable_internet_service_before'];
-				$digitalServiceRequest->employment_status = $cableInternetDetails['cable_internet_employment_status'];
-				$digitalServiceRequest->want_to_receive_electronic_bill = $cableInternetDetails['cable_internet_bill_electronically'];
-				$digitalServiceRequest->want_to_contract_plan = $cableInternetDetails['cable_internet_contract_plan'];
-				$digitalServiceRequest->want_to_setup_preauthorise_payment = $cableInternetDetails['cable_internet_preauthorise_payment'];
-				$digitalServiceRequest->callback_option = $cableInternetDetails['cable_internet_callback_option'];
-				$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
+
+				$digitalServiceRequest->have_cable_internet_already = isset( $cableInternetDetails['cable_internet_service_before'] ) ? $cableInternetDetails['cable_internet_service_before'] : '0' ;
+				$digitalServiceRequest->employment_status = isset( $cableInternetDetails['cable_internet_employment_status'] ) ? $cableInternetDetails['cable_internet_employment_status'] : '0';
+				$digitalServiceRequest->want_to_receive_electronic_bill = isset( $cableInternetDetails['cable_internet_bill_electronically'] ) ? $cableInternetDetails['cable_internet_bill_electronically'] : '0';
+				$digitalServiceRequest->want_to_contract_plan = isset( $cableInternetDetails['cable_internet_contract_plan'] ) ? $cableInternetDetails['cable_internet_contract_plan'] : '0';
+				$digitalServiceRequest->want_to_setup_preauthorise_payment = isset( $cableInternetDetails['cable_internet_preauthorise_payment'] ) ? $cableInternetDetails['cable_internet_preauthorise_payment'] : '0';
+				$digitalServiceRequest->callback_option = isset( $cableInternetDetails['cable_internet_callback_option'] ) ? $cableInternetDetails['cable_internet_callback_option'] : '0';
+				
+				if( isset( $cableInternetDetails['cable_internet_callback_time'] ) )
+				{
+					$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
+				}
+				
 				$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
 				$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
 				$digitalServiceRequest->additional_information = $cableInternetDetails['cable_internet_additional_info'];
@@ -1599,13 +1605,18 @@ class MoversController extends Controller
 					$digitalServiceRequest->moving_to_floor = $cableInternetDetails['cable_internet_house_to_level'];
 					$digitalServiceRequest->moving_to_bedroom_count = $cableInternetDetails['cable_internet_house_to_bedroom_count'];
 					$digitalServiceRequest->moving_to_property_type = $cableInternetDetails['cable_internet_house_to_property_type'];
-					$digitalServiceRequest->have_cable_internet_already = $cableInternetDetails['cable_internet_service_before'];
-					$digitalServiceRequest->employment_status = $cableInternetDetails['cable_internet_employment_status'];
-					$digitalServiceRequest->want_to_receive_electronic_bill = $cableInternetDetails['cable_internet_bill_electronically'];
-					$digitalServiceRequest->want_to_contract_plan = $cableInternetDetails['cable_internet_contract_plan'];
-					$digitalServiceRequest->want_to_setup_preauthorise_payment = $cableInternetDetails['cable_internet_preauthorise_payment'];
-					$digitalServiceRequest->callback_option = $cableInternetDetails['cable_internet_callback_option'];
-					$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
+
+					$digitalServiceRequest->have_cable_internet_already = isset( $cableInternetDetails['cable_internet_service_before'] ) ? $cableInternetDetails['cable_internet_service_before'] : '0';
+					$digitalServiceRequest->employment_status = isset( $cableInternetDetails['cable_internet_employment_status'] ) ? $cableInternetDetails['cable_internet_employment_status'] : '0';
+					$digitalServiceRequest->want_to_receive_electronic_bill = isset( $cableInternetDetails['cable_internet_bill_electronically'] ) ? $cableInternetDetails['cable_internet_bill_electronically'] : '0';
+					$digitalServiceRequest->want_to_contract_plan = isset( $cableInternetDetails['cable_internet_contract_plan'] ) ? $cableInternetDetails['cable_internet_contract_plan'] : '0';
+					$digitalServiceRequest->want_to_setup_preauthorise_payment = isset( $cableInternetDetails['cable_internet_preauthorise_payment'] ) ? $cableInternetDetails['cable_internet_preauthorise_payment'] : '0';
+					$digitalServiceRequest->callback_option = isset( $cableInternetDetails['cable_internet_callback_option'] ) ? $cableInternetDetails['cable_internet_callback_option'] : '0'; 
+					if( isset( $cableInternetDetails['cable_internet_callback_time'] ) )
+					{
+						$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
+					}
+
 					$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
 					$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
 					$digitalServiceRequest->additional_information = $cableInternetDetails['cable_internet_additional_info'];
@@ -1878,15 +1889,15 @@ class MoversController extends Controller
  					$homeCleaningServiceRequest->moving_to_bedroom_count = $homeCleaningDetails['home_cleaning_house_to_bedroom_count'];
  					$homeCleaningServiceRequest->moving_to_property_type = $homeCleaningDetails['home_cleaning_house_to_property_type'];
 
- 					$homeCleaningServiceRequest->home_condition = $homeCleaningDetails['home_cleaning_condition'];
- 					$homeCleaningServiceRequest->home_cleaning_level = $homeCleaningDetails['home_cleaning_levels'];
- 					$homeCleaningServiceRequest->home_cleaning_area = $homeCleaningDetails['home_cleaning_area'];
- 					$homeCleaningServiceRequest->home_cleaning_people_count = $homeCleaningDetails['home_cleaning_peoples_count'];
- 					$homeCleaningServiceRequest->home_cleaning_pet_count = $homeCleaningDetails['home_cleaning_pets_count'];
- 					$homeCleaningServiceRequest->home_cleaning_bathroom_count = $homeCleaningDetails['home_cleaning_bathrooms_count'];
+ 					$homeCleaningServiceRequest->home_condition = isset( $homeCleaningDetails['home_cleaning_condition'] ) ? $homeCleaningDetails['home_cleaning_condition'] : '';
+ 					$homeCleaningServiceRequest->home_cleaning_level = isset( $homeCleaningDetails['home_cleaning_levels'] ) ? $homeCleaningDetails['home_cleaning_levels'] : '';
+ 					$homeCleaningServiceRequest->home_cleaning_area = isset( $homeCleaningDetails['home_cleaning_area'] ) ? $homeCleaningDetails['home_cleaning_area'] : '';
+ 					$homeCleaningServiceRequest->home_cleaning_people_count = isset( $homeCleaningDetails['home_cleaning_peoples_count'] ) ? $homeCleaningDetails['home_cleaning_peoples_count'] : '';
+ 					$homeCleaningServiceRequest->home_cleaning_pet_count = isset( $homeCleaningDetails['home_cleaning_pets_count'] ) ? $homeCleaningDetails['home_cleaning_pets_count'] : '';
+ 					$homeCleaningServiceRequest->home_cleaning_bathroom_count = isset( $homeCleaningDetails['home_cleaning_bathrooms_count'] ) ? $homeCleaningDetails['home_cleaning_bathrooms_count'] : '';
 
- 					$homeCleaningServiceRequest->cleaning_behind_refrigerator_and_stove = $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'];
- 					$homeCleaningServiceRequest->baseboard_to_be_washed = $homeCleaningDetails['home_cleaning_baseboard'];
+ 					$homeCleaningServiceRequest->cleaning_behind_refrigerator_and_stove = isset( $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'] ) ? $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'] : '0';
+ 					$homeCleaningServiceRequest->baseboard_to_be_washed = isset( $homeCleaningDetails['home_cleaning_baseboard'] ) ? $homeCleaningDetails['home_cleaning_baseboard'] : '0';
 
  					$homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
  					$homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
@@ -2172,7 +2183,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="cable_internet_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="cable_internet_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2256,7 +2267,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="tech_concierge_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="tech_concierge_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2349,7 +2360,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="home_cleaning_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="home_cleaning_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2459,7 +2470,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-service="moving_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="moving_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -3482,8 +3493,9 @@ class MoversController extends Controller
      */
     public function getqQuotationResponseDetails()
     {
-    	$requestId 	= Input::get('requestId');
-    	$serviceType= Input::get('serviceType');
+    	$requestId 		= Input::get('requestId');
+    	$serviceType 	= Input::get('serviceType');
+    	$paymentAmount 	= Input::get('paymentAmount');
 
     	$response 		= array();
     	$paymentAgainst = '';
@@ -3493,14 +3505,13 @@ class MoversController extends Controller
     		{
     			$paymentAgainst = 'Tech Concierge Service';
 
-    			$details = 	DB::table('service_request_responses as t1')
-    						->leftJoin('tech_concierge_service_requests as t2', 't1.company_id', '=', 't2.company_id')
-    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
-    						->leftJoin('companies as t4', 't2.company_id', '=', 't4.id')
-    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
-    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    			$details = 	DB::table('tech_concierge_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
+    						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
+    						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
 
     		}
@@ -3508,42 +3519,39 @@ class MoversController extends Controller
     		{
     			$paymentAgainst = 'Home Cleaning Service';
 
-    			$details = 	DB::table('service_request_responses as t1')
-    						->leftJoin('home_cleaning_service_requests as t2', 't1.company_id', '=', 't2.company_id')
-    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
-    						->leftJoin('companies as t4', 't2.company_id', '=', 't4.id')
-    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
-    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    			$details = 	DB::table('home_cleaning_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
+    						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
+    						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
     		}
     		else if( $serviceType == 'moving_service' )
     		{
     			$paymentAgainst = 'Moving Service';
 
-    			$details = 	DB::table('service_request_responses as t1')
-    						->leftJoin('moving_item_service_requests as t2', 't1.company_id', '=', 't2.mover_company_id')
-    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
-    						->leftJoin('companies as t4', 't2.mover_company_id', '=', 't4.id')
-    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
-    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    			$details = 	DB::table('moving_item_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.mover_company_id', '=', 't3.id')
+    						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
+    						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
     		}
     		else if( $serviceType == 'cable_internet_service' )
     		{
     			$paymentAgainst = 'Cable Internet Service';
 
-    			$details = 	DB::table('service_request_responses as t1')
-    						->leftJoin('digital_service_requests as t2', 't1.company_id', '=', 't2.digital_service_company_id')
-    						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
-    						->leftJoin('companies as t4', 't2.digital_service_company_id', '=', 't4.id')
-    						->leftJoin('agent_client_moving_to_addresses as t5', 't4.id', '=', 't5.agent_client_id')
-    						->leftJoin('cities as t6', 't5.city_id', '=', 't6.id')
+    			$details = 	DB::table('digital_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.digital_service_company_id', '=', 't3.id')
+    						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
+    						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't1.total_amount', 't3.id as clientId', 't3.fname', 't3.lname', 't3.email', 't3.contact_number', 't5.address1', 't5.address2', 't5.postal_code', 't6.name as city')
+    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
     		}
 
@@ -3563,7 +3571,7 @@ class MoversController extends Controller
 	    			$response['errCode'] 	= 0;
 	    			$response['errMsg'] 	= 'Success';
 	    			$response['details'] 	= array(
-	    				'amount' 		=> $details->total_amount,
+	    				'amount' 		=> $paymentAmount,
 	    				'paymentAgainst'=> $paymentAgainst,
 	    				'fname' 		=> $details->fname,
 	    				'lname' 		=> $details->lname,
