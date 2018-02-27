@@ -4330,22 +4330,33 @@ class AdminController extends Controller
     		// Check if the the response slot id is available
     		if( $responseDetails['slot_id'] == '' )
     		{
-    			$slot = new ResponseTimeSlot;
+    			// Check if there is an entry in the table or not. Only one entry is allowed
+    			$slotCount = ResponseTimeSlot::count();
 
-    			$slot->slot_title 	= $responseDetails['slot_title'];
-    			$slot->slot_time 	= $responseDetails['slot_time'];
-    			$slot->status 		= $responseDetails['slot_status'];
-    			$slot->created_by 	= $userId;
-
-    			if( $slot->save() )
+    			if( count( $slotCount ) == 0 )
     			{
-    				$response['errCode']    = 0;
-    	        	$response['errMsg']     = 'Response time saved successfully';
+	    			$slot = new ResponseTimeSlot;
+
+	    			$slot->slot_title 	= $responseDetails['slot_title'];
+	    			$slot->slot_time 	= $responseDetails['slot_time'];
+	    			$slot->status 		= $responseDetails['slot_status'];
+	    			$slot->created_by 	= $userId;
+
+	    			if( $slot->save() )
+	    			{
+	    				$response['errCode']    = 0;
+	    	        	$response['errMsg']     = 'Response time saved successfully';
+	    			}
+	    			else
+	    			{
+	    				$response['errCode']    = 2;
+	    	        	$response['errMsg']     = 'Some issue in saving the response time';
+	    			}
     			}
     			else
     			{
-    				$response['errCode']    = 2;
-    	        	$response['errMsg']     = 'Some issue in saving the response time';
+    				$response['errCode']    = 3;
+	    	        $response['errMsg']     = 'Only one slot is allowed at a time';
     			}
     		}
     		else
