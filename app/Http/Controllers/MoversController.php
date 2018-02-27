@@ -2504,7 +2504,7 @@ class MoversController extends Controller
                 $response['additional_information']     = $techConciergeArray->additional_information;
 
                 // Get the moving from address
-                $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
+                $clientMovingFromAddress = DB::table('tech_concierge_service_requests as t1')
                                         ->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                                         ->join('provinces as t3', 't2.province_id', '=', 't3.id')
                                         ->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -2514,7 +2514,7 @@ class MoversController extends Controller
                                         ->first();
 
                 // Get the moving to address
-                $clientMovingToAddress = DB::table('home_cleaning_service_requests as t1')
+                $clientMovingToAddress = DB::table('tech_concierge_service_requests as t1')
                                         ->join('agent_client_moving_to_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
                                         ->join('provinces as t3', 't2.province_id', '=', 't3.id')
                                         ->join('cities as t4', 't2.city_id', '=', 't4.id')
@@ -2616,7 +2616,7 @@ class MoversController extends Controller
 
                 $response['request_other_details'] = $otherDetailHtml;
 
-                $taxDetails = DB::table('service_request_responses')->where(['request_id' => $techConciergeId, 'company_id' => $companyId])->first();
+                /*$taxDetails = DB::table('service_request_responses')->where(['request_id' => $techConciergeId, 'company_id' => $companyId])->first();
 
                 if( count( $taxDetails ) > 0 )
                 {
@@ -2632,7 +2632,74 @@ class MoversController extends Controller
 	                $response['subtotal']       		= $subtotal;
 
 	                $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
-                }
+                }*/
+
+                // Get all the values and calculate the total amount
+                $appliancesServiceRequests 	= TechConciergeAppliancesServiceRequest::where(['service_request_id' => $techConciergeArray->id])->select('amount')->get();
+                $otherDetailServiceRequests = TechConciergeOtherDetailServiceRequest::where(['service_request_id' => $techConciergeArray->id])->select('amount')->get();
+                $placeServiceRequests 		= TechConciergePlaceServiceRequest::where(['service_request_id' => $techConciergeArray->id])->select('amount')->get();
+
+                $totalAmount= 0;
+                $discount 	= 0;
+                $gst = 0;
+                $hst = 0;
+                $pst = 0;
+                $serviceCharge = 0;
+                
+                if( count( $appliancesServiceRequests ) > 0 )
+            	{
+            		foreach( $appliancesServiceRequests as $appliancesServiceRequest )
+            		{
+            			$totalAmount += $appliancesServiceRequest->amount;
+            		}
+            	}
+
+            	if( count( $otherDetailServiceRequests ) > 0 )
+            	{
+            		foreach( $otherDetailServiceRequests as $otherDetailServiceRequest )
+            		{
+            			$totalAmount += $otherDetailServiceRequest->amount;
+            		}
+            	}
+
+            	if( count( $placeServiceRequests ) > 0 )
+            	{
+            		foreach( $placeServiceRequests as $placeServiceRequest )
+            		{
+            			$totalAmount += $placeServiceRequest->amount;
+            		}
+            	}
+
+            	// Substract the discount
+            	$discount = number_format($techConciergeArray->discount, 2, '.', '');
+            	$totalAmount = $totalAmount - $discount;
+
+        		//  Calculate the subtotal
+        		$subtotal = number_format( ( $totalAmount ) , 2, '.', '');
+
+            	// Calculate GST
+            	$gst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->gst, 2, '.', '');
+
+            	// Calculate HST
+            	$hst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->hst, 2, '.', '');
+
+            	// Calculate PST
+            	$pst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->pst, 2, '.', '');
+
+            	// Calculate Service Charge
+            	$serviceCharge = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->service_charge, 2, '.', '');
+
+            	$totalAmount = number_format( $totalAmount + $gst + $hst + $pst + $serviceCharge, 2, '.', '');
+
+
+        	    $response['subtotal']     			= $subtotal;
+        	    $response['gst_amount']     		= $gst;
+        	    $response['hst_amount']     		= $hst;
+        	    $response['pst_amount']     		= $pst;
+        	    $response['service_charge_amount'] 	= $serviceCharge;
+        	    $response['total_amount']   		= $totalAmount;
+        	    $response['discount']       		= $discount;
+        	    $response['comment']       			= ucfirst( strtolower( $techConciergeArray->comment ) );
 
             }
         }
@@ -3178,7 +3245,6 @@ class MoversController extends Controller
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 $mapApiResponse = json_decode(curl_exec($ch), true);
-                
                 if( count( $mapApiResponse ) > 0 && isset( $mapApiResponse['status'] ) && $mapApiResponse['status'] == 'OK' )
                 {
                     $clientMovingFromAddressCoordinates = $mapApiResponse['results'][0]['geometry']['location'];
@@ -3201,11 +3267,15 @@ class MoversController extends Controller
                 }
 
                 // Calculate the distance between the two address
-                $distance = Helper::distance($clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+                $distance = 0;
+                if( count( $clientMovingFromAddressCoordinates ) > 0 && count( $clientMovingToAddressCoordinates ) > 0 )
+                {
+                	$distance = Helper::distance($clientMovingToAddressCoordinates['lat'], $clientMovingToAddressCoordinates['lng'], $clientMovingFromAddressCoordinates['lat'], $clientMovingFromAddressCoordinates['lng'], "K");
+                }
 
                 $response['distance'] = round($distance, 2) . 'KM';
 
-                $taxDetails = DB::table('service_request_responses')->where(['request_id' => $movingCompanyId, 'company_id' => $companyId])->first();
+                /*$taxDetails = DB::table('service_request_responses')->where(['request_id' => $movingCompanyId, 'company_id' => $companyId])->first();
 
                 if( count( $taxDetails ) > 0 )
                 {
@@ -3222,7 +3292,85 @@ class MoversController extends Controller
                     $response['comment']       			= ucfirst( strtolower( $taxDetails->comment ) );
 
                     $response['subtotal']       		= $subtotal;
-                }
+                }*/
+
+                // Get all the values and calculate the total amount
+                $movingItemDetailServiceRequests 	= MovingItemDetailServiceRequest::where(['moving_items_service_id' => $movingCompaniesArray->id])->select('amount')->get();
+                $movingOtherItemServiceRequests 	= MovingOtherItemServiceRequest::where(['moving_items_service_id' => $movingCompaniesArray->id])->select('amount')->get();
+                $movingTransportationTypeRequests 	= MovingTransportationTypeRequest::where(['moving_items_services_id' => $movingCompaniesArray->id])->select('amount')->get();
+
+                $totalAmount= 0;
+                $discount 	= 0;
+                $gst = 0;
+                $hst = 0;
+                $pst = 0;
+                $serviceCharge = 0;
+                
+                if( count( $movingItemDetailServiceRequests ) > 0 )
+            	{
+            		foreach( $movingItemDetailServiceRequests as $movingItemDetailServiceRequest )
+            		{
+            			$totalAmount += $movingItemDetailServiceRequest->amount;
+            		}
+            	}
+
+            	if( count( $movingOtherItemServiceRequests ) > 0 )
+            	{
+            		foreach( $movingOtherItemServiceRequests as $movingOtherItemServiceRequest )
+            		{
+            			$totalAmount += $movingOtherItemServiceRequest->amount;
+            		}
+            	}
+
+            	if( count( $movingTransportationTypeRequests ) > 0 )
+            	{
+            		foreach( $movingTransportationTypeRequests as $movingTransportationTypeRequest )
+            		{
+            			$totalAmount += $movingTransportationTypeRequest->amount;
+            		}
+            	}
+
+            	// Add the amount value as well
+        		$insuranceAmount = 0;
+        		if( $movingCompaniesArray->insurance_amount != '' && !is_null( $movingCompaniesArray->insurance_amount ) )
+        		{
+        			$insuranceAmount = $movingCompaniesArray->insurance_amount;
+        		}
+        		$totalAmount += $insuranceAmount;
+
+            	// Substract the discount
+            	$discount = number_format($movingCompaniesArray->discount, 2, '.', '');
+            	$totalAmount = $totalAmount - $discount;
+
+        		//  Calculate the subtotal
+        		$subtotal = number_format( ( $totalAmount ) , 2, '.', '');
+
+            	// Calculate GST
+            	$gst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->gst, 2, '.', '');
+
+            	// Calculate HST
+            	$hst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->hst, 2, '.', '');
+
+            	// Calculate PST
+            	$pst = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->pst, 2, '.', '');
+
+            	// Calculate Service Charge
+            	$serviceCharge = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->service_charge, 2, '.', '');
+
+            	$totalAmount = number_format( $totalAmount + $gst + $hst + $pst + $serviceCharge, 2, '.', '');
+
+
+        	    $response['subtotal']     			= $subtotal;
+        	    $response['gst_amount']     		= $gst;
+        	    $response['hst_amount']     		= $hst;
+        	    $response['pst_amount']     		= $pst;
+        	    $response['service_charge_amount'] 	= $serviceCharge;
+        	    $response['total_amount']   		= $totalAmount;
+        	    $response['discount']       		= $discount;
+        	    $response['insurance'] 				= $insuranceAmount;
+        	    $response['comment']       			= ucfirst( strtolower( $movingCompaniesArray->comment ) );
+
+
             }
         }
         return response()->json($response);
