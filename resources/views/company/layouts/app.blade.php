@@ -125,6 +125,9 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
+                    	<li>
+                        	<a href="{{ url('company/changepassword') }}"><i class="fa fa-lock"></i> Change Password</a>
+                        </li>
                         <li>
                         	<a href="{{ url('/company/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
@@ -151,9 +154,9 @@
                         <li>
                             <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="{{ url('company/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
-                        </li>
+                        </li> -->
                         <!-- <li>
                             <a href="{{ url('company/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li> -->

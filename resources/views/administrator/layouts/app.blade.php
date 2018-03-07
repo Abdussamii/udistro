@@ -108,6 +108,9 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
+                    	<li>
+                        	<a href="{{ url('administrator/changepassword') }}"><i class="fa fa-lock"></i> Change Password</a>
+                        </li>
                         <li>
                         	<a href="{{ url('/administrator/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
@@ -168,9 +171,9 @@
                                 <li>
                                     <a href="{{ url('/administrator/companyrepresentative') }}"> Company Representative</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="{{ url('/administrator/industrytype') }}"> Industry Type</a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a href="{{ url('/administrator/services') }}"> Services</a>
                                 </li>
@@ -192,9 +195,9 @@
                         <li>
                             <a href="{{ url('administrator/paymentplans') }}"><i class="fa fa-building-o"></i> Payment Plans</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="{{ url('administrator/emailtemplates') }}"><i class="fa fa-envelope"></i> Email Templates</a>
-                        </li>
+                        </li> -->
 						<li>
                             <a href="#"><i class="fa fa-th-large" aria-hidden="true"></i> Authorization<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -240,9 +243,9 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="{{ url('administrator/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="{{ url('administrator/provincialagencies') }}"><i class="fa fa-dashboard fa-fw"></i> Provincial Agencies</a>
                         </li>

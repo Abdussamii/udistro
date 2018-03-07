@@ -1768,7 +1768,7 @@ $(document).ready(function(){
                     $('#frm_add_services #services_id').val(serviceId);
                     $('#frm_add_services #services_name').val(response.service);
                     $('#frm_add_services #description').val(response.description);
-                    $('#frm_add_services #category').val(response.category);
+                    $('#frm_add_services #services_category').val(response.category);
                     $('#frm_add_services input[name="services_status"][value="'+ response.status +'"]').prop('checked', true);
 
                     // Show the modal
@@ -2426,7 +2426,7 @@ $(document).ready(function(){
 			    	// Auto-fill the form
 			    	$('#frm_add_company_category #category_id').val(categoryId);
 			    	$('#frm_add_company_category #category_name').val(response.category);
-			    	$('#frm_add_company_category input[name="category_status_edit"][value="'+ response.status +'"]').prop('checked', true);
+			    	$('#frm_add_company_category input[name="category_status"][value="'+ response.status +'"]').prop('checked', true);
 
 			    	// Show the modal
 			    	$('#modal_add_company_category').modal('show');
@@ -2946,8 +2946,8 @@ $(document).ready(function(){
 			    	$('#frm_edit_company #representative_email').val(response.email);
 			    	$('#frm_edit_company #company_name').val(response.company_name);
 			    	$('#frm_edit_company #company_category').val(response.company_category_id);
-			    	$('#frm_edit_company #company_address1_edit').val(response.address1);
-                    $('#frm_edit_company #company_address2_edit').val(response.address2);
+			    	$('#frm_edit_company #street-address_edit').val(response.address1);
+                    $('#frm_edit_company #street-address2_edit').val(response.address2);
 			    	$('#frm_edit_company #company_province_edit').val(response.province_id);
                     $('#frm_edit_company #company_profile_image').attr('src', response.image);
 			    	
@@ -2960,7 +2960,7 @@ $(document).ready(function(){
 			    	$('#frm_edit_company #company_city_edit').html(cities);
 					
 					// Make the city selected 
-					$('#frm_edit_company #company_city').val(response.city_id);
+					$('#frm_edit_company #company_city_edit').val(response.city_id);
                     $('#frm_edit_company #company_country_edit').val(response.country_id);
 
 			    	$('#frm_edit_company #postcode_edit').val(response.postal_code);
@@ -3280,8 +3280,9 @@ $(document).ready(function(){
 	    "bProcessing": true,
 	    "bServerSide": true,
 	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchagents',
+	    
 	    "columnDefs": [
-	        { "className": "dt-center", "targets": [0, 8, 9] }
+	        { "className": "dt-center", "targets": [ 0, 5, 6 ] }
 	    ],
 	    "aoColumns": [
 	        { 'bSortable' : true },
@@ -3289,11 +3290,8 @@ $(document).ready(function(){
 	        { 'bSortable' : true },
 	        { 'bSortable' : false },
 	        { 'bSortable' : false },
-	        { 'bSortable' : false },
-	        { 'bSortable' : false },
-	        { 'bSortable' : false },
 	        { 'bSortable' : true },
-	        { 'bSortable' : false}
+	        { 'bSortable' : false }
 	    ]
 	});
 

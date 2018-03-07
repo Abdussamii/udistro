@@ -2331,10 +2331,10 @@ class AdminController extends Controller
             	$response['aaData'][$k] = array(
                     0 => $province->id,
                     1 => ucfirst( strtolower( $province->name ) ),
-					2 => $province->pst,
-					3 => $province->gst,
-					4 => $province->hst,
-					5 => $province->service_charge,
+					2 => number_format($province->pst, 2, '.', ''),
+					3 => number_format($province->gst, 2, '.', ''),
+					4 => number_format($province->hst, 2, '.', ''),
+					5 => number_format($province->service_charge, 2, '.', ''),
                     6 => Helper::getStatusText($province->status),
                     7 => '<a href="javascript:void(0);" id="'. $province->id .'" class="edit_province"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
@@ -4186,7 +4186,7 @@ class AdminController extends Controller
 	                    ->orderBy($sortBy, $sortType)
 	                    ->limit($length)
 	                    ->offset($start)
-	                    ->select('id', 'template_name', 'template_content', 'status')
+	                    ->select('id', 'template_name', 'template_content_to_view', 'status')
 	                    ->get();
 
         $iTotal = EmailTemplate::where('template_name','like', '%'.$sSearch.'%')->count();
@@ -4206,7 +4206,7 @@ class AdminController extends Controller
             	$response['aaData'][$k] = array(
                     0 => $emailTemplates->id,
                     1 => ucfirst( strtolower( $emailTemplates->template_name ) ),
-                    2 => '<div><a href="javascript:void(0);" class="datatable_template_check_preview">Check Preview</a><div class="datatable_template_preview" style="display:none;">'. $emailTemplates->template_content .'</div></div>',
+                    2 => '<div><a href="javascript:void(0);" class="datatable_template_check_preview">Check Preview</a><div class="datatable_template_preview" style="display:none;">'. $emailTemplates->template_content_to_view .'</div></div>',
                     3 => Helper::getStatusText($emailTemplates->status),
                     4 => '<a href="javascript:void(0);" id="'. $emailTemplates->id .'" class="edit_email_template"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );

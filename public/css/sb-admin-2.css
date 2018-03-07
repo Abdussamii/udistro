@@ -674,7 +674,7 @@ text-align: right;
 .dropdown-menu {
 	display: none;
 }
-.navbar-right .dropdown-menu { min-width: 120px; }
+.navbar-right .dropdown-menu { min-width: 180px; }
 .navbar-right .navbar-right .dropdown-menu>li>a:focus,
 .navbar-right .dropdown-menu>li>a:hover { background-color: #fff; }
 /************************************* DROPDOWN - NONE *************************************/

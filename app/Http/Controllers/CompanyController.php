@@ -50,6 +50,7 @@ use App\MovingTransportationTypeRequest;
 
 use Validator;
 use Helper;
+use Mail;
 
 class CompanyController extends Controller
 {
@@ -552,6 +553,29 @@ class CompanyController extends Controller
 
 							DB::commit();
 
+							// Send the email here
+							if( app()->env != 'local' )
+							{
+								$loginURL = url('/company');
+						    	if( $companyData['company_type'] == 1 )	// Real Estate company
+								{
+									$loginURL = url('/agent');
+								}
+								$emailData = array(
+									/* Email data */
+									'email' 	=> ucwords( strtolower( $companyData['rep_lname'] . ' ' . $companyData['rep_fname'] ) ),
+									'name' 		=> $companyData['email'],
+									'subject' 	=> 'Registration Successful',
+									'loginURL' 	=> $loginURL
+								);
+
+								Mail::send('emails.businessRegistration', ['emailData' => $emailData], function ($m) use ($emailData) {
+							        $m->from('info@udistro.ca', 'Udistro');
+							        
+							        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+							    });
+							}
+
 							$response['errCode']    = 0;
 				        	$response['errMsg']     = 'Company registered successfully';
 						}
@@ -594,7 +618,38 @@ class CompanyController extends Controller
      */
     public function dashboard()
     {
-    	return view('company/dashboard');
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user details
+		$user = User::find($userId);
+
+		// Get the company associated with the user
+		$companyDetails = $user->company->first();
+
+        // Get the no of quotation request for the company
+        $quotationCount = 0;
+		if( count( $companyDetails ) > 0 )
+		{
+			if( $companyDetails->company_category_id == '2' )		// Home Cleaning Service Company
+			{
+				$quotationCount = HomeCleaningServiceRequest::where(['company_id' => $companyDetails->id])->count();
+			}
+			else if( $companyDetails->company_category_id == '3' )	// Moving Company
+			{
+				$quotationCount = MovingItemServiceRequest::where(['mover_company_id' => $companyDetails->id])->count();
+			}
+			else if( $companyDetails->company_category_id == '4' ) 	// Internet & Cable Service provider
+			{
+				$quotationCount = DigitalServiceRequest::where(['digital_service_company_id' => $companyDetails->id])->count();
+			}
+			else if( $companyDetails->company_category_id == '5' ) 	// Tech Concierge
+			{
+				$quotationCount = TechConciergeServiceRequest::where(['company_id' => $companyDetails->id])->count();
+			}
+		}
+
+    	return view('company/dashboard', ['quotationCount' => $quotationCount]);
     }
 
     /**
@@ -2393,7 +2448,7 @@ class CompanyController extends Controller
 				$company->address2 				= $company_address2;
 				$company->province_id 			= $company_province;
 				$company->city_id 				= $company_city;
-				$company->city_id 				= $company_country;
+				$company->country_id 			= $company_country;
 				$company->postal_code 			= $postal_code;
 				$company->status 				= $company_status;
 				$company->updated_by 			= $userId;
@@ -2861,9 +2916,9 @@ class CompanyController extends Controller
     	// Datatable column number to table column name mapping
         $arr = array(
             0 => 't1.id',
-            1 => 't1.id',
-            2 => 't1.id',
-            8 => 't1.status',
+            1 => 't6.company_name',
+            2 => 't7.category',
+            5 => 't1.status',
         );
 
         // Map the sorting column index to the column name
@@ -2871,31 +2926,32 @@ class CompanyController extends Controller
 
         $agents 	= DB::select(
                         DB::raw(
-                        	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.address1, t1.postalcode, t1.status, 
-                        	t3.name as province, t4.name as city, t6.company_name
+                        	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.company_name, t7.category as company_category
 							FROM users AS t1 
 							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
 							LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
 							LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
 							LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
 							LEFT JOIN companies AS t6 ON t5.company_id = t6.id
+							LEFT JOIN company_categories AS t7 ON t6.company_category_id = t7.id
 							WHERE t2.role_id = '3' 
-                        	and t1.fname LIKE ('%". $sSearch ."%')
+                        	and ( t1.fname LIKE ('%". $sSearch ."%') OR t1.lname LIKE ('%". $sSearch ."%') )
                         	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
                         )
                     );
 
         $agentsCount = DB::select(
                             DB::raw("
-	                        SELECT t1.id
+	                        SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.company_name, t7.category as company_category
 							FROM users AS t1 
 							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
 							LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
 							LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
 							LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
 							LEFT JOIN companies AS t6 ON t5.company_id = t6.id
+							LEFT JOIN company_categories AS t7 ON t6.company_category_id = t7.id
 							WHERE t2.role_id = '3' 
-                        	and t1.fname LIKE ('%". $sSearch ."%')
+                        	and ( t1.fname LIKE ('%". $sSearch ."%') OR t1.lname LIKE ('%". $sSearch ."%') )
                             ")
                         );
 
@@ -2916,14 +2972,11 @@ class CompanyController extends Controller
    	            $response['aaData'][$k] = array(
    	                0 => $agent->id,
    	                1 => ucwords( strtolower( $agent->company_name ) ),
-   	                2 => ucwords( strtolower( $agent->agent_name ) ),
-   	                3 => $agent->email,
-   	                4 => $agent->address1,
-   	                5 => ucwords( strtolower( $agent->province) ),
-   	                6 => ucwords( strtolower( $agent->city ) ),
-   	                7 => $agent->postalcode,
-   	                8 => Helper::getStatusText($agent->status),
-   	                9 => '<a href="javascript:void(0);" id="'. $agent->id .'" data-usertype="agent" class="edit_agent"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+   	                2 => ucwords( strtolower( $agent->company_category ) ),
+   	                3 => ucwords( strtolower( $agent->agent_name ) ),
+   	                4 => $agent->email,
+   	                5 => Helper::getStatusText($agent->status),
+   	                6 => '<a href="javascript:void(0);" id="'. $agent->id .'" data-usertype="agent" class="edit_agent"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
    	            );
    	            $k++;
    	        }
@@ -3148,9 +3201,25 @@ class CompanyController extends Controller
     	$PaymentPlanType = PaymentPlanType::where(['plan_type' => $companyType, 'status' => '1'])->select('id')->first();
 
     	// Get the payment plan list for companies
-    	$paymentPlans = PaymentPlan::where(['status' => '1', 'plan_type_id' => $PaymentPlanType->id])->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')->get();
+    	/// $paymentPlans = PaymentPlan::where(['status' => '1', 'plan_type_id' => $PaymentPlanType->id])->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')->get();
 
-    	return view('company/paymentPlan', ['paymentPlans' => $paymentPlans]);
+		$currDate = date('Y-m-d');
+
+    	// Get the payment plan list
+    	$paymentPlans 	= PaymentPlan::where(['plan_type_id' => $PaymentPlanType->id, 'status' => '1'])	// plan_type_id : 1 is for agent
+    					->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')
+    					->get();
+
+    	// Get the selected payment plan details with the date validation
+    	$selectedPaymentPlan 	= DB::table('payment_plan_subscriptions as t1')
+    							->join('payment_plans as t2', 't1.plan_id', '=', 't2.id')
+    							->where(['t1.plan_type_id' => $PaymentPlanType->id, 't1.subscriber_id' => $userCompany->id, 't1.status' => '1', 't2.status' => '1'])
+    							->where('t1.start_date', '<=', $currDate)
+    							->where('t1.end_date', '>=', $currDate)
+    							->select('t1.id', 't2.plan_name', 't2.plan_charges', 't2.validity_days', 't1.start_date', 't1.end_date', 't1.quota', 't1.remaining_qouta')
+    							->first();
+
+    	return view('company/paymentPlan', ['paymentPlans' => $paymentPlans, 'selectedPaymentPlan' => $selectedPaymentPlan]);
     }
 
     /**

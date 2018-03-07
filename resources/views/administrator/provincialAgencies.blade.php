@@ -218,8 +218,8 @@
 								<div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="link">Link</label>
-											<input type="text" name="link" id="link" class="form-control" placeholder="Map URL" value="">
+											<label for="link">Do it Online</label>
+											<input type="text" name="link" id="link" class="form-control" placeholder="Do it Online" value="">
 										</div>
 									</div>
 									<div class="col-lg-6">

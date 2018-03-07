@@ -52,12 +52,9 @@
 					<tr>
 						<td>#</td>
 						<td>Company</td>
+						<td>Company Category</td>
 						<td>Agent Name</td>
 						<td>Email</td>
-						<td>Address</td>
-						<td>Province</td>
-						<td>City</td>
-						<td>Postal Code</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>

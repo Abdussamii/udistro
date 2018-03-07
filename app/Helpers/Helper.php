@@ -9,6 +9,7 @@ use App\LoginAttempt;
 use App\ClientActivityList;
 use App\ClientActivityLog;
 use App\PaymentPlanSubscription;
+use App\PaymentPlan;
 
 class Helper
 {
@@ -304,14 +305,48 @@ class Helper
     		// For agent payment plan there is a count limit
     		if( $planTypeId == 1 )
     		{
-    			// Check if their is an active payment plan exist on the present date
+    			// Check if the payment plan type is trial plan then there is no remaining qouta limit. Otherwise the remaining quota limit is there
     			$paymentPlanSubscriptionQouta = PaymentPlanSubscription::where('subscriber_id', '=', $subscriberId)	// subscriber is either company / agent
     											->where('plan_type_id', '=', $planTypeId)							// plan type is either for company / agent
     											->where('start_date', '<=', $date)									// plan start date must lie between the today's date
     											->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
-    											->where('remaining_qouta', '>', 0)									// plan remaining qouta count must not be zero
     											->where('status', '=', '1')
     											->first();
+
+   				// Check for the payment plan type
+    			if( count( $paymentPlanSubscriptionQouta ) > 0 )
+    			{
+    				$paymentPlanDetails = PaymentPlan::find($paymentPlanSubscriptionQouta->plan_id);
+
+    				if( count( $paymentPlanDetails ) > 0 )
+    				{
+    					// Check if the plan is a trial plan then there is no limit of email
+    					if( $paymentPlanDetails->trial_plan == '1' )
+    					{
+    						return true;
+    					}
+    					else
+    					{
+    						// If the plan is not a trial plan then there is limit of email
+    						if( $paymentPlanSubscriptionQouta->remaining_qouta > 0 )
+    						{
+    							return true;
+    						}
+    						else
+    						{
+    							return false;
+    						}
+    					}
+    				}
+    				else
+    				{
+    					return false;
+    				}
+    			}
+    			else
+    			{
+    				return false;
+    			}
     		}
     		else 	// There is no count limit for company
     		{
@@ -322,15 +357,15 @@ class Helper
     											->where('end_date', '>=', $date) 									// plan end date must lie between the today's date
     											->where('status', '=', '1')
     											->first();
-    		}
 
-    		if( count( $paymentPlanSubscriptionQouta ) > 0 )
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
+    			if( count( $paymentPlanSubscriptionQouta ) > 0 )
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				return false;
+    			}
     		}
     	}
     	else
