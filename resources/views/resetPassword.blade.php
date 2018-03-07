@@ -102,7 +102,7 @@
 				        <input type="password" class="form-control" id="password" name="password" placeholder="Please Enter password">
 				        <input type="hidden" name="token" id="token" value="{{ $response['token'] }}">
 				    </div>
-				    <button type="submit" class="btn btn-primary" id="btn_forgot_password" name="btn_forgot_password">Send Link</button>
+				    <button type="submit" class="btn btn-primary" id="btn_forgot_password" name="btn_forgot_password">Reset Password</button>
 				</form>
 			<?php
         	}

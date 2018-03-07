@@ -103,5 +103,24 @@
                 </a>
             </div>
         </div>
+
+      	<div class="col-lg-12">
+      		<h1 class="page-header">Recent Clients</h1>
+	      	<!-- Table to show all the cities -->
+			<table id="datatable_invited_clients" class="table table-striped">
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>First Name</td>
+						<td>Middle Name</td>
+						<td>Last Name</td>
+						<td>Email</td>
+						<td>Mobile</td>
+						<td>Status</td>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
     </div>
 @endsection

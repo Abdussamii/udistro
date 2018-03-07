@@ -278,6 +278,12 @@ $(document).ready(function(){
     $('#datatable_clients').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
+
+        // Hide the loader when datatable is rendered
+		"initComplete": function(settings, json) {
+			$('.loader-wrapper').hide();
+		},
+
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchclients',
         "columnDefs": [
@@ -293,6 +299,39 @@ $(document).ready(function(){
             { 'bSortable' : true },
             { 'bSortable' : false },
             { 'bSortable' : false }
+        ]
+    });
+
+    // To show the invited client list in datatable
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_invited_clients').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+
+        // Hide the loader when datatable is rendered
+		"initComplete": function(settings, json) {
+			$('.loader-wrapper').hide();
+		},
+
+		"searching": false,   	// Search Box will Be Disabled
+		"ordering": false,    	// Ordering (Sorting on Each Column)will Be Disabled
+		"info": false,         	// Will show "1 to n of n entries" Text at bottom
+		"lengthChange": false,	// Will Disabled Record number per page
+		"bPaginate": false,		// for pagination
+
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchinvitedclients',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 6 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : true }
         ]
     });
 
@@ -456,6 +495,17 @@ $(document).ready(function(){
         }
     });
 
+    // Canada number validation
+    $.validator.addMethod("canadaPhone", function (value, element) {
+        var filter = /^((\+[1-9]{0,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        if (filter.test(value)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }, 'Please enter a valid number');
+
     // Agent profile form validation
     $('#frm_agent_contact').submit(function(e){
         e.preventDefault();
@@ -467,7 +517,9 @@ $(document).ready(function(){
                 email: true
             },
             phone_number: {
-                required: true
+                required: true,
+                number: true,
+                canadaPhone: true
             }
         },
         messages: {
@@ -476,7 +528,8 @@ $(document).ready(function(){
                 email: 'Please enter valid email'
             },
             phone_number: {
-                required: 'Please enter phone number'
+                required: 'Please enter phone number',
+                number: 'Please enter a valid number'
             }
         }
     });

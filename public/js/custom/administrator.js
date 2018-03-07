@@ -2578,7 +2578,7 @@ $(document).ready(function(){
 					planId: planId
 				},
 			    success: function(response){
-			    	$('#modal_payment_plan').find('.modal-title').html('Edit Category');
+			    	$('#modal_payment_plan').find('.modal-title').html('Edit Plan');
 
 			    	// Auto-fill the form
 			    	$('#frm_add_payment_plan #payment_plan_id').val(planId);
@@ -2587,8 +2587,10 @@ $(document).ready(function(){
 			    	$('#frm_add_payment_plan #payment_plan_charge').val(response.plan_charge);
 			    	$('#frm_add_payment_plan #payment_plan_discount').val(response.discount);
 			    	$('#frm_add_payment_plan #payment_plan_validity').val(response.validity_days);
-			    	$('#frm_add_payment_plan #payment_plan_emails').val(response.no_of_emails);
+			    	$('#frm_add_payment_plan #payment_plan_emails').val(response.allowed_count);
 			    	$('#frm_add_payment_plan input[name="payment_plan_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	$('#frm_add_payment_plan input[name="trial_plan"][value="'+ response.trial_plan +'"]').prop('checked', true);
 
 			    	// Show the modal
 			    	$('#modal_payment_plan').modal('show');
@@ -3139,6 +3141,7 @@ $(document).ready(function(){
 
 	// To add an agent under the company
 	$('#btn_modal_agent').click(function(){
+		$('#modal_add_agent').find('.modal-title').text('ADD AGENT');
 		$('#modal_add_agent').modal('show');
 	});
 
@@ -3296,7 +3299,11 @@ $(document).ready(function(){
 
 	// To update the agent details
 	$(document).on('click', '.edit_agent', function(){
+
+		$('#modal_edit_agent').find('.modal-title').text('EDIT AGENT');
+
 		var agentId = $(this).attr('id');
+		var userType= $(this).attr('data-usertype');
 
     	if( agentId != '' )
     	{
@@ -3327,6 +3334,9 @@ $(document).ready(function(){
 					$('#frm_edit_agent #agent_edit_city').val(response.city_id);
 
 			    	$('#frm_edit_agent input[name="agent_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Fill the user type
+			    	$('#frm_edit_agent #user_type').val(userType);
 
 			    	// Show the modal
 			    	$('#modal_edit_agent').modal('show');
@@ -4514,6 +4524,30 @@ $(document).ready(function(){
 	});
 	
 	//code to manage laratrust end here
+
+	// Company Representative datatable
+	$.fn.dataTableExt.errMode = 'ignore';
+	$('#datatable_company_representatives').dataTable({
+	    "sServerMethod": "get", 
+	    "bProcessing": true,
+	    "bServerSide": true,
+	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanyrepresentatives',
+	    "columnDefs": [
+	        { "className": "dt-center", "targets": [0, 8, 9] }
+	    ],
+	    "aoColumns": [
+	        { 'bSortable' : true },
+	        { 'bSortable' : true },
+	        { 'bSortable' : true },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : true },
+	        { 'bSortable' : false}
+	    ]
+	});
 
 });
 

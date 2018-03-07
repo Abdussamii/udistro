@@ -18,6 +18,7 @@ use App\User;
 
 use Helper;
 use Validator;
+use Mail;
 
 class HomeController extends Controller
 {
@@ -48,10 +49,36 @@ class HomeController extends Controller
      */
     public function logout()
     {
-        Auth::logout();
+    	// Check the logged in user role and redirect it accordingly
+    	$userId = Auth::id();
+    	$user 	= User::find($userId); 
 
-        // Rolewise redirection is required here
-        return redirect('/');
+    	if( isset( $user ) && count( $user ) > 0 )
+    	{
+    		$role = $user->roles->first();
+
+			Auth::logout();
+
+			// Rolewise redirection is required here
+			if( $role->name == 'admin' )
+			{
+				return redirect('/administrator');
+			}
+			else if( $role->name == 'company_representative' )
+			{
+				return redirect('/company');
+			}
+			else if( $role->name == 'agent' )
+			{
+				return redirect('/agent');
+			}
+    	}
+    	else
+    	{
+    		Auth::logout();
+
+    		return redirect('/');
+    	}
     }
 
     /**
@@ -271,14 +298,25 @@ class HomeController extends Controller
 					// Send the email
 					if( app()->env == 'local' )
 					{
-						$emailLink = config('constants.LOCAL_APP_URL') . '/public/resetpassword/' . base64_encode($token);
+						$emailLink = config('constants.LOCAL_APP_URL') . 'public/resetpassword/' . base64_encode($token);
 					}
 					else
 					{
-						$emailLink = config('constants.SERVER_APP_URL') . '/public/resetpassword/' . base64_encode($token);
+						$emailLink = config('constants.SERVER_APP_URL') . 'resetpassword/' . base64_encode($token);
 					}
 
 					// Email send code here
+	    			$emailData = array(
+	    				'name' 		=> ucwords( strtolower( $user->lname . ' ' . $user->fname ) ),
+	    				'subject' 	=> 'Forgot Password',
+	    				'email' 	=> $user->email,
+	    				'url'		=> $emailLink,
+	    			);
+
+	    			Mail::send('emails.forgotPassword', ['emailData' => $emailData], function ($m) use ($emailData) {
+	    			    $m->from('info@udistro.ca', 'Udistro');
+	    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+	    			});
 
 	    			$response['errCode']    = 0;
 				    $response['errMsg']     = 'Password reset link is send on your email id';

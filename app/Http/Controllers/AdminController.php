@@ -3650,7 +3650,9 @@ class AdminController extends Controller
 		        'payment_plan_emails'	=> $planDetails['payment_plan_emails'],
 		        'payment_plan_discount'	=> $planDetails['payment_plan_discount'],
 		        'payment_plan_type'		=> $planDetails['payment_plan_type'],
-		        'payment_plan_status'	=> $planDetails['payment_plan_status']
+		        'payment_plan_status'	=> $planDetails['payment_plan_status'],
+
+		        'payment_trial_plan'	=> $planDetails['trial_plan']
 		    ),
 		    array(
 		        'payment_plan_name' 	=> array('required'),
@@ -3659,7 +3661,9 @@ class AdminController extends Controller
 		        'payment_plan_emails' 	=> array('required', 'integer'),
 		        'payment_plan_discount' => array('numeric'),
 		        'payment_plan_type' 	=> array('required'),
-		        'payment_plan_status' 	=> array('required')
+		        'payment_plan_status' 	=> array('required'),
+
+		        'payment_trial_plan' 	=> array('required'),
 		    ),
 		    array(
 		        'payment_plan_name.required' 	=> 'Please enter plan name',
@@ -3671,7 +3675,9 @@ class AdminController extends Controller
 		        'payment_plan_emails.integer' 	=> 'Please enter a valid value',
 		        'payment_plan_discount.required'=> 'Please enter valid discount value',
 		        'payment_plan_type.required' 	=> 'Please select plan type',
-		        'payment_plan_status.required' 	=> 'Please select status'
+		        'payment_plan_status.required' 	=> 'Please select status',
+
+		        'payment_trial_plan.required' 	=> 'Please select trial plan',
 		    )
 		);
 
@@ -3696,6 +3702,7 @@ class AdminController extends Controller
 				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
 				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
 				$paymentPlan->allowed_count 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->trial_plan 		= $planDetails['trial_plan'];
 				$paymentPlan->plan_type_id 		= $planDetails['payment_plan_type'];
 				$paymentPlan->discount 			= $planDetails['payment_plan_discount'];
 				$paymentPlan->status 			= $planDetails['payment_plan_status'];
@@ -3720,6 +3727,7 @@ class AdminController extends Controller
 				$paymentPlan->plan_charges 		= $planDetails['payment_plan_charge'];
 				$paymentPlan->validity_days 	= $planDetails['payment_plan_validity'];
 				$paymentPlan->allowed_count 	= $planDetails['payment_plan_emails'];
+				$paymentPlan->trial_plan 		= $planDetails['trial_plan'];
 				$paymentPlan->plan_type_id 		= $planDetails['payment_plan_type'];
 				$paymentPlan->discount 			= $planDetails['payment_plan_discount'];
 				$paymentPlan->status 			= $planDetails['payment_plan_status'];
@@ -3843,7 +3851,8 @@ class AdminController extends Controller
     			$response['plan_charge'] 	= $planDetails->plan_charges;
 	    		$response['discount'] 		= $planDetails->discount;
     			$response['validity_days'] 	= $planDetails->validity_days;
-    			$response['no_of_emails'] 	= $planDetails->number_of_emails;
+    			$response['trial_plan'] 	= $planDetails->trial_plan;
+    			$response['allowed_count'] 	= $planDetails->allowed_count;
     			$response['status'] 		= $planDetails->status;
     		}
     	}

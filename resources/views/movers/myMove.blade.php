@@ -242,7 +242,7 @@ function calculateRoute(from, to) {
 												<i class="{{ $icon1 }}" aria-hidden="true"></i>
 											</a>
 										</li>
-										<li><a href="javascript:void(0);" title="Do it later" class=""><i class="fa fa-history" aria-hidden="true"></i></a></li>
+										<li><a href="javascript:void(0);" title="Do it later" class="later_activity"><i class="fa fa-history" aria-hidden="true"></i></a></li>
 										<li>
 											<a href="javascript:void(0);" title="Discard" class="discard_activity" id="{{ $activity->id }}">
 												<i class="{{ $icon2 }}" aria-hidden="true"></i>
@@ -407,17 +407,13 @@ function calculateRoute(from, to) {
 							</div>
 						</div>
 						<div class="clearfix"></div>
+						
 						<div class="row">
-							<div class="col-sm-12 mailfarwd_wrap_radio">
-								<form name="frm_forward_mail" id="frm_forward_mail" autocomplete="off">
-								<label class="mailfarw_radio-lb">
-								<input type="radio" name="forward_mail_method" value="1">
-								Do it here online</label>
-								<label class="mailfarw_radio-lb">
-								<input type="radio" name="forward_mail_method" value="2">
-								Do it at Canada post office</label>
-								<label id="forward_mail_method-error" class="error" for="forward_mail_method"></label>
-								</form>
+							<div class="col-sm-12">
+								<div class="get_started_LB">
+									<a href="javascript:void(0);" id="forward_mail_method1" style="width: 250px; text-align: center;">Do it here online</a>
+									<a href="javascript:void(0);" id="forward_mail_method2" style="width: 250px; text-align: center;">Do it at Canada post office</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -450,37 +446,14 @@ function calculateRoute(from, to) {
 						</div>
 					</div>
 				</div>
-				<div class="row" style="display:none;">
-					<div class="col-sm-12">
-						<div class="row">
-							<div class="col-md-4">
-								<div class="lightbox-mailfarwd">
-									<h3>Peace of mind</h3>
-									<p>Ensure you don't miss important email</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="lightbox-mailfarwd">
-									<h3>Security</h3>
-									<p>Keep your valuable mail private</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="lightbox-mailfarwd">
-									<h3>Reliability</h3>
-									<p>More dependable than neighbours</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
+
+				<div class="row" id="forward_mail_flow_control" style="display: none;">
 					<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 					<div class="col-sm-4 col-md-4 col-lg-4 text-right">
-						<a href="javascript:void(0);" id="btn_prev_forward_mail" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
-						<a href="javascript:void(0);" id="btn_next_forward_mail" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+						<a href="javascript:void(0);" class="btn btn_prev_forward_mail"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -506,53 +479,14 @@ function calculateRoute(from, to) {
         <div class="clearfix"></div>
         <div class="col-sm-12">
 		<div class="get_started_LB">
-			<a href="javascript:void(0);" id="update_address_agency1">Federal Agencies</a>
-			<a href="javascript:void(0);" id="update_address_agency2">Provincial Agencies</a>
+			<a href="javascript:void(0);" id="update_address_agency1" style="width: 200px;">Federal Agencies</a>
+			<a href="javascript:void(0);" id="update_address_agency2" style="width: 200px;">Provincial Agencies</a>
 		</div>
         </div>
         <div class="clearfix"></div>
-        <!--<div class="col-sm-12">
-         <div class="row">
-          <form name="frm_update_address" id="frm_update_address" autocomplete="off">
-           <div class="col-md-4">
-            <div class="model-box-YN"> <span> Do you have full access to your CRA? </span>
-             <label><input type="radio" name="update_address_method1" value="1">Yes</label>
-             <label><input type="radio" name="update_address_method1" value="0">No</label>
-            </div>
-            <label id="update_address_method1-error" class="error" for="update_address_method1"></label>
-           </div>
-           <div class="col-md-4">
-            <div class="model-box-YN"> <span> Do you have dependent children?</span>
-             <label><input type="radio" name="update_address_method2" value="1">Yes</label>
-             <label><input type="radio" name="update_address_method2" value="0">No</label>
-            </div>
-            <label id="update_address_method2-error" class="error" for="update_address_method2"></label>
-           </div>
-           <div class="col-md-4">
-            <div class="model-box-YN"> <span>Do you receive child benefit?</span>
-             <label><input type="radio" name="update_address_method3" value="1">Yes</label>
-             <label><input type="radio" name="update_address_method3" value="0">No</label>
-            </div>
-            <label id="update_address_method3-error" class="error" for="update_address_method3"></label>
-           </div>
-          </form>
-         </div>
-        </div> -->
        </div>
       </div>
      </div>
-     <!-- <div class="model-WrapCont" id="update_address_step2" style="display: none;"> 
-      <h2>Update Address Online</h2>
-      <div class="col-sm-12 box-H-250 box-P-100">
-       <div class="block-head">
-        <h3>Update address with Canada Revenue Agency</h3>
-       </div>
-       <div>
-        <p> Since you have full access to your CRA account, you will be redirected to CRA website and you can do it online by yourself in less than 2 to 3 minutes. Having full access means you have access code giving to you by CRA </p>
-        <div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-       </div>
-      </div>
-     </div> -->
 
  	<div class="model-WrapCont" id="update_address_step3" style="display: none;"> 
 	       <!-- HSA 1 -->
@@ -569,7 +503,7 @@ function calculateRoute(from, to) {
 				  	  </div>
 				  	  <div id="collapse_revenew" class="panel-collapse collapse in">
 				  	    <div class="panel-body">
-				  	    	<div class="row">
+				  	    	<!-- <div class="row">
 				  	    		<div>
 				  	    			<div class="col-lg-6 col-md-6 col-sm-6">
 				  	    				<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
@@ -616,50 +550,79 @@ function calculateRoute(from, to) {
 				  	    				</ul>
 				  	    			</div>
 				  	    		</div>
+				  	    	</div> -->
+
+				  	    	<div class="panel-group" id="accordion_provincial_health_agencies">
+				  	    	    <div class="panel panel-default">
+				  	    	        <div class="panel-heading">
+				  	    	            <h4 class="panel-title">
+				  	    	                <a data-toggle="collapse" data-parent="#accordion_provincial_health_agencies" href="#provincial_health_agencies_collapse1" aria-expanded="false" class="collapsed">Do it Online</a>
+				  	    	            </h4>
+				  	    	        </div>
+				  	    	        <div id="provincial_health_agencies_collapse1" class="panel-collapse collapse in" aria-expanded="false">
+				  	    	            <div class="panel-body">
+				  	    					<div class="get_started_LB">
+				  	    						<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+				  	    					</div>
+				  	    	            </div>
+				  	    	        </div>
+				  	    	    </div>
+				  	    	    <div class="panel panel-default">
+				  	    	        <div class="panel-heading">
+				  	    	            <h4 class="panel-title">
+				  	    	                <a data-toggle="collapse" data-parent="#accordion_provincial_health_agencies" href="#provincial_health_agencies_collapse2" class="collapsed" aria-expanded="false">Call Option</a>
+				  	    	            </h4>
+				  	    	        </div>
+				  	    	        <div id="provincial_health_agencies_collapse2" class="panel-collapse collapse" aria-expanded="false">
+				  	    	            <div class="panel-body">
+				  	    	                <div class="col-md-12">
+				  	    	                	<div class="block-head">
+				  	    	                		<h3>Have these handy, before this call </h3>
+				  	    	                	</div>
+				  	    	                	<div class="up_add_li">
+				  	    	                		<ul>
+				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
+				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
+				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
+				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your SIN#</li>
+				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Phone contact, name and DOB of children</li>
+				  	    	                		</ul>
+				  	    	                	</div>
+				  	    	                </div>
+				  	    	                <div class="col-sm-12 col-md-6 col-lg-6">
+				  	    	                	<div class="block-head">
+				  	    	                		<h3> Opening Hours </h3>
+				  	    	                	</div>
+				  	    	                	<div class="up_add_li">
+				  	    	                		<ul>
+				  	    	                			<li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
+				  	    	                			<li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
+				  	    	                		</ul>
+				  	    	                	</div>
+				  	    	                </div>
+				  	    	                <div class="col-sm-12 col-md-6 col-lg-6">
+				  	    	                	<div class="block-head">
+				  	    	                		<h3> Phone Numbers </h3>
+				  	    	                	</div>
+				  	    	                	<div class="up_add_li">
+				  	    	                		<ul>
+				  	    	                			<li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>1-800-959-8281</li>
+				  	    	                			<li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>613-940-8495</li>
+				  	    	                		</ul>
+				  	    	                	</div>
+				  	    	                </div>
+				  	    	            </div>
+				  	    	        </div>
+				  	    	    </div>
 				  	    	</div>
 				  		</div>
 				  	  </div>
 				  	</div>
-				  </div> 
-
-				  <div class="pull-right">
-				  	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
 				  </div>
-
 				</div>
 	      </div>
 
-     <!-- <div class="model-WrapCont" id="update_address_step4" style="display: none;"> 
-      <h2>Update Address</h2>
-      <div class="col-sm-12 box-H-250 box-P-100">
-       <div class="block-head">
-        <h3>Change of address with provintial agencies</h3>
-       </div>
-       <div>
-			<form name="frm_update_address_provintial" id="frm_update_address_provintial" autocomplete="off">
-				<label class="mailfarw_radio-lb">
-				<input type="radio" name="update_address_provintial_method" value="1">
-				Do it here online</label>
-				<label class="mailfarw_radio-lb">
-				<input type="radio" name="update_address_provintial_method" value="2">
-				Call Provincial Agencies</label>
-				<label id="update_address_provintial_method-error" class="error" for="update_address_provintial_method"></label>
-			</form>
-       </div>
-      </div>
-     </div> -->
-
-     <!-- <div class="model-WrapCont" id="update_address_step5" style="display: none;"> 
-      <div class="model-WrapCont">
-		<h2>Update Address</h2>
-		</div>
-
-      <div class="col-sm-12 box-H-250 box-P-100">
-      	<div class="get_started_LB"> <a href="javascript:void(0);" onclick="window.open('http://www.manitobaaddresschange.ca/', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-      </div>
-     </div> -->
-
-     <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
+    <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
        <!-- HSA 1 -->
       	<div class="model-WrapCont">
        		<h2>Update Address On Phone</h2>
@@ -681,88 +644,108 @@ function calculateRoute(from, to) {
 			  			  </div>
 			  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? 'in' : '' }}">
 			  			    <div class="panel-body">
-			  			    	
 
-			  			    	<div class="row">
-			  			    		<div>
-			  			    			<div class="col-lg-6 col-md-6 col-sm-6">
-			  			    				<?php
-			  			    				if( $provincialAgency->logo != '' )
-			  			    				{
-			  			    					echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
-			  			    				}
-			  			    				else
-			  			    				{
-			  			    					echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
-			  			    				}
-			  			    				?>
-			  			    			</div>
-			  			    			<div class="col-lg-6 col-md-6 col-sm-6">
-			  			    				<?php
-			  			    				if( $provincialAgency->link != '' )
-			  			    				{
-			  			    				?>
-			  			    					<div class="get_started_LB">
-			  			    						<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
+			  			    	<div class="panel-group" id="accordion_internet_service_{{ $step }}">
+			  			    	    <div class="panel panel-default">
+			  			    	        <div class="panel-heading">
+			  			    	            <h4 class="panel-title">
+			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service_{{ $step }}" href="#cable_internet_services_collapse1{{ $step }}" aria-expanded="false" class="collapsed">Do it Online</a>
+			  			    	            </h4>
+			  			    	        </div>
+			  			    	        <div id="cable_internet_services_collapse1{{ $step }}" class="panel-collapse collapse in" aria-expanded="false">
+			  			    	            <div class="panel-body">
+			  			    					<!-- <div>
+			  			    						<?php
+			  			    						if( $provincialAgency->logo != '' )
+			  			    						{
+			  			    							echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
+			  			    						}
+			  			    						else
+			  			    						{
+			  			    							echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
+			  			    						}
+			  			    						?>
+			  			    					</div> -->
+			  			    					<div>
+			  			    						<?php
+			  			    						if( $provincialAgency->link != '' )
+			  			    						{
+			  			    						?>
+			  			    							<div class="get_started_LB">
+			  			    								<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
+			  			    							</div>
+			  			    						<?php
+			  			    						}
+			  			    						?>
 			  			    					</div>
-			  			    				<?php
-			  			    				}
-			  			    				?>
-			  			    			</div>
-			  			    		</div>
-			  			    		<div class="col-md-12">
-			  			    			<div class="block-head">
-			  			    				<h3>Have these handy, before this call </h3>
-			  			    			</div>
-			  			    			<div class="up_add_li">
-			  			    				<ul>
-			  			    				<?php
-			  			    				echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
-			  			    				echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
-			  			    				?>
-			  			    				</ul>
-			  			    			</div>
-			  			    		</div>
-			  			    		<div class="col-sm-12 col-md-6 col-lg-6">
-			  			    			<div class="block-head">
-			  			    				<h3> Opening Hours </h3>
-			  			    			</div>
-			  			    			<div class="up_add_li">
-			  			    				<ul>
-			  			    					<li>
-			  			    						<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
-			  			    					</li>
-			  			    					<li>
-			  			    						<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
-			  			    					</li>
-			  			    				</ul>
-			  			    			</div>
-			  			    		</div>
-			  			    		<div class="col-sm-12 col-md-6 col-lg-6">
-			  			    			<div class="block-head">
-			  			    				<h3> Phone Numbers </h3>
-			  			    			</div>
-			  			    			<div class="up_add_li">
-			  			    				<ul>
-			  			    					<li>
-			  			    						<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
-			  			    					</li>
-			  			    					<li>
-			  			    						<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
-			  			    					</li>
-			  			    				</ul>
-			  			    			</div>
-			  			    		</div>
-			  			    	</div>
+			  			    	            </div>
+			  			    	        </div>
+			  			    	    </div>
+			  			    	    <div class="panel panel-default">
+			  			    	        <div class="panel-heading">
+			  			    	            <h4 class="panel-title">
+			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2{{ $step }}" class="collapsed" aria-expanded="false">Call Option</a>
+			  			    	            </h4>
+			  			    	        </div>
+			  			    	        <div id="cable_internet_services_collapse2{{ $step }}" class="panel-collapse collapse" aria-expanded="false">
+			  			    	            <div class="panel-body">
+			  			    	                
+			  			    	                <div class="col-md-12">
+			  			    	                	<div class="block-head">
+			  			    	                		<h3>Have these handy, before this call </h3>
+			  			    	                	</div>
+			  			    	                	<div class="up_add_li">
+			  			    	                		<ul>
+			  			    	                		<?php
+			  			    	                		echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
+			  			    	                		echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
+			  			    	                		?>
+			  			    	                		</ul>
+			  			    	                	</div>
+			  			    	                </div>
+			  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
+			  			    	                	<div class="block-head">
+			  			    	                		<h3> Opening Hours </h3>
+			  			    	                	</div>
+			  			    	                	<div class="up_add_li">
+			  			    	                		<ul>
+			  			    	                			<li>
+			  			    	                				<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
+			  			    	                			</li>
+			  			    	                			<li>
+			  			    	                				<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
+			  			    	                			</li>
+			  			    	                		</ul>
+			  			    	                	</div>
+			  			    	                </div>
+			  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
+			  			    	                	<div class="block-head">
+			  			    	                		<h3> Phone Numbers </h3>
+			  			    	                	</div>
+			  			    	                	<div class="up_add_li">
+			  			    	                		<ul>
+			  			    	                			<li>
+			  			    	                				<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
+			  			    	                			</li>
+			  			    	                			<li>
+			  			    	                				<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
+			  			    	                			</li>
+			  			    	                		</ul>
+			  			    	                	</div>
+			  			    	                </div>
 
+			  			    	            </div>
+			  			    	        </div>
+			  			    	    </div>
+			  			    	</div>
 
 			  				</div>
 			  			  </div>
@@ -772,19 +755,16 @@ function calculateRoute(from, to) {
 			  		}
 			  	}
 			  	?>
-			  </div> 
-
-			  <div class="pull-right">
-			  	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
 			  </div>
 
 			</div>
       </div>
+
+      <div class="pull-right" style="display: none;" id="update_address_control">
+	  	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+	  </div>
+
     </div>
-    <!-- <div class="row">
-     <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
-     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> <a href="javascript:void(0);" id="btn_prev_update_address" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a> <a href="javascript:void(0);" id="btn_next_update_address" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a> </div>
-    </div> -->
    </div>
   </div>
  </div>
@@ -810,15 +790,12 @@ function calculateRoute(from, to) {
       </div>
       <div class="clearfix"></div>
       <div class="col-sm-12 mailfarwd_wrap_radio">
-       <form name="frm_mailbox_keys" id="frm_mailbox_keys" autocomplete="off">
-        <label class="mailfarw_radio-lb">
-         <input type="radio" name="mailbox_keys_method" value="2">
-         Do it here online</label>
-        <label class="mailfarw_radio-lb">
-         <input type="radio" name="mailbox_keys_method" value="1">
-         Call Canada Post</label>
-        <label id="mailbox_keys_method-error" class="error" for="mailbox_keys_method"></label>
-       </form>
+
+       <div class="get_started_LB">
+			<a href="javascript:void(0);" id="mailbox_keys_method1" style="width: 250px; text-align: center;">Do it here online</a>
+			<a href="javascript:void(0);" id="mailbox_keys_method2" style="width: 250px; text-align: center;">Do it at Canada post office</a>
+		</div>
+
       </div>
      </div>
      <div class="col-sm-12 box-H-250 box-P-100" id="mailbox_keys_step2" style="display: none;">
@@ -886,10 +863,14 @@ function calculateRoute(from, to) {
       </div>
      </div>
     </div>
-    <div class="row">
-     <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
-     <div class="col-sm-4 col-md-4 col-lg-4 text-right"> <a href="javascript:void(0);" id="btn_prev_mailbox_keys" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a> <a href="javascript:void(0);" id="btn_next_mailbox_keys" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a> </div>
+
+   	<div class="row" id="mailbox_keys_flow_control" style="display: none;">
+     	<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+     	<div class="col-sm-4 col-md-4 col-lg-4 text-right">
+     		<a href="javascript:void(0);" id="btn_prev_mailbox_keys" class="btn"><i class="fa fa-times" aria-hidden="true"></i> Close</a> 
+     	</div>
     </div>
+
    </div>
   </div>
  </div>
@@ -916,39 +897,16 @@ function calculateRoute(from, to) {
       <div class="clearfix"></div>
       
       	<div class="get_started_LB">
-			<a href="javascript:void(0);" id="connect_utility_agency1">Federal Agencies</a>
-			<a href="javascript:void(0);" id="connect_utility_agency2">Provincial Agencies</a>
+			<a href="javascript:void(0);" id="connect_utility_agency1" style="width: 220px;">Manitoba Hydro</a>
+			<a href="javascript:void(0);" id="connect_utility_agency2" style="width: 220px;">Water, Waste and Bin</a>
 		</div>
 
      </div>
     </div>
 	<!-- model box 1 ends -->
 	
-	<!-- model box 2 starts -->
-    <!-- <div id="connect_utilities_step2"  class="model-WrapCont">
-     	<h2>Connect Utilities</h2>
-	    <div class="col-sm-12 box-H-250 box-P-100">
-			<div class="block-head">
-				<h3>Hydro, Electricity and Gas</h3>
-			</div>
-			<div class="row">
-	      	<div class="col-sm-12">
-	       		<p>If you are moving in, and are financially responsible for Hydro, gas, or electricity at your new address, you need to open and account:</p>
-	      	</div>
-	      	<div class="col-sm-12">
-	      		<form name="frm_connect_utility_hydro_methods" id="frm_connect_utility_hydro_methods">
-					<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="1"> Call utility services</label>
-					<label class="mailfarw_radio-lb"><input type="radio" name="connect_utility_hydro_methods" value="2"> Do it here online</label>
-					<label id="connect_utility_hydro_methods-error" class="error" for="connect_utility_hydro_methods"></label>
-	      		</form>
-	      	</div>
-			</div>
-	  	</div>
-    </div> -->
-	<!-- model box 2 ends -->
-	
 	<!-- model box 3 starts -->
-    <div id="connect_utilities_step3" class="model-WrapCont">
+    <!-- <div id="connect_utilities_step3" class="model-WrapCont">
      	<h2>Connect Utilities</h2>
 	  	<div class="col-sm-12 box-H-250 box-P-100">
 			<div class="row">
@@ -1000,32 +958,79 @@ function calculateRoute(from, to) {
 			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
 		</div>
 
+    </div> -->
+
+    <div id="connect_utilities_step3" class="model-WrapCont">
+    	<h2>Connect Utilities</h2>
+    	<div class="col-sm-12 box-H-250 box-P-100">
+    		<p> Hydro, Electricity and Gas</p>
+	    	<div class="panel-group" id="connect_utility_hydro_collapse">
+	    	    <div class="panel panel-default">
+	    	        <div class="panel-heading">
+	    	            <h4 class="panel-title">
+	    	                <a data-toggle="collapse" data-parent="#connect_utility_hydro_collapse" href="#connect_utility_hydro1" aria-expanded="false" class="collapsed">Do it Online</a>
+	    	            </h4>
+	    	        </div>
+	    	        <div id="connect_utility_hydro1" class="panel-collapse collapse in" aria-expanded="false">
+	    	            <div class="panel-body">
+	    					<div class="get_started_LB">      			
+			        			<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+			        		</div>
+	    	            </div>
+	    	        </div>
+	    	    </div>
+	    	    <div class="panel panel-default">
+	    	        <div class="panel-heading">
+	    	            <h4 class="panel-title">
+	    	                <a data-toggle="collapse" data-parent="#connect_utility_hydro_collapse" href="#connect_utility_hydro2" class="collapsed" aria-expanded="false">Call Option</a>
+	    	            </h4>
+	    	        </div>
+	    	        <div id="connect_utility_hydro2" class="panel-collapse collapse" aria-expanded="false">
+	    	            <div class="panel-body">
+							<div class="col-md-12">
+								<div class="block-head">
+									<h3> Have these handy, before this call </h3>
+								</div>
+								<div class="up_add_li">
+									<ul>
+										<li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
+										<li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
+										<li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-6 col-lg-6">
+								<div class="block-head">
+									<h3> Opening Hours </h3>
+								</div>
+								<div class="up_add_li">
+									<ul>
+										<li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
+										<li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-6 col-lg-6">
+								<div class="block-head">
+									<h3> Phone Numbers </h3>
+								</div>
+								<div class="up_add_li">
+									<ul>
+										<li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 1-866-607-6301</li>
+										<li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 416-979-3033</li>
+									</ul>
+								</div>
+							</div>
+	    	            </div>
+	    	        </div>
+	    	    </div>
+	    	</div>
+    	</div>
     </div>
 	<!-- model box 3 ends -->
 	
-	<!-- model box 4 starts -->
-    <!-- <div id="connect_utilities_step4" class="model-WrapCont">
-     <h2>Connect Utilities</h2>
-	<div class="col-sm-12 box-H-250 box-P-100">
-			<div class="block-head">
-				<h3>Hydro, Electricity and Gas</h3>
-			</div>
-			<div class="row">
-				<div class="col-sm-12"> 
-					<div class="get_started_LB">      			
-						<label class="mailfarw_radio-lb">
-							<input name="mailbox_keys_method" value="2" type="radio"> Do it here online
-						 </label>
-					<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-				</div>
-			</div>
-		
-		</div>
-    </div> -->
-	<!-- model box 4 ends -->
-	
 	<!-- model box 5 starts -->
-    <div id="connect_utilities_step5" class="model-WrapCont">
+    <!-- <div id="connect_utilities_step5" class="model-WrapCont">
      <h2>Connect Utilities</h2>
     <div class="col-sm-12 box-H-250 box-P-100">
       <div> <strong>Water, Waste and Recycle Bins</strong>
@@ -1078,27 +1083,89 @@ function calculateRoute(from, to) {
       </div>
      </div>
 
-    <div class="pull-right">
-		<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
-	</div>
+    </div> -->
 
+    <div id="connect_utilities_step5" class="model-WrapCont">
+     	<h2>Connect Utilities</h2>
+     	<div class="col-sm-12 box-H-250 box-P-100">
+	     	<div> <strong>Water, Waste and Recycle Bins</strong>
+	       		<p>If you are moving in or moving out, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
+	      	</div>
+	    	<div class="panel-group" id="connect_utility_water_collapse">
+	    	    <div class="panel panel-default">
+	    	        <div class="panel-heading">
+	    	            <h4 class="panel-title">
+	    	                <a data-toggle="collapse" data-parent="#connect_utility_water_collapse" href="#connect_utility_water1" aria-expanded="false" class="collapsed">Do it Online</a>
+	    	            </h4>
+	    	        </div>
+	    	        <div id="connect_utility_water1" class="panel-collapse collapse in" aria-expanded="false">
+	    	            <div class="panel-body">
+	    					<div class="get_started_LB">
+	      						<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+	      					</div>
+	    	            </div>
+	    	        </div>
+	    	    </div>
+	    	    <div class="panel panel-default">
+	    	        <div class="panel-heading">
+	    	            <h4 class="panel-title">
+	    	                <a data-toggle="collapse" data-parent="#connect_utility_water_collapse" href="#connect_utility_water2" class="collapsed" aria-expanded="false">Call Option</a>
+	    	            </h4>
+	    	        </div>
+	    	        <div id="connect_utility_water2" class="panel-collapse collapse" aria-expanded="false">
+	    	            <div class="panel-body">
+							<div class="col-sm-12 col-md-12 col-lg-12">
+								<div class="up_add_li">
+									<div class="block-head">
+										<h3>We will require </h3>
+									</div>
+									<div class="up_add_li">
+										<ul>
+											<li><i class="fa fa-angle-right" aria-hidden="true"></i> Your name</li>
+											<li><i class="fa fa-angle-right" aria-hidden="true"></i> Name of anyone financially responsible for the utility bill</li>
+											<li><i class="fa fa-angle-right" aria-hidden="true"></i> Service Address</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-6 col-lg-6">
+								<div class="block-head">
+									<h3> Hours </h3>
+								</div>
+								<div class="up_add_li">
+									<ul>
+										<li> <span>Monday to Thursday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 07:00 PM (except holidays) </li>
+										<li> <span>Friday and Saturday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 04:30 PM (except holiday long weekend) </li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-6 col-lg-6">
+								<div class="block-head">
+									<h3> Phone Numbers </h3>
+								</div>
+								<div class="up_add_li">
+									<ul>
+										<li><span>City Services:</span> <i class="fa fa-phone" aria-hidden="true"></i>3-1-1</li>
+									</ul>
+								</div>
+							</div>
+	    	            </div>
+	    	        </div>
+	    	    </div>
+	    	</div>
+	    </div>
     </div>
 	<!-- model box 5 ends -->
 
     </div>
     <div class="row">
-     <div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
+    	<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 
-    <!-- <div class="col-sm-4 col-md-4 col-lg-4 text-right"> 
-     	<a href="javascript:void(0);" id="btn_prev_connect_utilities" class="btn"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
-     	<a href="javascript:void(0);" id="btn_next_connect_utilities" class="btn">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-	</div> -->
-
+     	<div class="pull-right" id="connect_utilities_control" style="display: none;">
+			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+		</div>
     </div>
    </div>
-   <!-- <div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      	</div> --> 
   </div>
  </div>
 </div>
@@ -1362,8 +1429,8 @@ function calculateRoute(from, to) {
 						                <div id="home_cleaning_services_collapse6" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group panel-Box">
-						                        	<input type="text" name="home_cleaning_callback_primary_no" class="form-control accord-input" placeholder="Primary Number">
-						                        	<input type="text" name="home_cleaning_callback_secondary_no" class="form-control accord-input" placeholder="Additional Number">
+						                        	<input type="text" name="home_cleaning_callback_primary_no" class="form-control accord-input" placeholder="Primary No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899">
+						                        	<input type="text" name="home_cleaning_callback_secondary_no" class="form-control accord-input" placeholder="Additional No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899">
 						                        </div>
 						                    </div>
 						                </div>
@@ -1940,8 +2007,8 @@ function calculateRoute(from, to) {
 						                <div id="tech_concierge_collapse7" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group panel-Box">
-						                        <input type="text" name="tech_concierge_callback_primary_no" class="form-control accord-input" placeholder="Primary Number">
-						                        <input type="text" name="tech_concierge_callback_secondary_no" class="form-control accord-input" placeholder="Additional Number">
+						                        <input type="text" name="tech_concierge_callback_primary_no" class="form-control accord-input" placeholder="Primary No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899">
+						                        <input type="text" name="tech_concierge_callback_secondary_no" class="form-control accord-input" placeholder="Additional No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899">
 						                        </div>
 						                    </div>
 						                </div>
@@ -2172,8 +2239,8 @@ function calculateRoute(from, to) {
 						                <div id="home_cleaning_services_collapse10" class="panel-collapse collapse in" aria-expanded="true" style="">
 						                    <div class="panel-body">
 						                        <div class="form-group panel-Box">
-						                        	<input name="cable_internet_callback_primary_no" class="form-control accord-input" placeholder="Primary Number" type="text">
-						                        	<input name="cable_internet_callback_secondary_no" class="form-control accord-input" placeholder="Additional Number" type="text">
+						                        	<input name="cable_internet_callback_primary_no" class="form-control accord-input" placeholder="Primary No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899" type="text">
+						                        	<input name="cable_internet_callback_secondary_no" class="form-control accord-input" placeholder="Additional No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899" type="text">
 						                        </div>
 						                    </div>
 						                </div>
@@ -2257,61 +2324,55 @@ function calculateRoute(from, to) {
 		      			</div>
 		      		</div>
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
-					<div class="announcement_right-box">
-						<div class="row">
-						<div class="col-sm-12">
-							<div class="announcement_title">
-								<h2>The {{ ucwords( strtolower( $clientName ) ) }} are moving!</h2>
+						<div class="announcement_right-box">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="announcement_title">
+										<h2>The {{ ucwords( strtolower( $clientName ) ) }} are moving!</h2>
+									</div>
+									<div class="clearfix"></div>
+									<div class="announcement_message">
+										<div class="hi_hello">Hi friends</div>
+										<p>we are moving from South to North.</p>
+										<p>Stop by Saturday night for a housewarming party!</p>
+										<p>With love from</p>
+										<div class="announc_Client_name">{{ ucwords( strtolower( $clientName ) ) }}</div>
+									</div>
+								</div>
 							</div>
 							<div class="clearfix"></div>
-							<div class="announcement_message">
-								<div class="hi_hello">Hi friends</div>
-								<p>we are moving from South to North.</p>
-								<p>Stop by Saturday night for a housewarming party!</p>
-								<p>With love from</p>
-								<div class="announc_Client_name">{{ ucwords( strtolower( $clientName ) ) }}</div>
+							<div class="bottom_Cdetails-Box">
+								<div class="col-sm-12">
+									<div class="col-sm-6 col-md-6 col-lg-6 right-box-border">
+										<div class="row">
+											<div class="col-sm-4">
+												<div class="row">
+													<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
+												</div>
+											</div>
+											<div class="col-sm-8">
+												<div class="row">
+													<div class="company-Details">
+														{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
+													</div>
+													<div class="company-Details">
+														{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6 col-md-6 col-lg-6 text-left">
+										<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
+										<div class="client-Details">
+											{{ $agentName }}
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-						</div>
-		      			<div class="clearfix"></div>
-						<div class="bottom_Cdetails-Box">
-						<div class="col-sm-12">
-			      			<div class="col-sm-6 col-md-6 col-lg-6 right-box-border">
-							<div class="row">
-								<div class="col-sm-4">
-								<div class="row">
-									<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
-								</div>
-								</div>
-								<div class="col-sm-8">
-								<div class="row">
-									<div class="company-Details">
-										{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
-									</div>
-									<div class="company-Details">
-										{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
-									</div>
-								</div>
-								</div>
-			      			</div>
-							</div>
-			      			<div class="col-sm-6 col-md-6 col-lg-6 text-left">
-			      				<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
-			      				<div class="client-Details">
-			      					{{ $agentName }}
-			      				</div>
-			      			</div>
-							</div>
-							</div>
-			      		</div>
 		      		</div>
 		      	</div>
-
-		      	<!--<div class="row">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      		</div>
-		      	</div>-->
-
 		      	<div class="annou-modelfooter-wrap">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
 		      			<ul class="comment-group">
@@ -2322,10 +2383,11 @@ function calculateRoute(from, to) {
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<div class="share-announc">Share this on: </div>
-		      			<a href="https://www.facebook.com/sharer/sharer.php?u=http://udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
-		      			<a href="http://twitter.com/share?text=udistro&url=http://udistro.ca/&hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a>
-		      			<a href="https://www.linkedin.com/shareArticle?mini=true&url=http://udistro.ca/&title=udistro&summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a>
-		      			<i class="fa fa fa-google-plus-square"></i>
+		      			<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
+		      			<a href="http://twitter.com/share?text=udistro&url=https://www.udistro.ca/&hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a>
+		      			<a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.udistro.ca/&title=udistro&summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a>
+		      			<!-- <i class="fa fa fa-google-plus-square"></i> -->
+		      			<a href="javascript:void(0);" id="share_announcement_email"><i class="fa fa-envelope-square"></i></a>
 		      		</div>
 		      	</div>
 
@@ -2334,6 +2396,82 @@ function calculateRoute(from, to) {
 	</div>
 </div>
 <!-- Share Announcement Modal -->
+
+<!-- Share Announcement Email Modal -->
+<div id="share_announcement_email_modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+	    <div class="modal-content">
+	    	<div class="modal-body">
+	      		<div class="close close-btn close_modal" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+		      	
+		      	<div class="row">
+		      		<table class="table">
+		      			<tr>
+		      				<th style="text-align: center;">Send Email</th>
+		      			</tr>
+		      		</table>
+		      	</div>
+
+		      	<div class="row" id="announcement_email_container">
+		      		<table class="table" style="text-align: center;">
+		      			<tr>
+		      				<td>
+		      					<div contenteditable="true">
+		      						The {{ ucwords( strtolower( $clientName ) ) }} are moving!
+		      						<div class="announcement_message">
+										<div class="hi_hello">Hi friends</div>
+										<p>we are moving from South to North.</p>
+										<p>Stop by Saturday night for a housewarming party!</p>
+										<p>With love from</p>
+										<div class="announc_Client_name">{{ ucwords( strtolower( $clientName ) ) }}</div>
+									</div>
+		      					</div>
+		      				</td>
+		      			</tr>
+		      		</table>
+		      		<table class="table">
+		      			<tr>
+		      				<td>
+		      					<div style="text-align: center;">
+		      						<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
+		      					</div>
+		      					<div class="company-Details" style="text-align: center;">
+		      						{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
+		      					</div>
+		      					<div class="company-Details" style="text-align: center;">
+		      						{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
+		      					</div>
+		      				</td>
+		      				<td>
+		      					<div  style="text-align: center;">
+		      					<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
+		      				</div>
+		      					<div class="client-Details" style="text-align: center;">
+		      						{{ $agentName }}
+		      					</div>
+		      				</td>
+		      			</tr>
+		      		</table>
+		      	</div>
+
+		      	<div>
+		      		<form name="frm_announcement_email" id="frm_announcement_email">
+			      		<div class="form-group">
+			                <input class="form-control" type="text" name="announcement_emails" id="announcement_emails" placeholder="Email id's seperated by comma">
+			            </div>
+			            <div class="form-group">
+			            	<button type="submit" class="btn btn-primary" name="btn_send_announcement_email" id="btn_send_announcement_email">Send Email</button>
+			            </div>
+		      		</form>
+		      	</div>
+
+		    </div>
+		</div>
+	</div>
+</div>
+<!-- Share Announcement Email Modal -->
+
 <div id="user_response_modal" class="modal fade">
     <div class="modal-dialog">
     <!-- Modal content-->

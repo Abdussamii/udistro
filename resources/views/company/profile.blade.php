@@ -170,7 +170,7 @@
 									<div class="form-group">
 										<label class="col-lg-3 control-label">Phone No:</label>
 										<div class="col-lg-8">
-											<input class="form-control" name="company_phone" id="company_phone" type="text" placeholder="Company Phone No" value="{{ $companyDetails->contact_number or '' }}">
+											<input class="form-control" name="company_phone" id="company_phone" type="text" value="{{ $companyDetails->contact_number or '' }}" placeholder="Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899, 1234567899">
 										</div>
 									</div>
 									<div class="form-group">

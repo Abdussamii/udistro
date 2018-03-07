@@ -59,6 +59,15 @@
 								</select>
 							</div>
 							<div class="form-group">
+								<label for="trial_plan">Trial Plan?</label>
+								<div class="radio">
+								 	<label><input type="radio" name="trial_plan" value="1">Yes</label>
+								</div>
+								<div class="radio">
+								 	<label><input type="radio" name="trial_plan" value="0" checked="true">No</label>
+								</div>
+							</div>
+							<div class="form-group">
 								<label for="payment_plan_name">Payment Plan Name</label>
 								<input type="text" name="payment_plan_name" id="payment_plan_name" class="form-control" placeholder="Enter plan name">
 								<input type="hidden" name="payment_plan_id" id="payment_plan_id">

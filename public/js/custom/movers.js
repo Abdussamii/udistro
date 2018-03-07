@@ -5,19 +5,22 @@ $(document).ready(function(){
 	alertify.set('notifier','position', 'top-center');
 
 	// Validation to check the monbile number
-	$.validator.addMethod("mobileNoValidate",function(value) {
-		if( value == '' )
+	$.validator.addMethod("canadaPhone", function (value, element) {
+		if( value != '' )
+		{
+		    var filter = /^((\+[1-9]{0,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+		    if (filter.test(value)) {
+		        return true;
+		    }
+		    else {
+		        return false;
+		    }
+		}
+		else
 		{
 			return true;
 		}
-	    var filter = /^[0-9-+]+$/;
-	    if (filter.test(value)) {
-	        return true;
-	    }
-	    else {
-	        return false;
-	    }
-	}, "Please enter valid number");
+	}, 'Please enter a valid number');
 
 	// To fill the star as per the rating assigned
 	$(document).on('click', '.assign_agent_rating', function(){
@@ -82,7 +85,7 @@ $(document).ready(function(){
     });
 
     // Forward mail - Show next step
-    $('#btn_next_forward_mail').click(function(){
+    /*$('#btn_next_forward_mail').click(function(){
     	if( forwardMailStep == 1 )
     	{
     		if( $('#frm_forward_mail').valid() )
@@ -136,6 +139,30 @@ $(document).ready(function(){
 
     		forwardMailStep--;
     	}
+    });*/
+
+    $('#forward_mail_method1').click(function(){
+    	$('#forward_mail_step1').hide();
+    	$('#forward_mail_step2').show();
+	    $('#forward_mail_step3').hide();
+
+	    $('#forward_mail_flow_control').show();
+    });
+
+    $('#forward_mail_method2').click(function(){
+    	$('#forward_mail_step1').hide();
+    	$('#forward_mail_step2').hide();
+	    $('#forward_mail_step3').show();
+
+	    $('#forward_mail_flow_control').show();
+    });
+
+    $('.btn_prev_forward_mail').click(function(){
+    	$('#forward_mail_step1').show();
+    	$('#forward_mail_step2').hide();
+	    $('#forward_mail_step3').hide();
+
+	    $('#forward_mail_flow_control').hide();
     });
 
     // To opne the website in a separate window
@@ -517,11 +544,15 @@ $(document).ready(function(){
     	$('#update_address_step1').hide();
     	$('#update_address_step3').show();
     	$('#update_address_step6').hide();
+
+    	$('#update_address_control').show();
     });
     $('#update_address_agency2').click(function(){
     	$('#update_address_step1').hide();
     	$('#update_address_step6').show();
     	$('#update_address_step3').hide();
+
+    	$('#update_address_control').show();
     });
 
     // On click of close, show the first screen
@@ -529,6 +560,8 @@ $(document).ready(function(){
     	$('#update_address_step1').show();
     	$('#update_address_step6').hide();
     	$('#update_address_step3').hide();
+
+    	$('#update_address_control').hide();
     });
 
 	/* ---------- Update Address functionality ends ---------- */
@@ -557,7 +590,7 @@ $(document).ready(function(){
 	});
 
 	// Mail box keys activity form validation
-    $('#frm_mailbox_keys').validate({
+    /*$('#frm_mailbox_keys').validate({
         rules: {
             mailbox_keys_method: {
                 required: true
@@ -568,9 +601,9 @@ $(document).ready(function(){
                 required: 'Please select an option'
             }
         }
-    });
+    });*/
 
-    $('#btn_next_mailbox_keys').click(function(){
+    /*$('#btn_next_mailbox_keys').click(function(){
     	if( $('#frm_mailbox_keys').valid() )
     	{
     		if( mailBoxStep == 1 )
@@ -614,6 +647,30 @@ $(document).ready(function(){
 
 			mailBoxStep--;
     	}
+    });*/
+
+    $('#mailbox_keys_method1').click(function(){
+    	$('#mailbox_keys_step1').hide();
+		$('#mailbox_keys_step2').show();
+		$('#mailbox_keys_step3').hide();
+
+		$('#mailbox_keys_flow_control').show();
+    });
+
+    $('#mailbox_keys_method2').click(function(){
+    	$('#mailbox_keys_step1').hide();
+		$('#mailbox_keys_step2').hide();
+		$('#mailbox_keys_step3').show();
+
+		$('#mailbox_keys_flow_control').show();
+    });
+
+    $('#btn_prev_mailbox_keys').click(function(){
+    	$('#mailbox_keys_step1').show();
+		$('#mailbox_keys_step2').hide();
+		$('#mailbox_keys_step3').hide();
+
+		$('#mailbox_keys_flow_control').hide();
     });
 	
 	/* ---------- Mail box functionality ends ---------- */
@@ -679,11 +736,15 @@ $(document).ready(function(){
 	$('#connect_utility_agency1').click(function(){
 		$('#connect_utilities_step1').hide();
 		$('#connect_utilities_step3').show();
+
+		$('#connect_utilities_control').show();
 	});
 
 	$('#connect_utility_agency2').click(function(){
 		$('#connect_utilities_step1').hide();
 		$('#connect_utilities_step5').show();
+
+		$('#connect_utilities_control').show();
 	});
 
 	$('.btn_prev_connect_utilities').click(function(){
@@ -691,6 +752,7 @@ $(document).ready(function(){
 		$('#connect_utilities_step3').hide();
 		$('#connect_utilities_step5').hide();
 
+		$('#connect_utilities_control').hide();
 	});
 
     // Show the different method details
@@ -772,8 +834,8 @@ $(document).ready(function(){
 			home_cleaning_house_to_bedroom_count: { required: true },
 			home_cleaning_house_to_property_type: { required: true },
 
-			home_cleaning_callback_primary_no: { mobileNoValidate: true },
-			home_cleaning_callback_secondary_no: { mobileNoValidate: true },
+			home_cleaning_callback_primary_no: { canadaPhone: true },
+			home_cleaning_callback_secondary_no: { canadaPhone: true },
 		},
 		messages: 
 		{
@@ -1011,8 +1073,8 @@ $(document).ready(function(){
 			'tech_concierge_places[]' : { required: true },
 			'tech_concierge_appliances[]' : { required: true },
 
-			tech_concierge_callback_primary_no: { mobileNoValidate: true },
-			tech_concierge_callback_secondary_no: { mobileNoValidate: true },
+			tech_concierge_callback_primary_no: { canadaPhone: true },
+			tech_concierge_callback_secondary_no: { canadaPhone: true },
 		},
 		messages: 
 		{
@@ -1136,8 +1198,8 @@ $(document).ready(function(){
 			cable_internet_from_property_type: { required: true },
 			'cable_internet_service_type[]': { required: true },
 
-			cable_internet_callback_primary_no: { mobileNoValidate: true },
-			cable_internet_callback_secondary_no: { mobileNoValidate: true },
+			cable_internet_callback_primary_no: { canadaPhone: true },
+			cable_internet_callback_secondary_no: { canadaPhone: true },
 		},
 		messages: 
 		{
@@ -1299,6 +1361,21 @@ $(document).ready(function(){
 
 		// Put the final status value to 0 i.e. discard
 		$(this).closest('.activities_container').find('.activity_final_status').val(0);
+	});
+
+	// Do it later functionality
+	$('.later_activity').click(function(){
+
+		// Check if the activity is already completed
+		if( $(this).closest('.activities_container').find('.fa-check').length == 1 )
+		{
+			alertify.error('This activity is already completed');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-history').addClass('fa fa-check');
+		}
+
 	});
 
 	// Update the helpful click response
@@ -1529,6 +1606,67 @@ $(document).ready(function(){
 		    	}
 		    }
 		});
+	});
+
+	// Share announcement email functionality
+	$('#share_announcement_email').click(function(){
+		// Open the modal
+		$('#share_announcement_email_modal').modal('show');
+	});
+
+	// Share announcement email form validation
+	$('#frm_announcement_email').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_announcement_email').validate({
+		rules: {
+			announcement_emails: {
+				required: true
+			}
+		},
+		messages: {
+			announcement_emails: {
+				required: 'Please enter atleast one email id'
+			}
+		}
+	});
+
+	// Share announcement send email
+	$('#btn_send_announcement_email').click(function(){
+		if( $('#frm_announcement_email').valid() )
+		{
+			// Get the email id's and email content
+			let emailIds 	= $('#announcement_emails').val();
+			let emailContent= $('#announcement_email_container').html();
+
+			$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/saveannouncementemail',
+    			method: 'post',
+    			data: {
+    				emailIds: emailIds,
+    				emailContent: emailContent
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Reset the form
+			    		$('#frm_announcement_email')[0].reset();
+
+			    		// Hide the modal
+			    		$('#share_announcement_email_modal').modal('hide');
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
 	});
 
 	// To set active class according to the user response on click of confirmation buttons

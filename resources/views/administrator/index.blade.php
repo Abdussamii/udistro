@@ -95,6 +95,9 @@
         	color: #a9a9a9;
         	font-size: 12px;
         }
+        .error {
+        	color: red !important;
+        }
         </style>
     </head>
     <body>
@@ -124,7 +127,7 @@
         				</form>
         			</div>
         			<div class="text-center">
-        				<a href="#">Forgot your password?</a>
+        				<a href="{{ url('/forgotpassword') }}">Forgot your password?</a>
         			</div>
         			<div class="center-copypart">
         				<p>Copyright &copy; 2018 Udistro | All Rights Reserved.</p>

@@ -16,6 +16,23 @@
 
 	<script type="text/javascript">
 	$(document).ready(function(){
+		$.validator.addMethod("canadaPhone", function (value, element) {
+			if( value != '' )
+			{
+			    var filter = /^((\+[1-9]{0,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+			    if (filter.test(value)) {
+			        return true;
+			    }
+			    else {
+			        return false;
+			    }
+			}
+			else
+			{
+				return true;
+			}
+		}, 'Please enter a valid number');
+
 		$('#frm_company_registration').submit(function(e){
 		    e.preventDefault();
 		});
@@ -40,7 +57,8 @@
 		        },
 		    	phone_no: {
 		    		required: true,
-		    		number: true
+		    		number: true,
+		    		canadaPhone: true
 		    	},
 		    	company_name: {
 		    		required: true

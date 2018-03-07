@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
 
 use Log;
 use Helper;
@@ -17,6 +18,8 @@ use App\TechConciergeServiceRequest;
 use App\MovingItemServiceRequest;
 use App\ResponseTimeSlot;
 use App\Company;
+use App\CompanyRequestEmail;
+use App\ShareAnnouncementEmail;
 
 // Email related classes
 use App\Mail\CompanyQuotationResponse;
@@ -362,4 +365,72 @@ class SchedulerController extends Controller
     		}
 		}
     }
+
+    public function sendCompanyNotificationEmail()
+	{
+		// Check if there is any entry available to send email
+		$notificationEmail = CompanyRequestEmail::where(['email_send_status' => '0'])->first();
+
+		// Get the email id of the agent associated with company
+		$agentDetails = DB::table('companies as t1')
+						->leftJoin('company_user as t2', 't1.id', '=', 't2.company_id')
+						->leftJoin('users as t3', 't2.user_id', '=', 't3.id')
+						->select('t3.email', 't3.fname', 't3.lname')
+						->first();
+
+		if( count( $agentDetails ) > 0 )
+		{
+			$agentName = ucwords( strtolower( $agentDetails->lname . ' ' . $agentDetails->fname ) );
+			$agentEmail= $agentDetails->email;
+
+			// Send the email
+			$emailData = array(
+				'name' 		=> $agentName,
+				'subject' 	=> 'Quotation Request',
+				'email' 	=> $agentEmail,
+				'url'		=> 'https://www.udistro.ca/company'
+			);
+
+			Mail::send('emails.companyNotificationEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+			    $m->from('info@udistro.ca', 'Udistro');
+			    
+			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+			});
+
+			// Update the email_send_status to 1, so that it can take next record
+			CompanyRequestEmail::where(['id' => $notificationEmail->id])->update(['email_send_status' => '1']);
+		}
+		else
+		{
+			// Update the email_send_status to 1, so that it can take next record
+			CompanyRequestEmail::where(['id' => $notificationEmail->id])->update(['email_send_status' => '1']);
+		}
+	}
+
+	/**
+     * Function to send the share announcement email
+     * @param void
+     */
+	public function sendAnnouncementEmail()
+	{
+		// Get the first entry from the table
+		$emailDetails = ShareAnnouncementEmail::where(['status' => '0'])->first();
+
+		// Send the email
+		$emailData = array(
+			'name' 		=> 'Udistro',
+			'subject' 	=> 'Udistro Announcement',
+			'email' 	=> $emailDetails->email,
+			'content'	=> $emailDetails->email_content
+		);
+
+		Mail::send('emails.shareAnnouncementEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+		    $m->from('info@udistro.ca', 'Udistro');
+		    
+		    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+		});
+
+		// Update the status
+		ShareAnnouncementEmail::where(['id' => $emailDetails->id])->update(['status' => '1']);
+	}
 }

@@ -211,6 +211,7 @@
 								  		<label for="agent_fname">First Name</label>
 								  		<input type="text" name="agent_fname" id="agent_fname" class="form-control" placeholder="First Name">
 								  		<input type="hidden" name="agent_id" id="agent_id" value="">
+								  		<input type="hidden" name="user_type" id="user_type" value="">
 								  	</div>
 								  	<div class="col-sm-6">
 								  		<label for="agent_lname">Last Name</label>

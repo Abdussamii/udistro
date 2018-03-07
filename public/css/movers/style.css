@@ -337,7 +337,9 @@ button.btn.coment-submit-btn:hover { border: 1px solid #00bcea; color: #546e7a; 
 #frm_home_cleaning_services .panel-heading,
 #accordion_home_moving_companies .panel-heading,
 #accordion_concierge .panel-heading,
-#provincial_health_agencies .panel-heading { background: #00bcea; color: #fff; padding: 0; }
+#provincial_health_agencies .panel-heading,
+#connect_utility_hydro_collapse .panel-heading,
+#connect_utility_water_collapse .panel-heading { background: #00bcea; color: #fff; padding: 0; }
 #accordion_internet_service .panel-heading .panel-title,
 #frm_home_cleaning_services .panel-heading .panel-title,
 #accordion_home_moving_companies .panel-heading .panel-title,

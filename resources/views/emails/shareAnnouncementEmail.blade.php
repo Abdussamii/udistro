@@ -1,0 +1,3 @@
+<div>
+	{!! $emailData['content'] !!}
+</div>

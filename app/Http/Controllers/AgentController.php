@@ -138,11 +138,28 @@ class AgentController extends Controller
 			                $user->update();
 
 			                // Update the login attempt count to zero
-    	            		$loginAttempt = LoginAttempt::where(['user_id' => $user->id])->first();
-		            		$loginAttempt->user_id 		= $user->id;
-		            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
-			            	$loginAttempt->count 		= 0;
-			            	$loginAttempt->save();
+    	            		$attemptDetails = LoginAttempt::where(['user_id' => $user->id])->first();
+
+			            	if( count( $attemptDetails ) == 0 )		// Add the data
+			            	{
+			            		$loginAttempt = new LoginAttempt;
+
+			            		$loginAttempt->user_id 		= $user->id;
+			            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
+				            	$loginAttempt->count 		= 0;
+
+				            	$loginAttempt->save();
+			            	}
+			            	else 									// Update the data
+			            	{
+			            		$loginAttempt = LoginAttempt::find($attemptDetails->id);
+
+			            		$loginAttempt->user_id 		= $user->id;
+			            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
+				            	$loginAttempt->count 		= $attemptDetails->count + 1;
+
+				            	$loginAttempt->save();
+			            	}
 
 			                $response['errCode']    = 0;
 			                $response['errMsg']     = 'Successful login';
@@ -711,6 +728,60 @@ class AgentController extends Controller
                     6 => Helper::getStatusText($agentClient->status),
                     7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>',
                     8 => '<a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to fetch the invited clients list and show in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchInvitedClients()
+    {
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        $agentClients = DB::table('agent_clients as t1')
+        				->leftJoin('agent_client_invites as t2', 't1.id', '=', 't2.client_id')
+        				->limit(10)
+        				->offset(0)
+        				->where(['t2.agent_id' => $userId])
+        				->select('t1.id', 't1.fname', 't1.lname', 't1.oname', 't1.email', 't1.contact_number', 't1.status')
+        				->get();
+
+        $iTotal = 0;
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $agentClients ) > 0 )
+        {
+            foreach ($agentClients as $agentClient)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $k + 1,
+                    1 => ucfirst( strtolower( $agentClient->fname ) ),
+                    2 => ucfirst( strtolower( $agentClient->oname ) ),
+                    3 => ucfirst( strtolower( $agentClient->lname ) ),
+                    4 => $agentClient->email,
+                    5 => $agentClient->contact_number,
+                    6 => Helper::getStatusText($agentClient->status)
                 );
                 $k++;
             }
@@ -1599,7 +1670,7 @@ class AgentController extends Controller
     public function emailTemplates()
     {
     	// Get the email template categories
-    	$emailTemplateCategories = EmailTemplateCategory::where(['status' => '1'])->select('id', 'name')->orderBy('name', 'asc')->get();
+    	$emailTemplateCategories = EmailTemplateCategory::where(['status' => '1'])->select('id', 'name')->orderBy('id', 'asc')->get();
 
         return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories]);
     }

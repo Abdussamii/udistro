@@ -224,6 +224,17 @@ $(document).ready(function(){
         });
     });
 
+    // Canada number validation
+    $.validator.addMethod("canadaPhone", function (value, element) {
+        var filter = /^((\+[1-9]{0,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        if (filter.test(value)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }, 'Please enter a valid number');
+
     // Company Details form validation
     $('#frm_company_details').submit(function(e){
         e.preventDefault();
@@ -239,7 +250,8 @@ $(document).ready(function(){
             },
             company_phone: {
         		required: true,
-        		number: true
+        		number: true,
+                canadaPhone: true
         	}
         },
         messages: {

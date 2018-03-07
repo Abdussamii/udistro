@@ -49,7 +49,6 @@ use App\DigitalAdditionalServiceTypeRequest;
 use App\HomeCleaningSteamingService;
 use App\HomeCleaningOtherPlace;
 use App\HomeCleaningAdditionalService;
-
 use App\HomeCleaningServiceRequest;
 use App\HomeCleaningAdditionalServiceRequest;
 use App\HomeCleaningOtherPlaceServiceRequest;
@@ -57,6 +56,7 @@ use App\HomeCleaningSteamingServiceRequest;
 use App\ProvincialAgencyDetail;
 use App\ServiceRequestResponse;
 use App\PaymentTransactionDetail;
+use App\ShareAnnouncementEmail;
 
 use Validator;
 use Helper;
@@ -925,6 +925,10 @@ class MoversController extends Controller
 				    			);
 				    		}
 				    	}
+
+				    	// Add the company email entry
+			    		$createdAt = date('Y-m-d H:i:s');
+			    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
     				}
     			}
     		}
@@ -1295,6 +1299,10 @@ class MoversController extends Controller
 
 						$quotation->save();						
 		    		}
+
+		    		// Add the company email entry
+		    		$createdAt = date('Y-m-d H:i:s');
+		    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
 
 				}
 			}
@@ -1682,7 +1690,8 @@ class MoversController extends Controller
 		    		}
 
 		    		// Add the company email entry
-		    		
+		    		$createdAt = date('Y-m-d H:i:s');
+		    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
 
 				}
 			}
@@ -1985,6 +1994,10 @@ class MoversController extends Controller
 
  						$quotation->save();						
  		    		}
+
+ 		    		// Add the company email entry
+		    		$createdAt = date('Y-m-d H:i:s');
+		    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
  				}
  			}
 
@@ -3598,6 +3611,65 @@ class MoversController extends Controller
     			$response['errCode'] 	= 2;
     			$response['errMsg'] 	= 'Some Issue';
     		}
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function save the share announcement email and message
+     * @param void
+     * @return array
+     */
+    public function saveAnnouncementEmail()
+    {
+    	$emailIds 		= Input::get('emailIds');
+    	$emailContent 	= Input::get('emailContent');
+
+    	$response = array();
+    	if( $emailIds != '' && $emailContent != '' )
+    	{
+	    	// Check if there is a comma present email string
+	    	$emailArray = explode(',', $emailIds);
+
+	    	// Save the detail to the respective table and CRON will send the email on the scheduled time
+	    	if( count( $emailArray ) > 0 )
+	    	{
+	    		$shareAnnouncementEmail = array();
+	    		foreach( $emailArray as $email )
+	    		{
+	    			$shareAnnouncementEmail[] = array(
+	    				'email' => trim( $email ),
+	    				'email_content' => $emailContent,
+	    				'status' => '0',
+	    				'created_at' => date('Y-m-d H:i:s')
+	    			);
+	    		}
+
+	    		if( count( $shareAnnouncementEmail ) > 0 )
+	    		{
+	    			if( ShareAnnouncementEmail::insert($shareAnnouncementEmail) )
+	    			{
+	    				$response['errCode'] 	= 0;
+    					$response['errMsg'] 	= 'Email details saved successfully';
+	    			}
+	    			else
+	    			{
+	    				$response['errCode'] 	= 1;
+    					$response['errMsg'] 	= 'Some issue';
+	    			}
+	    		}
+	    		else
+	    		{
+	    			$response['errCode'] 	= 2;
+    				$response['errMsg'] 	= 'Some issue';
+	    		}
+	    	}
+    	}
+    	else
+    	{
+    		$response['errCode'] 	= 3;
+    		$response['errMsg'] 	= 'Missing email id or email content';
     	}
 
     	return response()->json($response);

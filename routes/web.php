@@ -474,6 +474,12 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To get response time slot details
 	Route::get('/getresponsetimeslotdetails', 'AdminController@getResponseTimeSlotDetails');
 
+	// To return the company representative view
+	Route::get('/companyrepresentative', 'CompanyController@companyrepresentative');
+
+	// To fetch the company representative list and show in datatable
+	Route::get('/fetchcompanyrepresentatives', 'CompanyController@fetchCompanyRepresentatives');
+
 	/* ---------- Company related functionality ---------- */
 
 	// To return the provincial agency details page
@@ -534,6 +540,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// To fetch the clients list and show in datatable
 	Route::get('/fetchclients', 'AgentController@fetchClients');
+
+	// To fetch the invited clients list and show in datatable
+	Route::get('/fetchinvitedclients', 'AgentController@fetchInvitedClients');
 
 	// To fetch the clients invites and show in datatable
 	Route::get('/fetchinvites', 'AgentController@fetchInvites');
@@ -702,6 +711,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To get the quotation response details
 	Route::get('/getquotationresponsedetails', 'MoversController@getqQuotationResponseDetails');
+
+	// To save the share announcement email and message
+	Route::post('/saveannouncementemail', 'MoversController@saveAnnouncementEmail');
 	
 });
 
@@ -830,8 +842,14 @@ Route::group(['prefix' => 'scheduler'], function() {
 	// To send invitation email
 	Route::get('/sendinvitationemail', 'SchedulerController@sendInvitationEmail');
 
-	// To send the company, mover emails
+	// To send the mover emails
 	Route::get('/sendcompanyquotationresponseemail', 'SchedulerController@sendCompanyQuotationResponseEmail');
+
+	// To send the company notification emails
+	Route::get('/sendcompanynotificationemail', 'SchedulerController@sendCompanyNotificationEmail');
+
+	// To send the share announcement email
+	Route::get('/sendannouncementemail', 'SchedulerController@sendAnnouncementEmail');
 
 });
 
