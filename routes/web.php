@@ -459,6 +459,15 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update the agent details
 	Route::post('/updateagent', 'CompanyController@updateAgent');
 
+	// To save the company representative details
+	Route::post('/savecompanyrepresentative', 'CompanyController@saveCompanyRepresentative');
+
+	// To get the company representative details
+	Route::get('/getcompanyrepresentativedetails', 'CompanyController@getCompanyRepresentativeDetails');
+
+	// To update the company representative details
+	Route::post('/updatecompanyrepresentative', 'CompanyController@updateCompanyRepresentative');
+
 	// To update company image
 	Route::post('/updatecompanyimage', 'CompanyController@updateCompanyImage');
 

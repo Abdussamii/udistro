@@ -3019,23 +3019,10 @@ class CompanyController extends Controller
 		}
 		else
 		{
-			// Get the trial payment plan
-			$paymentPlan = array();
-			if( $agentData['user_type'] == 'agent' )
-			{
-				$paymentPlan = PaymentPlan::where(['trial_plan' => '1', 'plan_type_id' => '1'])->first();
-			}
-			else
-			{
-				$paymentPlan = PaymentPlan::where(['trial_plan' => '1', 'plan_type_id' => '2'])->first();
-			}
+			$user = User::find($agentData['agent_id']);
 
-			if( count( $paymentPlan ) > 0 )
+			if( count( $user ) > 0 )
 			{
-				$user = User::find($agentData['agent_id']);
-
-				DB::beginTransaction();
-
 				$user->email 		= $agentData['agent_email'];
 				$user->fname 		= $agentData['agent_fname'];
 				$user->lname 		= $agentData['agent_lname'];
@@ -3053,27 +3040,133 @@ class CompanyController extends Controller
 					// Check if the user company mapping exist or not
 					$user->company()->sync($agentData['agent_company']);
 
-					// Set the default payment plan for the user
-					$planStartDate 	= date('Y-m-d');
-					$planEndDate 	= date('Y-m-d',strtotime('+'. $paymentPlan->validity_days .' days',strtotime($planStartDate)));
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Agent added successfully';
+				}
+				else
+				{
+					$response['errCode']    = 1;
+		        	$response['errMsg']     = 'Some issue';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 2;
+		        $response['errMsg']     = 'No such user exist';
+			}
+		}
 
-					$paymentPlanSubscription = new PaymentPlanSubscription;
+		return response()->json($response);
+    }
 
-					$paymentPlanSubscription->plan_id 			= $paymentPlan->id;
-					$paymentPlanSubscription->plan_type_id 		= $paymentPlan->plan_type_id;
-					$paymentPlanSubscription->subscriber_id 	= $user->id;
-					$paymentPlanSubscription->start_date 		= $planStartDate;
-					$paymentPlanSubscription->end_date 			= $planEndDate;
-					$paymentPlanSubscription->quota 			= 0;
-					$paymentPlanSubscription->remaining_qouta	= 0;
-					$paymentPlanSubscription->status 			= '1';
+    /**
+     * Function to save the company representative details
+     * @param void
+     * @return array
+     */
+    public function saveCompanyRepresentative()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
 
-					$paymentPlanSubscription->save();
+        // Parse the serialize form data to an array
+        parse_str($frmData, $companyRepresentativeData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'company_representative_company'	=> $companyRepresentativeData['company_representative_company'],
+		        'company_representative_fname'		=> $companyRepresentativeData['company_representative_fname'],
+		        'company_representative_lname'		=> $companyRepresentativeData['company_representative_lname'],
+		        'company_representative_email'		=> $companyRepresentativeData['company_representative_email'],
+		        'company_representative_password'	=> $companyRepresentativeData['company_representative_password'],
+		        'company_representative_address1'	=> $companyRepresentativeData['company_representative_address1'],
+		        'company_representative_province'	=> $companyRepresentativeData['company_representative_province'],
+		        'company_representative_city'		=> $companyRepresentativeData['company_representative_city'],
+		        'company_representative_postalcode'	=> $companyRepresentativeData['company_representative_postalcode'],
+		        'company_representative_status'		=> $companyRepresentativeData['company_representative_status']
+		    ),
+		    array(
+		        'company_representative_company' 	=> array('required'),
+		        'company_representative_fname' 		=> array('required'),
+		        'company_representative_lname' 		=> array('required'),
+		        'company_representative_email' 		=> array('required', 'email'),
+		        'company_representative_password'	=> array('required', 'min:6', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%^&]).*$/'),
+		        'company_representative_address1'	=> array('required'),
+		        'company_representative_province'	=> array('required'),
+		        'company_representative_city' 		=> array('required'),
+		        'company_representative_postalcode' => array('required'),
+		        'company_representative_status' 	=> array('required')
+		    ),
+		    array(
+		        'company_representative_company.required'	=> 'Please select company',
+		        'company_representative_fname.required' 	=> 'Please enter first name',
+		        'company_representative_lname.required' 	=> 'Please enter last name',
+		        'company_representative_email.required' 	=> 'Please enter email',
+		        'company_representative_email.email' 		=> 'Please enter valid email',
+		        'company_representative_password.required' 	=> 'Please enter password',
+		        'company_representative_password.min' 		=> 'Password must contain atleat 6 characters',
+		        'company_representative_password.regex' 	=> 'Password must contain a lower case, upper case, a number, and a special symbol in it',
+		        'company_representative_address1.required' 	=> 'Please enter address',
+		        'company_representative_province.required' 	=> 'Please select province',
+		        'company_representative_city.required' 		=> 'Please select city',
+		        'company_representative_postalcode.required'=> 'Please enter postal code',
+		        'company_representative_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Check if the agent already exist
+			$agent = User::where(['fname' => $companyRepresentativeData['company_representative_fname'], 'lname' => $companyRepresentativeData['company_representative_lname']])->get();
+
+			if( count( $agent ) == 0 )
+			{
+				// Add the agent as a user
+				$user = new User;
+
+				DB::beginTransaction();
+
+				$user->email 		= $companyRepresentativeData['company_representative_email'];				
+				$user->password 	= Hash::make($companyRepresentativeData['company_representative_password']);
+				$user->fname 		= $companyRepresentativeData['company_representative_fname'];
+				$user->lname 		= $companyRepresentativeData['company_representative_lname'];
+				$user->address1 	= $companyRepresentativeData['company_representative_address1'];
+				$user->address2 	= $companyRepresentativeData['company_representative_address2'];
+				$user->province_id 	= $companyRepresentativeData['company_representative_province'];
+				$user->city_id 		= $companyRepresentativeData['company_representative_city'];
+				$user->postalcode 	= $companyRepresentativeData['company_representative_postalcode'];
+				$user->country_id 	= $companyRepresentativeData['company_representative_country'];
+				$user->status 		= $companyRepresentativeData['company_representative_status'];
+				$user->created_by 	= $userId;
+
+				if( $user->save() )
+				{
+					// Map the user to role
+					$user->attachRole(2);	// 2: company representative
+
+					// Map the user to company
+					$user->company()->attach($companyRepresentativeData['company_representative_company']);
 
 					DB::commit();
 
 					$response['errCode']    = 0;
-		        	$response['errMsg']     = 'Agent added successfully';
+		        	$response['errMsg']     = 'Company representative added successfully';
 		        	
 				}
 				else
@@ -3086,8 +3179,164 @@ class CompanyController extends Controller
 			}
 			else
 			{
-				$response['errCode']    = 4;
-		        $response['errMsg']     = 'Trial payment plan is missing';
+				$response['errCode']    = 2;
+		        $response['errMsg']     = 'Company representative with the same name already exist';
+			}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to get the company representative details
+     * @param void
+     * @return array
+     */
+    public function getCompanyRepresentativeDetails()
+    {
+		$companyRepId = Input::get('companyRepId');
+
+		$response = array();
+		if( $companyRepId != '' )
+		{
+			$companyRepDetails = User::find($companyRepId);
+
+			$companyRepCompanyDetails = $companyRepDetails->company;
+
+	        $response = array(
+	        	'id' 			=> $companyRepDetails->id,
+	        	'email' 		=> $companyRepDetails->email,
+	        	'fname' 		=> $companyRepDetails->fname,
+	        	'lname' 		=> $companyRepDetails->lname,
+	        	'address1' 		=> $companyRepDetails->address1,
+	        	'address2' 		=> $companyRepDetails->address2,
+	        	'province_id' 	=> $companyRepDetails->province_id,
+	        	'city_id' 		=> $companyRepDetails->city_id,
+	        	'postalcode' 	=> $companyRepDetails->postalcode,
+	        	'country_id' 	=> $companyRepDetails->country_id,
+	        	'company_id' 	=> $companyRepCompanyDetails[0]->id,
+	        	'status' 		=> $companyRepDetails->status,
+	        );
+
+	        // Get the cities list for the selected province as the city list is filtered to the selected province by using the ajax
+    		$cities = City::where(['province_id' => $companyRepDetails->province_id])->get();
+
+    		if( count( $cities ) > 0 )
+    		{
+    			$html = '';
+    			foreach ($cities as $city)
+    			{
+	    			$html .= '<option value="'. $city->id .'">'. $city->name .'</option>';
+    			}
+    			$response['cities'] = $html;
+    		}
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to update the company representative details
+     * @param void
+     * @return array
+     */
+    public function updateCompanyRepresentative()
+    {
+    	// Get the serialized form data
+        $frmData = Input::get('frmData');
+
+        // Parse the serialize form data to an array
+        parse_str($frmData, $agentData);
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+    	// Server Side Validation
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'company_representative_company'	=> $agentData['company_representative_company'],
+		        'company_representative_fname'		=> $agentData['company_representative_fname'],
+		        'company_representative_lname'		=> $agentData['company_representative_lname'],
+		        'company_representative_email'		=> $agentData['company_representative_email'],
+		        'company_representative_address1'	=> $agentData['company_representative_edit_address1'],
+		        'company_representative_province'	=> $agentData['company_representative_edit_province'],
+		        'company_representative_city'		=> $agentData['company_representative_edit_city'],
+		        'company_representative_postalcode'	=> $agentData['company_representative_edit_postalcode'],
+		        'company_representative_status'		=> $agentData['company_representative_status']
+		    ),
+		    array(
+		        'company_representative_company' 	=> array('required'),
+		        'company_representative_fname' 		=> array('required'),
+		        'company_representative_lname' 		=> array('required'),
+		        'company_representative_email' 		=> array('required', 'email'),
+		        'company_representative_address1'	=> array('required'),
+		        'company_representative_province'	=> array('required'),
+		        'company_representative_city' 		=> array('required'),
+		        'company_representative_postalcode' => array('required'),
+		        'company_representative_status' 	=> array('required')
+		    ),
+		    array(
+		        'company_representative_company.required'	=> 'Please select company',
+		        'company_representative_fname.required' 		=> 'Please enter first name',
+		        'company_representative_lname.required' 		=> 'Please enter last name',
+		        'company_representative_email.required' 		=> 'Please enter email',
+		        'company_representative_email.email' 		=> 'Please enter valid email',
+		        'company_representative_address1.required' 	=> 'Please enter address',
+		        'company_representative_province.required' 	=> 'Please select province',
+		        'company_representative_city.required' 		=> 'Please select city',
+		        'company_representative_postalcode.required'	=> 'Please enter postal code',
+		        'company_representative_status.required' 	=> 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			$user = User::find($agentData['company_representative_id']);
+
+			if( count( $user ) > 0 )
+			{
+				$user->email 		= $agentData['company_representative_email'];
+				$user->fname 		= $agentData['company_representative_fname'];
+				$user->lname 		= $agentData['company_representative_lname'];
+				$user->address1		= $agentData['company_representative_edit_address1'];
+				$user->address2		= $agentData['company_representative_edit_address2'];
+				$user->province_id 	= $agentData['company_representative_edit_province'];
+				$user->city_id 		= $agentData['company_representative_edit_city'];
+				$user->postalcode 	= $agentData['company_representative_edit_postalcode'];
+				$user->country_id 	= $agentData['company_representative_edit_country'];
+				$user->status 		= $agentData['company_representative_status'];
+				$user->updated_by 	= $userId;
+
+				if( $user->save() )
+				{
+					// Check if the user company mapping exist or not
+					$user->company()->sync($agentData['company_representative_company']);
+
+					$response['errCode']    = 0;
+			        $response['errMsg']     = 'Company representative updated successfully';
+				}
+				else
+				{
+					$response['errCode']    = 1;
+			        $response['errMsg']     = 'Some issue';
+				}
+			}
+			else
+			{
+				$response['errCode']    = 2;
+			    $response['errMsg']     = 'No user exist';
 			}
 		}
 
@@ -3559,8 +3808,8 @@ class CompanyController extends Controller
      */
     public function companyrepresentative()
     {
-    	// Get company list
-    	$companies = Company::select('id', 'company_name')->orderBy('company_name', 'asc')->get();
+    	// Get companies other then real estate
+    	$companies = Company::where('company_category_id', '!=', '1')->select('id', 'company_name')->orderBy('company_name', 'asc')->get();
 
     	// Get province list
     	$provinces = Province::where(['status' => '1'])->select('id', 'name', 'abbreviation')->orderBy('name', 'asc')->get();
@@ -3588,77 +3837,75 @@ class CompanyController extends Controller
     	$sortType   = Input::get('sSortDir_0');         // Sort type
 
     	// Datatable column number to table column name mapping
-        $arr = array(
-            0 => 't1.id',
-            1 => 't1.id',
-            2 => 't1.id',
-            8 => 't1.status',
-        );
+    	$arr = array(
+    	0 => 't1.id',
+    	1 => 't6.company_name',
+    	2 => 't7.category',
+    	5 => 't1.status',
+    	);
 
-        // Map the sorting column index to the column name
-        $sortBy = $arr[$col];
+    	// Map the sorting column index to the column name
+    	$sortBy = $arr[$col];
 
-        $agents 	= DB::select(
-                        DB::raw(
-                        	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.address1, t1.postalcode, t1.status, 
-                        	t3.name as province, t4.name as city, t6.company_name
-							FROM users AS t1 
-							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
-							LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
-							LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
-							LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
-							LEFT JOIN companies AS t6 ON t5.company_id = t6.id
-							WHERE t2.role_id = '2' /* For company respresentative */
-                        	and t1.fname LIKE ('%". $sSearch ."%')
-                        	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
-                        )
-                    );
+    	$agents 	= DB::select(
+    	            DB::raw(
+    	            	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.company_name, t7.category as company_category
+    					FROM users AS t1 
+    					LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
+    					LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
+    					LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
+    					LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
+    					LEFT JOIN companies AS t6 ON t5.company_id = t6.id
+    					LEFT JOIN company_categories AS t7 ON t6.company_category_id = t7.id
+    					WHERE t2.role_id = '2' 
+    	            	and ( t1.fname LIKE ('%". $sSearch ."%') OR t1.lname LIKE ('%". $sSearch ."%') )
+    	            	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
+    	            )
+    	        );
 
-        $agentsCount = DB::select(
-                            DB::raw("
-	                        SELECT t1.id
-							FROM users AS t1 
-							LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
-							LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
-							LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
-							LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
-							LEFT JOIN companies AS t6 ON t5.company_id = t6.id
-							WHERE t2.role_id = '2' /* For company respresentative */
-                        	and t1.fname LIKE ('%". $sSearch ."%')
-                            ")
-                        );
+    	$agentsCount = DB::select(
+    	                DB::raw("
+    	                SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.company_name, t7.category as company_category
+    					FROM users AS t1 
+    					LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
+    					LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
+    					LEFT JOIN cities AS t4 ON t1.city_id = t4.id 
+    					LEFT JOIN company_user AS t5 ON t5.user_id = t1.id
+    					LEFT JOIN companies AS t6 ON t5.company_id = t6.id
+    					LEFT JOIN company_categories AS t7 ON t6.company_category_id = t7.id
+    					WHERE t2.role_id = '3' 
+    	            	and ( t1.fname LIKE ('%". $sSearch ."%') OR t1.lname LIKE ('%". $sSearch ."%') )
+    	                ")
+    	            );
 
-   	    // Assign it to the datatable pagination variable
-   	    $iTotal = count($agentsCount);
+    	// Assign it to the datatable pagination variable
+    	$iTotal = count($agentsCount);
 
-   	    $response = array(
-   	        'iTotalRecords' => $iTotal,
-   	        'iTotalDisplayRecords' => $iTotal,
-   	        'aaData' => array()
-   	    );
+    	$response = array(
+    	    'iTotalRecords' => $iTotal,
+    	    'iTotalDisplayRecords' => $iTotal,
+    	    'aaData' => array()
+    	);
 
-   	    $k=0;
-   	    if ( count( $agents ) > 0 )
-   	    {
-   	        foreach ($agents as $agent)
-   	        {
-   	            $response['aaData'][$k] = array(
-   	                0 => $agent->id,
-   	                1 => ucwords( strtolower( $agent->company_name ) ),
-   	                2 => ucwords( strtolower( $agent->agent_name ) ),
-   	                3 => $agent->email,
-   	                4 => $agent->address1,
-   	                5 => ucwords( strtolower( $agent->province) ),
-   	                6 => ucwords( strtolower( $agent->city ) ),
-   	                7 => $agent->postalcode,
-   	                8 => Helper::getStatusText($agent->status),
-   	                9 => '<a href="javascript:void(0);" id="'. $agent->id .'" data-usertype="company_representative" class="edit_agent"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
-   	            );
-   	            $k++;
-   	        }
-   	    }
+    	$k=0;
+    	if ( count( $agents ) > 0 )
+    	{
+    	    foreach ($agents as $agent)
+    	    {
+    	        $response['aaData'][$k] = array(
+    	            0 => $agent->id,
+    	            1 => ucwords( strtolower( $agent->company_name ) ),
+    	            2 => ucwords( strtolower( $agent->company_category ) ),
+    	            3 => ucwords( strtolower( $agent->agent_name ) ),
+    	            4 => $agent->email,
+    	            5 => Helper::getStatusText($agent->status),
+    	            6 => '<a href="javascript:void(0);" id="'. $agent->id .'" data-usertype="company_representative" class="edit_company_representative"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+    	        );
+    	        $k++;
+    	    }
+    	}
 
-   		return response()->json($response);
+    	return response()->json($response);
     }
 
     /**

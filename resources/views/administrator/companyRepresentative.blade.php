@@ -9,12 +9,25 @@
 
 	<script type="text/javascript">
 		var fields = [
-		{ element: "agent_edit_address1", field: "Line1" },
-		{ element: "agent_edit_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
-		{ element: "agent_edit_city", field: "City", mode: pca.fieldMode.POPULATE },
-		{ element: "agent_edit_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
-		{ element: "agent_edit_postalcode", field: "PostalCode" },
-		{ element: "agent_edit_country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+			{ element: "company_representative_address1", field: "Line1" },
+			{ element: "company_representative_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+			{ element: "company_representative_city", field: "City", mode: pca.fieldMode.POPULATE },
+			{ element: "company_representative_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+			{ element: "company_representative_postalcode", field: "PostalCode" },
+			{ element: "company_representative_country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+		],
+		options = {
+			key: "kp88-mx67-ff25-xd59"
+		},
+		control = new pca.Address(fields, options);
+
+		var fields = [
+			{ element: "company_representative_edit_address1", field: "Line1" },
+			{ element: "company_representative_edit_address2", field: "Line2", mode: pca.fieldMode.POPULATE },
+			{ element: "company_representative_edit_city", field: "City", mode: pca.fieldMode.POPULATE },
+			{ element: "company_representative_edit_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+			{ element: "company_representative_edit_postalcode", field: "PostalCode" },
+			{ element: "company_representative_edit_country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
 		],
 		options = {
 			key: "kp88-mx67-ff25-xd59"
@@ -28,6 +41,10 @@
         </div>
     </div>
     <div class="row">
+		<div class="col-lg-12">
+			<button type="button" class="btn btn-primary" data-toggle="modal" id="btn_modal_company_representative">Add Company Representative</button>
+		</div>
+
         <div class="col-lg-12 top-buffer">
 	      	<!-- Table to show all the cities -->
 			<table id="datatable_company_representatives" class="table table-striped">
@@ -35,12 +52,9 @@
 					<tr>
 						<td>#</td>
 						<td>Company</td>
-						<td>Agent Name</td>
+						<td>Company Category</td>
+						<td>company_representative Name</td>
 						<td>Email</td>
-						<td>Address</td>
-						<td>Province</td>
-						<td>City</td>
-						<td>Postal Code</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>
@@ -49,21 +63,21 @@
 		</div>
     </div>
 
-	<!-- Modal to edit agent -->
-	<div id="modal_edit_agent" class="modal fade" role="dialog">
+    <!-- Modal to add company representative -->
+    <div id="modal_add_company_representative" class="modal fade" role="dialog">
 	  	<div class="modal-dialog">
 		    <!-- Modal content-->
 		    <div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add Agent</h4>
+					<h4 class="modal-title">Add company_representative</h4>
 				</div>
 
 				<div class="modal-body">
-					<form name="frm_edit_agent" id="frm_edit_agent" autocomplete="off">
+					<form name="frm_add_company_representative" id="frm_add_company_representative" autocomplete="off">
 						<div class="form-group">
-							<label for="agent_company">Company</label>
-							<select name="agent_company" id="agent_company" class="form-control">
+							<label for="company_representative_company">Company</label>
+							<select name="company_representative_company" id="company_representative_company" class="form-control">
 								<option value="">Select</option>
 								<?php
 								if( isset( $companies ) && count( $companies ) > 0 )
@@ -79,34 +93,35 @@
 						<div class="form-group">
 							<div class="row">
 							  	<div class="col-sm-6">
-							  		<label for="agent_fname">First Name</label>
-							  		<input type="text" name="agent_fname" id="agent_fname" class="form-control" placeholder="First Name">
-							  		<input type="hidden" name="agent_id" id="agent_id" value="">
-							  		<input type="hidden" name="user_type" id="user_type" value="">
+							  		<label for="company_representative_fname">First Name</label>
+							  		<input type="text" name="company_representative_fname" id="company_representative_fname" class="form-control" placeholder="First Name">
 							  	</div>
 							  	<div class="col-sm-6">
-							  		<label for="agent_lname">Last Name</label>
-							  		<input type="text" name="agent_lname" id="agent_lname" class="form-control" placeholder="Last Name">
+							  		<label for="company_representative_lname">Last Name</label>
+							  		<input type="text" name="company_representative_lname" id="company_representative_lname" class="form-control" placeholder="Last Name">
 							  	</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
 							  	<div class="col-sm-6">
-							  		<label for="agent_email">Email</label>
-							  		<input type="text" name="agent_email" id="agent_email" class="form-control" placeholder="Agent Email">
+							  		<label for="company_representative_email">Email</label>
+							  		<input type="text" name="company_representative_email" id="company_representative_email" class="form-control" placeholder="company_representative Email">
+							  	</div>
+							  	<div class="col-sm-6">
+							  		<label for="company_representative_password">Password</label>
+							  		<input type="password" name="company_representative_password" id="company_representative_password" class="form-control" placeholder="Password">
 							  	</div>
 							</div>
 						</div>
-						
 						<div class="form-group">
-							<label for="agent_address">Address</label>
-							<input name="agent_edit_address1" id="agent_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
+							<label for="company_representative_address1">Address</label>
+							<input name="company_representative_address1" id="company_representative_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 						</div>
 
-						<div id="add_agent_address" style="display: none;">
-							<input name="agent_edit_address2" id="agent_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
-				            <select id="agent_edit_city" class="form-control" name="agent_edit_city">
+						<div id="add_company_representative_address" style="display: none;">
+							<input name="company_representative_address2" id="company_representative_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+				            <select id="company_representative_city" class="form-control" name="company_representative_city">
 								<option value="">Select</option>
 									<?php
 									if( isset( $cities ) && count( $cities ) > 0 )
@@ -118,7 +133,7 @@
 									}
 									?>
 				            </select>
-	                        <select id="agent_edit_province" class="form-control" name="agent_edit_province">
+	                        <select id="company_representative_province" class="form-control" name="company_representative_province">
 	            				<option value="">Select</option>
 	            					<?php
 	            					if( isset( $provinces ) && count( $provinces ) > 0 )
@@ -130,8 +145,120 @@
 	            					}
 	            					?>
 	                        </select>
-	                        <input id="agent_edit_postalcode" name="agent_edit_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
-                            <select name="agent_edit_country" id="agent_edit_country" class="form-control">
+	                        <input id="company_representative_postalcode" name="company_representative_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+                            <select name="company_representative_country" id="company_representative_country" class="form-control">
+                				<option value="">Select</option>
+                					<?php
+                					if( isset( $countries ) && count( $countries ) > 0 )
+                					{
+                						foreach($countries as $country)
+                						{
+                							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+                						}
+                					}
+                					?>
+                            </select>
+						</div>
+						<div class="form-group">
+							<label for="company_representative_status">Status</label>
+							<div class="radio">
+							 	<label><input type="radio" name="company_representative_status" value="1" checked="true">Active</label>
+							</div>
+							<div class="radio">
+							 	<label><input type="radio" name="company_representative_status" value="0">Inactive</label>
+							</div>
+							<label id="company_representative_status-error" class="error" for="company_representative_status"></label>
+						</div>
+						<button type="submit" id="btn_add_company_representative" name="btn_add_company_representative" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+		    </div>
+	  	</div>
+	</div>
+
+	<!-- Modal to edit company_representative -->
+	<div id="modal_edit_company_representative" class="modal fade" role="dialog">
+	  	<div class="modal-dialog">
+		    <!-- Modal content-->
+		    <div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Company Representative</h4>
+				</div>
+
+				<div class="modal-body">
+					<form name="frm_edit_company_representative" id="frm_edit_company_representative" autocomplete="off">
+						<div class="form-group">
+							<label for="company_representative_company">Company</label>
+							<select name="company_representative_company" id="company_representative_company" class="form-control">
+								<option value="">Select</option>
+								<?php
+								if( isset( $companies ) && count( $companies ) > 0 )
+								{
+									foreach ($companies as $company)
+									{
+										echo '<option value="'. $company->id .'">'.ucwords( strtolower( $company->company_name ) ) .'</option>';
+									}
+								}
+								?>
+							</select>
+						</div>
+						<div class="form-group">
+							<div class="row">
+							  	<div class="col-sm-6">
+							  		<label for="company_representative_fname">First Name</label>
+							  		<input type="text" name="company_representative_fname" id="company_representative_fname" class="form-control" placeholder="First Name">
+							  		<input type="hidden" name="company_representative_id" id="company_representative_id" value="">
+							  		<input type="hidden" name="user_type" id="user_type" value="">
+							  	</div>
+							  	<div class="col-sm-6">
+							  		<label for="company_representative_lname">Last Name</label>
+							  		<input type="text" name="company_representative_lname" id="company_representative_lname" class="form-control" placeholder="Last Name">
+							  	</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+							  	<div class="col-sm-6">
+							  		<label for="company_representative_email">Email</label>
+							  		<input type="text" name="company_representative_email" id="company_representative_email" class="form-control" placeholder="Company Representative Email">
+							  	</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="company_representative_address">Address</label>
+							<input name="company_representative_edit_address1" id="company_representative_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
+						</div>
+
+						<div id="edit_company_representative_address" style="display: none;">
+							<input name="company_representative_edit_address2" id="company_representative_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+				            <select id="company_representative_edit_city" class="form-control" name="company_representative_edit_city">
+								<option value="">Select</option>
+									<?php
+									if( isset( $cities ) && count( $cities ) > 0 )
+									{
+										foreach($cities as $city)
+										{
+											echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+										}
+									}
+									?>
+				            </select>
+	                        <select id="company_representative_edit_province" class="form-control" name="company_representative_edit_province">
+	            				<option value="">Select</option>
+	            					<?php
+	            					if( isset( $provinces ) && count( $provinces ) > 0 )
+	            					{
+	            						foreach($provinces as $province)
+	            						{
+	            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+	            						}
+	            					}
+	            					?>
+	                        </select>
+	                        <input id="company_representative_edit_postalcode" name="company_representative_edit_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+                            <select name="company_representative_edit_country" id="company_representative_edit_country" class="form-control">
                 				<option value="">Select</option>
                 					<?php
                 					if( isset( $countries ) && count( $countries ) > 0 )
@@ -146,19 +273,20 @@
 						</div>
 						
 						<div class="form-group">
-							<label for="agent_status">Status</label>
+							<label for="company_representative_status">Status</label>
 							<div class="radio">
-							 	<label><input type="radio" name="agent_status" value="1" checked="true">Active</label>
+							 	<label><input type="radio" name="company_representative_status" value="1" checked="true">Active</label>
 							</div>
 							<div class="radio">
-							 	<label><input type="radio" name="agent_status" value="0">Inactive</label>
+							 	<label><input type="radio" name="company_representative_status" value="0">Inactive</label>
 							</div>
-							<label id="agent_status-error" class="error" for="agent_status"></label>
+							<label id="company_representative_status-error" class="error" for="company_representative_status"></label>
 						</div>
-						<button type="submit" id="btn_edit_agent" name="btn_edit_agent" class="btn btn-primary">Submit</button>
+						<button type="submit" id="btn_edit_company_representative" name="btn_edit_company_representative" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
 		    </div>
 	  	</div>
 	</div>
+
 @endsection

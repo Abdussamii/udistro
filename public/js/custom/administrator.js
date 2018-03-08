@@ -3111,6 +3111,12 @@ $(document).ready(function(){
 		$('#modal_add_agent').modal('show');
 	});
 
+	// To add a company representative under the company
+	$('#btn_modal_company_representative').click(function(){
+		$('#modal_add_company_representative').find('.modal-title').text('Add Company Representative');
+		$('#modal_add_company_representative').modal('show');
+	});
+
 	// To get the cities list as per the province selected for add agent
     $('#frm_add_agent #agent_province').change(function(){
     	var provinceId = $(this).val();
@@ -3307,6 +3313,234 @@ $(document).ready(function(){
 			    }
 			});
     	}
+	});
+
+	// Add company representative form validation
+	$('#frm_add_company_representative').submit(function(e){
+	    e.preventDefault();
+	});
+
+	$('#frm_add_company_representative').validate({
+	    rules: {
+	        company_representative_company: {
+	            required: true
+	        },
+	        company_representative_fname: {
+	            required: true
+	        },
+	        company_representative_lname: {
+	            required: true
+	        },
+	        company_representative_email: {
+	            required: true,
+	        	email: true
+	        },
+	        company_representative_password: {
+	            required: true,
+	        	minlength: 6,
+	        	atLeastOneLowercaseLetter: true,
+	        	atLeastOneUppercaseLetter: true,
+	        	atLeastOneNumber: true,
+	        	atLeastOneSymbol: true
+	        },
+	        company_representative_address1: {
+	            required: true
+	        },
+			company_representative_status: {
+	        	required: true	
+	        }
+	    },
+	    messages: {
+	        company_representative_company: {
+	            required: 'Please select company'
+	        },
+	        company_representative_fname: {
+	            required: 'Please enter first name'
+	        },
+	        company_representative_lname: {
+	            required: 'Please enter last name'
+	        },
+	        company_representative_email: {
+	            required: 'Please enter email',
+	        	email: 'Please enter valid email'
+	        },
+	        company_representative_password: {
+	            required: 'Please enter password',
+	        	minlength: 'Password must contain atleat 6 characters'
+	        },
+	        company_representative_address1: {
+	            required: 'Please enter address'
+	        },
+			company_representative_status: {
+	        	required: 'Please select status'	
+	        }
+	    }
+	});
+
+	// To update the company representative details
+	$(document).on('click', '.edit_company_representative', function(){
+
+		$('#modal_edit_company_representative').find('.modal-title').text('Edit Company Representative');
+
+		var companyRepId = $(this).attr('id');
+		var userType= $(this).attr('data-usertype');
+
+    	if( companyRepId != '' )
+    	{
+    		// Get the details of selected company representative
+    		$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/getcompanyrepresentativedetails',
+				method: 'get',
+				data: {
+					companyRepId: companyRepId
+				},
+			    success: function(response){
+			    	$('#frm_edit_company_representative #company_representative_id').val(companyRepId);
+
+			    	$('#frm_edit_company_representative #company_representative_fname').val(response.fname);
+			    	$('#frm_edit_company_representative #company_representative_lname').val(response.lname);
+			    	$('#frm_edit_company_representative #company_representative_email').val(response.email);
+			    	$('#frm_edit_company_representative #company_representative_edit_address1').val(response.address1);
+			    	$('#frm_edit_company_representative #company_representative_edit_province').val(response.province_id);
+			    	$('#frm_edit_company_representative #company_representative_edit_postalcode').val(response.postalcode);
+			    	$('#frm_edit_company_representative #company_representative_edit_country').val(response.country_id);
+			    	$('#frm_edit_company_representative #company_representative_company').val(response.company_id);
+			    	
+			    	// Fill the cities
+			    	$('#frm_edit_company_representative #company_representative_edit_city').html(response.cities);
+					
+					// Make the city selected 
+					$('#frm_edit_company_representative #company_representative_edit_city').val(response.city_id);
+
+			    	$('#frm_edit_company_representative input[name="company_representative_status"][value="'+ response.status +'"]').prop('checked', true);
+
+			    	// Fill the user type
+			    	$('#frm_edit_company_representative #user_type').val(userType);
+
+			    	// Show the modal
+			    	$('#modal_edit_company_representative').modal('show');
+			    }
+			});
+    	}
+	});
+
+	// Save the company representative data
+	$('#btn_add_company_representative').click(function(){
+		if( $('#frm_add_company_representative').valid() )
+		{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savecompanyrepresentative',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_company_representative').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+						
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_company_representative')[0].reset();
+
+			    		$('#modal_add_company_representative').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_agents').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
+	});
+
+	// To update company representative details
+	$('#frm_edit_company_representative').submit(function(e){
+	    e.preventDefault();
+	});
+	$('#frm_edit_company_representative').validate({
+	    rules: {
+	        company_representative_company: {
+	            required: true
+	        },
+	        company_representative_fname: {
+	            required: true
+	        },
+	        company_representative_lname: {
+	            required: true
+	        },
+	        company_representative_email: {
+	            required: true,
+	        	email: true
+	        },
+	        company_representative_edit_address1: {
+	            required: true
+	        },
+			company_representative_status: {
+	        	required: true	
+	        }
+	    },
+	    messages: {
+	        company_representative_company: {
+	            required: 'Please select company'
+	        },
+	        company_representative_fname: {
+	            required: 'Please enter first name'
+	        },
+	        company_representative_lname: {
+	            required: 'Please enter last name'
+	        },
+	        company_representative_email: {
+	            required: 'Please enter email',
+	        	email: 'Please enter valid email'
+	        },
+	        company_representative_edit_address1: {
+	            required: 'Please enter address'
+	        },
+			company_representative_status: {
+	        	required: 'Please select status'	
+	        }
+	    }
+	});
+
+	// Update the agent data
+	$('#btn_edit_company_representative').click(function(){
+		if( $('#frm_edit_company_representative').valid() )
+		{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/updatecompanyrepresentative',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_edit_company_representative').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+						
+			    		// Refresh the form and close the modal
+			    		$('#frm_edit_company_representative')[0].reset();
+
+			    		$('#modal_edit_company_representative').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_company_representatives').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
 	});
 
 	// To get the cities list as per the province selected for add agent
@@ -4496,8 +4730,9 @@ $(document).ready(function(){
 	    "bProcessing": true,
 	    "bServerSide": true,
 	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanyrepresentatives',
+	    
 	    "columnDefs": [
-	        { "className": "dt-center", "targets": [0, 8, 9] }
+	        { "className": "dt-center", "targets": [ 0, 5, 6 ] }
 	    ],
 	    "aoColumns": [
 	        { 'bSortable' : true },
@@ -4505,11 +4740,8 @@ $(document).ready(function(){
 	        { 'bSortable' : true },
 	        { 'bSortable' : false },
 	        { 'bSortable' : false },
-	        { 'bSortable' : false },
-	        { 'bSortable' : false },
-	        { 'bSortable' : false },
 	        { 'bSortable' : true },
-	        { 'bSortable' : false}
+	        { 'bSortable' : false }
 	    ]
 	});
 

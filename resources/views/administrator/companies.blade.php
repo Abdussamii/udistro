@@ -27,10 +27,10 @@
 	var fields1 = [
 		{ element: "street-address_edit", field: "Line1" },
 		{ element: "street-address2_edit", field: "Line2", mode: pca.fieldMode.POPULATE },
-		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
-		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "company_city_edit", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "company_province_edit", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
 		{ element: "postcode_edit", field: "PostalCode" },
-		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
+		{ element: "company_country_edit", field: "CountryName", mode: pca.fieldMode.COUNTRY }
 	],
 	options1 = {
 		key: "kp88-mx67-ff25-xd59"
