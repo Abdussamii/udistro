@@ -2907,15 +2907,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanies',
+        
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 9, 10] }
+            { "className": "dt-center", "targets": [0, 6, 7] }
         ],
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : false },

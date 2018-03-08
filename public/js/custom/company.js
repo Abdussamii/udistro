@@ -836,24 +836,27 @@ $(document).ready(function(){
     	});
     });
 
+    // Datatable to show quotation request
     $.fn.dataTableExt.errMode = 'ignore';
     $('#datatable_quotation_request').dataTable({
         "sServerMethod": "get", 
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchquotationrequest',
-        
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 4] }
+            { "className": "dt-center", "targets": [ 0, 4, 5, 6, 7 ] }
         ],
-        
         "aoColumns": [
-            { 'bSortable' : true, "width": "10%" },
-            { 'bSortable' : true },
-            { 'bSortable' : true },
-            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
             { 'bSortable' : false, "width": "10%" }
-        ]
+        ],
+        "order": [[ 6, "desc" ]]
     });
 
     // To update the home cleaning request quotation price related data
@@ -1321,6 +1324,26 @@ $(document).ready(function(){
 		    }
 		});
 
+    });
+
+
+    // Datatable to show quotation request
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_reviews').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchreviews',
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 2, 4 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : false, "width": "60%" },
+            { 'bSortable' : false, "width": "12%" }
+        ]
     });
 
 });

@@ -86,7 +86,7 @@
 	      	<!-- Table to show all the cities -->
 			<table id="datatable_companies" class="table table-striped">
 				<thead>
-					<tr>
+					<!-- <tr>
 						<td>#</td>
 						<td>Company Name</td>
 						<td>Category</td>
@@ -94,6 +94,17 @@
 						<td>Province</td>
 						<td>City</td>
 						<td>Postal Code</td>
+						<td>Representative Name</td>
+						<td>Email</td>
+						<td>Status</td>
+						<td>Action</td>
+					</tr> -->
+
+					<tr>
+						<td>#</td>
+						<td>Company Name</td>
+						<td>Category</td>
+						<td>Province</td>
 						<td>Representative Name</td>
 						<td>Email</td>
 						<td>Status</td>

@@ -819,6 +819,12 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To get the pst, gst, hst, service charge values
 	Route::get('/fetchprovincetaxes', 'CompanyController@fetchProvinceTaxes');
+
+	// To show the review page
+	Route::get('/review', 'CompanyController@review');
+
+	// To show the review page
+	Route::get('/fetchreviews', 'CompanyController@fetchReviews');
 	
 });
 

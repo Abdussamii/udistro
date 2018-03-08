@@ -463,10 +463,10 @@
 								<label for="company_image_upload"><i class="fa fa-pencil" aria-hidden="true"></i></label>
 								<input type="file" id="company_image_upload" name="company_image_upload" accept="image/*" style="display: none">
 							</div>
-							<div class="sub-can-box">
-								<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
-								<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
-							</div>
+						</div>
+						<div class="sub-can-box">
+							<button type="submit" class="btn btn-primary" name="btn_update_company_logo" id="btn_update_company_logo">Save</button>
+							<button type="reset" class="btn btn-primary" name="btn_cancel_company_logo" id="btn_cancel_company_logo">Cancel</button>
 						</div>
 					</form>
 				</div>

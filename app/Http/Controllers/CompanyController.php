@@ -47,6 +47,7 @@ use App\ServiceRequestResponse;
 use App\DigitalServiceTypeRequest;
 use App\MovingItemDetailServiceRequest;
 use App\MovingTransportationTypeRequest;
+use App\Rating;
 
 use Validator;
 use Helper;
@@ -905,7 +906,7 @@ class CompanyController extends Controller
      */
     public function QuotationRequest()
     {
-        return view('company/quotationrequest');
+        return view('company/quotationRequest');
     }
 
     /**
@@ -932,9 +933,7 @@ class CompanyController extends Controller
         
         // Datatable column number to table column name mapping
         $arr = array(
-            0 => 'id',
-            1 => 'name',
-            2 => 'status',
+            6 => 'updated_at'
         );
 
         // Map the sorting column index to the column name
@@ -950,7 +949,7 @@ class CompanyController extends Controller
                                 ->where('tech_concierge_service_requests.company_id', '=', $companyArray->id)
                                 ->limit($length)
                                 ->offset($start)
-                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'tech_concierge_service_requests.id')
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'tech_concierge_service_requests.id', 'tech_concierge_service_requests.created_at', 'tech_concierge_service_requests.updated_at', 'tech_concierge_service_requests.company_response', 'tech_concierge_service_requests.email_sent_status')
                                 ->get();
 
             $iTotal = DB::table('tech_concierge_service_requests')
@@ -968,7 +967,7 @@ class CompanyController extends Controller
                                 ->where('digital_service_requests.digital_service_company_id', '=', $companyArray->id)
                                 ->limit($length)
                                 ->offset($start)
-                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'digital_service_requests.id')
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'digital_service_requests.id', 'digital_service_requests.created_at', 'digital_service_requests.updated_at', 'digital_service_requests.company_response', 'digital_service_requests.email_sent_status')
                                 ->get();
 
             $iTotal = DB::table('digital_service_requests')
@@ -986,7 +985,7 @@ class CompanyController extends Controller
                                 ->where('moving_item_service_requests.mover_company_id', '=', $companyArray->id)
                                 ->limit($length)
                                 ->offset($start)
-                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'moving_item_service_requests.id')
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'moving_item_service_requests.id', 'moving_item_service_requests.created_at', 'moving_item_service_requests.updated_at', 'moving_item_service_requests.company_response', 'moving_item_service_requests.email_sent_status')
                                 ->get();
 
             $iTotal = DB::table('moving_item_service_requests')
@@ -1004,7 +1003,7 @@ class CompanyController extends Controller
                                 ->where('home_cleaning_service_requests.company_id', '=', $companyArray->id)
                                 ->limit($length)
                                 ->offset($start)
-                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'home_cleaning_service_requests.id')
+                                ->select('agent_clients.fname', 'agent_clients.lname', 'agent_clients.email', 'agent_clients.contact_number', 'home_cleaning_service_requests.id', 'home_cleaning_service_requests.created_at', 'home_cleaning_service_requests.updated_at', 'home_cleaning_service_requests.company_response', 'home_cleaning_service_requests.email_sent_status')
                                 ->get();
 
             $iTotal = DB::table('home_cleaning_service_requests')
@@ -1030,8 +1029,11 @@ class CompanyController extends Controller
                     0 => $movingItem->id,
                     1 => ucfirst( strtolower( $movingItem->fname." ".$movingItem->lname ) ),
                     2 => ucfirst( strtolower( $movingItem->email ) ),
-                    3 => $movingItem->contact_number,
-                    4 => '<a href="javascript:void(0);" id="'. $movingItem->id .'" class="'.$class.'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    3 => date('H:i:s Y-m-d', strtotime( $movingItem->created_at ) ),
+                    4 => ( $movingItem->company_response == '1' ) ? 'Yes' : 'No',
+                    5 => ( $movingItem->email_sent_status == '1' )? 'Yes' : 'No',
+                    6 => ( $movingItem->company_response == '1' ) ? date('H:i:s Y-m-d', strtotime( $movingItem->updated_at ) ) : 'NA',
+                    7 => '<a href="javascript:void(0);" id="'. $movingItem->id .'" class="'.$class.'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -2512,7 +2514,7 @@ class CompanyController extends Controller
         $arr = array(
             0 => 't1.id',
             1 => 't1.company_name',
-            9 => 't1.status'
+            6 => 't1.status'
         );
 
         // Map the sorting column index to the column name
@@ -2520,9 +2522,9 @@ class CompanyController extends Controller
 
         $companies 	= DB::select(
                         DB::raw(
-                        	"SELECT t1.id, t1.company_name, t1.address1, t1.postal_code, t1.status, t3.email, t3.fname, CONCAT_WS(' ', t3.fname, t3.lname) AS rep_name, 
+                        	"SELECT t1.id, t1.company_name, t1.status, t3.email, t3.fname, CONCAT_WS(' ', t3.fname, t3.lname) AS rep_name, 
 							t5.category,
-							t6.name AS province, t7.name AS city 
+							t6.name AS province
 							FROM companies AS t1 
 							LEFT JOIN company_user AS t2 ON t1.id = t2.company_id 
 							LEFT JOIN users AS t3 ON t2.user_id = t3.id 
@@ -2566,14 +2568,11 @@ class CompanyController extends Controller
    	                0 => $company->id,
    	                1 => ucwords( strtolower( $company->company_name ) ),
    	                2 => ucwords( strtolower( $company->category ) ),
-   	                3 => ucfirst( strtolower( $company->address1 ) ),
-   	                4 => ucfirst( strtolower( $company->province ) ),
-   	                5 => ucfirst( strtolower( $company->city ) ),
-   	                6 => $company->postal_code,
-   	                7 => ucwords( strtolower( $company->rep_name ) ),
-   	                8 => $company->email,
-   	                9 => Helper::getStatusText($company->status),
-   	                10 => '<a href="javascript:void(0);" id="'. $company->id .'" class="edit_company"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+   	                3 => ucfirst( strtolower( $company->province ) ),
+   	                4 => ucwords( strtolower( $company->rep_name ) ),
+   	                5 => $company->email,
+   	                6 => Helper::getStatusText($company->status),
+   	                7 => '<a href="javascript:void(0);" id="'. $company->id .'" class="edit_company"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
    	            );
    	            $k++;
    	        }
@@ -2753,8 +2752,8 @@ class CompanyController extends Controller
      */
     public function agents()
     {
-    	// Get company list
-    	$companies = Company::select('id', 'company_name')->orderBy('company_name', 'asc')->get();
+    	// Get real estate company list
+    	$companies = Company::where(['company_category_id' => '1'])->select('id', 'company_name')->orderBy('company_name', 'asc')->get();
 
     	// Get province list
     	$provinces = Province::where(['status' => '1'])->select('id', 'name', 'abbreviation')->orderBy('name', 'asc')->get();
@@ -3741,5 +3740,81 @@ class CompanyController extends Controller
    	    }
 
    		return response()->json($response);
+    }
+
+    /**
+     * Function to show the review page
+     * @param void
+     * @return \Illuminate\Http\Response
+     */
+    public function review()
+    {
+    	return view('company/review');
+    }
+
+    /**
+     * Function to fetch the review listing and show it in datatable
+     * @param void
+     * @return array
+     */
+    public function fetchReviews()
+    {
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 't1.id',
+            2 => 't1.rating'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the records after applying the datatable filters
+        $reviews = 	DB::table('ratings as t1')
+    				->leftJoin('agent_clients as t2', 't1.user_id', '=', 't2.id')
+    				->where(['t1.agent_id' => $userId])
+    				->select('t1.id', 't1.rating', 't1.comments', 't2.fname', 't1.created_at', 't2.lname')
+    				->orderBy($sortBy, $sortType)
+    				->limit($length)
+                    ->offset($start)
+    				->get();
+
+        $iTotal = DB::table('ratings as t1')
+    				->leftJoin('agent_clients as t2', 't1.user_id', '=', 't2.id')
+    				->where(['t1.agent_id' => $userId])
+    				->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $reviews ) > 0 )
+        {
+            foreach ($reviews as $review)
+            {
+            	$response['aaData'][$k] = array(
+                    0 => $review->id,
+                    1 => ucwords( strtolower( $review->fname ) ),
+                    2 => $review->rating,
+                    3 => $review->comments,
+                    4 => $review->created_at,
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
     }
 }

@@ -141,7 +141,10 @@
 						<td>#</td>
 						<td>Client Name</td>
 						<td>Email</td>
-						<td>Phone Number</td>
+						<td>Request Time</td>
+						<td>Response</td>
+						<td>Response Email</td>
+						<td>Response Time</td>
 						<td>Action</td>
 					</tr>
 				</thead>
