@@ -2185,9 +2185,6 @@ class CompanyController extends Controller
 
 		$validation = Validator::make(
 		    array(
-		        'rep_fname'			=> $companyDetails['representative_fname'],
-		        'rep_email'			=> $companyDetails['representative_email'],
-		        'rep_password'		=> $companyDetails['representative_password'],
 		        'company_name'		=> $companyDetails['company_name'],
 		        'company_category'	=> $companyDetails['company_category'],
 		        'company_address'	=> $companyDetails['company_address1'],
@@ -2198,9 +2195,6 @@ class CompanyController extends Controller
 		        'company_status'	=> $companyDetails['company_status'],
 		    ),
 		    array(
-		        'rep_fname'			=> array('required'),
-		        'rep_email'			=> array('required', 'email'),
-		        'rep_password'		=> array('required', 'min:6', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%^&]).*$/'),
 		        'company_name'		=> array('required'),
 		        'company_category'	=> array('required'),
 		        'company_address'	=> array('required'),
@@ -2211,12 +2205,6 @@ class CompanyController extends Controller
 		        'company_status'	=> array('required')
 		    ),
 		    array(
-		        'rep_fname.required' 		=> 'Please enter representative first name',
-		        'rep_email.required' 		=> 'Please enter representative email',
-		        'rep_email.email' 			=> 'Please enter valid representative email',
-		        'rep_password.required' 	=> 'Please enter password',
-		        'rep_password.min' 			=> 'Password must contain atleat 6 characters',
-		        'rep_password.regex' 		=> 'Password must contain a lower case, upper case, a number, and a special symbol in it',
 		        'company_name.required' 	=> 'Please enter company name',
 		        'company_category.required' => 'Please select company category',
 		        'company_address.required' 	=> 'Please enter company address',
@@ -2245,67 +2233,36 @@ class CompanyController extends Controller
 
 			if( count( $company ) == 0 )
 			{
-				// Step I: Add the user
-				// Step II: Add the role_user to sales representative
-				// Step III: Add the company
-				// Step IV: map the user to company
-
 				// Begin transaction
 				DB::beginTransaction();
 
-				// Add the user
-				$user = new User;
+				// Add the company
+				$company = new Company;
 
-				$user->email 		= $companyDetails['representative_email'];
-				$user->fname 		= $companyDetails['representative_fname'];
-				$user->lname 		= $companyDetails['representative_lname'];
-				$user->password 	= Hash::make($companyDetails['representative_password']);
-				$user->status 		= '1';
-				$user->created_by 	= $userId;
+				$company->company_name 			= $companyDetails['company_name'];	
+				$company->company_category_id 	= $companyDetails['company_category'];
+				$company->address1	 			= $companyDetails['company_address1'];
+				$company->address2	 			= $companyDetails['company_address2'];
+				$company->province_id 			= $companyDetails['company_province'];
+				$company->city_id 				= $companyDetails['company_city'];
+				$company->country_id 			= $companyDetails['company_country'];
+				$company->postal_code 			= $companyDetails['company_postalcode'];
+				$company->status 				= $companyDetails['company_status'];
+				$company->created_by 			= $userId;
 
-				if( $user->save() )
+				if( $company->save() )
 				{
-					// Add the role user
-					$user->attachRole(2);	// 2: company representative
+					DB::commit();
 
-					// Add the company
-					$company = new Company;
-
-					$company->company_name 			= $companyDetails['company_name'];	
-					$company->company_category_id 	= $companyDetails['company_category'];
-					$company->address1	 			= $companyDetails['company_address1'];
-					$company->address2	 			= $companyDetails['company_address2'];
-					$company->province_id 			= $companyDetails['company_province'];
-					$company->city_id 				= $companyDetails['company_city'];
-					$company->country_id 			= $companyDetails['company_country'];
-					$company->postal_code 			= $companyDetails['company_postalcode'];
-					$company->status 				= $companyDetails['company_status'];
-					$company->created_by 			= $userId;
-
-					if( $company->save() )
-					{
-						// Map the user to company
-						$user->company()->attach($company->id);
-
-						DB::commit();
-
-						$response['errCode']    = 0;
-				        $response['errMsg']     = 'Company added successfully';
-					}
-					else
-					{
-						DB::rollBack();
-
-						$response['errCode']    = 3;
-		        		$response['errMsg']     = 'Some error in adding the company';
-					}
+					$response['errCode']    = 0;
+			        $response['errMsg']     = 'Company added successfully';
 				}
 				else
 				{
 					DB::rollBack();
 
 					$response['errCode']    = 3;
-		        	$response['errMsg']     = 'Some error in adding the company';
+	        		$response['errMsg']     = 'Some error in adding the company';
 				}
 			}
 			else
@@ -2325,11 +2282,7 @@ class CompanyController extends Controller
      */
     public function updateCompanyDetails(Request $request)
     {
-
     	$companyImage   		= $request->file('fileData');
-    	$representative_fname   = $request->input('representative_fname');
-    	$representative_lname   = $request->input('representative_lname');
-    	$representative_email   = $request->input('representative_email');
     	$company_name  			= $request->input('company_name');
     	$company_id    			= $request->input('company_id');
     	$company_category    	= $request->input('company_category');
@@ -2349,8 +2302,6 @@ class CompanyController extends Controller
 
 		$validation = Validator::make(
 		    array(
-		        'rep_fname'			=> $representative_fname,
-		        'rep_email'			=> $representative_email,
 		        'company_name'		=> $company_name,
 		        'company_category'	=> $company_category,
 		        'company_address'	=> $company_address1,
@@ -2361,8 +2312,6 @@ class CompanyController extends Controller
 		        'company_status'	=> $company_status,
 		    ),
 		    array(
-		        'rep_fname'			=> array('required'),
-		        'rep_email'			=> array('required', 'email'),
 		        'company_name'		=> array('required'),
 		        'company_category'	=> array('required'),
 		        'company_address'	=> array('required'),
@@ -2373,9 +2322,6 @@ class CompanyController extends Controller
 		        'company_status'	=> array('required')
 		    ),
 		    array(
-		        'rep_fname.required' 		=> 'Please enter representative first name',
-		        'rep_email.required' 		=> 'Please enter representative email',
-		        'rep_email.email' 			=> 'Please enter valid representative email',
 		        'company_name.required' 	=> 'Please enter company name',
 		        'company_category.required' => 'Please select company category',
 		        'company_address.required' 	=> 'Please enter company address',
@@ -2401,7 +2347,6 @@ class CompanyController extends Controller
 		{
 			if(!is_null($companyImage) && ($companyImage->getSize() > 0))
 			{
-
 				// Image destination folder
 				$destinationPath = storage_path() . '/uploads/company';
 				if( $companyImage->isValid() )  // If the file is valid or not
@@ -2462,33 +2407,12 @@ class CompanyController extends Controller
 
 				if( $company->save() )
 				{
-					$userDetails = DB::table('users as t1')
-							            ->join('company_user as t2', 't1.id', '=', 't2.user_id')
-							            ->join('role_user as t3', 't3.user_id', '=', 't1.id')
-							            ->select('t1.id')
-							            ->where('t3.role_id', '2')
-							            ->first();
-
-					$user = User::find($userDetails->id);
-
-					$user->email 		= $representative_email;
-					$user->fname 		= $representative_fname;
-					$user->lname 		= $representative_lname;
-					$user->updated_by 	= $userId;
-
-					if( $user->save() )
-					{
-						$response['errCode']    = 0;
-				        $response['errMsg']     = 'Company details updated successfully';
-
-					} else {
-
-						$response['errCode']    = 3;
-	        			$response['errMsg']     = 'Some error in updating the company details';
-					}
-				} else {
-
-					$response['errCode']    = 3;
+					$response['errCode']    = 0;
+				    $response['errMsg']     = 'Company details updated successfully';	
+				}
+				else
+				{
+					$response['errCode']    = 1;
 	        		$response['errMsg']     = 'Some error in updating the company details';
 				}
 			}
@@ -2514,41 +2438,36 @@ class CompanyController extends Controller
         $arr = array(
             0 => 't1.id',
             1 => 't1.company_name',
+            2 => 't2.category',
+            3 => 't1.address1',
+            4 => 't3.name',
+            5 => 't4.name',
             6 => 't1.status'
         );
 
         // Map the sorting column index to the column name
         $sortBy = $arr[$col];
 
-        $companies 	= DB::select(
-                        DB::raw(
-                        	"SELECT t1.id, t1.company_name, t1.status, t3.email, t3.fname, CONCAT_WS(' ', t3.fname, t3.lname) AS rep_name, 
-							t5.category,
-							t6.name AS province
-							FROM companies AS t1 
-							LEFT JOIN company_user AS t2 ON t1.id = t2.company_id 
-							LEFT JOIN users AS t3 ON t2.user_id = t3.id 
-							LEFT JOIN role_user AS t4 on t4.user_id = t3.id 
-							LEFT JOIN company_categories AS t5 ON t1.company_category_id = t5.id 
-							LEFT JOIN provinces AS t6 ON t1.province_id = t6.id 
-							LEFT JOIN cities AS t7 ON t1.city_id = t7.id 
-							WHERE t4.role_id = 2 AND t1.company_name LIKE ('%". $sSearch ."%')
-                        	ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
-                        )
-                    );
+		$companies = DB::select(
+            DB::raw("
+            	SELECT t1.id, t1.company_name, t1.address1, t1.status, t2.category, t3.name as province, t4.name as city FROM companies AS t1 
+            	LEFT JOIN company_categories as t2 ON t1.company_category_id = t2.id 
+            	LEFT JOIN provinces as t3 ON t1.province_id = t3.id 
+            	LEFT JOIN cities as t4 ON t1.city_id = t4.id
+            	WHERE t1.company_name LIKE ('%". $sSearch ."%')
+                ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
+            )
+        );
 
         $companiesCount = DB::select(
-                            DB::raw("
-                            SELECT t1.id
-							FROM companies AS t1 
-							LEFT JOIN company_user AS t2 ON t1.id = t2.company_id 
-							LEFT JOIN users AS t3 ON t2.user_id = t3.id 
-							LEFT JOIN role_user AS t4 on t4.user_id = t3.id 
-							LEFT JOIN company_categories AS t5 ON t1.company_category_id = t5.id 
-							LEFT JOIN provinces AS t6 ON t1.province_id = t6.id 
-							LEFT JOIN cities AS t7 ON t1.city_id = t7.id 
-							WHERE t4.role_id = 2 AND t1.company_name LIKE ('%". $sSearch ."%')")
-                        );
+            DB::raw("
+            	SELECT t1.id FROM companies AS t1 
+            	LEFT JOIN company_categories as t2 ON t1.company_category_id = t2.id 
+            	LEFT JOIN provinces as t3 ON t1.province_id = t3.id 
+            	LEFT JOIN cities as t4 ON t1.city_id = t4.id
+            	WHERE t1.company_name LIKE ('%". $sSearch ."%')
+            ")
+        );
 
    	    // Assign it to the datatable pagination variable
    	    $iTotal = count($companiesCount);
@@ -2568,9 +2487,9 @@ class CompanyController extends Controller
    	                0 => $company->id,
    	                1 => ucwords( strtolower( $company->company_name ) ),
    	                2 => ucwords( strtolower( $company->category ) ),
-   	                3 => ucfirst( strtolower( $company->province ) ),
-   	                4 => ucwords( strtolower( $company->rep_name ) ),
-   	                5 => $company->email,
+   	                3 => $company->address1,
+   	                4 => ucfirst( strtolower( $company->province ) ),
+   	                5 => ucfirst( strtolower( $company->city ) ),
    	                6 => Helper::getStatusText($company->status),
    	                7 => '<a href="javascript:void(0);" id="'. $company->id .'" class="edit_company"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
    	            );
@@ -2610,7 +2529,7 @@ class CompanyController extends Controller
 	    		$response['status'] 			= $companyDetails->status;
 
 	    		if( $companyDetails->image != '' ) {
-					$response['image'] = url('/images/agents/'.$companyDetails->image);
+					$response['image'] = url('/images/company/'.$companyDetails->image);
 				} else {
 					$response['image'] = url('/images/no_image.jpg');
 				}

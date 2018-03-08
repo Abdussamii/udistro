@@ -2786,21 +2786,6 @@ $(document).ready(function(){
 
 	$('#frm_add_company').validate({
 	    rules: {
-	        representative_fname: {
-	            required: true
-	        },
-	        representative_email: {
-	        	required: true,
-	        	email: true
-	        },
-	        representative_password: {
-	        	required: true,
-	        	minlength: 6,
-	        	atLeastOneLowercaseLetter: true,
-	        	atLeastOneUppercaseLetter: true,
-	        	atLeastOneNumber: true,
-	        	atLeastOneSymbol: true
-	        },
 	        company_name: {
 	        	required: true
 	        },
@@ -2827,17 +2812,6 @@ $(document).ready(function(){
 	        }
 	    },
 	    messages: {
-	        representative_fname: {
-	            required: 'Please enter representative first name'
-	        },
-	        representative_email: {
-	        	required: 'Please enter representative email',
-	        	email: 'Please enter valid representative email'
-	        },
-	        representative_password: {
-	        	required: 'Please enter password',
-                minlength: 'Password must contain atleat 6 characters'
-	        },
 	        company_name: {
 	        	required: 'Please enter company name'
 	        },
@@ -2907,17 +2881,16 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanies',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 6, 7] }
         ],
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
-            { 'bSortable' : false },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
+            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : false }
         ]
@@ -2962,7 +2935,8 @@ $(document).ready(function(){
                     $('#frm_edit_company #company_country_edit').val(response.country_id);
 
 			    	$('#frm_edit_company #postcode_edit').val(response.postal_code);
-			    	$('#frm_edit_company input[name="company_status"][value="'+ response.status +'"]').prop('checked', true);
+			    	
+			    	$('#frm_edit_company input[name="company_status_edit"][value="'+ response.status +'"]').prop('checked', true);
 
 			    	// Show the modal
 			    	$('#modal_edit_company').modal('show');
@@ -3074,9 +3048,6 @@ $(document).ready(function(){
 		{
             // Ajax call to save the page related data
             var $this = $(this);
-            var representative_fname    = $('#frm_edit_company #representative_fname').val();
-            var representative_lname    = $('#frm_edit_company #representative_lname').val();
-            var representative_email    = $('#frm_edit_company #representative_email').val();
             var company_name            = $('#frm_edit_company #company_name').val();
             var company_id              = $('#frm_edit_company #company_id').val();
             var company_category        = $("#frm_edit_company #company_category").val();
@@ -3092,9 +3063,6 @@ $(document).ready(function(){
             // Create form data object and append the values into it
             var formData = new FormData();
             formData.append('fileData', fileData);
-            formData.append('representative_fname', representative_fname);
-            formData.append('representative_lname', representative_lname);
-            formData.append('representative_email', representative_email);
             formData.append('company_name', company_name);
             formData.append('company_id', company_id);
             formData.append('company_category', company_category);

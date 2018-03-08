@@ -14,8 +14,8 @@
 	var fields = [
 		{ element: "street-address", field: "Line1" },
 		{ element: "street-address2", field: "Line2", mode: pca.fieldMode.POPULATE },
-		{ element: "city", field: "City", mode: pca.fieldMode.POPULATE },
-		{ element: "state", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
+		{ element: "company_city", field: "City", mode: pca.fieldMode.POPULATE },
+		{ element: "company_province", field: "ProvinceName", mode: pca.fieldMode.POPULATE },
 		{ element: "postcode", field: "PostalCode" },
 		{ element: "country", field: "CountryName", mode: pca.fieldMode.COUNTRY }
 	],
@@ -23,18 +23,6 @@
 		key: "kp88-mx67-ff25-xd59"
 	},
 	control = new pca.Address(fields, options);
-
-	// On the selesction of address get the province abbreviation, and set it on the province dropdown
-	control.listen("populate", function (address) {
-
-	    $("#company_province option").each(function() {
-			if($(this).data('abbreviation') == address.Province)
-			{
-				$(this).attr('selected', 'selected').change();
-			}
-		});
-
-	});
 
 	var fields1 = [
 		{ element: "street-address_edit", field: "Line1" },
@@ -86,27 +74,13 @@
 	      	<!-- Table to show all the cities -->
 			<table id="datatable_companies" class="table table-striped">
 				<thead>
-					<!-- <tr>
+					<tr>
 						<td>#</td>
 						<td>Company Name</td>
 						<td>Category</td>
 						<td>Address</td>
 						<td>Province</td>
 						<td>City</td>
-						<td>Postal Code</td>
-						<td>Representative Name</td>
-						<td>Email</td>
-						<td>Status</td>
-						<td>Action</td>
-					</tr> -->
-
-					<tr>
-						<td>#</td>
-						<td>Company Name</td>
-						<td>Category</td>
-						<td>Province</td>
-						<td>Representative Name</td>
-						<td>Email</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>
@@ -126,32 +100,6 @@
 
 					<div class="modal-body">
 						<form name="frm_add_company" id="frm_add_company" autocomplete="off">
-							<legend>Representative Information</legend>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="representative_fname">First Name</label>
-								  		<input type="text" name="representative_fname" id="representative_fname" class="form-control" placeholder="First Name">
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="representative_lname">Last Name</label>
-								  		<input type="text" name="representative_lname" id="representative_lname" class="form-control" placeholder="Last Name">
-								  	</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="row">
-								  	<div class="col-sm-6">
-								  		<label for="representative_email">Email</label>
-								  		<input type="text" name="representative_email" id="representative_email" class="form-control" placeholder="Representative Email">
-								  	</div>
-								  	<div class="col-sm-6">
-								  		<label for="representative_password">Password</label>
-								  		<input type="password" name="representative_password" id="representative_password" class="form-control" placeholder="Password">
-								  	</div>
-								</div>
-							</div>
-
 							<legend>Company Information</legend>
 							<div class="form-group">
 								<label for="company_name">Company Name</label>
@@ -275,28 +223,6 @@
 						<div class="row">
 							<form name="frm_edit_company" id="frm_edit_company" autocomplete="off">
 								<div class="col-sm-9">
-									<legend>Representative Information</legend>
-									<div class="form-group">
-										<div class="row">
-										  	<div class="col-sm-6">
-										  		<label for="representative_fname">First Name</label>
-										  		<input type="text" name="representative_fname" id="representative_fname" class="form-control" placeholder="First Name">
-										  	</div>
-										  	<div class="col-sm-6">
-										  		<label for="representative_lname">Last Name</label>
-										  		<input type="text" name="representative_lname" id="representative_lname" class="form-control" placeholder="Last Name">
-										  	</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="row">
-										  	<div class="col-sm-6">
-										  		<label for="representative_email">Email</label>
-										  		<input type="text" name="representative_email" id="representative_email" class="form-control" placeholder="Representative Email">
-										  	</div>
-										</div>
-									</div>
-
 									<legend>Company Information</legend>
 									<div class="form-group">
 										<label for="company_name">Company Name</label>
