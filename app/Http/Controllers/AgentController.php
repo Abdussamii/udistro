@@ -38,6 +38,7 @@ use App\AgentClientInvite;
 use App\ForgotPassword;
 use App\EmailTemplateCategory;
 use App\AgentClientRating;
+use App\PaymentPlanSubscription;
 
 use Validator;
 use Helper;
@@ -122,83 +123,100 @@ class AgentController extends Controller
 			{
 		        if( $user->hasRole(['agent']) )	// list of allowed users
 		        {
-		        	// Check for the login count attempt
-		        	$loginAttempt = Helper::loginAttempt($user->id, date('Y-m-d H:i:s'));
 
-		        	if( $loginAttempt['errCode'] == 0 )
-		        	{
-			        	if(Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember))
-			            {
-			                // Get the logged-in user id
-			                $userId = Auth::id();
+		        	// Check if a valid payment plan exit or not
+		        	$currDate = date('Y-m-d');
 
-			                // If user credentials are valid, update the last_login time in users table.
-			                $user = User::find($userId);
-			                $user->last_login = date('Y-m-d H:i:s');
-			                $user->update();
+		        	$paymentPlanSubscription = 	PaymentPlanSubscription::where(['plan_type_id' => '1', 'subscriber_id' => $user->id, 'status' => '1'])
+		        								->where('start_date', '<=', $currDate)
+    											->where('end_date', '>=', $currDate)
+    											->first();
 
-			                // Update the login attempt count to zero
-    	            		$attemptDetails = LoginAttempt::where(['user_id' => $user->id])->first();
+    				if( count( $paymentPlanSubscription ) > 0 )
+    				{
+			        	// Check for the login count attempt
+			        	$loginAttempt = Helper::loginAttempt($user->id, date('Y-m-d H:i:s'));
 
-			            	if( count( $attemptDetails ) == 0 )		// Add the data
-			            	{
-			            		$loginAttempt = new LoginAttempt;
+			        	if( $loginAttempt['errCode'] == 0 )
+			        	{
+				        	if(Auth::attempt(['email' => $loginData['username'], 'password' => $loginData['password'], 'status' => '1'], $remember))
+				            {
+				                // Get the logged-in user id
+				                $userId = Auth::id();
 
-			            		$loginAttempt->user_id 		= $user->id;
-			            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
-				            	$loginAttempt->count 		= 0;
+				                // If user credentials are valid, update the last_login time in users table.
+				                $user = User::find($userId);
+				                $user->last_login = date('Y-m-d H:i:s');
+				                $user->update();
 
-				            	$loginAttempt->save();
-			            	}
-			            	else 									// Update the data
-			            	{
-			            		$loginAttempt = LoginAttempt::find($attemptDetails->id);
+				                // Update the login attempt count to zero
+	    	            		$attemptDetails = LoginAttempt::where(['user_id' => $user->id])->first();
 
-			            		$loginAttempt->user_id 		= $user->id;
-			            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
-				            	$loginAttempt->count 		= $attemptDetails->count + 1;
+				            	if( count( $attemptDetails ) == 0 )		// Add the data
+				            	{
+				            		$loginAttempt = new LoginAttempt;
 
-				            	$loginAttempt->save();
-			            	}
+				            		$loginAttempt->user_id 		= $user->id;
+				            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
+					            	$loginAttempt->count 		= 0;
 
-			                $response['errCode']    = 0;
-			                $response['errMsg']     = 'Successful login';
-			            }
-			            else
-			            {
-			            	// Add/Update the login attempt count
-			            	$attemptDetails = LoginAttempt::where(['user_id' => $user->id])->first();
+					            	$loginAttempt->save();
+				            	}
+				            	else 									// Update the data
+				            	{
+				            		$loginAttempt = LoginAttempt::find($attemptDetails->id);
 
-			            	if( count( $attemptDetails ) == 0 )		// Add the data
-			            	{
-			            		$loginAttempt = new LoginAttempt;
+				            		$loginAttempt->user_id 		= $user->id;
+				            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
+					            	$loginAttempt->count 		= $attemptDetails->count + 1;
 
-			            		$loginAttempt->user_id 		= $user->id;
-			            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
-				            	$loginAttempt->count 		= 0;
+					            	$loginAttempt->save();
+				            	}
 
-				            	$loginAttempt->save();
-			            	}
-			            	else 									// Update the data
-			            	{
-			            		$loginAttempt = LoginAttempt::find($attemptDetails->id);
+				                $response['errCode']    = 0;
+				                $response['errMsg']     = 'Successful login';
+				            }
+				            else
+				            {
+				            	// Add/Update the login attempt count
+				            	$attemptDetails = LoginAttempt::where(['user_id' => $user->id])->first();
 
-			            		$loginAttempt->user_id 		= $user->id;
-			            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
-				            	$loginAttempt->count 		= $attemptDetails->count + 1;
+				            	if( count( $attemptDetails ) == 0 )		// Add the data
+				            	{
+				            		$loginAttempt = new LoginAttempt;
 
-				            	$loginAttempt->save();
-			            	}
+				            		$loginAttempt->user_id 		= $user->id;
+				            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
+					            	$loginAttempt->count 		= 0;
 
-			                $response['errCode']    = 2;
-			                $response['errMsg']     = 'Invalid user credentials';
-			            }
-		        	}
-		        	else
-		        	{
-		        		$response['errCode']    = 5;
-			            $response['errMsg']     = $loginAttempt['errMsg'];
-		        	}
+					            	$loginAttempt->save();
+				            	}
+				            	else 									// Update the data
+				            	{
+				            		$loginAttempt = LoginAttempt::find($attemptDetails->id);
+
+				            		$loginAttempt->user_id 		= $user->id;
+				            		$loginAttempt->last_login	= date('Y-m-d H:i:s');
+					            	$loginAttempt->count 		= $attemptDetails->count + 1;
+
+					            	$loginAttempt->save();
+				            	}
+
+				                $response['errCode']    = 2;
+				                $response['errMsg']     = 'Invalid user credentials';
+				            }
+			        	}
+			        	else
+			        	{
+			        		$response['errCode']    = 5;
+				            $response['errMsg']     = $loginAttempt['errMsg'];
+			        	}
+    				}
+    				else
+    				{
+    					$response['errCode']    = 5;
+	           			$response['errMsg']     = 'Your payment plan expired, please purchase a new plan';
+    				}
 		        }
 		        else
 		        {
@@ -2540,6 +2558,7 @@ class AgentController extends Controller
 
     	// Get the payment plan list
     	$paymentPlans 	= PaymentPlan::where(['plan_type_id' => '1', 'status' => '1'])	// plan_type_id : 1 is for agent
+    					->orderBy('plan_name', 'asc')
     					->select('id', 'plan_name', 'plan_charges', 'discount', 'validity_days', 'allowed_count')
     					->get();
 

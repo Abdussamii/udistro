@@ -484,7 +484,7 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	Route::get('/getresponsetimeslotdetails', 'AdminController@getResponseTimeSlotDetails');
 
 	// To return the company representative view
-	Route::get('/companyrepresentative', 'CompanyController@companyrepresentative');
+	Route::get('/companyrepresentatives', 'CompanyController@companyRepresentatives');
 
 	// To fetch the company representative list and show in datatable
 	Route::get('/fetchcompanyrepresentatives', 'CompanyController@fetchCompanyRepresentatives');

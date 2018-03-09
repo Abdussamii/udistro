@@ -169,7 +169,7 @@
                                     <a href="{{ url('/administrator/agents') }}"> Agents</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/administrator/companyrepresentative') }}"> Company Representative</a>
+                                    <a href="{{ url('/administrator/companyrepresentatives') }}"> Company Representative</a>
                                 </li>
                                 <!-- <li>
                                     <a href="{{ url('/administrator/industrytype') }}"> Industry Type</a>

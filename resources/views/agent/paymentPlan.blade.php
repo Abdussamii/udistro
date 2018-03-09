@@ -95,9 +95,9 @@
 								</strong>
 								</p>
 							</div>
-		                  	<div class="panel-footer">
+		                  	<!-- <div class="panel-footer">
 		                  		<a class="btn btn-lg btn-default light-seegreen_btn agent_plan_selection" href="javascript:void(0);" id="{{ $plan->id }}">Select</a>
-		                  	</div>
+		                  	</div> -->
 		                </div>
 		            </div>
 	        	<?php

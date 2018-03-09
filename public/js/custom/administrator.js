@@ -3161,13 +3161,7 @@ $(document).ready(function(){
 	        agent_address: {
 	            required: true
 	        },
-	        agent_province: {
-	            required: true
-	        },
-	        agent_city: {
-	        	required: true
-	        },
-	        agent_postalcode: {
+	        agent_payment_plan: {
 	        	required: true
 	        },
 			company_status: {
@@ -3195,14 +3189,8 @@ $(document).ready(function(){
 	        agent_address: {
 	            required: 'Please enter address'
 	        },
-	        agent_province: {
-	            required: 'Please select province'
-	        },
-	        agent_city: {
-	        	required: 'Please select city'
-	        },
-	        agent_postalcode: {
-	        	required: 'Please enter postal code'
+	        agent_payment_plan: {
+	        	required: 'Please select a payment plan'
 	        },
 			company_status: {
 	        	required: 'Please select status'	
@@ -3254,12 +3242,13 @@ $(document).ready(function(){
 	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchagents',
 	    
 	    "columnDefs": [
-	        { "className": "dt-center", "targets": [ 0, 5, 6 ] }
+	        { "className": "dt-center", "targets": [ 0, 6, 7 ] }
 	    ],
 	    "aoColumns": [
 	        { 'bSortable' : true },
 	        { 'bSortable' : true },
 	        { 'bSortable' : true },
+	        { 'bSortable' : false },
 	        { 'bSortable' : false },
 	        { 'bSortable' : false },
 	        { 'bSortable' : true },
@@ -3308,6 +3297,9 @@ $(document).ready(function(){
 			    	// Fill the user type
 			    	$('#frm_edit_agent #user_type').val(userType);
 
+			    	// payment plan 
+			    	$('#frm_edit_agent #agent_edit_payment_plan').val(response.paymentPlan);
+
 			    	// Show the modal
 			    	$('#modal_edit_agent').modal('show');
 			    }
@@ -3348,6 +3340,9 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: true	
+	        },
+	        company_representative_payment_plan: {
+	        	required: true	
 	        }
 	    },
 	    messages: {
@@ -3373,8 +3368,46 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: 'Please select status'	
+	        },
+	        company_representative_payment_plan: {
+	        	required: 'Please select payment plan'	
 	        }
 	    }
+	});
+
+	// Save the company representative data
+	$('#btn_add_company_representative').click(function(){
+		if( $('#frm_add_company_representative').valid() )
+		{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/savecompanyrepresentative',
+    			method: 'post',
+    			data: {
+    				frmData: $('#frm_add_company_representative').serialize()
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+						
+			    		// Refresh the form and close the modal
+			    		$('#frm_add_company_representative')[0].reset();
+
+			    		$('#modal_add_company_representative').modal('hide');
+
+			    		// Refresh the datatable
+			    		$('#datatable_agents').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+		}
 	});
 
 	// To update the company representative details
@@ -3417,46 +3450,14 @@ $(document).ready(function(){
 			    	// Fill the user type
 			    	$('#frm_edit_company_representative #user_type').val(userType);
 
+			    	// Make the payment plaan selected
+			    	$('#frm_edit_company_representative #company_representative_edit_payment_plan').val(response.paymentPlan);
+
 			    	// Show the modal
 			    	$('#modal_edit_company_representative').modal('show');
 			    }
 			});
     	}
-	});
-
-	// Save the company representative data
-	$('#btn_add_company_representative').click(function(){
-		if( $('#frm_add_company_representative').valid() )
-		{
-    		$.ajax({
-    			url: $('meta[name="route"]').attr('content') + '/administrator/savecompanyrepresentative',
-    			method: 'post',
-    			data: {
-    				frmData: $('#frm_add_company_representative').serialize()
-    			},
-    			headers: {
-			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-			    success: function(response){
-			    	if( response.errCode == 0 )
-			    	{
-			    		alertify.success( response.errMsg );
-						
-			    		// Refresh the form and close the modal
-			    		$('#frm_add_company_representative')[0].reset();
-
-			    		$('#modal_add_company_representative').modal('hide');
-
-			    		// Refresh the datatable
-			    		$('#datatable_agents').DataTable().ajax.reload();
-			    	}
-			    	else
-			    	{
-			    		alertify.error( response.errMsg );
-			    	}
-			    }
-    		});
-		}
 	});
 
 	// To update company representative details
@@ -4732,12 +4733,13 @@ $(document).ready(function(){
 	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanyrepresentatives',
 	    
 	    "columnDefs": [
-	        { "className": "dt-center", "targets": [ 0, 5, 6 ] }
+	        { "className": "dt-center", "targets": [ 0, 6, 7 ] }
 	    ],
 	    "aoColumns": [
 	        { 'bSortable' : true },
 	        { 'bSortable' : true },
 	        { 'bSortable' : true },
+	        { 'bSortable' : false },
 	        { 'bSortable' : false },
 	        { 'bSortable' : false },
 	        { 'bSortable' : true },
