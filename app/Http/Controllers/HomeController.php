@@ -194,69 +194,77 @@ class HomeController extends Controller
 		}
 		else
 		{
-			// Check if the selected date is 15 days ahead or not
-			$futureDate 	= date('d-m-Y', strtotime('+15 days'));
-			$selectedDate 	= date('d-m-Y', strtotime($invitationDetails['moving_date']));
-
-			if( $selectedDate < $futureDate )
+			if( $systemAgentId != 0 )
 			{
-				$response['errCode']    = 2;
-		        $response['errMsg']     = 'Please select atleast 15 days ahead date';
+				// Check if the selected date is 15 days ahead or not
+				$futureDate 	= date('d-m-Y', strtotime('+15 days'));
+				$selectedDate 	= date('d-m-Y', strtotime($invitationDetails['moving_date']));
+
+				if( $selectedDate < $futureDate )
+				{
+					$response['errCode']    = 2;
+			        $response['errMsg']     = 'Please select atleast 15 days ahead date';
+				}
+				else
+				{
+					DB::beginTransaction();
+
+			    	$agentClient = new AgentClient;
+
+			    	$agentClient->agent_id 		= $systemAgentId;
+			    	$agentClient->fname 		= $invitationDetails['fname'];
+			    	$agentClient->lname 		= $invitationDetails['lname'];
+			    	$agentClient->email 		= $invitationDetails['email'];
+			    	$agentClient->contact_number= $invitationDetails['mobile'];
+			    	$agentClient->status 		= '1';
+
+			    	if( $agentClient->save() )
+			    	{
+			    		$movingFromAddress 	= new AgentClientMovingFromAddress([
+			    			'address1' 		=> $invitationDetails['moving_from_address1'],
+			    			'address2' 		=> $invitationDetails['moving_from_address2'],
+			    			'province_id' 	=> $invitationDetails['moving_from_province'],
+			    			'city_id' 		=> $invitationDetails['moving_from_city'],
+			    			'postal_code' 	=> $invitationDetails['moving_from_postalcode'],
+			    			'country_id' 	=> $invitationDetails['moving_from_country'],
+			    			'status' 		=> '1',
+			    			'created_by' 	=> $systemAgentId,
+			    		]);
+
+			    		$movingToAddress 	= new AgentClientMovingToAddress([
+			    			'address1' 		=> $invitationDetails['moving_to_address1'],
+			    			'address2' 		=> $invitationDetails['moving_to_address2'],
+			    			'province_id' 	=> $invitationDetails['moving_to_province'],
+			    			'city_id' 		=> $invitationDetails['moving_to_city'],
+			    			'postal_code' 	=> $invitationDetails['moving_to_postalcode'],
+			    			'country_id' 	=> $invitationDetails['moving_to_country'],
+			    			'moving_date'	=> date('Y-m-d', strtotime($invitationDetails['moving_date'])),
+			    			'status' 		=> '1',
+			    			'created_by' 	=> $systemAgentId,
+			    		]);
+
+			    		$agentClient->movingFromAddress()->save($movingFromAddress);
+
+			    		$agentClient->movingToAddress()->save($movingToAddress);
+
+			    		DB::commit();
+
+			    		$response['errCode']    = 0;
+			            $response['errMsg']     = 'Invitation details saved successfully';
+			    	}
+			    	else
+			        {
+			        	DB::rollBack();
+
+			            $response['errCode']    = 3;
+			            $response['errMsg']     = 'Some issue in sending invitation';
+			        }
+				}
 			}
 			else
 			{
-				DB::beginTransaction();
-
-		    	$agentClient = new AgentClient;
-
-		    	$agentClient->agent_id 		= $systemAgentId;
-		    	$agentClient->fname 		= $invitationDetails['fname'];
-		    	$agentClient->lname 		= $invitationDetails['lname'];
-		    	$agentClient->email 		= $invitationDetails['email'];
-		    	$agentClient->contact_number= $invitationDetails['mobile'];
-		    	$agentClient->status 		= '1';
-
-		    	if( $agentClient->save() )
-		    	{
-		    		$movingFromAddress 	= new AgentClientMovingFromAddress([
-		    			'address1' 		=> $invitationDetails['moving_from_address1'],
-		    			'address2' 		=> $invitationDetails['moving_from_address2'],
-		    			'province_id' 	=> $invitationDetails['moving_from_province'],
-		    			'city_id' 		=> $invitationDetails['moving_from_city'],
-		    			'postal_code' 	=> $invitationDetails['moving_from_postalcode'],
-		    			'country_id' 	=> $invitationDetails['moving_from_country'],
-		    			'status' 		=> '1',
-		    			'created_by' 	=> $systemAgentId,
-		    		]);
-
-		    		$movingToAddress 	= new AgentClientMovingToAddress([
-		    			'address1' 		=> $invitationDetails['moving_to_address1'],
-		    			'address2' 		=> $invitationDetails['moving_to_address2'],
-		    			'province_id' 	=> $invitationDetails['moving_to_province'],
-		    			'city_id' 		=> $invitationDetails['moving_to_city'],
-		    			'postal_code' 	=> $invitationDetails['moving_to_postalcode'],
-		    			'country_id' 	=> $invitationDetails['moving_to_country'],
-		    			'moving_date'	=> date('Y-m-d', strtotime($invitationDetails['moving_date'])),
-		    			'status' 		=> '1',
-		    			'created_by' 	=> $systemAgentId,
-		    		]);
-
-		    		$agentClient->movingFromAddress()->save($movingFromAddress);
-
-		    		$agentClient->movingToAddress()->save($movingToAddress);
-
-		    		DB::commit();
-
-		    		$response['errCode']    = 0;
-		            $response['errMsg']     = 'Invitation details saved successfully';
-		    	}
-		    	else
-		        {
-		        	DB::rollBack();
-
-		            $response['errCode']    = 3;
-		            $response['errMsg']     = 'Some issue in sending invitation';
-		        }
+				$response['errCode']    = 4;
+			    $response['errMsg']     = 'No system agent available';
 			}
 		}
 

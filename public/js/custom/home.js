@@ -4,6 +4,24 @@ $(document).ready(function(){
 
 	alertify.set('notifier','position', 'top-center');
 
+	// Validation to check the monbile number
+	$.validator.addMethod("canadaPhone", function (value, element) {
+		if( value != '' )
+		{
+		    var filter = /^((\+[1-9]{0,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+		    if (filter.test(value)) {
+		        return true;
+		    }
+		    else {
+		        return false;
+		    }
+		}
+		else
+		{
+			return true;
+		}
+	}, 'Please enter a valid number');
+
 	// Get invite form validation
 	$('#frm_get_invitation').submit(function(e){
 		e.preventDefault();
@@ -23,7 +41,8 @@ $(document).ready(function(){
 			},
 			mobile: {
 				required: true,
-				digits: true
+				digits: true,
+				canadaPhone: true
 			},
 			// Moving from address
 			moving_from_address1: {

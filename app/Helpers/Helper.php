@@ -10,6 +10,7 @@ use App\ClientActivityList;
 use App\ClientActivityLog;
 use App\PaymentPlanSubscription;
 use App\PaymentPlan;
+use App\User;
 
 class Helper
 {
@@ -419,6 +420,17 @@ class Helper
      */
     public static function getSystemAgent()
     {
-    	return 1000;
+    	// Udistro agent - invitation@udistro.ca
+
+    	$agent = User::where(['email' => 'invitation@udistro.ca', 'status' => '1'])->first();
+
+    	if( count( $agent ) > 0 )
+    	{
+    		return $agent->id;
+    	}
+    	else
+    	{
+    		return 0;
+    	}
     }
 }

@@ -112,7 +112,7 @@ address ul li i { margin-right: 10px; }
 .btn-default:hover:active { color: #7e869d !important; background-color: #f8f8f8 !important; border-color: #00bcea !important; }
 .inputBOXs { position: relation; }
 .inputBOXs i { position: absolute; left: 30px; color: #00bcea; top: 12px; }
-.inputBOXs input { height: auto; padding: 10px 14px 10px 50px; color: #7e869d; border: 1px solid #c3e1e9; text-transform: capitalize; }
+.inputBOXs input { height: auto; padding: 10px 14px 10px 50px; color: #7e869d; border: 1px solid #c3e1e9; /*text-transform: capitalize;*/ }
 .container.invitation-wrapper { width: 100%; }
 .getInvitation-wrap { width: 600px; margin: auto; }
 #frm_get_invitation label { width: 100%; text-align: left; font-size: 14px; }
