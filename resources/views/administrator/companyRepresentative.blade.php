@@ -7,6 +7,9 @@
 	<script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=kp88-mx67-ff25-xd59"></script>
 	<link rel="stylesheet" type="text/css" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.30.min.css?key=kp88-mx67-ff25-xd59" />
 
+	<!-- Tinymce -->
+	<script type="text/javascript" src="https://tinymce.cachefly.net/4.2/tinymce.min.js"></script>
+
 	<script type="text/javascript">
 		var fields = [
 			{ element: "company_representative_address1", field: "Line1" },
@@ -33,6 +36,15 @@
 			key: "kp88-mx67-ff25-xd59"
 		},
 		control = new pca.Address(fields, options);
+
+		$(document).ready(function(){
+	    	tinymce.init({
+	        selector: ".tinyMCE",
+	        height: "300",
+	        // For enabling diff plugin like file upload, create href link etc.
+	        // plugins : 'advlist autolink link image imagetools lists charmap print preview contextmenu textcolor colorpicker fullscreen hr insertdatetime media pagebreak save table textpattern wordcount visualchars'
+	    	});
+	    });
 	</script>
 
 	<div class="row">
@@ -63,6 +75,35 @@
 			</table>
 		</div>
     </div>
+
+    <!-- Modal to send email to the company representative with attachement -->
+    <div id="modal_send_company_representative_email" class="modal fade" role="dialog">
+      	<div class="modal-dialog">
+    	    <!-- Modal content-->
+    	    <div class="modal-content">
+    			<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal">&times;</button>
+    				<h4 class="modal-title">Send Email</h4>
+    			</div>
+
+    			<div class="modal-body">
+    				<form name="frm_send_company_representative_email" id="frm_send_company_representative_email" autocomplete="off">
+    					<div class="form-group">
+    						<label for="email_content">Email Content</label>
+    						<textarea name="email_content" id="email_content" class="form-control tinyMCE"></textarea>
+    						<input type="hidden" name="company_representative_id" id="company_representative_id" value="">
+    					</div>
+    					<div class="form-group">
+    						<label for="email_attachement">Email Attachement</label>
+    						<input type="file" name="email_attachement" id="email_attachement">
+    					</div>
+    					<button type="submit" id="btn_send_company_representative_email" name="btn_send_company_representative_email" class="btn btn-primary">Submit</button>
+    				</form>
+    			</div>
+    	    </div>
+      	</div>
+    </div>
+    <!-- Modal to send email to the company representative with attachement -->
 
     <!-- Modal to add company representative -->
     <div id="modal_add_company_representative" class="modal fade" role="dialog">

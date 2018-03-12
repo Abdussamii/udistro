@@ -4747,6 +4747,174 @@ $(document).ready(function(){
 	    ]
 	});
 
+	// Email notification to agent from admin
+	$(document).on('click', '.agent_notification_email', function(){
+
+		let agentId = $(this).attr('id');
+
+		// Set the agent id
+		$('#frm_send_agent_email #agent_id').val(agentId);
+
+		// Show the modal
+		$('#modal_send_agent_email').modal('show');
+	});
+
+	// Send email notification to agent from admin
+	$('#frm_send_agent_email').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_send_agent_email').validate({
+		rules: {
+			email_content: {
+				required: true
+			}
+		},
+		messages: {
+			email_content: {
+				required: 'Please enter some email content'
+			}
+		}
+	});
+	$('#btn_send_agent_email').click(function(){
+		if( $('#frm_send_agent_email').valid() )
+		{
+			var $this = $(this);
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+
+			// Upload the file and send it as an email attachement
+			let agentId 	= $('#agent_id').val();
+			let emailContent= tinymce.activeEditor.getContent();
+			let fileData 	= $('#email_attachement').prop('files')[0];
+
+			formData.append('agentId', agentId);
+			formData.append('emailContent', emailContent);
+            formData.append('fileData', fileData);
+
+            $.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/sendagentemailnotification',
+				method: 'post',
+				data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                	// Show the loading button
+                    $this.button('loading');
+                },
+                complete: function()
+                {
+                	// Change the button to previous
+                	$this.button('reset');
+                },
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Reset the form
+			    		$('#frm_send_agent_email')[0].reset();
+			    		$('#frm_send_agent_email #agent_id').val();
+
+			    		// Hide the modal
+			    		$('#modal_send_agent_email').modal('hide');
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+			});
+		}
+	});
+
+	// Email notification to company representative from admin
+	$(document).on('click', '.company_representative_notification_email', function(){
+
+		let companyRepId = $(this).attr('id');
+
+		// Set the company representative id
+		$('#frm_send_company_representative_email #company_representative_id').val(companyRepId);
+
+		// Show the modal
+		$('#modal_send_company_representative_email').modal('show');
+	});
+
+	// Send email notification to company representative from admin
+	$('#frm_send_company_representative_email').submit(function(e){
+		e.preventDefault();
+	});
+	$('#frm_send_company_representative_email').validate({
+		rules: {
+			email_content: {
+				required: true
+			}
+		},
+		messages: {
+			email_content: {
+				required: 'Please enter some email content'
+			}
+		}
+	});
+	$('#btn_send_company_representative_email').click(function(){
+		if( $('#frm_send_company_representative_email').valid() )
+		{
+			var $this = $(this);
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+
+			// Upload the file and send it as an email attachement
+			let companyRepId= $('#company_representative_id').val();
+			let emailContent= tinymce.activeEditor.getContent();
+			let fileData 	= $('#email_attachement').prop('files')[0];
+
+			formData.append('agentId', companyRepId);
+			formData.append('emailContent', emailContent);
+            formData.append('fileData', fileData);
+
+            $.ajax({
+				url: $('meta[name="route"]').attr('content') + '/administrator/sendagentemailnotification',
+				method: 'post',
+				data: formData,
+                contentType : false,
+                processData : false,
+                beforeSend: function() {
+                	// Show the loading button
+                    $this.button('loading');
+                },
+                complete: function()
+                {
+                	// Change the button to previous
+                	$this.button('reset');
+                },
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Reset the form
+			    		$('#frm_send_company_representative_email')[0].reset();
+			    		$('#frm_send_company_representative_email #agent_id').val();
+
+			    		// Hide the modal
+			    		$('#modal_send_company_representative_email').modal('hide');
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+			});
+		}
+	});
+
 });
 
 /**

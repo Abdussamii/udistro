@@ -509,6 +509,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To update Password
 	Route::post('/changepassword', 'AdminController@changePassword');
 
+	// To upload the file and send the email with attachement
+	Route::post('/sendagentemailnotification', 'EmailController@sendAgentEmailNotification');
+
 });
 
 /* ---------- Agent related functionality ---------- */

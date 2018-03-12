@@ -12,6 +12,7 @@ use App\AgentClient;
 
 use Helper;
 use Mail;
+use Validator;
 
 class EmailController extends Controller
 {
@@ -117,6 +118,149 @@ class EmailController extends Controller
 		{
 			$response['errCode']    = 1;
 			$response['errMsg']     = 'Your payment plan subscription is expired';
+		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to upload the file and send the email with attachement
+     * @param void
+     * @return array
+     */
+    public function sendAgentEmailNotification()
+    {
+    	$agentId     	= Input::get('agentId');
+    	$emailContent 	= Input::get('emailContent');
+    	$attachement	= Input::file('fileData');
+
+        $response =array();
+
+		$validation = Validator::make(
+		    array(
+		        'agentId'		=> $agentId,
+		        'emailContent'	=> $emailContent
+		    ),
+		    array(
+		        'agentId' 		=> array('required'),
+		        'emailContent' 	=> array('required')
+		    ),
+		    array(
+		        'agentId.required'		=> 'Missing required information',
+		        'emailContent.required' => 'Please select status'
+		    )
+		);
+
+		if ( $validation->fails() )
+		{
+			$error = $validation->errors()->first();
+
+		    if( isset( $error ) && !empty( $error ) )
+		    {
+		        $response['errCode']    = 1;
+		        $response['errMsg']     = $error;
+		    }
+		}
+		else
+		{
+			// Get the agent details
+        	$agentDetails = User::find($agentId);
+
+        	if( count( $agentDetails ) > 0 )
+        	{
+        		// Check if attachement is available. If available upload it and send it with email as an attachement
+        		if(!is_null($attachement) && ($attachement->getSize() > 0))
+        		{
+        			// Image destination folder
+        			$destinationPath = storage_path() . '/uploads/email_attachement';
+
+        			if( $attachement->isValid() )  // If the file is valid or not
+        			{
+        			    $fileExt  = $attachement->getClientOriginalExtension();
+        			    $fileType = $attachement->getMimeType();
+        			    $fileSize = $attachement->getSize();
+
+        			    if( $fileSize <= 1000000 ) 	// 1 MB = 1000000 Bytes
+        			    {
+        				    if( $fileType == 'application/pdf' )
+        				    {
+        				        // Rename the file
+        				        $fileNewName = str_random(40) . '.' . $fileExt;
+
+        				        if( $attachement->move( $destinationPath, $fileNewName ) )
+        				        {
+        				        	$pathToFile = $destinationPath . '/' . $fileNewName;
+
+        				        	// Send the email with attachement
+    				        		$emailData = array(
+    				        			// 'email' 	=> $agentDetails->email,
+    				        			'email' 	=> 'mayankpandey@virtualemployee.com',
+    				        			'name' 		=> ucwords( strtolower( $agentDetails->lname . ' ' . $agentDetails->fname ) ),
+    				        			'subject' 	=> 'Udistro Notification',
+    				        			'content'	=> $emailContent
+    				        		);
+
+    				        		Mail::send('emails.agentNotificationEmail', ['emailData' => $emailData], function ($m) use ($emailData, $pathToFile) {
+    				        	        $m->from('info@udistro.ca', 'Udistro');
+    				        	        
+    				        	        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+
+    				        	        $m->attach($pathToFile);
+    				        	    });
+
+        				        	$response['errCode']    = 0;
+        				        	$response['errMsg']     = 'Email sent successfully';
+        				        }
+        			        	else
+        			        	{
+        			        		$response['errCode']    = 3;
+        			                $response['errMsg']     = 'Some error in image upload';
+        			        	}
+        				    }
+        			    	else
+        			    	{
+        			    		$response['errCode']    = 4;
+        			            $response['errMsg']     = 'Invalid file type. Please select a pdf file';
+        			    	}
+        			    }
+        			    else
+        			    {
+        			    	$response['errCode']    = 5;
+        		        	$response['errMsg']     = 'File size exceed. Please upload a file less then 3 MB';
+        			    }
+        			}
+        			else
+        			{
+        				$response['errCode']    = 6;
+        		        $response['errMsg']     = 'Invalid file';
+        			}
+        		}
+        		else 	// No attachement available
+        		{
+        			// Send the email
+	        		$emailData = array(
+	        			// 'email' 	=> $agentDetails->email,
+	        			'email' 	=> 'mayankpandey@virtualemployee.com',
+	        			'name' 		=> ucwords( strtolower( $agentDetails->lname . ' ' . $agentDetails->fname ) ),
+	        			'subject' 	=> 'Udistro Notification',
+	        			'content'	=> $emailContent
+	        		);
+
+	        		Mail::send('emails.agentNotificationEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+	        	        $m->from('info@udistro.ca', 'Udistro');
+	        	        
+	        	        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+	        	    });
+
+		        	$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Email sent successfully';
+        		}	
+        	}
+        	else
+        	{
+        		$response['errCode']    = 7;
+        		$response['errMsg']     = 'Agent details missing';
+        	}
 		}
 
 		return response()->json($response);
