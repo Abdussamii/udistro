@@ -5,12 +5,25 @@ namespace App\Helpers;
 
 use Mail;
 
+use Illuminate\Support\Facades\DB;
+
 use App\LoginAttempt;
 use App\ClientActivityList;
 use App\ClientActivityLog;
 use App\PaymentPlanSubscription;
 use App\PaymentPlan;
 use App\User;
+
+use App\TechConciergeAppliancesServiceRequest;
+use App\TechConciergePlaceServiceRequest;
+use App\DigitalServiceTypeRequest;
+use App\DigitalAdditionalServiceTypeRequest;
+use App\HomeCleaningAdditionalServiceRequest;
+use App\HomeCleaningSteamingServiceRequest;
+use App\MovingItemDetailServiceRequest;
+use App\HomeCleaningOtherPlaceServiceRequest;
+use App\MovingOtherItemServiceRequest;
+use App\MovingTransportationTypeRequest;
 
 class Helper
 {
@@ -432,5 +445,286 @@ class Helper
     	{
     		return 0;
     	}
+    }
+
+
+    /**
+     * Function to calculate the receivable amount to the company for the job done by them
+     * @param void
+     * @return array
+     */
+    public static function calculateReceivableAmount($serviceRequestResponseId, $companyCategoryId)
+    {
+    	$totalAmount = number_format( ( 0 ), 2, '.', '');
+
+    	if( $companyCategoryId == '2' )			// Home Cleaning Service Company
+    	{
+    		$otherDetails = DB::table('home_cleaning_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
+    						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+    						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+    						->where(['t1.id' => $serviceRequestResponseId])
+    						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount')
+    						->first();
+
+    		// Get all the values and calculate the total amount
+    		$homeCleaningAdditionalServiceRequests 	= HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $otherDetails->id])->select('amount')->get();
+    		$homeCleaningOtherPlaceServiceRequests 	= HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $otherDetails->id])->select('amount')->get();
+    		$homeCleaningSteamingServiceRequests 	= HomeCleaningSteamingServiceRequest::where(['service_request_id' => $otherDetails->id])->select('amount')->get();
+
+    		$totalAmount= 0;
+    		$discount 	= 0;
+    		$gst = 0;
+    		$hst = 0;
+    		$pst = 0;
+    		$serviceCharge = 0;
+    		
+    		if( count( $homeCleaningAdditionalServiceRequests ) > 0 )
+    		{
+    			foreach( $homeCleaningAdditionalServiceRequests as $homeCleaningAdditionalServiceRequest )
+    			{
+    				$totalAmount += $homeCleaningAdditionalServiceRequest->amount;
+    			}
+    		}
+
+    		if( count( $homeCleaningOtherPlaceServiceRequests ) > 0 )
+    		{
+    			foreach( $homeCleaningOtherPlaceServiceRequests as $homeCleaningOtherPlaceServiceRequest )
+    			{
+    				$totalAmount += $homeCleaningOtherPlaceServiceRequest->amount;
+    			}
+    		}
+
+    		if( count( $homeCleaningSteamingServiceRequests ) > 0 )
+    		{
+    			foreach( $homeCleaningSteamingServiceRequests as $homeCleaningSteamingServiceRequest )
+    			{
+    				$totalAmount += $homeCleaningSteamingServiceRequest->amount;
+    			}
+    		}
+
+    		// Substract the discount
+    		$discount = $otherDetails->discount;
+    		$totalAmount = $totalAmount - $discount;
+
+    		// Calculate GST
+    		$gst = ( $totalAmount / 100 ) * $otherDetails->gst;
+
+    		// Calculate HST
+    		$hst = ( $totalAmount / 100 ) * $otherDetails->hst;
+
+    		// Calculate PST
+    		$pst = ( $totalAmount / 100 ) * $otherDetails->pst;
+
+    		// Calculate Service Charge
+    		// $serviceCharge = ( $totalAmount / 100 ) * $otherDetails->service_charge;
+
+    		// $totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+    		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst ), 2, '.', '');
+    	}
+    	else if( $companyCategoryId == '3' )	// Moving Company
+    	{
+    		$otherDetails = DB::table('moving_item_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.mover_company_id', '=', 't3.id')
+    						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+    						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+    						->where(['t1.id' => $serviceRequestResponseId])
+    						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount', 't1.insurance_amount')
+    						->first();
+
+    		// Get all the values and calculate the total amount
+    		$movingItemDetailServiceRequests 	= MovingItemDetailServiceRequest::where(['moving_items_service_id' => $otherDetails->id])->select('amount')->get();
+    		$movingOtherItemServiceRequests 	= MovingOtherItemServiceRequest::where(['moving_items_service_id' => $otherDetails->id])->select('amount')->get();
+    		$movingTransportationTypeRequests 	= MovingTransportationTypeRequest::where(['moving_items_services_id' => $otherDetails->id])->select('amount')->get();
+
+    		$totalAmount= 0;
+    		$discount 	= 0;
+    		$gst = 0;
+    		$hst = 0;
+    		$pst = 0;
+    		$serviceCharge = 0;
+    		
+    		if( count( $movingItemDetailServiceRequests ) > 0 )
+    		{
+    			foreach( $movingItemDetailServiceRequests as $movingItemDetailServiceRequest )
+    			{
+    				if( $movingItemDetailServiceRequest->amount != '' || !is_null( $movingItemDetailServiceRequest->amount ) )
+    				{
+    					$totalAmount += $movingItemDetailServiceRequest->amount;
+    				}
+    			}
+    		}
+
+    		if( count( $movingOtherItemServiceRequests ) > 0 )
+    		{
+    			foreach( $movingOtherItemServiceRequests as $movingOtherItemServiceRequest )
+    			{
+    				if( $movingOtherItemServiceRequest->amount != '' || !is_null( $movingOtherItemServiceRequest->amount ) )
+    				{
+    					$totalAmount += $movingOtherItemServiceRequest->amount;
+    				}
+    			}
+    		}
+
+    		if( count( $movingTransportationTypeRequests ) > 0 )
+    		{
+    			foreach( $movingTransportationTypeRequests as $movingTransportationTypeRequest )
+    			{
+    				if( $movingTransportationTypeRequest->amount != '' || !is_null( $movingTransportationTypeRequest->amount ) )
+    				{
+    					$totalAmount += $movingTransportationTypeRequest->amount;
+    				}
+    			}
+    		}
+
+    		// Add the amount value as well
+    		$insuranceAmount = 0;
+    		if( $otherDetails->insurance_amount != '' && !is_null( $otherDetails->insurance_amount ) )
+    		{
+    			$insuranceAmount = $otherDetails->insurance_amount;
+    		}
+    		$totalAmount += $insuranceAmount;
+
+    		// Substract the discount
+    		$discount = $otherDetails->discount;
+    		$totalAmount = $totalAmount - $discount;
+
+    		// Calculate GST
+    		$gst = ( $totalAmount / 100 ) * $otherDetails->gst;
+
+    		// Calculate HST
+    		$hst = ( $totalAmount / 100 ) * $otherDetails->hst;
+
+    		// Calculate PST
+    		$pst = ( $totalAmount / 100 ) * $otherDetails->pst;
+
+    		// Calculate Service Charge
+    		// $serviceCharge = ( $totalAmount / 100 ) * $otherDetails->service_charge;
+
+    		// $totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+    		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst ), 2, '.', '');
+    	}
+    	else if( $companyCategoryId == '4' )	// Internet & Cable Service provider
+    	{
+    		// Get the gst, hst, pst, service charge for the agent moving to address
+    		$otherDetails = DB::table('digital_service_requests as t1')
+            						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+            						->leftJoin('companies as t3', 't1.digital_service_company_id', '=', 't3.id')
+            						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+            						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+            						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+            						->where(['t1.id' => $serviceRequestResponseId])
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount')
+            						->first();
+
+    		$digitalServiceTypeRequests = DigitalServiceTypeRequest::where(['digital_service_request_id' => $serviceRequestResponseId])->select('amount')->get();
+    		$digitalAdditionalServiceTypeRequests = DigitalAdditionalServiceTypeRequest::where(['digital_service_request_id' => $serviceRequestResponseId])->select('amount')->get();
+
+    		$totalAmount= 0;
+    		$discount 	= 0;
+    		$gst = 0;
+    		$hst = 0;
+    		$pst = 0;
+    		$serviceCharge = 0;
+
+    		if( count( $digitalServiceTypeRequests ) > 0 )
+    		{
+    			foreach( $digitalServiceTypeRequests as $digitalServiceTypeRequest )
+    			{
+    				$totalAmount += $digitalServiceTypeRequest->amount;
+    			}
+    		}
+
+    		if( count( $digitalAdditionalServiceTypeRequests ) > 0 )
+    		{
+    			foreach( $digitalAdditionalServiceTypeRequests as $digitalAdditionalServiceTypeRequest )
+    			{
+    				$totalAmount += $digitalAdditionalServiceTypeRequest->amount;
+    			}
+    		}
+
+    		// Substract the discount
+    		$discount = $otherDetails->discount;
+    		$totalAmount = $totalAmount - $discount;
+
+    		// Calculate GST
+    		$gst = ( $totalAmount / 100 ) * $otherDetails->gst;
+
+    		// Calculate HST
+    		$hst = ( $totalAmount / 100 ) * $otherDetails->hst;
+
+    		// Calculate PST
+    		$pst = ( $totalAmount / 100 ) * $otherDetails->pst;
+
+    		// Calculate Service Charge
+    		// $serviceCharge = ( $totalAmount / 100 ) * $otherDetails->service_charge;
+
+    		// $totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+    		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst ), 2, '.', '');
+    	}
+    	else if( $companyCategoryId == '5' )	// Tech Concierge
+    	{
+    		$otherDetails = DB::table('tech_concierge_service_requests as t1')
+    						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+    						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
+    						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+    						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+    						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+    						->where(['t1.id' => $serviceRequestResponseId])
+    						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount')
+    						->first();
+
+    		// Get all the values and calculate the total amount
+    		$techConciergeAppliancesServiceRequests = TechConciergeAppliancesServiceRequest::where(['service_request_id' => $otherDetails->id])->select('amount')->get();
+    		$techConciergePlaceServiceRequests = TechConciergePlaceServiceRequest::where(['service_request_id' => $otherDetails->id])->select('amount')->get();
+
+    		$totalAmount= 0;
+    		$discount 	= 0;
+    		$gst = 0;
+    		$hst = 0;
+    		$pst = 0;
+    		$serviceCharge = 0;
+    		
+    		if( count( $techConciergeAppliancesServiceRequests ) > 0 )
+    		{
+    			foreach( $techConciergeAppliancesServiceRequests as $techConciergeAppliancesServiceRequest )
+    			{
+    				$totalAmount += $techConciergeAppliancesServiceRequest->amount;
+    			}
+    		}
+
+    		if( count( $techConciergePlaceServiceRequests ) > 0 )
+    		{
+    			foreach( $techConciergePlaceServiceRequests as $techConciergePlaceServiceRequest )
+    			{
+    				$totalAmount += $techConciergePlaceServiceRequest->amount;
+    			}
+    		}
+
+    		// Substract the discount
+    		$discount = $otherDetails->discount;
+    		$totalAmount = $totalAmount - $discount;
+
+    		// Calculate GST
+    		$gst = ( $totalAmount / 100 ) * $otherDetails->gst;
+
+    		// Calculate HST
+    		$hst = ( $totalAmount / 100 ) * $otherDetails->hst;
+
+    		// Calculate PST
+    		$pst = ( $totalAmount / 100 ) * $otherDetails->pst;
+
+    		// Calculate Service Charge
+    		// $serviceCharge = ( $totalAmount / 100 ) * $otherDetails->service_charge;
+
+    		// $totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
+    		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst ), 2, '.', '');
+    	}
+
+    	return $totalAmount;
     }
 }

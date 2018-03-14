@@ -412,6 +412,12 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To show the permissionsusers list in datatable
 	Route::get('/fetchpermissionsusers', 'AdminController@fetchPermissionsUsers');
 
+	// To show the job payment details
+	Route::get('/jobpayments', 'AdminController@jobpayments');
+
+	// To fetch the job payment details
+	Route::get('/fetchjobpayments', 'AdminController@fetchJobPayments');
+
 	/* -----------------  Newly added route end here ------------------*/
 	
 	
@@ -835,9 +841,15 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 	// To show the review page
 	Route::get('/review', 'CompanyController@review');
 
-	// To show the review page
+	// To fetch the reviews and show in datatable
 	Route::get('/fetchreviews', 'CompanyController@fetchReviews');
-	
+
+	// To show the assigned jobs to the company
+	Route::get('/jobs', 'CompanyController@jobs');
+
+	// To fetch the job listing
+	Route::get('/fetchjobs', 'CompanyController@fetchJobs');
+
 });
 
 // Paypal payment related routes

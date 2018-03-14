@@ -3399,7 +3399,7 @@ $(document).ready(function(){
 			    		$('#modal_add_company_representative').modal('hide');
 
 			    		// Refresh the datatable
-			    		$('#datatable_agents').DataTable().ajax.reload();
+			    		$('#datatable_company_representatives').DataTable().ajax.reload();
 			    	}
 			    	else
 			    	{
@@ -4913,6 +4913,31 @@ $(document).ready(function(){
 			    }
 			});
 		}
+	});
+
+	// Datatable to show company assigned jobs
+	$.fn.dataTableExt.errMode = 'ignore';
+	$('#datatable_jobs').dataTable({
+	    "sServerMethod": "get", 
+	    "bProcessing": true,
+	    "bServerSide": true,
+	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchjobpayments',
+	    
+	    "columnDefs": [
+	        { "className": "dt-center", "targets": [ 0 ] },
+	        { "className": "dt-right", "targets": [ 7 ] }
+	    ],
+	    "aoColumns": [
+	        { 'bSortable' : true },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false },
+	        { 'bSortable' : false }
+	    ]
 	});
 
 });

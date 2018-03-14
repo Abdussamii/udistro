@@ -1028,13 +1028,13 @@ class MoversController extends Controller
 
 		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
 		$companies = DB::table('companies as t1')
-					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
-					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
-					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
-					->where(['t2.id' => $companyCategory])							// company category must match
-					->where(['t3.plan_type_id' => '2', 't3.status' => '1'])								// for company payment plan
-					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
-					->get();
+							->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
+							->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
+							->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
+							->where(['t2.id' => $companyCategory])							// company category must match
+							->where(['t3.plan_type_id' => '2', 't3.status' => '1'])			// for company payment plan
+							->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
+							->get();
 
 		// Check if any company satisfy all the rules or not
 		$filteredCompanies 	= array();
@@ -1334,6 +1334,11 @@ class MoversController extends Controller
 	    		$response['errMsg'] 	= 'No matching company found';
 	    	}
 		}
+		else
+		{
+			$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'No matching company found';
+		}
 
 		return response()->json($response);
     }
@@ -1384,13 +1389,13 @@ class MoversController extends Controller
 
 		// Get the list of companies which are active, availability mode is on, must have a payment plan, company category also match
 		$companies = DB::table('companies as t1')
-					->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
-					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
-					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
-					->where(['t2.id' => $companyCategory])							// company category must match
-					->where(['t3.plan_type_id' => '2'])								// for company payment plan
-					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
-					->get();
+							->leftJoin('company_categories as t2', 't1.company_category_id', '=', 't2.id')
+							->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
+							->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
+							->where(['t2.id' => $companyCategory])							// company category must match
+							->where(['t3.plan_type_id' => '2', 't3.status' => '1'])			// for company payment plan
+							->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
+							->get();
 
 		// Check if any company satisfy all the rules or not
 		$filteredCompanies 	= array();
@@ -1721,6 +1726,11 @@ class MoversController extends Controller
 	    	}
 
 		}
+		else
+		{
+			$response['errCode'] 	= 2;
+	    	$response['errMsg'] 	= 'No matching company found';
+		}
 
 		return response()->json($response);
     }
@@ -1775,7 +1785,7 @@ class MoversController extends Controller
 					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
 					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
 					->where(['t2.id' => $companyCategory])							// company category must match
-					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+					->where(['t3.plan_type_id' => '2', 't3.status' => '1'])			// for company payment plan
 					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
 					->get();
 
@@ -2073,7 +2083,8 @@ class MoversController extends Controller
     	// Get the gst, pst, hst, service charge for the client
     	$clientProvinceCharges 	= DB::table('agent_clients as t1')
     							->leftJoin('agent_client_moving_to_addresses as t2', 't1.id', '=', 't2.agent_client_id')
-    							->leftJoin('provinces as t3', 't2.province_id', 't3.id', '=', 't3.id')
+    							// ->leftJoin('provinces as t3', 't2.province_id', 't3.id', '=', 't3.id')
+    							->leftJoin('provinces as t3', 't2.province_id', '=', 't3.id')
     							->where(['t1.id' => $clientId])
     							->select('t3.pst', 't3.gst', 't3.hst', 't3.service_charge')
     							->first();
@@ -3453,7 +3464,7 @@ class MoversController extends Controller
 					->leftJoin('payment_plan_subscriptions as t3', 't3.subscriber_id', '=', 't1.id')
 					->where(['t1.status' => '1', 'availability_mode' => '1'])		// status must be active, availability_mode must be on
 					->where(['t2.id' => $companyCategory])							// company category must match
-					->where(['t3.plan_type_id' => '2'])								// for company payment plan
+					->where(['t3.plan_type_id' => '2', 't3.status' => '1'])			// for company payment plan
 					->select('t1.id as company_id', 't1.company_name', 't1.address1', 't1.working_globally', 't1.target_area')
 					->get();
 
@@ -3527,7 +3538,7 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
 
     		}
@@ -3541,7 +3552,7 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
     		}
     		else if( $serviceType == 'moving_service' )
@@ -3554,7 +3565,7 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.mover_company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
     		}
     		else if( $serviceType == 'cable_internet_service' )
@@ -3567,7 +3578,7 @@ class MoversController extends Controller
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.digital_service_company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
     		}
 
@@ -3579,7 +3590,10 @@ class MoversController extends Controller
     			$paymentTransactionDetail = new PaymentTransactionDetail;
 
     			$paymentTransactionDetail->service_request_response_id = $details->service_request_response_id;
+    			$paymentTransactionDetail->company_id = $details->company_id;
+    			$paymentTransactionDetail->company_category_id = $details->company_category_id;
     			$paymentTransactionDetail->invoice_no = $invoiceNo;
+    			$paymentTransactionDetail->payment_against = $paymentAgainst;
     			$paymentTransactionDetail->created_at = date('Y-m-d H:i:s');
 
     			if( $paymentTransactionDetail->save() )

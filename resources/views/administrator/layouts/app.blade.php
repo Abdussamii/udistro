@@ -255,6 +255,9 @@
                         <li>
                             <a href="{{ url('administrator/responsetime') }}"><i class="fa fa-clock-o"></i> Response Time</a>
                         </li>
+                        <li>
+                            <a href="{{ url('administrator/jobpayments') }}"><i class="fa fa-dollar"></i> Job Payments</a>
+                        </li>
                         <!-- <li>
                             <a href="{{ url('administrator/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li> -->

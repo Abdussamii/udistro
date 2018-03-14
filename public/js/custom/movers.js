@@ -268,6 +268,10 @@ $(document).ready(function(){
 
                     $('#frm_home_cleaning_services #comment').text(response.comment);
 
+                    // Mover acceptance option
+                    $('#frm_home_cleaning_services .make_payment').attr('id', homeServiceId);
+                    $('#frm_home_cleaning_services .make_payment').attr('data-amount', response.total_amount);
+
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');
                 }
@@ -333,6 +337,10 @@ $(document).ready(function(){
                     $('#frm_tech_concierge #discount').text('$'+response.discount);
 
                     $('#frm_tech_concierge #comment').text(response.comment);
+
+                    // Mover acceptance option
+                    $('#frm_tech_concierge .make_payment').attr('id', techConciergeId);
+                    $('#frm_tech_concierge .make_payment').attr('data-amount', response.total_amount);
 
                     // Show the modal
                     $('#modal_tech_concierge_service_request').modal('show');
@@ -409,6 +417,10 @@ $(document).ready(function(){
                     $('#frm_cable_internet_services #discount').text('$'+response.discount);
 
                     $('#frm_cable_internet_services #comment').text(response.comment);
+
+                    // Mover acceptance option
+                    $('#frm_cable_internet_services .make_payment').attr('id', cableInternetId);
+                    $('#frm_cable_internet_services .make_payment').attr('data-amount', response.total_amount);
 
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');
@@ -490,6 +502,10 @@ $(document).ready(function(){
                     $('#frm_home_moving_companies #subtotal').text('$'+response.subtotal);
 
                     $('#frm_home_moving_companies #comment').text(response.comment);
+
+                    // Mover acceptance option
+                    $('#frm_home_moving_companies .make_payment').attr('id', movingCompaniesId);
+                    $('#frm_home_moving_companies .make_payment').attr('data-amount', response.total_amount);
 
                     // Show the modal
                     $('#modal_moving_companies_service_request').modal('show');
@@ -1549,7 +1565,7 @@ $(document).ready(function(){
 		}
 	});
 
-	// To show the make payment nodal
+	// To show the make payment modal
 	$(document).on('click', '.make_payment', function() {
 
 		// Get the quotation response details

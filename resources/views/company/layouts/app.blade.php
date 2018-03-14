@@ -157,6 +157,9 @@
                         <li>
                             <a href="{{ url('company/review') }}"><i class="fa fa-comments" aria-hidden="true"></i> Review</a>
                         </li>
+                        <li>
+                            <a href="{{ url('company/jobs') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Jobs</a>
+                        </li>
                         <!-- <li>
                             <a href="{{ url('company/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
                         </li> -->

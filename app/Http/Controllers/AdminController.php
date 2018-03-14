@@ -42,6 +42,19 @@ use App\ResponseTimeSlot;
 use App\AgentClient;
 use App\AgentClientInvite;
 
+use App\DigitalServiceTypeRequest;
+use App\DigitalAdditionalServiceTypeRequest;
+use App\TechConciergeAppliancesServiceRequest;
+use App\TechConciergePlaceServiceRequest;
+
+use App\HomeCleaningAdditionalServiceRequest;
+use App\HomeCleaningOtherPlaceServiceRequest;
+use App\HomeCleaningSteamingServiceRequest;
+
+use App\MovingItemDetailServiceRequest;
+use App\MovingOtherItemServiceRequest;
+use App\MovingTransportationTypeRequest;
+
 use Validator;
 use Helper;
 use PDF;
@@ -5382,8 +5395,145 @@ class AdminController extends Controller
 	
 	//Abdul Added code finished here
 	
+
+	/**
+     * Function to return the job payment details view
+     * @param void
+     * @return array
+     */
+    public function jobPayments()
+    {
+        return view('administrator/jobPayments');
+    }
 	
-	
-	
-	
+    /**
+     * Function to fetch job payment details
+     * @param void
+     * @return array
+     */
+    public function fetchJobPayments()
+    {
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 'id'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        $jobDetails = array();
+        $iTotal 	= 0;
+        
+		$jobDetails = DB::table('payment_transaction_details')
+        			// ->where(['payment_status' => 'Completed'])					// Get only completed transaction
+        			->orderBy($sortBy, $sortType)
+    				->limit($length)
+                    ->offset($start)
+                    ->select('id', 'service_request_response_id', 'company_id', 'company_category_id', 'invoice_no', 'company_payment_released', 'payment_against')
+        			->get();
+
+       	$iTotal = DB::table('payment_transaction_details')
+        			// ->where(['payment_status' => 'Completed'])					// Get only completed transaction
+        			->orderBy($sortBy, $sortType)
+    				->limit($length)
+                    ->offset($start)
+        			->count();
+
+        // Create the datatable response array
+        $response = array(
+            'iTotalRecords' => $iTotal,
+            'iTotalDisplayRecords' => $iTotal,
+            'aaData' => array()
+        );
+
+        $k=0;
+        if ( count( $jobDetails ) > 0 )
+        {
+            foreach ($jobDetails as $jobDetail)
+            {
+            	// Check for the company type and get the data accordingly
+            	$otherDetails = array();
+            	if( $jobDetail->company_category_id == '2' )		// Home Cleaning Service Company
+            	{
+            		$otherDetails = DB::table('home_cleaning_service_requests as t1')
+            						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+            						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
+            						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+            						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+            						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+            						->where(['t1.id' => $jobDetail->service_request_response_id])
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount')
+            						->first();
+
+            		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
+            	}
+            	else if( $jobDetail->company_category_id == '3' )	// Moving Company
+            	{
+            		$otherDetails = DB::table('moving_item_service_requests as t1')
+            						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+            						->leftJoin('companies as t3', 't1.mover_company_id', '=', 't3.id')
+            						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+            						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+            						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+            						->where(['t1.id' => $jobDetail->service_request_response_id])
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount', 't1.insurance_amount')
+            						->first();
+
+            		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
+            	}
+            	else if( $jobDetail->company_category_id == '4' )	// Internet & Cable Service provider
+            	{
+            		$otherDetails = DB::table('digital_service_requests as t1')
+            						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+            						->leftJoin('companies as t3', 't1.digital_service_company_id', '=', 't3.id')
+            						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+            						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+            						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+            						->where(['t1.id' => $jobDetail->service_request_response_id])
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount')
+            						->first();
+
+            		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
+            	}
+            	else if( $jobDetail->company_category_id == '5' )	// Tech Concierge
+            	{
+            		$otherDetails = DB::table('tech_concierge_service_requests as t1')
+            						->leftJoin('agent_clients as t2', 't1.agent_client_id', '=', 't2.id')
+            						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
+            						->leftJoin('company_categories as t4', 't3.company_category_id', '=', 't4.id')
+            						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
+            						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
+            						->where(['t1.id' => $jobDetail->service_request_response_id])
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount')
+            						->first();
+
+            		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
+            	}
+
+            	$response['aaData'][$k] = array(
+                    0 => $jobDetail->id,
+                    1 => ucwords( strtolower( $otherDetails->fname . ' ' . $otherDetails->oname ) ),
+                    2 => $otherDetails->contact_number,
+                    3 => ucwords( strtolower( $otherDetails->company_name ) ),
+                    4 => $jobDetail->payment_against,
+                    5 => $jobDetail->invoice_no,
+                    6 => ( $jobDetail->company_payment_released == 1 ) ? 'Confirmed' : 'Pending',
+                    7 => '$' . $totalAmount,
+                    8 => 'Action',
+                );
+                $k++;
+            }
+        }
+
+    	return response()->json($response);
+    }
 }

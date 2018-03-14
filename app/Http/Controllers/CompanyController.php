@@ -49,6 +49,10 @@ use App\MovingItemDetailServiceRequest;
 use App\MovingTransportationTypeRequest;
 use App\Rating;
 
+use App\DigitalAdditionalServiceTypeRequest;
+use App\MovingOtherItemServiceRequest;
+use App\TechConciergePlaceServiceRequest;
+
 use Validator;
 use Helper;
 use Mail;
@@ -4227,5 +4231,182 @@ class CompanyController extends Controller
         }
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to show the assigned jobs to the company representative
+     * @param void
+     * @return array
+     */
+    public function jobs()
+    {
+        return view('company/jobs');
+    }
+
+    /**
+     * Function to fetch the job listing
+     * @param void
+     * @return array
+     */
+    public function fetchJobs()
+    {
+    	// Get the logged-in user id
+		$userId = Auth::id();
+
+    	$start      = Input::get('iDisplayStart');      // Offset
+    	$length     = Input::get('iDisplayLength');     // Limit
+    	$sSearch    = Input::get('sSearch');            // Search string
+    	$col        = Input::get('iSortCol_0');         // Column number for sorting
+    	$sortType   = Input::get('sSortDir_0');         // Sort type
+
+    	// Datatable column number to table column name mapping
+        $arr = array(
+            0 => 't1.id'
+        );
+
+        // Map the sorting column index to the column name
+        $sortBy = $arr[$col];
+
+        // Get the company detail associated with the company representative
+        $user = User::find($userId);
+
+        $jobDetails = array();
+        if( count( $user ) > 0 )
+        {
+        	$companyDetails = $user->company->first();
+
+        	$payableAmount = 0;
+        	if( count( $companyDetails ) > 0 )
+        	{
+        		// Check for the company category and fetch the records according to the company category type
+
+        		if( $companyDetails->company_category_id == '2' )		// Home Cleaning Service Company
+        		{
+        			$jobDetails = DB::table('payment_transaction_details as t1')
+        						->leftJoin('home_cleaning_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->orderBy($sortBy, $sortType)
+			    				->limit($length)
+			                    ->offset($start)
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->get();
+
+        			$iTotal = DB::table('payment_transaction_details as t1')
+        						->leftJoin('home_cleaning_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->count();
+        		}
+        		else if( $companyDetails->company_category_id == '3' )	// Moving Company
+        		{
+        			$jobDetails = DB::table('payment_transaction_details as t1')
+        						->leftJoin('moving_item_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->orderBy($sortBy, $sortType)
+			    				->limit($length)
+			                    ->offset($start)
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->get();
+
+        			$iTotal = DB::table('payment_transaction_details as t1')
+        						->leftJoin('moving_item_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->count();
+        		}
+        		else if( $companyDetails->company_category_id == '4' )	// Internet & Cable Service provider
+        		{
+        			$jobDetails = DB::table('payment_transaction_details as t1')
+        						->leftJoin('digital_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->orderBy($sortBy, $sortType)
+			    				->limit($length)
+			                    ->offset($start)
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->get();
+
+        			$iTotal = DB::table('payment_transaction_details as t1')
+        						->leftJoin('digital_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->count();
+        		}
+        		else if( $companyDetails->company_category_id == '5' )	// Tech Concierge
+        		{
+        			$jobDetails = DB::table('payment_transaction_details as t1')
+        						->leftJoin('tech_concierge_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->orderBy($sortBy, $sortType)
+			    				->limit($length)
+			                    ->offset($start)
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->get();
+
+        			$iTotal = DB::table('payment_transaction_details as t1')
+        						->leftJoin('tech_concierge_service_requests as t2', 't1.service_request_response_id', '=', 't2.id')
+        						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+        						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
+        						->where(['t1.company_id' => $companyDetails->id])
+        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where('t3.fname', 'like', '%'. $sSearch .'%')
+        						->count();
+        		}
+
+        		
+    		    // Create the datatable response array
+    		    $response = array(
+    		        'iTotalRecords' => $iTotal,
+    		        'iTotalDisplayRecords' => $iTotal,
+    		        'aaData' => array()
+    		    );
+
+    		    $k=0;
+    		    if ( count( $jobDetails ) > 0 )
+    		    {
+    		        foreach ($jobDetails as $jobDetail)
+    		        {
+    		        	$response['aaData'][$k] = array(
+    		                0 => $jobDetail->transaction_id,
+    		                1 => ucwords( strtolower( $jobDetail->fname . ' ' . $jobDetail->oname ) ),
+    		                2 => $jobDetail->contact_number,
+    		                3 => $jobDetail->payment_against,
+    		                4 => $jobDetail->invoice_no,
+    		                5 => ( $jobDetail->company_payment_released == '1' ) ? 'Paid' : 'Pending',
+    		                6 => '$' . Helper::calculateReceivableAmount($jobDetail->response_id, $jobDetail->company_category_id),
+    		                7 => '<a href="javascript:void(0);" id="" class=""><i class="fa fa-usd" aria-hidden="true"></i> </a>',
+    		            );
+    		            $k++;
+    		        }
+    		    }
+
+    			return response()->json($response);
+    			
+        	}
+        }
     }
 }

@@ -580,7 +580,7 @@ table.dataTable.no-footer {
 	padding: 10px 14px;
 	color: #7e869d;
 	border: 1px solid #c3e1e9;
-	text-transform: capitalize;
+	/*text-transform: capitalize;*/
 }
 .modal-header .close {
 	font-size: 30px;

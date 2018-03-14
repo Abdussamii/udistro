@@ -388,14 +388,6 @@
                                                                 <td colspan="4" style="width: 80%;">Total</td>
                                                                 <td id="comment"></td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="4" style="width: 80%;">Accept &amp; Make Payment</td>
-                                                                <td>
-                                                                	<a href="javascript:void(0);" class="make_payment" data-amount="" data-service="tech_concierge_service" id="">
-                                                                		<i class="fa fa-paypal" aria-hidden="true"></i>
-                                                                	</a>
-                                                                </td>
-                                                            </tr>
                                                         </thead>
                                                     </table>
                                                 </div>
@@ -583,14 +575,6 @@
                                                         <td colspan="4" style="width: 80%;">Comment</td>
                                                         <td id="comment"></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td colspan="4" style="width: 80%;">Accept &amp; Make Payment</td>
-                                                        <td>
-                                                        	<a href="javascript:void(0);" class="make_payment" data-amount="" data-service="home_cleaning_service" id="">
-                                                        		<i class="fa fa-paypal" aria-hidden="true"></i>
-                                                        	</a>
-                                                        </td>
-                                                    </tr>
                                                 </thead>
                                             </table>
                                         </div>
@@ -770,14 +754,6 @@
                                                                 <td colspan="4" style="width: 80%;">Comment</td>
                                                                 <td id="comment"></td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="4" style="width: 80%;">Accept &amp; Make Payment</td>
-                                                                <td>
-                                                                	<a href="javascript:void(0);" class="make_payment" data-amount="" data-service="moving_service" id="">
-                                                                		<i class="fa fa-paypal" aria-hidden="true"></i>
-                                                                	</a>
-                                                                </td>
-                                                            </tr>
                                                         </thead>
                                                     </table>
                                                 </div>
@@ -790,6 +766,8 @@
                             </div>
                         </div>
                     </div>
+
+
 
                     <!-- Modal to Cable & Internet Service Request -->
                     <div id="modal_cable_internet_service_request" class="modal fade" role="dialog">
@@ -963,14 +941,6 @@
                                                                 <td colspan="4" style="width: 80%;">Comment</td>
                                                                 <td id="comment"></td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="4" style="width: 80%;">Accept &amp; Make Payment</td>
-                                                                <td>
-                                                                	<a href="javascript:void(0);" class="make_payment" data-amount="" data-service="cable_internet_service" id="">
-                                                                		<i class="fa fa-paypal" aria-hidden="true"></i>
-                                                                	</a>
-                                                                </td>
-                                                            </tr>
                                                         </thead>
                                                     </table>
                                                 </div>
@@ -1027,13 +997,8 @@
 					    <!-- More information: https://www.x.com/docs/DOC-1332 -->
 					    <div class="form-group" style="display: none;">
 						    <input type="text" name="cmd" value="_xclick" />
-
-						    <!-- Production -->
-						    <!-- <input type="text" name="business" value="info@udistro.ca" /> -->
-						    
-						    <!-- Sandbox -->
-						    <input type="text" name="business" value="sandboxbussiness@udistro.ca" />
-						    <input type="text" name="cbt" value="Return to Udistro" />
+						    <input type="text" name="business" value="info@udistro.ca" />
+						    <input type="text" name="cbt" value="Return to uDistro" />
 						    <input type="text" name="currency_code" value="CAD" />
 						</div>
 
@@ -1057,7 +1022,7 @@
 					    <input type="text" name="notify_url" value="{{ url('/paypal/paymentstatus') }}" style="display: none;" />
 
 					    <!-- Redirect the user to the billing page instead of paypal payment page -->
-					    <!-- <input type="hidden" name="landing_page" value="billing"> -->
+					    <input type="hidden" name="landing_page" value="billing">
 					</div>
 					<div class="modal-footer">
 						<!-- For production -->

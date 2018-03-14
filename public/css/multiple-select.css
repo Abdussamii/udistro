@@ -148,6 +148,7 @@
     display: list-item;
     background-image: none;
     position: static;
+    text-align: left;
 }
 
 .ms-drop ul > li .disabled {
@@ -184,6 +185,7 @@
 
 .ms-drop input[type="checkbox"] {
     vertical-align: middle;
+    margin: 0 5px 0 0; 
 }
 
 .ms-drop .ms-no-results {

@@ -1346,4 +1346,24 @@ $(document).ready(function(){
         ]
     });
 
+    // Datatable to show company assigned jobs
+    $.fn.dataTableExt.errMode = 'ignore';
+    $('#datatable_jobs').dataTable({
+        "sServerMethod": "get", 
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchjobs',
+        
+        /*"columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 4 ] }
+        ],
+        "aoColumns": [
+            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false }
+        ]*/
+    });
+
 });
