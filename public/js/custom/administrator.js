@@ -4940,6 +4940,40 @@ $(document).ready(function(){
 	    ]
 	});
 
+	// Admin release payment
+	$(document).on('click', '.payment_release', function(){
+
+    	let transactionId = $(this).attr('id');
+
+    	if( transactionId != '' )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/administrator/releasepayment',
+    			method: 'post',
+    			data: {
+    				transactionId: transactionId
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the datatable
+			    		$('#datatable_jobs').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
+    	
+	});
+
 });
 
 /**

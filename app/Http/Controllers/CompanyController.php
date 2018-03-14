@@ -4390,15 +4390,25 @@ class CompanyController extends Controller
     		    {
     		        foreach ($jobDetails as $jobDetail)
     		        {
+    		        	$paymentStatus = 'Pending';
+    		        	if( $jobDetail->company_payment_released == '1' )
+    		        	{
+    		        		$paymentStatus = 'Paid';
+    		        	}
+    		        	else if( $jobDetail->company_payment_released == '2' )
+    		        	{
+    		        		$paymentStatus = 'Requested';
+    		        	}
+
     		        	$response['aaData'][$k] = array(
     		                0 => $jobDetail->transaction_id,
     		                1 => ucwords( strtolower( $jobDetail->fname . ' ' . $jobDetail->oname ) ),
     		                2 => $jobDetail->contact_number,
     		                3 => $jobDetail->payment_against,
     		                4 => $jobDetail->invoice_no,
-    		                5 => ( $jobDetail->company_payment_released == '1' ) ? 'Paid' : 'Pending',
+    		                5 => $paymentStatus,
     		                6 => '$' . Helper::calculateReceivableAmount($jobDetail->response_id, $jobDetail->company_category_id),
-    		                7 => '<a href="javascript:void(0);" id="" class=""><i class="fa fa-usd" aria-hidden="true"></i> </a>',
+    		                7 => '<a href="javascript:void(0);" id="'. $jobDetail->transaction_id .'" class="request_money"><i class="fa fa-usd" aria-hidden="true"></i> </a>',
     		            );
     		            $k++;
     		        }
@@ -4408,5 +4418,57 @@ class CompanyController extends Controller
     			
         	}
         }
+    }
+
+    /**
+     * Function for Company request to release money
+     * @param void
+     * @return array
+     */
+    public function requestMoney()
+    {
+    	$transactionId = Input::get('transactionId');
+
+    	$response = array();
+    	if( $transactionId != '' )
+    	{
+    		// Check if request is already there
+    		$paymentRequest = DB::table('payment_transaction_details')->where(['id' => $transactionId])->first();
+
+    		if( count( $paymentRequest ) == 1 )
+    		{
+    			if( $paymentRequest->company_payment_released == '1' )			// Payment released
+    			{
+    				$response['errCode']    = 2;
+		        	$response['errMsg']     = 'Payment already released';
+    			}
+    			else if( $paymentRequest->company_payment_released == '2' )		// Payment already requested
+    			{
+	    			$response['errCode']    = 3;
+		        	$response['errMsg']     = 'Request already exist';
+    			}
+    			else
+    			{
+		    		// Update the company_payment_released to 2 as requested
+		    		if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '2']) )
+		    		{
+		    			$response['errCode']    = 0;
+		        		$response['errMsg']     = 'Payment request saved successfully';
+		    		}
+		    		else
+		    		{
+		    			$response['errCode']    = 1;
+		        		$response['errMsg']     = 'Some issue in requesting the payment';
+		    		}
+    			}
+    		}
+    	}
+    	else
+    	{
+			$response['errCode']    = 4;
+        	$response['errMsg']     = 'Missing transaction id';
+    	}
+
+    	return response()->json($response);
     }
 }

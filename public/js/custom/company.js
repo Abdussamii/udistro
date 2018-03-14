@@ -1353,17 +1353,52 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchjobs',
-        
-        /*"columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 4 ] }
+        "columnDefs": [
+            { "className": "dt-center", "targets": [ 0, 7 ] },
+            { "className": "dt-right", "targets": [ 6 ] }
         ],
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
             { 'bSortable' : false }
-        ]*/
+        ]
+    });
+
+    // Company request to release money
+    $(document).on('click', '.request_money', function(){
+    	let transactionId = $(this).attr('id');
+
+    	if( transactionId != '' )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/company/requestmoney',
+    			method: 'post',
+    			data: {
+    				transactionId: transactionId
+    			},
+    			headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+			    	{
+			    		alertify.success( response.errMsg );
+
+			    		// Refresh the datatable
+			    		$('#datatable_jobs').DataTable().ajax.reload();
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+			    }
+    		});
+    	}
     });
 
 });

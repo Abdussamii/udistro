@@ -518,6 +518,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function() {
 	// To upload the file and send the email with attachement
 	Route::post('/sendagentemailnotification', 'EmailController@sendAgentEmailNotification');
 
+	// To update the payment status
+	Route::post('/releasepayment', 'AdminController@releasepayment');
+
 });
 
 /* ---------- Agent related functionality ---------- */
@@ -849,6 +852,9 @@ Route::group(['prefix' => 'company', 'middleware' => 'auth'], function() {
 
 	// To fetch the job listing
 	Route::get('/fetchjobs', 'CompanyController@fetchJobs');
+
+	// Company request to release money
+	Route::post('/requestmoney', 'CompanyController@requestMoney');
 
 });
 

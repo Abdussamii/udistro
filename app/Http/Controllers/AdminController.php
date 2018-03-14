@@ -5519,6 +5519,19 @@ class AdminController extends Controller
             		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
             	}
 
+            	$paymentStatus = 'Pending';
+            	$option = 'Pending';
+            	if( $jobDetail->company_payment_released == '1' )
+            	{
+            		$paymentStatus = 'Paid';
+            		$option = 'Paid';
+            	}
+            	else if( $jobDetail->company_payment_released == '2' )
+            	{
+            		$paymentStatus = 'Requested';
+            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="payment_release">Release</a>';
+            	}
+
             	$response['aaData'][$k] = array(
                     0 => $jobDetail->id,
                     1 => ucwords( strtolower( $otherDetails->fname . ' ' . $otherDetails->oname ) ),
@@ -5526,13 +5539,46 @@ class AdminController extends Controller
                     3 => ucwords( strtolower( $otherDetails->company_name ) ),
                     4 => $jobDetail->payment_against,
                     5 => $jobDetail->invoice_no,
-                    6 => ( $jobDetail->company_payment_released == 1 ) ? 'Confirmed' : 'Pending',
+                    6 => $paymentStatus,
                     7 => '$' . $totalAmount,
-                    8 => 'Action',
+                    8 => $option
                 );
                 $k++;
             }
         }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to update the payment status
+     * @param void
+     * @return array
+     */
+    public function releasepayment()
+    {
+    	$transactionId = Input::get('transactionId');
+
+    	$response = array();
+    	if( $transactionId != '' )
+    	{
+			// Update the company_payment_released to 2 as requested
+			if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+			{
+				$response['errCode']    = 0;
+	    		$response['errMsg']     = 'Payment request saved successfully';
+			}
+			else
+			{
+				$response['errCode']    = 1;
+	    		$response['errMsg']     = 'Some issue in requesting the payment';
+			}
+    	}
+    	else
+    	{
+			$response['errCode']    = 4;
+        	$response['errMsg']     = 'Missing transaction id';
+    	}
 
     	return response()->json($response);
     }
