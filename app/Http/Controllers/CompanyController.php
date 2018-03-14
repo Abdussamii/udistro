@@ -4447,11 +4447,80 @@ class CompanyController extends Controller
 	    			$response['errCode']    = 3;
 		        	$response['errMsg']     = 'Request already exist';
     			}
-    			else
+    			else 															// No request already exist, save the request
     			{
 		    		// Update the company_payment_released to 2 as requested
 		    		if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '2']) )
 		    		{
+		    			// Send the email to get the review from mover
+    			    	if( app()->env != 'local' )
+    					{
+    						// Get the Date of Payment, Order Details, Client Name, Company Name
+    						$transactionDetails = DB::table('payment_transaction_details')->where(['id' => $transactionId])->first();
+
+    						$emailData = array();
+    						if( count( $transactionDetails ) > 0 )
+    						{
+    							if( $transactionDetails->company_category_id == '2' )			// Home Cleaning Service Company
+    							{
+    								$clientDetails = DB::table('payment_transaction_details as t1')
+    												->leftJoin('home_cleaning_service_requests as t2', 't1.company_id', '=', 't2.company_id')
+    												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    												->where(['t1.id' => $transactionDetails->id])
+    												->select('t3.fname', 't3.oname', 't3.email')
+    												->first();
+    							}
+    							else if( $transactionDetails->company_category_id == '3' )	// Moving Company
+    							{
+    								$clientDetails = DB::table('payment_transaction_details as t1')
+    												->leftJoin('moving_item_service_requests as t2', 't1.company_id', '=', 't2.mover_company_id')
+    												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    												->where(['t1.id' => $transactionDetails->id])
+    												->select('t3.fname', 't3.oname', 't3.email')
+    												->first();
+    							}
+    							else if( $transactionDetails->company_category_id == '4' ) 	// Internet & Cable Service provider
+    							{
+    								$clientDetails = DB::table('payment_transaction_details as t1')
+    												->leftJoin('digital_service_requests as t2', 't1.company_id', '=', 't2.digital_service_company_id')
+    												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    												->where(['t1.id' => $transactionDetails->id])
+    												->select('t3.fname', 't3.oname', 't3.email')
+    												->first();
+    							}
+    							else if( $transactionDetails->company_category_id == '5' ) 	// Tech Concierge
+    							{
+    								$clientDetails = DB::table('payment_transaction_details as t1')
+    												->leftJoin('tech_concierge_service_requests as t2', 't1.company_id', '=', 't2.company_id')
+    												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
+    												->where(['t1.id' => $transactionDetails->id])
+    												->select('t3.fname', 't3.oname', 't3.email')
+    												->first();
+    							}
+
+    							$companyDetails = Company::find($transactionDetails->company_id);
+
+    							$emailData = array(
+    								/* Email data */
+    								'email' 		=> $clientDetails->email,
+    								'name' 			=> ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname ) ),
+    								'subject' 		=> 'Confirm Payment',
+    								
+    								/* Template data */
+    								'dateOfPayment' => date('Y-m-d', strtotime( $transactionDetails->created_at )), 
+    								'orderDetails' 	=> $transactionDetails->payment_against, 
+    								'companyName' 	=> ucwords( strtolower( $companyDetails->company_name ) ),
+    								'clientName' 	=> ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname ) )
+    							);
+
+								Mail::send('emails.testEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+							        $m->from('info@udistro.ca', 'Udistro');
+							        
+							        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+							    });
+    						}
+    					}
+
 		    			$response['errCode']    = 0;
 		        		$response['errMsg']     = 'Payment request saved successfully';
 		    		}
