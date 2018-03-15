@@ -202,21 +202,6 @@
                             </select>
 						</div>
 						<div class="form-group">
-							<label for="company_representative_payment_plan">Payment Plan</label>
-							<select name="company_representative_payment_plan" id="company_representative_payment_plan" class="form-control">
-								<option value="">Select</option>
-								<?php
-								if( isset( $paymentPlans ) && count( $paymentPlans ) > 0 )
-								{
-									foreach ($paymentPlans as $paymentPlan)
-									{
-										echo '<option value="'. $paymentPlan->id .'">'.ucwords( strtolower( $paymentPlan->plan_name ) ) .' - $'. $paymentPlan->plan_charges . ' - ' . $paymentPlan->validity_days . ' Days' .'</option>';
-									}
-								}
-								?>
-							</select>
-						</div>
-						<div class="form-group">
 							<label for="company_representative_status">Status</label>
 							<div class="radio">
 							 	<label><input type="radio" name="company_representative_status" value="1" checked="true">Active</label>
@@ -327,21 +312,6 @@
                 					}
                 					?>
                             </select>
-						</div>
-						<div class="form-group">
-							<label for="company_representative_edit_payment_plan">Payment Plan</label>
-							<select name="company_representative_edit_payment_plan" id="company_representative_edit_payment_plan" class="form-control">
-								<option value="">Select</option>
-								<?php
-								if( isset( $paymentPlans ) && count( $paymentPlans ) > 0 )
-								{
-									foreach ($paymentPlans as $paymentPlan)
-									{
-										echo '<option value="'. $paymentPlan->id .'">'.ucwords( strtolower( $paymentPlan->plan_name ) ) .' - $'. $paymentPlan->plan_charges . ' - ' . $paymentPlan->validity_days . ' Days' .'</option>';
-									}
-								}
-								?>
-							</select>
 						</div>
 						<div class="form-group">
 							<label for="company_representative_status">Status</label>

@@ -1373,6 +1373,9 @@ $(document).ready(function(){
     $(document).on('click', '.request_money', function(){
     	let transactionId = $(this).attr('id');
 
+    	// Get the reference of element
+		var $this = $(this);
+
     	if( transactionId != '' )
     	{
     		$.ajax({
@@ -1381,6 +1384,13 @@ $(document).ready(function(){
     			data: {
     				transactionId: transactionId
     			},
+				beforeSend: function() {
+			        $this.html('<i class="fa fa-spinner" aria-hidden="true"></i>');
+			    },
+			    complete: function()
+			    {
+			    	$this.html('<i class="fa fa-paypal" aria-hidden="true"></i>');
+			    },
     			headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			    },

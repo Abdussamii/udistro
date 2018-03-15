@@ -54,6 +54,7 @@ use App\HomeCleaningSteamingServiceRequest;
 use App\MovingItemDetailServiceRequest;
 use App\MovingOtherItemServiceRequest;
 use App\MovingTransportationTypeRequest;
+use App\PaymentTransactionDetail;
 
 use Validator;
 use Helper;
@@ -5529,7 +5530,7 @@ class AdminController extends Controller
             	else if( $jobDetail->company_payment_released == '2' )
             	{
             		$paymentStatus = 'Requested';
-            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="payment_release">Release</a>';
+            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="release_payment">Release</a>';
             	}
 
             	$response['aaData'][$k] = array(
@@ -5562,17 +5563,59 @@ class AdminController extends Controller
     	$response = array();
     	if( $transactionId != '' )
     	{
-			// Update the company_payment_released to 2 as requested
-			if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
-			{
-				$response['errCode']    = 0;
-	    		$response['errMsg']     = 'Payment request saved successfully';
-			}
-			else
-			{
-				$response['errCode']    = 1;
-	    		$response['errMsg']     = 'Some issue in requesting the payment';
-			}
+    		// Check if mover allowed to release the permission. If yes release the payment and update the status, if no wait for 24 hours
+    		$transactionDetails = PaymentTransactionDetail::find($transactionId);
+
+    		if( count( $transactionDetails ) > 0 )
+    		{
+    			// Check for the mover_payment_released status
+    			if( $transactionDetails->mover_payment_released == '1' )
+    			{
+					// Update the company_payment_released to 1
+					if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+					{
+						$response['errCode']    = 0;
+			    		$response['errMsg']     = 'Payment request saved successfully';
+					}
+					else
+					{
+						$response['errCode']    = 1;
+			    		$response['errMsg']     = 'Some issue in releasing the payment';
+					}
+    			}
+    			else
+    			{
+    				// Check if 24 hours completed
+    				$currTime 		= date('Y-m-d H:i:s');
+    				$requestedTime 	= $transactionDetails->updated_at;
+    				$releaseTime 	= date('Y-m-d H:i:s', strtotime('+24 hours', strtotime( $requestedTime )));
+
+    				if( $currTime >= $releaseTime )
+    				{
+						// Update the company_payment_released to 1
+						if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+						{
+							$response['errCode']    = 0;
+				    		$response['errMsg']     = 'Payment request saved successfully';
+						}
+						else
+						{
+							$response['errCode']    = 1;
+				    		$response['errMsg']     = 'Some issue in releasing the payment';
+						}
+    				}
+    				else
+    				{
+	    				$response['errCode']    = 2;
+				    	$response['errMsg']     = 'Wait till ' . $releaseTime . ', after that you can release the payment';
+    				}
+    			}
+    		}
+    		else
+    		{
+    			$response['errCode']    = 3;
+        		$response['errMsg']     = 'Incorrect transaction id';
+    		}
     	}
     	else
     	{

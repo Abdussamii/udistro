@@ -24,6 +24,7 @@ use App\MovingItemDetailServiceRequest;
 use App\HomeCleaningOtherPlaceServiceRequest;
 use App\MovingOtherItemServiceRequest;
 use App\MovingTransportationTypeRequest;
+use App\PaymentTransactionDetail;
 
 class Helper
 {
@@ -727,4 +728,39 @@ class Helper
 
     	return $totalAmount;
     }
+
+    /**
+     * Function to trim a given string after certain number of characters with smart wrapping
+     * @param string
+     * @param integer
+     * @param string
+     * @return string
+     */
+    public static function companyStartWorkNotification($invoiceNo)
+	{
+    	$transactionDetails = PaymentTransactionDetail::where(['invoice_no' => $invoiceNo])->first();
+
+    	if( count( $transactionDetails ) > 0 )
+    	{
+	    	$companyDetails = DB::table('companies as t1')
+    						->leftJoin('company_user as t2', 't1.id', '=', 't2.company_id')
+    						->leftJoin('users as t3', 't2.user_id', '=', 't3.id')
+    						->where(['t1.id' => $transactionDetails->company_id])
+    						->select('t3.fname', 't3.lname', 't3.email')
+    						->first();
+
+			$emailData = array(
+				'email' 	=> $companyDetails->email,
+				'name' 		=> ucwords( strtolower( $companyDetails->fname . ' ' . $companyDetails->lname ) ),
+				'subject' 	=> 'Payment Done',
+				'requestedService' => $transactionDetails->payment_against
+			);
+
+			Mail::send('emails.companyPaymentNotificationEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+		        $m->from('info@udistro.ca', 'Udistro');
+		        
+		        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+		    });
+    	}
+	}
 }

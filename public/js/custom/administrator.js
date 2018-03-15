@@ -2809,6 +2809,9 @@ $(document).ready(function(){
 	        },
 			company_status: {
 	        	required: true	
+	        },
+	        payment_plan: {
+	        	required: true	
 	        }
 	    },
 	    messages: {
@@ -2835,6 +2838,9 @@ $(document).ready(function(){
 	        },
 	        company_status: {
 	        	required: 'Please select status'
+	        },
+	        payment_plan: {
+	        	required: 'Please select payment plan'	
 	        }
 	    }
 	});
@@ -2935,6 +2941,17 @@ $(document).ready(function(){
                     $('#frm_edit_company #company_country_edit').val(response.country_id);
 
 			    	$('#frm_edit_company #postcode_edit').val(response.postal_code);
+
+			    	// Make the payment plan selection
+			    	if( $('#frm_edit_company #company_category').val() != '1' )
+			    	{
+			    		$('#edit_payment_plan_container').show();
+			    		$('#frm_edit_company #payment_plan').val(response.paymentPlan);
+			    	}
+			    	else
+			    	{
+			    		$('#edit_payment_plan_container').hide();
+			    	}
 			    	
 			    	$('#frm_edit_company input[name="company_status_edit"][value="'+ response.status +'"]').prop('checked', true);
 
@@ -3048,6 +3065,7 @@ $(document).ready(function(){
 		{
             // Ajax call to save the page related data
             var $this = $(this);
+
             var company_name            = $('#frm_edit_company #company_name').val();
             var company_id              = $('#frm_edit_company #company_id').val();
             var company_category        = $("#frm_edit_company #company_category").val();
@@ -3057,6 +3075,8 @@ $(document).ready(function(){
             var company_city            = $("#frm_edit_company #company_city_edit").val();
             var company_country         = $("#frm_edit_company #company_country_edit").val();
             var postal_code             = $("#frm_edit_company #postcode_edit").val();
+            var payment_plan            = $("#frm_edit_company #payment_plan").val();
+
             var company_status          = $("input[name='company_status_edit']:checked").val();
             var fileData                = $('#frm_edit_company #company_upload_image').prop('files')[0];
 
@@ -3072,6 +3092,8 @@ $(document).ready(function(){
             formData.append('company_city', company_city);
             formData.append('company_country', company_country);
             formData.append('postal_code', postal_code);
+            formData.append('payment_plan', payment_plan);
+
             formData.append('company_status', company_status);
             
     		$.ajax({
@@ -3340,9 +3362,6 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: true	
-	        },
-	        company_representative_payment_plan: {
-	        	required: true	
 	        }
 	    },
 	    messages: {
@@ -3368,9 +3387,6 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: 'Please select status'	
-	        },
-	        company_representative_payment_plan: {
-	        	required: 'Please select payment plan'	
 	        }
 	    }
 	});
@@ -3449,9 +3465,6 @@ $(document).ready(function(){
 
 			    	// Fill the user type
 			    	$('#frm_edit_company_representative #user_type').val(userType);
-
-			    	// Make the payment plaan selected
-			    	$('#frm_edit_company_representative #company_representative_edit_payment_plan').val(response.paymentPlan);
 
 			    	// Show the modal
 			    	$('#modal_edit_company_representative').modal('show');
@@ -4941,7 +4954,7 @@ $(document).ready(function(){
 	});
 
 	// Admin release payment
-	$(document).on('click', '.payment_release', function(){
+	$(document).on('click', '.release_payment', function(){
 
     	let transactionId = $(this).attr('id');
 

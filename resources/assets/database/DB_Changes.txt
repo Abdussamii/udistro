@@ -1,8 +1,9 @@
 
 
-12-March-2018
+15-March-2018
 
-ALTER TABLE `payment_transaction_details` ADD `company_id` INT(10) NOT NULL AFTER `service_request_response_id`, ADD `company_category_id` INT(10) NOT NULL AFTER `company_id`;
+ALTER TABLE `payment_transaction_details` ADD `mover_payment_released` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `company_payment_released`;
 
-***************************************************************************************************
+ALTER TABLE `payment_transaction_details` CHANGE `mover_payment_released` `mover_payment_released` ENUM('0','1') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '0' COMMENT '0: Not approved, 1: Approved';
 
+*******************************************************************************************************************************************

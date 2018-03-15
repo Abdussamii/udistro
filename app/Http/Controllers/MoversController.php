@@ -3518,7 +3518,7 @@ class MoversController extends Controller
      * @param void
      * @return array
      */
-    public function getqQuotationResponseDetails()
+    public function getQuotationResponseDetails()
     {
     	$requestId 		= Input::get('requestId');
     	$serviceType 	= Input::get('serviceType');

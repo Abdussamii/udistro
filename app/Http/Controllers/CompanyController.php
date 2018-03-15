@@ -52,6 +52,7 @@ use App\Rating;
 use App\DigitalAdditionalServiceTypeRequest;
 use App\MovingOtherItemServiceRequest;
 use App\TechConciergePlaceServiceRequest;
+use App\PaymentTransactionDetail;
 
 use Validator;
 use Helper;
@@ -2165,7 +2166,10 @@ class CompanyController extends Controller
     	// Get country list
     	$countries 	= Country::orderBy('name', 'asc')->select('id', 'name')->get();
 
-    	return view('administrator/companies', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyCategories' => $companyCategories]);
+    	// Get the paymant plan for companies. Payment plan for companies is attached to companies and agent plan attached to agent
+    	$paymentPlans = PaymentPlan::where(['plan_type_id' => '2', 'status' => '1'])->orderBy('plan_name', 'asc')->get();
+
+    	return view('administrator/companies', ['provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'companyCategories' => $companyCategories, 'paymentPlans' => $paymentPlans]);
     }
 
     /**
@@ -2237,41 +2241,119 @@ class CompanyController extends Controller
 
 			if( count( $company ) == 0 )
 			{
-				// Begin transaction
-				DB::beginTransaction();
-
-				// Add the company
-				$company = new Company;
-
-				$company->company_name 			= $companyDetails['company_name'];	
-				$company->company_category_id 	= $companyDetails['company_category'];
-				$company->address1	 			= $companyDetails['company_address1'];
-				$company->address2	 			= $companyDetails['company_address2'];
-				$company->province_id 			= $companyDetails['company_province'];
-				$company->city_id 				= $companyDetails['company_city'];
-				$company->country_id 			= $companyDetails['company_country'];
-				$company->postal_code 			= $companyDetails['company_postalcode'];
-				$company->status 				= $companyDetails['company_status'];
-				$company->created_by 			= $userId;
-
-				if( $company->save() )
+				// Check if company type is other than real estate company in that case payment plan selection is must
+				if( $companyDetails['company_category'] != '1' )
 				{
-					DB::commit();
+					if( $companyDetails['payment_plan'] != '' )
+					{
+						// Begin transaction
+						DB::beginTransaction();
 
-					$response['errCode']    = 0;
-			        $response['errMsg']     = 'Company added successfully';
+						// Add the company
+						$company = new Company;
+
+						$company->company_name 			= $companyDetails['company_name'];	
+						$company->company_category_id 	= $companyDetails['company_category'];
+						$company->address1	 			= $companyDetails['company_address1'];
+						$company->address2	 			= $companyDetails['company_address2'];
+						$company->province_id 			= $companyDetails['company_province'];
+						$company->city_id 				= $companyDetails['company_city'];
+						$company->country_id 			= $companyDetails['company_country'];
+						$company->postal_code 			= $companyDetails['company_postalcode'];
+						$company->status 				= $companyDetails['company_status'];
+						$company->created_by 			= $userId;
+
+						if( $company->save() )
+						{
+							// Attach the payment plan
+					        $currDate = date('Y-m-d');
+
+							// Get the selected plan details
+							$paymentPlanDetails = PaymentPlan::find($companyDetails['payment_plan']);
+
+							if( count( $paymentPlanDetails ) > 0 )
+							{
+								$validUpto = date( 'Y-m-d', '+' . strtotime( $paymentPlanDetails->validity_days . ' days', strtotime( $currDate ) ) );
+
+								$paymentPlanSubscription = new PaymentPlanSubscription;
+
+								$paymentPlanSubscription->plan_id 			= $companyDetails['payment_plan'];
+								$paymentPlanSubscription->plan_type_id 		= '2';	// For company representative
+								$paymentPlanSubscription->subscriber_id 	= $company->id;
+								$paymentPlanSubscription->start_date 		= $currDate;
+								$paymentPlanSubscription->end_date 			= $validUpto;
+								$paymentPlanSubscription->quota 			= $paymentPlanDetails->allowed_count;
+								$paymentPlanSubscription->remaining_qouta 	= $paymentPlanDetails->allowed_count;
+								$paymentPlanSubscription->status 			= '1';
+
+								if( $paymentPlanSubscription->save() )
+								{
+									DB::commit();
+
+									$response['errCode']    = 0;
+							        $response['errMsg']     = 'Company added successfully';
+								}
+								else
+								{
+									DB::rollBack();
+
+									$response['errCode']    = 4;
+					        		$response['errMsg']     = 'Some error in adding the company';
+								}
+							}
+						}
+						else
+						{
+							DB::rollBack();
+
+							$response['errCode']    = 5;
+			        		$response['errMsg']     = 'Some error in adding the company';
+						}
+					}
+					else
+					{
+						$response['errCode']    = 6;
+				        $response['errMsg']     = 'Please select a payment plan';
+					}
 				}
 				else
 				{
-					DB::rollBack();
+					// Begin transaction
+					DB::beginTransaction();
 
-					$response['errCode']    = 3;
-	        		$response['errMsg']     = 'Some error in adding the company';
+					// Add the company
+					$company = new Company;
+
+					$company->company_name 			= $companyDetails['company_name'];	
+					$company->company_category_id 	= $companyDetails['company_category'];
+					$company->address1	 			= $companyDetails['company_address1'];
+					$company->address2	 			= $companyDetails['company_address2'];
+					$company->province_id 			= $companyDetails['company_province'];
+					$company->city_id 				= $companyDetails['company_city'];
+					$company->country_id 			= $companyDetails['company_country'];
+					$company->postal_code 			= $companyDetails['company_postalcode'];
+					$company->status 				= $companyDetails['company_status'];
+					$company->created_by 			= $userId;
+
+					if( $company->save() )
+					{
+						DB::commit();
+
+						$response['errCode']    = 0;
+				        $response['errMsg']     = 'Company added successfully';
+					}
+					else
+					{
+						DB::rollBack();
+
+						$response['errCode']    = 2;
+		        		$response['errMsg']     = 'Some error in adding the company';
+					}
 				}
 			}
 			else
 			{
-				$response['errCode']    = 2;
+				$response['errCode']    = 3;
 		        $response['errMsg']     = 'Company with the same name already exist';
 			}
 		}
@@ -2297,6 +2379,7 @@ class CompanyController extends Controller
     	$company_country    	= $request->input('company_country');
     	$postal_code    		= $request->input('postal_code');
     	$company_status    		= $request->input('company_status');
+    	$payment_plan    		= $request->input('payment_plan');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -2389,7 +2472,7 @@ class CompanyController extends Controller
 				$response['errCode']    = 2;
 			}
 
-			if($response['errCode'] == 1 || $response['errCode'] == 2)
+			if( $response['errCode'] == 1 || $response['errCode'] == 2 )
 			{
 				$company = Company::find($company_id);
 
@@ -2403,6 +2486,7 @@ class CompanyController extends Controller
 				$company->postal_code 			= $postal_code;
 				$company->status 				= $company_status;
 				$company->updated_by 			= $userId;
+				
 				if($response['errCode'] == 1)
 				{
 					$company->image 			= $fileNewName;
@@ -2411,6 +2495,56 @@ class CompanyController extends Controller
 
 				if( $company->save() )
 				{
+					// If the new payment plan selection is available, update the entry
+					if( $payment_plan != '' )
+					{
+				        $currDate = date('Y-m-d');
+
+				        // In any existing plan is there then change its status to '0'
+				        PaymentPlanSubscription::where(['subscriber_id' => $company_id, 'plan_type_id' => '2'])->update(['status' => '0']);
+
+						// Get the selected plan details
+						$paymentPlanDetails = PaymentPlan::find($payment_plan);
+
+						if( count( $paymentPlanDetails ) > 0 )
+						{
+							$validUpto = date( 'Y-m-d', '+' . strtotime( $paymentPlanDetails->validity_days . ' days', strtotime( $currDate ) ) );
+
+							$paymentPlanSubscription = new PaymentPlanSubscription;
+
+							$paymentPlanSubscription->plan_id 			= $payment_plan;
+							$paymentPlanSubscription->plan_type_id 		= '2';	// for company representative
+							$paymentPlanSubscription->subscriber_id 	= $company_id;
+							$paymentPlanSubscription->start_date 		= $currDate;
+							$paymentPlanSubscription->end_date 			= $validUpto;
+							$paymentPlanSubscription->quota 			= $paymentPlanDetails->allowed_count;
+							$paymentPlanSubscription->remaining_qouta 	= $paymentPlanDetails->allowed_count;
+							$paymentPlanSubscription->status 			= '1';
+
+							if( $paymentPlanSubscription->save() )
+							{
+								DB::commit();
+
+								$response['errCode']    = 0;
+					        	$response['errMsg']     = 'Agent added successfully';
+							}
+							else
+							{
+								DB::rollBack();
+
+								$response['errCode']    = 2;
+					        	$response['errMsg']     = 'Some issue in adding the payment plan subscription';
+							}
+						}
+						else
+						{
+							DB::rollBack();
+
+							$response['errCode']    = 3;
+				        	$response['errMsg']     = 'Invalid payment plan';
+						}
+					}
+
 					$response['errCode']    = 0;
 				    $response['errMsg']     = 'Company details updated successfully';	
 				}
@@ -2567,6 +2701,16 @@ class CompanyController extends Controller
 		    				'city' 	=> ucwords( strtolower( $city->name ) ),
 		    			);
 	    			}
+	    		}
+
+	    		// If company category is other than real estate company then attach the payment plan also
+	    		$response['paymentPlan'] = '';
+	    		if( $companyDetails->company_category_id != '1' )
+	    		{
+	    			// Get the payment plan details
+	    			$paymentPlan = PaymentPlanSubscription::where(['subscriber_id' => $companyDetails->id, 'status' => '1', 'plan_type_id' => '2'])->first();
+
+	    			$response['paymentPlan'] = $paymentPlan->plan_id;
 	    		}
 			}
 		}
@@ -3285,49 +3429,10 @@ class CompanyController extends Controller
 					// Map the user to company
 					$user->company()->attach($companyRepresentativeData['company_representative_company']);
 
-					// Attach the payment plan
-			        $currDate = date('Y-m-d');
+					DB::commit();
 
-					// Get the selected plan details
-					$paymentPlanDetails = PaymentPlan::find($companyRepresentativeData['company_representative_payment_plan']);
-
-					if( count( $paymentPlanDetails ) > 0 )
-					{
-						$validUpto = date( 'Y-m-d', '+' . strtotime( $paymentPlanDetails->validity_days . ' days', strtotime( $currDate ) ) );
-
-						$paymentPlanSubscription = new PaymentPlanSubscription;
-
-						$paymentPlanSubscription->plan_id 			= $companyRepresentativeData['company_representative_payment_plan'];
-						$paymentPlanSubscription->plan_type_id 		= '2';	// For company representative
-						$paymentPlanSubscription->subscriber_id 	= $user->id;
-						$paymentPlanSubscription->start_date 		= $currDate;
-						$paymentPlanSubscription->end_date 			= $validUpto;
-						$paymentPlanSubscription->quota 			= $paymentPlanDetails->allowed_count;
-						$paymentPlanSubscription->remaining_qouta 	= $paymentPlanDetails->allowed_count;
-						$paymentPlanSubscription->status 			= '1';
-
-						if( $paymentPlanSubscription->save() )
-						{
-							DB::commit();
-
-							$response['errCode']    = 0;
-				        	$response['errMsg']     = 'Company representative added successfully';
-						}
-						else
-						{
-							DB::rollBack();
-
-							$response['errCode']    = 2;
-				        	$response['errMsg']     = 'Some issue in adding the payment plan subscription';
-						}
-					}
-					else
-					{
-						DB::rollBack();
-
-						$response['errCode']    = 3;
-			        	$response['errMsg']     = 'Invalid payment plan';
-					}
+					$response['errCode']    = 0;
+		        	$response['errMsg']     = 'Company representative added successfully';
 				}
 				else
 				{
@@ -3383,21 +3488,12 @@ class CompanyController extends Controller
 
     		if( count( $cities ) > 0 )
     		{
-    			$html = '';
+    			$html = '<option value="" selected></option>';
     			foreach ($cities as $city)
     			{
 	    			$html .= '<option value="'. $city->id .'">'. $city->name .'</option>';
     			}
     			$response['cities'] = $html;
-    		}
-
-    		// Get the selected payment plan details
-    		$paymentPlanSubscription = PaymentPlanSubscription::where(['subscriber_id' => $companyRepId, 'plan_type_id' => '2', 'status' => '1'])->first();
-
-    		$response['paymentPlan'] = '';
-    		if( count( $paymentPlanSubscription ) > 0 )
-    		{
-    			$response['paymentPlan'] = $paymentPlanSubscription->plan_id;
     		}
 		}
 
@@ -3492,68 +3588,6 @@ class CompanyController extends Controller
 				{
 					// Check if the user company mapping exist or not
 					$user->company()->sync($agentData['company_representative_company']);
-
-
-
-					// Attach the payment plan if exist
-					if( $agentData['company_representative_edit_payment_plan'] != '' )
-					{
-				        $currDate = date('Y-m-d');
-
-				        // In any existing plan is there then change its status to '0'
-				        PaymentPlanSubscription::where(['subscriber_id' => $agentData['company_representative_id'], 'plan_type_id' => '2'])->update(['status' => '0']);
-
-						// Get the selected plan details
-						$paymentPlanDetails = PaymentPlan::find($agentData['company_representative_edit_payment_plan']);
-
-						if( count( $paymentPlanDetails ) > 0 )
-						{
-							$validUpto = date( 'Y-m-d', '+' . strtotime( $paymentPlanDetails->validity_days . ' days', strtotime( $currDate ) ) );
-
-							$paymentPlanSubscription = new PaymentPlanSubscription;
-
-							$paymentPlanSubscription->plan_id 			= $agentData['company_representative_edit_payment_plan'];
-							$paymentPlanSubscription->plan_type_id 		= '2';	// for company representative
-							$paymentPlanSubscription->subscriber_id 	= $agentData['company_representative_id'];
-							$paymentPlanSubscription->start_date 		= $currDate;
-							$paymentPlanSubscription->end_date 			= $validUpto;
-							$paymentPlanSubscription->quota 			= $paymentPlanDetails->allowed_count;
-							$paymentPlanSubscription->remaining_qouta 	= $paymentPlanDetails->allowed_count;
-							$paymentPlanSubscription->status 			= '1';
-
-							if( $paymentPlanSubscription->save() )
-							{
-								DB::commit();
-
-								$response['errCode']    = 0;
-					        	$response['errMsg']     = 'Agent added successfully';
-							}
-							else
-							{
-								DB::rollBack();
-
-								$response['errCode']    = 2;
-					        	$response['errMsg']     = 'Some issue in adding the payment plan subscription';
-							}
-						}
-						else
-						{
-							DB::rollBack();
-
-							$response['errCode']    = 3;
-				        	$response['errMsg']     = 'Invalid payment plan';
-						}
-					}
-					else
-					{
-						DB::commit();
-
-						$response['errCode']    = 0;
-			        	$response['errMsg']     = 'Agent added successfully';
-					}
-
-
-
 
 					$response['errCode']    = 0;
 			        $response['errMsg']     = 'Company representative updated successfully';
@@ -4051,10 +4085,7 @@ class CompanyController extends Controller
     	// Get the countries
     	$countries = Country::get();
 
-    	// Get the paymnet plan list where plan_type_id = 2 is for company
-    	$paymentPlans = PaymentPlan::where(['plan_type_id' => '2', 'status' => '1'])->orderBy('plan_name', 'asc')->select('id', 'plan_name', 'plan_charges', 'validity_days', 'trial_plan')->get();
-
-    	return view('administrator/companyRepresentative', ['companies' => $companies, 'provinces' => $provinces, 'cities' => $cities, 'countries' => $countries, 'paymentPlans' => $paymentPlans]);
+    	return view('administrator/companyRepresentative', ['companies' => $companies, 'provinces' => $provinces, 'cities' => $cities, 'countries' => $countries]);
     }
 
     /**
@@ -4081,9 +4112,9 @@ class CompanyController extends Controller
     	// Map the sorting column index to the column name
     	$sortBy = $arr[$col];
 
-    	$agents 	= DB::select(
+    	$companyRepresentatives = DB::select(
     	            DB::raw(
-    	            	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.company_name, t7.category as company_category
+    	            	"SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.id as companyId, t6.company_name, t7.category as company_category
     					FROM users AS t1 
     					LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
     					LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
@@ -4097,9 +4128,9 @@ class CompanyController extends Controller
     	            )
     	        );
 
-    	$agentsCount = DB::select(
+    	$crCount = DB::select(
     	                DB::raw("
-    	                SELECT t1.id, t1.email, CONCAT_WS(' ', t1.fname, t1.lname) AS agent_name, t1.status, t6.company_name, t7.category as company_category
+    	                SELECT t1.id
     					FROM users AS t1 
     					LEFT JOIN role_user AS t2 ON t1.id = t2.user_id 
     					LEFT JOIN provinces AS t3 ON t1.province_id = t3.id 
@@ -4113,7 +4144,7 @@ class CompanyController extends Controller
     	            );
 
     	// Assign it to the datatable pagination variable
-    	$iTotal = count($agentsCount);
+    	$iTotal = count($crCount);
 
     	$response = array(
     	    'iTotalRecords' => $iTotal,
@@ -4122,14 +4153,15 @@ class CompanyController extends Controller
     	);
 
     	$k=0;
-    	if ( count( $agents ) > 0 )
+    	if ( count( $companyRepresentatives ) > 0 )
     	{
-    	    foreach ($agents as $agent)
+    	    foreach ($companyRepresentatives as $companyRepresentative)
     	    {
-    	    	// Check the agent payment plan
+    	    	// Check the company payment plan
 	        	$currDate = date('Y-m-d');
 
-	        	$paymentPlanSubscription = 	PaymentPlanSubscription::where(['plan_type_id' => '2', 'subscriber_id' => $agent->id, 'status' => '1'])
+	        	// Get the company associated with the company representative
+	        	$paymentPlanSubscription = 	PaymentPlanSubscription::where(['plan_type_id' => '2', 'subscriber_id' => $companyRepresentative->companyId, 'status' => '1'])
 	        								->where('start_date', '<=', $currDate)
 											->where('end_date', '>=', $currDate)
 											->first();
@@ -4141,14 +4173,14 @@ class CompanyController extends Controller
 				}
 
     	        $response['aaData'][$k] = array(
-    	            0 => $agent->id,
-    	            1 => ucwords( strtolower( $agent->company_name ) ),
-    	            2 => ucwords( strtolower( $agent->company_category ) ),
-    	            3 => ucwords( strtolower( $agent->agent_name ) ),
-    	            4 => $agent->email,
+    	            0 => $companyRepresentative->id,
+    	            1 => ucwords( strtolower( $companyRepresentative->company_name ) ),
+    	            2 => ucwords( strtolower( $companyRepresentative->company_category ) ),
+    	            3 => ucwords( strtolower( $companyRepresentative->agent_name ) ),
+    	            4 => $companyRepresentative->email,
     	            5 => $planExpireDate,
-    	            6 => Helper::getStatusText($agent->status),
-    	            7 => '<a href="javascript:void(0);" id="'. $agent->id .'" data-usertype="company_representative" class="edit_company_representative"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> | <a href="javascript:void(0);" id="'. $agent->id .'" class="company_representative_notification_email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>'
+    	            6 => Helper::getStatusText($companyRepresentative->status),
+    	            7 => '<a href="javascript:void(0);" id="'. $companyRepresentative->id .'" data-usertype="company_representative" class="edit_company_representative"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> | <a href="javascript:void(0);" id="'. $companyRepresentative->id .'" class="company_representative_notification_email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>'
     	        );
     	        $k++;
     	    }
@@ -4467,7 +4499,7 @@ class CompanyController extends Controller
     												->leftJoin('home_cleaning_service_requests as t2', 't1.company_id', '=', 't2.company_id')
     												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
     												->where(['t1.id' => $transactionDetails->id])
-    												->select('t3.fname', 't3.oname', 't3.email')
+    												->select('t1.id', 't3.fname', 't3.oname', 't3.email')
     												->first();
     							}
     							else if( $transactionDetails->company_category_id == '3' )	// Moving Company
@@ -4476,7 +4508,7 @@ class CompanyController extends Controller
     												->leftJoin('moving_item_service_requests as t2', 't1.company_id', '=', 't2.mover_company_id')
     												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
     												->where(['t1.id' => $transactionDetails->id])
-    												->select('t3.fname', 't3.oname', 't3.email')
+    												->select('t1.id', 't3.fname', 't3.oname', 't3.email')
     												->first();
     							}
     							else if( $transactionDetails->company_category_id == '4' ) 	// Internet & Cable Service provider
@@ -4485,7 +4517,7 @@ class CompanyController extends Controller
     												->leftJoin('digital_service_requests as t2', 't1.company_id', '=', 't2.digital_service_company_id')
     												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
     												->where(['t1.id' => $transactionDetails->id])
-    												->select('t3.fname', 't3.oname', 't3.email')
+    												->select('t1.id', 't3.fname', 't3.oname', 't3.email')
     												->first();
     							}
     							else if( $transactionDetails->company_category_id == '5' ) 	// Tech Concierge
@@ -4494,11 +4526,13 @@ class CompanyController extends Controller
     												->leftJoin('tech_concierge_service_requests as t2', 't1.company_id', '=', 't2.company_id')
     												->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
     												->where(['t1.id' => $transactionDetails->id])
-    												->select('t3.fname', 't3.oname', 't3.email')
+    												->select('t1.id', 't3.fname', 't3.oname', 't3.email')
     												->first();
     							}
 
     							$companyDetails = Company::find($transactionDetails->company_id);
+
+    							$url = url('/rating') . '/' . $companyDetails->id . '/' . $clientDetails->id . '/' . $transactionDetails->id . '/' . $paymentRequest->id;
 
     							$emailData = array(
     								/* Email data */
@@ -4510,10 +4544,11 @@ class CompanyController extends Controller
     								'dateOfPayment' => date('Y-m-d', strtotime( $transactionDetails->created_at )), 
     								'orderDetails' 	=> $transactionDetails->payment_against, 
     								'companyName' 	=> ucwords( strtolower( $companyDetails->company_name ) ),
-    								'clientName' 	=> ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname ) )
+    								'clientName' 	=> ucwords( strtolower( $clientDetails->fname . ' ' . $clientDetails->oname ) ),
+    								'url'			=> $url
     							);
 
-								Mail::send('emails.testEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+								Mail::send('emails.requestForRating', ['emailData' => $emailData], function ($m) use ($emailData) {
 							        $m->from('info@udistro.ca', 'Udistro');
 							        
 							        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
@@ -4536,6 +4571,104 @@ class CompanyController extends Controller
     	{
 			$response['errCode']    = 4;
         	$response['errMsg']     = 'Missing transaction id';
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to show the rating form
+     * @param void
+     * @return array
+     */
+    public function rating($companyId='', $moverId='', $responseId='', $transactionId='')
+    {
+    	if( $companyId != '' && $moverId !='' && $responseId !='' && $transactionId != '' )
+    	{
+    		$params = true;
+
+    		return view('rating', ['params' => $params, 'companyId' => $companyId, 'moverId' => $moverId, 'responseId' => $responseId, 'transactionId' => $transactionId]);
+    	}
+    	else
+    	{
+    		$params = false;
+
+    		return view('rating', ['params' => $params]);
+    	}
+    }
+
+    /**
+     * Function to show the rating form
+     * @param void
+     * @return array
+     */
+    public function saveRating()
+    {
+    	$userRating 	= Input::get('rating');
+    	$companyId 		= Input::get('companyId');
+    	$moverId 		= Input::get('moverId');
+    	$responseId 	= Input::get('responseId');
+    	$transactionId 	= Input::get('transactionId');
+
+    	$response = array();
+    	if( $userRating != '' && $companyId != '' && $moverId != '' && $responseId != '' && $transactionId != '' )
+    	{
+    		// Check if the rating already exist
+    		$ratingExist = Rating::where(['company_id' => $companyId, 'mover_id' => $moverId, 'service_request_response_id' => $responseId])->first();
+
+    		if( count( $ratingExist ) == 0 )
+    		{
+    			// Start the transaction
+    			DB::beginTransaction();
+
+    			$rating = new Rating;
+
+    			$rating->company_id = $companyId;
+    			$rating->mover_id 	= $moverId;
+    			$rating->service_request_response_id = $responseId;
+    			$rating->rating 	= $userRating;
+    			$rating->status 	= '1';
+    			$rating->created_at = date('Y-m-d H:i:s');
+
+    			if( $rating->save() )
+    			{
+    				// Upadte the mover_payment_released in payment_transaction_details table
+    				if( PaymentTransactionDetail::where(['id' => $transactionId])->update(['mover_payment_released' => '1']) )
+    				{
+    					// Commit the transaction
+    					DB::commit();
+
+	    				$response['errCode']    = 0;
+			    		$response['errMsg']     = 'Rating saved successfully';
+    				}
+    				else
+    				{
+    					// Rollback the transaction
+    					DB::rollBack();
+
+	    				$response['errCode']    = 1;
+			    		$response['errMsg']     = 'Some issue in saving the rating';		
+    				}
+    			}
+    			else
+    			{
+    				// Rollback the transaction
+    				DB::rollBack();
+
+    				$response['errCode']    = 2;
+		    		$response['errMsg']     = 'Some issue in saving the rating';		
+    			}
+    		}
+    		else
+    		{
+    			$response['errCode']    = 3;
+		    	$response['errMsg']     = 'Rating already exist';
+    		}
+    	}
+    	else
+    	{
+    		$response['errCode']    = 3;
+		    $response['errMsg']     = 'Missing required parameters';
     	}
 
     	return response()->json($response);

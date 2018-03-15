@@ -152,6 +152,9 @@ class PaymentController extends Controller
     	  	$paymentTransactionDetail->verify_sign = $responseData['verify_sign'];
 
     	  	$paymentTransactionDetail->save();
+
+    	  	// Send the email to company to start the work
+    	  	Helper::companyStartWorkNotification( $responseData['invoice'] );
     	}
     	else if (strcmp ($res, "INVALID") == 0)
     	{

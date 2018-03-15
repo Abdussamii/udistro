@@ -97,10 +97,16 @@ Route::get('/login', function () {
     return view('login');
 });
 
-// Out team
+// Our team
 Route::get('/ourteam', function () {
     return view('ourTeam');
 });
+
+// To show the rating form
+Route::get('/rating/{companyId?}/{moverId?}/{responseId?}/{transactionId?}', 'CompanyController@rating');
+
+// To save rating
+Route::post('/saverating', 'CompanyController@saveRating');
 
 ////////// Home Pages Routes //////////
 
@@ -731,7 +737,7 @@ Route::group(['prefix' => 'movers'], function() {
 	Route::get('/getmovingcompaniesrequest', 'MoversController@getMovingCompaniesRequest');
 
 	// To get the quotation response details
-	Route::get('/getquotationresponsedetails', 'MoversController@getqQuotationResponseDetails');
+	Route::get('/getquotationresponsedetails', 'MoversController@getQuotationResponseDetails');
 
 	// To save the share announcement email and message
 	Route::post('/saveannouncementemail', 'MoversController@saveAnnouncementEmail');

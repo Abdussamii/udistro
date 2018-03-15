@@ -613,10 +613,10 @@ class AgentController extends Controller
 				// Save the client details
 				$agentClient = new AgentClient;
 
-				$agentClient->agent_id 		= $userId;
+				$agentClient->agent_id 			= $userId;
 				$agentClient->fname 			= $clientData['client_fname'];
-				$agentClient->lname 			= $clientData['client_mname'];
-				$agentClient->oname 			= $clientData['client_lname'];
+				$agentClient->oname 			= $clientData['client_mname'];
+				$agentClient->lname 			= $clientData['client_lname'];
 				$agentClient->email 			= $clientData['client_email'];
 				$agentClient->contact_number 	= $clientData['client_number'];
 				$agentClient->status 			= $clientData['client_status'];

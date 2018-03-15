@@ -37,18 +37,6 @@
 	},
 	control1 = new pca.Address(fields1, options1);
 
-	// On the selesction of address get the province abbreviation, and set it on the province dropdown
-	control1.listen("populate", function (address) {
-
-	    $("#company_province_edit option").each(function() {
-			if($(this).data('abbreviation') == address.Province)
-			{
-				$(this).attr('selected', 'selected').change();
-			}
-		});
-
-	});
-
 	$(document).ready(function(){
 		// To pot a space after user enters 3 characters like (123 456)
 		$('#postal_code').keyup(function() {
@@ -57,6 +45,37 @@
 		    	postalCode = postalCode.match(new RegExp('.{1,3}', 'g')).join(" ");
 		  	}
 		  	$(this).val(postalCode);
+		});
+
+		// According to company category selection hide/show the payment_plan selection
+		// Add
+		$('#payment_plan_container').hide();
+		$('#frm_add_company #company_category').change(function(){
+			let companyCategoryId = $(this).val();
+
+			if( companyCategoryId == '1' )
+			{
+				$('#payment_plan_container').hide();
+			}
+			else
+			{
+				$('#payment_plan_container').show();
+			}
+		});
+
+		// Edit
+		$('#edit_payment_plan_container').hide();
+		$('#frm_edit_company #company_category').change(function(){
+			let companyCategoryId = $(this).val();
+
+			if( companyCategoryId == '1' )
+			{
+				$('#edit_payment_plan_container').hide();
+			}
+			else
+			{
+				$('#edit_payment_plan_container').show();
+			}
 		});
 	});
 	</script>
@@ -120,6 +139,24 @@
 									?>
 								</select>
 							</div>
+
+							<!-- Payment Plan Selection only for companies other than Real Estate companies -->
+							<div class="form-group" id="payment_plan_container" style="display: none;">
+								<label for="payment_plan">Payment Plan</label>
+								<select name="payment_plan" id="payment_plan" class="form-control">
+									<option value="">Select</option>
+									<?php
+									if( isset( $paymentPlans ) && count( $paymentPlans ) > 0 )
+									{
+										foreach ($paymentPlans as $paymentPlan)
+										{
+											echo '<option value="'. $paymentPlan->id .'">'. ucwords( strtolower( $paymentPlan->plan_name ) ) .'</option>';
+										}
+									}
+									?>
+								</select>
+							</div>
+
 							<div class="form-group">
 								<label class="control-label">Address Line 1:</label>
 								<div class="input-line">
@@ -244,6 +281,24 @@
 											?>
 										</select>
 									</div>
+
+									<!-- Payment Plan Selection only for companies other than Real Estate companies -->
+									<div class="form-group" id="edit_payment_plan_container" style="display: none;">
+										<label for="payment_plan">Payment Plan</label>
+										<select name="payment_plan" id="payment_plan" class="form-control">
+											<option value="">Select</option>
+											<?php
+											if( isset( $paymentPlans ) && count( $paymentPlans ) > 0 )
+											{
+												foreach ($paymentPlans as $paymentPlan)
+												{
+													echo '<option value="'. $paymentPlan->id .'">'. ucwords( strtolower( $paymentPlan->plan_name ) ) .'</option>';
+												}
+											}
+											?>
+										</select>
+									</div>
+
 									<div class="form-group">
 										<label class="control-label">Address Line 1:</label>
 										<div class="input-line">
