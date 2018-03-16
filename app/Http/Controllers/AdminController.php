@@ -5435,7 +5435,7 @@ class AdminController extends Controller
         $iTotal 	= 0;
         
 		$jobDetails = DB::table('payment_transaction_details')
-        			// ->where(['payment_status' => 'Completed'])					// Get only completed transaction
+        			->where(['payment_status' => 'Completed'])					// Get only completed transaction
         			->orderBy($sortBy, $sortType)
     				->limit($length)
                     ->offset($start)
@@ -5443,7 +5443,7 @@ class AdminController extends Controller
         			->get();
 
        	$iTotal = DB::table('payment_transaction_details')
-        			// ->where(['payment_status' => 'Completed'])					// Get only completed transaction
+        			->where(['payment_status' => 'Completed'])					// Get only completed transaction
         			->orderBy($sortBy, $sortType)
     				->limit($length)
                     ->offset($start)

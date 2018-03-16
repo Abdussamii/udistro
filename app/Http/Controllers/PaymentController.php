@@ -32,7 +32,7 @@ class PaymentController extends Controller
      */
     public function success()
     {
-        echo 'Payment is successful';
+        return view('payment/successful-payment');
     }
 
     /**
@@ -42,7 +42,7 @@ class PaymentController extends Controller
      */
     public function cancel()
     {
-        echo 'Payment is cancelled';
+        return view('payment/payment-cancel');
     }
 
     /**
@@ -52,7 +52,7 @@ class PaymentController extends Controller
      */
     public function paymentStatus()
     {
-    	// Log::useDailyFiles(storage_path().'/logs/Paypal_IPN.log');
+    	Log::useDailyFiles(storage_path().'/logs/Paypal_IPN.log');
 
     	// STEP 1: read POST data
     	// Reading POSTed data directly from $_POST causes serialization issues with array data in the POST.
@@ -128,7 +128,7 @@ class PaymentController extends Controller
     	  	$paymentTransactionDetail->address_zip = $responseData['address_zip'];
     	  	$paymentTransactionDetail->first_name = $responseData['first_name'];
     	  	$paymentTransactionDetail->last_name = $responseData['last_name'];
-    	  	$paymentTransactionDetail->ipn_track_id	= $responseData['ipn_track_id'];
+    	  	$paymentTransactionDetail->ipn_track_id	= isset( $responseData['ipn_track_id'] ) ? $responseData['ipn_track_id'] : '';
     	  	$paymentTransactionDetail->item_name = $responseData['item_name'];
     	  	$paymentTransactionDetail->item_number = $responseData['item_number'];
     	  	$paymentTransactionDetail->mc_currency = $responseData['mc_currency'];
@@ -138,16 +138,16 @@ class PaymentController extends Controller
     	  	$paymentTransactionDetail->payer_id	= $responseData['payer_id'];
     	  	$paymentTransactionDetail->payer_status	= $responseData['payer_status'];
     	  	$paymentTransactionDetail->payment_date	= $responseData['payment_date'];
-    	  	$paymentTransactionDetail->payment_gross = $responseData['payment_gross'];
+    	  	$paymentTransactionDetail->payment_gross = isset( $responseData['payment_gross'] ) ? $responseData['payment_gross'] : '';
     	  	$paymentTransactionDetail->payment_status = $responseData['payment_status'];
     	  	$paymentTransactionDetail->payment_type	= $responseData['payment_type'];
-    	  	$paymentTransactionDetail->pending_reason = $responseData['pending_reason'];
-    	  	$paymentTransactionDetail->protection_eligibility = $responseData['protection_eligibility'];		
+    	  	$paymentTransactionDetail->pending_reason = isset( $responseData['pending_reason'] ) ? $responseData['pending_reason'] : '';
+    	  	$paymentTransactionDetail->protection_eligibility = isset( $responseData['protection_eligibility'] ) ? $responseData['protection_eligibility'] : '';	
     	  	$paymentTransactionDetail->quantity	= $responseData['quantity'];
     	  	$paymentTransactionDetail->receiver_email = $responseData['receiver_email'];
     	  	$paymentTransactionDetail->residence_country = $responseData['residence_country'];	
     	  	$paymentTransactionDetail->txn_id = $responseData['txn_id'];
-    	  	$paymentTransactionDetail->transaction_subject = $responseData['transaction_subject'];	
+    	  	$paymentTransactionDetail->transaction_subject = isset( $responseData['transaction_subject'] ) ? $responseData['transaction_subject'] : '';
     	  	$paymentTransactionDetail->txn_type	= $responseData['txn_type'];
     	  	$paymentTransactionDetail->verify_sign = $responseData['verify_sign'];
 
@@ -163,6 +163,6 @@ class PaymentController extends Controller
     	}
     	
     	// Log::info( $log );
-    	// Log::info( $responseData );
+    	Log::info( $responseData );
     }
 }

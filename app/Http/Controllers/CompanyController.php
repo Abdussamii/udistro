@@ -4319,7 +4319,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
@@ -4332,7 +4332,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->count();
         		}
@@ -4343,7 +4343,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
@@ -4356,7 +4356,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->count();
         		}
@@ -4367,7 +4367,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
@@ -4380,7 +4380,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->count();
         		}
@@ -4391,7 +4391,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
@@ -4404,7 +4404,7 @@ class CompanyController extends Controller
         						->leftJoin('agent_clients as t3', 't2.agent_client_id', '=', 't3.id')
         						->leftJoin('companies as t4', 't1.company_id', '=', 't4.id')
         						->where(['t1.company_id' => $companyDetails->id])
-        						//->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
+        						->where(['t1.payment_status' => 'Completed'])					// Get only completed transaction
         						->where('t3.fname', 'like', '%'. $sSearch .'%')
         						->count();
         		}

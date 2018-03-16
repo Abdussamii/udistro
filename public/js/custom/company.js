@@ -865,6 +865,8 @@ $(document).ready(function(){
     });
     $('#btn_update_home_cleaning_service_request').click(function(){
     	
+    	var $this = $(this);
+
 		$.ajax({
 			url: $('meta[name="route"]').attr('content') + '/company/updatehomecleaningservicerequest',
 			method: 'post',
@@ -874,12 +876,24 @@ $(document).ready(function(){
 			headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    },
+		    beforeSend: function() {
+		        // Show the loading button
+		        $this.button('loading');
+		    },
+		    complete: function()
+		    {
+		        // Change the button to previous
+		        $this.button('reset');
+		    },
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
 		    		$('#modal_home_cleaning_service_request').modal('hide');
 		    		
 		    		alertify.success( response.errMsg );
+
+		    		// Refresh the datatable
+		    		$('#datatable_quotation_request').DataTable().ajax.reload();
 		    	}
 		    	else
 		    	{
@@ -896,11 +910,22 @@ $(document).ready(function(){
     });
     $('#btn_update_moving_service_request').click(function(){
     	
+    	var $this = $(this);
+
 		$.ajax({
 			url: $('meta[name="route"]').attr('content') + '/company/updatemovingservicerequest',
 			method: 'post',
 			data: {
 				frmData: $('#frm_home_moving_companies').serialize()
+			},
+			beforeSend: function() {
+			    // Show the loading button
+			    $this.button('loading');
+			},
+			complete: function()
+			{
+			    // Change the button to previous
+			    $this.button('reset');
 			},
 			headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -911,6 +936,9 @@ $(document).ready(function(){
 		    		$('#modal_moving_companies_service_request').modal('hide');
 
 		    		alertify.success( response.errMsg );
+
+		    		// Refresh the datatable
+		    		$('#datatable_quotation_request').DataTable().ajax.reload();
 		    	}
 		    	else
 		    	{
@@ -927,6 +955,8 @@ $(document).ready(function(){
     });
     $('#btn_update_tech_concierge_service_request').click(function(){
     	
+    	var $this = $(this);
+
 		$.ajax({
 			url: $('meta[name="route"]').attr('content') + '/company/updatetechconciergeservicerequest',
 			method: 'post',
@@ -936,12 +966,24 @@ $(document).ready(function(){
 			headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    },
+		    beforeSend: function() {
+		        // Show the loading button
+		        $this.button('loading');
+		    },
+		    complete: function()
+		    {
+		        // Change the button to previous
+		        $this.button('reset');
+		    },
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
 		    		alertify.success( response.errMsg );
 
 		    		$('#modal_tech_concierge_service_request').modal('hide');
+
+		    		// Refresh the datatable
+		    		$('#datatable_quotation_request').DataTable().ajax.reload();
 		    	}
 		    	else
 		    	{
@@ -958,6 +1000,8 @@ $(document).ready(function(){
     });
     $('#btn_update_cable_internet_service_request').click(function(){
     	
+    	var $this = $(this);
+
 		$.ajax({
 			url: $('meta[name="route"]').attr('content') + '/company/updatecableinternetservicerequest',
 			method: 'post',
@@ -967,12 +1011,24 @@ $(document).ready(function(){
 			headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    },
+		    beforeSend: function() {
+		        // Show the loading button
+		        $this.button('loading');
+		    },
+		    complete: function()
+		    {
+		        // Change the button to previous
+		        $this.button('reset');
+		    },
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
 		    		alertify.success( response.errMsg );
 
 		    		$('#modal_cable_internet_service_request').modal('hide');
+
+		    		// Refresh the datatable
+		    		$('#datatable_quotation_request').DataTable().ajax.reload();
 		    	}
 		    	else
 		    	{

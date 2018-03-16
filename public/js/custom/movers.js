@@ -872,6 +872,8 @@ $(document).ready(function(){
 	$('#btn_submit_home_cleaning_query').click(function(){
 		if( $('#frm_home_cleaning_services').valid() )
 		{
+			var $this = $(this);
+
 			$.ajax({
 				url: $('meta[name="route"]').attr('content') + '/movers/savehomecleaningquery',
 				method: 'post',
@@ -880,6 +882,15 @@ $(document).ready(function(){
 				},
 				headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    beforeSend: function() {
+			        // Show the loading button
+			        $this.button('loading');
+			    },
+			    complete: function()
+			    {
+			        // Change the button to previous
+			        $this.button('reset');
 			    },
 			    success: function(response){
 			    	if( response.errCode == 0 )
@@ -1008,6 +1019,8 @@ $(document).ready(function(){
 	$('#btn_submit_moving_query').click(function(){
 		if( $('#frm_home_moving_companies').valid() )
 		{
+			var $this = $(this);
+
 			$.ajax({
 				url: $('meta[name="route"]').attr('content') + '/movers/saveusermovingquery',
 				method: 'post',
@@ -1016,6 +1029,15 @@ $(document).ready(function(){
 				},
 				headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    beforeSend: function() {
+			        // Show the loading button
+			        $this.button('loading');
+			    },
+			    complete: function()
+			    {
+			        // Change the button to previous
+			        $this.button('reset');
 			    },
 			    success: function(response){
 			    	if( response.errCode == 0 )
@@ -1107,6 +1129,8 @@ $(document).ready(function(){
 	$('#btn_submit_tech_concierge_query').click(function(){
 		if( $('#frm_tech_concierge').valid() )
 		{
+			var $this = $(this);
+
 			$.ajax({
 				url: $('meta[name="route"]').attr('content') + '/movers/savetechconciergequery',
 				method: 'post',
@@ -1115,6 +1139,15 @@ $(document).ready(function(){
 				},
 				headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    beforeSend: function() {
+			        // Show the loading button
+			        $this.button('loading');
+			    },
+			    complete: function()
+			    {
+			        // Change the button to previous
+			        $this.button('reset');
 			    },
 			    success: function(response){
 			    	if( response.errCode == 0 )
@@ -1234,6 +1267,8 @@ $(document).ready(function(){
 	$('#btn_cable_internet_submit_query').click(function(){
 		if( $('#frm_cable_internet_services').valid() )
 		{
+			var $this = $(this);
+
 			$.ajax({
 				url: $('meta[name="route"]').attr('content') + '/movers/savecableinternetquery',
 				method: 'post',
@@ -1242,6 +1277,15 @@ $(document).ready(function(){
 				},
 				headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    beforeSend: function() {
+			        // Show the loading button
+			        $this.button('loading');
+			    },
+			    complete: function()
+			    {
+			        // Change the button to previous
+			        $this.button('reset');
 			    },
 			    success: function(response){
 			    	if( response.errCode == 0 )

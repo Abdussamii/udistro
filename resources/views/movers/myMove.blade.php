@@ -35,6 +35,9 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="{{ URL::asset('js/jquery.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
+
 <script src="{{ URL::asset('js/movers/bootstrap.min.3.3.7.js') }}"></script>
 
 <!-- Custom functionality -->
@@ -55,7 +58,6 @@
 <link rel="stylesheet" href="{{ URL::asset('css/multiple-select.css') }}" />
 
 <!-- Jquery UI for datepicker -->
-<script type="text/javascript" src="{{ URL::asset('js/jquery-ui.min.js') }}"></script>
 <link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.min.css') }}" />
 
 <script>
@@ -2236,7 +2238,7 @@ function calculateRoute(from, to) {
 						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#home_cleaning_services_collapse10">Call Me On</a>
 						                    </h4>
 						                </div>
-						                <div id="home_cleaning_services_collapse10" class="panel-collapse collapse in" aria-expanded="true" style="">
+						                <div id="home_cleaning_services_collapse10" class="panel-collapse collapse" aria-expanded="true" style="">
 						                    <div class="panel-body">
 						                        <div class="form-group panel-Box">
 						                        	<input name="cable_internet_callback_primary_no" class="form-control accord-input" placeholder="Primary No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899" type="text">
