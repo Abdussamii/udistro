@@ -547,8 +547,8 @@ class CompanyController extends Controller
 						$company = new Company;
 
 						$company->company_name 			= $companyData['company_name'];
-						$company->company_category_id 	= $companyData['company_province'];
-						$company->province_id 			= $companyData['company_type'];
+						$company->company_category_id 	= $companyData['company_type'];
+						$company->province_id 			= $companyData['company_province'];
 						$company->created_by			= $companyRep->id;									// Id of newly created user
 						$company->status 				= '1';
 
@@ -557,33 +557,139 @@ class CompanyController extends Controller
 							// Attach the created user to the company
 							$companyRep->company()->attach($company->id);
 
-							DB::commit();
-
-							// Send the email here
-							if( app()->env != 'local' )
+							// Attach the trial payment plan to newly registered company
+							// Get the trial payment plan
+							$trialPaymentPlan = array();
+							if( $companyData['company_type'] == 1 )		// Real Estate company
 							{
-								$loginURL = url('/company');
-						    	if( $companyData['company_type'] == 1 )	// Real Estate company
-								{
-									$loginURL = url('/agent');
-								}
-								$emailData = array(
-									/* Email data */
-									'email' 	=> ucwords( strtolower( $companyData['rep_lname'] . ' ' . $companyData['rep_fname'] ) ),
-									'name' 		=> $companyData['email'],
-									'subject' 	=> 'Registration Successful',
-									'loginURL' 	=> $loginURL
-								);
-
-								Mail::send('emails.businessRegistration', ['emailData' => $emailData], function ($m) use ($emailData) {
-							        $m->from('info@udistro.ca', 'Udistro');
-							        
-							        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-							    });
+								$trialPaymentPlan = PaymentPlan::where(['plan_type_id' => '1', 'trial_plan' => '1', 'status' => '1'])->first();
+							}
+							else 										// Local business
+							{
+								$trialPaymentPlan = PaymentPlan::where(['plan_type_id' => '2', 'trial_plan' => '1', 'status' => '1'])->first();
 							}
 
-							$response['errCode']    = 0;
-				        	$response['errMsg']     = 'Company registered successfully';
+							if( count( $trialPaymentPlan ) > 0 )
+							{
+								// Save the payment plan entry
+								if( $companyData['company_type'] == 1 )		// Real Estate company, the payment plan is for agent
+								{
+							        $currDate = date('Y-m-d');
+
+									$validUpto = date( 'Y-m-d', '+' . strtotime( $trialPaymentPlan->validity_days . ' days', strtotime( $currDate ) ) );
+
+									$paymentPlanSubscription = new PaymentPlanSubscription;
+
+									$paymentPlanSubscription->plan_id 			= $trialPaymentPlan->id;
+									$paymentPlanSubscription->plan_type_id 		= '1';	// for agent
+									$paymentPlanSubscription->subscriber_id 	= $companyRep->id;
+									$paymentPlanSubscription->start_date 		= $currDate;
+									$paymentPlanSubscription->end_date 			= $validUpto;
+									$paymentPlanSubscription->quota 			= $trialPaymentPlan->allowed_count;
+									$paymentPlanSubscription->remaining_qouta 	= $trialPaymentPlan->allowed_count;
+									$paymentPlanSubscription->status 			= '1';
+
+									if( $paymentPlanSubscription->save() )
+									{
+										DB::commit();
+
+										// Send the email here
+										if( app()->env != 'local' )
+										{
+											$loginURL = url('/company');
+									    	if( $companyData['company_type'] == 1 )	// Real Estate company
+											{
+												$loginURL = url('/agent');
+											}
+											$emailData = array(
+												/* Email data */
+												'email' 	=> ucwords( strtolower( $companyData['rep_lname'] . ' ' . $companyData['rep_fname'] ) ),
+												'name' 		=> $companyData['email'],
+												'subject' 	=> 'Registration Successful',
+												'loginURL' 	=> $loginURL
+											);
+
+											Mail::send('emails.businessRegistration', ['emailData' => $emailData], function ($m) use ($emailData) {
+										        $m->from('info@udistro.ca', 'Udistro');
+										        
+										        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+										    });
+										}
+
+										$response['errCode']    = 0;
+							        	$response['errMsg']     = 'Company registered successfully';
+									}
+									else
+									{
+										DB::rollBack();
+
+										$response['errCode']    = 7;
+							        	$response['errMsg']     = 'Some error in company registeration';
+									}
+								}
+								else 										// Local business, the payment plan is for company
+								{
+							        $currDate = date('Y-m-d');
+
+									$validUpto = date( 'Y-m-d', '+' . strtotime( $trialPaymentPlan->validity_days . ' days', strtotime( $currDate ) ) );
+
+									$paymentPlanSubscription = new PaymentPlanSubscription;
+
+									$paymentPlanSubscription->plan_id 			= $trialPaymentPlan->id;
+									$paymentPlanSubscription->plan_type_id 		= '2';	// for company
+									$paymentPlanSubscription->subscriber_id 	= $company->id;
+									$paymentPlanSubscription->start_date 		= $currDate;
+									$paymentPlanSubscription->end_date 			= $validUpto;
+									$paymentPlanSubscription->quota 			= $trialPaymentPlan->allowed_count;
+									$paymentPlanSubscription->remaining_qouta 	= $trialPaymentPlan->allowed_count;
+									$paymentPlanSubscription->status 			= '1';
+
+									if( $paymentPlanSubscription->save() )
+									{
+										DB::commit();
+
+										// Send the email here
+										if( app()->env != 'local' )
+										{
+											$loginURL = url('/company');
+									    	if( $companyData['company_type'] == 1 )	// Real Estate company
+											{
+												$loginURL = url('/agent');
+											}
+											$emailData = array(
+												/* Email data */
+												'email' 	=> ucwords( strtolower( $companyData['rep_lname'] . ' ' . $companyData['rep_fname'] ) ),
+												'name' 		=> $companyData['email'],
+												'subject' 	=> 'Registration Successful',
+												'loginURL' 	=> $loginURL
+											);
+
+											Mail::send('emails.businessRegistration', ['emailData' => $emailData], function ($m) use ($emailData) {
+										        $m->from('info@udistro.ca', 'Udistro');
+										        
+										        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+										    });
+										}
+
+										$response['errCode']    = 0;
+							        	$response['errMsg']     = 'Company registered successfully';
+									}
+									else
+									{
+										DB::rollBack();
+
+										$response['errCode']    = 7;
+							        	$response['errMsg']     = 'Some error in company registeration';
+									}
+								}
+							}
+							else
+							{
+								DB::rollBack();
+
+								$response['errCode']    = 6;
+					        	$response['errMsg']     = 'Some error in company registeration';
+							}
 						}
 						else
 						{

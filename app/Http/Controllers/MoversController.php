@@ -3585,7 +3585,8 @@ class MoversController extends Controller
     		if( isset( $details ) && count( $details ) > 0 )
     		{
     			// Generate the Invoice No and make an entry into transaction table
-    			$invoiceNo = strtoupper( str_random(20) );
+    			// $invoiceNo = strtoupper( str_random(20) );
+    			$invoiceNo = (rand(10000000, 99999999));
 
     			$paymentTransactionDetail = new PaymentTransactionDetail;
 

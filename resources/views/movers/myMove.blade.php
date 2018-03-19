@@ -674,7 +674,7 @@ function calculateRoute(from, to) {
 			  			    						{
 			  			    						?>
 			  			    							<div class="get_started_LB">
-			  			    								<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Map Link</a>
+			  			    								<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
 			  			    							</div>
 			  			    						<?php
 			  			    						}

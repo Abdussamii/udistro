@@ -53,7 +53,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#profile">Information</a></li>
             <li><a data-toggle="tab" href="#message">Brand</a></li>
-            <li><a data-toggle="tab" href="#template">Template</a></li>
+            <!-- <li><a data-toggle="tab" href="#template">Template</a></li> -->
           </ul>
           <div class="tab-content">
             <div id="profile" class="tab-pane fade in active">
@@ -343,12 +343,12 @@
                     </div>
                   </form>
               </div>
-              <div class="message-box">
+              <!-- <div class="message-box">
                   <h3>Message</h3>
                   <form class="form-horizontal" role="form" name="frm_agent_message" id="frm_agent_message" novalidate>
                     <div class="form-group">
                       <div class="col-lg-12">
-                        <textarea class="form-control" rows="10" name="agent_message" id="agent_message">{{ $message->message }}</textarea>
+                        <textarea class="form-control" rows="10" name="agent_message" id="agent_message">{{ $message->message or '' }}</textarea>
                       </div>
                     </div>
                     <div>
@@ -357,10 +357,10 @@
                       </div>
                     </div>
                   </form>
-              </div>
+              </div> -->
             </div>
 
-            <div id="template" class="tab-pane fade">
+            <!-- <div id="template" class="tab-pane fade">
               <div class="email-template-wrap">
                 <form class="form-horizontal" role="form" name="frm_agent_email_template" id="frm_agent_email_template" novalidate>
                     <div class="form-group">
@@ -400,7 +400,7 @@
                     </div>
                 </form>
             </div>
-          </div>
+          </div> -->
 
           <br />
         </div>
