@@ -230,6 +230,32 @@
 									</div>
 								</div>
 								<div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="do_it_on_line_label">Do it Online Label</label>
+											<input type="text" name="do_it_on_line_label" id="do_it_on_line_label" class="form-control" placeholder="Do it Online Label" value="">
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="get_started_label">Get Started Label</label>
+											<input type="text" name="get_started_label" id="get_started_label" class="form-control" placeholder="Get Started Label" value="">
+										</div>
+									</div>
+								</div>
+								<div>
+									<div class="col-lg-12">
+										<div class="form-group">
+											<label for="direct_link">Direct Link</label>
+											<div class="radio">
+											 	<label><input type="radio" name="direct_link" value="1" checked="true">Yes</label>
+											</div>
+											<div class="radio">
+											 	<label><input type="radio" name="direct_link" value="0">No</label>
+											</div>
+										</div>
+									</div>
+								<div>
 									<div class="col-lg-12">
 										<div class="form-group">
 											<label for="company_status">Status</label>

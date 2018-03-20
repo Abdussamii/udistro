@@ -1173,7 +1173,11 @@ $(document).ready(function(){
             formData.append('detail2', $('#frm_add_provincial_agency #detail2').val());
             formData.append('detail3', $('#frm_add_provincial_agency #detail3').val());
             formData.append('detail4', $('#frm_add_provincial_agency #detail4').val());
-
+			
+			formData.append('do_it_on_line_label', $('#frm_add_provincial_agency #do_it_on_line_label').val());
+            formData.append('get_started_label', $('#frm_add_provincial_agency #get_started_label').val());
+			formData.append('direct_link', $("input[name='direct_link']:checked").val());
+			
             formData.append('link', $('#frm_add_provincial_agency #link').val());
 
             formData.append('status', $("input[name='province_address_status']:checked").val());
@@ -1730,6 +1734,10 @@ $(document).ready(function(){
                     $('#frm_add_provincial_agency #detail2').val(response.detail2);
                     $('#frm_add_provincial_agency #detail3').val(response.detail3);
                     $('#frm_add_provincial_agency #detail4').val(response.detail4);
+					
+					$('#frm_add_provincial_agency #do_it_on_line_label').val(response.do_it_on_line_label);
+                    $('#frm_add_provincial_agency #get_started_label').val(response.get_started_label);
+					$('#frm_add_provincial_agency input[name="direct_link"][value="'+ response.direct_link +'"]').prop('checked', true);
 
                     $('#frm_add_provincial_agency #link').val(response.link);
                     

@@ -1,0 +1,5 @@
+
+
+ALTER TABLE `provincial_agency_details` ADD `do_it_on_line_label` VARCHAR(50) NOT NULL AFTER `logo`, ADD `get_started_label` VARCHAR(50) NOT NULL AFTER `do_it_on_line_label`, ADD `direct_link` ENUM('0','1') NOT NULL COMMENT '0 means not direct link' AFTER `get_started_label`;
+
+

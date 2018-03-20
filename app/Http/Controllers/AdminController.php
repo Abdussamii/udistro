@@ -1682,6 +1682,10 @@ class AdminController extends Controller
 
     	$link 		= Input::get('link');
     	$status		= Input::get('status');
+		
+		$doItOnLineLabel	= Input::get('do_it_on_line_label');
+    	$getStartedLabel 	= Input::get('get_started_label');
+    	$directLink			= Input::get('direct_link');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -1734,6 +1738,10 @@ class AdminController extends Controller
 	        	    		$provincialDetail->detail2 		= $detail2;
 	        	    		$provincialDetail->detail3 		= $detail3;
 	        	    		$provincialDetail->detail4 		= $detail4;
+							
+							$provincialDetail->do_it_on_line_label 	= $doItOnLineLabel;
+	        	    		$provincialDetail->get_started_label 	= $getStartedLabel;
+	        	    		$provincialDetail->direct_link 			= $directLink;
 
 	        	    		$provincialDetail->link 		= $link;
 	        	    		$provincialDetail->logo 		= $fileName;
@@ -1793,6 +1801,10 @@ class AdminController extends Controller
 	    		$provincialDetail->detail3 		= $detail3;
 	    		$provincialDetail->detail4 		= $detail4;
 
+				$provincialDetail->do_it_on_line_label 	= $doItOnLineLabel;
+	        	$provincialDetail->get_started_label 	= $getStartedLabel;
+	        	$provincialDetail->direct_link 			= $directLink;
+							
 	    		$provincialDetail->link 		= $link;
 	    		$provincialDetail->logo 		= $fileName;
 	    		$provincialDetail->status 		= $status;
@@ -1858,6 +1870,10 @@ class AdminController extends Controller
 	        	    		$provincialDetail->detail3 		= $detail3;
 	        	    		$provincialDetail->detail4 		= $detail4;
 
+							$provincialDetail->do_it_on_line_label 	= $doItOnLineLabel;
+	        	    		$provincialDetail->get_started_label 	= $getStartedLabel;
+	        	    		$provincialDetail->direct_link 			= $directLink;
+							
 	        	    		$provincialDetail->link 		= $link;
 	        	    		$provincialDetail->logo 		= $fileName;
 	        	    		$provincialDetail->status 		= $status;
@@ -1916,6 +1932,10 @@ class AdminController extends Controller
 	    		$provincialDetail->detail3 		= $detail3;
 	    		$provincialDetail->detail4 		= $detail4;
 
+				$provincialDetail->do_it_on_line_label 	= $doItOnLineLabel;
+	        	$provincialDetail->get_started_label 	= $getStartedLabel;
+	        	$provincialDetail->direct_link 			= $directLink;
+							
 	    		$provincialDetail->link 		= $link;
 	    		$provincialDetail->logo 		= $fileName;
 	    		$provincialDetail->status 		= $status;
