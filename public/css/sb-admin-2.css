@@ -678,7 +678,11 @@ text-align: right;
 .navbar-right .navbar-right .dropdown-menu>li>a:focus,
 .navbar-right .dropdown-menu>li>a:hover { background-color: #fff; }
 /************************************* DROPDOWN - NONE *************************************/
-
+img#company_profile_image {
+    display: block;
+    width: 80px;
+    height: auto;
+}
 
 /*********************************************************************************** RESPONSIVE MEDIA QUERY STARTS HERE ***********************************************************************************/
 @media (min-width: 768px) {

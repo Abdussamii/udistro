@@ -250,7 +250,7 @@
 		<div id="modal_edit_company" class="modal fade" role="dialog">
 		  	<div class="modal-dialog">
 			    <!-- Modal content-->
-			    <div class="modal-content" style="width:1100px;">
+			    <div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title">Edit Company</h4>
@@ -259,7 +259,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<form name="frm_edit_company" id="frm_edit_company" autocomplete="off">
-								<div class="col-sm-9">
+								<div class="col-sm-12">
 									<legend>Company Information</legend>
 									<div class="form-group">
 										<label for="company_name">Company Name</label>
@@ -382,8 +382,8 @@
 										<label id="company_status-error" class="error" for="company_status"></label>
 									</div>
 								</div>
-								<div class="col-sm-3">
-									<label for="company_status">Image</label>
+								<div class="form-group col-sm-12">
+									<label for="company_status">Company Logo</label>
 									<img src="" id="company_profile_image" height="150px" width="150px" class="avatar img-square" alt="avatar">
 									<div class="top-buffer">
 										<!-- To upload image -->
@@ -391,8 +391,10 @@
 										<input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
 										<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
 									</div>
-								</div><br /><br /><br /><br /><br /><br />
-								<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
+								</div>
+								<div class="col-sm-12">
+									<button type="submit" id="btn_update_company_details" name="btn_update_company_details" class="btn btn-primary">Submit</button>
+								</div>
 							</form>
 						</div>
 					</div>

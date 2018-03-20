@@ -478,6 +478,13 @@
 													<td>
 														<table>
 															<tr>
+																<td style="padding-top: 20px; padding-left: 20px;">
+																	Dear [firstname],
+																</td>
+															</tr>
+														</table>
+														<table>
+															<tr>
 																<td style="padding:20px; width: 50%;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 																	<div class="editable" style="text-align: justify;">
@@ -647,40 +654,6 @@
 				<h4 class="modal-title">Uplaod Image</h4>
 			</div>
 			<div class="modal-body">
-		    	<!-- <ul class="nav nav-tabs">
-		    	    <li class="active"><a data-toggle="tab" href="#home">Upload Image</a></li>
-		    	    <li><a data-toggle="tab" href="#menu1">Choose from Udistro</a></li>
-		    	</ul>
-
-		    	<div class="tab-content">
-		    	    <div id="home" class="tab-pane fade in active">
-		    	      	<form id="frm_upload_email_template_image" name="frm_upload_email_template_image">
-		    	      		<div class="form-group">
-		    	      			<label for="upload_image">Select Image:</label>
-		    	      			<input type="file" name="upload_image" id="upload_image">
-		    	      		</div>
-		    	      		<div id="container_email_template_image" style="display: none;">
-		    	      			<div class="form-group">
-		    	      				<label>Preview:</label>
-		    	      				<div>
-		    	      					<img src="" alt="Udistro" id="uploaded_image_preview">
-		    	      				</div>
-		    	      				<label>Image Path:</label>
-		    	      				<div>
-		    	      					<input type="text" name="uploaded_image_path" id="uploaded_image_path" class="form-control">
-		    	      				</div>
-		    	      			</div>
-		    	      		</div>
-		    	      	</form>
-		    	    </div>
-		    	    <div id="menu1" class="tab-pane fade">
-		    	      	<div class="form-group">
-		    	      		<img src="{{ url('images/email_template/wH5yJUTpN1LE6Fbl9aZ2.jpg') }}" width="200" height="200">
-		    	      		<input type="" name="" value="{{ url('images/email_template/wH5yJUTpN1LE6Fbl9aZ2.jpg') }}" class="form-control">
-		    	      	</div>
-		    	    </div>
-		    	</div> -->
-
 		    	<form id="frm_upload_email_template_image" name="frm_upload_email_template_image">
 		    		<div class="form-group">
 		    			<label for="upload_image">Select Image:</label>
@@ -688,14 +661,15 @@
 		    		</div>
 		    		<div id="container_email_template_image" style="display: none;">
 		    			<div class="form-group">
-		    				<label>Preview:</label>
+		    				<!-- <label>Preview:</label>
 		    				<div>
 		    					<img src="" alt="Udistro" id="uploaded_image_preview">
-		    				</div>
+		    				</div> -->
 		    				<label>Image Path:</label>
 		    				<div>
 		    					<input type="text" name="uploaded_image_path" id="uploaded_image_path" class="form-control">
 		    				</div>
+		    				<a id="copy_image_path" href="javascript:void(0);">Copy image path</a>
 		    			</div>
 		    		</div>
 		    	</form>
@@ -745,7 +719,7 @@ $(document).ready(function(){
 	$('.add_image').click(function(){
 		// Flush the contents
 		$('#upload_image').val('');
-		$('#uploaded_image_preview').attr('src', '');
+		// $('#uploaded_image_preview').attr('src', '');
 		$('#container_email_template_image').hide();
 
 		// Show the modal
@@ -772,7 +746,7 @@ $(document).ready(function(){
     	        if( response.errCode == 0 )
     	        {
     	            // Show the image with the associated controls
-    	            $('#uploaded_image_preview').attr('src', response.filePath );
+    	            // $('#uploaded_image_preview').attr('src', response.filePath );
     	            $('#uploaded_image_path').val( response.filePath );
 
     	            $('#container_email_template_image').show();
@@ -807,7 +781,7 @@ $(document).ready(function(){
     		let placementId = $('input[name="image_placement"]:checked').val();
 
     		// Assign it to respective image
-    		$('#logo_image' + placementId).attr('src', $('#uploaded_image_preview').attr('src'));
+    		// $('#logo_image' + placementId).attr('src', $('#uploaded_image_preview').attr('src'));
 
     		// Change its custom attribute
     		$('#logo_image' + placementId).attr('image-type', 'uploaded');
@@ -949,6 +923,15 @@ $(document).ready(function(){
     		return false;
     	}
 
+    });
+
+    // To copy the image path in clipboard
+    $('#copy_image_path').click(function(){
+    	var $temp = $("<input>");
+	    $("body").append($temp);
+	    $temp.val( $('#uploaded_image_path').val() ).select();
+	    document.execCommand("copy");
+	    $temp.remove();
     });
 
 });

@@ -160,20 +160,17 @@
                             <a href="#"><i class="fa fa-building-o" aria-hidden="true"></i> Company Management<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="{{ url('/administrator/companycategories') }}"> Company Categories</a>
+                                    <a href="{{ url('/administrator/companies') }}"> Companies</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/administrator/companies') }}"> Companies</a>
+                                    <a href="{{ url('/administrator/companyrepresentatives') }}"> Company Representative</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/administrator/agents') }}"> Agents</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/administrator/companyrepresentatives') }}"> Company Representative</a>
+                                    <a href="{{ url('/administrator/companycategories') }}"> Company Categories</a>
                                 </li>
-                                <!-- <li>
-                                    <a href="{{ url('/administrator/industrytype') }}"> Industry Type</a>
-                                </li> -->
                                 <li>
                                     <a href="{{ url('/administrator/services') }}"> Services</a>
                                 </li>

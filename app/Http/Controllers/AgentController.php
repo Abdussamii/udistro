@@ -2108,6 +2108,16 @@ class AgentController extends Controller
 					$movingToAddress->save();
 				}
 			}
+
+			// Replace the [firstname] with the mover's first name
+			$clientDetails = AgentClient::find($inviteDetails['client_id']);
+
+			// Get the email template content
+			$emailTemplate = EmailTemplate::find($inviteDetails['client_email_template']);
+			$emailTemplateContent = $emailTemplate->template_content_to_send;
+
+			$clientFName = ucwords( strtolower( $clientDetails->fname ) );
+			$updatedTemplateContent = str_replace('[firstname]', $clientFName, $emailTemplateContent);
 			
 			// Save the invitation details
 			$agentClientInvite = new AgentClientInvite;
@@ -2115,7 +2125,7 @@ class AgentController extends Controller
 			$agentClientInvite->agent_id 			= $userId;
 			$agentClientInvite->client_id 			= $inviteDetails['client_id'];
 			$agentClientInvite->email_template_id 	= $inviteDetails['client_email_template'];
-			$agentClientInvite->message_content 	= '';
+			$agentClientInvite->message_content 	= $updatedTemplateContent;
 			$agentClientInvite->email_url 			= '';
 			if( $inviteDetails['client_invitation_schedule_date'] != '' )
 			{

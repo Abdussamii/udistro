@@ -7,3 +7,7 @@ ALTER TABLE `payment_transaction_details` ADD `mover_payment_released` ENUM('0',
 ALTER TABLE `payment_transaction_details` CHANGE `mover_payment_released` `mover_payment_released` ENUM('0','1') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '0' COMMENT '0: Not approved, 1: Approved';
 
 *******************************************************************************************************************************************
+
+20-03-2018
+
+ALTER TABLE `agent_client_invites` CHANGE `message_content` `message_content` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
