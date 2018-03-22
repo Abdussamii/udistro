@@ -2,6 +2,31 @@
 @section('title', 'Udistro | Moving Category')
 
 @section('content')
+	
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Moving Category</h1>
@@ -41,12 +66,12 @@
 							<div class="col-sm-9">
 								<form name="frm_add_moving_category" id="frm_add_moving_category" autocomplete="off">
 									<div class="form-group">
-										<label for="category_name">Category Name</label>
+										<label for="category_name">Category Name <span class="error">*</span></label>
 										<input type="text" name="category_name" id="category_name" class="form-control" placeholder="Enter category name">
 										<input type="hidden" name="category_id" id="category_id">
 									</div>
 									<div class="form-group">
-										<label for="category_status">Status</label>
+										<label for="category_status">Status <span class="error">*</span></label>
 										<div class="radio">
 										 	<label><input type="radio" name="category_status" value="1" checked="true">Active</label>
 										</div>

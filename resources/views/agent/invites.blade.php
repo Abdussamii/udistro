@@ -2,6 +2,27 @@
 @section('title', 'Udistro | Invites')
 
 @section('content')
+	<style type="text/css">
+	.loader-wrapper {
+    	position: fixed;
+    	width: 100%;
+    	height: 100%;
+    	background: #fff;
+    	z-index: 999;
+    }
+    .preload {
+        position: absolute;
+        top: 50%;
+        left: 40%;
+        transform: translate(-50%, -40%);
+        -webkit-transform: translate(-50%, -40%);
+    }
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
 
 	<div class="row">
         <div class="col-lg-12">

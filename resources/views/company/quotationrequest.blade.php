@@ -122,7 +122,29 @@
 		    transform: rotate(360deg);
 		  }
 		}
+
+		.loader-wrapper {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			background: #fff;
+			z-index: 999;
+			left:0;
+			top:0;
+		}
+		.preload {
+		    position: absolute;
+		    top: 50%;
+		    left: 55%;
+		    transform: translate(-50%, -55%);
+		    -webkit-transform: translate(-50%, -55%);
+		}
 	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
 	
 	<!-- Loading Spinner -->
 	<div class="loading" style="display: none;">Loading&#8230;</div>

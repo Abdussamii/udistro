@@ -2,6 +2,31 @@
 @section('title', 'Udistro | Moving Item details')
 
 @section('content')
+	
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Moving Item details</h1>
@@ -19,8 +44,8 @@
 					<tr>
 						<td>#</td>
 						<td>Category Name</td>
-						<td>ITEM Name</td>
-						<td>ITEM Weight (in LBS)</td>
+						<td>Item Name</td>
+						<td>Item Weight (in LBS)</td>
 						<td>Status</td>
 						<td>Action</td>
 					</tr>
@@ -43,12 +68,12 @@
 							<div class="col-sm-9">
 								<form name="frm_add_moving_item" id="frm_add_moving_item" autocomplete="off">
 									<div class="form-group">
-										<label for="item_name">Item Name</label>
+										<label for="item_name">Item Name <span class="error">*</span></label>
 										<input type="text" name="item_name" id="item_name" class="form-control" placeholder="Enter Item name">
 										<input type="hidden" name="item_id" id="item_id">
 									</div>
 									<div class="form-group">
-										<label for="province">Category Name</label>
+										<label for="province">Category Name <span class="error">*</span></label>
 										<select name="item_category" id="item_category" class="form-control">
 											<option value="">Select</option>
 											<?php
@@ -63,11 +88,11 @@
 										</select>
 									</div>
 									<div class="form-group">
-										<label for="category_name">Item Weight (in LBS)</label>
+										<label for="category_name">Item Weight (in LBS) <span class="error">*</span></label>
 										<input type="text" name="item_weight" id="item_weight" class="form-control" placeholder="Enter item weight">
 									</div>
 									<div class="form-group">
-										<label for="item_status">Status</label>
+										<label for="item_status">Status <span class="error">*</span></label>
 										<div class="radio">
 										 	<label><input type="radio" name="item_status" value="1" checked="true">Active</label>
 										</div>

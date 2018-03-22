@@ -165,7 +165,7 @@ $(document).ready(function(){
 	    $('#forward_mail_flow_control').hide();
     });
 
-    // To opne the website in a separate window
+    // To open the website in a separate window
     $('#forward_mail_search_postoffice').click(function(){
     	var paramString = $('#forward_mail_search_postoffices_address').val();
 
@@ -180,6 +180,25 @@ $(document).ready(function(){
     	{
     		var URL = window.open("https://www.google.co.in/maps/search/canada+post+offices/@51.1745672,-115.6424392,12z/data=!3m1!4b1", "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
     	}
+    });
+
+    // To open the nearest public insurance offices on map in a separate window
+    $('.btn_update_address_search_insurance_office').click(function(){
+    	let province = $(this).attr('id');
+
+    	var paramString = $('#update_address_search_insurance_office').val();
+
+    	var searchFor = '';
+    	if( paramString != '' )
+    	{
+    		searchFor = 'public+insurance+office+in+' + paramString + '+' + province;
+    	}
+    	else
+    	{
+    		searchFor = 'public+insurance+office+in+' + province;	
+    	}
+
+    	var URL = window.open("https://www.google.co.in/maps/search/" + searchFor, "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
     });
 
 	/* ---------- Activities functionality ends ---------- */

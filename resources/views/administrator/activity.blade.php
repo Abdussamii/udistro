@@ -2,6 +2,31 @@
 @section('title', 'Udistro | Activity')
 
 @section('content')
+	
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Activity</h1>
@@ -42,7 +67,7 @@
 							<div class="col-sm-9">
 								<form name="frm_add_activity" id="frm_add_activity" autocomplete="off">
 									<div class="form-group">
-										<label for="activity_name">Activity Name</label>
+										<label for="activity_name">Activity Name <span class="error">*</span></label>
 										<input type="text" name="activity_name" id="activity_name" class="form-control" placeholder="Enter Activity Name">
 										<input type="hidden" name="activity_id" id="activity_id">
 									</div>

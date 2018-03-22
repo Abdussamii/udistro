@@ -47,6 +47,30 @@
 	    });
 	</script>
 
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Company Representative</h1>
@@ -118,7 +142,7 @@
 				<div class="modal-body">
 					<form name="frm_add_company_representative" id="frm_add_company_representative" autocomplete="off">
 						<div class="form-group">
-							<label for="company_representative_company">Company</label>
+							<label for="company_representative_company">Company <span class="error">*</span></label>
 							<select name="company_representative_company" id="company_representative_company" class="form-control">
 								<option value="">Select</option>
 								<?php
@@ -135,11 +159,11 @@
 						<div class="form-group">
 							<div class="row">
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_fname">First Name</label>
+							  		<label for="company_representative_fname">First Name <span class="error">*</span></label>
 							  		<input type="text" name="company_representative_fname" id="company_representative_fname" class="form-control" placeholder="First Name">
 							  	</div>
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_lname">Last Name</label>
+							  		<label for="company_representative_lname">Last Name <span class="error">*</span></label>
 							  		<input type="text" name="company_representative_lname" id="company_representative_lname" class="form-control" placeholder="Last Name">
 							  	</div>
 							</div>
@@ -147,59 +171,74 @@
 						<div class="form-group">
 							<div class="row">
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_email">Email</label>
+							  		<label for="company_representative_email">Email <span class="error">*</span></label>
 							  		<input type="text" name="company_representative_email" id="company_representative_email" class="form-control" placeholder="company_representative Email">
 							  	</div>
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_password">Password</label>
+							  		<label for="company_representative_password">Password <span class="error">*</span></label>
 							  		<input type="password" name="company_representative_password" id="company_representative_password" class="form-control" placeholder="Password">
 							  	</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="company_representative_address1">Address</label>
+							<label for="company_representative_address1">Address <span class="error">*</span></label>
 							<input name="company_representative_address1" id="company_representative_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 						</div>
 
-						<div id="add_company_representative_address" style="display: none;">
-							<input name="company_representative_address2" id="company_representative_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
-				            <select id="company_representative_city" class="form-control" name="company_representative_city">
-								<option value="">Select</option>
-									<?php
-									if( isset( $cities ) && count( $cities ) > 0 )
-									{
-										foreach($cities as $city)
+						<div id="add_company_representative_address">
+							<div class="form-group">
+								<label for="company_representative_address1">Address 2</label>
+								<input name="company_representative_address2" id="company_representative_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+							</div>
+							<div class="form-group">
+								<label for="company_representative_address1">City <span class="error">*</span></label>
+					            <select id="company_representative_city" class="form-control" name="company_representative_city">
+									<option value="">Select</option>
+										<?php
+										if( isset( $cities ) && count( $cities ) > 0 )
 										{
-											echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+											foreach($cities as $city)
+											{
+												echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+											}
 										}
-									}
-									?>
-				            </select>
-	                        <select id="company_representative_province" class="form-control" name="company_representative_province">
-	            				<option value="">Select</option>
-	            					<?php
-	            					if( isset( $provinces ) && count( $provinces ) > 0 )
-	            					{
-	            						foreach($provinces as $province)
-	            						{
-	            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
-	            						}
-	            					}
-	            					?>
-	                        </select>
-	                        <input id="company_representative_postalcode" name="company_representative_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
-                            <select name="company_representative_country" id="company_representative_country" class="form-control">
-                				<option value="">Select</option>
-                					<?php
-                					if( isset( $countries ) && count( $countries ) > 0 )
-                					{
-                						foreach($countries as $country)
-                						{
-                							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-                						}
-                					}
-                					?>
-                            </select>
+										?>
+					            </select>
+					        </div>
+					        <div class="form-group">
+					        	<label for="company_representative_address1">Province <span class="error">*</span></label>
+		                        <select id="company_representative_province" class="form-control" name="company_representative_province">
+		            				<option value="">Select</option>
+		            					<?php
+		            					if( isset( $provinces ) && count( $provinces ) > 0 )
+		            					{
+		            						foreach($provinces as $province)
+		            						{
+		            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+		            						}
+		            					}
+		            					?>
+		                        </select>
+		                    </div>
+		                    <div class="form-group">
+		                    	<label for="company_representative_address1">Zip/Postcode <span class="error">*</span></label>
+	                        	<input id="company_representative_postalcode" name="company_representative_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+	                        </div>
+	                        <div class="form-group">
+	                        	<label for="company_representative_address1">Country <span class="error">*</span></label>
+	                            <select name="company_representative_country" id="company_representative_country" class="form-control">
+	                				<option value="">Select</option>
+	                					<?php
+	                					if( isset( $countries ) && count( $countries ) > 0 )
+	                					{
+	                						foreach($countries as $country)
+	                						{
+	                							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+	                						}
+	                					}
+	                					?>
+	                            </select>
+	                        </div>
 						</div>
 						<div class="form-group">
 							<label for="company_representative_status">Status</label>
@@ -231,7 +270,7 @@
 				<div class="modal-body">
 					<form name="frm_edit_company_representative" id="frm_edit_company_representative" autocomplete="off">
 						<div class="form-group">
-							<label for="company_representative_company">Company</label>
+							<label for="company_representative_company">Company <span class="error">*</span></label>
 							<select name="company_representative_company" id="company_representative_company" class="form-control">
 								<option value="">Select</option>
 								<?php
@@ -248,13 +287,13 @@
 						<div class="form-group">
 							<div class="row">
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_fname">First Name</label>
+							  		<label for="company_representative_fname">First Name <span class="error">*</span></label>
 							  		<input type="text" name="company_representative_fname" id="company_representative_fname" class="form-control" placeholder="First Name">
 							  		<input type="hidden" name="company_representative_id" id="company_representative_id" value="">
 							  		<input type="hidden" name="user_type" id="user_type" value="">
 							  	</div>
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_lname">Last Name</label>
+							  		<label for="company_representative_lname">Last Name <span class="error">*</span></label>
 							  		<input type="text" name="company_representative_lname" id="company_representative_lname" class="form-control" placeholder="Last Name">
 							  	</div>
 							</div>
@@ -262,56 +301,71 @@
 						<div class="form-group">
 							<div class="row">
 							  	<div class="col-sm-6">
-							  		<label for="company_representative_email">Email</label>
+							  		<label for="company_representative_email">Email <span class="error">*</span></label>
 							  		<input type="text" name="company_representative_email" id="company_representative_email" class="form-control" placeholder="Company Representative Email">
 							  	</div>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label for="company_representative_address">Address</label>
+							<label for="company_representative_address">Address <span class="error">*</span></label>
 							<input name="company_representative_edit_address1" id="company_representative_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 						</div>
 
-						<div id="edit_company_representative_address" style="display: none;">
-							<input name="company_representative_edit_address2" id="company_representative_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
-				            <select id="company_representative_edit_city" class="form-control" name="company_representative_edit_city">
-								<option value="">Select</option>
-									<?php
-									if( isset( $cities ) && count( $cities ) > 0 )
-									{
-										foreach($cities as $city)
+						<div id="edit_company_representative_address">
+							<div class="form-group">
+								<label for="company_representative_address">Address 2</label>
+								<input name="company_representative_edit_address2" id="company_representative_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+							</div>
+							<div class="form-group">
+								<label for="company_representative_edit_city">City <span class="error">*</span></label>
+					            <select id="company_representative_edit_city" class="form-control" name="company_representative_edit_city">
+									<option value="">Select</option>
+										<?php
+										if( isset( $cities ) && count( $cities ) > 0 )
 										{
-											echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+											foreach($cities as $city)
+											{
+												echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+											}
 										}
-									}
-									?>
-				            </select>
-	                        <select id="company_representative_edit_province" class="form-control" name="company_representative_edit_province">
-	            				<option value="">Select</option>
-	            					<?php
-	            					if( isset( $provinces ) && count( $provinces ) > 0 )
-	            					{
-	            						foreach($provinces as $province)
-	            						{
-	            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
-	            						}
-	            					}
-	            					?>
-	                        </select>
-	                        <input id="company_representative_edit_postalcode" name="company_representative_edit_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
-                            <select name="company_representative_edit_country" id="company_representative_edit_country" class="form-control">
-                				<option value="">Select</option>
-                					<?php
-                					if( isset( $countries ) && count( $countries ) > 0 )
-                					{
-                						foreach($countries as $country)
-                						{
-                							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-                						}
-                					}
-                					?>
-                            </select>
+										?>
+					            </select>
+					        </div>
+					        <div class="form-group">
+								<label for="company_representative_edit_city">Province <span class="error">*</span></label>
+		                        <select id="company_representative_edit_province" class="form-control" name="company_representative_edit_province">
+		            				<option value="">Select</option>
+		            					<?php
+		            					if( isset( $provinces ) && count( $provinces ) > 0 )
+		            					{
+		            						foreach($provinces as $province)
+		            						{
+		            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+		            						}
+		            					}
+		            					?>
+		                        </select>
+		                    </div>
+		                    <div class="form-group">
+								<label for="company_representative_edit_city">Zip/Postcode <span class="error">*</span></label>
+	                        	<input id="company_representative_edit_postalcode" name="company_representative_edit_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
+	                        </div>
+	                        <div class="form-group">
+								<label for="company_representative_edit_city">Country <span class="error">*</span></label>
+	                            <select name="company_representative_edit_country" id="company_representative_edit_country" class="form-control">
+	                				<option value="">Select</option>
+	                					<?php
+	                					if( isset( $countries ) && count( $countries ) > 0 )
+	                					{
+	                						foreach($countries as $country)
+	                						{
+	                							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+	                						}
+	                					}
+	                					?>
+	                            </select>
+	                        </div>
 						</div>
 						<div class="form-group">
 							<label for="company_representative_status">Status</label>

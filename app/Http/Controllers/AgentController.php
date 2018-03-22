@@ -2164,15 +2164,15 @@ class AgentController extends Controller
 				$agentClientInvite->save();
 
 				// Update this link in the html as well
-				$emailContent = EmailTemplate::find($agentClientInvite->email_template_id);
+				$emailContent 	= AgentClientInvite::find($lastInviteId);
 
-				$contentToSend 	= $emailContent->template_content_to_send;
+				$messageContent = $emailContent->message_content;
 
 				// Replace the "https://www.udistro.ca/" with the real link
-				$updatedContent = str_replace('href="https://www.udistro.ca/"', 'href="' . $emailLink . '"', $contentToSend);
+				$updatedContent = str_replace('href="https://www.udistro.ca/"', 'href="' . $emailLink . '"', $messageContent);
 
 				// Update the content in the table
-				EmailTemplate::where(['id' => $agentClientInvite->email_template_id])->update(['template_content_to_send' => $updatedContent]);
+				AgentClientInvite::where(['id' => $lastInviteId])->update(['message_content' => $updatedContent]);
 			}
 
 			$response['errCode']    = 0;

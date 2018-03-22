@@ -361,6 +361,10 @@ $(document).ready(function(){
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 6] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -1486,6 +1490,10 @@ $(document).ready(function(){
         "columnDefs": [
             { "className": "dt-center", "targets": [ 0, 4, 5 ] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
 			{ 'bSortable' : true },

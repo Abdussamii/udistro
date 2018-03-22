@@ -1395,12 +1395,14 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchprovinces',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 6, 7] },
 			{ "className": "dt-right", "targets": [ 2, 3, 4, 5] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -1418,11 +1420,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchmovingcategory',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 2, 3] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -1436,11 +1440,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchmovingitemdetails',
-        
         "columnDefs": [
-            { "className": "dt-center", "targets": [0, 2, 3] }
+            { "className": "dt-center", "targets": [0, 4, 5] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -1456,11 +1462,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchactivity',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -1483,11 +1491,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchprovincialagencies',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 4] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -1502,11 +1512,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchactivityfeedback',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -1538,11 +1550,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchservices',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true, "width": "10%" },
             { 'bSortable' : true },
@@ -2402,11 +2416,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcompanycategories',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 2, 3] }
         ],
-        
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -2559,6 +2575,10 @@ $(document).ready(function(){
             { "className": "dt-center", "targets": [0, 7, 8] },
             { "className": "dt-right", "targets": [2, 3, 4, 5] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -2689,10 +2709,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchcities',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 3, 4] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : false },
@@ -2898,6 +2921,10 @@ $(document).ready(function(){
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 6, 7] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -2997,19 +3024,19 @@ $(document).ready(function(){
 	        company_name: {
 	        	required: true
 	        },
-	        company_category: {
+	        company_category_edit: {
 	        	required: true
 	        },
-	        company_addres: {
+	        company_address1_edit: {
 	        	required: true
 	        },
-	        company_province: {
+	        company_province_edit: {
 	        	required: true
 	        },
-	        company_city: {
+	        company_city_edit: {
 	        	required: true
 	        },
-	        postal_code: {
+	        company_postalcode_edit: {
 	        	required: true
 	        },
 			company_status: {
@@ -3030,19 +3057,19 @@ $(document).ready(function(){
 	        company_name: {
 	        	required: 'Please enter company name'
 	        },
-	        company_category: {
+	        company_category_edit: {
 	        	required: 'Please select company category'
 	        },
-	        company_addres: {
+	        company_address1_edit: {
 	        	required: 'Please enter company address'
 	        },
-	        company_province: {
+	        company_province_edit: {
 	        	required: 'Please select province'
 	        },
-	        company_city: {
+	        company_city_edit: {
 	        	required: 'Please select city'
 	        },
-	        postal_code: {
+	        company_postalcode_edit: {
 	        	required: 'Please enter postal code'
 	        },
 	        company_status: {
@@ -3188,7 +3215,7 @@ $(document).ready(function(){
 	        	atLeastOneNumber: true,
 	        	atLeastOneSymbol: true
 	        },
-	        agent_address: {
+	        agent_address1: {
 	            required: true
 	        },
 	        agent_payment_plan: {
@@ -3196,6 +3223,19 @@ $(document).ready(function(){
 	        },
 			company_status: {
 	        	required: true	
+	        },
+
+	        agent_city :{
+	        	required: true
+	        },
+	        agent_province :{
+	        	required: true
+	        },
+	        agent_postalcode :{
+	        	required: true
+	        },
+	        agent_country :{
+	        	required: true
 	        }
 	    },
 	    messages: {
@@ -3216,7 +3256,7 @@ $(document).ready(function(){
 	            required: 'Please enter password',
 	        	minlength: 'Password must contain atleat 6 characters'
 	        },
-	        agent_address: {
+	        agent_address1: {
 	            required: 'Please enter address'
 	        },
 	        agent_payment_plan: {
@@ -3224,6 +3264,19 @@ $(document).ready(function(){
 	        },
 			company_status: {
 	        	required: 'Please select status'	
+	        },
+
+	        agent_city :{
+	        	required: 'Please select city'
+	        },
+	        agent_province :{
+	        	required: 'Please select province'
+	        },
+	        agent_postalcode :{
+	        	required: 'Please enter postalcode'
+	        },
+	        agent_country :{
+	        	required: 'Please select country'
 	        }
 	    }
 	});
@@ -3274,6 +3327,10 @@ $(document).ready(function(){
 	    "columnDefs": [
 	        { "className": "dt-center", "targets": [ 0, 6, 7 ] }
 	    ],
+	    // Hide the loader when datatable is rendered
+	    "initComplete": function(settings, json) {
+	    	$('.loader-wrapper').hide();
+	    },
 	    "aoColumns": [
 	        { 'bSortable' : true },
 	        { 'bSortable' : true },
@@ -3370,6 +3427,19 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: true	
+	        },
+
+	        company_representative_city: {
+	        	required: true	
+	        },
+	        company_representative_province: {
+	        	required: true	
+	        },
+	        company_representative_postalcode: {
+	        	required: true	
+	        },
+	        company_representative_country: {
+	        	required: true	
 	        }
 	    },
 	    messages: {
@@ -3395,6 +3465,19 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: 'Please select status'	
+	        },
+
+	        company_representative_city: {
+	        	required: 'Please select city'	
+	        },
+	        company_representative_province: {
+	        	required: 'Please select province'	
+	        },
+	        company_representative_postalcode: {
+	        	required: 'Please enter postalcode'
+	        },
+	        company_representative_country: {
+	        	required: 'Please select country'
 	        }
 	    }
 	});
@@ -3505,6 +3588,19 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: true	
+	        },
+
+	        company_representative_edit_city: {
+	        	required: true
+	        },
+	        company_representative_edit_province: {
+	        	required: true
+	        },
+	        company_representative_edit_postalcode: {
+	        	required: true
+	        },
+	        company_representative_edit_country: {
+	        	required: true
 	        }
 	    },
 	    messages: {
@@ -3526,6 +3622,19 @@ $(document).ready(function(){
 	        },
 			company_representative_status: {
 	        	required: 'Please select status'	
+	        },
+
+	        company_representative_edit_city: {
+	        	required: 'Please select city'
+	        },
+	        company_representative_edit_province: {
+	        	required: 'Please select province'
+	        },
+	        company_representative_edit_postalcode: {
+	        	required: 'Please enter postalcode'
+	        },
+	        company_representative_edit_country: {
+	        	required: 'Please select country'	
 	        }
 	    }
 	});
@@ -3598,7 +3707,7 @@ $(document).ready(function(){
 	            required: true,
 	        	email: true
 	        },
-	        agent_address: {
+	        agent_edit_address1: {
 	            required: true
 	        },
 	        agent_province: {
@@ -3612,6 +3721,22 @@ $(document).ready(function(){
 	        },
 			company_status: {
 	        	required: true	
+	        },
+	        agent_edit_payment_plan: {
+	        	required: true	
+	        },
+
+	        agent_edit_city: {
+	        	required: true
+	        },
+	        agent_edit_province: {
+	        	required: true
+	        },
+	        agent_edit_postalcode: {
+	        	required: true
+	        },
+	        agent_edit_country: {
+	        	required: true
 	        }
 	    },
 	    messages: {
@@ -3628,7 +3753,7 @@ $(document).ready(function(){
 	            required: 'Please enter email',
 	        	email: 'Please enter valid email'
 	        },
-	        agent_address: {
+	        agent_edit_address1: {
 	            required: 'Please enter address'
 	        },
 	        agent_province: {
@@ -3642,6 +3767,22 @@ $(document).ready(function(){
 	        },
 			company_status: {
 	        	required: 'Please select status'	
+	        },
+	        agent_edit_payment_plan: {
+	        	required: 'Please select payment plan'
+	        },
+
+	        agent_edit_city: {
+	        	required: 'Please select city'
+	        },
+	        agent_edit_province: {
+	        	required: 'Please select province'
+	        },
+	        agent_edit_postalcode: {
+	        	required: 'Please enter postal code'
+	        },
+	        agent_edit_country: {
+	        	required: 'Please select city'
 	        }
 	    }
 	});
@@ -3914,10 +4055,13 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchresponsetimeslots',
-        
         "columnDefs": [
             { "className": "dt-center", "targets": [0, 3, 4] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -4756,6 +4900,10 @@ $(document).ready(function(){
 	    "columnDefs": [
 	        { "className": "dt-center", "targets": [ 0, 6, 7 ] }
 	    ],
+	    // Hide the loader when datatable is rendered
+	    "initComplete": function(settings, json) {
+	    	$('.loader-wrapper').hide();
+	    },
 	    "aoColumns": [
 	        { 'bSortable' : true },
 	        { 'bSortable' : true },
@@ -4943,11 +5091,14 @@ $(document).ready(function(){
 	    "bProcessing": true,
 	    "bServerSide": true,
 	    "sAjaxSource": $('meta[name="route"]').attr('content') + '/administrator/fetchjobpayments',
-	    
 	    "columnDefs": [
 	        { "className": "dt-center", "targets": [ 0 ] },
 	        { "className": "dt-right", "targets": [ 7 ] }
 	    ],
+	    // Hide the loader when datatable is rendered
+	    "initComplete": function(settings, json) {
+	    	$('.loader-wrapper').hide();
+	    },
 	    "aoColumns": [
 	        { 'bSortable' : true },
 	        { 'bSortable' : false },

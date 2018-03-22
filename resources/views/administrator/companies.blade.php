@@ -23,6 +23,10 @@
 		key: "kp88-mx67-ff25-xd59"
 	},
 	control = new pca.Address(fields, options);
+	// For testing
+	/*control.listen("populate", function (address) {
+	    console.log(address.City + ' - ' + address.ProvinceCode);
+	});*/
 
 	var fields1 = [
 		{ element: "street-address_edit", field: "Line1" },
@@ -79,6 +83,31 @@
 		});
 	});
 	</script>
+
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Companies</h1>
@@ -121,11 +150,11 @@
 						<form name="frm_add_company" id="frm_add_company" autocomplete="off">
 							<legend>Company Information</legend>
 							<div class="form-group">
-								<label for="company_name">Company Name</label>
+								<label for="company_name">Company Name <span class="error">*</span></label>
 								<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Enter company name">
 							</div>
 							<div class="form-group">
-								<label for="company_category">Company Category</label>
+								<label for="company_category">Company Category <span class="error">*</span></label>
 								<select name="company_category" id="company_category" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -142,7 +171,7 @@
 
 							<!-- Payment Plan Selection only for companies other than Real Estate companies -->
 							<div class="form-group" id="payment_plan_container" style="display: none;">
-								<label for="payment_plan">Payment Plan</label>
+								<label for="payment_plan">Payment Plan <span class="error">*</span></label>
 								<select name="payment_plan" id="payment_plan" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -158,7 +187,7 @@
 							</div>
 
 							<div class="form-group">
-								<label class="control-label">Address Line 1:</label>
+								<label class="control-label">Address Line 1: <span class="error">*</span></label>
 								<div class="input-line">
 									<input id="street-address" name="company_address1" type="text" class="form-control" placeholder="Street address" value="" />
 								</div>
@@ -170,7 +199,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label">City:</label>
+								<label class="control-label">City: <span class="error">*</span></label>
 								<div class="input-line">
 									<select name="company_city" id="company_city" class="form-control">
 										<option value="">Select</option>
@@ -188,7 +217,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label">Province:</label>
+								<label class="control-label">Province: <span class="error">*</span></label>
 								<div class="input-line">
 									<select name="company_province" id="company_province" class="form-control">
 										<option value="">Select</option>
@@ -206,13 +235,13 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label">Postalcode:</label>
+								<label class="control-label">Postalcode: <span class="error">*</span></label>
 								<div class="input-line">
 									<input id="postcode" name="company_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" value="" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label">Country:</label>
+								<label class="control-label">Country: <span class="error">*</span></label>
 								<div class="input-line">
 									<select name="company_country" id="company_country" class="form-control">
 										<option value="">Select</option>
@@ -262,12 +291,12 @@
 								<div class="col-sm-12">
 									<legend>Company Information</legend>
 									<div class="form-group">
-										<label for="company_name">Company Name</label>
+										<label for="company_name">Company Name <span class="error">*</span></label>
 										<input type="text" name="company_name" id="company_name" class="form-control" placeholder="Enter company name">
 										<input type="hidden" name="company_id" id="company_id">
 									</div>
 									<div class="form-group">
-										<label for="company_category">Company Category</label>
+										<label for="company_category">Company Category <span class="error">*</span></label>
 										<select name="company_category_edit" id="company_category" class="form-control">
 											<option value="">Select</option>
 											<?php
@@ -284,7 +313,7 @@
 
 									<!-- Payment Plan Selection only for companies other than Real Estate companies -->
 									<div class="form-group" id="edit_payment_plan_container" style="display: none;">
-										<label for="payment_plan">Payment Plan</label>
+										<label for="payment_plan">Payment Plan <span class="error">*</span></label>
 										<select name="payment_plan" id="payment_plan" class="form-control">
 											<option value="">Select</option>
 											<?php
@@ -300,7 +329,7 @@
 									</div>
 
 									<div class="form-group">
-										<label class="control-label">Address Line 1:</label>
+										<label class="control-label">Address Line 1: <span class="error">*</span></label>
 										<div class="input-line">
 											<input id="street-address_edit" name="company_address1_edit" type="text" class="form-control" placeholder="Street address" value="" />
 										</div>
@@ -312,7 +341,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label">City:</label>
+										<label class="control-label">City: <span class="error">*</span></label>
 										<div class="input-line">
 											<select name="company_city_edit" id="company_city_edit" class="form-control">
 												<option value="">Select</option>
@@ -330,7 +359,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label">Province:</label>
+										<label class="control-label">Province: <span class="error">*</span></label>
 										<div class="input-line">
 											<select name="company_province_edit" id="company_province_edit" class="form-control">
 												<option value="">Select</option>
@@ -348,13 +377,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label">Postalcode:</label>
+										<label class="control-label">Postalcode: <span class="error">*</span></label>
 										<div class="input-line">
 											<input id="postcode_edit" name="company_postalcode_edit" type="text" class="form-control" placeholder="Zip/Postcode" value="" />
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label">Country:</label>
+										<label class="control-label">Country: <span class="error">*</span></label>
 										<div class="input-line">
 											<select name="company_country_edit" id="company_country_edit" class="form-control">
 												<option value="">Select</option>

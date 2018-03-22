@@ -846,6 +846,10 @@ $(document).ready(function(){
         "columnDefs": [
             { "className": "dt-center", "targets": [ 0, 4, 5, 6, 7 ] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        $('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : false },
             { 'bSortable' : false },
@@ -1393,6 +1397,10 @@ $(document).ready(function(){
         "columnDefs": [
             { "className": "dt-center", "targets": [ 0, 2, 4 ] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : false },
@@ -1413,6 +1421,10 @@ $(document).ready(function(){
             { "className": "dt-center", "targets": [ 0, 7 ] },
             { "className": "dt-right", "targets": [ 6 ] }
         ],
+        // Hide the loader when datatable is rendered
+        "initComplete": function(settings, json) {
+        	$('.loader-wrapper').hide();
+        },
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : false },

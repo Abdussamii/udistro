@@ -47,6 +47,30 @@
 	    });	
 	</script>
 
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Company Agents</h1>
@@ -117,7 +141,7 @@
 					<div class="modal-body">
 						<form name="frm_add_agent" id="frm_add_agent" autocomplete="off">
 							<div class="form-group">
-								<label for="agent_company">Company</label>
+								<label for="agent_company">Company <span class="error">*</span></label>
 								<select name="agent_company" id="agent_company" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -134,11 +158,11 @@
 							<div class="form-group">
 								<div class="row">
 								  	<div class="col-sm-6">
-								  		<label for="agent_fname">First Name</label>
+								  		<label for="agent_fname">First Name <span class="error">*</span></label>
 								  		<input type="text" name="agent_fname" id="agent_fname" class="form-control" placeholder="First Name">
 								  	</div>
 								  	<div class="col-sm-6">
-								  		<label for="agent_lname">Last Name</label>
+								  		<label for="agent_lname">Last Name <span class="error">*</span></label>
 								  		<input type="text" name="agent_lname" id="agent_lname" class="form-control" placeholder="Last Name">
 								  	</div>
 								</div>
@@ -146,62 +170,77 @@
 							<div class="form-group">
 								<div class="row">
 								  	<div class="col-sm-6">
-								  		<label for="agent_email">Email</label>
+								  		<label for="agent_email">Email <span class="error">*</span></label>
 								  		<input type="text" name="agent_email" id="agent_email" class="form-control" placeholder="Agent Email">
 								  	</div>
 								  	<div class="col-sm-6">
-								  		<label for="agent_password">Password</label>
+								  		<label for="agent_password">Password <span class="error">*</span></label>
 								  		<input type="password" name="agent_password" id="agent_password" class="form-control" placeholder="Password">
 								  	</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="agent_address">Address</label>
+								<label for="agent_address">Address <span class="error">*</span></label>
 								<input name="agent_address1" id="agent_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 							</div>
 
-							<div id="add_agent_address" style="display: none;">
-								<input name="agent_address2" id="agent_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
-					            <select id="agent_city" class="form-control" name="agent_city">
-									<option value="">Select</option>
-										<?php
-										if( isset( $cities ) && count( $cities ) > 0 )
-										{
-											foreach($cities as $city)
+							<div id="add_agent_address">
+								<div class="form-group">
+									<label for="agent_address2">Address 2</label>
+									<input name="agent_address2" id="agent_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+								</div>
+								<div class="form-group">
+									<label for="agent_city">City</label>
+						            <select id="agent_city" class="form-control" name="agent_city">
+										<option value="">Select</option>
+											<?php
+											if( isset( $cities ) && count( $cities ) > 0 )
 											{
-												echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+												foreach($cities as $city)
+												{
+													echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+												}
 											}
-										}
-										?>
-					            </select>
-		                        <select id="agent_province" class="form-control" name="agent_province">
-		            				<option value="">Select</option>
-		            					<?php
-		            					if( isset( $provinces ) && count( $provinces ) > 0 )
-		            					{
-		            						foreach($provinces as $province)
-		            						{
-		            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
-		            						}
-		            					}
-		            					?>
-		                        </select>
-		                        <input id="agent_postalcode" name="agent_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
-                                <select name="agent_country" id="agent_country" class="form-control">
-                    				<option value="">Select</option>
-                    					<?php
-                    					if( isset( $countries ) && count( $countries ) > 0 )
-                    					{
-                    						foreach($countries as $country)
-                    						{
-                    							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-                    						}
-                    					}
-                    					?>
-                                </select>
+											?>
+						            </select>
+						        </div>
+						        <div class="form-group">
+									<label for="agent_province">Province</label>
+			                        <select id="agent_province" class="form-control" name="agent_province">
+			            				<option value="">Select</option>
+			            					<?php
+			            					if( isset( $provinces ) && count( $provinces ) > 0 )
+			            					{
+			            						foreach($provinces as $province)
+			            						{
+			            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+			            						}
+			            					}
+			            					?>
+			                        </select>
+			                    </div>
+			                    <div class="form-group">
+									<label for="agent_postalcode">Postal Code</label>
+		                        	<input id="agent_postalcode" name="agent_postalcode" type="text" class="form-control" placeholder="Postal Code" />
+		                        </div>
+		                        <div class="form-group">
+									<label for="agent_country">Country</label>
+	                                <select name="agent_country" id="agent_country" class="form-control">
+	                    				<option value="">Select</option>
+	                    					<?php
+	                    					if( isset( $countries ) && count( $countries ) > 0 )
+	                    					{
+	                    						foreach($countries as $country)
+	                    						{
+	                    							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+	                    						}
+	                    					}
+	                    					?>
+	                                </select>
+	                            </div>
 							</div>
 							<div class="form-group">
-								<label for="agent_payment_plan">Payment Plan</label>
+								<label for="agent_payment_plan">Payment Plan <span class="error">*</span></label>
 								<select name="agent_payment_plan" id="agent_payment_plan" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -245,7 +284,7 @@
 					<div class="modal-body">
 						<form name="frm_edit_agent" id="frm_edit_agent" autocomplete="off">
 							<div class="form-group">
-								<label for="agent_company">Company</label>
+								<label for="agent_company">Company <span class="error">*</span></label>
 								<select name="agent_company" id="agent_company" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -262,13 +301,13 @@
 							<div class="form-group">
 								<div class="row">
 								  	<div class="col-sm-6">
-								  		<label for="agent_fname">First Name</label>
+								  		<label for="agent_fname">First Name <span class="error">*</span></label>
 								  		<input type="text" name="agent_fname" id="agent_fname" class="form-control" placeholder="First Name">
 								  		<input type="hidden" name="agent_id" id="agent_id" value="">
 								  		<input type="hidden" name="user_type" id="user_type" value="">
 								  	</div>
 								  	<div class="col-sm-6">
-								  		<label for="agent_lname">Last Name</label>
+								  		<label for="agent_lname">Last Name <span class="error">*</span></label>
 								  		<input type="text" name="agent_lname" id="agent_lname" class="form-control" placeholder="Last Name">
 								  	</div>
 								</div>
@@ -276,59 +315,74 @@
 							<div class="form-group">
 								<div class="row">
 								  	<div class="col-sm-6">
-								  		<label for="agent_email">Email</label>
+								  		<label for="agent_email">Email <span class="error">*</span></label>
 								  		<input type="text" name="agent_email" id="agent_email" class="form-control" placeholder="Agent Email">
 								  	</div>
 								</div>
 							</div>
 							
 							<div class="form-group">
-								<label for="agent_address">Address</label>
+								<label for="agent_address">Address <span class="error">*</span></label>
 								<input name="agent_edit_address1" id="agent_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 							</div>
 
-							<div id="add_agent_address" style="display: none;">
-								<input name="agent_edit_address2" id="agent_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
-					            <select id="agent_edit_city" class="form-control" name="agent_edit_city">
-									<option value="">Select</option>
-										<?php
-										if( isset( $cities ) && count( $cities ) > 0 )
-										{
-											foreach($cities as $city)
+							<div id="add_agent_address">
+								<div class="form-group">
+									<label for="agent_address">Address 2</label>
+									<input name="agent_edit_address2" id="agent_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
+								</div>
+								<div class="form-group">
+									<label for="agent_edit_city">City</label>
+						            <select id="agent_edit_city" class="form-control" name="agent_edit_city">
+										<option value="">Select</option>
+											<?php
+											if( isset( $cities ) && count( $cities ) > 0 )
 											{
-												echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+												foreach($cities as $city)
+												{
+													echo '<option value="'. $city['id'] .'">'. $city['name'] .'</option>';
+												}
 											}
-										}
-										?>
-					            </select>
-		                        <select id="agent_edit_province" class="form-control" name="agent_edit_province">
-		            				<option value="">Select</option>
-		            					<?php
-		            					if( isset( $provinces ) && count( $provinces ) > 0 )
-		            					{
-		            						foreach($provinces as $province)
-		            						{
-		            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
-		            						}
-		            					}
-		            					?>
-		                        </select>
-		                        <input id="agent_edit_postalcode" name="agent_edit_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" />
-                                <select name="agent_edit_country" id="agent_edit_country" class="form-control">
-                    				<option value="">Select</option>
-                    					<?php
-                    					if( isset( $countries ) && count( $countries ) > 0 )
-                    					{
-                    						foreach($countries as $country)
-                    						{
-                    							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
-                    						}
-                    					}
-                    					?>
-                                </select>
+											?>
+						            </select>
+						        </div>
+						        <div class="form-group">
+									<label for="agent_edit_province">Province</label>
+			                        <select id="agent_edit_province" class="form-control" name="agent_edit_province">
+			            				<option value="">Select</option>
+			            					<?php
+			            					if( isset( $provinces ) && count( $provinces ) > 0 )
+			            					{
+			            						foreach($provinces as $province)
+			            						{
+			            							echo '<option data-abbreviation="'. $province->abbreviation .'" value="'. $province->id .'">'. $province->name .'</option>';
+			            						}
+			            					}
+			            					?>
+			                        </select>
+			                    </div>
+			                    <div class="form-group">
+									<label for="agent_edit_postalcode">Postal Code</label>
+		                        	<input id="agent_edit_postalcode" name="agent_edit_postalcode" type="text" class="form-control" placeholder="Postal Code" />
+		                        </div>
+		                        <div class="form-group">
+									<label for="agent_edit_country">Country</label>
+	                                <select name="agent_edit_country" id="agent_edit_country" class="form-control">
+	                    				<option value="">Select</option>
+	                    					<?php
+	                    					if( isset( $countries ) && count( $countries ) > 0 )
+	                    					{
+	                    						foreach($countries as $country)
+	                    						{
+	                    							echo '<option value="'. $country->id .'">'. $country->name .'</option>';
+	                    						}
+	                    					}
+	                    					?>
+	                                </select>
+	                            </div>
 							</div>
 							<div class="form-group">
-								<label for="agent_edit_payment_plan">Payment Plan</label>
+								<label for="agent_edit_payment_plan">Payment Plan <span class="error">*</span></label>
 								<select name="agent_edit_payment_plan" id="agent_edit_payment_plan" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -343,7 +397,7 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="agent_status">Status</label>
+								<label for="agent_status">Status <span class="error">*</span></label>
 								<div class="radio">
 								 	<label><input type="radio" name="agent_status" value="1" checked="true">Active</label>
 								</div>

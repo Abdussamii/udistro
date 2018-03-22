@@ -113,7 +113,7 @@
 									<div class="form-group inputBOXs">
 										<div class="col-sm-12">
 											<i class="fa fa-envelope-open" aria-hidden="true"></i>
-											<input type="text" class="form-control" id="email" name="email" placeholder="Enter Your Email ID">
+											<input type="text" class="form-control" id="email" name="email" placeholder="Enter Your Email Address">
 										</div>
 									</div>
 									<div class="form-group inputBOXs">
@@ -263,7 +263,7 @@
 									<div class="form-group inputBOXs">
 										<div class="col-sm-12">
 											<i class="fa fa-calendar" aria-hidden="true"></i>
-											<input type="text" class="form-control datepicker" id="moving_date" name="moving_date" placeholder="Enter The Date You Are Moving">
+											<input type="text" class="form-control datepicker" id="moving_date" name="moving_date" placeholder="Enter The Date You Are Moving" readonly="true">
 										</div>
 									</div>
 									<div class="form-group"> 

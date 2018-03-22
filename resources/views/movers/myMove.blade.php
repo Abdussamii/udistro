@@ -87,8 +87,8 @@ $(function(){
 	});
 
     // Call the method to calculate the route between two addresses
-    // calculateRoute('{{ $clientMovingFromAddress->address1 . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address1 . ' ' . $clientMovingToProvince->name }}');
-    calculateRoute('{{ $clientMovingFromAddress->address1 }}', '{{ $clientMovingToAddress->address1 }}');
+    calculateRoute('{{ $clientMovingFromAddress->address1 . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address1 . ' ' . $clientMovingToProvince->name }}');
+    // calculateRoute('{{ $clientMovingFromAddress->address1 }}', '{{ $clientMovingToAddress->address1 }}');
 });
 
 // To create route between two addresses
@@ -452,7 +452,7 @@ function calculateRoute(from, to) {
 				<div class="row" id="forward_mail_flow_control" style="display: none;">
 					<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 					<div class="col-sm-4 col-md-4 col-lg-4 text-right">
-						<a href="javascript:void(0);" class="btn btn_prev_forward_mail"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+						<a href="javascript:void(0);" class="btn btn_prev_forward_mail"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
 					</div>
 				</div>
 
@@ -493,67 +493,18 @@ function calculateRoute(from, to) {
  	<div class="model-WrapCont" id="update_address_step3" style="display: none;"> 
 	       <!-- HSA 1 -->
 	      	<div class="model-WrapCont">
-	       		<h2>Update Address On Phone</h2>
+	       		<h2>Update Address</h2>
 	      	</div>
 	      		<div class="col-sm-12 box-H-250 box-P-100">
-				  <div class="panel-group" id="provincial_health_agencies">
+				  <div class="panel-group provincial_health_agencies" id="provincial_health_agencies1">
 				  	<div class="panel panel-default">
 				  	  <div class="panel-heading">
 				  	    <h4 class="panel-title">
-				  	      <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse_revenew">Update address with Canada Revenue Agency</a>
+				  	      <a data-toggle="collapse" data-parent="#provincial_health_agencies1" href="#collapse_revenew">Update address with Canada Revenue Agency</a>
 				  	    </h4>
 				  	  </div>
-				  	  <div id="collapse_revenew" class="panel-collapse collapse in">
+				  	  <div id="collapse_revenew" class="panel-collapse collapse">
 				  	    <div class="panel-body">
-				  	    	<!-- <div class="row">
-				  	    		<div>
-				  	    			<div class="col-lg-6 col-md-6 col-sm-6">
-				  	    				<img src="{{ url('/images/udistro-logo-pop.jpg') }}" alt="Udistro" />
-				  	    			</div>
-				  	    			<div class="col-lg-6 col-md-6 col-sm-6">
-				  	    				<div class="get_started_LB">
-			  	    						<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Do it online</a>
-			  	    					</div>
-				  	    			</div>
-				  	    		</div>
-				  	    		<div class="col-md-12">
-				  	    			<div class="block-head">
-				  	    				<h3>Have these handy, before this call </h3>
-				  	    			</div>
-				  	    			<div class="up_add_li">
-				  	    				<ul>
-				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
-				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your SIN#</li>
-				  	    					<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Phone contact, name and DOB of children</li>
-				  	    				</ul>
-				  	    			</div>
-				  	    		</div>
-				  	    		<div class="col-sm-12 col-md-6 col-lg-6">
-				  	    			<div class="block-head">
-				  	    				<h3> Opening Hours </h3>
-				  	    			</div>
-				  	    			<div class="up_add_li">
-				  	    				<ul>
-				  	    					<li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-				  	    					<li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
-				  	    				</ul>
-				  	    			</div>
-				  	    		</div>
-				  	    		<div class="col-sm-12 col-md-6 col-lg-6">
-				  	    			<div class="block-head">
-				  	    				<h3> Phone Numbers </h3>
-				  	    			</div>
-				  	    			<div class="up_add_li">
-				  	    				<ul>
-				  	    					<li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>1-800-959-8281</li>
-				  	    					<li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>613-940-8495</li>
-				  	    				</ul>
-				  	    			</div>
-				  	    		</div>
-				  	    	</div> -->
-
 				  	    	<div class="panel-group" id="accordion_provincial_health_agencies">
 				  	    	    <div class="panel panel-default">
 				  	    	        <div class="panel-heading">
@@ -561,7 +512,7 @@ function calculateRoute(from, to) {
 				  	    	                <a data-toggle="collapse" data-parent="#accordion_provincial_health_agencies" href="#provincial_health_agencies_collapse1" aria-expanded="false" class="collapsed">Do it Online</a>
 				  	    	            </h4>
 				  	    	        </div>
-				  	    	        <div id="provincial_health_agencies_collapse1" class="panel-collapse collapse in" aria-expanded="false">
+				  	    	        <div id="provincial_health_agencies_collapse1" class="panel-collapse collapse" aria-expanded="false">
 				  	    	            <div class="panel-body">
 				  	    					<div class="get_started_LB">
 				  	    						<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
@@ -627,10 +578,10 @@ function calculateRoute(from, to) {
     <div class="model-WrapCont" id="update_address_step6" style="display: none;"> 
        <!-- HSA 1 -->
       	<div class="model-WrapCont">
-       		<h2>Update Address On Phone</h2>
+       		<h2>Update Address</h2>
       	</div>
       		<div class="col-sm-12 box-H-250 box-P-100">
-			  <div class="panel-group" id="provincial_health_agencies">
+			  <div class="panel-group provincial_health_agencies" id="provincial_health_agencies2">
 			  	<?php
 			  	$step = 1;
 			  	if( isset( $provincialAgencyDetails ) && count( $provincialAgencyDetails ) > 0 )
@@ -641,17 +592,17 @@ function calculateRoute(from, to) {
 			  			<div class="panel panel-default">
 			  			  <div class="panel-heading">
 			  			    <h4 class="panel-title">
-			  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
+			  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies2" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
 			  			    </h4>
 			  			  </div>
-			  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? 'in' : '' }}">
+			  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? '' : '' }}">
 			  			    <div class="panel-body">
 
 			  			    	<div class="panel-group" id="accordion_internet_service_{{ $step }}">
 			  			    	    <div class="panel panel-default">
-			  			    	        <div class="panel-heading">
+			  			    	        <div class="panel-heading tab-new01">
 			  			    	            <h4 class="panel-title">
-			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service_{{ $step }}" href="#cable_internet_services_collapse1{{ $step }}" aria-expanded="false" class="collapsed">Do it Online</a>
+			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service_{{ $step }}" href="#cable_internet_services_collapse1{{ $step }}" aria-expanded="false" class="collapsed">{{ $provincialAgency->do_it_on_line_label }}</a>
 			  			    	            </h4>
 			  			    	        </div>
 			  			    	        <div id="cable_internet_services_collapse1{{ $step }}" class="panel-collapse collapse in" aria-expanded="false">
@@ -670,11 +621,38 @@ function calculateRoute(from, to) {
 			  			    					</div> -->
 			  			    					<div>
 			  			    						<?php
-			  			    						if( $provincialAgency->link != '' )
+			  			    						// Check if it is a direct link or a search functionality
+			  			    						if( $provincialAgency->direct_link == '1' )
+			  			    						{
+			  			    							if( $provincialAgency->link != '' )
+			  			    							{
+			  			    							?>
+			  			    								<div class="get_started_LB blue-btn01">
+			  			    									<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">{{ $provincialAgency->get_started_label }}</a>
+			  			    								</div>
+			  			    							<?php
+			  			    							}
+			  			    						}
+			  			    						else
 			  			    						{
 			  			    						?>
 			  			    							<div class="get_started_LB">
-			  			    								<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
+			  			    								<div class="row">
+			  			    									<div class="col-sm-12">
+			  			    										<p>Search the closest {{ $clientMovingToProvince->name }} public insurance office</p>
+			  			    									</div>
+			  			    								</div>
+			  			    								<div>
+			  			    									<form name="frm_update_address_search_insurance_office" id="frm_update_address_search_insurance_office" autocomplete="off">
+			  			    										<div class="col-sm-9 col-md-9 col-lg-9 row">
+			  			    											<input type="text" name="update_address_search_insurance_office" id="update_address_search_insurance_office" class="form-control" placeholder="Enter the address">
+			  			    										</div>
+			  			    										<div class="col-sm-3 col-md-3 col-lg-3"> 
+			  			    											<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
+			  			    											<a href="javascript:void(0);" onclick="" id="{{ $clientMovingToProvince->name }}" class="btn_update_address_search_insurance_office">Go</a>
+			  			    										</div>
+			  			    									</form>
+			  			    								</div>
 			  			    							</div>
 			  			    						<?php
 			  			    						}
@@ -684,7 +662,7 @@ function calculateRoute(from, to) {
 			  			    	        </div>
 			  			    	    </div>
 			  			    	    <div class="panel panel-default">
-			  			    	        <div class="panel-heading">
+			  			    	        <div class="panel-heading tab-new01">
 			  			    	            <h4 class="panel-title">
 			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2{{ $step }}" class="collapsed" aria-expanded="false">Call Option</a>
 			  			    	            </h4>
@@ -763,7 +741,7 @@ function calculateRoute(from, to) {
       </div>
 
       <div class="pull-right" style="display: none;" id="update_address_control">
-	  	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+	  	<a href="javascript:void(0);" class="btn btn_prev_update_address"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
 	  </div>
 
     </div>
@@ -869,7 +847,7 @@ function calculateRoute(from, to) {
    	<div class="row" id="mailbox_keys_flow_control" style="display: none;">
      	<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
      	<div class="col-sm-4 col-md-4 col-lg-4 text-right">
-     		<a href="javascript:void(0);" id="btn_prev_mailbox_keys" class="btn"><i class="fa fa-times" aria-hidden="true"></i> Close</a> 
+     		<a href="javascript:void(0);" id="btn_prev_mailbox_keys" class="btn"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a> 
      	</div>
     </div>
 
@@ -906,61 +884,6 @@ function calculateRoute(from, to) {
      </div>
     </div>
 	<!-- model box 1 ends -->
-	
-	<!-- model box 3 starts -->
-    <!-- <div id="connect_utilities_step3" class="model-WrapCont">
-     	<h2>Connect Utilities</h2>
-	  	<div class="col-sm-12 box-H-250 box-P-100">
-			<div class="row">
-		        <div class="col-sm-12">
-		         <p> Hydro, Electricity and Gas</p>
-		        </div>
-		        <div class="col-sm-12"> 
-		        	<div class="get_started_LB">      			
-		        		<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-		        </div>
-		        <div class="col-md-12">
-		         <div class="block-head">
-		          <h3> Have these handy, before this call </h3>
-		         </div>
-		         <div class="up_add_li">
-		          <ul>
-		           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
-		           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-		           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-		          </ul>
-		         </div>
-		        </div>
-		        <div class="col-sm-12 col-md-6 col-lg-6">
-		         <div class="block-head">
-		          <h3> Opening Hours </h3>
-		         </div>
-		         <div class="up_add_li">
-		          <ul>
-		           <li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-		           <li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
-		          </ul>
-		         </div>
-		        </div>
-		        <div class="col-sm-12 col-md-6 col-lg-6">
-		         <div class="block-head">
-		          <h3> Phone Numbers </h3>
-		         </div>
-		         <div class="up_add_li">
-		          <ul>
-		           <li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 1-866-607-6301</li>
-		           <li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 416-979-3033</li>
-		          </ul>
-		         </div>
-		        </div>
-		    </div>
-	  	</div>
-
-	  	<div class="pull-right">
-			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
-		</div>
-
-    </div> -->
 
     <div id="connect_utilities_step3" class="model-WrapCont">
     	<h2>Connect Utilities</h2>
@@ -973,7 +896,7 @@ function calculateRoute(from, to) {
 	    	                <a data-toggle="collapse" data-parent="#connect_utility_hydro_collapse" href="#connect_utility_hydro1" aria-expanded="false" class="collapsed">Do it Online</a>
 	    	            </h4>
 	    	        </div>
-	    	        <div id="connect_utility_hydro1" class="panel-collapse collapse in" aria-expanded="false">
+	    	        <div id="connect_utility_hydro1" class="panel-collapse collapse" aria-expanded="false">
 	    	            <div class="panel-body">
 	    					<div class="get_started_LB">      			
 			        			<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
@@ -1030,62 +953,6 @@ function calculateRoute(from, to) {
     	</div>
     </div>
 	<!-- model box 3 ends -->
-	
-	<!-- model box 5 starts -->
-    <!-- <div id="connect_utilities_step5" class="model-WrapCont">
-     <h2>Connect Utilities</h2>
-    <div class="col-sm-12 box-H-250 box-P-100">
-      <div> <strong>Water, Waste and Recycle Bins</strong>
-       <p>If you are moving in or moving out, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
-      </div>
-      <div class="col-sm-12 up_add_li">
-      </div>
-      <div class="row">
-
-      	<div class="col-sm-12"> 
-      		<div class="get_started_LB">
-      		<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a> </div>
-      	</div>
-
-       <div class="col-sm-12 col-md-12 col-lg-12">
-        <div class="up_add_li">
-         <div class="block-head">
-          <h3>We will require </h3>
-         </div>
-         <div class="up_add_li">
-          <ul>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Your name</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Name of anyone financially responsible for the utility bill</li>
-           <li><i class="fa fa-angle-right" aria-hidden="true"></i> Service Address</li>
-          </ul>
-         </div>
-        </div>
-       </div>
-       <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="block-head">
-         <h3> Hours </h3>
-        </div>
-        <div class="up_add_li">
-         <ul>
-          <li> <span>Monday to Thursday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 07:00 PM (except holidays) </li>
-          <li> <span>Friday and Saturday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 04:30 PM (except holiday long weekend) </li>
-         </ul>
-        </div>
-       </div>
-       <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="block-head">
-         <h3> Phone Numbers </h3>
-        </div>
-        <div class="up_add_li">
-         <ul>
-          <li><span>City Services:</span> <i class="fa fa-phone" aria-hidden="true"></i>3-1-1</li>
-         </ul>
-        </div>
-       </div>
-      </div>
-     </div>
-
-    </div> -->
 
     <div id="connect_utilities_step5" class="model-WrapCont">
      	<h2>Connect Utilities</h2>
@@ -1100,7 +967,7 @@ function calculateRoute(from, to) {
 	    	                <a data-toggle="collapse" data-parent="#connect_utility_water_collapse" href="#connect_utility_water1" aria-expanded="false" class="collapsed">Do it Online</a>
 	    	            </h4>
 	    	        </div>
-	    	        <div id="connect_utility_water1" class="panel-collapse collapse in" aria-expanded="false">
+	    	        <div id="connect_utility_water1" class="panel-collapse collapse" aria-expanded="false">
 	    	            <div class="panel-body">
 	    					<div class="get_started_LB">
 	      						<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
@@ -1164,7 +1031,7 @@ function calculateRoute(from, to) {
     	<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
 
      	<div class="pull-right" id="connect_utilities_control" style="display: none;">
-			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-times" aria-hidden="true"></i> Close</a>
+			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
 		</div>
     </div>
    </div>

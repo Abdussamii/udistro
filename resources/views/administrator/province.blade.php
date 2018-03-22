@@ -2,6 +2,31 @@
 @section('title', 'Udistro | Provinces')
 
 @section('content')
+	
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Provinces</h1>
@@ -45,27 +70,33 @@
 							<div class="col-sm-9">
 								<form name="frm_add_province" id="frm_add_province" autocomplete="off">
 									<div class="form-group">
+										<label for="province">Province <span class="error">*</span></label>
 										<input type="text" name="province_name" id="province_name" class="form-control" placeholder="Enter province name">
 										<input type="hidden" name="province_id" id="province_id">
 										<input type="hidden" name="country_id" id="country_id" value="1">
 									</div>
 									<div class="form-group">
+										<label for="province">Province Abbreviation <span class="error">*</span></label>
 										<input type="text" name="abbreviation" id="abbreviation" class="form-control" placeholder="Enter Abbreviation">
 									</div>
 									<div class="form-group">
+										<label for="province">PST <span class="error">*</span></label>
 										<input type="number" name="pst" id="pst" class="form-control" placeholder="Enter PST">
 									</div>
 									<div class="form-group">
+										<label for="province">GST <span class="error">*</span></label>
 										<input type="number" name="gst" id="gst" class="form-control" placeholder="Enter GST">
 									</div>
 									<div class="form-group">
+										<label for="province">HST <span class="error">*</span></label>
 										<input type="number" name="hst" id="hst" class="form-control" placeholder="Enter HST">
 									</div>
 									<div class="form-group">
+										<label for="province">Service Charge <span class="error">*</span></label>
 										<input type="number" name="service_charge" id="service_charge" class="form-control" placeholder="Enter Service Charge">
 									</div>
 									<div class="form-group">
-										<label for="province_status">Status</label>
+										<label for="province_status">Status <span class="error">*</span></label>
 										<div class="radio">
 										 	<label><input type="radio" name="province_status" value="1" checked="true">Active</label>
 										</div>

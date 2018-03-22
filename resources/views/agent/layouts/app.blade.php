@@ -127,6 +127,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
+	                        <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+	                    </li>
+	                    <li>
+	                        <a href="{{ url('agent/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
+	                    </li>
+                        <li>
                         	<a href="{{ url('/agent/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
@@ -147,26 +153,26 @@
                             <a href="{{ url('agent/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
-                        </li>
-                        <li>
                             <a href="{{ url('agent/clients') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Clients</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('agent/invites') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Invites</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('agent/paymentplan') }}"><i class="fa fa-money" aria-hidden="true"></i> Payment Plan</a>
-                        </li>
-						<li>
-                            <a href="{{ url('agent/partners') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Partners</a>
                         </li>
                         <li>
                             <a href="{{ url('agent/emailtemplates') }}"><i class="fa fa-envelope" aria-hidden="true"></i>  Email Templates</a>
                         </li>
                         <li>
-                            <a href="{{ url('agent/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
+                            <a href="{{ url('agent/invites') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Invites</a>
                         </li>
+						<li>
+                            <a href="{{ url('agent/partners') }}"><i class="fa fa-th-list" aria-hidden="true"></i> Partners</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('agent/paymentplan') }}"><i class="fa fa-money" aria-hidden="true"></i> Payment Plan</a>
+                        </li>
+                        <!-- <li>
+                            <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('agent/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
+                        </li> -->
                         <!-- <li>
                             <a href="{{ url('agent/logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li> -->

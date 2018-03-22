@@ -153,7 +153,7 @@
 	<!-- About STARTS -->
 	<section class="mid-udistro">
 	 <div class="container">
-	  <h2>Free Trail</h2>
+	  <h2>Free Trial</h2>
 	  <div class="free-trail-box">
 	   <div class="col-md-7">
 	          <div class="leftbg-text">

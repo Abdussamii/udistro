@@ -2,6 +2,31 @@
 @section('title', 'Udistro | Payment Plans')
 
 @section('content')
+	
+	<style type="text/css">
+	.loader-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		z-index: 999;
+		left:0;
+		top:0;
+	}
+	.preload {
+	    position: absolute;
+	    top: 50%;
+	    left: 55%;
+	    transform: translate(-50%, -55%);
+	    -webkit-transform: translate(-50%, -55%);
+	}
+	</style>
+
+	<!-- Loader -->
+	<div class="loader-wrapper">
+		<div class="preload">Loading...</div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Payment Plans</h1>
@@ -44,7 +69,7 @@
 					<div class="modal-body">
 						<form name="frm_add_payment_plan" id="frm_add_payment_plan" autocomplete="off">
 							<div class="form-group">
-								<label for="payment_plan_type">Plan Type</label>
+								<label for="payment_plan_type">Plan Type <span class="error">*</span></label>
 								<select name="payment_plan_type" id="payment_plan_type" class="form-control">
 									<option value="">Select</option>
 									<?php
@@ -59,7 +84,7 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="trial_plan">Trial Plan?</label>
+								<label for="trial_plan">Trial Plan? <span class="error">*</span></label>
 								<div class="radio">
 								 	<label><input type="radio" name="trial_plan" value="1">Yes</label>
 								</div>
@@ -68,12 +93,12 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="payment_plan_name">Payment Plan Name</label>
+								<label for="payment_plan_name">Payment Plan Name <span class="error">*</span></label>
 								<input type="text" name="payment_plan_name" id="payment_plan_name" class="form-control" placeholder="Enter plan name">
 								<input type="hidden" name="payment_plan_id" id="payment_plan_id">
 							</div>
 							<div class="form-group">
-								<label for="payment_plan_charge">Payment Plan Charge</label>
+								<label for="payment_plan_charge">Payment Plan Charge <span class="error">*</span></label>
 								<input type="text" name="payment_plan_charge" id="payment_plan_charge" class="form-control" placeholder="Enter charge">
 							</div>
 							<div class="form-group">
@@ -81,15 +106,15 @@
 								<input type="text" name="payment_plan_discount" id="payment_plan_discount" class="form-control" placeholder="Enter discount, if any">
 							</div>
 							<div class="form-group">
-								<label for="payment_plan_validity">Validity (In days)</label>
+								<label for="payment_plan_validity">Validity (In days) <span class="error">*</span></label>
 								<input type="text" name="payment_plan_validity" id="payment_plan_validity" class="form-control" placeholder="Enter validity">
 							</div>
 							<div class="form-group">
-								<label for="payment_plan_emails">Number of emails / Percentage of quotation</label>
+								<label for="payment_plan_emails">Number of emails / Percentage of quotation <span class="error">*</span></label>
 								<input type="text" name="payment_plan_emails" id="payment_plan_emails" class="form-control" placeholder="Enter number of emails / percentage of quotation">
 							</div>
 							<div class="form-group">
-								<label for="payment_plan_status">Status</label>
+								<label for="payment_plan_status">Status <span class="error">*</span></label>
 								<div class="radio">
 								 	<label><input type="radio" name="payment_plan_status" value="1" checked="true">Active</label>
 								</div>
