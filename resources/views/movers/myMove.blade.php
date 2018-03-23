@@ -89,6 +89,18 @@ $(function(){
     // Call the method to calculate the route between two addresses
     calculateRoute('{{ $clientMovingFromAddress->address1 . ' ' . $clientMovingFromProvince->name }}', '{{ $clientMovingToAddress->address1 . ' ' . $clientMovingToProvince->name }}');
     // calculateRoute('{{ $clientMovingFromAddress->address1 }}', '{{ $clientMovingToAddress->address1 }}');
+
+    // To manage the moving company details job description
+    $('.collapse_moving_item_category').click(function(){
+
+    	// Close all
+    	$('.collapse_moving_item_container').slideUp();
+
+    	// Open the current
+    	let referId = $(this).attr('data-id');
+    	$('#'+referId).slideDown();
+
+    });
 });
 
 // To create route between two addresses
@@ -481,7 +493,7 @@ function calculateRoute(from, to) {
         <div class="clearfix"></div>
         <div class="col-sm-12">
 		<div class="get_started_LB">
-			<a href="javascript:void(0);" id="update_address_agency1" style="width: 200px;">Federal Agencies</a>
+			<a href="javascript:void(0);" id="update_address_agency1" style="width: 200px;">Federal Agency</a>
 			<a href="javascript:void(0);" id="update_address_agency2" style="width: 200px;">Provincial Agencies</a>
 		</div>
         </div>
@@ -500,7 +512,7 @@ function calculateRoute(from, to) {
 				  	<div class="panel panel-default">
 				  	  <div class="panel-heading">
 				  	    <h4 class="panel-title">
-				  	      <a data-toggle="collapse" data-parent="#provincial_health_agencies1" href="#collapse_revenew">Update address with Canada Revenue Agency</a>
+				  	      <a data-toggle="collapse" data-parent="#provincial_health_agencies1" href="#collapse_revenew">Canada Revenue Agency</a>
 				  	    </h4>
 				  	  </div>
 				  	  <div id="collapse_revenew" class="panel-collapse collapse">
@@ -772,8 +784,8 @@ function calculateRoute(from, to) {
       <div class="col-sm-12 mailfarwd_wrap_radio">
 
        <div class="get_started_LB">
-			<a href="javascript:void(0);" id="mailbox_keys_method1" style="width: 250px; text-align: center;">Do it here online</a>
-			<a href="javascript:void(0);" id="mailbox_keys_method2" style="width: 250px; text-align: center;">Do it at Canada post office</a>
+			<a href="javascript:void(0);" id="mailbox_keys_method2" style="width: 250px; text-align: center;">Do it here online</a>
+			<a href="javascript:void(0);" id="mailbox_keys_method1" style="width: 250px; text-align: center;">Do it at Canada post office</a>
 		</div>
 
       </div>
@@ -1458,10 +1470,14 @@ function calculateRoute(from, to) {
 						                    		?>
 						                    			<div class="form-group panel-Box">
 						                        			<!-- Collapse Title -->
-						                        			<div><label class="form-group accord-radio"><a data-toggle="collapse" href="#collapsable{{ $step }}">{{ $movingItemCategory->item_name }}</a></label></div>
+						                        			<div>
+						                        				<label class="form-group accord-radio">
+						                        					<a class="collapse_moving_item_category" data-id="collapsable{{ $step }}" href="javascript:void(0);">{{ $movingItemCategory->item_name }}</a>
+						                        				</label>
+						                        			</div>
 
 						                        			<!-- Collapse Body -->
-						                        			<div id="collapsable{{ $step }}" class="panel-collapse collapse">
+						                        			<div id="collapsable{{ $step }}" class="collapse_moving_item_container" style="display: none;">
 						                        				<div>
 							                        				<div class="col-sm-6 col-md-6 col-lg-6 accord-title"><strong>Item</strong></div>
 							                        				<div class="col-sm-4 col-md-4 col-lg-4 accord-title"><strong>Weight</strong></div>
@@ -2174,7 +2190,7 @@ function calculateRoute(from, to) {
 	    	<div class="modal-body">
 	      		<div class="close close-btn close_modal" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	
-		      	<div class="row">
+		      	<div class="row" id="share_announcement_container">
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 					<div class="propertyiMage">
 		      			<img src="{{ url('/images/house_sold.png') }}" height="200" width="250" alt="udistro">
@@ -2194,7 +2210,7 @@ function calculateRoute(from, to) {
 		      		</div>
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
 						<div class="announcement_right-box">
-							<div class="row">
+							<div class="row" id="announcement_message">
 								<div class="col-sm-12">
 									<div class="announcement_title">
 										<h2>The {{ ucwords( strtolower( $clientName ) ) }} are moving!</h2>
@@ -2247,14 +2263,14 @@ function calculateRoute(from, to) {
 		      			<ul class="comment-group">
 							<li><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful</a></li>
 							<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
-							<li><a href="javascript:void(0);" id="agent_rating_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
+							<li><a href="javascript:void(0);" id="share_announcement_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 						</ul>
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<div class="share-announc">Share this on: </div>
-		      			<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
+		      			<!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
 		      			<a href="http://twitter.com/share?text=udistro&url=https://www.udistro.ca/&hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a>
-		      			<a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.udistro.ca/&title=udistro&summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a>
+		      			<a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.udistro.ca/&title=udistro&summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a> -->
 		      			<!-- <i class="fa fa fa-google-plus-square"></i> -->
 		      			<a href="javascript:void(0);" id="share_announcement_email"><i class="fa fa-envelope-square"></i></a>
 		      		</div>
@@ -2274,60 +2290,14 @@ function calculateRoute(from, to) {
 	    	<div class="modal-body">
 	      		<div class="close close-btn close_modal" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	
-		      	<div class="row">
-		      		<table class="table">
-		      			<tr>
-		      				<th style="text-align: center;">Send Email</th>
-		      			</tr>
-		      		</table>
-		      	</div>
-
-		      	<div class="row" id="announcement_email_container">
-		      		<table class="table" style="text-align: center;">
-		      			<tr>
-		      				<td>
-		      					<div contenteditable="true">
-		      						The {{ ucwords( strtolower( $clientName ) ) }} are moving!
-		      						<div class="announcement_message">
-										<div class="hi_hello">Hi friends</div>
-										<p>we are moving from South to North.</p>
-										<p>Stop by Saturday night for a housewarming party!</p>
-										<p>With love from</p>
-										<div class="announc_Client_name">{{ ucwords( strtolower( $clientName ) ) }}</div>
-									</div>
-		      					</div>
-		      				</td>
-		      			</tr>
-		      		</table>
-		      		<table class="table">
-		      			<tr>
-		      				<td>
-		      					<div style="text-align: center;">
-		      						<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
-		      					</div>
-		      					<div class="company-Details" style="text-align: center;">
-		      						{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
-		      					</div>
-		      					<div class="company-Details" style="text-align: center;">
-		      						{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
-		      					</div>
-		      				</td>
-		      				<td>
-		      					<div  style="text-align: center;">
-		      					<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
-		      				</div>
-		      					<div class="client-Details" style="text-align: center;">
-		      						{{ $agentName }}
-		      					</div>
-		      				</td>
-		      			</tr>
-		      		</table>
-		      	</div>
+      	      	<div id="share_announcement_content">
+      	      		<!-- Dynamic content here -->
+      	      	</div>
 
 		      	<div>
 		      		<form name="frm_announcement_email" id="frm_announcement_email">
 			      		<div class="form-group">
-			                <input class="form-control" type="text" name="announcement_emails" id="announcement_emails" placeholder="Email id's seperated by comma">
+			                <input class="form-control" type="text" name="announcement_emails" id="announcement_emails" placeholder="Email id's seperated by comma" autocomplete="off">
 			            </div>
 			            <div class="form-group">
 			            	<button type="submit" class="btn btn-primary" name="btn_send_announcement_email" id="btn_send_announcement_email">Send Email</button>
@@ -2340,6 +2310,9 @@ function calculateRoute(from, to) {
 	</div>
 </div>
 <!-- Share Announcement Email Modal -->
+
+<!-- for share announcement purpose -->
+<img id="star_image" style="display: none;" src="{{ url('/images/star.png') }}" alt="">
 
 <div id="user_response_modal" class="modal fade">
     <div class="modal-dialog">
@@ -2389,7 +2362,7 @@ function calculateRoute(from, to) {
     <!-- Modal content-->
 	    <div class="modal-content">
 	    	<div class="modal-body">
-	      		<div class="close close-btn close_modal" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+	      		<div class="close close-btn" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 	      		<h4 class="modal-title">Is this helpful to you?</h4>
 		    </div>
 		    <div class="modal-footer">

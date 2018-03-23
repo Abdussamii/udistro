@@ -167,6 +167,9 @@
                         <li>
                             <a href="{{ url('agent/paymentplan') }}"><i class="fa fa-money" aria-hidden="true"></i> Payment Plan</a>
                         </li>
+                        <li>
+                            <a href="{{ url('agent/reviews') }}"><i class="fa fa-star-o" aria-hidden="true"></i> Reviews</a>
+                        </li>
                         <!-- <li>
                             <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                         </li>

@@ -134,11 +134,10 @@
 											<input type="text" class="form-control" id="moving_from_address2" name="moving_from_address2" placeholder="Enter The Address You Are Moving From">
 										</div>
 									</div>
-									<div class="form-group hide">
-									  	<label class="control-label col-sm-2" for="moving_from_province">Province:</label>
-										<div class="col-sm-10">          
+									<div class="form-group changeBr">
+										<div class="col-sm-6">          
 											<select name="moving_from_province" id="moving_from_province" class="form-control">
-												<option value="">Select</option>
+												<option value="">Select Moving From Province</option>
 												<?php
 												if( isset( $provinces ) && count( $provinces ) > 0 )
 												{
@@ -150,12 +149,10 @@
 												?>
 											</select>
 										</div>
-									</div>
-									<div class="form-group hide">
-									  	<label class="control-label col-sm-2" for="moving_from_city">City:</label>
-										<div class="col-sm-10">          
+										<div class="col-sm-6">          
 											<select name="moving_from_city" id="moving_from_city" class="form-control">
-												<option value="">Select</option>
+												<i class="fa fa-address-card" aria-hidden="true"></i>
+												<option value="">Select Moving From City</option>
 												<?php
 												if( isset( $cities ) && count( $cities ) > 0 )
 												{
@@ -194,7 +191,7 @@
 									<div class="form-group inputBOXs">
 										<div class="col-sm-12">
 											<i class="fa fa-address-card" aria-hidden="true"></i>
-											<input type="text" class="form-control" id="moving_to_address1" name="moving_to_address1" placeholder="Enter The Address You Are Moving TO">
+											<input type="text" class="form-control" id="moving_to_address1" name="moving_to_address1" placeholder="Enter The Address You Are Moving To">
 										</div>
 									</div>
 									<div class="form-group hide">
@@ -203,11 +200,11 @@
 											<input type="text" class="form-control" id="moving_to_address2" name="moving_to_address2" placeholder="Enter The Address You Are Moving TO">
 										</div>
 									</div>
-									<div class="form-group hide">
-									  	<label class="control-label col-sm-2" for="moving_to_province">Province:</label>
-										<div class="col-sm-10">          
-											<select name="moving_to_province" id="moving_to_province" class="form-control">
-												<option value="">Select</option>
+
+									<div class="form-group changeBr">
+										<div class="col-sm-6">          
+											<select name="moving_to_province" id="moving_to_province" class="form-control changeBr">
+												<option value="">Select Moving To Province</option>
 												<?php
 												if( isset( $provinces ) && count( $provinces ) > 0 )
 												{
@@ -219,12 +216,9 @@
 												?>
 											</select>
 										</div>
-									</div>
-									<div class="form-group hide">
-									  	<label class="control-label col-sm-2" for="moving_to_city">City:</label>
-										<div class="col-sm-10">          
-											<select name="moving_to_city" id="moving_to_city" class="form-control">
-												<option value="">Select</option>
+										<div class="col-sm-6">          
+											<select name="moving_to_city" id="moving_to_city" class="form-control changeBr">
+												<option value="">Select Moving To City</option>
 												<?php
 												if( isset( $cities ) && count( $cities ) > 0 )
 												{
@@ -277,5 +271,24 @@
 			</div>
 		</div>
 	</section>
+
+	<!-- Server Response -->
+	<div class="modal fade" id="invitation_response" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	            	Congratulations
+	            </div>
+	            <div class="modal-body">
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" href="{{ url('/') }}">OK</a>
+	                <a style="width: 80px;" id="bt-modal-confirm" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+
+	            </div>
+	        </div>
+	    </div>
+	</div>
 
 @endsection

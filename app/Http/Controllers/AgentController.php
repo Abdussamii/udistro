@@ -506,13 +506,37 @@ class AgentController extends Controller
      */
     public function emailPreview()
     {
-        // Get the client count
-        $id = Input::get('id');
-        $array = EmailTemplate::where(['id' => $id])->first();
+        $emailTemplateId = Input::get('emailTemplateId');
+        $clientId = Input::get('clientId');
 
-        $response['errCode'] 	= 0;
-        $response['errMsg']  	= 'Success';
-        $response['preview']	= $array->template_content_to_send;
+        // Get the email template content
+        $emailTemplate = EmailTemplate::where(['id' => $emailTemplateId])->first();
+
+        if( count( $emailTemplate ) > 0 )
+        {
+	        $emailTemplatePreview = $emailTemplate->template_content_to_send;
+
+	        // Get the client details
+	        $clientDetails = AgentClient::find($clientId);
+
+	        if( count( $clientDetails ) > 0 )
+	        {
+	        	// Replace the [firstname] with the client first name
+	        	$emailTemplatePreview = str_replace('[firstname]', ucwords( strtolower( $clientDetails->fname ) ), $emailTemplatePreview);
+
+	        	// Replace the get_started_link https://www.udistro.ca/ link with javascript:void(0) so that it can't be clickable
+				$emailTemplatePreview = str_replace('https://www.udistro.ca/', 'javascript:void(0);', $emailTemplatePreview);
+	        }
+
+	        $response['errCode'] 	= 0;
+	        $response['errMsg']  	= 'Success';
+	        $response['preview']	= $emailTemplatePreview;
+        }
+        else
+        {
+        	$response['errCode'] 	= 1;
+	        $response['errMsg']  	= 'Error';
+        }
 
         return response()->json($response);
     }
@@ -610,27 +634,48 @@ class AgentController extends Controller
 			// Check if the client_id is available or not. If available, edit the client, otherwise add it.
 			if( $clientData['client_id'] == '' )
 			{
-				// Save the client details
-				$agentClient = new AgentClient;
+				// Check if email & mobile number already exist
+				$agent = AgentClient::where(['email' => $clientData['client_email']])->orWhere(['contact_number' => $clientData['client_number']])->first();
 
-				$agentClient->agent_id 			= $userId;
-				$agentClient->fname 			= $clientData['client_fname'];
-				$agentClient->oname 			= $clientData['client_mname'];
-				$agentClient->lname 			= $clientData['client_lname'];
-				$agentClient->email 			= $clientData['client_email'];
-				$agentClient->contact_number 	= $clientData['client_number'];
-				$agentClient->status 			= $clientData['client_status'];
-				$agentClient->created_by 		= $userId;
-
-				if( $agentClient->save() )
+				if( count( $agent ) == 0 )
 				{
-					$response['errCode']    = 0;
-				    $response['errMsg']     = 'Client added successfully';
+					// Save the client details
+					$agentClient = new AgentClient;
+
+					$agentClient->agent_id 			= $userId;
+					$agentClient->fname 			= $clientData['client_fname'];
+					$agentClient->oname 			= $clientData['client_mname'];
+					$agentClient->lname 			= $clientData['client_lname'];
+					$agentClient->email 			= $clientData['client_email'];
+					$agentClient->contact_number 	= $clientData['client_number'];
+					$agentClient->status 			= $clientData['client_status'];
+					$agentClient->created_by 		= $userId;
+
+					if( $agentClient->save() )
+					{
+						$response['errCode']    = 0;
+					    $response['errMsg']     = 'Client added successfully';
+					}
+					else
+					{
+						$response['errCode']    = 1;
+					    $response['errMsg']     = 'Some issue in adding the client';
+					}
 				}
 				else
 				{
-					$response['errCode']    = 1;
-				    $response['errMsg']     = 'Some issue in adding the client';
+					// Email exist
+					if( $agent->email == $clientData['client_email'] )
+					{
+						$response['errCode']    = 4;
+					    $response['errMsg']     = 'Email id already exist';
+					}
+					// Mobile exist
+					else if( $agent->contact_number == $clientData['client_number'] )
+					{
+						$response['errCode']    = 5;
+					    $response['errMsg']     = 'Contact number already exist';	
+					}
 				}
 			}
 			else
@@ -2176,7 +2221,7 @@ class AgentController extends Controller
 			}
 
 			$response['errCode']    = 0;
-		    $response['errMsg']     = 'Invitation details updated successfully';
+		    $response['errMsg']     = 'Template successfully sent';
 		}
 
 		return response()->json($response);
@@ -2518,7 +2563,7 @@ class AgentController extends Controller
         			->orderBy($sortBy, $sortType)
                     ->limit($length)
                     ->offset($start)
-                    ->select('t1.id', 't2.fname', 't2.lname', 't2.email', 't1.rating', 't1.comment', 't1.helpful')
+                    ->select('t1.id', 't2.fname', 't2.lname', 't2.email', 't1.rating', 't1.comment')
                     ->get();
 
         $iTotal = DB::table('agent_client_ratings as t1')
@@ -2545,7 +2590,9 @@ class AgentController extends Controller
                     3 => $review->email,
                     4 => $review->rating,
                     5 => $review->comment,
-                    6 => ( $review->helpful == '1' ) ? 'Yes' : 'No'
+                    6 => '<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
+		      			<a href="http://twitter.com/share?text=udistro&amp;url=https://www.udistro.ca/&amp;hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a>
+		      			<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.udistro.ca/&amp;title=udistro&amp;summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a>'
                 );
                 $k++;
             }

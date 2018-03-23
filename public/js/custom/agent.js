@@ -793,10 +793,12 @@ $(document).ready(function(){
     });
 
     // Invite client next button functionality
-    $('#btn_next_invitation').click(function()
-    {
-        $('#invite_client_step1').addClass('hide');
-        $('#invite_client_step2').removeClass('hide');
+    $('#btn_next_invitation').click(function(){
+    	if( $('#frm_invite_client').valid() )
+    	{
+	        $('#invite_client_step1').addClass('hide');
+	        $('#invite_client_step2').removeClass('hide');
+    	}
     });
 
     // Invite client previous button functionality
@@ -917,26 +919,39 @@ $(document).ready(function(){
 
     $('#client_email_template').on('change', function()
     {
-        $.ajax({
-            url: $('meta[name="route"]').attr('content') + '/agent/emailpreview',
-            method: 'post',
-            data: {
-                id:$(this).val()
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response){
-                if( response.errCode == 0 )
-                {
-                    $('#email_preview').html( response.preview );
-                }
-                else
-                {
-                    alertify.error( response.errMsg );
-                }
-            }
-        });
+    	let emailTemplateId = $(this).val();
+
+    	// Get the mover id
+    	let clientId = $('#frm_invite_client #client_id').val();
+
+    	if( emailTemplateId != '' )
+    	{
+	        $.ajax({
+	            url: $('meta[name="route"]').attr('content') + '/agent/emailpreview',
+	            method: 'post',
+	            data: {
+	                emailTemplateId: emailTemplateId,
+	                clientId: clientId
+	            },
+	            headers: {
+	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	            },
+	            success: function(response){
+	                if( response.errCode == 0 )
+	                {
+	                    $('#email_preview').html( response.preview );
+	                }
+	                else
+	                {
+	                    alertify.error( response.errMsg );
+	                }
+	            }
+	        });
+    	}
+    	else
+    	{
+    		$('#email_preview').html('');
+    	}
     });
 
 
@@ -1084,7 +1099,7 @@ $(document).ready(function(){
     });
     $('#frm_invite_client').validate({
         rules: {
-            client_old_address: {
+            client_old_address1: {
                 required: true
             },
             client_old_unit_type: {
@@ -1102,7 +1117,7 @@ $(document).ready(function(){
             client_old_country: {
                 required: true
             },
-            client_new_address: {
+            client_new_address1: {
                 required: true
             },
             client_new_unit_type: {
@@ -1205,7 +1220,11 @@ $(document).ready(function(){
     		    success: function(response){
     		        if( response.errCode == 0 )
     		        {
-    		            alertify.success( response.errMsg );
+    		            // alertify.success( response.errMsg );
+
+    		            // Show the alert on modal
+    		            $('#sent_invitation_response').find('.modal-body').html(response.errMsg);
+    		            $('#sent_invitation_response').modal('show');
 
     		        	// Refresh the form and close the modal
 			    		$('#frm_invite_client')[0].reset();
@@ -1556,7 +1575,7 @@ $(document).ready(function(){
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchreviews',
         
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 4 ] }
+            { "className": "dt-center", "targets": [ 0, 4, 6 ] }
         ],
 
         "aoColumns": [

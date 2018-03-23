@@ -250,7 +250,7 @@ class HomeController extends Controller
 			    		DB::commit();
 
 			    		$response['errCode']    = 0;
-			            $response['errMsg']     = 'Invitation details saved successfully';
+			            $response['errMsg']     = 'Your request is successfully sent';
 			    	}
 			    	else
 			        {

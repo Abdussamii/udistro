@@ -4315,6 +4315,17 @@ class CompanyController extends Controller
     	// Get the logged-in user id
 		$userId = Auth::id();
 
+		// Get the company associated to this user
+		$user = User::find($userId);
+
+		$userCompany = $user->company->first();
+
+		$companyId = 0;
+		if( count( $userCompany ) > 0 )
+		{
+			$companyId = $userCompany->id;
+		}
+
     	$start      = Input::get('iDisplayStart');      // Offset
     	$length     = Input::get('iDisplayLength');     // Limit
     	$sSearch    = Input::get('sSearch');            // Search string
@@ -4332,8 +4343,8 @@ class CompanyController extends Controller
 
         // Get the records after applying the datatable filters
         $reviews = 	DB::table('ratings as t1')
-    				->leftJoin('agent_clients as t2', 't1.user_id', '=', 't2.id')
-    				->where(['t1.agent_id' => $userId])
+    				->leftJoin('agent_clients as t2', 't1.mover_id', '=', 't2.id')
+    				->where(['t1.company_id' => $companyId])
     				->select('t1.id', 't1.rating', 't1.comments', 't2.fname', 't1.created_at', 't2.lname')
     				->orderBy($sortBy, $sortType)
     				->limit($length)
@@ -4341,8 +4352,8 @@ class CompanyController extends Controller
     				->get();
 
         $iTotal = DB::table('ratings as t1')
-    				->leftJoin('agent_clients as t2', 't1.user_id', '=', 't2.id')
-    				->where(['t1.agent_id' => $userId])
+    				->leftJoin('agent_clients as t2', 't1.mover_id', '=', 't2.id')
+    				->where(['t1.company_id' => $companyId])
     				->count();
 
         // Create the datatable response array

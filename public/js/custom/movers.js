@@ -1689,8 +1689,36 @@ $(document).ready(function(){
 
 	// Share announcement email functionality
 	$('#share_announcement_email').click(function(){
+		// Get the fa star icon and change them to images
+		let rating = $('#agent_rating').val();
+
+		var content = $('#share_announcement_container').clone();
+
+		var step = 1;
+		$(content).find('.ratingstar li').each(function(){
+			if( step <= rating )
+			{
+				let imagePath = $('#star_image').attr('src');
+				$(this).html('<img src="'+ imagePath +'"/>');
+			}
+			else
+			{
+				$(this).html('');	
+			}
+			step++;
+		});
+
+		// Get the content and show it
+		$('#share_announcement_content').html($(content).html());
+
 		// Open the modal
 		$('#share_announcement_email_modal').modal('show');
+	});
+
+	// Share announcement email edit message
+	$('#share_announcement_edit_message').click(function(){
+		$('#announcement_message').attr('contenteditable','true');
+		$('#announcement_message').focus();
 	});
 
 	// Share announcement email form validation
@@ -1716,7 +1744,7 @@ $(document).ready(function(){
 		{
 			// Get the email id's and email content
 			let emailIds 	= $('#announcement_emails').val();
-			let emailContent= $('#announcement_email_container').html();
+			let emailContent= $('#share_announcement_content').html();
 
 			$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/movers/saveannouncementemail',

@@ -127,7 +127,11 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+
+			    		// Show the alert on modal with OK and Cancel. When user click on OK then it redirects the user to Udistro home
+			    		$('#invitation_response .modal-body').html(response.errMsg);
+			    		$('#invitation_response').modal('show');
 
 			    		// Reset the form
 			    		$('#frm_get_invitation')[0].reset();

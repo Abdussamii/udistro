@@ -209,10 +209,10 @@
 										</div>
 
 										<!-- Address Container -->
-										<div style="display: none;">
+										<div>
 
-											<div class="form-group">
-												<label for="client_fname">Old Address</label>
+											<div class="form-group" style="display: none;">
+												<label for="client_fname">Old Address 2</label>
 												<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
 											</div>
 
@@ -285,10 +285,10 @@
 										</div>
 
 										<!-- Address Container -->
-										<div style="display: none;">
+										<div>
 
-											<div class="form-group">
-												<label for="client_fname">New Address</label>
+											<div class="form-group" style="display: none;">
+												<label for="client_fname">New Address 2</label>
 												<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
 											</div>
 
@@ -372,7 +372,7 @@
 								  		{
 								  			foreach ($emailTemplates as $emailTemplate)
 								  			{
-								  				echo '<option value="'. $emailTemplate->id .'">'. $emailTemplate->template_name .'</option>';
+								  				echo '<option value="'. $emailTemplate->id .'">'. ucwords( strtolower( $emailTemplate->template_name ) ) .'</option>';
 								  			}
 								  		}
 								  		?>
@@ -381,7 +381,7 @@
 								</div>
 
 								<!-- To show the email template preview -->
-								<div class="form-group" id="email_preview"></div>
+								<div class="form-group" id="email_preview" style="height: 600px; overflow-y: scroll;"></div>
 
 								<div class="form-group" style="display: none;" id="client_invitation_scheduler">
 									<label for="">Schedule Date</label>
@@ -400,5 +400,22 @@
 		  	</div>
 		</div>
 
+    </div>
+
+    <!-- Server Response -->
+    <div class="modal fade" id="sent_invitation_response" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                	Success
+                </div>
+                <div class="modal-body">
+                	
+                </div>
+                <div class="modal-footer">
+                    <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" data-dismiss="modal">OK</a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

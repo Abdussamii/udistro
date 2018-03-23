@@ -42,7 +42,7 @@
 	     <div class="banner_btn-group center-block">
 	      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I am a business</button> -->
 	      <!--<a class="btn banner_btn btn-lg skyBlue_btn" href="{{ url('/company') }}">I'm a Business</a>-->
-	      <a class="btn banner_btn btn-lg skyBlue_btn" href="javascript:void(0)">I'm a Local Business</a>
+	      <a class="btn banner_btn btn-lg skyBlue_btn" href="{{ url('/freetrial') }}">Try It Now</a>
 	      <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
 	     </div>
 	    </div>

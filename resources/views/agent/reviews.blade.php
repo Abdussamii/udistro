@@ -21,7 +21,7 @@
 						<td>Email</td>
 						<td>Rating</td>
 						<td>Comment</td>
-						<td>Is Helpful</td>
+						<td>Action</td>
 					</tr>
 				</thead>
 			</table>

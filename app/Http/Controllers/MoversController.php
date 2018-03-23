@@ -3666,7 +3666,7 @@ class MoversController extends Controller
 	    			if( ShareAnnouncementEmail::insert($shareAnnouncementEmail) )
 	    			{
 	    				$response['errCode'] 	= 0;
-    					$response['errMsg'] 	= 'Email details saved successfully';
+    					$response['errMsg'] 	= 'Email sent successfully';
 	    			}
 	    			else
 	    			{

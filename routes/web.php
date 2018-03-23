@@ -80,10 +80,10 @@ Route::get('/faqs', function () {
     return view('faqs');
 });
 
-// Free trial
-/*Route::get('/freetrial', function () {
-    return view('freeTrial');
-});*/
+// Customers
+Route::get('/customers', function () {
+    return view('customers');
+});
 
 Route::get('/freetrial', 'CompanyController@register');
 

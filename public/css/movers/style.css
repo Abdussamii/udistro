@@ -308,8 +308,8 @@ button.btn.coment-submit-btn:hover { border: 1px solid #00bcea; color: #546e7a; 
 .mailfarwd_wrap_radio { margin-top: 30px; }
 .get_started_LB a { color: #7e869d; background-color: #fff; border: 1px solid #c3e1e9; font-size: 16px; padding: 10px 25px; border-radius: 4px; text-decoration: none; display: inline-block; }
 .get_started_LB a:hover { color: #fff; background-color: #00bcea; border: 1px solid #04a6ce; }
-.blue-btn01 a  { color: #fff !important; background-color: #00bcea !important;  border: 1px solid #04a6ce !important; }
-.blue-btn01 a:hover  { color: #7e869d !important; background-color: #fff !important;  border: 1px solid #c3e1e9 !important; }
+.blue-btn01 a  { color: ##7e869d !important; background-color: #fff !important;  border: 1px solid #04a6ce !important; }
+.blue-btn01 a:hover  { color: #fff !important; background-color: #00bcea !important;  border: 1px solid #c3e1e9 !important; }
 .activity_user_response { color: #fff; background-color: #00bcea; border: 1px solid #04a6ce; font-size: 16px; padding: 6px 25px; border-radius: 4px; text-decoration: none; display: inline-block; }
 .activity_user_response:hover,
 .activity_user_response:active,
