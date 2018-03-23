@@ -1289,13 +1289,75 @@ function calculateRoute(from, to) {
 						                    </div>
 						                </div>
 						            </div>
-						            <div class="panel panel-default">
+									
+									<div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse6">Call Me On</a>
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse6">Availability</a>
 						                    </h4>
 						                </div>
 						                <div id="home_cleaning_services_collapse6" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                    	<div class="add-serv-data allDaydaTa">
+						                    		<div class="col-lg-2">Day 1</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date4" id="availability_date4" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from1" id="availability_time_from1">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="text" name="availability_time_upto1" id="availability_time_upto1" class="form-control">
+						                    		</div>
+						                    	</div>
+						                    	<div class="add-serv-data">
+						                    		<div class="col-lg-2">Day 2</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date5" id="availability_date5" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from2" id="availability_time_from2">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control">
+						                    		</div>
+						                    	</div>
+						                    	<div class="add-serv-data">
+						                    		<div class="col-lg-2">Day 3</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date6" id="availability_date6" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from3" id="availability_time_from3">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control">
+						                    		</div>
+						                    	</div>
+						                    </div>
+						                </div>
+						            </div>
+									
+									
+						            <div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse7">Call Me On</a>
+						                    </h4>
+						                </div>
+						                <div id="home_cleaning_services_collapse7" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <div class="form-group panel-Box">
 						                        	<input type="text" name="home_cleaning_callback_primary_no" class="form-control accord-input" placeholder="Primary No. Ex: (123) 456 7899, (123)-456-7899, 123-456-7899, 123 456 7899">
@@ -1307,10 +1369,10 @@ function calculateRoute(from, to) {
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse7">Additional Information (If Any)</a>
+						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse8">Additional Information (If Any)</a>
 						                    </h4>
 						                </div>
-						                <div id="home_cleaning_services_collapse7" class="panel-collapse collapse">
+						                <div id="home_cleaning_services_collapse8" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                        <textarea class="form-control accord-input" name="home_cleaning_additional_information" class="form-control" placeholder="Enter Additional Information here If Any"></textarea>
 						                    </div>
@@ -1684,7 +1746,7 @@ function calculateRoute(from, to) {
 						                        		<option value="condo">Condo</option>
 						                        		<option value="studio">Studio</option>
 						                        	</select>
-						                        </div>
+						                    </div>
 											<div class="form-group panel-Box">
 						                        	<div class="accord-title">Floor Level</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="1">1</label>
@@ -1692,7 +1754,7 @@ function calculateRoute(from, to) {
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="3">3</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
 						                        	<div class="clean-error"><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
-						                        </div>
+						                    </div>
 											<div class="form-group panel-Box">
 						                        	<div class="accord-title">No of bedrooms</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
@@ -1700,7 +1762,7 @@ function calculateRoute(from, to) {
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
 						                        	<div class="clean-error"><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
-						                        </div>
+						                    </div>
 											<div class="form-group panel-Box">
 						                        	<div class="accord-title">Did you own or rent this property</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
@@ -2098,6 +2160,68 @@ function calculateRoute(from, to) {
 						                    </div>
 						                </div>
 						            </div>
+									
+									<div class="panel panel-default">
+						                <div class="panel-heading">
+						                    <h4 class="panel-title">
+						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse5">Availability</a>
+						                    </h4>
+						                </div>
+						                <div id="cable_internet_services_collapse5" class="panel-collapse collapse">
+						                    <div class="panel-body">
+						                    	<div class="add-serv-data allDaydaTa">
+						                    		<div class="col-lg-2">Day 1</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date7" id="availability_date7" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from1" id="availability_time_from1">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="text" name="availability_time_upto1" id="availability_time_upto1" class="form-control">
+						                    		</div>
+						                    	</div>
+						                    	<div class="add-serv-data">
+						                    		<div class="col-lg-2">Day 2</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date8" id="availability_date8" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from2" id="availability_time_from2">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control">
+						                    		</div>
+						                    	</div>
+						                    	<div class="add-serv-data">
+						                    		<div class="col-lg-2">Day 3</div>
+						                    		<div class="col-lg-3"><input type="text" name="availability_date9" id="availability_date9" class="form-control datepicker"></div>
+						                    		<div class="col-lg-3">
+						                    			<select class="form-control" name="availability_time_from3" id="availability_time_from3">
+						                    				<option value="">Select</option>
+						                    				<option value="08:00AM to 07:00PM">All day</option>
+						                    				<option value="08:00AM to 11:00AM">Morning</option>
+						                    				<option value="12:00PM to 03:00PM">Afternoon</option>
+						                    				<option value="03:00PM to 07:00PM">Evening</option>
+						                    			</select>
+						                    		</div>
+						                    		<div class="col-lg-4">
+						                    			<input type="text" name="availability_time_upto3" id="availability_time_upto3" class="form-control">
+						                    		</div>
+						                    	</div>
+						                    </div>
+						                </div>
+						            </div>
+									
+									
 									<!-- 23-1-2018 start -->
 									<div class="panel panel-default">
 						                <div class="panel-heading">

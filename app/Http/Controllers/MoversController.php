@@ -1536,6 +1536,15 @@ class MoversController extends Controller
 				
 				$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
 				$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
+				
+				$digitalServiceRequest->availability_date1 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date7']));
+				$digitalServiceRequest->availability_time1		 	= $cableInternetDetails['availability_time_upto1'];
+				$digitalServiceRequest->availability_date2 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date8']));
+				$digitalServiceRequest->availability_time2		 	= $cableInternetDetails['availability_time_upto2'];
+				$digitalServiceRequest->availability_date3 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date9']));
+				$digitalServiceRequest->availability_time3		 	= $cableInternetDetails['availability_time_upto3'];
+					
+					
 				$digitalServiceRequest->additional_information = $cableInternetDetails['cable_internet_additional_info'];
 				$digitalServiceRequest->status = '1';
 				$digitalServiceRequest->created_by = $clientId;
@@ -1632,6 +1641,14 @@ class MoversController extends Controller
 
 					$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
 					$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
+					
+					$digitalServiceRequest->availability_date1 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date7']));
+					$digitalServiceRequest->availability_time1		 	= $cableInternetDetails['availability_time_upto1'];
+					$digitalServiceRequest->availability_date2 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date8']));
+					$digitalServiceRequest->availability_time2		 	= $cableInternetDetails['availability_time_upto2'];
+					$digitalServiceRequest->availability_date3 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date9']));
+					$digitalServiceRequest->availability_time3		 	= $cableInternetDetails['availability_time_upto3'];
+					
 					$digitalServiceRequest->additional_information = $cableInternetDetails['cable_internet_additional_info'];
 					$digitalServiceRequest->status = '1';
 					$digitalServiceRequest->created_by = $clientId;
@@ -1923,6 +1940,13 @@ class MoversController extends Controller
 
  					$homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
  					$homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
+					
+					$homeCleaningServiceRequest->availability_date1 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
+					$homeCleaningServiceRequest->availability_time1		 	= $homeCleaningDetails['availability_time_upto1'];
+					$homeCleaningServiceRequest->availability_date2 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date5']));
+					$homeCleaningServiceRequest->availability_time2 		= $homeCleaningDetails['availability_time_upto2'];
+					$homeCleaningServiceRequest->availability_date3 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date6']));
+					$homeCleaningServiceRequest->availability_time3		 	= $homeCleaningDetails['availability_time_upto3'];
 
  					$homeCleaningServiceRequest->additional_information = $homeCleaningDetails['home_cleaning_additional_information'];
  					$homeCleaningServiceRequest->status = '1';
@@ -2780,6 +2804,18 @@ class MoversController extends Controller
                 $response['home_cleaning_bathroom_count']               = $homeServiceArray->home_cleaning_bathroom_count;
                 $response['cleaning_behind_refrigerator_and_stove']     = $homeServiceArray->cleaning_behind_refrigerator_and_stove;
                 $response['baseboard_to_be_washed']                     = $homeServiceArray->baseboard_to_be_washed;
+				
+				$response['availability_date1']         = date('d-m-Y', strtotime( $homeServiceArray->availability_date1 ) );
+                $response['availability_date2']         = date('d-m-Y', strtotime( $homeServiceArray->availability_date2 ) );
+                $response['availability_date3']         = date('d-m-Y', strtotime( $homeServiceArray->availability_date3 ) );
+
+                //$response['availability_time_from1']    = $homeServiceArray->availability_time_from1;
+                $response['availability_time_upto1']    = $homeServiceArray->availability_time1;
+                //$response['availability_time_from2']    = $homeServiceArray->availability_time_from2;
+                $response['availability_time_upto2']    = $homeServiceArray->availability_time2;
+                //$response['availability_time_from3']    = $homeServiceArray->availability_time_from3;
+                $response['availability_time_upto3']    = $homeServiceArray->availability_time3;
+				
                 $response['additional_information']                     = ucfirst( strtolower( $homeServiceArray->additional_information ) );
 
                 // Get the moving from address
@@ -2981,6 +3017,17 @@ class MoversController extends Controller
             $response['want_to_receive_electronic_bill']    = ( $cableInternetServiceDetails['want_to_receive_electronic_bill'] == 1 ) ? 'Yes' : 'No';
             $response['want_to_contract_plan']              = ( $cableInternetServiceDetails['want_to_contract_plan'] == 1 ) ? 'Yes' : 'No';
             $response['want_to_setup_preauthorise_payment'] = ( $cableInternetServiceDetails['want_to_setup_preauthorise_payment'] == 1 ) ? 'Yes' : 'No';
+			
+			$response['availability_date1']         = date('d-m-Y', strtotime( $cableInternetServiceDetails->availability_date1 ) );
+            $response['availability_date2']         = date('d-m-Y', strtotime( $cableInternetServiceDetails->availability_date2 ) );
+            $response['availability_date3']         = date('d-m-Y', strtotime( $cableInternetServiceDetails->availability_date3 ) );
+
+            //$response['availability_time_from1']    = $cableInternetServiceDetails->availability_time_from1;
+            $response['availability_time_upto1']    = $cableInternetServiceDetails->availability_time1;
+            //$response['availability_time_from2']    = $cableInternetServiceDetails->availability_time_from2;
+            $response['availability_time_upto2']    = $cableInternetServiceDetails->availability_time2;
+            //$response['availability_time_from3']    = $cableInternetServiceDetails->availability_time_from3;
+            $response['availability_time_upto3']    = $cableInternetServiceDetails->availability_time3;
 
             $response['additional_information']             = ucfirst( strtolower( $cableInternetServiceDetails['additional_information'] ) );
 
