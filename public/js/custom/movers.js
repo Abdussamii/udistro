@@ -271,6 +271,10 @@ $(document).ready(function(){
 
                     $('#frm_home_cleaning_services #cleaning_behind_refrigerator_and_stove').text( (response.cleaning_behind_refrigerator_and_stove) ? 'Yes' : 'No' );
                     $('#frm_home_cleaning_services #baseboard_to_be_washed').text( (response.baseboard_to_be_washed) ? 'Yes' : 'No' );
+					
+					$('#frm_home_cleaning_services #availability_day4').text( response.availability_date1 + ' (' + response.availability_time1 + ')' );
+                    $('#frm_home_cleaning_services #availability_day5').text( response.availability_date2 + ' (' + response.availability_time2 + ')' );
+                    $('#frm_home_cleaning_services #availability_day6').text( response.availability_date3 + ' (' + response.availability_time3 + ')' );
 
                     $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
 
@@ -415,6 +419,10 @@ $(document).ready(function(){
                     $('#frm_cable_internet_services #primary_no').text(response.primary_no);
                     $('#frm_cable_internet_services #secondary_no').text(response.secondary_no);
                     $('#frm_cable_internet_services #additional_information').text(response.additional_information);
+					
+					$('#frm_cable_internet_services #availability_day7').text( response.availability_date1 + ' (' + response.availability_time1 + ')' );
+                    $('#frm_cable_internet_services #availability_day8').text( response.availability_date2 + ' (' + response.availability_time2 + ')' );
+                    $('#frm_cable_internet_services #availability_day9').text( response.availability_date3 + ' (' + response.availability_time3 + ')' );
 
                     // Requested services
 					$('#frm_cable_internet_services #user_requested_cable_internet_services').html(response.request_services_details);
@@ -1185,6 +1193,7 @@ $(document).ready(function(){
 	});
 
 	// Tech Concierge Availability functionality
+	/*
 	$('#availability_time_from1').change(function(){
 		$('#availability_time_upto1').val( $(this).val() );
 	});
@@ -1194,8 +1203,44 @@ $(document).ready(function(){
 	$('#availability_time_from3').change(function(){
 		$('#availability_time_upto3').val( $(this).val() );
 	});
-
+	*/
 	/* ---------- Tech Concierge functionality ends ---------- */
+	
+	/* ---------- Availability functionality for cable internet, tech concierge and home cleaning service start ---------- */
+	
+	$('#frm_cable_internet_services #availability_time_from1').change(function(){
+		$('#frm_cable_internet_services #availability_time_upto1').val( $(this).val() );
+	});
+	$('#frm_cable_internet_services #availability_time_from2').change(function(){
+		$('#frm_cable_internet_services #availability_time_upto2').val( $(this).val() );
+	});
+	$('#frm_cable_internet_services #availability_time_from3').change(function(){
+		$('#frm_cable_internet_services #availability_time_upto3').val( $(this).val() );
+	});
+	
+	
+	$('#frm_tech_concierge #availability_time_from1').change(function(){
+		$('#frm_tech_concierge #availability_time_upto1').val( $(this).val() );
+	});
+	$('#frm_tech_concierge #availability_time_from2').change(function(){
+		$('#frm_tech_concierge #availability_time_upto2').val( $(this).val() );
+	});
+	$('#frm_tech_concierge #availability_time_from3').change(function(){
+		$('#frm_tech_concierge #availability_time_upto3').val( $(this).val() );
+	});
+	
+	
+	$('#frm_home_cleaning_services #availability_time_from1').change(function(){
+		$('#frm_home_cleaning_services #availability_time_upto1').val( $(this).val() );
+	});
+	$('#frm_home_cleaning_services #availability_time_from2').change(function(){
+		$('#frm_home_cleaning_services #availability_time_upto2').val( $(this).val() );
+	});
+	$('#frm_home_cleaning_services #availability_time_from3').change(function(){
+		$('#frm_home_cleaning_services #availability_time_upto3').val( $(this).val() );
+	});
+
+	/* ---------- Availability functionality for cable internet, tech concierge and home cleaning service ends ---------- */
 
 	/* ---------- Share Announcement functionality ---------- */
 
