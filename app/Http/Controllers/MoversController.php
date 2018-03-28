@@ -1215,15 +1215,13 @@ class MoversController extends Controller
 					$techConciergeRequest->secondary_no = $techConciergeDetails['tech_concierge_callback_secondary_no'];
 					$techConciergeRequest->additional_information = $techConciergeDetails['tech_concierge_additional_information'];
 
-					$techConciergeRequest->availability_date1 		= date('Y-m-d', strtotime($techConciergeDetails['availability_date1']));
-					$techConciergeRequest->availability_time_from1 	= $techConciergeDetails['availability_time_from1'];
-					$techConciergeRequest->availability_time_upto1 	= $techConciergeDetails['availability_time_upto1'];
-					$techConciergeRequest->availability_date2 		= date('Y-m-d', strtotime($techConciergeDetails['availability_date2']));
-					$techConciergeRequest->availability_time_from2 	= $techConciergeDetails['availability_time_from2'];
-					$techConciergeRequest->availability_time_upto2 	= $techConciergeDetails['availability_time_upto2'];
-					$techConciergeRequest->availability_date3 		= date('Y-m-d', strtotime($techConciergeDetails['availability_date3']));
-					$techConciergeRequest->availability_time_from3 	= $techConciergeDetails['availability_time_from3'];
-					$techConciergeRequest->availability_time_upto3 	= $techConciergeDetails['availability_time_upto3'];
+					$techConciergeRequest->availability_date1 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date1']));
+					$techConciergeRequest->availability_date2 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date2']));
+					$techConciergeRequest->availability_date3 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date3']));
+
+					$techConciergeRequest->availability_time1 	= $techConciergeDetails['availability_time_upto1'];
+					$techConciergeRequest->availability_time2 	= $techConciergeDetails['availability_time_upto2'];
+					$techConciergeRequest->availability_time3 	= $techConciergeDetails['availability_time_upto3'];
 
 					$techConciergeRequest->status = '1';
 					$techConciergeRequest->created_by = $clientId;

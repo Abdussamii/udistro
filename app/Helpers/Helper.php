@@ -161,19 +161,19 @@ class Helper
 		
 		if( $status == '0' )
 		{
-			$statusText = 'Initial';
+			$statusText = 'Scheduled';
 		}
 		else if( $status == '1' )
 		{
-			$statusText = 'Send';
+			$statusText = 'Sent';
 		}
 		else if( $status == '2' )
 		{
-			$statusText = 'Read';
+			$statusText = 'Opened';
 		}
-		else if( $status == '2' )
+		else if( $status == '3' )
 		{
-			$statusText = 'Expire';
+			$statusText = 'Expired';
 		}
 
 		return $statusText;
@@ -204,7 +204,7 @@ class Helper
     }
 
     /**
-     * To sget invite status
+     * To get invite status
      * @param array
      * @return null
      */
@@ -218,6 +218,41 @@ class Helper
 		}
 
 		return $statusText;
+    }
+
+    /**
+     * To get status of invite at client
+     * @param array
+     * @return null
+     */
+    public static function getInviteStatusAtClient($inviteId=0)
+    {
+    	// Check if any of the activity is done by the client then it is "In Progress", otherwise "Completed"
+    	$invitedActivityCount = ClientActivityLog::where(['invitation_id' => $inviteId])->get();
+
+    	$status = '';
+    	if( count( $invitedActivityCount ) == 0 )
+    	{
+    		$status = 'NA';
+    	}
+    	else if( count( $invitedActivityCount ) >= 1 && count( $invitedActivityCount ) < 10 )
+    	{
+    		// Check if that activity is login
+    		if( count( $invitedActivityCount ) == 1 && $invitedActivityCount[0]->activity_id == '1' )	// Login activity
+    		{
+    			$status = 'Opened';
+    		}
+    		else
+    		{
+    			$status = 'In Progress';
+    		}
+    	}
+    	else if( count( $invitedActivityCount ) == 10 )
+    	{
+    		$status = 'Completed';
+    	}
+
+    	return $status;
     }
 
     /**

@@ -1191,6 +1191,11 @@ class CompanyController extends Controller
                 $response['baseboard_to_be_washed']                  	= $homeServiceArray->baseboard_to_be_washed;
                 $response['additional_information']                     = ucfirst( strtolower( $homeServiceArray->additional_information ) );
 
+                // Get the availability details
+                $response['availability1'] = $homeServiceArray['availability_date1'] . ' - ' . $homeServiceArray['availability_time1'];
+                $response['availability2'] = $homeServiceArray['availability_date2'] . ' - ' . $homeServiceArray['availability_time2'];
+                $response['availability3'] = $homeServiceArray['availability_date3'] . ' - ' . $homeServiceArray['availability_time3'];
+
                 // Get the moving from address
                 $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
 	                					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
@@ -1329,6 +1334,11 @@ class CompanyController extends Controller
 
 			$response['additional_information']				= ucfirst( strtolower( $cableInternetServiceDetails['additional_information'] ) );
 
+			// Get the availability details
+			$response['availability1'] = $cableInternetServiceDetails['availability_date1'] . ' - ' . $cableInternetServiceDetails['availability_time1'];
+			$response['availability2'] = $cableInternetServiceDetails['availability_date2'] . ' - ' . $cableInternetServiceDetails['availability_time2'];
+			$response['availability3'] = $cableInternetServiceDetails['availability_date3'] . ' - ' . $cableInternetServiceDetails['availability_time3'];
+
             // Get the moving from address
             $clientMovingFromAddress = DB::table('digital_service_requests as t1')
                 					->join('agent_client_moving_from_addresses as t2', 't1.agent_client_id', '=', 't2.agent_client_id')
@@ -1438,12 +1448,10 @@ class CompanyController extends Controller
                 $response['availability_date2']     	= date('d-m-Y', strtotime( $techConciergeArray->availability_date2 ) );
                 $response['availability_date3']   		= date('d-m-Y', strtotime( $techConciergeArray->availability_date3 ) );
 
-                $response['availability_time_from1']	= $techConciergeArray->availability_time_from1;
-                $response['availability_time_upto1']	= $techConciergeArray->availability_time_upto1;
-                $response['availability_time_from2']	= $techConciergeArray->availability_time_from2;
-                $response['availability_time_upto2']	= $techConciergeArray->availability_time_upto2;
-                $response['availability_time_from3']	= $techConciergeArray->availability_time_from3;
-                $response['availability_time_upto3']	= $techConciergeArray->availability_time_upto3;
+                // Availability
+				$response['availability1'] = $techConciergeArray['availability_date1'] . ' ' . $techConciergeArray['availability_time1'];
+				$response['availability2'] = $techConciergeArray['availability_date2'] . ' ' . $techConciergeArray['availability_time2'];
+				$response['availability3'] = $techConciergeArray['availability_date3'] . ' ' . $techConciergeArray['availability_time3'];
 
                 $response['additional_information'] 	= $techConciergeArray->additional_information;
 
@@ -3894,7 +3902,7 @@ class CompanyController extends Controller
 		    }
 
 		    // Update the home_cleaning_service_requests company_response column to 1
-		    HomeCleaningServiceRequest::where(['id' => $homeCleaningDetails['home_cleaning_service_request_id']])->update(['company_response' => '1', 'discount' => $homeCleaningDetails['discount'], 'comment' => $homeCleaningDetails['comment']]);
+		    HomeCleaningServiceRequest::where(['id' => $homeCleaningDetails['home_cleaning_service_request_id']])->update(['company_response' => '1', 'discount' => $homeCleaningDetails['discount'], 'comment' => $homeCleaningDetails['comment'], 'date_of_working' => $homeCleaningDetails['availability']]);
 
     	    // Commit the transaction
     		DB::commit();
@@ -3954,7 +3962,7 @@ class CompanyController extends Controller
 		    }
 
 		    // Update the tech_concierge_service_requests company_response column to 1, discount, comment column as well
-		    TechConciergeServiceRequest::where(['id' => $techConciergeDetails['tech_concierge_service_request_id']])->update(['company_response' => '1', 'discount' => $techConciergeDetails['discount'], 'comment' => $techConciergeDetails['comment']]);
+		    TechConciergeServiceRequest::where(['id' => $techConciergeDetails['tech_concierge_service_request_id']])->update(['company_response' => '1', 'discount' => $techConciergeDetails['discount'], 'comment' => $techConciergeDetails['comment'], 'date_of_working' => $techConciergeDetails['availability']]);
 
 			// Commit the transaction
 			DB::commit();
@@ -4030,7 +4038,7 @@ class CompanyController extends Controller
 		    }
 
 		    // Update the moving_item_service_requests company_response column to 1
-		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $movingDetails['insurance']]);
+		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $movingDetails['insurance'], 'date_of_working' => $movingDetails['availability']]);
 		    	
 		    // Commit the transaction
 			DB::commit();
@@ -4090,7 +4098,14 @@ class CompanyController extends Controller
 
     	    // Update the digital_service_requests company_response column to 1, discount, comment
     	    DigitalServiceRequest::where(['id' => $cableInternetDetails['cable_internet_service_request_id']])
-    	    					->update(['company_response' => '1', 'discount' => $cableInternetDetails['discount'], 'comment' => $cableInternetDetails['comment']]);
+    	    					->update(
+    	    						[
+    	    							'company_response' => '1', 
+    	    							'discount' => $cableInternetDetails['discount'], 
+    	    							'comment' => $cableInternetDetails['comment'],
+    	    							'date_of_working' => $cableInternetDetails['availability']
+    	    						]
+    	    					);
     	    
     		// Commit the transaction
     		DB::commit();
@@ -4441,7 +4456,7 @@ class CompanyController extends Controller
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
 			                    ->offset($start)
-        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against', 't2.date_of_working')
         						->get();
 
         			$iTotal = DB::table('payment_transaction_details as t1')
@@ -4465,7 +4480,7 @@ class CompanyController extends Controller
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
 			                    ->offset($start)
-        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against', 't2.date_of_working')
         						->get();
 
         			$iTotal = DB::table('payment_transaction_details as t1')
@@ -4489,7 +4504,7 @@ class CompanyController extends Controller
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
 			                    ->offset($start)
-        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against', 't2.date_of_working')
         						->get();
 
         			$iTotal = DB::table('payment_transaction_details as t1')
@@ -4513,7 +4528,7 @@ class CompanyController extends Controller
         						->orderBy($sortBy, $sortType)
 			    				->limit($length)
 			                    ->offset($start)
-        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against')
+        						->select('t1.id as transaction_id', 't2.id as response_id', 't3.contact_number', 't3.fname', 't3.oname', 't3.updated_at as payment_date', 't1.invoice_no', 't1.company_payment_released', 't4.company_category_id', 't1.payment_against', 't2.date_of_working')
         						->get();
 
         			$iTotal = DB::table('payment_transaction_details as t1')
@@ -4557,7 +4572,8 @@ class CompanyController extends Controller
     		                4 => $jobDetail->invoice_no,
     		                5 => $paymentStatus,
     		                6 => '$' . Helper::calculateReceivableAmount($jobDetail->response_id, $jobDetail->company_category_id),
-    		                7 => '<a href="javascript:void(0);" id="'. $jobDetail->transaction_id .'" class="request_money"><i class="fa fa-usd" aria-hidden="true"></i> </a>',
+    		                7 => $jobDetail->date_of_working,
+    		                8 => '<a href="javascript:void(0);" id="'. $jobDetail->transaction_id .'" class="request_money"><i class="fa fa-usd" aria-hidden="true"></i> </a>',
     		            );
     		            $k++;
     		        }

@@ -35,6 +35,9 @@
     <link rel="stylesheet" href="{{ URL::asset('css/font-awesome.min.css') }}" />-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 
+	<!-- Multiple select -->
+	<link rel="stylesheet" href="{{ URL::asset('css/multiple-select.css') }}" />
+
     <!-- JQuery UI -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 
@@ -78,6 +81,9 @@
 	<script type="text/javascript" src="{{ URL::asset('js/alertify.min.js') }}"></script>
 	<link rel="stylesheet" href="{{ URL::asset('css/alertify.min.css') }}" />
 
+	<!-- Multiple select -->
+	<script type="text/javascript" src="{{ URL::asset('js/multiple-select.js') }}"></script>
+
     <!-- Admin JS -->
     <script type="text/javascript" src="{{ URL::asset('js/custom/agent.js') }}"></script>
 
@@ -99,6 +105,11 @@
     $(document).ready(function(){
     	// Initiate the tooltip for static as well as dynamic content also
     	$('body').tooltip({selector: '[data-toggle="tooltip"]'});
+
+    	// Multi-select
+    	$('#recipient_email').multipleSelect({
+            placeholder: 'Email Recipient'
+        });
     });
     </script>
 
@@ -418,11 +429,22 @@
     								{
     								?>
     									<div class="control-email">
-											<i class="fa fa-envelope-open email-icon" aria-hidden="true"></i>
-    										<input type="email" name="recipient_email" id="recipient_email" placeholder="Email Id" value="">
+											<!-- <i class="fa fa-envelope-open email-icon" aria-hidden="true"></i> -->
+    										<!-- <input type="email" name="recipient_email" id="recipient_email" placeholder="Email Id" value=""> -->
+    										<select name="recipient_email" id="recipient_email" multiple="true" style="width: 180px;">
+    											<?php
+    											if( isset( $clients ) && count( $clients ) > 0 )
+    											{
+    												foreach( $clients as $client )
+    												{
+    													echo '<option value="'. $client->email .'">'. ucwords( strtolower( $client->fname .' '. $client->lname ) ) .'</option>';
+    												}
+    											}
+    											?>
+    										</select>
     									</div>
 
-    									<div class="control-buttons">
+    									<div class="control-buttons" style="margin-top: 10px;">
 											<i class="fa fa-paper-plane send-icon" aria-hidden="true"></i>
     										<input type="button" name="btn_agent_send_email" id="btn_agent_send_email" class="btn btn-success" value="Send Email">
     									</div>
@@ -803,11 +825,11 @@ $(document).ready(function(){
     // To send the email
     $('#btn_agent_send_email').click(function(){
 
-    	let recipientEmail = $('#recipient_email').val();
+    	let recipientEmails = $('#recipient_email').val();
 
-    	if( recipientEmail == '' )
+    	if( recipientEmails == null )
     	{
-    		alertify.error('Please enter email id');
+    		alertify.error('Please select atleast one email recipient');
     		$('#recipient_email').focus();
 
     		return false;
@@ -841,7 +863,7 @@ $(document).ready(function(){
 			url: $('meta[name="route"]').attr('content') + '/email',
 			method: 'post',
 			data: {
-				recipientEmail: recipientEmail,
+				recipientEmails: recipientEmails,
 				content: content
 			},
 			headers: {
@@ -887,8 +909,9 @@ $(document).ready(function(){
     				$(this).remove();
     			}
 
-    			// Add max-width: 800 to all images
-    			$(this).css('max-width', '800px');
+    			// Add max-width: 250px, max-height: 250px to all images
+    			$(this).css('max-width', '250px');
+    			$(this).css('max-height', '250px');
     		});
 
     		// Show the get started button

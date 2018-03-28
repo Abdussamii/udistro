@@ -12,8 +12,8 @@
 	   <li><a href="{{ url('/agent/home') }}">
 	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>
 	    </a></li>
-	   <li><a href="{{ url('/company/home') }}">
-	    <button type="button" class="btn top-btn1">I'm a Local Business</button>
+	   <li><a href="{{ url('/') }}">
+	    <button type="button" class="btn top-btn1">I'm Moving </button>
 	    </a></li>
 	  </ul>
 	 </div>

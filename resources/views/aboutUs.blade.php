@@ -27,9 +27,9 @@
 	 	<h2>About uDistro</h2>
 	  <div class="about-para">
 	  	<p>
-	   	“Udistro is a time-saving tool that offer individual and commercial movers the ability to forward their mail using Canada Post Mail Forwarding Service, update address with agencies such as Canada Revenue Agency, Provincial Health Agencies, connect utilities, Cable and Internet Services, hire professional moving and home service companies and share your happiness with friends and families from one easy-to-use platform. You can do all of these for free and in minutes, saving hours!
-	
+	   	uDistro is a time-saving tool that offers individual and commercial movers the ability to forward their mail using Canada Post Mail Forwarding Service, update address with agencies such as Canada Revenue Agency, provincial health agencies, connect utilities, cable and internet services, hire professional moving and home cleaning companies and share the happiness with friends, families and colleagues from one easy-to-use platform. You can do all of these in minutes, saving several hours plus it is completely Free!
 	   </p>
+	   <p>uDistro is an invite-only platform. In order to gain access to uDistro, you must be invited by someone helping you to move – your real estate agent, property manager, builder etc. Once you have been invited, simply claim your account, and start crossing items out of your moving check-lists!</p>
 	  </div>
 	 </div>
 	</section>

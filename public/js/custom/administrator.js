@@ -5108,6 +5108,7 @@ $(document).ready(function(){
 	        { 'bSortable' : false },
 	        { 'bSortable' : false },
 	        { 'bSortable' : false },
+	        { 'bSortable' : false },
 	        { 'bSortable' : false }
 	    ]
 	});

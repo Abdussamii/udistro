@@ -143,6 +143,10 @@ function calculateRoute(from, to) {
 .error {
 	color: red;
 }
+/* For modal rating */
+.red {
+    color: #00bcea;
+}
 </style>
 </head>
 
@@ -2314,7 +2318,7 @@ function calculateRoute(from, to) {
 	    	<div class="modal-body">
 	      		<div class="close close-btn close_modal" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	
-		      	<div class="row" id="share_announcement_container">
+		      	<!-- <div class="row" id="share_announcement_container">
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 					<div class="propertyiMage">
 		      			<img src="{{ url('/images/house_sold.png') }}" height="200" width="250" alt="udistro">
@@ -2322,7 +2326,6 @@ function calculateRoute(from, to) {
 		      			<div class="specialThanksBox">
 		      				<h4>Special Thanks to Agent {{ $agentName }}</h4>
 		      				<ul class="ratingstar">
-		      					<!-- <li><a href="javascript:void(0);"><i class="fa fa-star red" aria-hidden="true"></i></a></li> -->
 		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
 		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
 		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
@@ -2381,24 +2384,128 @@ function calculateRoute(from, to) {
 							</div>
 						</div>
 		      		</div>
-		      	</div>
-		      	<div class="annou-modelfooter-wrap">
+		      	</div> --> 
+		      	<!-- <div class="annou-modelfooter-wrap">
 		      		<div class="col-sm-8 col-md-8 col-lg-8">
 		      			<ul class="comment-group">
 							<li><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful</a></li>
-							<!-- <li><a href="javascript:void(0);"><i class="fa">2</i>Follow</a></li> -->
 							<li><a href="javascript:void(0);" id="share_announcement_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
 						</ul>
 		      		</div>
 		      		<div class="col-sm-4 col-md-4 col-lg-4">
 		      			<div class="share-announc">Share this on: </div>
-		      			<!-- <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
-		      			<a href="http://twitter.com/share?text=udistro&url=https://www.udistro.ca/&hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a>
-		      			<a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.udistro.ca/&title=udistro&summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a> -->
-		      			<!-- <i class="fa fa fa-google-plus-square"></i> -->
 		      			<a href="javascript:void(0);" id="share_announcement_email"><i class="fa fa-envelope-square"></i></a>
 		      		</div>
-		      	</div>
+		      	</div> -->
+
+		      	<table align="center" style=" background:#fff; width:870px;">
+	      			<tr id="share_announcement_container">
+	      				<td style="padding:10px; width: 200px;">
+	      					<img src="{{ url('/images/house_sold.png') }}" height="200" width="250" alt="udistro">
+	      					
+	      					<!-- <div style="background: #f4f5f5; border-radius: 5px; margin-top: 15px; text-align: center; padding: 10px; font-size:16px;">
+	      						<h4>Special Thanks to Agent<br> {{ $agentName }}</h4>
+	      						<ul class="ratingstar" style="height: 40px;">
+	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
+	      						</ul>
+	      						<span>( {{ $agentRating }} Rating )</span>
+	      					</div> -->
+
+	      					<table style="text-align: center; width: 100%;">
+	      						<tr>
+	      							<td>
+	      								<h4 style="margin-bottom: 10px;">Special Thanks to Agent<br> {{ $agentName }}</h4>
+	      							</td>
+	      						</tr>
+	      					</table>
+	      					<table align="center" style="text-align: center; width: 60%;">
+	      						<tr class="ratingstar">
+	      							<td style=""><a style="color: #dbdbdb;" href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></td>
+	      							<td style=""><a style="color: #dbdbdb;" href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></td>
+	      							<td style=""><a style="color: #dbdbdb;" href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></td>
+	      							<td style=""><a style="color: #dbdbdb;" href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></td>
+	      							<td style=""><a style="color: #dbdbdb;" href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></td>
+	      						</tr>
+	      					</table>
+	      					<table style="text-align: center; width: 100%; margin:15px 0 0;">
+	      						<tr>
+	      							<td>( {{ $agentRating }} Rating )</td>
+	      						</tr>
+	      					</table>
+	      				</td>
+	      				<td style="padding: 10px; vertical-align: top;">
+	      					<table style="text-align: center; background: #f3f9fc; width:100%; line-height: 33px;">
+	      						<tr class="content_editable">
+	      							<td><h2>The {{ ucwords( strtolower( $clientName ) . "'s" ) }} are moving!</h2></td>
+	      						</tr>
+	      						<tr class="content_editable">
+	      							<td>Hi friends</td>
+	      						</tr>
+	      						<tr class="content_editable">
+	      							<td>we are moving from South to North.</td>
+	      						</tr>
+	      						<tr class="content_editable">
+	      							<td>Stop by Saturday night for a housewarming party!</td>
+	      						</tr>
+	      						<tr class="content_editable">
+	      							<td>With love from</td>
+	      						</tr>
+	      						<tr class="content_editable">
+	      							<td>{{ ucwords( strtolower( $clientName ) ) }}</td>
+	      						</tr>
+	      						<tr>
+	      							<td>
+	      								<table style="width: 100%; border-top:1px solid #dceaf1;">
+	      									<tr>
+	      										<td style="text-align: left; font-size: 14px; padding: 0px 10px; width: 50%; border-right:1px solid #dceaf1;">
+	      											<table>
+	      												<tr>
+	      													<td>
+	      														<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
+	      													</td>
+	      													<td style="padding: 15px;">
+	      														{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
+	      														{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
+	      													</td>
+	      												</tr>
+	      											</table>
+	      										</td>
+	      										<td style="width: 50%; text-align: left; padding-left: 10px;">
+	      											<span>
+	      												<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
+	      											</span>
+	      											<span>{{ $agentName }}</span>
+	      										</td>
+	      									</tr>
+	      								</table>
+	      							</td>
+	      						</tr>
+	      					</table>
+	      				</td>
+	      			</tr>
+	      			<tr style="border:1px solid #dceaf1;">
+	      				<td>
+	      					<table>
+	      						<tr>
+	      							<td style="padding: 10px; font-size: 14px;"><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count"> {{ $agentHelpfulCount }}</span> Helpful</a></td>
+	      							<td style="padding: 10px 10px 10px 55px; font-size: 14px;"><a href="javascript:void(0);" id="share_announcement_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Message</a></td>
+	      						</tr>
+	      					</table>
+	      				</td>
+	      				<td style="text-align: right; padding: 10px;">
+	      					<table width="90%;">
+	      						<tr>
+	      							<td colspan="2">Share this on: <a href="javascript:void(0);" id="share_announcement_email"><i class="fa fa-envelope-square"></i></a></td>
+	      						</tr>
+	      					</table>
+	      				</td>
+	      			</tr>
+	      		</table>
+
 
 		    </div>
 		</div>

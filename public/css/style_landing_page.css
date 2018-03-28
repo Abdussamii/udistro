@@ -56,7 +56,7 @@ section.content-section.ready-yourBusiness .section-organise h2.title-main { col
 .banner_btn-group .banner_btn.skyBlue_btn { min-width: 218px; min-height: 60px; -webkit-border-radius: 11px; -moz-border-radius: 11px; border-radius: 11px; background-color: #44bae6; color: #fff; }
 .btn-blue { width: 106px; height: 38px; -webkit-border-radius: 19px; -moz-border-radius: 19px; border-radius: 19px; background-color: #44bbe6; color: #fff; }
 .top-btn1 { height: 40px; -webkit-border-radius: 19px; -moz-border-radius: 19px; border-radius: 4px; background-color: #44bae6; color: #fff; width: 190px; }
-.top-btn1:hover { background-color: #3393bd; color: #fff; }
+.top-btn1:hover, .top-btn1:focus { background-color: #3393bd; color: #fff; }
 .navbar { transition: all 0.5s ease-in; -webkit-transition: all 0.5s ease-in; -ms-transition: all 0.5s ease-in; -o-transition: all 0.5s ease-in; -moz-transition: all 0.5s ease-in; }
 .navbar-top-link li { float: none; display: inline-block; font-size: 16px; color: #fff; }
 .navbar-top-link li a { color: #fff !important; }

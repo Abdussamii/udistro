@@ -46,6 +46,7 @@
     				<td>Invoice#</td>
     				<td>Payment Status</td>
     				<td>Receivable Amount</td>
+    				<td>Delivery Date</td>
     				<td>Ask For Money</td>
     			</tr>
     		</thead>

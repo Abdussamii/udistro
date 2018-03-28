@@ -377,7 +377,6 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.view_invite', function(){
-        $('#modal_invite').modal('show');
         var inviteId = $(this).attr('id');
         if( inviteId != '' )
         {
@@ -389,11 +388,41 @@ $(document).ready(function(){
                     inviteId: inviteId
                 },
                 success: function(response){
+                	$('#modal_invite').modal('show');
                     $('#htmlInvite').append(response.html);
                 }
             });
         }
     });
+
+    // To resend the invite
+    $(document).on('click', '.resend_invite', function(){
+    	var inviteId = $(this).attr('id');
+
+    	$.ajax({
+    	    url: $('meta[name="route"]').attr('content') + '/agent/resendemail',
+    	    method: 'post',
+    	    data: {
+    	        inviteId: inviteId
+    	    },
+    	    headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	    },
+    	    success: function(response){
+    	        if( response.errCode == 0 )
+    	        {
+    	            alertify.success( response.errMsg );
+
+    	            // Refresh the datatable
+    	            $('#datatable_invites').DataTable().ajax.reload();                       
+    	        }
+    	        else
+    	        {
+    	            alertify.error( response.errMsg );
+    	        }
+    	    }
+    	});
+    });	
 
     // To edit the client details
     $(document).on('click', '.edit_client', function(){

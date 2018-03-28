@@ -39,8 +39,8 @@
 						<td>First Name</td>
 						<td>Last Name</td>
 						<td>Email</td>
-						<td>Status</td>
-						<td>Schedule Status</td>
+						<td>Status at Source</td>
+						<td>Status at Client</td>
 						<td>Action</td>
 					</tr>
 				</thead>

@@ -349,6 +349,12 @@
 											<td id="total_remittance">$0</td>
 										</tr>
 										<tr>
+											<td>Availability</td>
+											<td>
+												<select name="availability" id="availability" class="form-control"></select>
+											</td>
+										</tr>
+										<tr>
 											<td>Comment</td>
 											<td>
 												<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
@@ -548,6 +554,12 @@
 													<td id="total_remittance">$0</td>
 												</tr>
 												<tr>
+													<td>Availability</td>
+													<td>
+														<select name="availability" id="availability" class="form-control"></select>
+													</td>
+												</tr>
+												<tr>
 													<td>Comment</td>
 													<td>
 														<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
@@ -630,18 +642,6 @@
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
 											<tr>
-												<td>Availability 1</td>
-												<td id="availability_day1"></td>
-											</tr>
-											<tr>
-												<td>Availability 2</td>
-												<td id="availability_day2"></td>
-											</tr>
-											<tr>
-												<td>Availability 3</td>
-												<td id="availability_day3"></td>
-											</tr>
-											<tr>
 												<td>Additional Information</td>
 												<td id="additional_information"></td>
 											</tr>
@@ -715,6 +715,12 @@
 												<tr>
 													<td colspan="4" style="width: 80%;">Total Remittance</td>
 													<td id="total_remittance">$0</td>
+												</tr>
+												<tr>
+													<td>Availability</td>
+													<td>
+														<select name="availability" id="availability" class="form-control"></select>
+													</td>
 												</tr>
 												<tr>
 													<td>Comment</td>
@@ -823,10 +829,10 @@
 												<th style="width:70%">Items</th>
 												<th>User Input</th>
 											</tr>
-											<tr>
+											<!-- <tr>
 												<td>Moving date</td>
 												<td id="moving_date"></td>
-											</tr>
+											</tr> -->
 											<tr>
 												<td>Distance</td>
 												<td id="distance"></td>
@@ -911,6 +917,12 @@
 												<tr>
 													<td colspan="4" style="width: 80%;">Total Remittance</td>
 													<td id="total_remittance">$0</td>
+												</tr>
+												<tr>
+													<td>Availability</td>
+													<td>
+														<select name="availability" id="availability" class="form-control"></select>
+													</td>
 												</tr>
 												<tr>
 													<td>Comment</td>

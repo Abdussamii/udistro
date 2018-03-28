@@ -59,15 +59,17 @@
         	border-bottom:1px solid #e2e2e2;
         	padding-bottom: 15px;
         	text-align: center;
-        	color: #2c80bc;
+        	color: #44bae6;
         	margin-top: 0;
         	font-size: 30px;
         }
         .field-section .form-control {
-        	box-shadow: none;
-        	border-radius: 0;
-        	border:1px solid #e2e2e2;
-        }
+			box-shadow: none;
+			border-radius: 0;
+			border: 1px solid #e2e2e2;
+			height: 45px;
+			line-height: 45px;
+		}
         .field-section .form-group label {
         	color:#a09fa4;
         }
@@ -80,23 +82,35 @@
         .field-section .btn {
         	border-radius: 0;
         	font-weight: 600;
-        	font-size: 15px;
+        	font-size: 16px;
         	padding: 15px 0;
-        	background: #3879cd;
-        	border:1px solid #3879cd;
+        	background: #44bae6;
+        	border:1px solid #44bae6;
         }
-
+		.field-section .btn:hover,
+		.btn-primary:focus,
+		.btn-primary:active:focus		{
+			background-color: #3393bd;
+		}
+		
         .backColor .text-center {
         	margin-top:20px;
         }
         .backColor .text-center a {
         	font-size: 16px;
+        	color: #44bae6;
         }
         .center-copypart {
         	margin-top:30px;
         	color: #a9a9a9;
         	font-size: 12px;
         }
+		#frm_agent_login {
+			margin: 30px 0;
+		}
+		#frm_agent_login .form-group {
+			margin-bottom: 20px;
+		}
         .error {
         	color: red !important;
         }

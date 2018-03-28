@@ -9,8 +9,8 @@
 	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
-	   <li><a href="{{ url('/agent/home') }}">
-	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent</button>
+	   <li><a href="{{ url('/') }}">
+	    <button type="button" class="btn top-btn1"> I'm Moving</button>
 	    </a></li>
 	   <li><a href="{{ url('/company/home') }}">
 	    <button type="button" class="btn top-btn1">I'm a Local Business</button>
@@ -35,13 +35,14 @@
 	   <div class="row">
 	    <div class="col-lg-12">
 	     <div class="logo_banner">
-	     	<!-- <img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro"> -->
-	     	<img src="{{ url('/images/landing_image/banner-logo.png') }}" class="center-block img-responsive" alt="udistro">
+	     	<!-- <img src="images/banner-logo.png" class="center-block img-responsive" alt="udistro">
+	     	<img src="{{ url('/images/landing_image/banner-logo.png') }}" class="center-block img-responsive" alt="udistro"> -->
+			<img src="{{ url('/images/banner-logo.png') }}" class="center-block img-responsive" alt="" />
 	     </div>
 	     <h1 class="title_banner">Use our customizable, branded email templates to engage your clients in a radically new way</h1>
 	     <div class="banner_btn-group center-block">
 	      <!-- <button type="button" class="btn banner_btn btn-lg skyBlue_btn">I Help Others Move</button> -->
-	      <a href="{{ url('/agent') }}" class="btn banner_btn btn-lg skyBlue_btn">I’m a Real-Estate Agent</a>
+	      <a href="{{ url('/freetrial') }}" class="btn banner_btn btn-lg skyBlue_btn">Try It Now</a>
 	      <a href="#learn_more"><button type="button" class="btn banner_btn btn-lg white_btn">Learn More</button></a>
 	     </div>
 	    </div>

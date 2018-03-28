@@ -1740,7 +1740,7 @@ $(document).ready(function(){
 		var content = $('#share_announcement_container').clone();
 
 		var step = 1;
-		$(content).find('.ratingstar li').each(function(){
+		$(content).find('.ratingstar td a').each(function(){
 			if( step <= rating )
 			{
 				let imagePath = $('#star_image').attr('src');
@@ -1748,7 +1748,7 @@ $(document).ready(function(){
 			}
 			else
 			{
-				$(this).html('');	
+				$(this).html('');
 			}
 			step++;
 		});
@@ -1762,8 +1762,11 @@ $(document).ready(function(){
 
 	// Share announcement email edit message
 	$('#share_announcement_edit_message').click(function(){
-		$('#announcement_message').attr('contenteditable','true');
-		$('#announcement_message').focus();
+		// $('#announcement_message').attr('contenteditable','true');
+		// $('#announcement_message').focus();
+		
+		$('.content_editable').attr('contenteditable','true');
+		$('.content_editable:first').focus();
 	});
 
 	// Share announcement email form validation
@@ -1789,7 +1792,9 @@ $(document).ready(function(){
 		{
 			// Get the email id's and email content
 			let emailIds 	= $('#announcement_emails').val();
-			let emailContent= $('#share_announcement_content').html();
+
+			// Wrap the tr content into table and tr
+			let emailContent= '<table><tr>' + $('#share_announcement_content').html() + '</tr></table>';
 
 			$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/movers/saveannouncementemail',

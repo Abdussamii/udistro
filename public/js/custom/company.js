@@ -351,7 +351,10 @@ $(document).ready(function(){
                     $('#frm_home_cleaning_services #additional_information').text(response.additional_information);
 
                     // Requested services
-					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);                  
+					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);
+
+					// Availability
+                    $('#frm_home_cleaning_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
 
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');
@@ -417,6 +420,9 @@ $(document).ready(function(){
                     $('#frm_cable_internet_services #hst_percentage').text(response.hst);
                     $('#frm_cable_internet_services #service_charge_percetage').text(response.service_charge);
 
+                    // Availability
+                    $('#frm_cable_internet_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');
+
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');
                 }
@@ -461,10 +467,6 @@ $(document).ready(function(){
                     $('#frm_tech_concierge #moving_to_floor').text(response.moving_to_floor);
                     $('#frm_tech_concierge #moving_to_bedroom_count').text(response.moving_to_bedroom_count);
                     $('#frm_tech_concierge #moving_to_property_type').text(response.moving_to_property_type);
-
-                    $('#frm_tech_concierge #availability_day1').text( response.availability_date1 + ' (' + response.availability_time_from1 + ' to ' + response.availability_time_upto1 + ')' );
-                    $('#frm_tech_concierge #availability_day2').text( response.availability_date2 + ' (' + response.availability_time_from2 + ' to ' + response.availability_time_upto2 + ')' );
-                    $('#frm_tech_concierge #availability_day3').text( response.availability_date3 + ' (' + response.availability_time_from3 + ' to ' + response.availability_time_upto3 + ')' );
                     
                     $('#frm_tech_concierge #additional_information').text(response.additional_information);
 
@@ -478,6 +480,9 @@ $(document).ready(function(){
                     $('#frm_tech_concierge #gst_percentage').text(response.gst);
                     $('#frm_tech_concierge #hst_percentage').text(response.hst);
                     $('#frm_tech_concierge #service_charge_percetage').text(response.service_charge);
+
+                    // Availability
+                    $('#frm_tech_concierge #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
 
                     // Show the modal
                     $('#modal_tech_concierge_service_request').modal('show');
@@ -527,7 +532,10 @@ $(document).ready(function(){
                     $('#frm_home_moving_companies #moving_to_property_type').text(response.moving_to_property_type);
                     
                     $('#frm_home_moving_companies #additional_information').text(response.additional_information);
-                    $('#frm_home_moving_companies #moving_date').text(response.moving_date);
+                    // $('#frm_home_moving_companies #moving_date').text(response.moving_date);
+
+                    // Show moving date dropdown
+                    $('#frm_home_moving_companies #availability').html('<option value="'+ response.moving_date +'">'+ response.moving_date +'</option>');
 
                     $('#frm_home_moving_companies #moving_from_address').text(response.moving_from_address);
                     $('#frm_home_moving_companies #moving_to_address').text(response.moving_to_address);
@@ -1418,7 +1426,7 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/company/fetchjobs',
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 7 ] },
+            { "className": "dt-center", "targets": [ 0, 8 ] },
             { "className": "dt-right", "targets": [ 6 ] }
         ],
         // Hide the loader when datatable is rendered
@@ -1427,6 +1435,7 @@ $(document).ready(function(){
         },
         "aoColumns": [
             { 'bSortable' : true },
+            { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : false },

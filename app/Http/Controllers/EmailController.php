@@ -9,6 +9,7 @@ use App\AgentClientInvite;
 use App\EmailTemplate;
 use App\User;
 use App\AgentClient;
+use App\ShareAnnouncementEmail;
 
 use Helper;
 use Mail;
@@ -86,21 +87,67 @@ class EmailController extends Controller
      */
     public function sendEmail()
     {
-    	$recipientEmail = Input::get('recipientEmail');
+    	$recipientEmails = Input::get('recipientEmails');	// Array of emails
     	$content = Input::get('content');
 
     	// Get the logged-in user id
 		$userId = Auth::id();
 
-		// Check check whether they have remaining email quota, if yes decrement the count by 1
+		$emailCount = 0;
+		$response = array();
+
 		if( Helper::manageEmailQuota($userId, 1) )
 		{
+			if( count( $recipientEmails ) > 0 && is_array( $recipientEmails ) )
+			{
+				foreach ($recipientEmails as $recipientEmail)
+				{
+					// Replace the Dear [firstname] with the client name
+					$clientDetails = AgentClient::where(['email' => $recipientEmail])->first();
+
+					if( count( $clientDetails ) > 0 )
+					{
+						$emailContent = str_replace('[firstname]', ucwords( strtolower( $clientDetails->fname ) ), $content);
+
+						$shareEmail = new ShareAnnouncementEmail;
+
+						$shareEmail->email = $recipientEmail;
+						$shareEmail->email_content = $emailContent;
+						$shareEmail->status = '0';
+						$shareEmail->created_at = date('Y-m-d H-i-s');
+
+						if( $shareEmail->save() )
+						{
+							$emailCount++;
+						}
+					}
+				}
+			}
+
+			if( $emailCount > 0 )
+			{
+				$response['errCode']    = 0;
+				$response['errMsg']     = $emailCount . ' Email sent successfully';
+			}
+			else
+			{
+				$response['errCode']    = 1;
+				$response['errMsg']     = 'Some issue in sending email';
+			}
+		}
+		else
+		{
+			$response['errCode']    = 2;
+			$response['errMsg']     = 'Your payment plan subscription is expired';
+		}
+
+		// Check check whether they have remaining email quota, if yes decrement the count by 1
+		/*if( Helper::manageEmailQuota($userId, 1) )
+		{
 	    	$emailData = array(
-	    		/* Email data */
 	    		'email' 	=> $recipientEmail,
 	    		'name' 		=> 'Test User',
 	    		'subject' 	=> 'Test Email',
-	    		/* Template data */
 	    		'content'	=> $content
 	    		
 	    	);
@@ -118,7 +165,7 @@ class EmailController extends Controller
 		{
 			$response['errCode']    = 1;
 			$response['errMsg']     = 'Your payment plan subscription is expired';
-		}
+		}*/
 
 		return response()->json($response);
     }

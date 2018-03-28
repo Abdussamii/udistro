@@ -574,6 +574,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 	// To fetch the clients invites and show in datatable
 	Route::get('/fetchinvites', 'AgentController@fetchInvites');
 
+	// To resend invitation email
+	Route::post('/resendemail', 'AgentController@resendEmail');
+
 	// To get the details of the selected client
 	Route::get('/getclientdetails', 'AgentController@getClientDetails');
 

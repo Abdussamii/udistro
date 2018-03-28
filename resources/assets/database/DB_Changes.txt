@@ -11,3 +11,15 @@ ALTER TABLE `payment_transaction_details` CHANGE `mover_payment_released` `mover
 20-03-2018
 
 ALTER TABLE `agent_client_invites` CHANGE `message_content` `message_content` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+*******************************************************************************************************************************************
+
+26-03-2018
+
+. ALTER TABLE `digital_service_requests` ADD `date_of_working` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Working date selected by company' AFTER `comment`;
+
+. ALTER TABLE `home_cleaning_service_requests` ADD `date_of_working` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Working date selected by company' AFTER `comment`;
+
+. ALTER TABLE `moving_item_service_requests` ADD `date_of_working` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Working date selected by company' AFTER `comment`;
+
+. tech_concierge_service_requests replace the table

@@ -883,12 +883,17 @@ class AgentController extends Controller
 
         // Get the records after applying the datatable filters
        	$invites = DB::select(
-                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.status, t1.schedule_status FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length)
+                        DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.status 
+                        	FROM agent_client_invites t1 
+                        	LEFT JOIN agent_clients t2 ON t1.client_id = t2.id 
+                        	LEFT JOIN email_templates as t3 ON t1.email_template_id = t3.id
+                        	WHERE ( t1.agent_id = ".$userId." ) ORDER BY " . $sortBy . " " . $sortType ." LIMIT ".$start.", ".$length
+                        )
                     );
 
        	// Get the total count without any condition to maintian the pagination
         $inviteCount = DB::select(
-                            DB::raw("SELECT t1.id, t2.fname, t2.lname, t2.email, t1.message_content, t1.status, t1.schedule_status, t3.template_name FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE (  t1.agent_id = " . $userId . ")")
+                            DB::raw("SELECT t1.id FROM agent_client_invites t1 LEFT JOIN agent_clients t2 ON t1.client_id = t2.id LEFT JOIN email_templates as t3 ON (t1.email_template_id = t3.id) WHERE (  t1.agent_id = " . $userId . ")")
                         );
 
         // Assign it to the datatable pagination variable
@@ -911,12 +916,38 @@ class AgentController extends Controller
                     2 => ucfirst( strtolower( $invite->lname ) ),
                     3 => ucfirst( strtolower( $invite->email ) ),
                     4 => Helper::getInviteStatus($invite->status),
-                    5 => Helper::getInviteScheduleStatus($invite->schedule_status),
-                    6 => '<a href="javascript:void(0);" id="'. $invite->id .'" class="view_invite"><i class="fa fa-eye" aria-hidden="true"></i></a>'
+                    // 5 => Helper::getInviteScheduleStatus($invite->schedule_status),
+                    5 => Helper::getInviteStatusAtClient($invite->id),
+                    6 => '<a title="View Details" href="javascript:void(0);" id="'. $invite->id .'" class="view_invite"><i class="fa fa-eye" aria-hidden="true"></i></a> | <a title="Resend" href="javascript:void(0);" id="'. $invite->id .'" class="resend_invite"><i class="fa fa-send-o"></i></a>'
                 );
                 $k++;
             }
         }
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to resend invitation email
+     * @param void
+     * @return array
+     */
+    public function resendEmail()
+    {
+    	$inviteId = Input::get('inviteId');
+
+    	// Change the schedule_status to '0', schedule_date to NULL, authentication to '0', status to '0'
+    	$response = array();
+    	if( AgentClientInvite::where(['id' => $inviteId])->update(['schedule_status' => '0', 'schedule_date' => NULL, 'authentication' => '0', 'status' => '0']) )
+    	{
+    		$response['errCode']    = 0;
+			$response['errMsg']     = 'Email sent successfully';
+    	}
+    	else
+    	{
+    		$response['errCode']    = 1;
+			$response['errMsg']     = 'Some issue';
+    	}
 
     	return response()->json($response);
     }
@@ -987,11 +1018,11 @@ class AgentController extends Controller
                                 ->select('client_activity_lists.activity', 'client_activity_logs.action')
                                 ->get();
 
-            $html = '<table class="table"><thead><tr><th>#</th><th>Activity Name</th><th>Action</th></tr></thead><tbody>';
+            $html = '<table class="table"><thead><tr><th style="text-align: center;">#</th><th>Activity Name</th><th>Action</th></tr></thead><tbody>';
             //echo '<pre>'; print_r($inviteArray); die('a');
             foreach ($inviteArray as $key => $invities)
             {
-                $html.= '<tr><td>'.$key.'</td><td>'.ucwords($invities->activity).'</td><td>'.Helper::getInviteAction($invities->action).'</td></tr>';
+                $html.= '<tr><td style="text-align: center;">'.($key + 1).'</td><td>'.ucwords($invities->activity).'</td><td>'.Helper::getInviteAction($invities->action).'</td></tr>';
             }
             $html.= '</tbody></table>';
         }
@@ -1735,7 +1766,13 @@ class AgentController extends Controller
     	// Get the email template categories
     	$emailTemplateCategories = EmailTemplateCategory::where(['status' => '1'])->select('id', 'name')->orderBy('id', 'asc')->get();
 
-        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories]);
+    	// Get the logged in agent id
+    	$userId = Auth::user()->id;
+
+    	// Get the client name and their email list
+    	$clients = agentClient::where(['agent_id' => $userId])->select('id', 'fname', 'lname', 'email')->orderBy('fname', 'asc')->get();
+
+        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories, 'clients' => $clients]);
     }
 
     /**
