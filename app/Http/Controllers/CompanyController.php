@@ -739,29 +739,82 @@ class CompanyController extends Controller
 		// Get the company associated with the user
 		$companyDetails = $user->company->first();
 
-        // Get the no of quotation request for the company
+        // Prepare dashboard notification
         $quotationCount = 0;
+		$jobGiven = 0;
+		$ratings = 0;
+		$paymentPlanDaysLeft = '';
+		
 		if( count( $companyDetails ) > 0 )
 		{
 			if( $companyDetails->company_category_id == '2' )		// Home Cleaning Service Company
 			{
 				$quotationCount = HomeCleaningServiceRequest::where(['company_id' => $companyDetails->id])->count();
+				$jobGiven = PaymentTransactionDetail::where(['company_id' => $companyDetails->id])->count();
+				$ratings = Rating::where(['company_id' => $companyDetails->id])->count();
+				
+				// Get the paymant plan subscription for companies. 
+				$paymentPlanSubscription = PaymentPlanSubscription::where(['plan_type_id' => '2', 'status' => '1', 'subscriber_id' => $companyDetails->id ])->select('start_date', 'end_date', 'plan_id')->first();
+				
+				$paymentPlanDays = PaymentPlan::where(['id' => $paymentPlanSubscription->plan_id ])->select('validity_days')->first();
+				
+				$paymentPlanDaysLeft = date_diff(date_create(date('Y-m-d')), date_create($paymentPlanSubscription->start_date));
+				
+				$paymentPlanDaysLeft = $paymentPlanDays->validity_days - $paymentPlanDaysLeft->format('%a');
 			}
 			else if( $companyDetails->company_category_id == '3' )	// Moving Company
 			{
 				$quotationCount = MovingItemServiceRequest::where(['mover_company_id' => $companyDetails->id])->count();
+				$jobGiven = PaymentTransactionDetail::where(['company_id' => $companyDetails->id])->count();
+				$ratings = Rating::where(['company_id' => $companyDetails->id])->count();
+				
+				// Get the paymant plan subscription for companies. 
+				$paymentPlanSubscription = PaymentPlanSubscription::where(['plan_type_id' => '2', 'status' => '1', 'subscriber_id' => $companyDetails->id ])->select('start_date', 'end_date', 'plan_id')->first();
+				
+				$paymentPlanDays = PaymentPlan::where(['id' => $paymentPlanSubscription->plan_id ])->select('validity_days')->first();
+				
+				$paymentPlanDaysLeft = date_diff(date_create(date('Y-m-d')), date_create($paymentPlanSubscription->start_date));
+				
+				$paymentPlanDaysLeft = $paymentPlanDays->validity_days - $paymentPlanDaysLeft->format('%a');
+				
 			}
 			else if( $companyDetails->company_category_id == '4' ) 	// Internet & Cable Service provider
 			{
 				$quotationCount = DigitalServiceRequest::where(['digital_service_company_id' => $companyDetails->id])->count();
+				$jobGiven = PaymentTransactionDetail::where(['company_id' => $companyDetails->id])->count();
+				$ratings = Rating::where(['company_id' => $companyDetails->id])->count();
+				
+				// Get the paymant plan subscription for companies. 
+				$paymentPlanSubscription = PaymentPlanSubscription::where(['plan_type_id' => '2', 'status' => '1', 'subscriber_id' => $companyDetails->id ])->select('start_date', 'end_date', 'plan_id')->first();
+				
+				$paymentPlanDays = PaymentPlan::where(['id' => $paymentPlanSubscription->plan_id ])->select('validity_days')->first();
+				
+				$paymentPlanDaysLeft = date_diff(date_create(date('Y-m-d')), date_create($paymentPlanSubscription->start_date));
+				
+				$paymentPlanDaysLeft = $paymentPlanDays->validity_days - $paymentPlanDaysLeft->format('%a');
+				
 			}
 			else if( $companyDetails->company_category_id == '5' ) 	// Tech Concierge
 			{
 				$quotationCount = TechConciergeServiceRequest::where(['company_id' => $companyDetails->id])->count();
+				$jobGiven = PaymentTransactionDetail::where(['company_id' => $companyDetails->id])->count();
+				$ratings = Rating::where(['company_id' => $companyDetails->id])->count();
+				
+				// Get the paymant plan subscription for companies. 
+				$paymentPlanSubscription = PaymentPlanSubscription::where(['plan_type_id' => '2', 'status' => '1', 'subscriber_id' => $companyDetails->id ])->select('start_date', 'end_date', 'plan_id')->first();
+				
+				$paymentPlanDays = PaymentPlan::where(['id' => $paymentPlanSubscription->plan_id ])->select('validity_days')->first();
+				
+				$paymentPlanDaysLeft = date_diff(date_create(date('Y-m-d')), date_create($paymentPlanSubscription->start_date));
+				
+				$paymentPlanDaysLeft = $paymentPlanDays->validity_days - $paymentPlanDaysLeft->format('%a');
+				
 			}
 		}
+		
+		
 
-    	return view('company/dashboard', ['quotationCount' => $quotationCount]);
+    	return view('company/dashboard', ['quotationCount' => $quotationCount, 'jobGiven' => $jobGiven, 'rating' => $ratings, 'daysLeft' => $paymentPlanDaysLeft]);
     }
 
     /**

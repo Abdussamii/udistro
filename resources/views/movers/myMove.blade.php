@@ -226,7 +226,7 @@ function calculateRoute(from, to) {
 					foreach ($activities as $activity)
 					{
 					?>
-						<div class="col-xs-6 col-lg-4">
+						<div class="col-xs-6 col-lg-4" >
 							<div class="boxes">
 								<div class="img-icon">
 									<!-- If image is not available, show the default image -->
