@@ -53,6 +53,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#profile">Information</a></li>
             <li><a data-toggle="tab" href="#message">Brand</a></li>
+            <li><a data-toggle="tab" href="#company_logo">Company Logo</a></li>
             <!-- <li><a data-toggle="tab" href="#template">Template</a></li> -->
           </ul>
           <div class="tab-content">
@@ -111,7 +112,7 @@
                    <form class="form-horizontal accordian" role="form" name="frm_agent_contact" id="frm_agent_contact" novalidate>
                       <fieldset>
                         <legend>Contact: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
-                    <div class="collapsbox" style="display:none;">
+                    	<div class="collapsbox" style="display:none;">
                           <div class="form-group">
                             <label class="col-lg-3 control-label">Email:</label>
                               <div class="col-lg-8">
@@ -150,7 +151,7 @@
                                 </div>
                             </div>
                           </div>
-                    </div>
+                    	</div>
                   </fieldset>
                 </form>
 
@@ -337,27 +338,45 @@
                       <div class="top-buffer"> 
                         <!-- To upload image -->
                     <div class="sub-can-box">
-                      <button type="submit" class="btn btn-primary" name="btn_update_agent_image" id="btn_update_agent_image">Save</button>
+                    	<div><label id="agent_upload_image-error" class="error" for="agent_upload_image"></label></div>
+                      	<button type="submit" class="btn btn-primary" name="btn_update_agent_image" id="btn_update_agent_image">Save</button>
                     </div>
                       </div>
                     </div>
                   </form>
               </div>
-              <!-- <div class="message-box">
-                  <h3>Message</h3>
-                  <form class="form-horizontal" role="form" name="frm_agent_message" id="frm_agent_message" novalidate>
-                    <div class="form-group">
-                      <div class="col-lg-12">
-                        <textarea class="form-control" rows="10" name="agent_message" id="agent_message">{{ $message->message or '' }}</textarea>
+            </div>
+
+            <div id="company_logo" class="tab-pane fade">
+                <div class="profile-wrap">
+                    <form class="form-horizontal" role="form" name="frm_company_image" id="frm_company_image">
+                      <div class="profile-box text-center"> 
+                        <div class="profile-pic-box">
+                          <?php
+	                      if( $companyDetails->image != '' )
+	                      {
+	                        echo '<img src="'. url('/images/company/' . $companyDetails->image) .'" id="agent_profile_image" height="" width="" class="avatar img-circle" alt="avatar">';
+	                      }
+	                      else
+	                      {
+	                        echo '<img src="'. url('/images/no_image.jpg') .'" id="agent_profile_image" height="" width="" class="avatar img-circle" alt="avatar">';
+	                      }
+	                      ?>
+	                      <div class="edit-profile-pic">
+	                        <label for="company_upload_image"><i class="fa fa-pencil" aria-hidden="true"></i></label>
+	                          <input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
+	                      </div>
+                    	</div>
+                        <div class="top-buffer"> 
+                        <!-- To upload image -->
+	                    <div class="sub-can-box">
+	                    	<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
+	                        <button type="submit" class="btn btn-primary" name="btn_update_company_image" id="btn_update_company_image">Save</button>
+	                    </div>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <div class="ui-select">
-                        <button type="submit" class="btn btn-primary" name="btn_update_agent_message" id="btn_update_agent_message">Submit</button>
-                      </div>
-                    </div>
-                  </form>
-              </div> -->
+                    </form>
+                </div>
             </div>
 
             <!-- <div id="template" class="tab-pane fade">

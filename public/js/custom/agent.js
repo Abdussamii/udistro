@@ -218,6 +218,9 @@ $(document).ready(function(){
             },
             client_status: {
             	required: true
+            },
+            client_possession_date: {
+            	required: true
             }
         },
         messages: {
@@ -234,6 +237,9 @@ $(document).ready(function(){
             },
             client_status: {
             	required: 'Please select status'
+            },
+            client_possession_date: {
+            	required: 'Please select possession date'
             }
         }
     });
@@ -287,7 +293,7 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchclients',
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 6, 7, 8 ] }
+            { "className": "dt-center", "targets": [ 0, 6, 7, 8, 9 ] }
         ],
         "aoColumns": [
             { 'bSortable' : true },
@@ -296,6 +302,7 @@ $(document).ready(function(){
             { 'bSortable' : true },
             { 'bSortable' : false },
             { 'bSortable' : false },
+            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : false },
             { 'bSortable' : false }
@@ -1109,7 +1116,62 @@ $(document).ready(function(){
                     if( response.errCode == 0 )
 			    	{
 			    		// Show the uploaded image
-			    		$('#agent_profile_image').attr('src', response.imgPath);
+			    		$('#frm_agent_image #agent_profile_image').attr('src', response.imgPath);
+
+			    		alertify.success( response.errMsg );
+			    	}
+			    	else
+			    	{
+			    		alertify.error( response.errMsg );
+			    	}
+                }
+            });
+    	}
+    });
+
+    $('#frm_company_image').submit(function(e){
+        e.preventDefault();
+    });
+    $('#frm_company_image').validate({
+    	ignore: "not:hidden",	// As the input file is hidden
+        rules: {
+            company_upload_image: {
+                required: true
+            }
+        },
+        messages: {
+            company_upload_image: {
+                required: 'Please select image to upload'
+            }
+        }
+    });
+
+    // Update the agent company image
+    $('#btn_update_company_image').click(function(){
+    	if( $('#frm_company_image').valid() )
+    	{
+			// Get the image and append it to form object
+            var fileData = $('#company_upload_image').prop('files')[0];
+
+            // Create form data object and append the values into it
+            var formData = new FormData();
+
+            formData.append('fileData', fileData);
+
+            $.ajax({
+                url: $('meta[name="route"]').attr('content') + '/agent/updateagentcompanyimage',
+                method: 'post',
+                data: formData,
+                contentType : false,
+                processData : false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response){
+                    if( response.errCode == 0 )
+			    	{
+			    		// Show the uploaded image
+			    		$('#frm_company_image #agent_profile_image').attr('src', response.imgPath);
 
 			    		alertify.success( response.errMsg );
 			    	}

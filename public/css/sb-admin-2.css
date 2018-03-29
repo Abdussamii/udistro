@@ -66,11 +66,28 @@ body { background-color: #f8f8f8; font-family: 'Open Sans', sans-serif; }
   padding-right: 0;
 }
 .sidebar .sidebar-search { padding: 15px; }
-.sidebar ul li { border-bottom: 1px solid #fff; }
+.sidebar ul li {
+	border-bottom: 1px solid #00a2c9;
+}
+.nav.nav-second-level.collapse.in {
+	background: #00a2c9;
+}
 .sidebar ul li a {
-  text-decoration: none;
-  color: #fff;
-  font-size: 18px;
+	text-decoration: none;
+	color: #fff;
+	font-size: 16px;
+	padding: 10px 20px 10px 30px;
+}
+.sidebar ul li a i {
+	position: absolute;
+	left: 5px;
+	line-height: 22px;
+}
+.sidebar ul li a .fa.arrow {
+	position: absolute;
+	right: 6px;
+	line-height: 22px;
+	top: 13px;
 }
 .sidebar ul li a:focus,
 .sidebar ul li a:hover {
@@ -87,7 +104,13 @@ body { background-color: #f8f8f8; font-family: 'Open Sans', sans-serif; }
 .sidebar .active > a > .fa.arrow:before { content: "\f107"; }
 .sidebar .nav-second-level li,
 .sidebar .nav-third-level li { border-bottom: none !important; }
-.sidebar .nav-second-level li a { padding-left: 37px; }
+.sidebar .nav-second-level li a {
+	padding-left: 30px;
+	font-style: italic;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top: 1px solid #00a2c9;
+}
 .sidebar .nav-third-level li a { padding-left: 52px; }
 .btn-outline {
   color: inherit;
@@ -528,11 +551,33 @@ body { background-color: #f8f8f8; font-family: 'Open Sans', sans-serif; }
 .dataTables_wrapper .dataTables_info  {
     color: #7e869d !important;
 }
-.paginate_button.current {
+.dataTables_wrapper .dataTables_paginate span .paginate_button.current {
+	border: 1px solid #04a6ce !important;
+	background: #00bcea !important;
+	width: 10px;
+	padding: 0 !important;
+	color: #fff !important;
+}
+.dataTables_wrapper .dataTables_paginate span .paginate_button.current:hover {
+	color: #fff !important;
+}
+.dataTables_wrapper .dataTables_paginate span .paginate_button {
 	border: 1px solid #c3e1e9 !important;
 	background: #fff !important;
 	width: 10px;
 	padding: 0 !important;
+}
+.dataTables_wrapper .dataTables_paginate span .paginate_button:hover {
+	border: 1px solid #04a6ce !important;
+	background: #00bcea !important;
+	width: 10px;
+	padding: 0 !important;
+	color: #fff !important;
+}
+#datatable_companies_next:hover {
+	background: transparent;
+	color: #00bcea !important;
+	border-color: #fff;
 }
 table.dataTable thead th, table.dataTable thead td {
 	padding: 10px 18px;

@@ -491,12 +491,14 @@ class AgentController extends Controller
     	// Get the total accepted invite
 		$acceptedInviteCount = AgentClientInvite::where(['agent_id' => $userId, 'status' => '2'])->count();		// status: 2 for email read or invitation accepted
 
-    	// Get the total move completed
-
     	// Get the reviews count for the agent
     	$agnetRating = AgentClientRating::where(['agent_id' => $userId])->groupBy('agent_id')->select(DB::raw('sum(rating) as rating'))->first();
 
-    	return view('agent/dashboard', ['clientCount' => $clientCount, 'inviteCount' => $inviteCount, 'acceptedInviteCount' => $acceptedInviteCount, 'agnetRating' => $agnetRating]);
+    	// Get the client listing that is in critical zone
+    	$criticalZone 	= date('Y-m-d', strtotime('+60 days'));
+    	$criticalZoneClients = AgentClient::where(['agent_id' => $userId])->where('possession_date', '<=', $criticalZone)->count();
+
+    	return view('agent/dashboard', ['clientCount' => $clientCount, 'inviteCount' => $inviteCount, 'acceptedInviteCount' => $acceptedInviteCount, 'agnetRating' => $agnetRating, 'criticalZoneClients' => $criticalZoneClients]);
     }
 
     /**
@@ -648,6 +650,7 @@ class AgentController extends Controller
 					$agentClient->lname 			= $clientData['client_lname'];
 					$agentClient->email 			= $clientData['client_email'];
 					$agentClient->contact_number 	= $clientData['client_number'];
+					$agentClient->possession_date 	= date('Y-m-d', strtotime( $clientData['client_possession_date'] ));
 					$agentClient->status 			= $clientData['client_status'];
 					$agentClient->created_by 		= $userId;
 
@@ -749,7 +752,8 @@ class AgentController extends Controller
             1 => 'fname',
             2 => 'oname',
             3 => 'lname',
-            6 => 'status'
+            6 => 'possession_date',
+            7 => 'status'
         );
 
         // Map the sorting column index to the column name
@@ -764,7 +768,7 @@ class AgentController extends Controller
                     ->orderBy($sortBy, $sortType)
                     ->limit($length)
                     ->offset($start)
-                    ->select('id', 'fname', 'lname', 'oname', 'email', 'contact_number', 'status')
+                    ->select('id', 'fname', 'lname', 'oname', 'email', 'contact_number', 'status', 'possession_date')
                     ->get();
 
         $iTotal = AgentClient::where('fname','like', '%'.$sSearch.'%')->where('agent_id','=', $userId)->count();
@@ -781,6 +785,15 @@ class AgentController extends Controller
         {
             foreach ($agentClients as $agentClient)
             {
+            	// Show the posession date in red color
+            	$criticalZone 	= date('d-m-Y', strtotime('+45 days'));
+            	$possessionDate = date('d-m-Y', strtotime( $agentClient->possession_date ));
+            	$style = '';
+            	if( $criticalZone >= $possessionDate )
+            	{
+            		$style = 'style="color: red"';
+            	}
+ 
             	$response['aaData'][$k] = array(
                     0 => $agentClient->id,
                     1 => ucfirst( strtolower( $agentClient->fname ) ),
@@ -788,9 +801,10 @@ class AgentController extends Controller
                     3 => ucfirst( strtolower( $agentClient->lname ) ),
                     4 => $agentClient->email,
                     5 => $agentClient->contact_number,
-                    6 => Helper::getStatusText($agentClient->status),
-                    7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>',
-                    8 => '<a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    6 => '<span '. $style .'>' . $possessionDate . '</span>',
+                    7 => Helper::getStatusText($agentClient->status),
+                    8 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>',
+                    9 => '<a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -1043,7 +1057,7 @@ class AgentController extends Controller
     	$agentDetails = User::find($userId);
 
     	// Get the company associated with the agent
-    	$companyDetails = $agentDetails->company;
+    	$companyDetails = $agentDetails->company->first();
 
     	// Get the company categories list
     	$companyCategories = CompanyCategory::where(['status' => '1'])->get();
@@ -1752,6 +1766,111 @@ class AgentController extends Controller
 		        $response['errMsg']     = 'Invalid file';
 			}
 		}
+
+		return response()->json($response);
+    }
+
+    /**
+     * Function to update agent image
+     * @param void
+     * @return array
+     */
+    public function updateAgentCompanyImage(Request $request)
+    {
+    	$agentImage = $request->file('fileData');
+
+        // Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the company for the logged-in agent
+        $user = User::find($userId);
+        $userCompany = $user->company->first();
+
+        if( count( $userCompany ) > 0 )
+        {
+	        $validation = Validator::make(
+			    array(
+			        'agentImage' => $agentImage
+			    ),
+			    array(
+			        'agentImage' => array('required')
+			    ),
+			    array(
+			        'agentImage.required' => 'Please select image to upload'
+			    )
+			);
+
+	        $response = array();
+			if ( $validation->fails() )
+			{
+				$error = $validation->errors()->first();
+
+			    if( isset( $error ) && !empty( $error ) )
+			    {
+			        $response['errCode']    = 1;
+			        $response['errMsg']     = $error;
+			    }
+			}
+			else
+			{
+				// Image destination folder
+				$destinationPath = storage_path() . '/uploads/company';
+
+				if( $agentImage->isValid() )  // If the file is valid or not
+				{
+				    $fileExt  = $agentImage->getClientOriginalExtension();
+				    $fileType = $agentImage->getMimeType();
+				    $fileSize = $agentImage->getSize();
+
+				    if( ( $fileType == 'image/jpeg' || $fileType == 'image/jpg' || $fileType == 'image/png' ) && $fileSize <= 3000000 )     // 3 MB = 3000000 Bytes
+				    {
+				        // Rename the file
+				        $fileNewName = str_random(10) . '.' . $fileExt;
+
+				        if( $agentImage->move( $destinationPath, $fileNewName ) )
+				        {
+				        	// Update the image entry in table
+				        	$userCom = Company::find($userCompany->id);
+
+				        	$userCom->image = $fileNewName;
+				        	$userCom->updated_by = $userId;
+
+				        	if( $userCom->save() )
+				        	{
+				        		$response['errCode']    = 0;
+			        			$response['errMsg']     = 'Image uploaded successfully';
+			        			$response['imgPath']    = url('images/company') . '/' .  $fileNewName;
+				        	}
+				        	else
+				        	{
+				        		$response['errCode']    = 2;
+			                	$response['errMsg']     = 'Some error in image upload';
+				        	}
+				        }
+			        	else
+			        	{
+			        		$response['errCode']    = 3;
+			                $response['errMsg']     = 'Some error in image upload';
+			        	}
+				    }
+			    	else
+			    	{
+			    		$response['errCode']    = 4;
+			            $response['errMsg']     = 'Only image file with size less then 3MB is allowed';
+			    	}
+				}
+				else
+				{
+					$response['errCode']    = 5;
+			        $response['errMsg']     = 'Invalid file';
+				}
+			}
+        }
+        else
+        {
+        	$response['errCode']    = 6;
+			$response['errMsg']     = 'Missing company details';
+        }
 
 		return response()->json($response);
     }

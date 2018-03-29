@@ -92,6 +92,11 @@ Route::get('/helpcenter', function () {
     return view('helpCenter');
 });
 
+// Comingsoon
+Route::get('/comingsoon', function () {
+    return view('comingsoon');
+});
+
 // login
 Route::get('/login', function () {
     return view('login');
@@ -615,6 +620,9 @@ Route::group(['prefix' => 'agent', 'middleware' => 'auth'], function() {
 
 	// To update agent image
 	Route::post('/updateagentimage', 'AgentController@updateAgentImage');
+
+	// To update agent company image
+	Route::post('/updateagentcompanyimage', 'AgentController@updateAgentCompanyImage');
 
 	// To save the agent invitation details
 	Route::post('/saveinvitationdetails', 'AgentController@saveInvitationDetails');

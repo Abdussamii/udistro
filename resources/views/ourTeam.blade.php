@@ -27,90 +27,77 @@
 	   <div class="tagline-team">We’re led by a team who constantly questions, tinkers, and challenges to unlock great creativity around every turn.</div>
 	  <div class="team-details">
 	   <div class="col-sm-12">
-	   	<div class="col-xs-6 col-sm-4 photo-wrap">
+	   	<div class="col-md-4 col-sm-6 col-xs-12 photo-wrap">
 	    	<div class="picture-box">
 	     	<div class="photo">
-	      	<img src="{{ url('/images/one.jpg') }}" alt="" />
+	      	<img src="{{ url('/images/one.png') }}" alt="" />
 	      </div>
 	      <div class="mem-detail">
-	       <div class="name">Darrell</div>
+	       <div class="name">Darrell Penner</div>
 	       <div class="designation">Chief Operating Officer</div>
 	      </div>
 	     </div>
 	    </div>
-	    <div class="col-xs-6 col-sm-4 photo-wrap">
+	    <div class="col-md-4 col-sm-6 col-xs-12 photo-wrap">
 	    	<div class="picture-box">
 	     	<div class="photo">
-	      	<img src="{{ url('/images/two.jpg') }}" alt="" />
+	      	<img src="{{ url('/images/two.png') }}" alt="" />
 	      </div>
 	      <div class="mem-detail">
-	       <div class="name">Akeem</div>
+	       <div class="name">Akeem Adebisi</div>
 	       <div class="designation">Chief Information Officer</div>
 	      </div>
 	     </div>
 	    </div>
 	   
-	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	   <div class="col-md-4 col-sm-6 col-xs-12 photo-wrap">
 	    	<div class="picture-box">
 	     	<div class="photo">
-	      	<img src="{{ url('/images/three.jpg') }}" alt="" />
+	      	<img src="{{ url('/images/three.png') }}" alt="" />
 	      </div>
 	      <div class="mem-detail">
-	       <div class="name">Tope</div>
+	       <div class="name">Tope Otubusen</div>
 	       <div class="designation">Chief Technology Officer</div>
 	      </div>
 	     </div>
 	    </div>
 	   
-	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	   <div class="col-md-4 col-sm-6 col-xs-12 photo-wrap">
 	    	<div class="picture-box">
 	     	<div class="photo">
-	      	<img src="{{ url('/images/.jpg') }}" alt="" />
+	      	<img src="{{ url('/images/rick_buchan.png') }}" alt="" />
 	      </div>
 	      <div class="mem-detail">
-	       <div class="name">Member 4</div>
-	       <div class="designation">Designation of member</div>
+	       <div class="name">Rick Buchan</div>
+	       <div class="designation">Chief Marketing Officer</div>
+	      </div>
+	     </div>
+	  </div>
+	   
+	   <div class="col-md-4 col-sm-6 col-xs-12 photo-wrap">
+	    	<div class="picture-box">
+	     	<div class="photo">
+	      	<img src="{{ url('/images/four.png') }}" alt="" />
+	      </div>
+	      <div class="mem-detail">
+	       <div class="name">Tod Niblock</div>
+	       <div class="designation">Board Members</div>
 	      </div>
 	     </div>
 	    </div>
 	   
-	   <div class="col-xs-6 col-sm-4 photo-wrap">
+	   <div class="col-md-4 col-sm-6 col-xs-12 photo-wrap">
 	    	<div class="picture-box">
 	     	<div class="photo">
-	      	<img src="{{ url('/images/.jpg') }}" alt="" />
+	      	<img src="{{ url('/images/Lana.png') }}" alt="" />
 	      </div>
 	      <div class="mem-detail">
-	       <div class="name">Member 5</div>
-	       <div class="designation">Designation of member</div>
+	       <div class="name">Lana Adeleye-Olusae</div>
+	       <div class="designation">Board Members</div>
 	      </div>
 	     </div>
 	    </div>
-	   
-	   <div class="col-xs-6 col-sm-4 photo-wrap">
-	    	<div class="picture-box">
-	     	<div class="photo">
-	      	<img src="{{ url('/images/.jpg') }}" alt="" />
-	      </div>
-	      <div class="mem-detail">
-	       <div class="name">Member 6</div>
-	       <div class="designation">Designation of member</div>
-	      </div>
-	     </div>
-	    </div>
-	   
-	   <div class="col-xs-6 col-sm-4 photo-wrap">
-	    	<div class="picture-box">
-	     	<div class="photo">
-	      	<img src="{{ url('/images/.jpg') }}" alt="" />
-	      </div>
-	      <div class="mem-detail">
-	       <div class="name">Member 7</div>
-	       <div class="designation">Designation of member</div>
-	      </div>
-	     </div>
-	    </div>
-		
-		
+	   		
 	   </div>
 	  </div>
 	  </div>

@@ -126,6 +126,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                     	<li>
+                            <a href="{{ url('company/profile') }}"><i class="fa fa-user"></i> Profile</a>
+                        </li>
+                    	<li>
                         	<a href="{{ url('company/changepassword') }}"><i class="fa fa-lock"></i> Change Password</a>
                         </li>
                         <li>
@@ -142,12 +145,15 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+                    	<li class="dash-logo">
+                    		<img src="https://www.udistro.ca/images/logo-dash.png" alt="Udistro">
+                    	</li>
                         <li>
                             <a href="{{ url('company/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="{{ url('company/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="{{ url('company/quotationrequest') }}"><i class="fa fa-dashboard fa-fw"></i> Quotation Request</a>
                         </li>

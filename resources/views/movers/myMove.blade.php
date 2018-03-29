@@ -180,16 +180,15 @@ function calculateRoute(from, to) {
 <section class="content-section map-bg" style="background:url('{{ ( $clientMovingToProvince->image != '' ) ? url('/images/province/' . $clientMovingToProvince->image) : url('/images/movers/map-bg.jpg') }}') no-repeat center center;position: relative;display: block; max-width: 100%; background-size:cover; padding: 50px 0; ">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-sm-8 col-md-8">
 				<div class="contry-name">
 					<h2>{{ ucwords( strtolower( $clientMovingToProvince->abbreviation ) ) }}</h2>
 					<span>{{ ucwords( strtolower( $clientMovingToProvince->name ) ) }}</span>
 				</div>
 			</div>
-			<div class="col-md-4"> </div>
-			<div class="col-md-4"> 
+			<div class="col-xs-12 col-sm-4 col-md-4"> 
 				<!-- Google map here -->
-				<div class="map-area" id="map" style="overflow: hidden; border-radius: 0; height: 330px; width: 330px; border: 5px solid #fff;"> </div>
+				<div class="map-area" id="map" style="overflow: hidden; border-radius: 0;"> </div>
 			</div>
 		</div>
 	</div>
@@ -219,14 +218,15 @@ function calculateRoute(from, to) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12"> <h1 class="mover-steps-head">Moving Recommended Steps</h1></div>
-			<div class="col-md-10 col-md-offset-1">
+			<!--<div class="col-md-10 col-md-offset-1">-->
+			<div class="col-md-12">
 				<?php
 				if( isset( $activities ) && count( $activities ) > 0 )
 				{
 					foreach ($activities as $activity)
 					{
 					?>
-						<div class="col-xs-6 col-lg-4">
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 col-sm-600">
 							<div class="boxes">
 								<div class="img-icon">
 									<!-- If image is not available, show the default image -->
@@ -286,8 +286,8 @@ function calculateRoute(from, to) {
 
 <div class="container">
 	<div class="review-section">
-		<div class="row">
-			<div class="col-md-4">
+		<div class="">
+			<div class="col-xs-12 col-sm-6 col-md-4">
 				<div class="user-name-review">
 					<div class="user-short-name">
 						<span>{{ $agentInitials }}</span>
@@ -295,7 +295,7 @@ function calculateRoute(from, to) {
 					</div>
 				</div>
 			</div>
-			<div class="col-md-8">
+			<div class="col-xs-12 col-sm-6 col-md-8">
 				<div class="reciew-box">
 					<h2>Special Thanks to Agent {{ $agentName }}</h2>
 					<ul class="ratingstar">
@@ -360,53 +360,6 @@ function calculateRoute(from, to) {
 		</form>
 	</div>
 </div>
-
-<footer class="footer-main section-pd">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="media-body client-achive-step">
-					<h2 class="media-heading">Company</h2>
-				</div>
-				<ul class="list-group custom-listgroup">
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>About</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Career</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Sitemap</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of Use</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Terms of services</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Privacy Policy</a></li>
-				</ul>
-			</div>
-			<div class="col-md-4">
-				<div class="media-body client-achive-step">
-					<h2 class="media-heading">Important Links</h2>
-				</div>
-				<ul class="list-group custom-listgroup">
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Login</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Features</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Free Trial</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Pricing</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Support</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Schedule Demo</a></li>
-				</ul>
-			</div>
-			<div class="col-md-4">
-				<div class="media-body client-achive-step">
-					<h2 class="media-heading">Follow Us</h2>
-				</div>
-				<ul class="list-group custom-listgroup">
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Twitter</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Facebook</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Google Plus</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Linkedin</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>You tube</a></li>
-					<li class="list-group-item"><a href="javascript:void(0);"><i class="fa fa-angle-double-right" aria-hidden="true"></i>Instagram</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</footer>
-
 <!-- Forward Mail Modal -->
 <div id="forward_mail_modal" class="modal fade mover-modal" role="dialog">
 	<div class="modal-dialog modal-lg"> 

@@ -240,17 +240,44 @@ ul.social-icon-top li { display: inline-block; }
 /* Map banner section */
 
 /*.map-bg{background:url(../../images/movers/map-bg.jpg) no-repeat center center;position: relative;display: block;max-width: 100%;}*/
-.map-area { position: relative; padding-top: 60px; padding-bottom: 90px; text-align: right; padding-right: 60px; display: block; vertical-align: middle; float: right; margin-right: 20px; }
+.map-area {
+	position: relative;
+	text-align: right;
+	display: block;
+	vertical-align: middle;
+	float: right;
+	margin-right: 20px;
+	width: 330px;
+	height: 330px;
+	border: 5px solid #fff;
+}
 .contry-name { position: relative; max-width: 314px; background-color: rgba(0,0,0, 0.6); color: #fff; text-align: center; margin-top: 100px; margin-left: 10px; padding: 20px 0px 15px; }
-.contry-name h2 { font-size: 44px; text-transform: uppercase; color: #fff; margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; font-weight: 100; }
-.contry-name span { font-size: 35px; font-weight: 100; font-family: 'Open Sans', sans-serif; }
+.contry-name h2 {
+	font-size: 44px;
+	text-transform: uppercase;
+	color: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 100;
+	display: inline-block;
+	width: 100%;
+}
+.contry-name span {
+	font-size: 35px;
+	font-weight: 100;
+	font-family: 'Open Sans', sans-serif;
+	display: inline-block;
+	width: 100%;
+	padding-top: 15px;
+}
 .contry-name h2:before {
  max-width\: 109px; height: 1px; background-color: #fff; content: ''; display: block; margin: 6px auto; position: absolute; top: 50%; left: 0; right: 0; margin-left: 50px; margin-right: 50px; }
 .percentage-bar .progress { border-radius: 50px; -webkit-box-shadow: none; box-shadow: none; border: 1px solid #d4dfdf; background-color: #fff; min-height: 26px; margin-bottom: 28px; }
 .percentage-bar .progress .progress-bar { background-color: #00bcea; border-radius: 100px; }
 .percentage-bar { position: relative; display: block; text-align: center; }
 .percentage-bar h2 { font-family: 'Open Sans', sans-serif; font-size: 24px; margin-bottom: 20px; }
-.mailboxes-section { background-color: #fff; padding-top: 75px; padding-bottom: 75px; }
+.mailboxes-section { background-color: #fff; padding-top: 75px; padding-bottom: 0px; }
 .mailboxes-section .boxes { position: relative; /*max-width: 270px;*/ border-radius: 10px; border: 1px solid #c3e1e9; padding: 40px 40px 10px 40px; min-height: 294px; margin-bottom: 60px; }
 .mailboxes-section .boxes .img-icon { position: relative; margin-top: 30px; min-height: 70px; }
 .mailboxes-section .boxes .img-icon:before { display: block; width: 50px; height: 1px; background-color: #00bcea; content: ''; position: absolute; top: 25px; left: 0; right: auto; bottom: 0; }
@@ -264,11 +291,24 @@ ul.popover-icon-group li a { width: 43px; height: 33px; background-color: #00bce
 ul.popover-icon-group li a:hover { opacity: 1; }
 .boxes { position: relative; }
 .boxes:hover { background: #e8efef; }
-.review-section { position: relative; display: block; min-height: 218px; background-color: #fff; border: 1px solid #dceaf1; border-radius: 5px; }
+.review-section {
+	background-color: #fff;
+	border: 1px solid #dceaf1;
+	border-radius: 5px;
+	display: inline-block;
+	width: 100%;
+}
 .user-name-review { position: relative; display: block; width: 100%; }
-.user-name-review .user-short-name { text-align: center; padding-top: 75px; vertical-align: middle; position: absolute; left: 0; right: 0;/* top: auto; *//* bottom: 0; */ }
+.user-name-review .user-short-name {
+	text-align: center;
+	padding-top: 75px;
+	vertical-align: middle;
+	left: 0;
+	right: 0;
+	width: 100%;
+}
 .user-name-review .user-short-name p { color: #6a6a6a; font-size: 16px; display: block; }
-.reciew-box { position: relative; max-width: 718px; min-height: 157px; background-color: #fff; -webkit-box-shadow: 0 0 7px 3px rgba(0,0,0,.05); -moz-box-shadow: 0 0 7px 3px rgba(0,0,0,.05); box-shadow: 0 0 7px 3px rgba(0,0,0,.05); text-align: center; margin-top: 30px; margin-right: 80px; margin-bottom: 30px; }
+.reciew-box { position: relative; max-width: 718px; min-height: 157px; background-color: #fff; -webkit-box-shadow: 0 0 7px 3px rgba(0,0,0,.05); -moz-box-shadow: 0 0 7px 3px rgba(0,0,0,.05); box-shadow: 0 0 7px 3px rgba(0,0,0,.05); text-align: center; margin-top: 30px; margin-bottom: 30px; }
 .reciew-box h2 { padding-top: 34px; font-size: 24px; font-family: 'Open Sans', sans-serif; color: #6a6a6a; }
 ul.ratingstar { list-style: none; margin: 0 0 5px 0; padding: 0; }
 ul.ratingstar li { display: inline-block; }
@@ -279,7 +319,15 @@ ul.ratingstar a .red { color: #00bcea; }
 .comment-section .comment-area { position: relative; display: block; background-color: #fff; border: 1px solid #dceaf1; margin-top: 15px; border-radius: 5px; padding: 40px 50px; }
 .comment-section .comment-area h2 { margin-top: 0; margin-bottom: 24px; font-family: 'Open Sans', sans-serif; font-size: 24px; font-weight: 600; color: #6a6a6a; }
 .comment-section .comment-area p { color: #5a5a5a; font-size: 14px; line-height: 24px; }
-.user-comment-info { position: relative; min-height: 51px; border: 1px solid #dceaf1; border-radius: 5px; margin-top: 5px; }
+.user-comment-info {
+	position: relative;
+	min-height: 51px;
+	border: 1px solid #dceaf1;
+	border-radius: 5px;
+	margin-top: 5px;
+	display: inline-block;
+	width: 100%;
+}
 .comment-group-left { }
 ul.comment-group { padding: 0; margin: 0; list-style: none; }
 ul.comment-group li { display: inline-block; }
@@ -416,5 +464,54 @@ button.btn.coment-submit-btn:hover { border: 1px solid #00bcea; color: #546e7a; 
 @media screen and (max-width: 780px) {
 	.box-P-100  {
 		padding: 0 10px;
+	}
+	.col-sm-600 { width:50%;}
+	.mailboxes-section .boxes {
+		margin-bottom: 30px;
+	}
+	.navbar-header {
+		display: inline-block;
+	}
+	.user-page {
+		display: inline-block;
+		float: right;
+	}
+}
+@media screen and (max-width: 767px) {
+	.contry-name {
+		max-width: inherit;
+		margin-top: 0px;
+		margin-left: 0px;
+		padding: 0px;
+		margin-bottom: 15px;
+	}
+	.content-section.map-bg { padding:10px 0px !important;}
+	.map-area { width:100%; height: 200px; margin-right: 0px; }
+	.contry-name h2 {font-size: 34px;}
+	.contry-name span { font-size: 25px;}
+	button.btn.coment-submit-btn {
+		margin-top: 10px;
+		margin-bottom: 20px;
+	}
+	.mailboxes-section {
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+	.mover-steps-head {
+		margin-bottom: 30px;
+	}
+	.user-name-review .user-short-name { padding-top: 20px; }
+	.reciew-box h2 { padding-top: 0;}
+	.comment-section .comment-area {	padding: 20px;}
+}
+@media (max-width: 571px) {
+	.col-sm-600 { width:100%;}
+}
+@media (max-width: 430px) {
+	.navbar-brand > img {
+		width: 170px;
+	}
+	.user-page {
+		padding-top: 25px;
 	}
 }

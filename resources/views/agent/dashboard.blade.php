@@ -104,6 +104,38 @@
             </div>
         </div>
 
+        <!-- Client in critical zone -->
+        <?php
+        if( isset( $criticalZoneClients ) && count( $criticalZoneClients ) > 0 )
+        {
+        ?>
+        	<div class="col-lg-3 col-md-6">
+        	    <div class="panel panel-primary">
+        	        <div class="panel-heading" style="background-color: red;">
+        	            <div class="row">
+        	                <div class="col-xs-3">
+        	                    <i class="fa fa-warning fa-5x"></i>
+        	                    <!-- <i class="fa fa-warning fa-5x" style="color:red"></i> -->
+        	                </div>
+        	                <div class="col-xs-9 text-right">
+        	                    <div class="huge">{{ $criticalZoneClients or 0 }}</div>
+        	                    <div>Send Invitation Immediately</div>
+        	                </div>
+        	            </div>
+        	        </div>
+        	        <a href="{{ url('/agent/clients') }}">
+        	            <div class="panel-footer">
+        	                <span class="pull-left">View Details</span>
+        	                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+        	                <div class="clearfix"></div>
+        	            </div>
+        	        </a>
+        	    </div>
+        	</div>
+        <?php
+        }
+        ?>
+
       	<div class="col-lg-12">
       		<h1 class="page-header">Recent Clients</h1>
 	      	<!-- Table to show all the cities -->

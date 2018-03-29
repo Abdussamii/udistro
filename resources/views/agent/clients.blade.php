@@ -74,10 +74,16 @@
 		  	$(this).val(postalCode);
 		});
 
+		// Datepicker
 		$('#client_moving_date').datepicker({
 			dateFormat: 'dd-mm-yy'
 		});
+
 		$('#client_invitation_schedule_date').datepicker({
+			dateFormat: 'dd-mm-yy'
+		});
+
+		$('#client_possession_date').datepicker({
 			dateFormat: 'dd-mm-yy'
 		});
 
@@ -129,6 +135,7 @@
 						<td>Last Name</td>
 						<td>Email</td>
 						<td>Mobile</td>
+						<td>Possession Date</td>
 						<td>Status</td>
 						<td>Invite</td>
 						<td>Action</td>
@@ -169,6 +176,10 @@
 							<div class="form-group">
 								<label for="client_number">Contact Number</label>
 								<input type="text" name="client_number" id="client_number" class="form-control" placeholder="Enter contact number">
+							</div>
+							<div class="form-group">
+								<label for="client_possession_date">Possession Date</label>
+								<input type="text" name="client_possession_date" id="client_possession_date" class="form-control" placeholder="Possession Date" readonly="">
 							</div>
 							<div class="form-group">
 								<label for="client_status">Status</label>

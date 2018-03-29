@@ -322,7 +322,7 @@ class HomeController extends Controller
 	    			);
 
 	    			Mail::send('emails.forgotPassword', ['emailData' => $emailData], function ($m) use ($emailData) {
-	    			    $m->from('info@udistro.ca', 'Udistro');
+	    			    $m->from('noreply@udistro.ca', 'Udistro');
 	    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
 	    			});
 
