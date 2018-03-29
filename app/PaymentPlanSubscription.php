@@ -12,7 +12,7 @@ class PaymentPlanSubscription extends Model
      * @var array
      */
     protected $fillable = [
-        'plan_type_id', 'plan_type_id', 'subscriber_id', 'start_date', 'end_date', 'status'
+        'plan_id', 'plan_type_id', 'subscriber_id', 'start_date', 'end_date', 'status'
     ];
 
     public $timestamps = false;
