@@ -255,6 +255,9 @@ $(document).ready(function(){
 					// Availability
                     $('#frm_home_cleaning_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
 
+                    // Elevator availability
+                    $('#frm_home_cleaning_services #elevator_availability').html(response.elevator_availability);
+
                     // Show the company entered data, if already available
                     if( response.discount != null )
                     {
@@ -508,6 +511,9 @@ $(document).ready(function(){
 					// Reqested additional services
 					$('#frm_home_moving_companies #user_requested_moving_other_services').html(response.request_other_details);
 
+					// Reqested insurance services
+					$('#frm_home_moving_companies #user_requested_insurance_services').html(response.insuranceHtml);
+
 					$('#frm_home_moving_companies #pst_percenateg').text(response.pst);
 					$('#frm_home_moving_companies #gst_percentage').text(response.gst);
 					$('#frm_home_moving_companies #hst_percentage').text(response.hst);
@@ -526,7 +532,7 @@ $(document).ready(function(){
 						$('#frm_home_moving_companies #availability').val(response.date_of_working);
 					}
 					$('#frm_home_moving_companies #comment').val(response.comment);
-					$('#frm_home_moving_companies #insurance').val(response.insurance_amount);
+					// $('#frm_home_moving_companies #insurance').val(response.insurance_amount);
 
 					// If the resposne is already there, disable the submit button
 					if( response.date_of_working != null )

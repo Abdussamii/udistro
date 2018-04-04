@@ -696,7 +696,7 @@
 		                	<fieldset>
 		                		<legend>Settings: <span class="open-close"><i class="fa fa-angle-down" aria-hidden="true"></i></span></legend>
 		                		<div class="collapsbox1 top-buffer" style="display: none;">
-		                			<div class="form-group">
+		                			<!-- <div class="form-group">
 		                				<label class="col-lg-3 control-label">Industry Type:</label>
 		                				<div class="col-lg-8">
 		                					<select name="company_industry_type" id="company_industry_type" class="form-control">
@@ -718,7 +718,7 @@
 		                							?>
 		                						</select>
 		                				</div>
-		                			</div>
+		                			</div> -->
 		                			<div class="form-group">
 		                				<label class="col-lg-3 control-label">Services:</label>
 		                				<div class="col-lg-8">

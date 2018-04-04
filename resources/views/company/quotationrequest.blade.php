@@ -291,6 +291,10 @@
 										<td>Additional Information</td>
 										<td id="additional_information"></td>
 									</tr>
+									<tr>
+										<td>Elevator Available</td>
+										<td id="elevator_availability"></td>
+									</tr>
 								</table>
 							</div>
 
@@ -878,11 +882,11 @@
 									<div class="col-lg-12 col-md-12 col-sm-12">
 										<table class="table table-striped" id="moving_service_calculations">
 											<thead>
-												<tr>
-													<td colspan="4" style="width: 80%;">Insurance</td>
+												<tr id="user_requested_insurance_services">
+													<!-- <td colspan="4" style="width: 80%;">Insurance</td>
 													<td>
 														<input type="text" name="insurance" id="insurance"  class="form-control moving_service_insurance">
-													</td>
+													</td> -->
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Discount</td>

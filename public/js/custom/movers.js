@@ -54,7 +54,11 @@ $(document).ready(function(){
 
 		if( $(this).hasClass('completed') )
 		{
-			alertify.error('This activity is already completed');
+			// alertify.error('This activity is already completed');
+			$('#service_response').find('.modal-header').html('Alert');
+	    	$('#service_response').find('.modal-body').html('This activity is already completed.');
+	    	$('#service_response').modal('show');
+
 			return false;
 		}
 
@@ -153,7 +157,11 @@ $(document).ready(function(){
 
 		if( $(this).hasClass('completed') )
 		{
-			alertify.error('This activity is already completed');
+			// alertify.error('This activity is already completed');
+			$('#service_response').find('.modal-header').html('Alert');
+	    	$('#service_response').find('.modal-body').html('This activity is already completed.');
+	    	$('#service_response').modal('show');
+
 			return false;
 		}
 
@@ -726,7 +734,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 				    {
-				    	alertify.success(response.errMsg);
+				    	// alertify.success(response.errMsg);
+				    	$('#service_response').find('.modal-header').html('Congratulations');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').modal('show');
 
 				    	$('#home_cleaning_services_modal').modal('hide');
 				    }
@@ -807,7 +818,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 				    {
-				    	alertify.success(response.errMsg);
+				    	// alertify.success(response.errMsg);
+				    	$('#service_response').find('.modal-header').html('Congratulations');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').modal('show');
 
 				    	$('#moving_companies_modal').modal('hide');
 				    }
@@ -886,7 +900,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 				    {
-				    	alertify.success(response.errMsg);
+				    	// alertify.success(response.errMsg);
+				    	$('#service_response').find('.modal-header').html('Congratulations');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').modal('show');
 
 				    	$('#tech_concierge_modal').modal('hide');
 				    }
@@ -1012,6 +1029,8 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 				    {
 				    	// alertify.success(response.errMsg);
+				    	$('#service_response').find('.modal-header').html('Congratulations');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
 				    	$('#service_response').modal('show');
 
 				    	$('#cable_internet_services_modal').modal('hide');
@@ -1115,34 +1134,47 @@ $(document).ready(function(){
 	$('.discard_activity').click(function(){
 		var activityId = $(this).attr('id');
 
-		$.ajax({
-			url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
-			method: 'post',
-			data: {
-				activityId: activityId,
-				action: '0'
-			},
-			headers: {
-		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    },
-		    success: function(response){
-		    	if( response.errCode == 0 )
-			    {
-			    	$('#activity_progress1').html(response.percent);
-			    	$('#activity_progress2').html(response.percent);
-			    	$('#activity_progress_bar').css('width', response.percent + '%');
+		// Check if the activity is already completed then discard the action
+		if( $(this).closest('.activities_container').find('li:first').find('a').hasClass('completed') )
+		{
+			// alertify.error('This activity is already completed');
+			$('#service_response').find('.modal-header').html('Alert');
+	    	$('#service_response').find('.modal-body').html('This activity is already completed.');
+	    	$('#service_response').modal('show');
+
+			return false;
+		}
+		else
+		{
+			$.ajax({
+				url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+				method: 'post',
+				data: {
+					activityId: activityId,
+					action: '0'
+				},
+				headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(response){
+			    	if( response.errCode == 0 )
+				    {
+				    	$('#activity_progress1').html(response.percent);
+				    	$('#activity_progress2').html(response.percent);
+				    	$('#activity_progress_bar').css('width', response.percent + '%');
+				    }
 			    }
-		    }
-		});
-		
-		// To remove the check mark from done
-		$(this).closest('.activities_container').find('.done_activity').find('i').removeClass('fa fa-check').addClass('fa fa-arrow-circle-o-right');
+			});
+			
+			// To remove the check mark from done
+			$(this).closest('.activities_container').find('.done_activity').find('i').removeClass('fa fa-check').addClass('fa fa-arrow-circle-o-right');
 
-		// To put the check mark on discard
-		$(this).find('i').removeClass('fa fa-times-circle').addClass('fa fa-check');
+			// To put the check mark on discard
+			$(this).find('i').removeClass('fa fa-times-circle').addClass('fa fa-check');
 
-		// Put the final status value to 0 i.e. discard
-		$(this).closest('.activities_container').find('.activity_final_status').val(0);
+			// Put the final status value to 0 i.e. discard
+			$(this).closest('.activities_container').find('.activity_final_status').val(0);
+		}
 	});
 
 	// Do it later functionality
@@ -1151,7 +1183,10 @@ $(document).ready(function(){
 		// Check if the activity is already completed
 		if( $(this).closest('.activities_container').find('.fa-check').length == 1 )
 		{
-			alertify.error('This activity is already completed');
+			// alertify.error('This activity is already completed');
+			$('#service_response').find('.modal-header').html('Alert');
+	    	$('#service_response').find('.modal-body').html('This activity is already completed.');
+	    	$('#service_response').modal('show');
 		}
 		else
 		{

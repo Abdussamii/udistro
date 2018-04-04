@@ -128,7 +128,7 @@ $(function(){
 
 	    	// Create the html and add it
 	    	var html = '<div class="selected_item_list"><input type="hidden" class="form-control" type="number" min="0" name="item_quantity['+ movingItemCategoryId +']" value="'+ quantity +'">';
-	    	html += '<div>'+ movingItemCategory + ' - ' + quantity + '</div></div>';
+	    	html += '<div>'+ movingItemCategory + ' - ' + quantity + ' <a href="javascript:void(0);" class="remove_item_from_list"><i class="fa fa-trash-o"></i></a></div></div>';
 
 	    	$(this).closest('#moving_item_category_container').find('.selected_item_details_container').append(html);
 
@@ -149,6 +149,19 @@ $(function(){
     			$(this).closest('#moving_item_category_container').find('.moving_item_quantity').focus();
     		}
     	}
+
+    });
+
+    // To remove the moving detailed job description from cart
+    $(document).on('click', '.remove_item_from_list', function(){
+
+    	// Decrease the quantity from cart
+    	var itemCount = $(this).closest('#moving_item_category_container').find('.selected_item_list').length - 1;
+
+    	$(this).closest('#moving_item_category_container').find('.show_selected_item_details').html('Cart ('+ itemCount +')');
+
+    	// Remove the list item
+    	$(this).closest('.selected_item_list').remove();
 
     });
 });
@@ -356,7 +369,7 @@ function calculateRoute(from, to) {
 						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 3 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
 						<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating {{ ( isset($agentClientRating->rating) && $agentClientRating->rating > 4 ) ? 'red' : '' }}" aria-hidden="true"></i></a></li>
 					</ul>
-					<span id="agent_average_rating">( {{ $agentRating or 0 }} Rating )</span>
+					<!-- <span id="agent_average_rating">( {{ $agentRating or 0 }} Rating )</span> -->
 				</div>
 			</div>
 		</div>
@@ -2393,10 +2406,10 @@ function calculateRoute(from, to) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            	Congratulations
+            	
             </div>
             <div class="modal-body">
-            	Your project request has been submitted, please check your mail after 24 hours.
+            	
             </div>
             <div class="modal-footer">
                 <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" href="javascript:void(0);" data-dismiss="modal">OK</a>
@@ -2528,9 +2541,9 @@ function calculateRoute(from, to) {
 	      						</tr>
 	      					</table>
 	      					<table style="text-align: center; width: 100%; margin:15px 0 0;">
-	      						<tr>
+	      						<!-- <tr>
 	      							<td>( {{ $agentRating }} Rating )</td>
-	      						</tr>
+	      						</tr> -->
 	      					</table>
 	      				</td>
 	      				<td style="padding: 10px; vertical-align: top;">

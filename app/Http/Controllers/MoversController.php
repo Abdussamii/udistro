@@ -1943,6 +1943,9 @@ class MoversController extends Controller
  					$homeCleaningServiceRequest->cleaning_behind_refrigerator_and_stove = isset( $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'] ) ? $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'] : '0';
  					$homeCleaningServiceRequest->baseboard_to_be_washed = isset( $homeCleaningDetails['home_cleaning_baseboard'] ) ? $homeCleaningDetails['home_cleaning_baseboard'] : '0';
 
+ 					// Elevator availability
+ 					$homeCleaningServiceRequest->elevator_availability 	= isset( $homeCleaningDetails['home_cleaning_elevator_availability'] ) ? $homeCleaningDetails['home_cleaning_elevator_availability'] : '0';
+
  					// $homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
  					// $homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
 					

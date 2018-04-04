@@ -1242,6 +1242,7 @@ class CompanyController extends Controller
                 $response['home_cleaning_bathroom_count']               = $homeServiceArray->home_cleaning_bathroom_count;
                 $response['cleaning_behind_refrigerator_and_stove']     = $homeServiceArray->cleaning_behind_refrigerator_and_stove;
                 $response['baseboard_to_be_washed']                  	= $homeServiceArray->baseboard_to_be_washed;
+                $response['elevator_availability']                  	= ( $homeServiceArray->elevator_availability == '1' ) ? 'Yes' : 'No';
                 $response['additional_information']                     = ucfirst( strtolower( $homeServiceArray->additional_information ) );
 
                 // Get the availability details
@@ -1750,6 +1751,15 @@ class CompanyController extends Controller
     	        }
 
     	        $response['request_services_details'] = $html;
+
+    	        // Check if insurance is selected or not
+    	        $insuranceHtml = '';
+    	        if( $movingCompaniesArray->insurance == '1' )
+    	        {
+    	        	$insuranceHtml .= '<td colspan="4">Insurance</td> <td> <input type="text" name="insurance" id="insurance"  class="form-control moving_service_insurance" value="'. $movingCompaniesArray->insurance_amount .'"> </td>';
+    	        }
+
+    	        $response['insuranceHtml'] = $insuranceHtml;
 
     	        // Get the list of other related things
     	        $otherDetailHtml = '';
