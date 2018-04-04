@@ -185,7 +185,7 @@
 							<input name="company_representative_address1" id="company_representative_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 						</div>
 
-						<div id="add_company_representative_address">
+						<div id="add_company_representative_address" style="display: none;">
 							<div class="form-group">
 								<label for="company_representative_address1">Address 2</label>
 								<input name="company_representative_address2" id="company_representative_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
@@ -312,7 +312,7 @@
 							<input name="company_representative_edit_address1" id="company_representative_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 						</div>
 
-						<div id="edit_company_representative_address">
+						<div id="edit_company_representative_address" style="display: none;">
 							<div class="form-group">
 								<label for="company_representative_address">Address 2</label>
 								<input name="company_representative_edit_address2" id="company_representative_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">

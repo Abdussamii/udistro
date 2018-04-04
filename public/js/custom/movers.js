@@ -84,63 +84,6 @@ $(document).ready(function(){
         }
     });
 
-    // Forward mail - Show next step
-    /*$('#btn_next_forward_mail').click(function(){
-    	if( forwardMailStep == 1 )
-    	{
-    		if( $('#frm_forward_mail').valid() )
-	    	{
-	    		// Change the next button to close on last step
-	    		$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-
-	    		if( $('input[name="forward_mail_method"]:checked').val() == 1 )
-	    		{
-	    			$('#forward_mail_step1').hide();
-	    			$('#forward_mail_step3').hide();
-	    			$('#forward_mail_step4').hide();
-	    			$('#forward_mail_step2').show();
-	    		}
-	    		else
-	    		{
-	    			$('#forward_mail_step1').hide();
-	    			$('#forward_mail_step2').hide();
-	    			$('#forward_mail_step3').show();
-	    			$('#forward_mail_step4').hide();
-	    		}
-
-	    		forwardMailStep++;
-	    	}
-    	}
-    	else if( forwardMailStep == 2 )	// On click of next button close the modal
-    	{
-    		$(this).closest('.modal-body').find('.close_modal').click();
-    	}
-    });
-
-    // Forward mail - Show previous step
-    $('#btn_prev_forward_mail').click(function(){
-    	if( forwardMailStep == 2 )
-    	{
-    		// Change close to next again
-    		$(this).next('#btn_next_forward_mail').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-
-    		if( $('input[name="forward_mail_method"]:checked').val() == 1 )
-    		{
-    			$('#forward_mail_step1').show();
-    			$('#forward_mail_step2').hide();
-    			$('#forward_mail_step3').hide();
-    		}
-    		else
-    		{
-    			$('#forward_mail_step1').show();
-    			$('#forward_mail_step2').hide();
-    			$('#forward_mail_step3').hide();
-    		}
-
-    		forwardMailStep--;
-    	}
-    });*/
-
     $('#forward_mail_method1').click(function(){
     	$('#forward_mail_step1').hide();
     	$('#forward_mail_step2').show();
@@ -572,16 +515,6 @@ $(document).ready(function(){
         }
     });
 
-    // Update address provintial method validation
-    /*$('#frm_update_address_provintial').validate({
-    	rules: {
-    		update_address_provintial_method: { required: true }
-    	},
-    	messages: {
-    		update_address_provintial_method: { required: 'Please select an option' }
-    	}
-    });*/
-
     // Update address next button functionality
     $('#update_address_agency1').click(function(){
     	$('#update_address_step1').hide();
@@ -632,66 +565,6 @@ $(document).ready(function(){
 
 	});
 
-	// Mail box keys activity form validation
-    /*$('#frm_mailbox_keys').validate({
-        rules: {
-            mailbox_keys_method: {
-                required: true
-            }
-        },
-        messages: {
-            mailbox_keys_method: {
-                required: 'Please select an option'
-            }
-        }
-    });*/
-
-    /*$('#btn_next_mailbox_keys').click(function(){
-    	if( $('#frm_mailbox_keys').valid() )
-    	{
-    		if( mailBoxStep == 1 )
-    		{
-    			// Change the next button to close on last step
-    			$(this).html('Close <i class="fa fa-times" aria-hidden="true"></i>');
-
-	    		if( $('input[name="mailbox_keys_method"]:checked').val() == 1 )
-	    		{
-	    			$('#mailbox_keys_step1').hide();
-	    			$('#mailbox_keys_step2').show();
-	    			$('#mailbox_keys_step3').hide();
-	    			$('#mailbox_keys_step4').hide();
-	    		}
-	    		else
-	    		{
-	    			$('#mailbox_keys_step1').hide();
-	    			$('#mailbox_keys_step2').hide();
-	    			$('#mailbox_keys_step3').show();
-	    			$('#mailbox_keys_step4').hide();
-	    		}
-
-	    		mailBoxStep++;
-    		}
-    		else if( mailBoxStep == 2 )	// On click of next button close the modal
-	    	{
-	    		$(this).closest('.modal-body').find('.close_modal').click();
-	    	}
-    	}
-    });
-
-    $('#btn_prev_mailbox_keys').click(function(){
-    	if( mailBoxStep == 2 )
-    	{
-    		$(this).next('#btn_next_mailbox_keys').html('Next <i class="fa fa-angle-double-right" aria-hidden="true"></i>');
-    		
-    		$('#mailbox_keys_step1').show();
-			$('#mailbox_keys_step2').hide();
-			$('#mailbox_keys_step3').hide();
-			$('#mailbox_keys_step4').hide();
-
-			mailBoxStep--;
-    	}
-    });*/
-
     $('#mailbox_keys_method1').click(function(){
     	$('#mailbox_keys_step1').hide();
 		$('#mailbox_keys_step2').show();
@@ -719,40 +592,6 @@ $(document).ready(function(){
 	/* ---------- Mail box functionality ends ---------- */
 
 	/* ---------- Connect Utilities functionality ---------- */
-
-	/*$('#frm_connect_utilities').validate({
-		rules: {
-			update_address_method1: {
-				required: true
-			},
-			update_address_method2: {
-				required: true
-			},
-			update_address_method3: {
-				required: true
-			}
-		},
-		messages: {
-			update_address_method1: {
-				required: 'Please select an option'
-			},
-			update_address_method2: {
-				required: 'Please select an option'
-			},
-			update_address_method3: {
-				required: 'Please select an option'
-			}
-		}
-	});*/
-
-	/*$('#frm_connect_utility_hydro_methods').validate({
-		rules: {
-			connect_utility_hydro_methods: { required: true }
-		},
-		messages: {
-			connect_utility_hydro_methods: { required: 'Please select an option' }
-		}
-	});*/
 
 	var connectUtilitiesStep = 1;
 	$('.connect_utilities').click(function(){
@@ -835,28 +674,6 @@ $(document).ready(function(){
 		$('#home_cleaning_services_step2').hide();
 	});
 
-	// Previuos button functionality
-	/*$('#btn_prev_home_cleaning_services').click(function(){
-		if( StepHomeCleaningServices == 2 )
-		{
-			$('#home_cleaning_services_step1').show();
-			$('#home_cleaning_services_step2').hide();
-		}
-
-		StepHomeCleaningServices--;
-	});*/
-
-	// Next button functionality
-	/*$('#btn_next_home_cleaning_services').click(function(){
-		if( StepHomeCleaningServices == 1 )
-		{
-			$('#home_cleaning_services_step1').hide();
-			$('#home_cleaning_services_step2').show();
-		}
-
-		StepHomeCleaningServices++;
-	});*/
-
 	// Save the query data
 	$('#frm_home_cleaning_services').submit(function(e){
 		e.preventDefault();
@@ -865,34 +682,21 @@ $(document).ready(function(){
 		ignore: "not:hidden",
 		rules: 
 		{
-			home_cleaning_moveout: { required: true },
-			home_cleaning_movein: { required: true },
-			home_cleaning_house_from_type: { required: true },
-			home_cleaning_house_from_level: { required: true },
-			home_cleaning_house_from_bedroom_count: { required: true },
-			home_cleaning_house_from_property_type: { required: true },
-
-			home_cleaning_house_to_type: { required: true },
-			home_cleaning_house_to_level: { required: true },
-			home_cleaning_house_to_bedroom_count: { required: true },
-			home_cleaning_house_to_property_type: { required: true },
-
-			home_cleaning_callback_primary_no: { canadaPhone: true },
-			home_cleaning_callback_secondary_no: { canadaPhone: true },
+			home_cleaning_condition: { required: true },
+			home_cleaning_area: { required: true },
+			home_cleaning_pets_count: { required: true },			
+			home_cleaning_elevator_availability: { required: true },
+			availability_date4: { required: true },
+			availability_time_from1: { required: true },
 		},
 		messages: 
 		{
-			home_cleaning_moveout: { required: 'Please select an option' },
-			home_cleaning_movein: { required: 'Please select an option' },
-			home_cleaning_house_from_type: { required: 'Select the type' },
-			home_cleaning_house_from_level: { required: 'Please select floor level' },
-			home_cleaning_house_from_bedroom_count: { required: 'Please select bedroom count' },
-			home_cleaning_house_from_property_type: { required: 'Please select property type' },
-
-			home_cleaning_house_to_type: { required: 'Select the type' },
-			home_cleaning_house_to_level: { required: 'Please select floor level' },
-			home_cleaning_house_to_bedroom_count: { required: 'Please select bedroom count' },
-			home_cleaning_house_to_property_type: { required: 'Please select property type' },
+			home_cleaning_condition: { required: 'Please select home condition' },
+			home_cleaning_area: { required: 'Please select size of property' },
+			home_cleaning_pets_count: { required: 'Please select pet count' },			
+			home_cleaning_elevator_availability: { required: 'Please select elevator availability' },
+			availability_date4: { required: 'Please select availability date' },
+			availability_time_from1: { required: 'Please select availability time' },
 		}
 	});
 
@@ -958,28 +762,6 @@ $(document).ready(function(){
 		$('#moving_companies_step2').hide();
 	});
 
-	// Previuos button functionality
-	/*$('#btn_prev_home_moving_companies').click(function(){
-		if( StepMovingCompanies == 2 )
-		{
-			$('#moving_companies_step1').show();
-			$('#moving_companies_step2').hide();
-		}
-
-		StepMovingCompanies--;
-	});*/
-
-	// Next button functionality
-	/*$('#btn_next_home_moving_companies').click(function(){
-		if( StepMovingCompanies == 1 )
-		{
-			$('#moving_companies_step1').hide();
-			$('#moving_companies_step2').show();
-		}
-
-		StepMovingCompanies++;
-	});*/
-
 	// Save the query data
 	$('#frm_home_moving_companies').submit(function(e){
 		e.preventDefault();
@@ -987,58 +769,14 @@ $(document).ready(function(){
 	$('#frm_home_moving_companies').validate({
 		ignore: "not:hidden",
 		rules: 
-		{
-			moving_house_to_type: { required: true },
-			moving_house_to_level: { required: true },
-			moving_house_to_bedroom_count: { required: true },
-			moving_house_to_property_type: { required: true },
-			moving_house_from_type: { required: true },
-			moving_house_from_level: { required: true },
-			moving_house_from_bedroom_count: { required: true },
-			moving_house_from_property_type: { required: true },
-
-			moving_house_description_1:  { required: true },
-			moving_house_description_2:  { required: true },
-			moving_house_description_3:  { required: true },
-			moving_house_description_4:  { required: true },
-			moving_house_description_5:  { required: true },
-			moving_house_description_6:  { required: true },
-			moving_house_description_7:  { required: true },
-			moving_house_description_8:  { required: true },
-			moving_house_description_9:  { required: true },
-			moving_house_description_10: { required: true },
-			
-			moving_house_packing_issue: { required: true },
+		{	
 			moving_house_callback_option: { required: true },
-
 			moving_house_need_insurance: { required: true }
 		},
 		messages: 
 		{
-			moving_house_to_type: { required: 'Select the type' },
-			moving_house_to_level: { required: 'Please select floor level' },
-			moving_house_to_bedroom_count: { required: 'Please select bedroom count' },
-			moving_house_to_property_type: { required: 'Please select property type' },
-			moving_house_from_type: { required: 'Select the type' },
-			moving_house_from_level: { required: 'Please select floor level' },
-			moving_house_from_bedroom_count: { required: 'Please select bedroom count' },
-			moving_house_from_property_type: { required: 'Please select property type' },
-
-			moving_house_description_1:  { required: 'Please select a option' },
-			moving_house_description_2:  { required: 'Please select a option' },
-			moving_house_description_3:  { required: 'Please select a option' },
-			moving_house_description_4:  { required: 'Please select a option' },
-			moving_house_description_5:  { required: 'Please select a option' },
-			moving_house_description_6:  { required: 'Please select a option' },
-			moving_house_description_7:  { required: 'Please select a option' },
-			moving_house_description_8:  { required: 'Please select a option' },
-			moving_house_description_9:  { required: 'Please select a option' },
-			moving_house_description_10: { required: 'Please select a option' },
-
-			moving_house_packing_issue: { required: 'Please select a option' },
-			moving_house_callback_option: { required: 'Please select a option' },
-
-			moving_house_need_insurance: { required: 'Please select an option' }
+			moving_house_callback_option: { required: 'Please select callback option' },
+			moving_house_need_insurance: { required: 'Please select an insurance option' }
 		}
 	});
 
@@ -1101,28 +839,6 @@ $(document).ready(function(){
 		$('#tech_concierge_modal').modal({ backdrop: 'static', keyboard: false });
 	});
 
-	// Previuos button functionality
-	/*$('#btn_prev_tech_concierge').click(function(){
-		if( StepTechConcierge == 2 )
-		{
-			$('#tech_concierge_step1').show();
-			$('#tech_concierge_step2').hide();
-		}
-
-		StepTechConcierge--;
-	});*/
-
-	// Next button functionality
-	/*$('#btn_next_tech_concierge').click(function(){
-		if( StepTechConcierge == 1 )
-		{
-			$('#tech_concierge_step1').hide();
-			$('#tech_concierge_step2').show();
-		}
-
-		StepTechConcierge++;
-	});*/
-
 	$('#frm_tech_concierge').submit(function(e){
 		e.preventDefault();
 	});
@@ -1130,26 +846,17 @@ $(document).ready(function(){
 		ignore: "not:hidden",
 		rules: 
 		{
-			moving_house_to_type : { required: true },
-			moving_house_to_level : { required: true },
-			moving_house_to_bedroom_count : { required: true },
-			moving_house_to_property_type : { required: true },
-
 			'tech_concierge_places[]' : { required: true },
 			'tech_concierge_appliances[]' : { required: true },
-
-			tech_concierge_callback_primary_no: { canadaPhone: true },
-			tech_concierge_callback_secondary_no: { canadaPhone: true },
+			availability_date1: { required: true },
+			availability_time_from1: { required: true }
 		},
 		messages: 
 		{
-			moving_house_to_type: { required: 'Select the type' },
-			moving_house_to_level: { required: 'Please select floor level' },
-			moving_house_to_bedroom_count: { required: 'Please select bedroom count' },
-			moving_house_to_property_type: { required: 'Please select property type' },
-
-			'tech_concierge_places[]' : { required: 'Please select atleast one option' },
-			'tech_concierge_appliances[]' : { required: 'Please select atleast one option' },
+			'tech_concierge_places[]' : { required: 'Please select atleast one option from Other Place To Install Appliances' },
+			'tech_concierge_appliances[]' : { required: 'Please select atleast one option from Job Description' },
+			availability_date1: { required: 'Please select availability date' },
+			availability_time_from1: { required: 'Please select availability time' }
 		}
 	});
 
@@ -1191,19 +898,6 @@ $(document).ready(function(){
 			});
 		}
 	});
-
-	// Tech Concierge Availability functionality
-	/*
-	$('#availability_time_from1').change(function(){
-		$('#availability_time_upto1').val( $(this).val() );
-	});
-	$('#availability_time_from2').change(function(){
-		$('#availability_time_upto2').val( $(this).val() );
-	});
-	$('#availability_time_from3').change(function(){
-		$('#availability_time_upto3').val( $(this).val() );
-	});
-	*/
 	/* ---------- Tech Concierge functionality ends ---------- */
 	
 	/* ---------- Availability functionality for cable internet, tech concierge and home cleaning service start ---------- */
@@ -1271,28 +965,6 @@ $(document).ready(function(){
 		$('#cable_internet_services_step2').hide();
 	});
 
-	// Previuos button functionality
-	/*$('#btn_prev_cable_internet_services').click(function(){
-		if( StepTechConcierge == 2 )
-		{
-			$('#cable_internet_services_step1').show();
-			$('#cable_internet_services_step2').hide();
-		}
-
-		StepTechConcierge--;
-	});*/
-
-	// Next button functionality
-	/*$('#btn_next_cable_internet_services').click(function(){
-		if( StepTechConcierge == 1 )
-		{
-			$('#cable_internet_services_step1').hide();
-			$('#cable_internet_services_step2').show();
-		}
-
-		StepTechConcierge++;
-	});*/
-
 	// Save the query data
 	$('#frm_cable_internet_services').submit(function(e){
 		e.preventDefault();
@@ -1301,30 +973,15 @@ $(document).ready(function(){
 		ignore: "not:hidden",
 		rules: 
 		{
-			cable_internet_house_to_type: { required: true },
-			cable_internet_house_to_level: { required: true },
-			cable_internet_house_to_bedroom_count: { required: true },
-			cable_internet_house_to_property_type: { required: true },
-			cable_internet_house_from_type: { required: true },
-			cable_internet_house_from_level: { required: true },
-			cable_internet_house_from_bedroom_count: { required: true },
-			cable_internet_from_property_type: { required: true },
 			'cable_internet_service_type[]': { required: true },
-
-			cable_internet_callback_primary_no: { canadaPhone: true },
-			cable_internet_callback_secondary_no: { canadaPhone: true },
+			availability_date7 : { required: true },
+			availability_time_from1: { required: true }
 		},
 		messages: 
 		{
-			cable_internet_house_to_type: { required: 'Select the type' },
-			cable_internet_house_to_level: { required: 'Please select floor level' },
-			cable_internet_house_to_bedroom_count: { required: 'Please select bedroom count' },
-			cable_internet_house_to_property_type: { required: 'Please select property type' },
-			cable_internet_house_from_type: { required: 'Select the type' },
-			cable_internet_house_from_level: { required: 'Please select floor level' },
-			cable_internet_house_from_bedroom_count: { required: 'Please select bedroom count' },
-			cable_internet_from_property_type: { required: 'Please select property type' },
-			'cable_internet_service_type[]': { required: 'Please select atleast one service' }
+			'cable_internet_service_type[]': { required: 'Please select atleast one service you are applying for under "Detailed Job Description"' },
+			availability_date7 : { required: 'Please select atleast one availability date' },
+			availability_time_from1: { required: 'Please select atleast one availability time' }
 		}
 	});
 
@@ -1354,7 +1011,8 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 				    {
-				    	alertify.success(response.errMsg);
+				    	// alertify.success(response.errMsg);
+				    	$('#service_response').modal('show');
 
 				    	$('#cable_internet_services_modal').modal('hide');
 				    }
@@ -1439,8 +1097,8 @@ $(document).ready(function(){
 				});
 
 				// Show the "Is this activity helpful thing" modal
-				$('#frm_activity_helpful_user_response #activity_name').val(activityName);
-				$('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
+				// $('#frm_activity_helpful_user_response #activity_name').val(activityName);
+				// $('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
 			}
 			else 	// Activity is still pending
 			{
@@ -1825,53 +1483,6 @@ $(document).ready(function(){
     		});
 		}
 	});
-
-	// To set active class according to the user response on click of confirmation buttons
-	/*$('.btn_activity_user_response').click(function(){
-		var finalStatus = $(this).attr('id');
-		var activityName= $(this).data('activity');
-		var activityId  = $('.'+activityName).attr('id');
-
-		if( activityName != '' )
-		{
-			// Activity is done
-			if( finalStatus == 1 )
-			{
-				$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
-
-				// Set the status value
-				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
-
-				$.ajax({
-					url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
-					method: 'post',
-					data: {
-						activityId: activityId,
-						action: finalStatus
-					},
-					headers: {
-				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-				    success: function(response){
-				    	if( response.errCode == 0 )
-					    {
-					    	$('#activity_progress1').html(response.percent);
-					    	$('#activity_progress2').html(response.percent);
-					    	$('#activity_progress_bar').css('width', response.percent + '%');
-					    }
-				    }
-				});
-			}
-			else 	// Activity is still pending
-			{
-				$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
-
-				// Set the status value
-				$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
-			}
-		}
-
-	});*/
 
 });
 

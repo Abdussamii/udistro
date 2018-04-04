@@ -144,7 +144,6 @@
 					<tr>
 						<td>#</td>
 						<td>First Name</td>
-						<td>Middle Name</td>
 						<td>Last Name</td>
 						<td>Email</td>
 						<td>Mobile</td>

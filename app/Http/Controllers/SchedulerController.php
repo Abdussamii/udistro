@@ -404,21 +404,24 @@ class SchedulerController extends Controller
 		// Get the first entry from the table
 		$emailDetails = ShareAnnouncementEmail::where(['status' => '0'])->first();
 
-		// Send the email
-		$emailData = array(
-			'name' 		=> 'Udistro',
-			'subject' 	=> 'Udistro Announcement',
-			'email' 	=> $emailDetails->email,
-			'content'	=> $emailDetails->email_content
-		);
+		if( count( $emailDetails ) >= 0 )
+		{
+			// Send the email
+			$emailData = array(
+				'name' 		=> 'Udistro',
+				'subject' 	=> 'Udistro Announcement',
+				'email' 	=> $emailDetails->email,
+				'content'	=> $emailDetails->email_content
+			);
 
-		Mail::send('emails.shareAnnouncementEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
-		    $m->from('info@udistro.ca', 'Udistro');
-		    
-		    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
-		});
+			Mail::send('emails.shareAnnouncementEmail', ['emailData' => $emailData], function ($m) use ($emailData) {
+			    $m->from('info@udistro.ca', 'Udistro');
+			    
+			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+			});
 
-		// Update the status
-		ShareAnnouncementEmail::where(['id' => $emailDetails->id])->update(['status' => '1']);
+			// Update the status
+			ShareAnnouncementEmail::where(['id' => $emailDetails->id])->update(['status' => '1']);
+		}
 	}
 }

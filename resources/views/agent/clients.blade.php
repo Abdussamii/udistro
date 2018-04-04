@@ -131,7 +131,6 @@
 					<tr>
 						<td>#</td>
 						<td>First Name</td>
-						<td>Middle Name</td>
 						<td>Last Name</td>
 						<td>Email</td>
 						<td>Mobile</td>
@@ -161,10 +160,10 @@
 								<input type="text" name="client_fname" id="client_fname" class="form-control" placeholder="Enter first name">
 								<input type="hidden" name="client_id" id="client_id" value="">
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label for="client_mname">Middle Name</label>
 								<input type="text" name="client_mname" id="client_mname" class="form-control" placeholder="Enter middle name">
-							</div>
+							</div> -->
 							<div class="form-group">
 								<label for="client_lname">Last Name</label>
 								<input type="text" name="client_lname" id="client_lname" class="form-control" placeholder="Enter last name">
@@ -220,8 +219,7 @@
 										</div>
 
 										<!-- Address Container -->
-										<div>
-
+										<div style="display: none;">
 											<div class="form-group" style="display: none;">
 												<label for="client_fname">Old Address 2</label>
 												<input type="text" class="form-control" name="client_old_address2" id="client_old_address2" value="">
@@ -283,7 +281,6 @@
 												  	</div>
 												</div>
 											</div>
-
 										</div>
 
 									</fieldset>
@@ -296,8 +293,7 @@
 										</div>
 
 										<!-- Address Container -->
-										<div>
-
+										<div style="display: none;">
 											<div class="form-group" style="display: none;">
 												<label for="client_fname">New Address 2</label>
 												<input type="text" class="form-control" name="client_new_address2" id="client_new_address2" value="">
@@ -359,7 +355,6 @@
 												  	</div>
 												</div>
 											</div>
-
 										</div>
 
 									</fieldset>

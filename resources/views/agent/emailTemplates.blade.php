@@ -460,13 +460,13 @@
     			?>
 
     			<!-- Email template creation panel -->
-			    <div class="col-sm-12" style="margin-bottom: 50px;">
+			    <div class="col-sm-12" style="">
 
 			        <!-- Email template creation panel -->
 					<div class="element_container" id="email_container">
 						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="min-width: 320px; font-size: 18px;">
 							<tr>
-								<td align="center" bgcolor="#eff3f8" style="padding-bottom: 40px;">
+								<td align="center" bgcolor="#eff3f8" style="">
 
 								<!--[if gte mso 10]>
 								<table width="680" border="0" cellspacing="0" cellpadding="0">
@@ -613,7 +613,8 @@
 
 								</td>
 							</tr>
-							<table width="80%" align="center" cellpadding="0" cellspacing="0">
+
+							<!-- <table width="80%" align="center" cellpadding="0" cellspacing="0">
 								<tr>
 									<td align="center" style="padding:20px 0; width: 33%;">
 										<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
@@ -634,9 +635,9 @@
 										</div>
 									</td>
 								</tr>
-							</table>
+							</table> -->
 
-							<table width="80%" align="center" cellpadding="0" cellspacing="0">
+							<!-- <table width="80%" align="center" cellpadding="0" cellspacing="0">
 								<tr>
 									<td colspan="3" align="center" style="border-top:1px solid #d9d9d9;">
 										<span class="editable">Connect with us</span>
@@ -660,7 +661,7 @@
 										</div>
 									</td>
 								</tr>                                        
-							</table>
+							</table> -->
 						</table>
 					</div>
 
@@ -682,7 +683,7 @@
     	<div class="modal-content">
     		<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Uplaod Image</h4>
+				<h4 class="modal-title">Upload Image</h4>
 			</div>
 			<div class="modal-body">
 		    	<form id="frm_upload_email_template_image" name="frm_upload_email_template_image">

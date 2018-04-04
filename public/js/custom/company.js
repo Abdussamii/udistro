@@ -4,107 +4,6 @@ $(document).ready(function(){
 
 	alertify.set('notifier','position', 'top-center');
 
-    // Company registration form validation
-    /*$('#frm_company_registration').submit(function(e){
-        e.preventDefault();
-    });
-    $('#frm_company_registration').validate({
-        rules: {
-        	rep_fname: {
-        		required: true
-        	},
-        	rep_lname: {
-        		required: true
-        	},
-        	rep_designation: {
-        		required: true
-        	},
-        	email: {
-                required: true,
-                email: true
-            },
-            password: {
-                required: true,
-                minlength: 6
-            },
-        	phone_no: {
-        		required: true,
-        		number: true
-        	},
-        	company_name: {
-        		required: true
-        	},
-        	company_province: {
-        		required: true
-        	},
-        	company_type: {
-        		required: true
-        	}
-        },
-        messages: {
-        	rep_fname: {
-        		required: 'Please enter first name'
-        	},
-        	rep_lname: {
-        		required: 'Please enter last name'
-        	},
-        	rep_designation: {
-        		required: 'Please enter job title'
-        	},
-        	email: {
-                required: 'Please enter email',
-                email: 'Please enter valid email'
-            },
-            password: {
-                required: 'Please enter password',
-                minlength: 'Password must contain atleat 6 characters'
-            },
-        	phone_no: {
-        		required: 'Please enter phone number',
-        		number: 'Please enter a valid number'
-        	},
-        	company_name: {
-        		required: 'Please enter company name'
-        	},
-        	company_province: {
-        		required: 'Please select province'
-        	},
-        	company_type: {
-        		required: 'Please select industry type'
-        	}
-        }
-    });*/
-
-    // Register the company
-    /*$('#btn_company_registration').click(function(){
-    	if( $('#frm_company_registration').valid() )
-    	{
-    		$.ajax({
-    			url: $('meta[name="route"]').attr('content') + '/company/registercompany',
-    			method: 'post',
-    			data: {
-    				frmData: $('#frm_company_registration').serialize()
-    			},
-    			headers: {
-			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-			    success: function(response){
-			    	if( response.errCode == 0 )
-			    	{
-			    		alertify.success( response.errMsg );
-
-			    		// Refresh the form
-			    		$('#frm_company_registration')[0].reset();
-			    	}
-			    	else
-			    	{
-			    		alertify.error( response.errMsg );
-			    	}
-			    }
-    		});
-    	}
-    });*/
-
     /* ----- Company profile related functionality ----- */
 
     // Change Password form validation
@@ -356,6 +255,27 @@ $(document).ready(function(){
 					// Availability
                     $('#frm_home_cleaning_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
 
+                    // Show the company entered data, if already available
+                    if( response.discount != null )
+                    {
+                    	$('#frm_home_cleaning_services #discount').val(response.discount).blur();
+                    }
+                    if( response.date_of_working != null )
+                    {
+                    	$('#frm_home_cleaning_services #availability').val(response.date_of_working);
+                    }
+                    $('#frm_home_cleaning_services #comment').val(response.comment);
+
+                    // If the resposne is already there, disable the submit button
+                    if( response.date_of_working != null )
+                    {
+                    	$('#btn_update_home_cleaning_service_request').attr('disabled', true);
+                    }
+                    else
+                    {
+                    	$('#btn_update_home_cleaning_service_request').attr('disabled', false);
+                    }
+
                     // Show the modal
                     $('#modal_home_cleaning_service_request').modal('show');
                 }
@@ -423,6 +343,27 @@ $(document).ready(function(){
                     // Availability
                     $('#frm_cable_internet_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');
 
+                    // Show the company entered data, if already available
+                    if( response.discount != null )
+                    {
+                    	$('#frm_cable_internet_services #discount').val(response.discount).blur();
+                    }
+                    if( response.date_of_working != null )
+                    {
+                    	$('#frm_cable_internet_services #availability').val(response.date_of_working);
+                    }
+                    $('#frm_cable_internet_services #comment').val(response.comment);
+
+                    // If the resposne is already there, disable the submit button
+                    if( response.date_of_working != null )
+                    {
+                    	$('#btn_update_cable_internet_service_request').attr('disabled', true);
+                    }
+                    else
+                    {
+                    	$('#btn_update_cable_internet_service_request').attr('disabled', false);
+                    }
+
                     // Show the modal
                     $('#modal_cable_internet_service_request').modal('show');
                 }
@@ -483,6 +424,27 @@ $(document).ready(function(){
 
                     // Availability
                     $('#frm_tech_concierge #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
+
+                    // Show the company entered data, if already available
+                    if( response.discount != null )
+                    {
+                    	$('#frm_tech_concierge #discount').val(response.discount).blur();
+                    }
+                    if( response.date_of_working != null )
+                    {
+                    	$('#frm_tech_concierge #availability').val(response.date_of_working);
+                    }
+                    $('#frm_tech_concierge #comment').val(response.comment);
+
+                    // If the resposne is already there, disable the submit button
+                    if( response.date_of_working != null )
+                    {
+                    	$('#btn_update_tech_concierge_service_request').attr('disabled', true);
+                    }
+                    else
+                    {
+                    	$('#btn_update_tech_concierge_service_request').attr('disabled', false);
+                    }
 
                     // Show the modal
                     $('#modal_tech_concierge_service_request').modal('show');
@@ -553,6 +515,28 @@ $(document).ready(function(){
 
 					// Distance between two addresses
 					$('#frm_home_moving_companies #distance').text(response.distance);
+
+					// Show the company entered data, if already available
+					if( response.discount != null )
+					{
+						$('#frm_home_moving_companies #discount').val(response.discount).blur();
+					}
+					if( response.date_of_working != null )
+					{
+						$('#frm_home_moving_companies #availability').val(response.date_of_working);
+					}
+					$('#frm_home_moving_companies #comment').val(response.comment);
+					$('#frm_home_moving_companies #insurance').val(response.insurance_amount);
+
+					// If the resposne is already there, disable the submit button
+					if( response.date_of_working != null )
+					{
+						$('#btn_update_moving_service_request').attr('disabled', true);
+					}
+					else
+					{
+						$('#btn_update_moving_service_request').attr('disabled', false);
+					}
 
                     // Show the modal
                     $('#modal_moving_companies_service_request').modal('show');

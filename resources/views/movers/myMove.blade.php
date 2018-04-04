@@ -93,12 +93,62 @@ $(function(){
     // To manage the moving company details job description
     $('.collapse_moving_item_category').click(function(){
 
-    	// Close all
-    	$('.collapse_moving_item_container').slideUp();
-
-    	// Open the current
+    	// If already open, don't do anything
     	let referId = $(this).attr('data-id');
-    	$('#'+referId).slideDown();
+
+    	if( !$('#'+referId).is(':visible') )
+    	{
+    		// Close all
+    		$('.collapse_moving_item_container').slideUp();
+
+    		// Open the current
+    		$('#'+referId).slideDown();
+    	}
+    });
+
+    // To manage the moving detailed job description selection functionality
+    $('.show_selected_item_details').click(function(){
+    	let itemCategoryId = $(this).attr('id');
+
+    	$('#' + itemCategoryId + '.selected_item_details_container').toggle();
+    });
+
+    // To add the selected moving detailed job description to cart
+    $('.add_item_to_selection').click(function(){
+
+    	let movingItemCategoryId= $(this).closest('#moving_item_category_container').find('.moving_item_category').val();
+    	let movingItemCategory 	= $(this).closest('#moving_item_category_container').find('.moving_item_category option:selected').text();
+	    let quantity = $(this).closest('#moving_item_category_container').find('.moving_item_quantity').val();
+
+    	if( movingItemCategoryId != '' && quantity != '' )
+    	{
+    		// Reset the selection
+	    	$(this).closest('#moving_item_category_container').find('.moving_item_quantity').val('');
+	    	$(this).closest('#moving_item_category_container').find('.moving_item_category').val('');
+
+	    	// Create the html and add it
+	    	var html = '<div class="selected_item_list"><input type="hidden" class="form-control" type="number" min="0" name="item_quantity['+ movingItemCategoryId +']" value="'+ quantity +'">';
+	    	html += '<div>'+ movingItemCategory + ' - ' + quantity + '</div></div>';
+
+	    	$(this).closest('#moving_item_category_container').find('.selected_item_details_container').append(html);
+
+	    	var itemCount = $(this).closest('#moving_item_category_container').find('.selected_item_details_container').find('.selected_item_list').length;
+
+	    	$(this).closest('#moving_item_category_container').find('.show_selected_item_details').html('Cart ('+ itemCount +')');
+    	}
+    	else
+    	{
+    		if( movingItemCategoryId == '' )
+    		{
+    			alertify.error('Please select an option');
+    			$(this).closest('#moving_item_category_container').find('.moving_item_category').focus();
+    		}
+    		else if( quantity == '' )
+    		{
+    			alertify.error('Please enter the weight');
+    			$(this).closest('#moving_item_category_container').find('.moving_item_quantity').focus();
+    		}
+    	}
 
     });
 });
@@ -163,11 +213,11 @@ function calculateRoute(from, to) {
 				<div class="user-short-name"> <span>{{ $clientInitials }}</span> </div>
 				<button class="btnbg-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ ucwords( strtolower( $clientName ) ) }}<span class="caret"></span></button>
 				<ul class="dropdown-menu" aria-labelledby="dLabel">
-					<li> <a href="javascript:void(0);"><i class="fa fa-inbox" aria-hidden="true"></i> <span class="text">Inbox</span> </a> </li>
-					<li> <a href="javascript:void(0);"><i class="fa fa-language" aria-hidden="true"></i> <span class="text">English</span> </a> </li>
-					<li> <a href="javascript:void(0);"><i class="fa fa-question-circle-o" aria-hidden="true"></i> <span class="text">Help Centre</span> </a> </li>
-					<li> <a href="javascript:void(0);"><i class="fa fa-key" aria-hidden="true"></i> <span class="text">Privacy</span> </a> </li>
-					<li> <a href="javascript:void(0);"> <i class="fa fa-power-off"></i> <span class="text">Logout</span> </a> </li>
+					<!-- <li> <a href="javascript:void(0);"><i class="fa fa-inbox" aria-hidden="true"></i> <span class="text">Inbox</span> </a> </li> -->
+					<li> <a href="{{ url('/faqs') }}"><i class="fa fa-language" aria-hidden="true"></i> <span class="text">FAQ</span> </a> </li>
+					<li> <a href="{{ url('/helpcenter') }}"><i class="fa fa-question-circle-o" aria-hidden="true"></i> <span class="text">Help Centre</span> </a> </li>
+					<li> <a href="https://termsfeed.com/privacy-policy/78d745deeed0b145a84dbc4b46e88912"><i class="fa fa-key" aria-hidden="true"></i> <span class="text">Privacy</span> </a> </li>
+					<li> <a href="{{ url('/logout') }}"> <i class="fa fa-power-off"></i> <span class="text">Logout</span> </a> </li>
 				</ul>
 			</div>
 		</div>
@@ -407,7 +457,7 @@ function calculateRoute(from, to) {
 						<div>
 							<form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices" autocomplete="off">
 								<div class="col-sm-9 col-md-9 col-lg-9 row">
-									<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office">
+									<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office" value="{{ $clientMovingFromProvince->name }}">
 								</div>
 								<div class="col-sm-3 col-md-3 col-lg-3 row"> 
 									<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
@@ -1030,7 +1080,18 @@ function calculateRoute(from, to) {
       					<div class="col-sm-12">
       						<form name="frm_home_cleaning_services" id="frm_home_cleaning_services">
 						        <div class="panel-group" id="accordion">
-						            <div class="panel panel-default">
+
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_house_type }}" name="home_cleaning_house_from_type" id="home_cleaning_house_from_type">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_floor }}" name="home_cleaning_house_from_level" id="home_cleaning_house_from_level">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_bedroom_count }}" name="home_cleaning_house_from_bedroom_count" id="home_cleaning_house_from_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_property_type }}" name="home_cleaning_house_from_property_type" id="home_cleaning_house_from_property_type">
+
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_house_type }}" name="home_cleaning_house_to_type" id="home_cleaning_house_to_type">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_floor }}" name="home_cleaning_house_to_level" id="home_cleaning_house_to_level">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_bedroom_count }}" name="home_cleaning_house_to_bedroom_count" id="home_cleaning_house_to_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_property_type }}" name="home_cleaning_house_to_property_type" id="home_cleaning_house_to_property_type">
+
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse2">Moving From</a>
@@ -1046,7 +1107,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group panel-Box">
 						                        	<div class="accord-title">Type</div>
-						                        	<select class="form-control" name="home_cleaning_house_from_type" id="moving_house_from_type">
+						                        	<select class="form-control" name="home_cleaning_house_from_type" id="home_cleaning_house_from_type">
 						                        		<option value="">Select</option>
 						                        		<option value="house">House</option>
 						                        		<option value="apartment/flat">Apartment/Flat</option>
@@ -1078,8 +1139,8 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
-						            <div class="panel panel-default">
+						            </div> -->
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse3">Moving To</a>
@@ -1127,7 +1188,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
+						            </div> -->
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
@@ -1166,6 +1227,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                        <div class="form-group panel-Box">
 						                        	<div class="accord-title">How many pets live in the house</div>
+						                        	<label class="form-group accord-radio"><input type="radio" name="home_cleaning_pets_count" value="0">None</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="home_cleaning_pets_count" value="1">1</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="home_cleaning_pets_count" value="2">2</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="home_cleaning_pets_count" value="3">3</label>
@@ -1255,6 +1317,11 @@ function calculateRoute(from, to) {
 							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_baseboard" value="1">Yes</label>
 							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_baseboard" value="0">No</label>
 							                    </div>
+							                    <div class="form-group panel-Box">
+							                        <div class="accord-title">Elevator Available?</div>
+							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_elevator_availability" value="1">Yes</label>
+							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_elevator_availability" value="0">No</label>
+							                    </div>
 						                    </div>
 						                </div>
 						            </div>
@@ -1283,7 +1350,7 @@ function calculateRoute(from, to) {
 						                    			<input type="text" name="availability_time_upto1" id="availability_time_upto1" class="form-control">
 						                    		</div>
 						                    	</div>
-						                    	<div class="add-serv-data">
+						                    	<div class="add-serv-data allDaydaTa">
 						                    		<div class="col-lg-2">Day 2</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date5" id="availability_date5" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -1299,7 +1366,7 @@ function calculateRoute(from, to) {
 						                    			<input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control">
 						                    		</div>
 						                    	</div>
-						                    	<div class="add-serv-data">
+						                    	<div class="add-serv-data allDaydaTa">
 						                    		<div class="col-lg-2">Day 3</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date6" id="availability_date6" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -1319,8 +1386,7 @@ function calculateRoute(from, to) {
 						                </div>
 						            </div>
 									
-									
-						            <div class="panel panel-default">
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion" href="#home_cleaning_services_collapse7">Call Me On</a>
@@ -1334,7 +1400,8 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
+						            </div> -->
+
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
@@ -1348,6 +1415,16 @@ function calculateRoute(from, to) {
 						                </div>
 						            </div>
 						        </div>
+
+						        <div class="clean-error">
+						        	<div><label id="home_cleaning_condition-error" class="error" for="home_cleaning_condition"></label></div>
+						        	<div><label id="home_cleaning_area-error" class="error" for="home_cleaning_area"></label></div>
+						        	<div><label id="home_cleaning_pets_count-error" class="error" for="home_cleaning_pets_count"></label></div>
+						        	<div><label id="home_cleaning_elevator_availability-error" class="error" for="home_cleaning_elevator_availability"></label></div>
+						        	<div><label id="availability_date4-error" class="error" for="availability_date4"></label></div>
+						        	<div><label id="availability_time_from1-error" class="error" for="availability_time_from1"></label></div>
+						        </div>
+
 								<div class="row">
 									<div class="col-sm-12">
 										<button type="submit" class="btn btn-info" name="btn_submit_home_cleaning_query" id="btn_submit_home_cleaning_query">Submit</button>
@@ -1384,7 +1461,18 @@ function calculateRoute(from, to) {
       					<div class="col-sm-12">
       						<form name="frm_home_moving_companies" id="frm_home_moving_companies" autocomplete="off">
 						        <div class="panel-group" id="accordion_home_moving_companies">
-						        	<div class="panel panel-default">
+
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_house_type }}" name="moving_house_from_type" id="moving_house_from_type">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_floor }}" name="moving_house_from_level" id="moving_house_from_level">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_bedroom_count }}" name="moving_house_from_bedroom_count" id="moving_house_from_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_property_type }}" name="moving_house_from_property_type" id="moving_house_from_property_type">
+
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_house_type }}" name="moving_house_to_type" id="moving_house_to_type">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_floor }}" name="moving_house_to_level" id="moving_house_to_level">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_bedroom_count }}" name="moving_house_to_bedroom_count" id="moving_house_to_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_property_type }}" name="moving_house_to_property_type" id="moving_house_to_property_type">
+
+						        	<!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse3">Moving From</a>
@@ -1426,8 +1514,8 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
-						            <div class="panel panel-default">
+						            </div> -->
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse2">Moving To</a>
@@ -1469,7 +1557,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
+						            </div> -->
 						            
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
@@ -1497,33 +1585,45 @@ function calculateRoute(from, to) {
 
 						                        			<!-- Collapse Body -->
 						                        			<div id="collapsable{{ $step }}" class="collapse_moving_item_container" style="display: none;">
-						                        				<div>
-							                        				<div class="col-sm-6 col-md-6 col-lg-6 accord-title"><strong>Item</strong></div>
-							                        				<div class="col-sm-4 col-md-4 col-lg-4 accord-title"><strong>Weight</strong></div>
-							                        				<div class="col-sm-2 col-md-2 col-lg-2 accord-title"><strong>Quantity</strong></div>
-						                        				</div>
-							                        			<?php
-							                        			if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
-							                        			{
-							                        				foreach ($movingItemDetails as $movingItemDetail)
-							                        				{
-							                        					if( $movingItemDetail->moving_item_category_id == $movingItemCategory->id )
-							                        					{
-							                        						// echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name . ' - ' . $movingItemDetail->item_weight .'</option>';
-							                        					?>
-																		<div class="add-serv-data">
-							                        						<div class="col-sm-6 col-md-6 col-lg-6">{{ $movingItemDetail->item_name }}</div>
-							                        						<div class="col-sm-4 col-md-4 col-lg-4">{{ $movingItemDetail->item_weight }}</div>
-							                        						<div class="col-sm-2 col-md-2 col-lg-2">
-							                        							<input class="form-control" type="number" min="0" name="item_quantity[{{ $movingItemDetail->id }}]" value="">
-							                        						</div>
-																		</div>
-							                        					<?php
-							                        					}
-							                        				}
-							                        			}
-							                        			?>
+						                        				
+						                        				<div class="row">
+							                        				<div class="form-group" id="moving_item_category_container">
+							                        					<div class="col-sm-6 col-md-6 col-lg-6">
+								                        					<select class="form-control moving_item_category" name="moving_item_category">
+								                        						<option value="">Select</option>
+									                        					<?php
+									                        					if( isset( $movingItemDetails ) && count( $movingItemDetails ) > 0 )
+									                        					{
+									                        						foreach ($movingItemDetails as $movingItemDetail)
+									                        						{
+									                        							if( $movingItemDetail->moving_item_category_id == $movingItemCategory->id )
+									                        							{
+									                        								echo '<option value="'. $movingItemDetail->id .'">'. $movingItemDetail->item_name . ' - ' . $movingItemDetail->item_weight .'</option>';
+									                        							}
+									                        						}
+									                        					}
+									                        					?>
+								                        					</select>
+							                        					</div>
+							                        					<div class="col-sm-2 col-md-2 col-lg-2">
+							                        						<input class="form-control moving_item_quantity" type="number" style="height: 32px;" min="0" name="moving_item_quantity" value="">
+							                        					</div>
+							                        					<div class="col-sm-2 col-md-2 col-lg-2">
+							                        						<button type="button" id="{{ $movingItemCategory->id }}" class="add_item_to_selection">+</button>
+							                        					</div>
+							                        					<div class="col-sm-2 col-md-2 col-lg-2">
+							                        						<a class="show_selected_item_details" id="{{ $movingItemCategory->id }}" href="javascript:void(0);">Cart (0)</a>
+							                        					</div>
+
+							                        					<div class="clearfix"></div>
+
+							                        					<!-- To hold the selected item details -->
+							                        					<div class="selected_item_details_container col-sm-12 col-md-12 col-lg-12" id="{{ $movingItemCategory->id }}" style="display: none;"></div>
+							                        				</div>
+							                        			</div>
+
 						                        			</div>
+
 						                        		</div>
 						                        		<div class="clearfix"></div>
 						                    		<?php
@@ -1618,13 +1718,11 @@ function calculateRoute(from, to) {
 						                        	<div class="accord-title">Need insurance?</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_need_insurance" value="1">Yes</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_need_insurance" value="0">No</label>
-						                        	<div class="clean-error"><label id="moving_house_need_insurance-error" class="error" for="moving_house_need_insurance"></label></div>
 						                        </div>
 						                        <div class="form-group panel-Box">
 						                        	<div class="accord-title">Call back option?</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_option" value="1">Yes</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_option" value="0">No</label>
-						                        	<div class="clean-error"><label id="moving_house_callback_option-error" class="error" for="moving_house_callback_option"></label></div>
 						                        </div>
 						                        <div class="form-group panel-Box">
 						                        	<div class="accord-title">Call back time?</div>
@@ -1633,11 +1731,11 @@ function calculateRoute(from, to) {
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_time" value="2">Evening</label>
 						                        	<div class="clean-error"><label id="moving_house_callback_time-error" class="error" for="moving_house_callback_time"></label></div>
 						                        </div>
-						                        <div class="form-group panel-Box">
+						                        <!-- <div class="form-group panel-Box">
 						                        	<div class="accord-title">Call me on?</div>
 						                        	<input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">
 						                        	<input type="text" name="moving_house_callback_secondary_no" class="form-control" placeholder="Additional Number">
-						                        </div>
+						                        </div> -->
 
 						                	</div>
 						                </div>
@@ -1661,7 +1759,7 @@ function calculateRoute(from, to) {
 						                    </h4>
 						                </div>
 						                <div id="home_moving_companies_collapse8" class="panel-collapse collapse">
-						                    <div class="panel-body">
+						                    <div class="panel-body allDaydaTa">
 						                        <input type="text" name="moving_house_date" id="moving_house_date" class="form-control datepicker">
 						                    </div>
 						                </div>
@@ -1669,6 +1767,10 @@ function calculateRoute(from, to) {
 						        </div>
 
 						        <div>
+						        	<div class="clean-error">
+						        		<div><label id="moving_house_need_insurance-error" class="error" for="moving_house_need_insurance"></label></div>
+						        		<div><label id="moving_house_callback_option-error" class="error" for="moving_house_callback_option"></label></div>
+						        	</div>
 						        	<button type="submit" class="btn btn-info" name="btn_submit_moving_query" id="btn_submit_moving_query">Submit</button>
 						        </div>
 						    </form>
@@ -1688,8 +1790,6 @@ function calculateRoute(from, to) {
 	    <div class="modal-content">
 	    	<div class="modal-body">
 	      		<div class="close close-btn close_modal" data-activity="tech_concierge" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
-		      	
-
 		      	<div class="row">
 				<div class="model-WrapCont">
 					 <h2>Tech Concierge</h2>
@@ -1702,7 +1802,13 @@ function calculateRoute(from, to) {
 		      			<div class="col-sm-12">
       						<form name="frm_tech_concierge" id="frm_tech_concierge" autocomplete="off">
 						        <div class="panel-group" id="accordion_concierge">
-						            <div class="panel panel-default">
+
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_house_type }}" name="moving_house_to_type" id="moving_house_to_type">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_floor }}" name="moving_house_to_level" id="moving_house_to_level">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_bedroom_count }}" name="moving_house_to_bedroom_count" id="moving_house_to_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_property_type }}" name="moving_house_to_property_type" id="moving_house_to_property_type">
+
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse2">Moving To</a>
@@ -1744,7 +1850,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
+						            </div> -->
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
@@ -1769,9 +1875,6 @@ function calculateRoute(from, to) {
 							                        		}
 							                        	}
 							                        	?>
-						                        	</div>
-						                        	<div>
-						                        		<label id="tech_concierge_places[]-error" class="error" for="tech_concierge_places[]"></label>
 						                        	</div>
 						                        </div>
 						                    </div>
@@ -1802,9 +1905,6 @@ function calculateRoute(from, to) {
 							                        		}
 							                        	}
 							                        	?>
-						                        	</div>
-						                        	<div>
-						                        		<label id="tech_concierge_appliances[]-error" class="error" for="tech_concierge_appliances[]"></label>
 						                        	</div>
 						                        </div>
 						                    </div>
@@ -1865,7 +1965,7 @@ function calculateRoute(from, to) {
 						                    			<input type="text" name="availability_time_upto1" id="availability_time_upto1" class="form-control">
 						                    		</div>
 						                    	</div>
-						                    	<div class="add-serv-data">
+						                    	<div class="add-serv-data allDaydaTa">
 						                    		<div class="col-lg-2">Day 2</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date2" id="availability_date2" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -1881,7 +1981,7 @@ function calculateRoute(from, to) {
 						                    			<input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control">
 						                    		</div>
 						                    	</div>
-						                    	<div class="add-serv-data">
+						                    	<div class="add-serv-data allDaydaTa">
 						                    		<div class="col-lg-2">Day 3</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date3" id="availability_date3" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -1901,8 +2001,7 @@ function calculateRoute(from, to) {
 						                </div>
 						            </div>
 									
-									
-									<div class="panel panel-default">
+									<!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                         <a data-toggle="collapse" data-parent="#accordion_concierge" href="#tech_concierge_collapse7">Call me on</a>
@@ -1916,9 +2015,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
-									
-
+						            </div> -->
 									
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
@@ -1935,6 +2032,13 @@ function calculateRoute(from, to) {
 						        </div>
 
 						        <div>
+						        	<div class="clean-error">
+						        		<div><label id="tech_concierge_places[]-error" class="error" for="tech_concierge_places[]"></label></div>
+						        		<div><label id="tech_concierge_appliances[]-error" class="error" for="tech_concierge_appliances[]"></label></div>
+						        		<div><label id="availability_date1-error" class="error" for="availability_date1"></label></div>
+						        		<div><label id="availability_time_from1-error" class="error" for="availability_time_from1"></label></div>
+						        	</div>
+
 						        	<button type="submit" class="btn btn-info" name="btn_submit_tech_concierge_query" id="btn_submit_tech_concierge_query">Submit</button>
 						        </div>
 						    </form>
@@ -1958,7 +2062,7 @@ function calculateRoute(from, to) {
 
 		      	<div class="row">
 					<div class="model-WrapCont">
-						<h2>Cable & Internet Service</h2>
+						<h2>Cable &amp; Internet Service</h2>
 					 </div>
 		      		<div class="col-sm-12 box-P-100" id="cable_internet_services_step1">
 						
@@ -1970,7 +2074,18 @@ function calculateRoute(from, to) {
 		      			<div class="col-sm-12">
       						<form name="frm_cable_internet_services" id="frm_cable_internet_services">
 						        <div class="panel-group" id="accordion_internet_service">
-						            <div class="panel panel-default">
+
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_house_type }}" name="cable_internet_house_from_type" id="cable_internet_house_from_type">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_floor }}" name="cable_internet_house_from_level" id="cable_internet_house_from_level">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_bedroom_count }}" name="cable_internet_house_from_bedroom_count" id="cable_internet_house_from_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingFromAddress->moving_from_property_type }}" name="cable_internet_from_property_type" id="cable_internet_from_property_type">
+
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_house_type }}" name="cable_internet_house_to_type" id="cable_internet_house_to_type">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_floor }}" name="cable_internet_house_to_level" id="cable_internet_house_to_level">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_bedroom_count }}" name="cable_internet_house_to_bedroom_count" id="cable_internet_house_to_bedroom_count">
+						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_property_type }}" name="cable_internet_house_to_property_type" id="cable_internet_house_to_property_type">		        	
+
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse1">Moving From</a>
@@ -2012,8 +2127,8 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
-						            <div class="panel panel-default">
+						            </div> -->
+						            <!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2">Moving To</a>
@@ -2055,7 +2170,7 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
+						            </div> -->
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
@@ -2095,7 +2210,6 @@ function calculateRoute(from, to) {
 							                        	}
 							                        }
 							                        ?>
-							                        <div class="clean-error"><label id="cable_internet_service_type[]-error" class="error" for="cable_internet_service_type[]"></label></div>
 						                        </div>
 
 						                        <div class="form-group panel-Box">
@@ -2143,6 +2257,11 @@ function calculateRoute(from, to) {
 						                <div id="cable_internet_services_collapse5" class="panel-collapse collapse">
 						                    <div class="panel-body">
 						                    	<div class="add-serv-data allDaydaTa">
+
+						                    		<!-- <input type="" name="" class="datepicker">
+						                    		<input type="" name="" class="datepicker">
+						                    		<input type="" name="" class="datepicker"> -->
+
 						                    		<div class="col-lg-2">Day 1</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date7" id="availability_date7" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -2158,7 +2277,7 @@ function calculateRoute(from, to) {
 						                    			<input type="text" name="availability_time_upto1" id="availability_time_upto1" class="form-control">
 						                    		</div>
 						                    	</div>
-						                    	<div class="add-serv-data">
+						                    	<div class="add-serv-data allDaydaTa">
 						                    		<div class="col-lg-2">Day 2</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date8" id="availability_date8" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -2174,7 +2293,7 @@ function calculateRoute(from, to) {
 						                    			<input type="text" name="availability_time_upto2" id="availability_time_upto2" class="form-control">
 						                    		</div>
 						                    	</div>
-						                    	<div class="add-serv-data">
+						                    	<div class="add-serv-data allDaydaTa">
 						                    		<div class="col-lg-2">Day 3</div>
 						                    		<div class="col-lg-3"><input type="text" name="availability_date9" id="availability_date9" class="form-control datepicker"></div>
 						                    		<div class="col-lg-3">
@@ -2196,7 +2315,7 @@ function calculateRoute(from, to) {
 									
 									
 									<!-- 23-1-2018 start -->
-									<div class="panel panel-default">
+									<!-- <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
 						                        <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#home_cleaning_services_collapse10">Call Me On</a>
@@ -2210,8 +2329,9 @@ function calculateRoute(from, to) {
 						                        </div>
 						                    </div>
 						                </div>
-						            </div>
+						            </div> -->
 									<!-- 23-1-2018 ends -->
+
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
 						                    <h4 class="panel-title">
@@ -2247,6 +2367,11 @@ function calculateRoute(from, to) {
 						        </div>
 								<div class="row">
 									<div class="col-sm-12">
+										<div class="clean-error">
+											<div><label id="cable_internet_service_type[]-error" class="error" for="cable_internet_service_type[]"></label></div>
+											<div><label id="availability_date7-error" class="error" for="availability_date7"></label></div>
+											<div><label id="availability_time_from1-error" class="error" for="availability_time_from1"></label></div>
+										</div>
 										<button type="submit" class="btn btn-info" name="btn_cable_internet_submit_query" id="btn_cable_internet_submit_query">Submit</button>
 									</div>
 								</div>
@@ -2262,6 +2387,24 @@ function calculateRoute(from, to) {
   	</div>
 </div>
 <!-- Cable & Internet Service Modal End -->
+
+<!-- Server Response -->
+<div class="modal fade" id="service_response" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            	Congratulations
+            </div>
+            <div class="modal-body">
+            	Your project request has been submitted, please check your mail after 24 hours.
+            </div>
+            <div class="modal-footer">
+                <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" href="javascript:void(0);" data-dismiss="modal">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Server Response -->
 
 <!-- Share Announcement Modal -->
 <div id="share_announcement_modal" class="modal fade">
@@ -2562,6 +2705,10 @@ function calculateRoute(from, to) {
 	</div>
 </div>
 <!-- To handle the Is this activity helpful thing -->
+
+<div class="center-copypart text-center">
+	<p>Copyright &copy; {{ date('Y') }} Udistro | All Rights Reserved</p>
+</div>
 
 </body>
 </html> 

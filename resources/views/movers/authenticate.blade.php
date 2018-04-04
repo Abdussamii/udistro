@@ -73,6 +73,90 @@ $(function(){
     width: 100%;
     font-weight: normal;
 }
+html, body {
+	height: 100%;
+	min-height: 100%;
+}
+.backColor {
+	background: #f7f7f7;
+	padding: 20px 0;
+	height: 100%;
+	min-height: 100%;
+}
+.backColor {
+	background: #f7f7f7;
+	padding: 20px 0;
+}
+
+.backColor .classlogo_part {
+	margin-bottom: 20px;
+	text-align: center;
+}
+.field-section {
+	background: #fff;
+	border:1px solid #e2e2e2;
+	padding: 20px;
+}
+
+.field-section h1 {
+	border-bottom:1px solid #e2e2e2;
+	padding-bottom: 15px;
+	text-align: center;
+	color: #44bae6;
+	margin-top: 0;
+	font-size: 30px;
+}
+.field-section .form-control {
+	box-shadow: none;
+	border-radius: 0;
+	border: 1px solid #e2e2e2;
+	height: 45px;
+	line-height: 45px;
+}
+.field-section .form-group label {
+	color:#a09fa4;
+}
+
+.field-section label.normal {
+	color:#2c80bc;
+	font-weight: normal;
+}
+
+.field-section .btn {
+	border-radius: 0;
+	font-weight: 600;
+	font-size: 16px;
+	padding: 15px 0;
+	background: #44bae6;
+	border:1px solid #44bae6;
+}
+.field-section .btn:hover,
+.btn-primary:focus,
+.btn-primary:active:focus		{
+	background-color: #3393bd;
+}
+
+.backColor .text-center {
+	margin-top:20px;
+}
+.backColor .text-center a {
+	font-size: 16px;
+	color: #44bae6;
+}
+.center-copypart {
+	margin-top:30px;
+	color: #a9a9a9;
+	font-size: 12px;
+}
+#frm_agent_login {
+	margin: 30px 0;
+}
+#frm_agent_login .form-group {
+	margin-bottom: 20px;
+}
+.error {
+	color: red !important;
+}
 </style>
 
 <script type="text/javascript">
@@ -87,12 +171,66 @@ $(document).ready(function(){
 			mobile_no: {
 				required: true,
 				number: true
+			},
+			moving_from_house_type: {
+				required: true
+			},
+			moving_from_house_level: {
+				required: true
+			},
+			moving_from_house_bedroom_count: {
+				required: true
+			},
+			moving_from_property_type: {
+				required: true
+			},
+			moving_from_house_type: {
+				required: true
+			},
+			moving_to_house_level: {
+				required: true
+			},
+			moving_to_house_bedroom_count: {
+				required: true
+			},
+			moving_to_property_type: {
+				required: true
+			},
+			terms: {
+				required: true
 			}
 		},
 		messages: {
 			mobile_no: {
 				required: 'Please enter your mobile number',
 				number: 'Please enter a valid mobile number'
+			},
+			moving_from_house_type: {
+				required: 'Please select an option'
+			},
+			moving_from_house_level: {
+				required: 'Please select floor level'
+			},
+			moving_from_house_bedroom_count: {
+				required: 'Please select number of bedroom'
+			},
+			moving_from_property_type: {
+				required: 'Please select property type'
+			},
+			moving_from_house_type: {
+				required: 'Please select an option'
+			},
+			moving_to_house_level: {
+				required: 'Please select floor level'
+			},
+			moving_to_house_bedroom_count: {
+				required: 'Please select number of bedroom'
+			},
+			moving_to_property_type: {
+				required: 'Please select property type'
+			},
+			terms: {
+				required: 'Please select the Terms & Condition'
 			}
 		}
 	});
@@ -100,17 +238,11 @@ $(document).ready(function(){
 	$('#btn_authenticate_user').click(function(){
 		if( $('#frm_authenticate_user').valid() )
 		{
-			let mobileNo 	= $('#mobile_no').val();
-			let clientId 	= $('#client_id').val();
-			let invitationId= $('#invitation_id').val();
-
     		$.ajax({
     			url: $('meta[name="route"]').attr('content') + '/movers/checkuserauthentication',
     			method: 'post',
     			data: {
-    				mobileNo: mobileNo,
-    				clientId: clientId,
-    				invitationId: invitationId
+    				frmData: $('#frm_authenticate_user').serialize()
     			},
     			headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -135,46 +267,126 @@ $(document).ready(function(){
 	});
 });
 </script>
-<style>
-	form#frm_authenticate_user {
-	    text-align: center;
-	    margin: auto;
-	    position: absolute;
-	    left: 0;
-	    right: 0;
-	    top: 10%;
-	    width: 500px;
-	    height: 370px;
-	    background: #fff;
-	    border-radius: 4px;
-	    padding: 20px;
-	}
-	.mover-authentication {
-	    display: inline-block;
-	    width: 100%;
-	    height: 100%;
-	    background: #eee;
-	    position: fixed;
-	}
-	.classlogo_part {
-	    padding-bottom: 20px;
-	    border-bottom: 1px solid #eee;
-	    margin-bottom: 20px;
-	}
-	.ma_h1 {
-	    background: #eee;
-	    padding: 10px;
-	    font-size: 25px;
-	    margin-bottom: 20px;
-	    font-weight: bolder;
-	    color: #000;
-	}
-</style>
+
 </head>
 
 <body>
 
-	<div class="mover-authentication">
+	<div class="backColor">
+    	<div class="container">
+    		<div class="">
+    			<div class="classlogo_part">
+    				<img src="{{ url('images/udistro-logo.png') }}" alt="">
+    			</div>
+    			<div class="field-section">
+    				<h1>Mover Autentication</h1>
+			        <form name="frm_authenticate_user" id="frm_authenticate_user" autocomplete="off">
+			            <div class="form-group">
+							<label class="form-group">Enter your mobile number</label>
+							<input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Mobile number">
+							<input type="hidden" name="client_id" id="client_id" class="form-control" value="{{ $clientId }}">
+							<input type="hidden" name="invitation_id" id="invitation_id" class="form-control" value="{{ $invitationId }}">
+						</div>
+
+						<fieldset>
+						  	<h1>Moving From Details</h1>
+						  	<div class="row">
+		                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                        	<div class="">Type</div>
+		                        	<select class="form-control" name="moving_from_house_type" id="moving_from_house_type">
+		                        		<option value="">Select</option>
+		                        		<option value="house">House</option>
+		                        		<option value="apartment/flat">Apartment/Flat</option>
+		                        		<option value="condo">Condo</option>
+		                        		<option value="studio">Studio</option>
+		                        	</select>
+		                        </div>
+		                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                        	<div class="">Floor Level</div>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_level" value="1">1</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_level" value="2">2</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_level" value="3">3</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_level" value="4+">4 or more</label>
+		                        	<div class="clean-error"><label id="moving_from_house_level-error" class="error" for="moving_from_house_level"></label></div>
+		                        </div>
+		                    </div>
+		                    <div class="row">
+		                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                        	<div class="">No of bedrooms</div>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_bedroom_count" value="1">1</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_bedroom_count" value="2">2</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_bedroom_count" value="3">3</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_house_bedroom_count" value="4+">4 or more</label>
+		                        	<div class="clean-error"><label id="moving_from_house_bedroom_count-error" class="error" for="moving_from_house_bedroom_count"></label></div>
+		                        </div>
+		                        <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                        	<div class="">Did you own or rent this property</div>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_property_type" value="own">Own</label>
+		                        	<label class="form-group accord-radio"><input type="radio" name="moving_from_property_type" value="rent">Rent</label>
+		                        	<div class="clean-error"><label id="moving_from_property_type-error" class="error" for="moving_from_property_type"></label></div>
+		                        </div>
+		                    </div>
+						 </fieldset>
+
+		 				<fieldset>
+		 				  	<h1>Moving To Details</h1>
+		 				  	<div class="row">
+		                         <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                         	<div class="">Type</div>
+		                         	<select class="form-control" name="moving_to_house_type" id="moving_to_house_type">
+		                         		<option value="">Select</option>
+		                         		<option value="house">House</option>
+		                         		<option value="apartment/flat">Apartment/Flat</option>
+		                         		<option value="condo">Condo</option>
+		                         		<option value="studio">Studio</option>
+		                         	</select>
+		                         </div>
+		                         <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                         	<div class="">Floor Level</div>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_level" value="1">1</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_level" value="2">2</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_level" value="3">3</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_level" value="4+">4 or more</label>
+		                         	<div class="clean-error"><label id="moving_to_house_level-error" class="error" for="moving_to_house_level"></label></div>
+		                         </div>
+		                     </div>
+		                     <div class="row">
+		                         <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                         	<div class="">No of bedrooms</div>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_bedroom_count" value="1">1</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_bedroom_count" value="2">2</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_bedroom_count" value="3">3</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_house_bedroom_count" value="4+">4 or more</label>
+		                         	<div class="clean-error"><label id="moving_to_house_bedroom_count-error" class="error" for="moving_to_house_bedroom_count"></label></div>
+		                         </div>
+		                         <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                         	<div class="">Did you own or rent this property</div>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_property_type" value="own">Own</label>
+		                         	<label class="form-group accord-radio"><input type="radio" name="moving_to_property_type" value="rent">Rent</label>
+		                         	<div class="clean-error"><label id="moving_to_property_type-error" class="error" for="moving_to_property_type"></label></div>
+		                         </div>
+		                     </div>
+		                     <div class="row">
+		                     	<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                     		<label>
+		                     			<input type="checkbox" name="terms" id="terms"> <a href="https://termsfeed.com/terms-conditions/ecb999172c16298afdddc8eb94b9a21b">Terms &amp; Condition</a>
+		                     		</label>
+		                     		<div><label id="terms-error" class="error" for="terms"></label></div>
+		                     	</div>
+		                     </div>
+		 				 </fieldset>
+			            
+			            <button type="submit" class="btn btn-primary btn-block" id="btn_authenticate_user" name="btn_authenticate_user">Submit</button>
+			        </form>
+    			</div>
+    			<div class="center-copypart text-center">
+    				<p>Copyright &copy; {{ date('Y') }} Udistro | All Rights Reserved.</p>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+	<!-- <div class="mover-authentication">
 		<form name="frm_authenticate_user" id="frm_authenticate_user" autocomplete="off">
 			<div class="classlogo_part">
 				<img src="{{ url('images/udistro-logo.png') }}" alt="">
@@ -188,7 +400,7 @@ $(document).ready(function(){
 			</div>
 			<button type="submit" id="btn_authenticate_user" name="btn_authenticate_user" class="btn btn-primary">Submit</button>
 		</form>
-	</div>
+	</div> -->
 
 </body>
 </html> 

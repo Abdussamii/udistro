@@ -70,6 +70,11 @@
     	key: "kp88-mx67-ff25-xd59"
     },
     control = new pca.Address(fields2, options2);
+
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+
     </script>
 
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display: block;">
@@ -134,7 +139,7 @@
 											<input type="text" class="form-control" id="moving_from_address2" name="moving_from_address2" placeholder="Enter The Address You Are Moving From">
 										</div>
 									</div>
-									<div class="form-group changeBr">
+									<div class="form-group changeBr" style="display: none;">
 										<div class="col-sm-6">          
 											<select name="moving_from_province" id="moving_from_province" class="form-control">
 												<option value="">Select Moving From Province</option>
@@ -201,7 +206,7 @@
 										</div>
 									</div>
 
-									<div class="form-group changeBr">
+									<div class="form-group changeBr" style="display: none;">
 										<div class="col-sm-6">          
 											<select name="moving_to_province" id="moving_to_province" class="form-control changeBr">
 												<option value="">Select Moving To Province</option>
@@ -255,9 +260,12 @@
 										</div>
 									</div>
 									<div class="form-group inputBOXs">
-										<div class="col-sm-12">
+										<div class="col-sm-11">
 											<i class="fa fa-calendar" aria-hidden="true"></i>
 											<input type="text" class="form-control datepicker" id="moving_date" name="moving_date" placeholder="Enter The Date You Are Moving" readonly="true">
+										</div>
+										<div class="col-sm-1">
+											<i class="fa fa-question-circle" data-toggle="tooltip" title="You can ask for invitation at least 15 days before you move"></i>
 										</div>
 									</div>
 									<div class="form-group"> 

@@ -169,7 +169,7 @@
 					    		alertify.success( response.errMsg );
 
 					    		setTimeout(function(){
-					    			window.location.href = $('meta[name="route"]').attr('content');
+					    			window.location.href = response.url;
 					    		}, 2000);
 					    	}
 					    	else
@@ -208,12 +208,9 @@
 				            <button type="submit" class="btn btn-primary btn-block" id="btn_forgot_password" name="btn_forgot_password">Reset Password</button>
 				        </form>
 	    			</div>
-	    			<div class="text-center">
-	    				<a href="{{ url('/forgotpassword') }}">Forgot your password?</a>
-	    			</div>
 	    			<div class="center-copypart text-center">
-	    				<p>Copyright &copy; 2018 Udistro | All Rights Reserved.</p>
-	    			</div>
+        				<p>Copyright &copy; {{ date('Y') }} Udistro | All Rights Reserved.</p>
+        			</div>
 	    		</div>
 	    	</div>
 	    </div>

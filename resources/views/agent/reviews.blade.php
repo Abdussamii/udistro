@@ -3,6 +3,30 @@
 
 @section('content')
 
+		<style>
+		/* To resolve the google map autocomplete issue */
+	    .pac-container {
+	        z-index: 10000 !important;
+	    }
+	    .loader-wrapper {
+	    	position: fixed;
+	    	width: 100%;
+	    	height: 100%;
+	    	background: #fff;
+	    	z-index: 999;
+	    }
+	    .preload {
+	        position: absolute;
+	        top: 50%;
+	        left: 40%;
+	        transform: translate(-50%, -40%);
+	        -webkit-transform: translate(-50%, -40%);
+	    }
+		</style>
+		<div class="loader-wrapper">
+			<div class="preload"><!-- <img src="http://i.imgur.com/KUJoe.gif"> -->Loading...</div>
+		</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Review Dashboard</h1>
@@ -19,9 +43,9 @@
 						<td>First Name</td>
 						<td>Last Name</td>
 						<td>Email</td>
-						<td>Rating</td>
 						<td>Comment</td>
-						<td>Action</td>
+						<td>Is helpful</td>
+						<td>Rating</td>
 					</tr>
 				</thead>
 			</table>

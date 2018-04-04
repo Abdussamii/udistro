@@ -52,8 +52,8 @@
         <div class="col-lg-12 profile-box">
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#profile">Information</a></li>
-            <li><a data-toggle="tab" href="#message">Brand</a></li>
-            <li><a data-toggle="tab" href="#company_logo">Company Logo</a></li>
+            <li><a data-toggle="tab" href="#message">Brand Logo</a></li>
+            <!-- <li><a data-toggle="tab" href="#company_logo">Company Logo</a></li> -->
             <!-- <li><a data-toggle="tab" href="#template">Template</a></li> -->
           </ul>
           <div class="tab-content">
@@ -317,37 +317,69 @@
 
           <div id="message" class="tab-pane fade">
               <div class="profile-wrap">
-                  <form class="form-horizontal" role="form" name="frm_agent_image" id="frm_agent_image">
-                    <div class="profile-box text-center"> 
-                      <div class="profile-pic-box">
-                        <?php
-                    if( $agentDetails->image != '' )
-                    {
-                      echo '<img src="'. url('/images/agents/' . $agentDetails->image) .'" id="agent_profile_image" height="" width="" class="avatar img-circle" alt="avatar">';
-                    }
-                    else
-                    {
-                      echo '<img src="'. url('/images/no_image.jpg') .'" id="agent_profile_image" height="" width="" class="avatar img-circle" alt="avatar">';
-                    }
-                    ?>
-                    <div class="edit-profile-pic">
-                      <label for="agent_upload_image"><i class="fa fa-pencil" aria-hidden="true"></i></label>
-                        <input type="file" id="agent_upload_image" name="agent_upload_image" accept="image/*" style="display: none">
-                    </div>
-                  </div>
-                      <div class="top-buffer"> 
-                        <!-- To upload image -->
-                    <div class="sub-can-box">
-                    	<div><label id="agent_upload_image-error" class="error" for="agent_upload_image"></label></div>
-                      	<button type="submit" class="btn btn-primary" name="btn_update_agent_image" id="btn_update_agent_image">Save</button>
-                    </div>
-                      </div>
-                    </div>
-                  </form>
+              		<div style="text-align: center;"><h4>Profile Picture</h4></div>
+					<form class="form-horizontal" role="form" name="frm_agent_image" id="frm_agent_image">
+						<div class="profile-box text-center"> 
+						  <div class="profile-pic-box">
+						    <?php
+						if( $agentDetails->image != '' )
+						{
+						  echo '<img src="'. url('/images/agents/' . $agentDetails->image) .'" id="agent_profile_image" height="" width="" class="avatar img-circle" alt="avatar">';
+						}
+						else
+						{
+						  echo '<img src="'. url('/images/no_image.jpg') .'" id="agent_profile_image" height="" width="" class="avatar img-circle" alt="avatar">';
+						}
+						?>
+						<div class="edit-profile-pic">
+						  <label for="agent_upload_image"><i class="fa fa-pencil" aria-hidden="true"></i></label>
+						    <input type="file" id="agent_upload_image" name="agent_upload_image" accept="image/*" style="display: none">
+						</div>
+						</div>
+						  <div class="top-buffer"> 
+						    <!-- To upload image -->
+						<div class="sub-can-box">
+							<div><label id="agent_upload_image-error" class="error" for="agent_upload_image"></label></div>
+						  	<button type="submit" class="btn btn-primary" name="btn_update_agent_image" id="btn_update_agent_image">Save</button>
+						</div>
+						  </div>
+						</div>
+					</form>
+              </div>
+
+              <div class="profile-wrap">
+              	<div style="text-align: center;"><h4>Company Logo</h4></div>
+					<form class="form-horizontal" role="form" name="frm_company_image" id="frm_company_image">
+						<div class="profile-box text-center"> 
+						  <div class="profile-pic-box">
+						    <?php
+						      if( $companyDetails->image != '' )
+						      {
+						        echo '<img src="'. url('/images/company/' . $companyDetails->image) .'" id="agent_profile_image" height="" width="" class="avatar alt="avatar">';
+						      }
+						      else
+						      {
+						        echo '<img src="'. url('/images/no_image.jpg') .'" id="agent_profile_image" height="" width="" class="avatar alt="avatar">';
+						      }
+						      ?>
+						      <div class="edit-profile-pic">
+						        <label for="company_upload_image"><i class="fa fa-pencil" aria-hidden="true"></i></label>
+						          <input type="file" id="company_upload_image" name="company_upload_image" accept="image/*" style="display: none">
+						      </div>
+							</div>
+						  <div class="top-buffer"> 
+						  <!-- To upload image -->
+						    <div class="sub-can-box">
+						    	<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
+						        <button type="submit" class="btn btn-primary" name="btn_update_company_image" id="btn_update_company_image">Save</button>
+						    </div>
+						  </div>
+						</div>
+					</form>
               </div>
             </div>
 
-            <div id="company_logo" class="tab-pane fade">
+            <!-- <div id="company_logo" class="tab-pane fade">
                 <div class="profile-wrap">
                     <form class="form-horizontal" role="form" name="frm_company_image" id="frm_company_image">
                       <div class="profile-box text-center"> 
@@ -368,16 +400,15 @@
 	                      </div>
                     	</div>
                         <div class="top-buffer"> 
-                        <!-- To upload image -->
-	                    <div class="sub-can-box">
-	                    	<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
-	                        <button type="submit" class="btn btn-primary" name="btn_update_company_image" id="btn_update_company_image">Save</button>
-	                    </div>
+		                    <div class="sub-can-box">
+		                    	<div><label id="company_upload_image-error" class="error" for="company_upload_image"></label></div>
+		                        <button type="submit" class="btn btn-primary" name="btn_update_company_image" id="btn_update_company_image">Save</button>
+		                    </div>
                         </div>
                       </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
 
             <!-- <div id="template" class="tab-pane fade">
               <div class="email-template-wrap">

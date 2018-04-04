@@ -192,13 +192,13 @@
 									<input id="street-address" name="company_address1" type="text" class="form-control" placeholder="Street address" value="" />
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="display: none;">
 								<label class="control-label">Address Line 2:</label>
 								<div class="input-line">
 									<input id="street-address2" name="company_address2" type="text" class="form-control" placeholder="Street address" value="" />
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="display: none;">
 								<label class="control-label">City: <span class="error">*</span></label>
 								<div class="input-line">
 									<select name="company_city" id="company_city" class="form-control">
@@ -216,7 +216,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="display: none;">
 								<label class="control-label">Province: <span class="error">*</span></label>
 								<div class="input-line">
 									<select name="company_province" id="company_province" class="form-control">
@@ -234,13 +234,13 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="display: none;">
 								<label class="control-label">Postalcode: <span class="error">*</span></label>
 								<div class="input-line">
 									<input id="postcode" name="company_postalcode" type="text" class="form-control" placeholder="Zip/Postcode" value="" />
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="display: none;">
 								<label class="control-label">Country: <span class="error">*</span></label>
 								<div class="input-line">
 									<select name="company_country" id="company_country" class="form-control">
@@ -334,13 +334,13 @@
 											<input id="street-address_edit" name="company_address1_edit" type="text" class="form-control" placeholder="Street address" value="" />
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" style="display: none;">
 										<label class="control-label">Address Line 2:</label>
 										<div class="input-line">
 											<input id="street-address2_edit" name="company_address2_edit" type="text" class="form-control" placeholder="Street address" value=""/>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" style="display: none;">
 										<label class="control-label">City: <span class="error">*</span></label>
 										<div class="input-line">
 											<select name="company_city_edit" id="company_city_edit" class="form-control">
@@ -358,7 +358,7 @@
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" style="display: none;">
 										<label class="control-label">Province: <span class="error">*</span></label>
 										<div class="input-line">
 											<select name="company_province_edit" id="company_province_edit" class="form-control">
@@ -376,13 +376,13 @@
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" style="display: none;">
 										<label class="control-label">Postalcode: <span class="error">*</span></label>
 										<div class="input-line">
 											<input id="postcode_edit" name="company_postalcode_edit" type="text" class="form-control" placeholder="Zip/Postcode" value="" />
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group" style="display: none;">
 										<label class="control-label">Country: <span class="error">*</span></label>
 										<div class="input-line">
 											<select name="company_country_edit" id="company_country_edit" class="form-control">

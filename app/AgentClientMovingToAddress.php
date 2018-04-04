@@ -12,7 +12,7 @@ class AgentClientMovingToAddress extends Model
      * @var array
      */
     protected $fillable = [
-        'agent_client_id', 'address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id', 'moving_date', 'status', 'created_by'
+        'agent_client_id', 'address1', 'address2', 'province_id', 'city_id', 'postal_code', 'country_id', 'moving_to_house_type', 'moving_to_floor', 'moving_to_bedroom_count', 'moving_to_property_type', 'moving_date', 'status', 'created_by'
     ];
 
     public $timestamps = true;

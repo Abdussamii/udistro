@@ -211,14 +211,14 @@
 	 <div class="container-fluid">
 	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
-	   	<li>
+	   	<!-- <li>
 		   	<a href="{{ url('/agent/home') }}">
 		    	<button type="button" class="btn top-btn1"> I’m a Real-Estate Agent</button>
 		    </a>
-		</li>
+		</li> -->
 	   <li>
-	   		<a href="{{ url('/company/home') }}">
-	    		<button type="button" class="btn top-btn1"> I'm a Local Business</button>
+	   		<a href="{{ url('/') }}">
+	    		<button type="button" class="btn top-btn1"> Go to home page</button>
 	    	</a>
 		</li>
 	  </ul>
@@ -1049,8 +1049,8 @@
 						    <input type="text" name="shipping" value="" /> -->
 						    <input type="text" name="invoice" id="invoice" value="" />
 						    <input type="text" name="amount" id="amount" value="" />
-						    <input type="text" name="return" value="{{ url('/paypal/success') }}"/>		<!-- http://localhost/paypal_integration_php/success.php -->
-						    <input type="text" name="cancel_return" value="{{ url('/paypal/cancel') }}" />		<!-- http://localhost/paypal_integration_php/cancel.php -->
+						    <input type="text" name="return" value="{{ Request::fullUrl() }}"/>		<!-- http://localhost/paypal_integration_php/success.php -->
+						    <input type="text" name="cancel_return" value="{{ Request::fullUrl() }}" />		<!-- http://localhost/paypal_integration_php/cancel.php -->
 						</div>
 
 					    <!-- Where to send the PayPal IPN to. -->

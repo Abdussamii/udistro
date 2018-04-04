@@ -5,7 +5,7 @@
 	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" style="display:none;">
 	 <div class="container-fluid">
-	  <div class="navbar-header logo"> <a href="#"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
+	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
 	  <ul class="nav navbar-nav navbar-right navbar-top-link">
 	   <li><a href="{{ url('/agent/home') }}">
 	    <button type="button" class="btn top-btn1"> I’m a Real-Estate Agent </button>

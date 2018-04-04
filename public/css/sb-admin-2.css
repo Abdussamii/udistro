@@ -6,6 +6,9 @@
  
 body { background-color: #f8f8f8; font-family: 'Open Sans', sans-serif; }
 /***6-12-2017***/
+#page-wrapper {
+	min-height: auto !important;
+}
 .dash-logo {
   height: 70px;
   padding-left: 15px;
@@ -76,7 +79,7 @@ body { background-color: #f8f8f8; font-family: 'Open Sans', sans-serif; }
 	text-decoration: none;
 	color: #fff;
 	font-size: 16px;
-	padding: 10px 20px 10px 30px;
+	padding: 10px 20px 10px 30px !important;
 }
 .sidebar ul li a i {
 	position: absolute;

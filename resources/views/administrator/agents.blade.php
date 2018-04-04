@@ -184,7 +184,7 @@
 								<input name="agent_address1" id="agent_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 							</div>
 
-							<div id="add_agent_address">
+							<div id="add_agent_address" style="display: none;">
 								<div class="form-group">
 									<label for="agent_address2">Address 2</label>
 									<input name="agent_address2" id="agent_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">
@@ -326,7 +326,7 @@
 								<input name="agent_edit_address1" id="agent_edit_address1" class="form-control" value="" placeholder="Enter address" autocomplete="off" type="text">
 							</div>
 
-							<div id="add_agent_address">
+							<div id="add_agent_address" style="display: none;">
 								<div class="form-group">
 									<label for="agent_address">Address 2</label>
 									<input name="agent_edit_address2" id="agent_edit_address2" class="form-control" value="" placeholder="Enter address line 2" autocomplete="off" type="text">

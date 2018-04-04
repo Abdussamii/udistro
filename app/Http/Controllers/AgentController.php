@@ -750,10 +750,9 @@ class AgentController extends Controller
         $arr = array(
             0 => 'id',
             1 => 'fname',
-            2 => 'oname',
-            3 => 'lname',
-            6 => 'possession_date',
-            7 => 'status'
+            2 => 'lname',
+            5 => 'possession_date',
+            6 => 'status'
         );
 
         // Map the sorting column index to the column name
@@ -797,14 +796,13 @@ class AgentController extends Controller
             	$response['aaData'][$k] = array(
                     0 => $agentClient->id,
                     1 => ucfirst( strtolower( $agentClient->fname ) ),
-                    2 => ucfirst( strtolower( $agentClient->oname ) ),
-                    3 => ucfirst( strtolower( $agentClient->lname ) ),
-                    4 => $agentClient->email,
-                    5 => $agentClient->contact_number,
-                    6 => '<span '. $style .'>' . $possessionDate . '</span>',
-                    7 => Helper::getStatusText($agentClient->status),
-                    8 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>',
-                    9 => '<a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+                    2 => ucfirst( strtolower( $agentClient->lname ) ),
+                    3 => $agentClient->email,
+                    4 => $agentClient->contact_number,
+                    5 => '<span '. $style .'>' . $possessionDate . '</span>',
+                    6 => Helper::getStatusText($agentClient->status),
+                    7 => '<a href="javascript:void(0);" class="agent_invite_client" id="'. $agentClient->id .'" data-toggle="tooltip" title=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>',
+                    8 => '<a href="javascript:void(0);" data-toggle="tooltip" title="" id="'. $agentClient->id .'" class="edit_client"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
             }
@@ -854,11 +852,10 @@ class AgentController extends Controller
             	$response['aaData'][$k] = array(
                     0 => $k + 1,
                     1 => ucfirst( strtolower( $agentClient->fname ) ),
-                    2 => ucfirst( strtolower( $agentClient->oname ) ),
-                    3 => ucfirst( strtolower( $agentClient->lname ) ),
-                    4 => $agentClient->email,
-                    5 => $agentClient->contact_number,
-                    6 => Helper::getStatusText($agentClient->status)
+                    2 => ucfirst( strtolower( $agentClient->lname ) ),
+                    3 => $agentClient->email,
+                    4 => $agentClient->contact_number,
+                    5 => Helper::getStatusText($agentClient->status)
                 );
                 $k++;
             }
@@ -2719,7 +2716,7 @@ class AgentController extends Controller
         			->orderBy($sortBy, $sortType)
                     ->limit($length)
                     ->offset($start)
-                    ->select('t1.id', 't2.fname', 't2.lname', 't2.email', 't1.rating', 't1.comment')
+                    ->select('t1.id', 't2.fname', 't2.lname', 't2.email', 't1.rating', 't1.comment', 't1.helpful')
                     ->get();
 
         $iTotal = DB::table('agent_client_ratings as t1')
@@ -2739,16 +2736,22 @@ class AgentController extends Controller
         {
             foreach ($reviews as $review)
             {
+            	$rating = '';
+            	for($i=1; $i <= $review->rating; $i++)
+            	{
+            		$rating .= '<i class="fa fa-star-o"></i> ';
+            	}
+
             	$response['aaData'][$k] = array(
                     0 => $review->id,
                     1 => ucfirst( strtolower( $review->fname ) ),
                     2 => ucfirst( strtolower( $review->lname ) ),
                     3 => $review->email,
-                    4 => $review->rating,
-                    5 => $review->comment,
-                    6 => '<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a>
-		      			<a href="http://twitter.com/share?text=udistro&amp;url=https://www.udistro.ca/&amp;hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a>
-		      			<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.udistro.ca/&amp;title=udistro&amp;summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a>'
+                    4 => $review->comment,
+                    5 => ( $review->helpful ) ? 'Yes' : 'No',
+                    6 => $rating,
+                    
+                    //6 => '<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.udistro.ca/" target="_blank"><i class="fa fa-facebook-square"></i></a><a href="http://twitter.com/share?text=udistro&amp;url=https://www.udistro.ca/&amp;hashtags=udistro" target="_blank"><i class="fa fa fa-twitter-square"></i></a><a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.udistro.ca/&amp;title=udistro&amp;summary=udistro" target="_blank"><i class="fa fa fa-linkedin-square"></i></a>'
                 );
                 $k++;
             }

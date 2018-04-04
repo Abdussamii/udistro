@@ -1278,21 +1278,21 @@ class CompanyController extends Controller
                 $steamingServices = DB::table('home_cleaning_steaming_service_requests as t1')
                 					->join('home_cleaning_steaming_services as t2', 't1.steaming_service_id', '=', 't2.id')
                 					->where(['t1.service_request_id' => $homeServiceId])
-                					->select('t1.id as service_request_id', 't2.id as service_id', 't2.steaming_service_for')
+                					->select('t1.id as service_request_id', 't2.id as service_id', 't2.steaming_service_for', 't1.amount', 't1.hour_to_complete')
                 					->get();
 
                 // Get the selected Other places to clean by mover
                	$otherPlacesToClean = DB::table('home_cleaning_other_place_service_requests as t1')
                 					->join('home_cleaning_other_places as t2', 't1.other_place_id', '=', 't2.id')
                 					->where(['t1.service_request_id' => $homeServiceId])
-                					->select('t1.id as service_request_id', 't2.id as places_id', 't2.other_places')
+                					->select('t1.id as service_request_id', 't2.id as places_id', 't2.other_places', 't1.amount', 't1.hour_to_complete')
                 					->get();
 
                 // Get the Additional Services selected by mover
                	$additionalServices = DB::table('home_cleaning_additional_service_requests as t1')
                 					->join('home_cleaning_additional_services as t2', 't1.additional_request_id', '=', 't2.id')
                 					->where(['t1.service_request_id' => $homeServiceId])
-                					->select('t1.id as service_request_id', 't2.id as additional_service_id', 't1.quantity', 't2.additional_service')
+                					->select('t1.id as service_request_id', 't2.id as additional_service_id', 't1.quantity', 't2.additional_service', 't1.amount', 't1.hour_to_complete')
                 					->get();
 
                 $response['moving_from_address']= $clientMovingFromAddress->address1 . ', ' . $clientMovingFromAddress->city . ', ' . $clientMovingFromAddress->province . ', ' . $clientMovingFromAddress->country;
@@ -1309,8 +1309,8 @@ class CompanyController extends Controller
                 		$html .= '<td>Steaming carpet cleaning</td>';
                 		$html .= '<td>'. ucwords( strtolower( $steamingService->steaming_service_for ) ) .'</td>';
                 		$html .= '<td>NA</td>';
-                		$html .= '<td><input name="steaming_service_time_estimate['. $steamingService->service_id .']" class="form-control steaming_service_time_estimate" style="width: 100px;"></td>';
-                		$html .= '<td><input name="steaming_service_budget_estimate['. $steamingService->service_id .']" class="form-control steaming_service_budget_estimate home_cleaning_amount" style="width: 100px;"></td>';
+                		$html .= '<td><input name="steaming_service_time_estimate['. $steamingService->service_id .']" class="form-control steaming_service_time_estimate" style="width: 100px;" value="'. $steamingService->hour_to_complete .'"></td>';
+                		$html .= '<td><input name="steaming_service_budget_estimate['. $steamingService->service_id .']" class="form-control steaming_service_budget_estimate home_cleaning_amount" style="width: 100px;" value="'. $steamingService->amount .'"></td>';
 
                 		$html .= '</tr>';
                 	}
@@ -1325,8 +1325,8 @@ class CompanyController extends Controller
                 		$html .= '<td>Other places to clean</td>';
                 		$html .= '<td>'. ucwords( strtolower( $otherPlace->other_places ) ) .'</td>';
                 		$html .= '<td>NA</td>';
-                		$html .= '<td><input name="other_place_to_clean_time_estimate['. $otherPlace->places_id .']" class="form-control other_place_to_clean_time_estimate" style="width: 100px;"></td>';
-                		$html .= '<td><input name="other_place_to_clean_budget_estimate['. $otherPlace->places_id .']" class="form-control other_place_to_clean_budget_estimate home_cleaning_amount" style="width: 100px;"></td>';
+                		$html .= '<td><input name="other_place_to_clean_time_estimate['. $otherPlace->places_id .']" class="form-control other_place_to_clean_time_estimate" style="width: 100px;" value="'. $steamingService->hour_to_complete .'"></td>';
+                		$html .= '<td><input name="other_place_to_clean_budget_estimate['. $otherPlace->places_id .']" class="form-control other_place_to_clean_budget_estimate home_cleaning_amount" style="width: 100px;" value="'. $steamingService->amount .'"></td>';
 
                 		$html .= '</tr>';
                 	}
@@ -1341,14 +1341,19 @@ class CompanyController extends Controller
                 		$html .= '<td>Additional services</td>';
                 		$html .= '<td>'. ucwords( strtolower( $additionalService->additional_service ) ) .'</td>';
                 		$html .= '<td>'. $additionalService->quantity .'</td>';
-                		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="form-control additional_service_time_estimate" style="width: 100px;"></td>';
-                		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="form-control additional_service_budget_estimate home_cleaning_amount" style="width: 100px;"></td>';
+                		$html .= '<td><input name="additional_service_time_estimate['. $additionalService->additional_service_id .']" class="form-control additional_service_time_estimate" style="width: 100px;" value="'. $steamingService->hour_to_complete .'"></td>';
+                		$html .= '<td><input name="additional_service_budget_estimate['. $additionalService->additional_service_id .']" class="form-control additional_service_budget_estimate home_cleaning_amount" style="width: 100px;" value="'. $steamingService->amount .'"></td>';
 
                 		$html .= '</tr>';
                 	}
                 }
 
                 $response['request_services_details'] = $html;
+
+                // Get the already entered discount, availibility, comment
+                $response['discount'] = $homeServiceArray->discount;
+                $response['date_of_working'] = $homeServiceArray->date_of_working;
+                $response['comment'] = $homeServiceArray->comment;
             }
         }
         return response()->json($response);
@@ -1425,7 +1430,7 @@ class CompanyController extends Controller
 	        $services = DB::table('digital_service_type_requests as t1')
     					->join('digital_service_types as t2', 't1.digital_service_type_id', '=', 't2.id')
     					->where(['t1.digital_service_request_id' => $cableInternetId])
-    					->select('t1.id as service_request_id', 't2.id as service_id', 't2.service')
+    					->select('t1.id as service_request_id', 't2.id as service_id', 't2.service', 't1.service_hours', 't1.amount')
     					->get();
 
 			$html = '';
@@ -1438,8 +1443,8 @@ class CompanyController extends Controller
 	        		$html .= '<td>Services</td>';
 	        		$html .= '<td>'. ucwords( strtolower( $service->service ) ) .'</td>';
 	        		$html .= '<td>NA</td>';
-	        		$html .= '<td><input name="service_time_estimate['. $service->service_id .']" class="service_time_estimate form-control cable_internet_service_budget" style="width: 100px;"></td>';
-	        		$html .= '<td><input name="service_budget_estimate['. $service->service_id .']" class="service_budget_estimate form-control cable_internet_service_amount" style="width: 100px;"></td>';
+	        		$html .= '<td><input name="service_time_estimate['. $service->service_id .']" class="service_time_estimate form-control cable_internet_service_budget" style="width: 100px;" value="'. $service->service_hours .'"></td>';
+	        		$html .= '<td><input name="service_budget_estimate['. $service->service_id .']" class="service_budget_estimate form-control cable_internet_service_amount" style="width: 100px;" value="'. $service->amount .'"></td>';
 
 	        		$html .= '</tr>';
 	        	}
@@ -1469,6 +1474,11 @@ class CompanyController extends Controller
 	        }
 
 	        $response['request_additional_services_details'] = $additionalServiceHtml;
+
+	        // Get the already entered discount, availibility, comment
+	        $response['discount'] = $cableInternetServiceDetails->discount;
+	        $response['date_of_working'] = $cableInternetServiceDetails->date_of_working;
+	        $response['comment'] = $cableInternetServiceDetails->comment;
 
         }
         
@@ -1542,7 +1552,7 @@ class CompanyController extends Controller
     	        $appliances = DB::table('tech_concierge_appliances_service_requests as t1')
         					->join('tech_concierge_appliances as t2', 't1.appliance_id', '=', 't2.id')
         					->where(['t1.service_request_id' => $techConciergeId])
-        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.appliances')
+        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.appliances', 't1.amount', 't1.service_hours')
         					->get();
 
         		if( count( $appliances ) > 0 )
@@ -1554,8 +1564,8 @@ class CompanyController extends Controller
     	        		$html .= '<td>Appliances you plan to install</td>';
     	        		$html .= '<td>'. ucwords( strtolower( $appliance->appliances ) ) .'</td>';
     	        		$html .= '<td>NA</td>';
-    	        		$html .= '<td><input name="appliance_time_estimate['. $appliance->service_id .']" class="appliance_time_estimate form-control" style="width: 100px;"></td>';
-    	        		$html .= '<td><input name="appliance_budget_estimate['. $appliance->service_id .']" class="appliance_budget_estimate form-control tech_concierge_amount" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="appliance_time_estimate['. $appliance->service_id .']" class="appliance_time_estimate form-control" style="width: 100px;" value="'. $appliance->service_hours .'"></td>';
+    	        		$html .= '<td><input name="appliance_budget_estimate['. $appliance->service_id .']" class="appliance_budget_estimate form-control tech_concierge_amount" style="width: 100px;" value="'. $appliance->amount .'"></td>';
 
     	        		$html .= '</tr>';
     	        	}
@@ -1619,6 +1629,11 @@ class CompanyController extends Controller
     	        }
 
     	        $response['request_other_details'] = $otherDetailHtml;
+
+    	        // Get the already entered discount, availibility, comment
+    	        $response['discount'] = $techConciergeArray->discount;
+    	        $response['date_of_working'] = $techConciergeArray->date_of_working;
+    	        $response['comment'] = $techConciergeArray->comment;
             }
         }
         return response()->json($response);
@@ -1690,7 +1705,7 @@ class CompanyController extends Controller
     	        $itemDetails = DB::table('moving_item_detail_service_requests as t1')
         					->join('moving_item_details as t2', 't1.moving_items_details_id', '=', 't2.id')
         					->where(['t1.moving_items_service_id' => $movingCompanyId])
-        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.item_name', 't2.item_weight')
+        					->select('t1.id as service_request_id', 't2.id as service_id', 't2.item_name', 't2.item_weight', 't1.move_hours', 't1.amount')
         					->get();
 
     	        if( count( $itemDetails ) > 0 )
@@ -1702,8 +1717,8 @@ class CompanyController extends Controller
     	        		$html .= '<td>Detail job description</td>';
     	        		$html .= '<td>'. ucwords( strtolower( $itemDetail->item_name ) ) .'</td>';
     	        		$html .= '<td>'. $itemDetail->item_weight .'</td>';
-    	        		$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate form-control" style="width: 100px;"></td>';
-    	        		$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
+    	        		$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate form-control" style="width: 100px;" value="'. $itemDetail->move_hours .'"></td>';
+    	        		$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate form-control moving_service_amount" style="width: 100px;" value="'. $itemDetail->amount .'"></td>';
 
     	        		$html .= '</tr>';
     	        	}
@@ -1714,6 +1729,9 @@ class CompanyController extends Controller
 	    	        // Get the moving transportations
 	    	        $movingTransportations = MovingTransportation::get();
 
+	    	        // Get the moving transportation details
+	    	        $movingTransportationDetails = MovingTransportationTypeRequest::where(['moving_items_services_id' => $movingCompaniesArray->id])->first();
+
 	    	        if( count( $movingTransportations ) > 0 )
 	    	        {
 	    	        	foreach( $movingTransportations as $movingTransportation )
@@ -1723,8 +1741,8 @@ class CompanyController extends Controller
 	    	        		$html .= '<td>'. $movingTransportation->transportation_type .'</td>';
 	    	        		$html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
 	    	        		$html .= '<td>NA</td>';
-	    	        		$html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;"></td>';
-	    	        		$html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;"></td>';
+	    	        		$html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;" value="'. number_format( $movingTransportationDetails->hour_to_complete ) .'"></td>';
+	    	        		$html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;" value="'. $movingTransportationDetails->amount .'"></td>';
 
 	    	        		$html .= '</tr>';
 	    	        	}
@@ -1770,7 +1788,7 @@ class CompanyController extends Controller
     	        // $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
     	        // $mapApiResponse = json_decode(file_get_contents($url), true);
 
-    	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingFromAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $response['moving_from_address'] ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -1785,7 +1803,7 @@ class CompanyController extends Controller
     	        // $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
     	        // $mapApiResponse = json_decode(file_get_contents($url), true);
 
-    	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $clientMovingToAddress->address1 ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
+    	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. urlencode( $response['moving_to_address'] ) .'&key=AIzaSyCSaTspumQXz5ow3MBIbwq0e3qsCoT2LDE';
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -1801,6 +1819,12 @@ class CompanyController extends Controller
     	        }
 
     	        $response['distance'] = round($distance, 2) . 'KM';
+
+    	        // Get the already entered discount, availibility, comment, insurance
+    	        $response['insurance_amount'] = $movingCompaniesArray->insurance_amount;
+    	        $response['discount'] = $movingCompaniesArray->discount;
+    	        $response['date_of_working'] = $movingCompaniesArray->date_of_working;
+    	        $response['comment'] = $movingCompaniesArray->comment;
             }
         }
         return response()->json($response);

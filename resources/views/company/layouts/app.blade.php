@@ -158,13 +158,13 @@
                             <a href="{{ url('company/quotationrequest') }}"><i class="fa fa-dashboard fa-fw"></i> Quotation Request</a>
                         </li>
                         <li>
-                            <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
+                            <a href="{{ url('company/jobs') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Jobs</a>
                         </li>
                         <li>
                             <a href="{{ url('company/review') }}"><i class="fa fa-comments" aria-hidden="true"></i> Review</a>
                         </li>
                         <li>
-                            <a href="{{ url('company/jobs') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Jobs</a>
+                            <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
                         </li>
                         <!-- <li>
                             <a href="{{ url('company/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>

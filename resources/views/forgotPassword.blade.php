@@ -186,11 +186,8 @@
 				            <button type="submit" class="btn btn-primary btn-block" id="btn_forgot_password" name="btn_forgot_password">Send Link</button>
 				        </form>
         			</div>
-        			<div class="text-center">
-        				<a href="{{ url('/forgotpassword') }}">Forgot your password?</a>
-        			</div>
         			<div class="center-copypart text-center">
-        				<p>Copyright &copy; 2018 Udistro | All Rights Reserved.</p>
+        				<p>Copyright &copy; {{ date('Y') }} Udistro | All Rights Reserved.</p>
         			</div>
         		</div>
         	</div>

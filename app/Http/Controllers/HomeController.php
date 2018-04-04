@@ -306,7 +306,7 @@ class HomeController extends Controller
 					// Send the email
 					if( app()->env == 'local' )
 					{
-						$emailLink = config('constants.LOCAL_APP_URL') . 'public/resetpassword/' . base64_encode($token);
+						$emailLink = config('constants.LOCAL_APP_URL') . '/public/resetpassword/' . base64_encode($token);
 					}
 					else
 					{
@@ -403,12 +403,32 @@ class HomeController extends Controller
 
     	if( count( $user ) == 1 )
     	{
+    		// Get the user role
+    		$userDetails = User::where(['email' => $user->email])->first();
+    		$role = $userDetails->roles->first();
+
+    		// Rolewise url redirection is required
+    		$url = '';
+    		if( $role->name == 'admin' )
+    		{
+    			$url = url('/admin');
+    		}
+    		else if( $role->name == 'company_representative' )
+    		{
+    			$url = url('/company');	
+    		}
+    		else if( $role->name == 'agent' )
+    		{
+    			$url = url('/agent');
+    		}
+
     		// Update the password
     		$hash = Hash::make($password);
 
     		if(User::where(['email' => $user->email])->update(['password' => $hash]))
     		{
     			$response['errCode']    = 0;
+    			$response['url']    	= $url;
 		    	$response['errMsg']     = 'Password updated successfully';
     		}
     		else

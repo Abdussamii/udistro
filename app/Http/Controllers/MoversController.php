@@ -178,18 +178,19 @@ class MoversController extends Controller
      */
     public function checkUserAuthentication()
     {
-    	$mobileNo = Input::get('mobileNo');
-    	$clientId = Input::get('clientId');
-    	$invitationId = Input::get('invitationId');
+    	$frmData = Input::get('frmData');
+
+    	$details = array();
+    	parse_str($frmData, $details);
 
     	// Server Side Validation
         $response =array();
 
 		$validation = Validator::make(
 		    array(
-		        'mobileNo'	=> $mobileNo,
-		        'clientId' 	=> $clientId,
-		        'invitationId' => $invitationId
+		        'mobileNo'		=> $details['mobile_no'],
+		        'clientId' 		=> $details['client_id'],
+		        'invitationId' 	=> $details['invitation_id']
 		    ),
 		    array(
 		        'mobileNo' 	=> array('required', 'numeric'),
@@ -219,13 +220,18 @@ class MoversController extends Controller
 		else 							// The data is valid, go ahead and check the login credentials and do login
 		{
 			// Check if the mobile number is valid
-			$authenticate = AgentClient::where(['id' => $clientId, 'contact_number' => $mobileNo])->first();
+			$authenticate = AgentClient::where(['id' => $details['client_id'], 'contact_number' => $details['mobile_no']])->first();
 
 			if( count( $authenticate ) > 0 )
 			{
 				// Update the authentication status
-				if( AgentClientInvite::where(['id' => $invitationId])->update(['authentication' => '1']) )
+				if( AgentClientInvite::where(['id' => $details['invitation_id']])->update(['authentication' => '1']) )
 				{
+					// Save the moving related information
+					AgentClientMovingFromAddress::where(['agent_client_id' => $details['client_id']])->update(['moving_from_house_type' => $details['moving_from_house_type'], 'moving_from_floor' => $details['moving_from_house_level'], 'moving_from_bedroom_count' => $details['moving_from_house_bedroom_count'], 'moving_from_property_type' => $details['moving_from_property_type']]);
+
+					AgentClientMovingToAddress::where(['agent_client_id' => $details['client_id']])->update(['moving_to_house_type' => $details['moving_to_house_type'], 'moving_to_floor' => $details['moving_to_house_level'], 'moving_to_bedroom_count' => $details['moving_to_house_bedroom_count'], 'moving_to_property_type' => $details['moving_to_property_type']]);
+					
 					$response['errCode'] 	= 0;
 					$response['errMsg'] 	= 'User verified successfully';
 				}
@@ -867,8 +873,8 @@ class MoversController extends Controller
 
 				    	$movingServiceRequest->insurance = isset( $details['moving_house_need_insurance'] ) ? $details['moving_house_need_insurance'] : null;
 
-				    	$movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
-				    	$movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
+				    	// $movingServiceRequest->primary_no 	= $details['moving_house_callback_primary_no'];
+				    	// $movingServiceRequest->secondary_no = $details['moving_house_callback_secondary_no'];
 				    	
 				    	$movingServiceRequest->moving_date = date('Y-m-d H:i:s', strtotime( $details['moving_house_date'] ) );
 				    	$movingServiceRequest->additional_information = $details['moving_house_additional_information'];
@@ -1211,8 +1217,9 @@ class MoversController extends Controller
 					$techConciergeRequest->moving_to_bedroom_count = $techConciergeDetails['moving_house_to_bedroom_count'];
 					$techConciergeRequest->moving_to_property_type = $techConciergeDetails['moving_house_to_property_type'];
 					
-					$techConciergeRequest->primary_no = $techConciergeDetails['tech_concierge_callback_primary_no'];
-					$techConciergeRequest->secondary_no = $techConciergeDetails['tech_concierge_callback_secondary_no'];
+					// $techConciergeRequest->primary_no = $techConciergeDetails['tech_concierge_callback_primary_no'];
+					// $techConciergeRequest->secondary_no = $techConciergeDetails['tech_concierge_callback_secondary_no'];
+					
 					$techConciergeRequest->additional_information = $techConciergeDetails['tech_concierge_additional_information'];
 
 					$techConciergeRequest->availability_date1 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date1']));
@@ -1532,8 +1539,8 @@ class MoversController extends Controller
 					$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
 				}
 				
-				$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
-				$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
+				// $digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
+				// $digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
 				
 				$digitalServiceRequest->availability_date1 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date7']));
 				$digitalServiceRequest->availability_time1		 	= $cableInternetDetails['availability_time_upto1'];
@@ -1637,8 +1644,8 @@ class MoversController extends Controller
 						$digitalServiceRequest->callback_time = $cableInternetDetails['cable_internet_callback_time'];
 					}
 
-					$digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
-					$digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
+					// $digitalServiceRequest->primary_no = $cableInternetDetails['cable_internet_callback_primary_no'];
+					// $digitalServiceRequest->secondary_no = $cableInternetDetails['cable_internet_callback_secondary_no'];
 					
 					$digitalServiceRequest->availability_date1 			= date('Y-m-d', strtotime($cableInternetDetails['availability_date7']));
 					$digitalServiceRequest->availability_time1		 	= $cableInternetDetails['availability_time_upto1'];
@@ -1913,8 +1920,8 @@ class MoversController extends Controller
  					$homeCleaningServiceRequest->invitation_id 	= $invitationId;
  					$homeCleaningServiceRequest->company_id = $filterCompany->company_id;
 
- 					$homeCleaningServiceRequest->move_out_cleaning 	= $homeCleaningDetails['home_cleaning_moveout'];
- 					$homeCleaningServiceRequest->move_in_cleaning 	= $homeCleaningDetails['home_cleaning_movein'];
+ 					// $homeCleaningServiceRequest->move_out_cleaning 	= $homeCleaningDetails['home_cleaning_moveout'];
+ 					// $homeCleaningServiceRequest->move_in_cleaning 	= $homeCleaningDetails['home_cleaning_movein'];
 
  					$homeCleaningServiceRequest->moving_from_house_type = $homeCleaningDetails['home_cleaning_house_from_type'];
  					$homeCleaningServiceRequest->moving_from_floor = $homeCleaningDetails['home_cleaning_house_from_level'];
@@ -1936,8 +1943,8 @@ class MoversController extends Controller
  					$homeCleaningServiceRequest->cleaning_behind_refrigerator_and_stove = isset( $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'] ) ? $homeCleaningDetails['home_cleaning_behind_refrigerator_stove'] : '0';
  					$homeCleaningServiceRequest->baseboard_to_be_washed = isset( $homeCleaningDetails['home_cleaning_baseboard'] ) ? $homeCleaningDetails['home_cleaning_baseboard'] : '0';
 
- 					$homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
- 					$homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
+ 					// $homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
+ 					// $homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
 					
 					$homeCleaningServiceRequest->availability_date1 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
 					$homeCleaningServiceRequest->availability_time1		 	= $homeCleaningDetails['availability_time_upto1'];
@@ -2224,6 +2231,16 @@ class MoversController extends Controller
 
             		$totalAmount = $totalAmount + $gst + $hst + $pst + $serviceCharge;
             	}
+
+            	//  Check if payment is already done, disabled it
+            	$paymentTransactionDetail = PaymentTransactionDetail::where(['service_request_response_id' => $Array->id, 'company_id' => $Array->company_id,'payment_status' => 'Completed'])->first();
+            	$paymentClass 	= 'payment_done';
+            	$paymentText 	= 'Payment Done';
+            	if( count( $paymentTransactionDetail ) == 0 )
+            	{
+            		$paymentClass = 'make_payment';
+            		$paymentText 	= '<i class="fa fa-paypal" aria-hidden="true"></i>';
+            	}
             	
                 $response['aaData'][$k] = array(
                     0 => $k+1,
@@ -2232,7 +2249,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_cable_internet_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="cable_internet_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="'. $paymentClass .'" data-amount="'. $totalAmount .'" data-service="cable_internet_service" id="'. $Array->id .'">'. $paymentText .'</a>'
                 );
                 $k++;
             }
@@ -2309,6 +2326,16 @@ class MoversController extends Controller
             		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
             	}
 
+            	//  Check if payment is already done, disabled it
+            	$paymentTransactionDetail = PaymentTransactionDetail::where(['service_request_response_id' => $Array->id, 'company_id' => $Array->company_id,'payment_status' => 'Completed'])->first();
+            	$paymentClass 	= 'payment_done';
+            	$paymentText 	= 'Payment Done';
+            	if( count( $paymentTransactionDetail ) == 0 )
+            	{
+            		$paymentClass = 'make_payment';
+            		$paymentText 	= '<i class="fa fa-paypal" aria-hidden="true"></i>';
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
@@ -2316,7 +2343,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_tech_concierge_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="tech_concierge_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="'. $paymentClass .'" data-amount="'. $totalAmount .'" data-service="tech_concierge_service" id="'. $Array->id .'">'. $paymentText .'</a>'
                 );
                 $k++;
             }
@@ -2402,6 +2429,16 @@ class MoversController extends Controller
             		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
             	}
 
+            	//  Check if payment is already done, disabled it
+            	$paymentTransactionDetail = PaymentTransactionDetail::where(['service_request_response_id' => $Array->id, 'company_id' => $Array->company_id,'payment_status' => 'Completed'])->first();
+            	$paymentClass 	= 'payment_done';
+            	$paymentText 	= 'Payment Done';
+            	if( count( $paymentTransactionDetail ) == 0 )
+            	{
+            		$paymentClass = 'make_payment';
+            		$paymentText 	= '<i class="fa fa-paypal" aria-hidden="true"></i>';
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
@@ -2409,7 +2446,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_home_cleaning_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="home_cleaning_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="'. $paymentClass .'" data-amount="'. $totalAmount .'" data-service="home_cleaning_service" id="'. $Array->id .'">'. $paymentText .'</a>'
                 );
                 $k++;
             }
@@ -2512,6 +2549,16 @@ class MoversController extends Controller
             		$totalAmount = number_format( ( $totalAmount + $gst + $hst + $pst + $serviceCharge ), 2, '.', '');
             	}
 
+            	//  Check if payment is already done, disabled it
+            	$paymentTransactionDetail = PaymentTransactionDetail::where(['service_request_response_id' => $Array->id, 'company_id' => $Array->company_id,'payment_status' => 'Completed'])->first();
+            	$paymentClass 	= 'payment_done';
+            	$paymentText 	= 'Payment Done';
+            	if( count( $paymentTransactionDetail ) == 0 )
+            	{
+            		$paymentClass = 'make_payment';
+            		$paymentText 	= '<i class="fa fa-paypal" aria-hidden="true"></i>';
+            	}
+
                 $response['aaData'][$k] = array(
                     0 => $k+1,
                     1 => ucfirst( strtolower($Array->company_name) ),
@@ -2519,7 +2566,7 @@ class MoversController extends Controller
                     3 => ( $responseTime == 0 || $responseTime == 1 ) ? $responseTime . ' Minute' : $responseTime . ' Minutes',
                     4 => $reviewCount,
                     5 => '<a href="javascript:void(0);" id="'. $Array->company_id .'@@@@'. $Array->id .'" class="view_moving_item_service"><i class="fa fa-eye" aria-hidden="true"></i></a>',
-                    6 => '<a href="javascript:void(0);" class="make_payment" data-amount="'. $totalAmount .'" data-service="moving_service" id="'. $Array->id .'"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    6 => '<a href="javascript:void(0);" class="'. $paymentClass .'" data-amount="'. $totalAmount .'" data-service="moving_service" id="'. $Array->id .'">'. $paymentText .'</a>'
                 );
                 $k++;
             }

@@ -293,10 +293,9 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchclients',
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 6, 7, 8, 9 ] }
+            { "className": "dt-center", "targets": [ 0, 5, 6, 7, 8 ] }
         ],
         "aoColumns": [
-            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -329,10 +328,9 @@ $(document).ready(function(){
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchinvitedclients',
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 6 ] }
+            { "className": "dt-center", "targets": [ 0, 5 ] }
         ],
         "aoColumns": [
-            { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
             { 'bSortable' : true },
@@ -1664,17 +1662,19 @@ $(document).ready(function(){
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": $('meta[name="route"]').attr('content') + '/agent/fetchreviews',
-        
+        // Hide the loader when datatable is rendered
+		"initComplete": function(settings, json) {
+			$('.loader-wrapper').hide();
+		},
         "columnDefs": [
-            { "className": "dt-center", "targets": [ 0, 4, 6 ] }
+            { "className": "dt-center", "targets": [ 0 , 5, 6 ] }
         ],
-
         "aoColumns": [
             { 'bSortable' : true },
             { 'bSortable' : true },
-            { 'bSortable' : true },
             { 'bSortable' : false },
-            { 'bSortable' : true },
+            { 'bSortable' : false },
+            { 'bSortable' : false },
             { 'bSortable' : false },
             { 'bSortable' : false }
         ]
