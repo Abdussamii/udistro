@@ -7,6 +7,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 
+	<script type="text/javascript" src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
+
 	<!-- JQuery Validation -->
 	<script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
 
@@ -106,11 +108,22 @@
 		$('#btn_company_registration').click(function(){
 	    	if( $('#frm_company_registration').valid() )
 	    	{
+	    		var $this = $(this);
+
 	    		$.ajax({
 	    			url: $('meta[name="route"]').attr('content') + '/company/registercompany',
 	    			method: 'post',
 	    			data: {
 	    				frmData: $('#frm_company_registration').serialize()
+	    			},
+	    			beforeSend: function() {
+	    				// Show the loading button
+	    			    $this.button('loading');
+	    			},
+	    			complete: function()
+	    			{
+	    				// Change the button to previous
+	    				$this.button('reset');
 	    			},
 	    			headers: {
 				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -219,7 +232,7 @@
 	                </select>
 	            </div>
 	            <div class="form-group">
-	                <input class="btn btn-default" id="btn_company_registration" name="btn_company_registration" value="Start Free Trail" type="submit">
+	                <input type="button" class="btn btn-default" id="btn_company_registration" name="btn_company_registration" value="Start Free Trail" type="submit">
 	            </div>
 	            <span class="instraction"> No auto charge after the free trial ends. We ask you for your credit card to make sure you are not a robot. You won’t be charged unless you manually upgrade to a paid account.</span>
 	        </form>

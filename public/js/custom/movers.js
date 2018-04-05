@@ -740,6 +740,61 @@ $(document).ready(function(){
 				    	$('#service_response').modal('show');
 
 				    	$('#home_cleaning_services_modal').modal('hide');
+
+				    	// Mark the activity as completed
+				    	var finalStatus = '1';
+				    	var activityName= 'home_cleaning_services';
+				    	var activityId  = '7';
+
+				    	if( activityName != '' )
+				    	{
+				    		// Activity is done
+				    		if( finalStatus == 1 )
+				    		{
+				    			// Remove the tick mark if it is available on discard
+				    			$('.'+activityName).closest('.activities_container').find('.discard_activity').find('i').removeClass('fa fa-check').addClass('fa fa-times-circle');
+
+				    			// Put the tick mark on the activity marked as done
+				    			$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				    			// Put the completed class on the anchor
+				    			$('.'+activityName).closest('.activities_container').find('.done_activity').addClass('completed');
+
+				    			$.ajax({
+				    				url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+				    				method: 'post',
+				    				data: {
+				    					activityId: activityId,
+				    					action: finalStatus
+				    				},
+				    				headers: {
+				    			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    			    },
+				    			    success: function(response){
+				    			    	if( response.errCode == 0 )
+				    				    {
+				    				    	$('#activity_progress1').html(response.percent);
+				    				    	$('#activity_progress2').html(response.percent);
+				    				    	$('#activity_progress_bar').css('width', response.percent + '%');
+				    				    }
+				    			    }
+				    			});
+
+				    			// Show the "Is this activity helpful thing" modal
+				    			// $('#frm_activity_helpful_user_response #activity_name').val(activityName);
+				    			// $('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
+				    		}
+				    		else 	// Activity is still pending
+				    		{
+				    			$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
+				    		}
+				    	}
 				    }
 				    else
 				    {
@@ -824,6 +879,61 @@ $(document).ready(function(){
 				    	$('#service_response').modal('show');
 
 				    	$('#moving_companies_modal').modal('hide');
+
+				    	// Mark the activity as completed
+				    	var finalStatus = '1';
+				    	var activityName= 'moving_companies';
+				    	var activityId  = '8';
+
+				    	if( activityName != '' )
+				    	{
+				    		// Activity is done
+				    		if( finalStatus == 1 )
+				    		{
+				    			// Remove the tick mark if it is available on discard
+				    			$('.'+activityName).closest('.activities_container').find('.discard_activity').find('i').removeClass('fa fa-check').addClass('fa fa-times-circle');
+
+				    			// Put the tick mark on the activity marked as done
+				    			$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				    			// Put the completed class on the anchor
+				    			$('.'+activityName).closest('.activities_container').find('.done_activity').addClass('completed');
+
+				    			$.ajax({
+				    				url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+				    				method: 'post',
+				    				data: {
+				    					activityId: activityId,
+				    					action: finalStatus
+				    				},
+				    				headers: {
+				    			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    			    },
+				    			    success: function(response){
+				    			    	if( response.errCode == 0 )
+				    				    {
+				    				    	$('#activity_progress1').html(response.percent);
+				    				    	$('#activity_progress2').html(response.percent);
+				    				    	$('#activity_progress_bar').css('width', response.percent + '%');
+				    				    }
+				    			    }
+				    			});
+
+				    			// Show the "Is this activity helpful thing" modal
+				    			// $('#frm_activity_helpful_user_response #activity_name').val(activityName);
+				    			// $('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
+				    		}
+				    		else 	// Activity is still pending
+				    		{
+				    			$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
+				    		}
+				    	}
 				    }
 				    else
 				    {
@@ -906,6 +1016,61 @@ $(document).ready(function(){
 				    	$('#service_response').modal('show');
 
 				    	$('#tech_concierge_modal').modal('hide');
+
+				    	// Mark the activity as completed
+				    	var finalStatus = '1';
+				    	var activityName= 'tech_concierge';
+				    	var activityId  = '9';
+
+				    	if( activityName != '' )
+				    	{
+				    		// Activity is done
+				    		if( finalStatus == 1 )
+				    		{
+				    			// Remove the tick mark if it is available on discard
+				    			$('.'+activityName).closest('.activities_container').find('.discard_activity').find('i').removeClass('fa fa-check').addClass('fa fa-times-circle');
+
+				    			// Put the tick mark on the activity marked as done
+				    			$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				    			// Put the completed class on the anchor
+				    			$('.'+activityName).closest('.activities_container').find('.done_activity').addClass('completed');
+
+				    			$.ajax({
+				    				url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+				    				method: 'post',
+				    				data: {
+				    					activityId: activityId,
+				    					action: finalStatus
+				    				},
+				    				headers: {
+				    			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    			    },
+				    			    success: function(response){
+				    			    	if( response.errCode == 0 )
+				    				    {
+				    				    	$('#activity_progress1').html(response.percent);
+				    				    	$('#activity_progress2').html(response.percent);
+				    				    	$('#activity_progress_bar').css('width', response.percent + '%');
+				    				    }
+				    			    }
+				    			});
+
+				    			// Show the "Is this activity helpful thing" modal
+				    			// $('#frm_activity_helpful_user_response #activity_name').val(activityName);
+				    			// $('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
+				    		}
+				    		else 	// Activity is still pending
+				    		{
+				    			$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
+				    		}
+				    	}
 				    }
 				    else
 				    {
@@ -1034,6 +1199,61 @@ $(document).ready(function(){
 				    	$('#service_response').modal('show');
 
 				    	$('#cable_internet_services_modal').modal('hide');
+
+				    	// Mark the activity as completed
+				    	var finalStatus = '1';
+				    	var activityName= 'cable_internet_services';
+				    	var activityId  = '6';
+
+				    	if( activityName != '' )
+				    	{
+				    		// Activity is done
+				    		if( finalStatus == 1 )
+				    		{
+				    			// Remove the tick mark if it is available on discard
+				    			$('.'+activityName).closest('.activities_container').find('.discard_activity').find('i').removeClass('fa fa-check').addClass('fa fa-times-circle');
+
+				    			// Put the tick mark on the activity marked as done
+				    			$('.'+activityName).find('i').removeClass('fa-arrow-circle-o-right').addClass('fa-check');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(1);
+
+				    			// Put the completed class on the anchor
+				    			$('.'+activityName).closest('.activities_container').find('.done_activity').addClass('completed');
+
+				    			$.ajax({
+				    				url: $('meta[name="route"]').attr('content') + '/movers/updateactivitystatus',
+				    				method: 'post',
+				    				data: {
+				    					activityId: activityId,
+				    					action: finalStatus
+				    				},
+				    				headers: {
+				    			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    			    },
+				    			    success: function(response){
+				    			    	if( response.errCode == 0 )
+				    				    {
+				    				    	$('#activity_progress1').html(response.percent);
+				    				    	$('#activity_progress2').html(response.percent);
+				    				    	$('#activity_progress_bar').css('width', response.percent + '%');
+				    				    }
+				    			    }
+				    			});
+
+				    			// Show the "Is this activity helpful thing" modal
+				    			// $('#frm_activity_helpful_user_response #activity_name').val(activityName);
+				    			// $('#user_activity_helpful_response_modal').modal({ backdrop: 'static', keyboard: false });
+				    		}
+				    		else 	// Activity is still pending
+				    		{
+				    			$('.'+activityName).find('i').removeClass('fa-check').addClass('fa-arrow-circle-o-right');
+
+				    			// Set the status value
+				    			$('.'+activityName).closest('.activities_container').find('.activity_final_status').val(0);
+				    		}
+				    	}
 				    }
 				    else
 				    {

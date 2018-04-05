@@ -445,7 +445,7 @@ class CompanyController extends Controller
      */
     public function registerCompany()
     {
-    	$frmData = Input::get('frmData');
+		$frmData = Input::get('frmData');
 
     	$companyData = array();
 
@@ -601,10 +601,11 @@ class CompanyController extends Controller
 											{
 												$loginURL = url('/agent');
 											}
+
 											$emailData = array(
 												/* Email data */
-												'email' 	=> ucwords( strtolower( $companyData['rep_lname'] . ' ' . $companyData['rep_fname'] ) ),
-												'name' 		=> $companyData['email'],
+												'name' 		=> ucwords( strtolower( $companyData['rep_lname'] . ' ' . $companyData['rep_fname'] ) ),
+												'email' 	=> $companyData['email'],
 												'subject' 	=> 'Registration Successful',
 												'loginURL' 	=> $loginURL
 											);

@@ -11,6 +11,8 @@
 
         <title>Udistro | Administrator Login</title>
 
+        <link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
+
         <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
         <script type="text/javascript" src="{{ URL::asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>

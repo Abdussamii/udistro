@@ -1223,12 +1223,12 @@ class MoversController extends Controller
 					$techConciergeRequest->additional_information = $techConciergeDetails['tech_concierge_additional_information'];
 
 					$techConciergeRequest->availability_date1 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date1']));
-					$techConciergeRequest->availability_date2 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date2']));
-					$techConciergeRequest->availability_date3 	= date('Y-m-d', strtotime($techConciergeDetails['availability_date3']));
+					$techConciergeRequest->availability_date2 	= ( $techConciergeDetails['availability_date2'] != '' ) ? date('Y-m-d', strtotime($techConciergeDetails['availability_date2'])) : null;
+					$techConciergeRequest->availability_date3 	= ( $techConciergeDetails['availability_date3'] != '' ) ? date('Y-m-d', strtotime($techConciergeDetails['availability_date3'])) : null;
 
 					$techConciergeRequest->availability_time1 	= $techConciergeDetails['availability_time_upto1'];
-					$techConciergeRequest->availability_time2 	= $techConciergeDetails['availability_time_upto2'];
-					$techConciergeRequest->availability_time3 	= $techConciergeDetails['availability_time_upto3'];
+					$techConciergeRequest->availability_time2 	= ( $techConciergeDetails['availability_time_upto2'] != '' ) ? $techConciergeDetails['availability_time_upto2'] : null;
+					$techConciergeRequest->availability_time3 	= ( $techConciergeDetails['availability_time_upto3'] != '' ) ? $techConciergeDetails['availability_time_upto3'] : null;
 
 					$techConciergeRequest->status = '1';
 					$techConciergeRequest->created_by = $clientId;

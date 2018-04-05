@@ -14,6 +14,8 @@
 
     <title>@yield('title')</title>
 
+    <link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
+
     <!-- Bootstrap Core CSS -->
     <!-- <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
