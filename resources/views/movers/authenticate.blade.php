@@ -10,6 +10,8 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>uDistro</title>
 
+<link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
+
 <!-- Bootstrap -->
 <link href="{{ URL::asset('css/movers/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/movers/style.css') }}" rel="stylesheet">
@@ -369,7 +371,8 @@ $(document).ready(function(){
 		                     <div class="row">
 		                     	<div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                     		<label>
-		                     			<input type="checkbox" name="terms" id="terms"> <a href="https://termsfeed.com/terms-conditions/ecb999172c16298afdddc8eb94b9a21b">Terms &amp; Condition</a>
+		                     			<input type="checkbox" name="terms" id="terms">
+		                     			<a href="https://termsfeed.com/terms-conditions/ecb999172c16298afdddc8eb94b9a21b" target="_blank">Terms &amp; Condition</a>
 		                     		</label>
 		                     		<div><label id="terms-error" class="error" for="terms"></label></div>
 		                     	</div>

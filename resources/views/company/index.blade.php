@@ -11,6 +11,8 @@
 
         <title>Udistro | Company Login</title>
 
+        <link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
+
         <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
 
         <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}" />

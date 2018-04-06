@@ -426,7 +426,17 @@ $(document).ready(function(){
                     $('#frm_tech_concierge #service_charge_percetage').text(response.service_charge);
 
                     // Availability
-                    $('#frm_tech_concierge #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
+                    $('#frm_tech_concierge #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option>');
+                    
+                    if( response.availability2 != '' && response.availability2 != ' ' )
+                    {
+                    	$('#frm_tech_concierge #availability').append('<option value="'+ response.availability2 +'">'+ response.availability2 +'</option>');
+                    }
+
+                    if( response.availability3 != '' && response.availability3 != ' ' )
+                    {
+                    	$('#frm_tech_concierge #availability').append('<option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');
+                    }
 
                     // Show the company entered data, if already available
                     if( response.discount != null )

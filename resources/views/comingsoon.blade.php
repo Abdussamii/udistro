@@ -22,7 +22,8 @@
     <div class="overlay"></div>
     <div class="comingsoon_udistro">
 	     <div class="cs_banner">
-	     	<img src="{{ url('/images/banner-logo.png') }}" class="center-block img-responsive" alt="" />
+	     	<!-- <img src="{{ url('/images/banner-logo.png') }}" class="center-block img-responsive" alt="" /> -->
+	     	<iframe width="1200" height="800" src="https://www.youtube.com/channel/UC6iNCk1iPfxUJCHLBHyVi0w"></iframe>
 	     </div>
        <div class="h2-cs">Coming Soon</div>
     </div>

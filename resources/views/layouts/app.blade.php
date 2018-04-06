@@ -19,6 +19,8 @@
     <meta name="route" content="{{ url('/') }}">
 
     <title>@yield('title')</title>
+    
+    <link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 	<script type="text/javascript" src="{{ URL::asset('js/jquery.min.js') }}"></script>

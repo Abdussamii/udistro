@@ -10,6 +10,8 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>uDistro</title>
 
+<link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
+
 <!-- Bootstrap -->
 <link href="{{ URL::asset('css/movers/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ URL::asset('css/movers/style.css') }}" rel="stylesheet">
