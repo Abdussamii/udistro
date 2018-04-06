@@ -1068,17 +1068,21 @@ $(document).ready(function(){
         {
             // Ajax call to save the page related data
             var $this = $(this);
-            var activityId     = $('#activity_id').val();
-            var activityName   = $('#activity_name').val();
-            var description   = $('#description').val();
-            var activityStatus = $("input[name='activity_status']:checked").val();
-            var fileData       = $('#activity_upload_image').prop('files')[0];
+            var activityId     	= $('#activity_id').val();
+            var activityName   	= $('#activity_name').val();
+            var description   	= $('#description').val();
+			var tooltip_data   	= $('#tooltip_data').val();
+			var tooltip_position  = $('#tooltip_position').val();
+            var activityStatus 	= $("input[name='activity_status']:checked").val();
+            var fileData       	= $('#activity_upload_image').prop('files')[0];
 
             // Create form data object and append the values into it
             var formData = new FormData();
             formData.append('fileData', fileData);
             formData.append('activity_name', activityName);
             formData.append('description', description);
+			formData.append('tooltip_data', tooltip_data);
+			formData.append('tooltip_position', tooltip_position);
             formData.append('activity_id', activityId);
             formData.append('activity_status', activityStatus);
 
@@ -1691,6 +1695,8 @@ $(document).ready(function(){
                     $('#frm_add_activity #activity_id').val(activityId);
                     $('#frm_add_activity #activity_name').val(response.name);
                     $('#frm_add_activity #description').val(response.description);
+					$('#frm_add_activity #tooltip_data').val(response.tooltip_data);
+					$('#frm_add_activity #tooltip_position').val(response.tooltip_position);
                     $('#frm_add_activity #activity_profile_image').attr('src', response.image);
                     $('#frm_add_activity input[name="activity_status"][value="'+ response.status +'"]').prop('checked', true);
 

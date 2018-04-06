@@ -248,9 +248,24 @@ class HomeController extends Controller
 			    		$agentClient->movingToAddress()->save($movingToAddress);
 
 			    		DB::commit();
+						
+						//send feedback email
+						if( $movingFromAddress->save() && $movingToAddress->save() )
+						{
+							$emailData = array(
+								'name' 		=> ucwords( strtolower( $invitationDetails['lname'] . ' ' . $invitationDetails['fname'] ) ),
+								'subject' 	=> 'Invitation Feedback',
+								'email' 	=> $invitationDetails['email'],
+							);
 
-			    		$response['errCode']    = 0;
-			            $response['errMsg']     = 'Your request is successfully sent';
+							Mail::send('emails.getInvitationFeedback', ['emailData' => $emailData], function ($m) use ($emailData) {
+								$m->from('invitation@udistro.ca', 'Udistro');
+								$m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+							});
+
+							$response['errCode']    = 0;
+							$response['errMsg']     = 'Your request is received and feedback email has been sent to you.';
+						}
 			    	}
 			    	else
 			        {
@@ -316,7 +331,7 @@ class HomeController extends Controller
 					// Email send code here
 	    			$emailData = array(
 	    				'name' 		=> ucwords( strtolower( $user->lname . ' ' . $user->fname ) ),
-	    				'subject' 	=> 'Forgot Password',
+						'subject' 	=> 'Forgot Password',
 	    				'email' 	=> $user->email,
 	    				'url'		=> $emailLink,
 	    			);

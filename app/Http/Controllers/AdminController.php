@@ -251,7 +251,7 @@ class AdminController extends Controller
                     if(1)
                     {
                         $response['errCode'] = 0;
-                        $response['errMsg']  = 'Email has been sent successfully. Please check you email';
+                        $response['errMsg']  = 'Email has been sent successfully. Please check your email';
                     }
                     else
                     {
@@ -1502,11 +1502,13 @@ class AdminController extends Controller
      */
     public function saveActivity(Request $request)
     {
-    	$activityImage   = $request->file('fileData');
-    	$activityId      = $request->input('activity_id');
-    	$description    = $request->input('description');
-    	$activityName    = $request->input('activity_name');
-    	$activityStatus  = $request->input('activity_status');
+    	$activityImage   	= $request->file('fileData');
+    	$activityId      	= $request->input('activity_id');
+    	$description     	= $request->input('description');
+    	$activityName    	= $request->input('activity_name');
+    	$activityStatus  	= $request->input('activity_status');
+		$tooltip_data    	= $request->input('tooltip_data');
+		$tooltip_position   = $request->input('tooltip_position');
 
         // Get the logged in user id
         $userId = Auth::user()->id;
@@ -1518,17 +1520,23 @@ class AdminController extends Controller
 		    array(
 		        'activity_name'		=> $activityName,
 		        'activity_status'	=> $activityStatus,
-		        'description'		=> $description
+		        'description'		=> $description,
+				'tooltip_data'		=> $tooltip_data,
+				'tooltip_position'	=> $tooltip_position
 		    ),
 		    array(
 		        'activity_name' 	=> array('required'),
 		        'activity_status' 	=> array('required'),
-		        'description' 	    => array('required')
+		        'description' 	    => array('required'),
+				'tooltip_data' 	    => array('required'),
+				'tooltip_position' 	=> array('required')
 		    ),
 		    array(
 		        'activity_name.required'	=> 'Please enter the activity name',
 		        'activity_status.required' 	=> 'Please select status',
-		        'description.required' 	=> 'Please enter the description'
+		        'description.required' 		=> 'Please enter the description',
+				'tooltip_data.required' 	=> 'Please enter the tooltip data',
+				'tooltip_position.required' => 'Please select the tooltip position'
 		    )
 		);
 
@@ -1591,11 +1599,13 @@ class AdminController extends Controller
 				{
 					$activities = new ClientActivityList;
 
-					$activities->activity 		= $activityName;
-					$activities->status 		= $activityStatus;
-					$activities->description    = $description;
-					$activities->updated_by 	= $userId;
-					$activities->created_by 	= $userId;
+					$activities->activity 			= $activityName;
+					$activities->status 			= $activityStatus;
+					$activities->description    	= $description;
+					$activities->tooltip_data   	= $tooltip_data;
+					$activities->tooltip_position  	= $tooltip_position;
+					$activities->updated_by 		= $userId;
+					$activities->created_by 		= $userId;
 					if($response['errCode'] == 1)
 					{
 						$activities->image_name = $fileNewName;
@@ -1616,10 +1626,12 @@ class AdminController extends Controller
 				{
 					$activities = ClientActivityList::find($activityId);
 
-					$activities->activity 		= $activityName;
-					$activities->status 		= $activityStatus;
-					$activities->description    = $description;
-					$activities->created_by 	= $userId;
+					$activities->activity 			= $activityName;
+					$activities->status 			= $activityStatus;
+					$activities->description    	= $description;
+					$activities->tooltip_data   	= $tooltip_data;
+					$activities->tooltip_position  	= $tooltip_position;
+					$activities->created_by 		= $userId;
 					if($response['errCode'] == 1)
 					{
 						$activities->image_name = $fileNewName;
@@ -2824,6 +2836,8 @@ class AdminController extends Controller
     		$response['status'] = $activities->status;
     		$response['image']  = URL::to('/').'/images/activity/'.$activities->image_name;
     		$response['description']  = $activities->description;
+			$response['tooltip_data']  = $activities->tooltip_data;
+			$response['tooltip_position']  = $activities->tooltip_position;
 
     	}
 

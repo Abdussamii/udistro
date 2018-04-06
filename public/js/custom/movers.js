@@ -4,6 +4,9 @@ $(document).ready(function(){
 
 	alertify.set('notifier','position', 'top-center');
 	
+	// tooltip dispaly
+	$('[data-toggle="tooltip"]').tooltip();
+	
 	// Validation to check the monbile number
 	$.validator.addMethod("canadaPhone", function (value, element) {
 		if( value != '' )

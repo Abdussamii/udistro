@@ -76,6 +76,20 @@
 										<input type="text" name="description" id="description" class="form-control" placeholder="Enter Description">
 									</div>
 									<div class="form-group">
+										<label for="tooltip_data">Tooltip Data</label>
+										<input type="text" name="tooltip_data" id="tooltip_data" class="form-control" placeholder="Enter Tooltip Data">
+									</div>
+									<div class="form-group">
+										<label for="tooltip_position">Tooltip Position</label>
+										<select name="tooltip_position" id="tooltip_position" class="form-control">
+											<option value="">Select Tooltip Position</option>
+											<option value="top">Top</option>
+											<option value="bottom">Bottom</option>
+											<option value="left">Left</option>
+											<option value="right">Right</option>
+										</select>
+									</div>
+									<div class="form-group">
 										<label for="activity_status">Status</label>
 										<div class="radio">
 										 	<label><input type="radio" name="activity_status" value="1" checked="true">Active</label>

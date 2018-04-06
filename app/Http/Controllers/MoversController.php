@@ -298,7 +298,7 @@ class MoversController extends Controller
     	$agentInitials = $this->strAcronym($agentName, $max = 2, $acronym = '');
 
     	// Get the list of activities
-    	$activities = ClientActivityList::where(['status' => '1', 'listing_event' => '1'])->select('id', 'activity', 'image_name', 'description', 'activity_class')->get();
+    	$activities = ClientActivityList::where(['status' => '1', 'listing_event' => '1'])->select('id', 'activity', 'image_name', 'description', 'activity_class', 'tooltip_data', 'tooltip_position')->get();
 
     	// Fetch the rating for the agent
     	$agentRating = AgentClientRating::where(['agent_id' => $inviteDetails->agent_id])->avg('rating');

@@ -290,7 +290,7 @@ function calculateRoute(from, to) {
 					{
 					?>
 						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 col-sm-600">
-							<div class="boxes">
+							<div class="boxes" data-toggle="tooltip" data-placement="{{ $activity->tooltip_position }}" title="{{ $activity->tooltip_data }}">
 								<div class="img-icon">
 									<!-- If image is not available, show the default image -->
 									<img src="{{ ($activity->image_name !='' ) ? url('/images/activities/' . $activity->image_name) : url('/images/activity_image_not_found.png') }}" class="center-block" alt="">
@@ -381,9 +381,9 @@ function calculateRoute(from, to) {
 					<div class="comment-area">
 						<h2>Hi {{ $agentName }},</h2>
 						<p id="agent_rating_message_container">
-							I appreciate you work and want to say thank you.
+							I appreciate your work and want to say thank you.
 						</p>
-						<textarea name="agent_rating_message" id="agent_rating_message" class="form-control" style="display: none;">Hi {{ $agentName }},I appreciate you work and want to say thank you.</textarea>
+						<textarea name="agent_rating_message" id="agent_rating_message" class="form-control" style="display: none;">Hi {{ $agentName }},I appreciate your work and want to say thank you.</textarea>
 						<input type="hidden" name="agent_rating" id="agent_rating" value="">
 					</div>
 				</div>
@@ -437,7 +437,7 @@ function calculateRoute(from, to) {
 					<div class="col-sm-12 box-H-250 box-P-100" id="forward_mail_step1">
 						<div class="row">
 							<div class="col-sm-12">
-								<p>Canada Post’s Mail Forwarding service ensures all your important mail reaches you at your new address.</p>
+								<p>Moving or relocating to a new address? Ensure all your mail follow you to your new address. Letter mail, Registered Mail, and Magazines addressed to your old address will be delivered to the new address..</p>
 							</div>
 						</div>
 						<div class="clearfix"></div>
@@ -508,7 +508,7 @@ function calculateRoute(from, to) {
       <div class="col-sm-12 box-H-250 box-P-100">
        <div class="row">
         <div class="col-sm-12">
-         <p>Canada post cannot update your new address with all the organization you are have business with, especially infrequent mails such as, tax documents, driver's license renewals and financial statements</p>
+         <p>Parcels, prepaid envelopes, and government mailers are excluded from Canada Post Mail Forward Service. If you are expecting any of these deliveries, you must advise the sender(s) of your new address.</p>
         </div>
         <div class="clearfix"></div>
         <div class="col-sm-12">
@@ -797,7 +797,7 @@ function calculateRoute(from, to) {
      <div class="col-sm-12 box-H-250 box-P-100" id="mailbox_keys_step1">
       <div class="row">
        <div class="col-sm-12">
-        <p>If you recently moved to a neighbourhood where mail is delivered to a community mailbox, we recommend that you get new keys from Canada post, even if the former residents left the old mailbox keys behind.</p>
+        <p>If you have just moved to a new residence where you will receive mail at a community mailbox, complete the online form to request new keys. You will receive a notice-card when your keys are ready.</p>
        </div>
       </div>
       <div class="clearfix"></div>
@@ -903,7 +903,7 @@ function calculateRoute(from, to) {
      <div class="col-sm-12 box-H-250 box-P-100">
       <div class="row">
        <div class="col-sm-12">
-        <p>Moving to a new neighborhood, you need to setup new, cancel or transfer old service to your new address. If you need to open a Hydro, Gas, Water and Waste accounts, then start here:</p>
+        <p>If you are moving or relocating to a new address, you need a utility account at your new address. Set up water or waste account, get the city to deliver you recycle cart before you move in.</p>
        </div>
       </div>
       <div class="clearfix"></div>
@@ -1087,7 +1087,7 @@ function calculateRoute(from, to) {
 		      		<div class="col-sm-12 box-P-100" id="home_cleaning_services_step1">
 					<div class="row">
 		      			<div class="col-sm-12">
-      						<p>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service starts here</p>
+      						<p>If you are moving out of your home or an apartment, you need to hire a move out cleaner. On uDistro, home cleaning service companies will provide you with no obligation quotes within 24 hours.</p>
       					</div>
 						<div class="clearfix"></div>
       					<div class="col-sm-12">
@@ -1468,7 +1468,7 @@ function calculateRoute(from, to) {
 					 </div>
 		      		<div class="col-sm-12 box-P-100" id="moving_companies_step1">
 		      			<div class="col-sm-12">
-      						<p>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</p>
+      						<p>If you are moving or relocating to a new address, you need professional moving companies to make your relocation a breeze. On uDistro, professional movers will provide you with no obligation quotes within 24 hours.</p>
       					</div>
       					<div class="clearfix"></div>
       					<div class="col-sm-12">
@@ -1809,7 +1809,7 @@ function calculateRoute(from, to) {
 					 </div>
 		      		<div class="col-sm-12 box-P-100" id="tech_concierge_step2">
 		      			<div class="col-sm-12">
-      						<p>Moving to a new neighbourhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</p>
+      						<p>If you are moving or relocating to a new address, you need someone to install your appliances. From dishwasher to washing machines, dryers, range and stove. Technicians on uDistro will provide you with no obligation quotes within 24 hours.</p>
       					</div>
       					<div class="clearfix"></div>
 		      			<div class="col-sm-12">
@@ -2081,7 +2081,7 @@ function calculateRoute(from, to) {
 						
 						<div class="row">
 		      			<div class="col-sm-12">
-      						<p>Moving to a new neighborhood, and you need someone to clean your old apartment, or new house before you move in. Anything you need do on home cleaning service service starts here</p>
+      						<p>If you are moving or relocating to a new address, you need cable and internet service set up at your new address. On uDistro, digital service companies will provide you with no obligation quotes within 24 hours.</p>
       					</div>
 						<div class="clearfix"></div>
 		      			<div class="col-sm-12">
