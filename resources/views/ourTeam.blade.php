@@ -19,8 +19,14 @@
 	</nav>
 	<!-- End Navbar -->
 	<section class="topic-image"> <img src="{{ url('/images/team-topic.jpg') }}" alt=""/> </section>
-	<!-- About STARTS -->
 	<section class="mid-udistro">
+	 	<div class="container">
+		  	<h2>Coming Soon</h2>
+		  	<br><br>
+		</div>
+	</section>
+	<!-- About STARTS -->
+	<!-- <section class="mid-udistro">
 	 <div class="container">
 	  <h2>Leadership</h2>
 	  <div class="team-pictures">
@@ -102,6 +108,6 @@
 	  </div>
 	  </div>
 	 </div>
-	</section>
+	</section> -->
 	<!-- About ENDS --> 
 @endsection

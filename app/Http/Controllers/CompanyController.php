@@ -935,11 +935,15 @@ class CompanyController extends Controller
 					// Update the details
 					$company = Company::find( $userCompany->id );
 
-					$company->company_name 	= $companyData['company_name'];
-					$company->email 		= $companyData['company_email'];
-					$company->contact_number= $companyData['company_phone'];
-					$company->fax 			= $companyData['company_fax'];
-					$company->website 		= $companyData['company_website'];
+					$company->company_name 		= $companyData['company_name'];
+					$company->email 			= $companyData['company_email'];
+					$company->contact_number	= $companyData['company_phone'];
+					$company->fax 				= $companyData['company_fax'];
+					$company->website 			= $companyData['company_website'];
+
+					$company->profile 			= $companyData['company_profile'];
+					$company->guarantee_policy 	= ( isset( $companyData['company_guarantee_policy'] ) ) ? $companyData['company_guarantee_policy'] : null;
+
 					$company->updated_by	= $userId;
 
 					if( $company->save() )
@@ -1247,9 +1251,9 @@ class CompanyController extends Controller
                 $response['additional_information']                     = ucfirst( strtolower( $homeServiceArray->additional_information ) );
 
                 // Get the availability details
-                $response['availability1'] = $homeServiceArray['availability_date1'] . ' - ' . $homeServiceArray['availability_time1'];
-                $response['availability2'] = $homeServiceArray['availability_date2'] . ' - ' . $homeServiceArray['availability_time2'];
-                $response['availability3'] = $homeServiceArray['availability_date3'] . ' - ' . $homeServiceArray['availability_time3'];
+                $response['availability1'] = $homeServiceArray['availability_date1'] . ' ' . $homeServiceArray['availability_time1'];
+                $response['availability2'] = $homeServiceArray['availability_date2'] . ' ' . $homeServiceArray['availability_time2'];
+                $response['availability3'] = $homeServiceArray['availability_date3'] . ' ' . $homeServiceArray['availability_time3'];
 
                 // Get the moving from address
                 $clientMovingFromAddress = DB::table('home_cleaning_service_requests as t1')
@@ -1925,106 +1929,76 @@ class CompanyController extends Controller
 		// Server Side Validation
         $response =array();
 
-		$validation = Validator::make(
-		    array(
-		        'industry_type'	=> $companyData['company_industry_type']
-		    ),
-		    array(
-		        'industry_type' => array('required')
-		    ),
-		    array(
-		        'industry_type.required' => 'Please select industry type'
-		    )
-		);
-
-		if ( $validation->fails() )
+		// Check whether atleast one service is selected or not
+		if( isset( $companyData['company_services'] ) && count( $companyData['company_services'] ) != 0 )
 		{
-			$error = $validation->errors()->first();
-
-		    if( isset( $error ) && !empty( $error ) )
-		    {
-		        $response['errCode']    = 1;
-		        $response['errMsg']     = $error;
-		    }
-		}
-		else
-		{
-			// Check whether atleast one service is selected or not
-			if( isset( $companyData['company_services'] ) && count( $companyData['company_services'] ) != 0 )
+			// Check whether target area or working on multiple selection value is available or not
+			if( isset( $companyData['company_target_global'] ) || $companyData['company_target_area'] != '' )
 			{
-				// Check whether target area or working on multiple selection value is available or not
-				if( isset( $companyData['company_target_global'] ) || $companyData['company_target_area'] != '' )
+				// Get the company associated with the user
+				$userCompany = $user->company->first();
+
+				if( count( $userCompany ) > 0 )
 				{
-					// Get the company associated with the user
-					$userCompany = $user->company->first();
+					// Update the details
+					$company = Company::find( $userCompany->id );
 
-					if( count( $userCompany ) > 0 )
+					// $company->company_category_id 	= $companyData['company_industry_type'];
+
+					if( isset( $companyData['company_target_area'] ) )
 					{
-						// Update the details
-						$company = Company::find( $userCompany->id );
-
-						$company->company_category_id 	= $companyData['company_industry_type'];
-
-						if( isset( $companyData['company_target_area'] ) )
-						{
-							$company->target_area = $companyData['company_target_area'];
-						}
-						else
-						{
-							$company->target_area = null;	
-						}
-
-
-						if( isset( $companyData['company_target_global'] ) )
-						{
-							$company->working_globally = $companyData['company_target_global'];
-						}
-						else
-						{
-							$company->working_globally = '0';
-						}
-
-						if( isset( $companyData['company_availability_mode'] ) )
-						{
-							$company->availability_mode = $companyData['company_availability_mode'];
-						}
-						else
-						{
-							$company->availability_mode = '0';
-						}
-
-						$company->updated_by = $userId;
-
-						if( $company->save() )
-						{
-							// Update the services provided by the company
-							$userCompany->services()->sync($companyData['company_services']);
-
-							$response['errCode']    = 0;
-				        	$response['errMsg']     = 'Company Additional details updated successfully';
-						}
-						else
-						{
-							$response['errCode']    = 2;
-					        $response['errMsg']     = 'Some error in updating the company additional details';
-						}
+						$company->target_area = $companyData['company_target_area'];
 					}
 					else
 					{
-						$response['errCode']    = 4;
-				        $response['errMsg']     = 'Invalid company';
+						$company->target_area = null;	
+					}
+
+
+					if( isset( $companyData['company_target_global'] ) )
+					{
+						$company->working_globally = $companyData['company_target_global'];
+					}
+					else
+					{
+						$company->working_globally = '0';
+					}
+
+					if( isset( $companyData['company_availability_mode'] ) )
+					{
+						$company->availability_mode = $companyData['company_availability_mode'];
+					}
+					else
+					{
+						$company->availability_mode = '0';
+					}
+
+					$company->updated_by = $userId;
+
+					if( $company->save() )
+					{
+						// Update the services provided by the company
+						$userCompany->services()->sync($companyData['company_services']);
+
+						$response['errCode']    = 0;
+			        	$response['errMsg']     = 'Company Additional details updated successfully';
+					}
+					else
+					{
+						$response['errCode']    = 2;
+				        $response['errMsg']     = 'Some error in updating the company additional details';
 					}
 				}
 				else
 				{
-					$response['errCode']    = 2;
-		        	$response['errMsg']     = 'Please provide target area';
+					$response['errCode']    = 4;
+			        $response['errMsg']     = 'Invalid company';
 				}
 			}
 			else
 			{
-				$response['errCode']    = 3;
-		        $response['errMsg']     = 'Please select atleast one service';
+				$response['errCode']    = 2;
+	        	$response['errMsg']     = 'Please provide target area';
 			}
 		}
 

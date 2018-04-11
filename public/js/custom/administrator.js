@@ -63,7 +63,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -127,7 +130,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
 
                         // Refresh the form and close the modal
                         $('#frm_change_password')[0].reset();
@@ -135,7 +141,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -174,14 +183,20 @@ $(document).ready(function(){
             {
                 if( response.errCode == 0 )
                 {
-                    alertify.success( response.errMsg );
+                    // alertify.success( response.errMsg );
+                    $('#alert_box_modal').find('.modal-header').html('Success');
+                	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                	$('#alert_box_modal').modal('show');
 
                     // Refresh the form and close the modal
                     $('#frm_forgot_password')[0].reset();
                 }
                 else
                 {
-                    alertify.error( response.errMsg );
+                    // alertify.error( response.errMsg );
+                    $('#alert_box_modal').find('.modal-header').html('Alert');
+                	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                	$('#alert_box_modal').modal('show');
                 }
             }
         });
@@ -243,7 +258,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_navigation_category')[0].reset();
@@ -255,7 +273,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -383,7 +404,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_navigation')[0].reset();
@@ -394,7 +418,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -521,7 +548,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_navigation')[0].reset();
@@ -533,7 +563,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -579,7 +612,10 @@ $(document).ready(function(){
 
     		if($.trim(pageContentTxt) == '')
     		{
-    		   	alertify.error('Please enter some page content');
+    		   	// alertify.error('Please enter some page content');
+    		   	$('#alert_box_modal').find('.modal-header').html('Alert');
+    		   	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    		   	$('#alert_box_modal').modal('show');
     		}
     		else
     		{
@@ -610,7 +646,10 @@ $(document).ready(function(){
 				    success: function(response){
 				    	if( response.errCode == 0 )
 				    	{
-				    		alertify.success( response.errMsg );
+				    		// alertify.success( response.errMsg );
+				    		$('#alert_box_modal').find('.modal-header').html('Success');
+			    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    			$('#alert_box_modal').modal('show');
 							
 				    		// Refresh the form and close the modal
 				    		$('#frm_add_page')[0].reset();
@@ -622,7 +661,10 @@ $(document).ready(function(){
 				    	}
 				    	else
 				    	{
-				    		alertify.error( response.errMsg );
+				    		// alertify.error( response.errMsg );
+				    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    			$('#alert_box_modal').modal('show');
 				    	}
 				    }
 	    		});
@@ -679,7 +721,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing page id');
+    		// alertify.error('Missing page id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    		$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -826,7 +871,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_province')[0].reset();
@@ -838,7 +886,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    },
 
@@ -909,7 +960,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                         
                         // Refresh the form and close the modal
                         $('#frm_add_moving_category')[0].reset();
@@ -921,7 +975,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -1004,7 +1061,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                         
                         // Refresh the form and close the modal
                         $('#frm_add_moving_item')[0].reset();
@@ -1016,7 +1076,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -1107,7 +1170,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                         
                         // Refresh the form and close the modal
                         $('#frm_add_activity')[0].reset();
@@ -1119,7 +1185,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -1198,7 +1267,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                         
                         // Refresh the form and close the modal
                         $('#frm_add_provincial_agency')[0].reset();
@@ -1210,7 +1282,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -1293,7 +1368,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                         
                         // Refresh the form and close the modal
                         $('#frm_add_services')[0].reset();
@@ -1305,7 +1383,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -1373,7 +1454,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                         
                         // Refresh the form and close the modal
                         $('#frm_edit_industry')[0].reset();
@@ -1385,7 +1469,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -1605,7 +1692,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing province id');
+    		// alertify.error('Missing province id');
+		    $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing province id');
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -1637,7 +1727,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing category id');
+            // alertify.error('Missing category id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing category id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -1671,7 +1764,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing item id');
+            // alertify.error('Missing item id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing item id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -1707,7 +1803,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing Activity id');
+            // alertify.error('Missing Activity id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing Activity id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -1771,7 +1870,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing Activity id');
+            // alertify.error('Missing Activity id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing Activity id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -1806,7 +1908,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing Service id');
+            // alertify.error('Missing Service id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing Service id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -1835,7 +1940,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing province id');
+            // alertify.error('Missing province id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing province id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -1903,7 +2011,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_utility_service_category')[0].reset();
@@ -1915,7 +2026,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -1972,7 +2086,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing service category id');
+    		// alertify.error('Missing service category id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing service category id');
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -2039,7 +2156,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_service_type')[0].reset();
@@ -2051,7 +2171,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -2108,7 +2231,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing service type id');
+    		// alertify.error('Missing service type id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing service type id');
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -2243,7 +2369,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_service_provider')[0].reset();
@@ -2255,7 +2384,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -2396,7 +2528,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_company_category')[0].reset();
@@ -2408,7 +2543,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -2465,7 +2603,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing category id');
+    		// alertify.error('Missing category id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing category id');
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -2551,7 +2692,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_payment_plan')[0].reset();
@@ -2563,7 +2707,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -2633,7 +2780,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing category id');
+    		// alertify.error('Missing category id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing category id');
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -2689,7 +2839,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_city')[0].reset();
@@ -2701,7 +2854,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -2760,7 +2916,10 @@ $(document).ready(function(){
     	}
     	else
     	{
-    		alertify.error('Missing category id');
+    		// alertify.error('Missing category id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing category id');
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -2898,7 +3057,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_company')[0].reset();
@@ -2910,7 +3072,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -3149,7 +3314,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_edit_company')[0].reset();
@@ -3161,7 +3329,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -3303,7 +3474,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_agent')[0].reset();
@@ -3315,7 +3489,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -3504,7 +3681,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_company_representative')[0].reset();
@@ -3516,7 +3696,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -3661,7 +3844,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_edit_company_representative')[0].reset();
@@ -3673,7 +3859,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -3809,7 +3998,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the form and close the modal
 			    		$('#frm_edit_agent')[0].reset();
@@ -3821,7 +4013,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -3869,7 +4064,10 @@ $(document).ready(function(){
 
     		if($.trim(pageContentTxt) == '')
     		{
-    		   	alertify.error('Please enter some content');
+    		   	// alertify.error('Please enter some content');
+	    		$('#alert_box_modal').find('.modal-header').html('Success');
+				$('#alert_box_modal').find('.modal-body').html('Please enter some content');
+				$('#alert_box_modal').modal('show');
     		}
     		else
     		{
@@ -3900,7 +4098,10 @@ $(document).ready(function(){
 				    success: function(response){
 				    	if( response.errCode == 0 )
 				    	{
-				    		alertify.success( response.errMsg );
+				    		// alertify.success( response.errMsg );
+				    		$('#alert_box_modal').find('.modal-header').html('Success');
+							$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+							$('#alert_box_modal').modal('show');
 							
 				    		// Refresh the form and close the modal
 				    		$('#frm_email_template')[0].reset();
@@ -3912,7 +4113,10 @@ $(document).ready(function(){
 				    	}
 				    	else
 				    	{
-				    		alertify.error( response.errMsg );
+				    		// alertify.error( response.errMsg );
+				    		$('#alert_box_modal').find('.modal-header').html('Alert');
+							$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+							$('#alert_box_modal').modal('show');
 				    	}
 				    }
 	    		});
@@ -4034,7 +4238,10 @@ $(document).ready(function(){
     		    {
     		        if( response.errCode == 0 )
     		        {
-    		            alertify.success( response.errMsg );
+    		            // alertify.success( response.errMsg );
+    		            $('#alert_box_modal').find('.modal-header').html('Success');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 
     		            // Refresh the form and close the modal
     		            $('#frm_response_time')[0].reset();
@@ -4047,7 +4254,10 @@ $(document).ready(function(){
     		        }
     		        else
     		        {
-    		            alertify.error( response.errMsg );
+    		            // alertify.error( response.errMsg );
+    		            $('#alert_box_modal').find('.modal-header').html('Alert');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
     		        }
     		    }
     		});
@@ -4188,7 +4398,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_role')[0].reset();
@@ -4200,7 +4413,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -4263,7 +4479,10 @@ $(document).ready(function(){
     	}
 		else
         {
-            alertify.error('Missing Role id');
+            // alertify.error('Missing Role id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing Role id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -4347,7 +4566,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_permission')[0].reset();
@@ -4359,7 +4581,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+						$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+						$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -4419,7 +4644,10 @@ $(document).ready(function(){
     	}
 		else
         {
-            alertify.error('Missing permission id');
+            // alertify.error('Missing permission id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing permission id');
+			$('#alert_box_modal').modal('show');
         }
     });
 
@@ -4490,7 +4718,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_rolepermissions')[0].reset();
@@ -4502,7 +4733,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    },
 				error: function(xhr, ajaxOptions, thrownError) {
@@ -4557,14 +4791,20 @@ $(document).ready(function(){
 				success: function(response){
 					if( response.errCode == 0 )
 					{
-						alertify.success( response.errMsg );
+						// alertify.success( response.errMsg );
+						$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the datatable
 						$('#datatable_rolepermissions').DataTable().ajax.reload();
 					}
 					else
 					{
-						alertify.error( response.errMsg );
+						// alertify.error( response.errMsg );
+						$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 					}
 				}
 				
@@ -4573,7 +4813,10 @@ $(document).ready(function(){
 		}
 		else
 		{
-			alertify.error('Missing permission and role');
+			// alertify.error('Missing permission and role');
+			$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			$('#alert_box_modal').modal('show');
 		}
 		})
 		
@@ -4647,7 +4890,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_roleusers')[0].reset();
@@ -4659,7 +4905,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    },
 				error: function(xhr, ajaxOptions, thrownError) {
@@ -4714,14 +4963,20 @@ $(document).ready(function(){
 				success: function(response){
 					if( response.errCode == 0 )
 					{
-						alertify.success( response.errMsg );
+						// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the datatable
 						$('#datatable_roleusers').DataTable().ajax.reload();
 					}
 					else
 					{
-						alertify.error( response.errMsg );
+						// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 					}
 				}
 				
@@ -4730,7 +4985,10 @@ $(document).ready(function(){
 		}
 		else
 		{
-			alertify.error('Missing user and role id');
+			// alertify.error('Missing user and role id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing user and role id');
+			$('#alert_box_modal').modal('show');
 		}
 		})
 		
@@ -4804,7 +5062,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_permissionusers')[0].reset();
@@ -4816,7 +5077,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    },
 				error: function(xhr, ajaxOptions, thrownError) {
@@ -4871,14 +5135,20 @@ $(document).ready(function(){
 				success: function(response){
 					if( response.errCode == 0 )
 					{
-						alertify.success( response.errMsg );
+						// alertify.success( response.errMsg );
+						$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 						
 			    		// Refresh the datatable
 						$('#datatable_permissionusers').DataTable().ajax.reload();
 					}
 					else
 					{
-						alertify.error( response.errMsg );
+						// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 					}
 				}
 				
@@ -4887,7 +5157,10 @@ $(document).ready(function(){
 		}
 		else
 		{
-			alertify.error('Missing user and permission id');
+			// alertify.error('Missing user and permission id');
+			$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html('Missing user and permission id');
+			$('#alert_box_modal').modal('show');
 		}
 		})
 		
@@ -4988,7 +5261,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Reset the form
 			    		$('#frm_send_agent_email')[0].reset();
@@ -4999,7 +5275,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
 			});
@@ -5072,7 +5351,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Reset the form
 			    		$('#frm_send_company_representative_email')[0].reset();
@@ -5083,7 +5365,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
 			});
@@ -5138,14 +5423,20 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 
 			    		// Refresh the datatable
 			    		$('#datatable_jobs').DataTable().ajax.reload();
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    					$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});

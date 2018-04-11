@@ -850,8 +850,9 @@ $(document).ready(function(){
     			$(this).remove();
     		}
 
-    		// Add max-width: 800 to all images
-    		$(this).css('max-width', '800px');
+    		// Add max-width: 200px, max-height: 200px to all images
+    		$(this).css('max-width', '200px');
+    		$(this).css('max-height', '200px');
     	});
 
     	// Remove the "Click here to get started link" as display none will not work on the email server
@@ -910,9 +911,9 @@ $(document).ready(function(){
     				$(this).remove();
     			}
 
-    			// Add max-width: 250px, max-height: 250px to all images
-    			$(this).css('max-width', '250px');
-    			$(this).css('max-height', '250px');
+    			// Add max-width: 200px, max-height: 200px to all images
+    			$(this).css('max-width', '200px');
+    			$(this).css('max-height', '200px');
     		});
 
     		// Show the get started button

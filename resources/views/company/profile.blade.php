@@ -519,13 +519,30 @@
 											<input class="form-control" name="company_website" id="company_website" type="text" placeholder="Company Website" value="{{ $companyDetails->website or '' }}">
 										</div>
 									</div>
+
 									<div class="form-group">
-									<label class="col-lg-3 control-label">&nbsp;</label>
-									<div class="col-lg-8">
-									<div class="ui-select">
-									<button type="submit" class="btn btn-primary" name="btn_update_company_details" id="btn_update_company_details">Submit</button>
+										<label class="col-lg-3 control-label">Profile:</label>
+										<div class="col-lg-8">
+											<textarea name="company_profile" id="company_profile" class="form-control" placeholder="Company Profile">{{ $companyDetails->profile or '' }}</textarea>
+										</div>
 									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">Guarantee Policy:</label>
+										<div class="col-lg-8">
+											<label class="switch">
+											  <input type="checkbox" name="company_guarantee_policy" id="company_guarantee_policy" value="1" {{ ( $companyDetails['guarantee_policy'] == 1 ) ? 'checked' : '' }}>
+											  <span class="slider round"></span>
+											</label>
+										</div>
 									</div>
+
+									<div class="form-group">
+										<label class="col-lg-3 control-label">&nbsp;</label>
+										<div class="col-lg-8">
+											<div class="ui-select">
+												<button type="submit" class="btn btn-primary" name="btn_update_company_details" id="btn_update_company_details">Submit</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</fieldset>
@@ -756,7 +773,7 @@
 		                				<label class="col-lg-3 control-label">Availability Mode:</label>
 		                				<div class="col-lg-8">
 		                					<label class="switch">
-		                					  <input type="checkbox" name="company_availability_mode" id="company_availability_mode" value="1" checked="">
+		                					  <input type="checkbox" name="company_availability_mode" id="company_availability_mode" value="1" {{ ( $companyDetails['availability_mode'] == 1 ) ? 'checked' : '' }}>
 		                					  <span class="slider round"></span>
 		                					</label>
 		                				</div>

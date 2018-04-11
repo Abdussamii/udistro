@@ -1543,14 +1543,24 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success(response.errMsg);
+			    		// alertify.success(response.errMsg);
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 
 			    		// Update the rating average count
 			    		$('#agent_average_rating').html('( ' + response.agentRating + ' Rating )');
+
+			    		setTimeout(function(){
+			    			window.location.href = $('meta[name="route"]').attr('content')
+			    		}, 2000);
 			    	}
 			    	else
 			    	{
-			    		alertify.error(response.errMsg);
+			    		// alertify.error(response.errMsg);
+			    		$('#service_response').find('.modal-header').html('Alert');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 			    	}
 			    }
 			});
@@ -1584,7 +1594,11 @@ $(document).ready(function(){
 
 			if( $('.done_activity, .discard_activity').index(this) > 1 )
 			{
-				alertify.error('You are not following the correct sequence');
+				// alertify.error('You are not following the correct sequence');
+
+				$('#service_response').find('.modal-header').html('Alert');
+				$('#service_response').find('.modal-body').html('You are not following the correct sequence');
+				$('#service_response').modal('show');
 			}
 		}
 	});
@@ -1725,7 +1739,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 
 			    		// Reset the form
 			    		$('#frm_announcement_email')[0].reset();
@@ -1735,7 +1752,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Alert');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 			    	}
 			    }
     		});
@@ -1760,11 +1780,17 @@ function userActivityFeedback(activity, feedback)
 	    success: function(response){
 	    	if( response.errCode == 0 )
 		    {
-		    	alertify.success(response.errMsg);
+		    	// alertify.success(response.errMsg);
+		    	$('#service_response').find('.modal-header').html('Success');
+		    	$('#service_response').find('.modal-body').html(response.errMsg);
+		    	$('#service_response').modal('show');
 		    }
 		    else
 		    {
-		    	alertify.error(response.errMsg);	
+		    	// alertify.error(response.errMsg);
+		    	$('#service_response').find('.modal-header').html('Alert');
+		    	$('#service_response').find('.modal-body').html(response.errMsg);
+		    	$('#service_response').modal('show');
 		    }
 	    }
 	});

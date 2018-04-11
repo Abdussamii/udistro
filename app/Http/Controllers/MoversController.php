@@ -57,6 +57,9 @@ use App\ProvincialAgencyDetail;
 use App\ServiceRequestResponse;
 use App\PaymentTransactionDetail;
 use App\ShareAnnouncementEmail;
+use App\Rating;
+use App\Province;
+use App\City;
 
 use Validator;
 use Helper;
@@ -557,7 +560,7 @@ class MoversController extends Controller
     	$response = array();
     	if( $agentId != '' && $clientId != '' && $invitationId != '' )
     	{
-    		// Check if rating already exist
+	    	// Check if rating already exist
     		$rating = AgentClientRating::where(['invitation_id' => $invitationId, 'agent_id' => $agentId, 'client_id' => $clientId])->first();
 
     		if( count( $rating ) == 0 )
@@ -575,6 +578,185 @@ class MoversController extends Controller
 	    		{
 	    			// Fetch the updated rating percentage
     				$agentRating = AgentClientRating::where(['agent_id' => $agentId])->avg('rating');
+
+	    	    	/** 
+	    	    	 * To send the email fetch the required data
+	    			 * The required details include the Mover's details and the moving from and moving to address
+	    			 * The work related information include the companies details which received the quotation
+	    	    	 */
+
+	    	    	$clientDetails = AgentClient::find($clientId);
+
+	    	    	$clientMovingFrom 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->first();
+	    	    	$clientMovingTo 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->first();
+
+	    	    	$clientMovingFromProvince 	= Province::where(['id' => $clientMovingFrom->province_id, 'status' => '1'])->select('id', 'name')->first();
+	    	    	$clientMovingFromCity 		= City::where(['id' => $clientMovingFrom->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+	    	    	$clientMovingFromAddress= array(
+	    	    		'address1' => $clientMovingFrom->address1,
+	    	    		'province' => $clientMovingFromProvince->name,
+	    	    		'city' => $clientMovingFromCity->name,
+	    	    		'postal_code' => $clientMovingFrom->postal_code,
+	    	    		'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+	    	    		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
+	    	    		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
+	    	    		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
+	    	    	);
+
+	    	    	$clientMovingToProvince 	= Province::where(['id' => $clientMovingTo->province_id, 'status' => '1'])->select('id', 'name')->first();
+	    	    	$clientMovingToCity 		= City::where(['id' => $clientMovingTo->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+	    	    	$clientMovingToAddress 	= array(
+	    	    		'address1' => $clientMovingTo->address1,
+	    	    		'province' => $clientMovingToProvince->name,
+	    	    		'city' => $clientMovingToCity->name,
+	    	    		'postal_code' => $clientMovingTo->postal_code,
+	    	    		'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+	    	    		'moving_from_floor' => $clientMovingTo->moving_from_floor,
+	    	    		'moving_from_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+	    	    		'moving_from_property_type' => $clientMovingTo->moving_from_property_type
+	    	    	);
+
+	    	    	// Digital service
+	    	    	$digitalServiceRequest = DB::table('digital_service_requests as t1')
+	    	    							->join('companies as t2', 't1.digital_service_company_id', '=', 't2.id')
+	    	    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    	    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    	    							->get();
+
+	    	    	// Home Cleaning service
+	    	    	$homeCleaningServiceRequest = DB::table('home_cleaning_service_requests as t1')
+	    		    							->join('companies as t2', 't1.company_id', '=', 't2.id')
+	    		    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    		    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    		    							->get();
+
+	    	    	// Moving service
+	    	    	$movingServiceRequest = DB::table('moving_item_service_requests as t1')
+	    	    							->join('companies as t2', 't1.mover_company_id', '=', 't2.id')
+	    	    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    	    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    	    							->get();
+
+	    	    	// Tech Concierge service
+	    	    	$techConciergeServiceRequest = DB::table('tech_concierge_service_requests as t1')
+	    		    							->join('companies as t2', 't1.company_id', '=', 't2.id')
+	    		    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    		    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    		    							->get();
+
+	    		   	$companiesList = array();
+
+	    		   	if( count( $digitalServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $digitalServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    					$interval = $createdAt->diff($currentdate);
+	    					$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	if( count( $homeCleaningServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $homeCleaningServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    		   			$interval = $createdAt->diff($currentdate);
+	    		   			$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	if( count( $movingServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $movingServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    		   			$interval = $createdAt->diff($currentdate);
+	    		   			$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	if( count( $techConciergeServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $techConciergeServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    		   			$interval = $createdAt->diff($currentdate);
+	    		   			$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	$emailData = array(
+	    		   		'fname' 		=> ucwords( strtolower( $clientDetails['fname'] ) ),
+	    		   		'fname' 		=> ucwords( strtolower( $clientDetails['lname'] ) ),
+	    		   		'name'			=> ucwords( strtolower( $clientDetails['fname'] . ' ' . $clientDetails['lname'] ) ),
+	    		   		'subject' 		=> 'Feedback Response',
+	    		   		'email' 		=> $clientDetails['email'],
+	    		   		'contact_number'=> $clientDetails['contact_number'],
+
+	    		   		'moving_from'	=> $clientMovingFromAddress,
+	    		   		'moving_to'		=> $clientMovingToAddress,
+	    		   		'companies' 	=> $companiesList
+	    		   	);
+
+	    		   	// Send email
+	    		   	if( app()->env == 'local' )
+	    		   	{
+		    		   	Mail::send('emails.projectRequestFeedback', ['emailData' => $emailData], function ($m) use ($emailData) {
+		    		   	    $m->from('info@udistro.ca', 'Udistro');
+		    		   	    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+		    		   	});
+	    		   	}
 
 	    			$response['errCode'] 	= 0;
 		    		$response['errMsg'] 	= 'Thanks for the feedback!';
@@ -1949,12 +2131,20 @@ class MoversController extends Controller
  					// $homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
  					// $homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
 					
-					$homeCleaningServiceRequest->availability_date1 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
-					$homeCleaningServiceRequest->availability_time1		 	= $homeCleaningDetails['availability_time_upto1'];
-					$homeCleaningServiceRequest->availability_date2 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date5']));
-					$homeCleaningServiceRequest->availability_time2 		= $homeCleaningDetails['availability_time_upto2'];
-					$homeCleaningServiceRequest->availability_date3 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date6']));
-					$homeCleaningServiceRequest->availability_time3		 	= $homeCleaningDetails['availability_time_upto3'];
+					// $homeCleaningServiceRequest->availability_date1 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
+					// $homeCleaningServiceRequest->availability_time1		 	= $homeCleaningDetails['availability_time_upto1'];
+					// $homeCleaningServiceRequest->availability_date2 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date5']));
+					// $homeCleaningServiceRequest->availability_time2 		= $homeCleaningDetails['availability_time_upto2'];
+					// $homeCleaningServiceRequest->availability_date3 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date6']));
+					// $homeCleaningServiceRequest->availability_time3		 	= $homeCleaningDetails['availability_time_upto3'];
+
+					$homeCleaningServiceRequest->availability_date1 	= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
+					$homeCleaningServiceRequest->availability_date2 	= ( $homeCleaningDetails['availability_date5'] != '' ) ? date('Y-m-d', strtotime($homeCleaningDetails['availability_date2'])) : null;
+					$homeCleaningServiceRequest->availability_date3 	= ( $homeCleaningDetails['availability_date6'] != '' ) ? date('Y-m-d', strtotime($homeCleaningDetails['availability_date3'])) : null;
+
+					$homeCleaningServiceRequest->availability_time1 	= $homeCleaningDetails['availability_time_upto1'];
+					$homeCleaningServiceRequest->availability_time2 	= ( $homeCleaningDetails['availability_time_upto2'] != '' ) ? $homeCleaningDetails['availability_time_upto2'] : null;
+					$homeCleaningServiceRequest->availability_time3 	= ( $homeCleaningDetails['availability_time_upto3'] != '' ) ? $homeCleaningDetails['availability_time_upto3'] : null;
 
  					$homeCleaningServiceRequest->additional_information = $homeCleaningDetails['home_cleaning_additional_information'];
  					$homeCleaningServiceRequest->status = '1';

@@ -142,12 +142,20 @@ $(function(){
     	{
     		if( movingItemCategoryId == '' )
     		{
-    			alertify.error('Please select an option');
+    			// alertify.error('Please select an option');
+    			$('#service_response').find('.modal-header').html('Alert');
+    			$('#service_response').find('.modal-body').html('Please select an option');
+    			$('#service_response').modal('show');
+
     			$(this).closest('#moving_item_category_container').find('.moving_item_category').focus();
     		}
     		else if( quantity == '' )
     		{
-    			alertify.error('Please enter the weight');
+    			// alertify.error('Please enter the weight');
+    			$('#service_response').find('.modal-header').html('Alert');
+    			$('#service_response').find('.modal-body').html('Please enter the weight');
+    			$('#service_response').modal('show');
+
     			$(this).closest('#moving_item_category_container').find('.moving_item_quantity').focus();
     		}
     	}
@@ -156,7 +164,6 @@ $(function(){
 
     // To remove the moving detailed job description from cart
     $(document).on('click', '.remove_item_from_list', function(){
-
     	// Decrease the quantity from cart
     	var itemCount = $(this).closest('#moving_item_category_container').find('.selected_item_list').length - 1;
 
@@ -164,7 +171,11 @@ $(function(){
 
     	// Remove the list item
     	$(this).closest('.selected_item_list').remove();
+    });
 
+    // Hide the tooltip when user click on get started
+    $('.activities_container').click(function(){
+    	$('[data-toggle="tooltip"]').tooltip("hide");
     });
 });
 
@@ -198,7 +209,12 @@ function calculateRoute(from, to) {
         });
       }
       else
-        alertify.error('Unable to retrieve route map');
+      {
+        // alertify.error('Unable to retrieve route map');
+      	$('#service_response').find('.modal-header').html('Alert');
+      	$('#service_response').find('.modal-body').html('Unable to retrieve route map');
+      	$('#service_response').modal('show');
+      }
     }
   );
 }
@@ -2429,102 +2445,10 @@ function calculateRoute(from, to) {
 	    	<div class="modal-body">
 	      		<div class="close close-btn close_modal" data-activity="share_announcement" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
 		      	
-		      	<!-- <div class="row" id="share_announcement_container">
-		      		<div class="col-sm-4 col-md-4 col-lg-4">
-					<div class="propertyiMage">
-		      			<img src="{{ url('/images/house_sold.png') }}" height="200" width="250" alt="udistro">
-					</div>
-		      			<div class="specialThanksBox">
-		      				<h4>Special Thanks to Agent {{ $agentName }}</h4>
-		      				<ul class="ratingstar">
-		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-		      					<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-		      				</ul>
-		      				<span>( {{ $agentRating }} Rating )</span>
-		      			</div>
-		      		</div>
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-						<div class="announcement_right-box">
-							<div class="row" id="announcement_message">
-								<div class="col-sm-12">
-									<div class="announcement_title">
-										<h2>The {{ ucwords( strtolower( $clientName ) ) }} are moving!</h2>
-									</div>
-									<div class="clearfix"></div>
-									<div class="announcement_message">
-										<div class="hi_hello">Hi friends</div>
-										<p>we are moving from South to North.</p>
-										<p>Stop by Saturday night for a housewarming party!</p>
-										<p>With love from</p>
-										<div class="announc_Client_name">{{ ucwords( strtolower( $clientName ) ) }}</div>
-									</div>
-								</div>
-							</div>
-							<div class="clearfix"></div>
-							<div class="bottom_Cdetails-Box">
-								<div class="col-sm-12">
-									<div class="col-sm-6 col-md-6 col-lg-6 right-box-border">
-										<div class="row">
-											<div class="col-sm-4">
-												<div class="row">
-													<img src="{{ ( $companyDetails->image != '' ) ? url('/images/company/' . $companyDetails->image) : url('/images/movers/company_icon.png') }}" height="60px" width="60px" alt="Udistro" />
-												</div>
-											</div>
-											<div class="col-sm-8">
-												<div class="row">
-													<div class="company-Details">
-														{{ ucwords( strtolower( $companyDetails->company_name ) ) }}
-													</div>
-													<div class="company-Details">
-														{{ ucwords( strtolower( $companyDetails->address ) ) }}, {{ $companyProvince->name }}, {{ $companyCity->name }}, {{ $companyDetails->postal_code }}
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-6 col-md-6 col-lg-6 text-left">
-										<img src="{{ ( $agentDetails->image != '' ) ? url('/images/agents/' . $agentDetails->image) : url('/images/movers/user-avtar.png') }}" class="user-avtar" alt="Udistro" height="50px" width="50px">
-										<div class="client-Details">
-											{{ $agentName }}
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-		      		</div>
-		      	</div> --> 
-		      	<!-- <div class="annou-modelfooter-wrap">
-		      		<div class="col-sm-8 col-md-8 col-lg-8">
-		      			<ul class="comment-group">
-							<li><a href="javascript:void(0);" class="agent_helpful"><i class="fa fa-thumbs-up" aria-hidden="true"></i><span class="agent_helpful_count">{{ $agentHelpfulCount }}</span> Helpful</a></li>
-							<li><a href="javascript:void(0);" id="share_announcement_edit_message"><i class="fa fa-pencil" aria-hidden="true"></i>Edit Message</a></li>
-						</ul>
-		      		</div>
-		      		<div class="col-sm-4 col-md-4 col-lg-4">
-		      			<div class="share-announc">Share this on: </div>
-		      			<a href="javascript:void(0);" id="share_announcement_email"><i class="fa fa-envelope-square"></i></a>
-		      		</div>
-		      	</div> -->
-
 		      	<table align="center" style=" background:#fff; width:870px;">
 	      			<tr id="share_announcement_container">
 	      				<td style="padding:10px; width: 200px;">
 	      					<img src="{{ url('/images/house_sold.png') }}" height="200" width="250" alt="udistro">
-	      					
-	      					<!-- <div style="background: #f4f5f5; border-radius: 5px; margin-top: 15px; text-align: center; padding: 10px; font-size:16px;">
-	      						<h4>Special Thanks to Agent<br> {{ $agentName }}</h4>
-	      						<ul class="ratingstar" style="height: 40px;">
-	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-	      							<li><a href="javascript:void(0);"><i class="fa fa-star assign_agent_rating" aria-hidden="true"></i></a></li>
-	      						</ul>
-	      						<span>( {{ $agentRating }} Rating )</span>
-	      					</div> -->
 
 	      					<table style="text-align: center; width: 100%;">
 	      						<tr>
