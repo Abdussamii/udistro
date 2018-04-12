@@ -76,11 +76,11 @@ $(function(){
 
     // Multi-select Inintialize
     $('.multiselect').multipleSelect({
-    	placeholder: 'Select',
-        selectAll: false,
-        multiple: true,
-        width: 880,
-        multipleWidth: 280
+		placeholder: 'Select Service',
+		selectAll: false,
+		multiple: true,
+		width: 300,
+		// multipleWidth: 280
     });
 
     // Datepicker intialize
@@ -906,187 +906,230 @@ function calculateRoute(from, to) {
  </div>
 </div>
 <!-- Mailbox keys Modal End -->
+<style type="text/css">
+	.connect_utilitiy h5 {
+		font-weight: 700;
+		text-align: center;
+		border-bottom: 1px solid #ddd;
+		padding-bottom: 15px;
+		margin-bottom: 0;
+	}
 
+	.connect_utilitiy span {
+		font-size: 14px;
+	}
+
+	.connect_utilitiy_company {
+		width:100%;
+		display: table;
+		border:1px solid #eee;
+		padding: 0px 5px;
+		font-size: 14px;
+		color: #333;
+		margin-top: 10px;
+		border-radius: 4px;
+	}
+
+	.connect_utilitiy_company .form-control {
+		border:none;
+		box-shadow: none;
+	}
+	.utilitie-company-name {
+		display: table-cell;
+		width: 80%
+		padding:5px 0;
+	}
+	.utilitie-company-add {
+		display: table-cell;
+		width: 12%;
+		text-align: center;
+		border-left:1px solid #eee;
+		padding:5px 0;
+	}
+</style>
 <!-- Connect Utilities Modal -->
 <div id="connect_utilities_modal" class="modal fade mover-modal">
- <div class="modal-dialog modal-lg"> 
-  <!-- Modal content-->
-  <div class="modal-content">
-   <div class="modal-body">
-    <div class="close close-btn close_modal" data-activity="connect_utilities" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
-    <div class="row">
-	<!-- model box 1 starts -->
-    <div id="connect_utilities_step1" class="model-WrapCont">
-     <h2>Connect Utilities</h2>
-     <div class="col-sm-12 box-H-250 box-P-100">
-      <div class="row">
-       <div class="col-sm-12">
-        <p>If you are moving or relocating to a new address, you need a utility account at your new address. Set up water or waste account, get the city to deliver you recycle cart before you move in.</p>
-       </div>
-      </div>
-      <div class="clearfix"></div>
-      
-      	<div class="get_started_LB">
-			<a href="javascript:void(0);" id="connect_utility_agency1" style="width: 220px;">Manitoba Hydro</a>
-			<a href="javascript:void(0);" id="connect_utility_agency2" style="width: 220px;">Water, Waste and Bin</a>
+	<div class="modal-dialog modal-lg"> 
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="close close-btn close_modal" data-activity="connect_utilities" data-dismiss="modal"><img src="{{ url('/images/movers/close-img.png') }}" alt=""></div>
+				<div class="row">
+				    <div id="connect_utilities_step1" class="model-WrapCont">
+				     	<h2>Connect Utilities</h2>
+				    </div>
+
+				    <div class="col-sm-12 box-H-250 box-P-100" id="utility_service_step_start">
+		    			<div class="panel-group provincial_health_agencies" id="connect_utilities">
+					    <?php
+					    if( isset( $utilities ) && count( $utilities ) > 0 )
+					    {
+					    	foreach( $utilities as $utility )
+					    	{
+					    	?>
+    			        		<div class="panel panel-default">
+    			        			<div class="panel-heading">
+    			        				<h4 class="panel-title">
+    			        					<a data-toggle="collapse" data-parent="#connect_utilities" href="#{{ 'utility_' . $utility->id }}">{{ $utility->utility_name }}</a>
+    			        				</h4>
+    			        			</div>
+    			        			<div id="{{ 'utility_' . $utility->id }}" class="panel-collapse collapse">
+    			        				<div class="panel-body">
+    			        					<div class="utility_service_container">
+    			        						<!-- Moving From -->
+    			        						<div class="col-sm-6 col-md-6 col-lg-6">
+    			        							<div class="connect_utilitiy">
+    			        								<h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5> 
+    			        								<div class="connect_utilitiy_company">
+    			        									<?php
+    			        									if( isset( $utilityCompanies ) && count( $utilityCompanies ) > 0 )
+    			        									{
+    			        									?>
+    			        										<select class="form-control moving_from_utility_companies">
+    			        											<option value="">Select Company</option>
+	    			        										<?php
+	    			        										foreach( $utilityCompanies as $utilityCompany )
+	    			        										{
+	    			        											if( $utility->id == $utilityCompany->utility_id )
+	    			        											{
+	    			        											?>
+	    			        												<option data-url="{{ $utilityCompany->url }}" data-contact="{{ $utilityCompany->phone_number }}" value="{{ $utilityCompany->id }}">{{ $utilityCompany->utility_company_name }}</option>
+	    			        											<?php
+	    			        											}
+	    			        										}
+	    			        										?>
+    			        										</select>
+    			        									<?php
+    			        									}
+    			        									?>
+    			        								</div>
+    			        								<div class="connect_utilitiy_company moving_from_utility_company_container">
+    			        									<select class="moving_from_utility_company_services multiselect" multiple="true"></select>
+    			        								</div>
+    			        							</div>
+    			        						</div>
+    			        						<!-- Moving To -->
+    			        						<div class="col-sm-6 col-md-6 col-lg-6">
+    			        							<div class="connect_utilitiy">
+    			        								<h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
+    			        								<div class="connect_utilitiy_company">
+    			        									<?php
+    			        									if( isset( $utilityCompanies ) && count( $utilityCompanies ) > 0 )
+    			        									{
+    			        									?>
+    			        										<select class="form-control moving_to_utility_companies">
+    			        											<option value="">Select Company</option>
+	    			        										<?php
+	    			        										foreach( $utilityCompanies as $utilityCompany )
+	    			        										{
+	    			        											if( $utility->id == $utilityCompany->utility_id )
+	    			        											{
+	    			        											?>
+	    			        												<option data-url="{{ $utilityCompany->url }}" data-contact="{{ $utilityCompany->phone_number }}" value="{{ $utilityCompany->id }}">{{ $utilityCompany->utility_company_name }}</option>
+	    			        											<?php
+	    			        											}
+	    			        										}
+	    			        										?>
+    			        										</select>
+    			        									<?php
+    			        									}
+    			        									?>
+    			        								</div>
+    			        								<div class="connect_utilitiy_company moving_to_utility_company_container">
+    			        									<select class="moving_to_utility_company_services multiselect" multiple="true"></select>
+    			        								</div>
+    			        							</div>
+    			        						</div>
+
+    			        						<div class="pull-right">
+			        							  	<a href="javascript:void(0);" class="btn btn_next_utility_service">Next <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+			        							</div>
+
+    			        					</div>
+    			        				</div>
+    			    				</div>
+    			        		</div>
+					    	<?php
+					    	}
+					    }
+					    ?>
+				    	</div>
+		    		</div>
+		    		<style type="text/css">
+		    			.connect-utilitiy-btn {
+							color: #fff;
+							background-color: #00bcea;
+							border: 1px solid #04a6ce;
+							font-size: 16px;
+							padding: 6px 25px;
+							border-radius: 4px;
+							text-decoration: none;
+							display: inline-block;
+							margin:5px 0;
+							width: 100%;
+		    			}
+
+		    			.connect-utilitiy-btn:hover, .connect-utilitiy-btn:active, .connect-utilitiy-btn:focus, .connect-utilitiy-btn:active:focus {
+		    			    color: #7e869d;
+		    			    background-color: #f8f8f8;
+		    			    border: 1px solid #c3e1e9;
+		    			}
+
+		    		</style>
+		    		<div class="col-sm-12 box-H-250 box-P-100" id="utility_service_step_both" style="display: none;">
+		    			<div class="col-sm-6 col-md-6 col-lg-6">
+							<div class="connect_utilitiy">
+								<h5 id="moving_from_company_name"></h5>
+								<h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5> 
+								<button id="btn_moving_from_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Disconnection on Phone</button>
+								<button id="btn_moving_from_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Disconnection Online</button>
+							</div>
+						</div>
+		    			<div class="col-sm-6 col-md-6 col-lg-6">
+							<div class="connect_utilitiy">
+								<h5 id="moving_to_company_name"></h5>
+								<h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
+								<button id="btn_moving_to_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Connection on Phone</button>
+								<button id="btn_moving_to_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Connection Online</button>
+							</div>
+						</div>
+						<div class="pull-right">
+						  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+						</div>
+		    		</div>
+
+		    		<div class="col-sm-12 box-H-250 box-P-100" id="utility_service_step_moving_from" style="display: none;">
+		    			<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="connect_utilitiy">
+								<h5 id="moving_from_company_name"></h5>
+								<h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5>
+								<button id="btn_moving_from_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Disconnection on Phone</button>
+								<button id="btn_moving_from_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Disconnection Online</button>
+							</div>
+						</div>
+						<div class="pull-right">
+						  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+						</div>
+		    		</div>
+
+		    		<div class="col-sm-12 box-H-250 box-P-100" id="utility_service_step_moving_to" style="display: none;">
+		    			<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="connect_utilitiy">
+								<h5 id="moving_to_company_name"></h5>
+								<h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
+								<button id="btn_moving_to_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Connection on Phone</button>
+								<button id="btn_moving_to_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Connection Online</button>
+							</div>
+						</div>
+						<div class="pull-right">
+						  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+						</div>
+		    		</div>
+
+
+				</div>
+			</div>
 		</div>
-
-     </div>
-    </div>
-	<!-- model box 1 ends -->
-
-    <div id="connect_utilities_step3" class="model-WrapCont">
-    	<h2>Connect Utilities</h2>
-    	<div class="col-sm-12 box-H-250 box-P-100">
-    		<p> Hydro, Electricity and Gas</p>
-	    	<div class="panel-group" id="connect_utility_hydro_collapse">
-	    	    <div class="panel panel-default">
-	    	        <div class="panel-heading">
-	    	            <h4 class="panel-title">
-	    	                <a data-toggle="collapse" data-parent="#connect_utility_hydro_collapse" href="#connect_utility_hydro1" aria-expanded="false" class="collapsed">Do it Online</a>
-	    	            </h4>
-	    	        </div>
-	    	        <div id="connect_utility_hydro1" class="panel-collapse collapse" aria-expanded="false">
-	    	            <div class="panel-body">
-	    					<div class="get_started_LB">      			
-			        			<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
-			        		</div>
-	    	            </div>
-	    	        </div>
-	    	    </div>
-	    	    <div class="panel panel-default">
-	    	        <div class="panel-heading">
-	    	            <h4 class="panel-title">
-	    	                <a data-toggle="collapse" data-parent="#connect_utility_hydro_collapse" href="#connect_utility_hydro2" class="collapsed" aria-expanded="false">Call Option</a>
-	    	            </h4>
-	    	        </div>
-	    	        <div id="connect_utility_hydro2" class="panel-collapse collapse" aria-expanded="false">
-	    	            <div class="panel-body">
-							<div class="col-md-12">
-								<div class="block-head">
-									<h3> Have these handy, before this call </h3>
-								</div>
-								<div class="up_add_li">
-									<ul>
-										<li><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
-										<li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-										<li><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-sm-12 col-md-6 col-lg-6">
-								<div class="block-head">
-									<h3> Opening Hours </h3>
-								</div>
-								<div class="up_add_li">
-									<ul>
-										<li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-										<li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-sm-12 col-md-6 col-lg-6">
-								<div class="block-head">
-									<h3> Phone Numbers </h3>
-								</div>
-								<div class="up_add_li">
-									<ul>
-										<li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 1-866-607-6301</li>
-										<li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i> 416-979-3033</li>
-									</ul>
-								</div>
-							</div>
-	    	            </div>
-	    	        </div>
-	    	    </div>
-	    	</div>
-    	</div>
-    </div>
-	<!-- model box 3 ends -->
-
-    <div id="connect_utilities_step5" class="model-WrapCont">
-     	<h2>Connect Utilities</h2>
-     	<div class="col-sm-12 box-H-250 box-P-100">
-	     	<div> <strong>Water, Waste and Recycle Bins</strong>
-	       		<p>If you are moving in or moving out, and are financially responsible for Water, waste, or recycle at your new address, you need to open and account:</p>
-	      	</div>
-	    	<div class="panel-group" id="connect_utility_water_collapse">
-	    	    <div class="panel panel-default">
-	    	        <div class="panel-heading">
-	    	            <h4 class="panel-title">
-	    	                <a data-toggle="collapse" data-parent="#connect_utility_water_collapse" href="#connect_utility_water1" aria-expanded="false" class="collapsed">Do it Online</a>
-	    	            </h4>
-	    	        </div>
-	    	        <div id="connect_utility_water1" class="panel-collapse collapse" aria-expanded="false">
-	    	            <div class="panel-body">
-	    					<div class="get_started_LB">
-	      						<a href="javascript:void(0);" onclick="window.open('https://www.hydro.mb.ca/custmoves/main.jsf', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
-	      					</div>
-	    	            </div>
-	    	        </div>
-	    	    </div>
-	    	    <div class="panel panel-default">
-	    	        <div class="panel-heading">
-	    	            <h4 class="panel-title">
-	    	                <a data-toggle="collapse" data-parent="#connect_utility_water_collapse" href="#connect_utility_water2" class="collapsed" aria-expanded="false">Call Option</a>
-	    	            </h4>
-	    	        </div>
-	    	        <div id="connect_utility_water2" class="panel-collapse collapse" aria-expanded="false">
-	    	            <div class="panel-body">
-							<div class="col-sm-12 col-md-12 col-lg-12">
-								<div class="up_add_li">
-									<div class="block-head">
-										<h3>We will require </h3>
-									</div>
-									<div class="up_add_li">
-										<ul>
-											<li><i class="fa fa-angle-right" aria-hidden="true"></i> Your name</li>
-											<li><i class="fa fa-angle-right" aria-hidden="true"></i> Name of anyone financially responsible for the utility bill</li>
-											<li><i class="fa fa-angle-right" aria-hidden="true"></i> Service Address</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-12 col-md-6 col-lg-6">
-								<div class="block-head">
-									<h3> Hours </h3>
-								</div>
-								<div class="up_add_li">
-									<ul>
-										<li> <span>Monday to Thursday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 07:00 PM (except holidays) </li>
-										<li> <span>Friday and Saturday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>08:30 AM - 04:30 PM (except holiday long weekend) </li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-sm-12 col-md-6 col-lg-6">
-								<div class="block-head">
-									<h3> Phone Numbers </h3>
-								</div>
-								<div class="up_add_li">
-									<ul>
-										<li><span>City Services:</span> <i class="fa fa-phone" aria-hidden="true"></i>3-1-1</li>
-									</ul>
-								</div>
-							</div>
-	    	            </div>
-	    	        </div>
-	    	    </div>
-	    	</div>
-	    </div>
-    </div>
-	<!-- model box 5 ends -->
-
-    </div>
-    <div class="row">
-    	<div class="col-sm-8 col-md-8 col-lg-8">&nbsp;</div>
-
-     	<div class="pull-right" id="connect_utilities_control" style="display: none;">
-			<a href="javascript:void(0);" class="btn btn_prev_connect_utilities"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
-		</div>
-    </div>
-   </div>
-  </div>
- </div>
+	</div>
 </div>
 <!-- Connect Utilities Modal End -->
 

@@ -752,6 +752,9 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To save the share announcement email and message
 	Route::post('/saveannouncementemail', 'MoversController@saveAnnouncementEmail');
+
+	// To fetch the utility services for the selected company
+	Route::get('/getcompanyservices', 'MoversController@getCompanyServices');
 	
 });
 
@@ -927,3 +930,11 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
 
 // To fetch quotation for agent Partner
 Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
+
+/* For Twilio */
+Route::get('/twiliodemo', 'TwilioController@twilioDemo');
+Route::post('/call', 'TwilioController@call');
+Route::post('/outbound/{salesPhone}', 'TwilioController@outbound');
+
+/* Twilio Callback */
+Route::get('/outbound', 'TwilioController@twilioResponse');

@@ -61,6 +61,10 @@ use App\Rating;
 use App\Province;
 use App\City;
 
+use App\Utility;
+use App\UtilityCompany;
+use App\UtilityCompanyService;
+
 use Validator;
 use Helper;
 use Session;
@@ -413,9 +417,15 @@ class MoversController extends Controller
     	// Get the provincial health agency data
     	$provincialAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id])->get();
 
-    	// echo '<pre>';
-    	// print_r( $provincialAgencyDetails->toArray() );
-    	// exit;
+    	// Get the Utility Details
+    	$utilities = Utility::where(['status' => '1'])->select('id', 'utility_name')->get();
+
+    	// Get the Utility Company Details
+    	$utilityCompanies = UtilityCompany::where(['province_id' => $clientMovingToAddress->province_id, 'status' => '1'])->get();
+
+    	/*echo '<pre>';
+    	print_r( $utilityCompanyServices->toArray() );
+    	exit;*/
 
     	return view('movers/myMove', 
     		[
@@ -461,7 +471,11 @@ class MoversController extends Controller
     			'homeCleaningAdditionalService' => $homeCleaningAdditionalService,
 
     			// Provincial health agency data for the province in which mover is moving to
-    			'provincialAgencyDetails' 	=> $provincialAgencyDetails
+    			'provincialAgencyDetails' 	=> $provincialAgencyDetails,
+
+    			// Utilities
+    			'utilities' 			=> $utilities,
+    			'utilityCompanies' 		=> $utilityCompanies
     		]
     	);
     }
@@ -3973,6 +3987,29 @@ class MoversController extends Controller
     	}
 
     	return response()->json($response);
+    }
+
+    /**
+     * Function to fetch the utility services for the selected company
+     * @param void
+     * @return array
+     */
+    public function getCompanyServices()
+    {
+    	$utilityCompanyId = Input::get('utilityCompanyId');
+
+    	$utilityCompanyServices = UtilityCompanyService::where(['utility_company_id' => $utilityCompanyId, 'status' => '1'])->select('id', 'utility_company_service_name')->get();
+
+    	$response = '';
+    	if( count( $utilityCompanyServices ) > 0 )
+    	{
+    		foreach( $utilityCompanyServices as $utilityCompanyService )
+    		{
+    			$response .= '<option value="'. $utilityCompanyService->id .'">'. $utilityCompanyService->utility_company_service_name .'</option>';
+    		}
+    	}
+
+    	return $response;
     }
 
     /**

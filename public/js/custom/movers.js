@@ -626,7 +626,7 @@ $(document).ready(function(){
 	});
 
 	// Connect Utilities
-	$('#connect_utility_agency1').click(function(){
+	/*$('#connect_utility_agency1').click(function(){
 		$('#connect_utilities_step1').hide();
 		$('#connect_utilities_step3').show();
 
@@ -660,6 +660,189 @@ $(document).ready(function(){
     		$('#connect_utilities_method_type_container1').hide();
     		$('#connect_utilities_method_type_container2').show();
     	}
+    });*/
+
+    // Fetch the utility services for the selected company
+    $('.moving_from_utility_companies').change(function(){
+    	let utilityCompanyId= $(this).val();
+    	let refer 			= $(this);
+
+    	if( utilityCompanyId != '' )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/getcompanyservices',
+    			method: 'get',
+    			data: {
+    				utilityCompanyId: utilityCompanyId
+    			},
+    		    beforeSend: function() {
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-spinner"></i>');
+    		    },
+    		    complete: function()
+    		    {
+    		        $(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-plus-circle"></i>');
+    		    },
+    		    success: function(response){
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').html(response);
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').multipleSelect("refresh");
+    		    }
+    		});
+    	}
+    	else
+    	{
+    		$(this).closest('.connect_utilitiy').find('.moving_from_utility_company_services').html('<option value="">Select Service</option>');
+    	}
+    });
+    $('.moving_to_utility_companies').change(function(){
+    	let utilityCompanyId= $(this).val();
+    	let refer 			= $(this);
+
+    	if( utilityCompanyId != '' )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/getcompanyservices',
+    			method: 'get',
+    			data: {
+    				utilityCompanyId: utilityCompanyId
+    			},
+    		    beforeSend: function() {
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-spinner"></i>');
+    		    },
+    		    complete: function()
+    		    {
+    		        $(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-plus-circle"></i>');
+    		    },
+    		    success: function(response){
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').html(response);
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').multipleSelect("refresh");
+    		    }
+    		});
+    	}
+    	else
+    	{
+    		$(this).closest('.connect_utilitiy').find('.moving_to_utility_company_services').html('<option value="">Select Service</option>');
+    	}
+    });
+
+    // Utility Services next button functionality
+    $('.btn_next_utility_service').click(function(){
+    	// Get selected companies details
+    	let movingFromCompanyId = $(this).closest('.utility_service_container').find('.moving_from_utility_companies').val();
+    	let movingToCompanyId 	= $(this).closest('.utility_service_container').find('.moving_to_utility_companies').val();
+    	
+    	let movingFromcompany 	= $(this).closest('.utility_service_container').find('.moving_from_utility_companies option:selected').text();
+    	let movingTocompany 	= $(this).closest('.utility_service_container').find('.moving_to_utility_companies option:selected').text();
+
+    	let movingFromContact	= $(this).closest('.utility_service_container').find('.moving_from_utility_companies option:selected').attr('data-contact');
+    	let movingFromUrl		= $(this).closest('.utility_service_container').find('.moving_from_utility_companies option:selected').attr('data-url');
+    	let movingToContact		= $(this).closest('.utility_service_container').find('.moving_to_utility_companies option:selected').attr('data-contact');
+    	let movingToUrl			= $(this).closest('.utility_service_container').find('.moving_to_utility_companies option:selected').attr('data-url');
+
+    	var movingFromCompanyServices = [];
+    	$( $(this).closest('.utility_service_container').find('.moving_from_utility_company_container').find('.ms-drop').find('ul').find('li') ).each(function(){
+    		if( $(this).hasClass('selected') && ( $(this).find('input').val() != 'on' ) )
+    		{
+    			movingFromCompanyServices.push( $(this).find('input').val() );
+    		}
+    	});
+
+    	var movingToCompanyServices = [];
+    	$( $(this).closest('.utility_service_container').find('.moving_to_utility_company_container').find('.ms-drop').find('ul').find('li') ).each(function(){
+    		if( $(this).hasClass('selected') && ( $(this).find('input').val() != 'on' ) )
+    		{
+    			movingToCompanyServices.push( $(this).find('input').val() );
+    		}
+    	});
+
+    	if( movingFromCompanyId == '' && movingToCompanyId == '' )
+    	{
+    		$('#service_response').find('.modal-header').html('Error');
+    		$('#service_response').find('.modal-body').html('Please select atleast one company and their services.');
+    		$('#service_response').modal('show');
+    	}
+    	else
+    	{
+    		if( movingFromCompanyId != '' && movingToCompanyId != '' ) 	// Show both the services
+    		{
+    			$('#utility_service_step_both #moving_from_company_name').text(movingFromcompany);
+    			$('#utility_service_step_both #moving_to_company_name').text(movingTocompany);
+
+    			$('#utility_service_step_both #btn_moving_from_arrange_disconnect_phone').attr('data-contact', movingFromContact);
+    			$('#utility_service_step_both #btn_moving_from_arrange_disconnect_online').attr('data-url', movingFromUrl);
+    			$('#utility_service_step_both #btn_moving_to_arrange_disconnect_phone').attr('data-contact', movingToContact);
+    			$('#utility_service_step_both #btn_moving_to_arrange_disconnect_online').attr('data-url', movingToUrl);
+
+    			$('#utility_service_step_start').hide();
+    			$('#utility_service_step_moving_from').hide();
+    			$('#utility_service_step_moving_to').hide();
+    			$('#utility_service_step_both').show();
+    		}
+    		else if( movingFromCompanyId != '' )						// Show moving from service
+    		{
+    			$('#utility_service_step_moving_from #moving_from_company_name').text(movingFromcompany);
+    			$('#utility_service_step_moving_from #moving_to_company_name').text(movingTocompany);
+
+    			$('#utility_service_step_moving_from #btn_moving_from_arrange_disconnect_phone').attr('data-contact', movingFromContact);
+    			$('#utility_service_step_moving_from #btn_moving_from_arrange_disconnect_online').attr('data-url', movingFromUrl);
+
+    			$('#utility_service_step_start').hide();
+    			$('#utility_service_step_both').hide();
+    			$('#utility_service_step_moving_to').hide();
+    			$('#utility_service_step_moving_from').show();
+    		}
+    		else if( movingToCompanyId != '' )							// Show moving to service
+    		{
+    			$('#utility_service_step_moving_to #moving_from_company_name').text(movingFromcompany);
+    			$('#utility_service_step_moving_to #moving_to_company_name').text(movingTocompany);
+
+    			$('#utility_service_step_moving_to #btn_moving_to_arrange_disconnect_phone').attr('data-contact', movingToContact);
+    			$('#utility_service_step_moving_to #btn_moving_to_arrange_disconnect_online').attr('data-url', movingToUrl);
+
+    			$('#utility_service_step_start').hide();
+    			$('#utility_service_step_both').hide();
+    			$('#utility_service_step_moving_from').hide();
+    			$('#utility_service_step_moving_to').show();
+    		}
+    	}
+    });
+
+    // Utility Services previous button functionality
+    $('.btn_previous_utility_service').click(function(){
+    	$('#utility_service_step_start').show();
+    	$('#utility_service_step_both').hide();
+		$('#utility_service_step_moving_from').hide();
+		$('#utility_service_step_moving_to').hide();
+    });
+
+    // Online option - open the web page
+    $('.btn_connect_utilitiy_online').click(function(){
+    	let webURL = $(this).attr('data-url');
+    	window.open(webURL, "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
+    });
+
+    // Calling option - Initiate the call
+    $('.btn_connect_utilitiy_call').click(function(){
+    	let contactNumber = $(this).attr('data-contact');
+
+    	// Initiate the call
+        $.ajax({
+            url: $('meta[name="route"]').attr('content') + '/call',
+            method: 'POST',
+            dataType: 'json',
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+            data: {
+                userPhone: contactNumber
+            }
+        }).done(function(data) {
+            // The JSON sent back from the server will contain a success message
+            // alert(data.message);
+            console.log( data.message );
+        }).fail(function(error) {
+            // alert(JSON.stringify(error));
+            console.log( JSON.stringify(error) );
+        });
     });
 
 	/* ---------- Connect Utilities functionality ends ---------- */
