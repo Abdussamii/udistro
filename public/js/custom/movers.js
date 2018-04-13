@@ -727,6 +727,8 @@ $(document).ready(function(){
     // Utility Services next button functionality
     $('.btn_next_utility_service').click(function(){
     	// Get selected companies details
+    	let utilityId 			= $(this).attr('id');
+
     	let movingFromCompanyId = $(this).closest('.utility_service_container').find('.moving_from_utility_companies').val();
     	let movingToCompanyId 	= $(this).closest('.utility_service_container').find('.moving_to_utility_companies').val();
     	
@@ -772,6 +774,8 @@ $(document).ready(function(){
     			$('#utility_service_step_both #btn_moving_to_arrange_disconnect_phone').attr('data-contact', movingToContact);
     			$('#utility_service_step_both #btn_moving_to_arrange_disconnect_online').attr('data-url', movingToUrl);
 
+    			$('#utility_service_step_both .utility_service_check_complete').attr('data-utility', utilityId);
+
     			$('#utility_service_step_start').hide();
     			$('#utility_service_step_moving_from').hide();
     			$('#utility_service_step_moving_to').hide();
@@ -785,6 +789,8 @@ $(document).ready(function(){
     			$('#utility_service_step_moving_from #btn_moving_from_arrange_disconnect_phone').attr('data-contact', movingFromContact);
     			$('#utility_service_step_moving_from #btn_moving_from_arrange_disconnect_online').attr('data-url', movingFromUrl);
 
+    			$('#utility_service_step_moving_from .utility_service_check_complete').attr('data-utility', utilityId);
+
     			$('#utility_service_step_start').hide();
     			$('#utility_service_step_both').hide();
     			$('#utility_service_step_moving_to').hide();
@@ -797,6 +803,8 @@ $(document).ready(function(){
 
     			$('#utility_service_step_moving_to #btn_moving_to_arrange_disconnect_phone').attr('data-contact', movingToContact);
     			$('#utility_service_step_moving_to #btn_moving_to_arrange_disconnect_online').attr('data-url', movingToUrl);
+
+    			$('#utility_service_step_moving_to .utility_service_check_complete').attr('data-utility', utilityId);
 
     			$('#utility_service_step_start').hide();
     			$('#utility_service_step_both').hide();
@@ -843,6 +851,53 @@ $(document).ready(function(){
             // alert(JSON.stringify(error));
             console.log( JSON.stringify(error) );
         });
+    });
+
+    // Save the completed utility
+    $('.utility_service_check_complete').change(function(){
+    	// Get the utility id
+    	let utilityId = $(this).attr('data-utility');
+    	// Get the service type
+    	let serviceType = $(this).attr('id');
+
+    	var status = false;
+    	if( $(this).is(':checked') )
+    	{
+    		status = true;
+    	}
+
+    	var serviceStatus = '0';	// No action
+    	if( serviceType == 'moving_to' )
+    	{
+    		serviceStatus = '1';	// disconnected
+    	}
+    	else if( serviceType == 'moving_from' )
+    	{
+    		serviceStatus = '2';	// connected
+    	}
+    	else if( serviceType == 'both' )
+    	{
+    		serviceStatus = '3';	// transfered
+    	}
+
+    	$.ajax({
+    		url: $('meta[name="route"]').attr('content') + '/movers/updateutilityservicelog',
+    		method: 'post',
+    		data: {
+    			utilityId: utilityId,
+    			serviceStatus: serviceStatus,
+    			status: status
+    		},
+    		headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	    },
+    	    success: function(response){
+    	    	if( response.errCode == 0 )
+    		    {
+    		    	$('#connect_utilities_completed').html(response.count);
+    		    }
+    	    }
+    	});
     });
 
 	/* ---------- Connect Utilities functionality ends ---------- */

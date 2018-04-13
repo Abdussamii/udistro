@@ -64,6 +64,7 @@ use App\City;
 use App\Utility;
 use App\UtilityCompany;
 use App\UtilityCompanyService;
+use App\MoverUtilityActionLog;
 
 use Validator;
 use Helper;
@@ -423,6 +424,13 @@ class MoversController extends Controller
     	// Get the Utility Company Details
     	$utilityCompanies = UtilityCompany::where(['province_id' => $clientMovingToAddress->province_id, 'status' => '1'])->get();
 
+    	$agentId 		= base64_decode(Input::get('agent_id'));
+    	$clientId 		= base64_decode(Input::get('client_id'));
+    	$invitationId 	= base64_decode(Input::get('invitation_id'));
+
+    	// Get the completed utility count
+    	$utilityCompletedCount = MoverUtilityActionLog::where(['client_id' => $clientId, 'invitation_id' => $invitationId])->count();
+
     	/*echo '<pre>';
     	print_r( $utilityCompanyServices->toArray() );
     	exit;*/
@@ -475,7 +483,8 @@ class MoversController extends Controller
 
     			// Utilities
     			'utilities' 			=> $utilities,
-    			'utilityCompanies' 		=> $utilityCompanies
+    			'utilityCompanies' 		=> $utilityCompanies,
+    			'utilityCompletedCount' => $utilityCompletedCount
     		]
     	);
     }
@@ -4010,6 +4019,62 @@ class MoversController extends Controller
     	}
 
     	return $response;
+    }
+
+    /**
+     * Function to save the completed utility
+     * @param void
+     * @return array
+     */
+    public function updateUtilityServiceLog()
+    {
+    	$utilityId 		= Input::get('utilityId');
+    	$serviceStatus 	= Input::get('serviceStatus');
+    	$status 		= Input::get('status');
+
+    	$clientId 		= Session::get('clientId');
+    	$invitationId 	= Session::get('invitationId');
+
+    	if( $status == 'true' )
+    	{
+    		$moverUtilityActionLog = new MoverUtilityActionLog;
+
+    		$moverUtilityActionLog->utility_id 		= $utilityId;
+    		$moverUtilityActionLog->client_id 		= $clientId;
+    		$moverUtilityActionLog->invitation_id 	= $invitationId;
+    		$moverUtilityActionLog->action_status 	= $serviceStatus;
+    		$moverUtilityActionLog->created_at 		= date('Y-m-d H:i:s');
+
+    		if( $moverUtilityActionLog->save() )
+    		{
+    			$response['errCode'] 	= 0;
+				$response['errMsg'] 	= 'Success';
+				$response['count'] 		= MoverUtilityActionLog::where(['client_id' => $clientId, 'invitation_id' => $invitationId])->count();
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 1;
+				$response['errMsg'] 	= 'Some issue';
+    		}
+    	}
+    	else
+    	{
+    		$moverUtilityActionLog = MoverUtilityActionLog::where(['utility_id' => $utilityId, 'client_id' => $clientId, 'invitation_id' => $invitationId])->first();
+
+    		if( $moverUtilityActionLog->delete() )
+    		{
+    			$response['errCode'] 	= 0;
+				$response['errMsg'] 	= 'Success';
+				$response['count'] 		= MoverUtilityActionLog::where(['client_id' => $clientId, 'invitation_id' => $invitationId])->count();
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 1;
+				$response['errMsg'] 	= 'Some issue';
+    		}
+    	}
+
+    	return response()->json($response);
     }
 
     /**

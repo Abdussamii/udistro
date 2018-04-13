@@ -33,8 +33,9 @@ class SchedulerController extends Controller
 		// Log::info('Hello');
 
     	// Working hours in Canada: 07:00 to 17:00
-    	$workingHourStartTime 	= '07:00:00';
+    	// $workingHourStartTime 	= '07:00:00';
     	// $workingHourEndTime 	= '17:00:00';
+    	$workingHourStartTime 	= '00:00:00';
     	$workingHourEndTime 	= '24:00:00';
 
     	// Check the current time of the server

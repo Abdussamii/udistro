@@ -527,7 +527,7 @@ class AgentController extends Controller
 	        	$emailTemplatePreview = str_replace('[firstname]', ucwords( strtolower( $clientDetails->fname ) ), $emailTemplatePreview);
 
 	        	// Replace the get_started_link https://www.udistro.ca/ link with javascript:void(0) so that it can't be clickable
-				$emailTemplatePreview = str_replace('https://www.udistro.ca/', 'javascript:void(0);', $emailTemplatePreview);
+				$emailTemplatePreview = str_replace('<a id="get_started_link" href="https://www.udistro.ca/">', '<a id="get_started_link" href="javascript:void(0);">', $emailTemplatePreview);
 	        }
 
 	        $response['errCode'] 	= 0;
@@ -2362,7 +2362,7 @@ class AgentController extends Controller
 				}
 				else
 				{
-					$emailLink = config('constants.SERVER_APP_URL') . '/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
+					$emailLink = config('constants.SERVER_APP_URL') . 'movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
 				}
 
 				// Update the email link

@@ -228,6 +228,24 @@ function calculateRoute(from, to) {
 .red {
     color: #00bcea;
 }
+.connect-utilitiy-btn {
+	color: #fff;
+	background-color: #00bcea;
+	border: 1px solid #04a6ce;
+	font-size: 16px;
+	padding: 6px 25px;
+	border-radius: 4px;
+	text-decoration: none;
+	display: inline-block;
+	margin:5px 0;
+	width: 100%;
+}
+
+.connect-utilitiy-btn:hover, .connect-utilitiy-btn:active, .connect-utilitiy-btn:focus, .connect-utilitiy-btn:active:focus {
+    color: #7e869d;
+    background-color: #f8f8f8;
+    border: 1px solid #c3e1e9;
+}
 </style>
 </head>
 
@@ -315,6 +333,12 @@ function calculateRoute(from, to) {
 								</div>
 								<div class="box-title">
 								<h3>{{ ucwords( strtolower( $activity->activity ) ) }}</h3>
+								<?php
+								if( $activity->id == 5 )
+								{
+									echo '<div><span id="connect_utilities_completed">'. $utilityCompletedCount .' </span> / '. count( $utilities ) .' completed</div>';
+								}
+								?>
 								</div>
 								<div class="pophover-icon">
 									<ul class="popover-icon-group activities_container">
@@ -1041,7 +1065,7 @@ function calculateRoute(from, to) {
     			        						</div>
 
     			        						<div class="pull-right">
-			        							  	<a href="javascript:void(0);" class="btn btn_next_utility_service">Next <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+			        							  	<a href="javascript:void(0);" class="btn btn_next_utility_service" id="{{ $utility->id }}">Next <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
 			        							</div>
 
     			        					</div>
@@ -1054,33 +1078,13 @@ function calculateRoute(from, to) {
 					    ?>
 				    	</div>
 		    		</div>
-		    		<style type="text/css">
-		    			.connect-utilitiy-btn {
-							color: #fff;
-							background-color: #00bcea;
-							border: 1px solid #04a6ce;
-							font-size: 16px;
-							padding: 6px 25px;
-							border-radius: 4px;
-							text-decoration: none;
-							display: inline-block;
-							margin:5px 0;
-							width: 100%;
-		    			}
-
-		    			.connect-utilitiy-btn:hover, .connect-utilitiy-btn:active, .connect-utilitiy-btn:focus, .connect-utilitiy-btn:active:focus {
-		    			    color: #7e869d;
-		    			    background-color: #f8f8f8;
-		    			    border: 1px solid #c3e1e9;
-		    			}
-
-		    		</style>
+		    		
 		    		<div class="col-sm-12 box-H-250 box-P-100" id="utility_service_step_both" style="display: none;">
 		    			<div class="col-sm-6 col-md-6 col-lg-6">
 							<div class="connect_utilitiy">
 								<h5 id="moving_from_company_name"></h5>
 								<h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5> 
-								<button id="btn_moving_from_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Disconnection on Phone</button>
+								<button id="btn_moving_from_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure your phone number is correct to receive the call" type="button">Arrange Disconnection on Phone</button>
 								<button id="btn_moving_from_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Disconnection Online</button>
 							</div>
 						</div>
@@ -1088,12 +1092,17 @@ function calculateRoute(from, to) {
 							<div class="connect_utilitiy">
 								<h5 id="moving_to_company_name"></h5>
 								<h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
-								<button id="btn_moving_to_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Connection on Phone</button>
+								<button id="btn_moving_to_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure your phone number is correct to receive the call" type="button">Arrange Connection on Phone</button>
 								<button id="btn_moving_to_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Connection Online</button>
 							</div>
 						</div>
-						<div class="pull-right">
-						  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="pull-left">
+								<label><input type="checkbox" class="utility_service_check_complete" id="both"> Mark as completed</label>
+							</div>
+							<div class="pull-right">
+							  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+							</div>
 						</div>
 		    		</div>
 
@@ -1102,12 +1111,17 @@ function calculateRoute(from, to) {
 							<div class="connect_utilitiy">
 								<h5 id="moving_from_company_name"></h5>
 								<h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5>
-								<button id="btn_moving_from_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Disconnection on Phone</button>
+								<button id="btn_moving_from_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure your phone number is correct to receive the call" type="button">Arrange Disconnection on Phone</button>
 								<button id="btn_moving_from_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Disconnection Online</button>
 							</div>
 						</div>
-						<div class="pull-right">
-						  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="pull-left">
+								<label><input type="checkbox" class="utility_service_check_complete" id="moving_from"> Mark as completed</label>
+							</div>
+							<div class="pull-right">
+							  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+							</div>
 						</div>
 		    		</div>
 
@@ -1116,15 +1130,19 @@ function calculateRoute(from, to) {
 							<div class="connect_utilitiy">
 								<h5 id="moving_to_company_name"></h5>
 								<h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
-								<button id="btn_moving_to_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure you have headphone and mic before calling" type="button">Arrange Connection on Phone</button>
+								<button id="btn_moving_to_arrange_disconnect_phone" class="connect-utilitiy-btn btn_connect_utilitiy_call" data-toggle="tooltip" data-placement="top" title="Make sure your phone number is correct to receive the call" type="button">Arrange Connection on Phone</button>
 								<button id="btn_moving_to_arrange_disconnect_online" class="connect-utilitiy-btn btn_connect_utilitiy_online" type="button">Arrange Connection Online</button>
 							</div>
 						</div>
-						<div class="pull-right">
-						  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<div class="pull-left">
+								<label><input type="checkbox" class="utility_service_check_complete" id="moving_to"> Mark as completed</label>
+							</div>
+							<div class="pull-right">
+							  	<a href="javascript:void(0);" class="btn btn_previous_utility_service"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Previous</a>
+							</div>
 						</div>
 		    		</div>
-
 
 				</div>
 			</div>
