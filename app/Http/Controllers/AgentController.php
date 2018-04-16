@@ -1896,10 +1896,12 @@ class AgentController extends Controller
     	// Get the logged in agent id
     	$userId = Auth::user()->id;
 
+    	$agentDetails = User::find($userId);
+
     	// Get the client name and their email list
     	$clients = agentClient::where(['agent_id' => $userId])->select('id', 'fname', 'lname', 'email')->orderBy('fname', 'asc')->get();
 
-        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories, 'clients' => $clients]);
+        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories, 'clients' => $clients, 'agentDetails' => $agentDetails]);
     }
 
     /**

@@ -840,15 +840,23 @@ $(document).ready(function(){
 			headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    },
+		    beforeSend: function() {
+		        // Show the calling button
+		        $('#calling_modal').modal('show');
+		    },
             data: {
                 userPhone: contactNumber
             }
         }).done(function(data) {
             // The JSON sent back from the server will contain a success message
             // alert(data.message);
+            // Hide the calling button
+            $('#calling_modal').modal('hide');
             console.log( data.message );
         }).fail(function(error) {
             // alert(JSON.stringify(error));
+            // Hide the calling button
+            $('#calling_modal').modal('hide');
             console.log( JSON.stringify(error) );
         });
     });

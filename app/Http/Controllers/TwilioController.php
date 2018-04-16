@@ -32,9 +32,6 @@ class TwilioController extends BaseController
 
     public function call(Request $request)
     {
-    	var_dump( env('TWILIO_ACCOUNT_SID') );
-    	exit;
-
     	// Get form input
     	// $userPhone = '+12048076739';
     	$userPhone = Input::get('userPhone');
@@ -54,12 +51,14 @@ class TwilioController extends BaseController
 
 	    	// Create authenticated REST client using account credentials in
 	    	// <project root dir>/.env.php
-	    	$client = new Twilio\Rest\Client('ACcf0657ed14627852f1578d3e8daaf8ee', 'b17d536dfc70a9c7bf33c46325771732');
+	    	// $client = new Twilio\Rest\Client('ACcf0657ed14627852f1578d3e8daaf8ee', 'b17d536dfc70a9c7bf33c46325771732');
+	    	$client = new Twilio\Rest\Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));
 
 	    	try {
 	    	    $client->calls->create(
 	    	        $userPhone, // The visitor's phone number
-	    	        '+18192010995', // A Twilio number in your account
+	    	        // '+18192010995', // A Twilio number in your account
+	    	        env('TWILIO_NUMBER'), // A Twilio number in your account
 	    	        array(
 	    	            "url" => "http://$host/outbound/$encodedSalesPhone"
 	    	        )

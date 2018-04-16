@@ -246,6 +246,12 @@ function calculateRoute(from, to) {
     background-color: #f8f8f8;
     border: 1px solid #c3e1e9;
 }
+.calling_image {
+	text-align: center;
+}
+.calling_image img {
+	max-width:100%;
+}
 </style>
 </head>
 
@@ -2497,6 +2503,29 @@ function calculateRoute(from, to) {
     </div>
 </div>
 <!-- Server Response -->
+
+<!-- Calling Modal -->
+<div class="modal fade" id="calling_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            	<!-- <div class="close close-btn close_modal" data-activity="connect_utilities" data-dismiss="modal">
+            		<img src="http://localhost/udistro/public/images/movers/close-img.png" alt="">
+            	</div> -->
+            	<div style="text-align: center;">
+            		You are now calling
+            	</div>
+            </div>
+            <div class="modal-body">
+            	<div class="calling_image">
+            		<img src="{{ url('/images/calling.gif') }}" alt="uDistro">
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Calling Modal -->
+
 
 <!-- Share Announcement Modal -->
 <div id="share_announcement_modal" class="modal fade">
