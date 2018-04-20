@@ -53,6 +53,8 @@ use App\DigitalAdditionalServiceTypeRequest;
 use App\MovingOtherItemServiceRequest;
 use App\TechConciergePlaceServiceRequest;
 use App\PaymentTransactionDetail;
+use App\AgentClientMovingFromAddress;
+use App\AgentClientMovingToAddress;
 
 use Validator;
 use Helper;
@@ -1228,17 +1230,22 @@ class CompanyController extends Controller
 
             if( count( $homeServiceArray ) > 0 )
             {
+            	$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $homeServiceArray->agent_client_id, 'status' => '1'])->first();
+            	$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $homeServiceArray->agent_client_id, 'status' => '1'])->first();
+
             	$response['move_out_cleaning']                     		= $homeServiceArray->move_out_cleaning;
             	$response['move_in_cleaning']                     		= $homeServiceArray->move_in_cleaning;
 
-                $response['moving_from_house_type']                     = ucwords( strtolower( $homeServiceArray->moving_from_house_type ) );
-                $response['moving_from_floor']                          = $homeServiceArray->moving_from_floor;
-                $response['moving_from_bedroom_count']                  = $homeServiceArray->moving_from_bedroom_count;
-                $response['moving_from_property_type']                  = ucwords( strtolower( $homeServiceArray->moving_from_property_type ) );
-                $response['moving_to_house_type']                       = ucwords( strtolower( $homeServiceArray->moving_to_house_type ) );
-                $response['moving_to_floor']                            = $homeServiceArray->moving_to_floor;
-                $response['moving_to_bedroom_count']                    = $homeServiceArray->moving_to_bedroom_count;
-                $response['moving_to_property_type']                    = ucwords( strtolower( $homeServiceArray->moving_to_property_type ) );
+                $response['moving_from_house_type']                     = ucwords( strtolower( $movingFromAddress->moving_from_house_type ) );
+                $response['moving_from_floor']                          = $movingFromAddress->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $movingFromAddress->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = ucwords( strtolower( $movingFromAddress->moving_from_property_type ) );
+                
+                $response['moving_to_house_type']                       = ucwords( strtolower( $movingToAddress->moving_to_house_type ) );
+                $response['moving_to_floor']                            = $movingToAddress->moving_to_floor;
+                $response['moving_to_bedroom_count']                    = $movingToAddress->moving_to_bedroom_count;
+                $response['moving_to_property_type']                    = ucwords( strtolower( $movingToAddress->moving_to_property_type ) );
+                
                 $response['home_condition']                             = ucwords( strtolower( $homeServiceArray->home_condition ) );
                 $response['home_cleaning_level']                        = $homeServiceArray->home_cleaning_level;
                 $response['home_cleaning_area']                         = $homeServiceArray->home_cleaning_area . 'sqft';
@@ -1508,10 +1515,12 @@ class CompanyController extends Controller
 
             if( count( $techConciergeArray ) > 0 )
             {
-                $response['moving_to_house_type']  		= ucwords( strtolower( $techConciergeArray->moving_to_house_type ) );
-                $response['moving_to_floor']        	= $techConciergeArray->moving_to_floor;
-                $response['moving_to_bedroom_count']	= $techConciergeArray->moving_to_bedroom_count;
-                $response['moving_to_property_type']	= ucwords( strtolower( $techConciergeArray->moving_to_property_type ) );
+            	$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $techConciergeArray->agent_client_id, 'status' => '1'])->first();
+            	
+                $response['moving_to_house_type']  		= ucwords( strtolower( $movingToAddress->moving_to_house_type ) );
+                $response['moving_to_floor']        	= $movingToAddress->moving_to_floor;
+                $response['moving_to_bedroom_count']	= $movingToAddress->moving_to_bedroom_count;
+                $response['moving_to_property_type']	= ucwords( strtolower( $movingToAddress->moving_to_property_type ) );
 
                 $response['availability_date1']     	= date('d-m-Y', strtotime( $techConciergeArray->availability_date1 ) );
                 $response['availability_date2']     	= date('d-m-Y', strtotime( $techConciergeArray->availability_date2 ) );
@@ -1662,15 +1671,18 @@ class CompanyController extends Controller
 
             if( count( $movingCompaniesArray ) > 0 )
             {
-                $response['moving_from_house_type']                     = ucfirst( strtolower( $movingCompaniesArray->moving_from_house_type ) );
-                $response['moving_from_floor']                          = $movingCompaniesArray->moving_from_floor;
-                $response['moving_from_bedroom_count']                  = $movingCompaniesArray->moving_from_bedroom_count;
-                $response['moving_from_property_type']                  = ucfirst( strtolower($movingCompaniesArray->moving_from_property_type ) );
+            	$movingFromAddress 	= AgentClientMovingFromAddress::where(['agent_client_id' => $movingCompaniesArray->agent_client_id, 'status' => '1'])->first();
+            	$movingToAddress 	= AgentClientMovingToAddress::where(['agent_client_id' => $movingCompaniesArray->agent_client_id, 'status' => '1'])->first();
 
-                $response['moving_to_house_type']                       = ucfirst( strtolower($movingCompaniesArray->moving_to_house_type ) );
-                $response['moving_to_floor']                            = $movingCompaniesArray->moving_to_floor;
-                $response['moving_to_bedroom_count']                    = $movingCompaniesArray->moving_to_bedroom_count;
-                $response['moving_to_property_type']                    = ucfirst( strtolower($movingCompaniesArray->moving_to_property_type ) );
+                $response['moving_from_house_type']                     = ucfirst( strtolower( $movingFromAddress->moving_from_house_type ) );
+                $response['moving_from_floor']                          = $movingFromAddress->moving_from_floor;
+                $response['moving_from_bedroom_count']                  = $movingFromAddress->moving_from_bedroom_count;
+                $response['moving_from_property_type']                  = ucfirst( strtolower($movingFromAddress->moving_from_property_type ) );
+
+                $response['moving_to_house_type']                       = ucfirst( strtolower($movingToAddress->moving_to_house_type ) );
+                $response['moving_to_floor']                            = $movingToAddress->moving_to_floor;
+                $response['moving_to_bedroom_count']                    = $movingToAddress->moving_to_bedroom_count;
+                $response['moving_to_property_type']                    = ucfirst( strtolower($movingToAddress->moving_to_property_type ) );
 
                 $response['transportation_vehicle_type']                = $movingCompaniesArray->transportation_vehicle_type;
                 
@@ -3937,21 +3949,27 @@ class CompanyController extends Controller
 		    DB::beginTransaction();
 
 		    // Update the hours and amount in home_cleaning_additional_service_requests table
-		    foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
+		    if( isset( $homeCleaningDetails['additional_service_budget_estimate'] ) && count( $homeCleaningDetails['additional_service_budget_estimate'] ) )
 		    {
-		       	HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 				 'additional_request_id' => $key])->update([
-					'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
-					'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
-		       	]);
+			    foreach( $homeCleaningDetails['additional_service_budget_estimate'] as $key => $value )
+			    {
+			       	HomeCleaningAdditionalServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 				 'additional_request_id' => $key])->update([
+						'amount' => $homeCleaningDetails['additional_service_budget_estimate'][$key],
+						'hour_to_complete' => $homeCleaningDetails['additional_service_time_estimate'][$key]
+			       	]);
+			    }
 		    }
 
 		    // Update the hours and amount in home_cleaning_other_place_service_requests table
-		    foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
+		    if( isset( $homeCleaningDetails['other_place_to_clean_budget_estimate'] ) && count( $homeCleaningDetails['other_place_to_clean_budget_estimate'] ) )
 		    {
-		       	HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
-		    	'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
-		    	'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
-		       	]);
+			    foreach( $homeCleaningDetails['other_place_to_clean_budget_estimate'] as $key => $value )
+			    {
+			       	HomeCleaningOtherPlaceServiceRequest::where(['service_request_id' => $homeCleaningDetails['home_cleaning_service_request_id'], 'other_place_id' => $key])->update([
+			    	'amount' => $homeCleaningDetails['other_place_to_clean_budget_estimate'][$key],
+			    	'hour_to_complete' => $homeCleaningDetails['other_place_to_clean_time_estimate'][$key]
+			       	]);
+			    }
 		    }
 
 		    // Update the hours and amount in home_cleaning_steaming_service_requests table
@@ -4099,8 +4117,9 @@ class CompanyController extends Controller
 		    	}
 		    }
 
+		    $insuranceAmount = isset($movingDetails['insurance']) ? $movingDetails['insurance'] : null;
 		    // Update the moving_item_service_requests company_response column to 1
-		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $movingDetails['insurance'], 'date_of_working' => $movingDetails['availability']]);
+		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $insuranceAmount, 'date_of_working' => $movingDetails['availability']]);
 		    	
 		    // Commit the transaction
 			DB::commit();
@@ -4752,7 +4771,7 @@ class CompanyController extends Controller
     					}
 
 		    			$response['errCode']    = 0;
-		        		$response['errMsg']     = 'Payment request saved successfully';
+		        		$response['errMsg']     = 'Payment request sent successfully';
 		    		}
 		    		else
 		    		{

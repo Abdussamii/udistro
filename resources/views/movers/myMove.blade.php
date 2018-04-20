@@ -432,7 +432,7 @@ function calculateRoute(from, to) {
 							I appreciate your work and want to say thank you.
 						</p>
 						<textarea name="agent_rating_message" id="agent_rating_message" class="form-control" style="display: none;">Hi {{ $agentName }},I appreciate your work and want to say thank you.</textarea>
-						<input type="hidden" name="agent_rating" id="agent_rating" value="">
+						<input type="hidden" name="agent_rating" id="agent_rating" value="{{ isset($agentClientRating->rating) ? $agentClientRating->rating : '' }}">
 					</div>
 				</div>
 			</div>
@@ -576,82 +576,165 @@ function calculateRoute(from, to) {
 	       		<h2>Update Address</h2>
 	      	</div>
 	      		<div class="col-sm-12 box-H-250 box-P-100">
-				  <div class="panel-group provincial_health_agencies" id="provincial_health_agencies1">
-				  	<div class="panel panel-default">
-				  	  <div class="panel-heading">
-				  	    <h4 class="panel-title">
-				  	      <a data-toggle="collapse" data-parent="#provincial_health_agencies1" href="#collapse_revenew">Canada Revenue Agency</a>
-				  	    </h4>
-				  	  </div>
-				  	  <div id="collapse_revenew" class="panel-collapse collapse">
-				  	    <div class="panel-body">
-				  	    	<div class="panel-group" id="accordion_provincial_health_agencies">
-				  	    	    <div class="panel panel-default">
-				  	    	        <div class="panel-heading">
-				  	    	            <h4 class="panel-title">
-				  	    	                <a data-toggle="collapse" data-parent="#accordion_provincial_health_agencies" href="#provincial_health_agencies_collapse1" aria-expanded="false" class="collapsed">Do it Online</a>
-				  	    	            </h4>
-				  	    	        </div>
-				  	    	        <div id="provincial_health_agencies_collapse1" class="panel-collapse collapse" aria-expanded="false">
-				  	    	            <div class="panel-body">
-				  	    					<div class="get_started_LB">
-				  	    						<a href="javascript:void(0);" onclick="window.open('https://www.canada.ca/en/revenue-agency/services/e-services/e-services-individuals/account-individuals.html', '_blank', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">Click here to get started</a>
-				  	    					</div>
-				  	    	            </div>
-				  	    	        </div>
-				  	    	    </div>
-				  	    	    <div class="panel panel-default">
-				  	    	        <div class="panel-heading">
-				  	    	            <h4 class="panel-title">
-				  	    	                <a data-toggle="collapse" data-parent="#accordion_provincial_health_agencies" href="#provincial_health_agencies_collapse2" class="collapsed" aria-expanded="false">Call Option</a>
-				  	    	            </h4>
-				  	    	        </div>
-				  	    	        <div id="provincial_health_agencies_collapse2" class="panel-collapse collapse" aria-expanded="false">
-				  	    	            <div class="panel-body">
-				  	    	                <div class="col-md-12">
-				  	    	                	<div class="block-head">
-				  	    	                		<h3>Have these handy, before this call </h3>
-				  	    	                	</div>
-				  	    	                	<div class="up_add_li">
-				  	    	                		<ul>
-				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your full name</li>
-				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new address</li>
-				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Old and new postal codes</li>
-				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Your SIN#</li>
-				  	    	                			<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i> Phone contact, name and DOB of children</li>
-				  	    	                		</ul>
-				  	    	                	</div>
-				  	    	                </div>
-				  	    	                <div class="col-sm-12 col-md-6 col-lg-6">
-				  	    	                	<div class="block-head">
-				  	    	                		<h3> Opening Hours </h3>
-				  	    	                	</div>
-				  	    	                	<div class="up_add_li">
-				  	    	                		<ul>
-				  	    	                			<li> <span>Monday to Friday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>07:00 AM - 11:00 PM ET </li>
-				  	    	                			<li> <span>Saturday and Sunday,</span> <i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 09:00 PM ET </li>
-				  	    	                		</ul>
-				  	    	                	</div>
-				  	    	                </div>
-				  	    	                <div class="col-sm-12 col-md-6 col-lg-6">
-				  	    	                	<div class="block-head">
-				  	    	                		<h3> Phone Numbers </h3>
-				  	    	                	</div>
-				  	    	                	<div class="up_add_li">
-				  	    	                		<ul>
-				  	    	                			<li><span>Inside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>1-800-959-8281</li>
-				  	    	                			<li><span>Outside of Canada:</span> <i class="fa fa-phone" aria-hidden="true"></i>613-940-8495</li>
-				  	    	                		</ul>
-				  	    	                	</div>
-				  	    	                </div>
-				  	    	            </div>
-				  	    	        </div>
-				  	    	    </div>
-				  	    	</div>
-				  		</div>
-				  	  </div>
-				  	</div>
+				  <div class="panel-group provincial_health_agencies" id="provincial_health_agencies2">
+				  	<?php
+				  	$step = 1;
+				  	if( isset( $provincialAgencyDetails ) && count( $provincialAgencyDetails ) > 0 )
+				  	{
+				  		foreach ($provincialAgencyDetails as $provincialAgency)
+				  		{
+				  			if( $provincialAgency->agency_type == '2' )
+				  			{
+					  		?>
+					  			<div class="panel panel-default">
+					  			  <div class="panel-heading">
+					  			    <h4 class="panel-title">
+					  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies2" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
+					  			    </h4>
+					  			  </div>
+					  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? '' : '' }}">
+					  			    <div class="panel-body">
+
+					  			    	<div class="panel-group" id="accordion_internet_service_{{ $step }}">
+					  			    	    <div class="panel panel-default">
+					  			    	        <div class="panel-heading tab-new01">
+					  			    	            <h4 class="panel-title">
+					  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service_{{ $step }}" href="#cable_internet_services_collapse1{{ $step }}" aria-expanded="false" class="collapsed">{{ $provincialAgency->do_it_on_line_label }}</a>
+					  			    	            </h4>
+					  			    	        </div>
+					  			    	        <div id="cable_internet_services_collapse1{{ $step }}" class="panel-collapse collapse in" aria-expanded="false">
+					  			    	            <div class="panel-body">
+					  			    					<!-- <div>
+					  			    						<?php
+					  			    						if( $provincialAgency->logo != '' )
+					  			    						{
+					  			    							echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
+					  			    						}
+					  			    						else
+					  			    						{
+					  			    							echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
+					  			    						}
+					  			    						?>
+					  			    					</div> -->
+					  			    					<div>
+					  			    						<?php
+					  			    						// Check if it is a direct link or a search functionality
+					  			    						if( $provincialAgency->direct_link == '1' )
+					  			    						{
+					  			    							if( $provincialAgency->link != '' )
+					  			    							{
+					  			    							?>
+					  			    								<div class="get_started_LB blue-btn01">
+					  			    									<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">{{ $provincialAgency->get_started_label }}</a>
+					  			    								</div>
+					  			    							<?php
+					  			    							}
+					  			    						}
+					  			    						else
+					  			    						{
+					  			    						?>
+					  			    							<div class="get_started_LB">
+					  			    								<div class="row">
+					  			    									<div class="col-sm-12">
+					  			    										<p>Search the closest {{ $clientMovingToProvince->name }} public insurance office</p>
+					  			    									</div>
+					  			    								</div>
+					  			    								<div>
+					  			    									<form name="frm_update_address_search_insurance_office" id="frm_update_address_search_insurance_office" autocomplete="off">
+					  			    										<div class="col-sm-9 col-md-9 col-lg-9 row">
+					  			    											<input type="text" name="update_address_search_insurance_office" id="update_address_search_insurance_office" class="form-control" placeholder="Enter the address">
+					  			    										</div>
+					  			    										<div class="col-sm-3 col-md-3 col-lg-3"> 
+					  			    											<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
+					  			    											<a href="javascript:void(0);" onclick="" id="{{ $clientMovingToProvince->name }}" class="btn_update_address_search_insurance_office">Go</a>
+					  			    										</div>
+					  			    									</form>
+					  			    								</div>
+					  			    							</div>
+					  			    						<?php
+					  			    						}
+					  			    						?>
+					  			    					</div>
+					  			    	            </div>
+					  			    	        </div>
+					  			    	    </div>
+					  			    	    <div class="panel panel-default">
+					  			    	        <div class="panel-heading tab-new01">
+					  			    	            <h4 class="panel-title">
+					  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2{{ $step }}" class="collapsed" aria-expanded="false">Call Option</a>
+					  			    	            </h4>
+					  			    	        </div>
+					  			    	        <div id="cable_internet_services_collapse2{{ $step }}" class="panel-collapse collapse" aria-expanded="false">
+					  			    	            <div class="panel-body">
+					  			    	                
+					  			    	                <div class="col-md-12">
+					  			    	                	<div class="block-head">
+					  			    	                		<h3>Have these handy, before this call </h3>
+					  			    	                	</div>
+					  			    	                	<div class="up_add_li">
+					  			    	                		<ul>
+					  			    	                		<?php
+					  			    	                		echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
+					  			    	                		echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
+					  			    	                		?>
+					  			    	                		</ul>
+					  			    	                	</div>
+					  			    	                </div>
+					  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
+					  			    	                	<div class="block-head">
+					  			    	                		<h3> Opening Hours </h3>
+					  			    	                	</div>
+					  			    	                	<div class="up_add_li">
+					  			    	                		<ul>
+					  			    	                			<li>
+					  			    	                				<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
+					  			    	                			</li>
+					  			    	                			<li>
+					  			    	                				<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
+					  			    	                			</li>
+					  			    	                		</ul>
+					  			    	                	</div>
+					  			    	                </div>
+					  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
+					  			    	                	<div class="block-head">
+					  			    	                		<h3> Phone Numbers </h3>
+					  			    	                	</div>
+					  			    	                	<div class="up_add_li">
+					  			    	                		<ul>
+					  			    	                			<li>
+					  			    	                				<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
+					  			    	                			</li>
+					  			    	                			<li>
+					  			    	                				<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
+					  			    	                			</li>
+					  			    	                		</ul>
+					  			    	                	</div>
+					  			    	                </div>
+
+					  			    	            </div>
+					  			    	        </div>
+					  			    	    </div>
+					  			    	</div>
+
+					  				</div>
+					  			  </div>
+					  			</div>
+					  		<?php
+					  		}
+				  			$step++;
+				  		}
+				  	}
+				  	?>
 				  </div>
+
 				</div>
 	      </div>
 
@@ -668,149 +751,152 @@ function calculateRoute(from, to) {
 			  	{
 			  		foreach ($provincialAgencyDetails as $provincialAgency)
 			  		{
-			  		?>
-			  			<div class="panel panel-default">
-			  			  <div class="panel-heading">
-			  			    <h4 class="panel-title">
-			  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies2" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
-			  			    </h4>
-			  			  </div>
-			  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? '' : '' }}">
-			  			    <div class="panel-body">
+			  			if( $provincialAgency->agency_type == '1' )
+			  			{
+				  		?>
+				  			<div class="panel panel-default">
+				  			  <div class="panel-heading">
+				  			    <h4 class="panel-title">
+				  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies2" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
+				  			    </h4>
+				  			  </div>
+				  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? '' : '' }}">
+				  			    <div class="panel-body">
 
-			  			    	<div class="panel-group" id="accordion_internet_service_{{ $step }}">
-			  			    	    <div class="panel panel-default">
-			  			    	        <div class="panel-heading tab-new01">
-			  			    	            <h4 class="panel-title">
-			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service_{{ $step }}" href="#cable_internet_services_collapse1{{ $step }}" aria-expanded="false" class="collapsed">{{ $provincialAgency->do_it_on_line_label }}</a>
-			  			    	            </h4>
-			  			    	        </div>
-			  			    	        <div id="cable_internet_services_collapse1{{ $step }}" class="panel-collapse collapse in" aria-expanded="false">
-			  			    	            <div class="panel-body">
-			  			    					<!-- <div>
-			  			    						<?php
-			  			    						if( $provincialAgency->logo != '' )
-			  			    						{
-			  			    							echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
-			  			    						}
-			  			    						else
-			  			    						{
-			  			    							echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
-			  			    						}
-			  			    						?>
-			  			    					</div> -->
-			  			    					<div>
-			  			    						<?php
-			  			    						// Check if it is a direct link or a search functionality
-			  			    						if( $provincialAgency->direct_link == '1' )
-			  			    						{
-			  			    							if( $provincialAgency->link != '' )
-			  			    							{
-			  			    							?>
-			  			    								<div class="get_started_LB blue-btn01">
-			  			    									<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">{{ $provincialAgency->get_started_label }}</a>
-			  			    								</div>
-			  			    							<?php
-			  			    							}
-			  			    						}
-			  			    						else
-			  			    						{
-			  			    						?>
-			  			    							<div class="get_started_LB">
-			  			    								<div class="row">
-			  			    									<div class="col-sm-12">
-			  			    										<p>Search the closest {{ $clientMovingToProvince->name }} public insurance office</p>
-			  			    									</div>
-			  			    								</div>
-			  			    								<div>
-			  			    									<form name="frm_update_address_search_insurance_office" id="frm_update_address_search_insurance_office" autocomplete="off">
-			  			    										<div class="col-sm-9 col-md-9 col-lg-9 row">
-			  			    											<input type="text" name="update_address_search_insurance_office" id="update_address_search_insurance_office" class="form-control" placeholder="Enter the address">
-			  			    										</div>
-			  			    										<div class="col-sm-3 col-md-3 col-lg-3"> 
-			  			    											<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
-			  			    											<a href="javascript:void(0);" onclick="" id="{{ $clientMovingToProvince->name }}" class="btn_update_address_search_insurance_office">Go</a>
-			  			    										</div>
-			  			    									</form>
-			  			    								</div>
-			  			    							</div>
-			  			    						<?php
-			  			    						}
-			  			    						?>
-			  			    					</div>
-			  			    	            </div>
-			  			    	        </div>
-			  			    	    </div>
-			  			    	    <div class="panel panel-default">
-			  			    	        <div class="panel-heading tab-new01">
-			  			    	            <h4 class="panel-title">
-			  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2{{ $step }}" class="collapsed" aria-expanded="false">Call Option</a>
-			  			    	            </h4>
-			  			    	        </div>
-			  			    	        <div id="cable_internet_services_collapse2{{ $step }}" class="panel-collapse collapse" aria-expanded="false">
-			  			    	            <div class="panel-body">
-			  			    	                
-			  			    	                <div class="col-md-12">
-			  			    	                	<div class="block-head">
-			  			    	                		<h3>Have these handy, before this call </h3>
-			  			    	                	</div>
-			  			    	                	<div class="up_add_li">
-			  			    	                		<ul>
-			  			    	                		<?php
-			  			    	                		echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
-			  			    	                		echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
-			  			    	                		?>
-			  			    	                		</ul>
-			  			    	                	</div>
-			  			    	                </div>
-			  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
-			  			    	                	<div class="block-head">
-			  			    	                		<h3> Opening Hours </h3>
-			  			    	                	</div>
-			  			    	                	<div class="up_add_li">
-			  			    	                		<ul>
-			  			    	                			<li>
-			  			    	                				<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
-			  			    	                			</li>
-			  			    	                			<li>
-			  			    	                				<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
-			  			    	                			</li>
-			  			    	                		</ul>
-			  			    	                	</div>
-			  			    	                </div>
-			  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
-			  			    	                	<div class="block-head">
-			  			    	                		<h3> Phone Numbers </h3>
-			  			    	                	</div>
-			  			    	                	<div class="up_add_li">
-			  			    	                		<ul>
-			  			    	                			<li>
-			  			    	                				<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
-			  			    	                			</li>
-			  			    	                			<li>
-			  			    	                				<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
-			  			    	                			</li>
-			  			    	                		</ul>
-			  			    	                	</div>
-			  			    	                </div>
+				  			    	<div class="panel-group" id="accordion_internet_service_{{ $step }}">
+				  			    	    <div class="panel panel-default">
+				  			    	        <div class="panel-heading tab-new01">
+				  			    	            <h4 class="panel-title">
+				  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service_{{ $step }}" href="#cable_internet_services_collapse1{{ $step }}" aria-expanded="false" class="collapsed">{{ $provincialAgency->do_it_on_line_label }}</a>
+				  			    	            </h4>
+				  			    	        </div>
+				  			    	        <div id="cable_internet_services_collapse1{{ $step }}" class="panel-collapse collapse in" aria-expanded="false">
+				  			    	            <div class="panel-body">
+				  			    					<!-- <div>
+				  			    						<?php
+				  			    						if( $provincialAgency->logo != '' )
+				  			    						{
+				  			    							echo '<img src="'. url('/images/provincial_agencies/' . $provincialAgency->logo) .'" height="100" width="100" alt="Udistro" />';
+				  			    						}
+				  			    						else
+				  			    						{
+				  			    							echo '<img src="'. url('/images/udistro-logo-pop.jpg') .'" alt="Udistro" />';
+				  			    						}
+				  			    						?>
+				  			    					</div> -->
+				  			    					<div>
+				  			    						<?php
+				  			    						// Check if it is a direct link or a search functionality
+				  			    						if( $provincialAgency->direct_link == '1' )
+				  			    						{
+				  			    							if( $provincialAgency->link != '' )
+				  			    							{
+				  			    							?>
+				  			    								<div class="get_started_LB blue-btn01">
+				  			    									<a href="javascript:void(0);" onclick="window.open('{{ $provincialAgency->link }}', 'location=yes,height=800,width=1000,scrollbars=yes,status=yes');">{{ $provincialAgency->get_started_label }}</a>
+				  			    								</div>
+				  			    							<?php
+				  			    							}
+				  			    						}
+				  			    						else
+				  			    						{
+				  			    						?>
+				  			    							<div class="get_started_LB">
+				  			    								<div class="row">
+				  			    									<div class="col-sm-12">
+				  			    										<p>Search the closest {{ $clientMovingToProvince->name }} public insurance office</p>
+				  			    									</div>
+				  			    								</div>
+				  			    								<div>
+				  			    									<form name="frm_update_address_search_insurance_office" id="frm_update_address_search_insurance_office" autocomplete="off">
+				  			    										<div class="col-sm-9 col-md-9 col-lg-9 row">
+				  			    											<input type="text" name="update_address_search_insurance_office" id="update_address_search_insurance_office" class="form-control" placeholder="Enter the address">
+				  			    										</div>
+				  			    										<div class="col-sm-3 col-md-3 col-lg-3"> 
+				  			    											<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
+				  			    											<a href="javascript:void(0);" onclick="" id="{{ $clientMovingToProvince->name }}" class="btn_update_address_search_insurance_office">Go</a>
+				  			    										</div>
+				  			    									</form>
+				  			    								</div>
+				  			    							</div>
+				  			    						<?php
+				  			    						}
+				  			    						?>
+				  			    					</div>
+				  			    	            </div>
+				  			    	        </div>
+				  			    	    </div>
+				  			    	    <div class="panel panel-default">
+				  			    	        <div class="panel-heading tab-new01">
+				  			    	            <h4 class="panel-title">
+				  			    	                <a data-toggle="collapse" data-parent="#accordion_internet_service" href="#cable_internet_services_collapse2{{ $step }}" class="collapsed" aria-expanded="false">Call Option</a>
+				  			    	            </h4>
+				  			    	        </div>
+				  			    	        <div id="cable_internet_services_collapse2{{ $step }}" class="panel-collapse collapse" aria-expanded="false">
+				  			    	            <div class="panel-body">
+				  			    	                
+				  			    	                <div class="col-md-12">
+				  			    	                	<div class="block-head">
+				  			    	                		<h3>Have these handy, before this call </h3>
+				  			    	                	</div>
+				  			    	                	<div class="up_add_li">
+				  			    	                		<ul>
+				  			    	                		<?php
+				  			    	                		echo ( $provincialAgency->label1 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label1 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label2 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label2 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label3 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label3 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label4 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label4 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label5 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label5 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label6 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label6 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label7 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label7 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label8 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label8 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label9 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label9 . '</li>' : '';
+				  			    	                		echo ( $provincialAgency->label10 != '' ) ? '<li class="col-sm-6"><i class="fa fa-angle-right" aria-hidden="true"></i>' . $provincialAgency->label10 . '</li>' : '';
+				  			    	                		?>
+				  			    	                		</ul>
+				  			    	                	</div>
+				  			    	                </div>
+				  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
+				  			    	                	<div class="block-head">
+				  			    	                		<h3> Opening Hours </h3>
+				  			    	                	</div>
+				  			    	                	<div class="up_add_li">
+				  			    	                		<ul>
+				  			    	                			<li>
+				  			    	                				<span>{{ ( $provincialAgency->heading1 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail1 != '' ) ? $provincialAgency->detail1 : '' }}
+				  			    	                			</li>
+				  			    	                			<li>
+				  			    	                				<span>{{ ( $provincialAgency->heading2 != '' ) ? $provincialAgency->heading1 : '' }}</span><i class="fa fa-clock-o" aria-hidden="true"></i>{{ ( $provincialAgency->detail2 != '' ) ? $provincialAgency->detail2 : '' }}
+				  			    	                			</li>
+				  			    	                		</ul>
+				  			    	                	</div>
+				  			    	                </div>
+				  			    	                <div class="col-sm-12 col-md-6 col-lg-6">
+				  			    	                	<div class="block-head">
+				  			    	                		<h3> Phone Numbers </h3>
+				  			    	                	</div>
+				  			    	                	<div class="up_add_li">
+				  			    	                		<ul>
+				  			    	                			<li>
+				  			    	                				<span>{{ ( $provincialAgency->heading3 != '' ) ? $provincialAgency->heading3 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail3 != '' ) ? $provincialAgency->detail3 : '' }}
+				  			    	                			</li>
+				  			    	                			<li>
+				  			    	                				<span>{{ ( $provincialAgency->heading4 != '' ) ? $provincialAgency->heading4 : '' }}</span><i class="fa fa-phone" aria-hidden="true"></i>{{ ( $provincialAgency->detail4 != '' ) ? $provincialAgency->detail4 : '' }}
+				  			    	                			</li>
+				  			    	                		</ul>
+				  			    	                	</div>
+				  			    	                </div>
 
-			  			    	            </div>
-			  			    	        </div>
-			  			    	    </div>
-			  			    	</div>
+				  			    	            </div>
+				  			    	        </div>
+				  			    	    </div>
+				  			    	</div>
 
-			  				</div>
-			  			  </div>
-			  			</div>
-			  		<?php
+				  				</div>
+				  			  </div>
+				  			</div>
+				  		<?php
+				  		}
 			  			$step++;
 			  		}
 			  	}
@@ -1008,7 +1094,8 @@ function calculateRoute(from, to) {
     			        						<!-- Moving From -->
     			        						<div class="col-sm-6 col-md-6 col-lg-6">
     			        							<div class="connect_utilitiy">
-    			        								<h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5> 
+    			        								<!-- <h5>Moving From: {{ $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5> -->
+    			        								<h5>Moving From: {{ strlen($clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name) > 25 ? substr($clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name,0,25) . '...' : $clientMovingFromAddress->address1 . ', ' . $clientMovingFromProvince->name }}</h5>
     			        								<div class="connect_utilitiy_company">
     			        									<?php
     			        									if( isset( $utilityCompanies ) && count( $utilityCompanies ) > 0 )
@@ -1040,7 +1127,8 @@ function calculateRoute(from, to) {
     			        						<!-- Moving To -->
     			        						<div class="col-sm-6 col-md-6 col-lg-6">
     			        							<div class="connect_utilitiy">
-    			        								<h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
+    			        								<!-- <h5>Moving To: {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5> -->
+    			        								<h5>Moving From: {{ strlen($clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name) > 25 ? substr($clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name,0,25) . '...' : $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</h5>
     			        								<div class="connect_utilitiy_company">
     			        									<?php
     			        									if( isset( $utilityCompanies ) && count( $utilityCompanies ) > 0 )
@@ -1569,93 +1657,6 @@ function calculateRoute(from, to) {
 						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_floor }}" name="moving_house_to_level" id="moving_house_to_level">
 						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_bedroom_count }}" name="moving_house_to_bedroom_count" id="moving_house_to_bedroom_count">
 						        	<input type="hidden" value="{{ $clientMovingToAddress->moving_to_property_type }}" name="moving_house_to_property_type" id="moving_house_to_property_type">
-
-						        	<!-- <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse3">Moving From</a>
-						                    </h4>
-						                </div>
-						                <div id="home_moving_companies_collapse3" class="panel-collapse collapse in">
-						                    <div class="panel-body">
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Type</div>
-						                        	<select class="form-control" name="moving_house_from_type" id="moving_house_from_type">
-						                        		<option value="">Select</option>
-						                        		<option value="house">House</option>
-						                        		<option value="apartment/flat">Apartment/Flat</option>
-						                        		<option value="condo">Condo</option>
-						                        		<option value="studio">Studio</option>
-						                        	</select>
-						                        </div>
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Floor Level</div>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_level" value="1">1</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_level" value="2">2</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_level" value="3">3</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_level" value="4+">4 or more</label>
-						                        	<div class="clean-error"><label id="moving_house_from_level-error" class="error" for="moving_house_from_level"></label></div>
-						                        </div>
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">No of bedrooms</div>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_bedroom_count" value="1">1</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_bedroom_count" value="2">2</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_bedroom_count" value="3">3</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_bedroom_count" value="4+">4 or more</label>
-						                        	<div class="clean-error"><label id="moving_house_from_bedroom_count-error" class="error" for="moving_house_from_bedroom_count"></label></div>
-						                        </div>
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Did you own or rent this property</div>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_property_type" value="own">Own</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_from_property_type" value="rent">Rent</label>
-						                        	<div class="clean-error"><label id="moving_house_from_property_type-error" class="error" for="moving_house_from_property_type"></label></div>
-						                        </div>
-						                    </div>
-						                </div>
-						            </div> -->
-						            <!-- <div class="panel panel-default">
-						                <div class="panel-heading">
-						                    <h4 class="panel-title">
-						                        <a data-toggle="collapse" data-parent="#accordion_home_moving_companies" href="#home_moving_companies_collapse2">Moving To</a>
-						                    </h4>
-						                </div>
-						                <div id="home_moving_companies_collapse2" class="panel-collapse collapse">
-						                    <div class="panel-body">
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Type</div>
-						                        	<select class="form-control" name="moving_house_to_type" id="moving_house_to_type">
-						                        		<option value="">Select</option>
-						                        		<option value="house">House</option>
-						                        		<option value="apartment/flat">Apartment/Flat</option>
-						                        		<option value="condo">Condo</option>
-						                        		<option value="studio">Studio</option>
-						                        	</select>
-						                        </div>
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Floor Level</div>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="1">1</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="2">2</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="3">3</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_level" value="4+">4 or more</label>
-						                        	<div class="clean-error"><label id="moving_house_to_level-error" class="error" for="moving_house_to_level"></label></div>
-						                        </div>
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">No of bedrooms</div>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="1">1</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="2">2</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="3">3</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_bedroom_count" value="4+">4 or more</label>
-						                        	<div class="clean-error"><label id="moving_house_to_bedroom_count-error" class="error" for="moving_house_to_bedroom_count"></label></div>
-						                        </div>
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Did you own or rent this property</div>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_property_type" value="own">Own</label>
-						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_to_property_type" value="rent">Rent</label>
-						                        	<div class="clean-error"><label id="moving_house_to_property_type-error" class="error" for="moving_house_to_property_type"></label></div>
-						                        </div>
-						                    </div>
-						                </div>
-						            </div> -->
 						            
 						            <div class="panel panel-default">
 						                <div class="panel-heading">
@@ -1817,18 +1818,18 @@ function calculateRoute(from, to) {
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_need_insurance" value="1">Yes</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_need_insurance" value="0">No</label>
 						                        </div>
-						                        <div class="form-group panel-Box">
+						                        <!-- <div class="form-group panel-Box">
 						                        	<div class="accord-title">Call back option?</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_option" value="1">Yes</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_option" value="0">No</label>
-						                        </div>
-						                        <div class="form-group panel-Box">
+						                        </div> -->
+						                        <!-- <div class="form-group panel-Box">
 						                        	<div class="accord-title">Call back time?</div>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_time" value="0">Anytime</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_time" value="1">Daytime</label>
 						                        	<label class="form-group accord-radio"><input type="radio" name="moving_house_callback_time" value="2">Evening</label>
 						                        	<div class="clean-error"><label id="moving_house_callback_time-error" class="error" for="moving_house_callback_time"></label></div>
-						                        </div>
+						                        </div> -->
 						                        <!-- <div class="form-group panel-Box">
 						                        	<div class="accord-title">Call me on?</div>
 						                        	<input type="text" name="moving_house_callback_primary_no" class="form-control" placeholder="Primary Number">

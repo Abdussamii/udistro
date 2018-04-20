@@ -2618,7 +2618,7 @@ class AdminController extends Controller
                 $response['aaData'][$k] = array(
                     0 => $provincialAgency->id,
                     1 => ucfirst(strtolower($provincialAgency->agency_name)),
-                    2 => ( $provincialAgency->agency_type == 1 ) ? 'Provincial Agencies' : 'Provincial Utility',
+                    2 => ( $provincialAgency->agency_type == 1 ) ? 'Provincial Agencies' : 'Federal Agencies',
                     3 => ucwords( strtolower( $province->name ) ),
                     4 => '<a href="javascript:void(0);" id="'. $provincialAgency->id .'" class="edit_provincial_agency_details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
@@ -5564,7 +5564,7 @@ class AdminController extends Controller
             	else if( $jobDetail->company_payment_released == '2' )
             	{
             		$paymentStatus = 'Requested';
-            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="release_payment">Release</a>';
+            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="release_payment">Release</a> | <a href="https://www6.memberdirect.net/brand/mb_crosstowncivic/OnlineBanking/Accounts/" target="_blank">Make Payment</a>';
             	}
 
             	$response['aaData'][$k] = array(
@@ -5610,7 +5610,7 @@ class AdminController extends Controller
 					if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
 					{
 						$response['errCode']    = 0;
-			    		$response['errMsg']     = 'Payment request saved successfully';
+			    		$response['errMsg']     = 'Payment released successfully';
 					}
 					else
 					{

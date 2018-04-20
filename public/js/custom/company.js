@@ -305,7 +305,7 @@ $(document).ready(function(){
                     }
 
                     // Show the modal
-                    $('#modal_home_cleaning_service_request').modal('show');
+                    $('#modal_home_cleaning_service_request').modal({backdrop: 'static', keyboard: false});
                 }
             });
         }
@@ -318,6 +318,19 @@ $(document).ready(function(){
         }
     });
 
+	// Home cleaning build quote
+	$('#btn_home_cleaning_build_quote').click(function(){
+		if( $(this).find('i').hasClass('fa fa-minus-square') )
+		{
+			$(this).find('i').removeClass('fa fa-minus-square').addClass('fa fa-plus-square');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-plus-square').addClass('fa fa-minus-square');
+		}
+
+		$('.home_cleaning_quote_details').toggle();
+	});
 
     $(document).on('click', '.edit_cable_internet_service', function(){
         var cableInternetId = $(this).attr('id');
@@ -491,7 +504,7 @@ $(document).ready(function(){
                     }
 
                     // Show the modal
-                    $('#modal_tech_concierge_service_request').modal('show');
+                    $('#modal_tech_concierge_service_request').modal({backdrop: 'static', keyboard: false});
                 }
             });
         }
@@ -503,6 +516,20 @@ $(document).ready(function(){
             $('#alert_box_modal').modal('show');
         }
     });
+
+	// Tech concierge build quote
+	$('#btn_tech_concierge_build_quote').click(function(){
+		if( $(this).find('i').hasClass('fa fa-minus-square') )
+		{
+			$(this).find('i').removeClass('fa fa-minus-square').addClass('fa fa-plus-square');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-plus-square').addClass('fa fa-minus-square');
+		}
+
+		$('.tech_concierge_quote_details').toggle();
+	});
 
 
     $(document).on('click', '.edit_moving_item_service', function()
@@ -589,7 +616,7 @@ $(document).ready(function(){
 					}
 
                     // Show the modal
-                    $('#modal_moving_companies_service_request').modal('show');
+                    $('#modal_moving_companies_service_request').modal({backdrop: 'static', keyboard: false});
                 }
             });
         }
@@ -601,6 +628,20 @@ $(document).ready(function(){
             $('#alert_box_modal').modal('show');
         }
     });
+
+	// Home cleaning build quote
+	$('#btn_moving_build_quote').click(function(){
+		if( $(this).find('i').hasClass('fa fa-minus-square') )
+		{
+			$(this).find('i').removeClass('fa fa-minus-square').addClass('fa fa-plus-square');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-plus-square').addClass('fa fa-minus-square');
+		}
+
+		$('.moving_quote_details').toggle();
+	});
 
     // Company Address Details form validation
     $('#frm_company_address_details').submit(function(e){
@@ -1352,7 +1393,7 @@ $(document).ready(function(){
 
 		    	discount = ( $('.moving_service_discount').val() != '' ) ? parseFloat( $('.moving_service_discount').val() ) : 0;
 
-		    	insurance = ( $('.moving_service_insurance').val() != '' ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
+		    	insurance = ( $('.moving_service_insurance').val() != '' && $('.moving_service_insurance').val() != null ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
 
 		    	if( serviceTotal > 0 )
 		    	{

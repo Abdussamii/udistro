@@ -985,7 +985,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#home_cleaning_services_modal').modal('hide');
@@ -1085,12 +1085,10 @@ $(document).ready(function(){
 		ignore: "not:hidden",
 		rules: 
 		{	
-			moving_house_callback_option: { required: true },
 			moving_house_need_insurance: { required: true }
 		},
 		messages: 
 		{
-			moving_house_callback_option: { required: 'Please select callback option' },
 			moving_house_need_insurance: { required: 'Please select an insurance option' }
 		}
 	});
@@ -1124,7 +1122,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#moving_companies_modal').modal('hide');
@@ -1261,7 +1259,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#tech_concierge_modal').modal('hide');
@@ -1444,7 +1442,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#cable_internet_services_modal').modal('hide');
@@ -1761,10 +1759,13 @@ $(document).ready(function(){
 				// Get the label text for the activity which is incomplete
 				var labelTxt = $(this).closest('.boxes').find('.box-title').find('h3').html();
 
-				if( !$(this).closest('ul').find('li').first().find('a').hasClass('share_announcement') )	// Share announcement is not a mandatory activity
+				if( !$(this).closest('ul').find('li').first().find('a').hasClass('share_announcement') && !$(this).closest('ul').find('li').first().find('a').hasClass('special_offer') )	// Share announcement, Special Offer is not a mandatory activity
 				{
 					// Show the alert message
-					alertify.error(labelTxt + ' activity is still incomplete');
+					// alertify.error(labelTxt + ' activity is still incomplete');
+					$('#service_response').find('.modal-header').html('Alert');
+			    	$('#service_response').find('.modal-body').html(labelTxt + ' activity is still incomplete');
+			    	$('#service_response').modal('show');
 
 					activitiesCheck = false;
 
@@ -1891,6 +1892,7 @@ $(document).ready(function(){
 		    		$('#paypal #address1').val( response.details.address1 );
 		    		$('#paypal #address2').val( response.details.address2 );
 		    		$('#paypal #city').val( response.details.city );
+		    		$('#paypal #state').val( response.details.province );
 		    		$('#paypal #zip').val( response.details.postal_code );
 		    		$('#paypal #day_phone_a').val( response.details.contactNumber );
 		    		$('#paypal #day_phone_b').val( response.details.contactNumber );
@@ -1902,7 +1904,10 @@ $(document).ready(function(){
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#service_response').find('.modal-header').html('Alert');
+			    	$('#service_response').find('.modal-body').html(response.errMsg);
+			    	$('#service_response').modal('show');
 		    	}
 		    }
 		});

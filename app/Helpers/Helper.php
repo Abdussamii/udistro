@@ -13,6 +13,7 @@ use App\ClientActivityLog;
 use App\PaymentPlanSubscription;
 use App\PaymentPlan;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 use App\TechConciergeAppliancesServiceRequest;
 use App\TechConciergePlaceServiceRequest;
@@ -797,5 +798,19 @@ class Helper
 		        $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
 		    });
     	}
+	}
+
+	public static function checkUserCompanyType()
+	{
+    	// Get the logged in user id
+        $userId = Auth::user()->id;
+
+        // Get the logged in user details
+		$user = User::find($userId);
+
+		// Get the company associated with the user
+		$companyDetails = $user->company->first();
+
+		return $companyDetails;
 	}
 }

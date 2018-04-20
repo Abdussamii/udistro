@@ -19,7 +19,7 @@
 							Please find a copy of the details you submitted at the bottom of this email.
 						</p>
 						<p>
-							Your quote request has now been sent to the following moving companies.
+							Your quote request has now been sent to the following companies.
 						</p>
 					</td>
 				</tr>
@@ -35,6 +35,21 @@
 						</p>
 						<p>
 							NP: During your selection process, it is recommended that you check ratings, company profile & qualifications and guarantee policies of the companies. 
+						</p>
+						<p>
+							For privacy reasons, we do not allow them to send you bunch of email. Instead we have listed all the responses on your accounts related with the email mayankpandey@virtualemployee.com below and you can review each of the response, accept and make payment through the following link below:
+						</p>
+						<p>
+							Quotation Response: <a href="{{ $emailData['url'] }}">Click here to see response from companies</a>
+						</p>
+						<p>
+							You can always come back to this page to check new responses.
+						</p>
+						<p>
+							After you review companies responses, you will be able to make a secure payment through your PayPal Account, Credit Card or Debit Card of your choice.
+						</p>
+						<p>
+							uDistro will not make payment commitments to the companies you are involved with until you have confirmed that your job is delivered as promised.
 						</p>
 						<p>
 							<strong>Details of the quote request you submitted:</strong>
@@ -62,10 +77,17 @@
 										<td>{{ ucwords( strtolower( $company['company_name'] ) ) }}</td>
 										<td style="text-align: center;">
 										<?php
+										if( $company['rating'] > 0 )
+										{
 											for($i=1; $i<=$company['rating']; $i++)
 											{
 												echo '<img src="'. url('/images/star.png') .'" alt="uDistro">';
 											}
+										}
+										else
+										{
+											echo 'NA';
+										}
 										?>	
 										</td>
 										<td>{{ ucwords( $company['profile'] ) }}</td>
@@ -75,6 +97,10 @@
 										if( !is_null( $company['guarantee_policy'] ) )
 										{
 											echo ( $company['guarantee_policy'] == '1' ) ? 'Yes' : 'No';
+										}
+										else
+										{
+											echo 'No';
 										}
 										?>
 										</td>
@@ -149,7 +175,7 @@
 								<td>{{ $emailData['moving_from']['moving_from_bedroom_count'] or '' }}</td>
 							</tr>
 							<tr>
-								<td>Moving to</td>
+								<td>Moving to:</td>
 								<td></td>
 							</tr>
 							<tr>

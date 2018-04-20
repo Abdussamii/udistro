@@ -147,6 +147,9 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+                    	<?php
+                    		$companyDetails = Helper::checkUserCompanyType();
+                    	?>
                     	<li class="dash-logo">
                     		<img src="https://www.udistro.ca/images/logo-dash.png" alt="Udistro">
                     	</li>
@@ -156,18 +159,32 @@
                         <!-- <li>
                             <a href="{{ url('company/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                         </li> -->
-                        <li>
-                            <a href="{{ url('company/quotationrequest') }}"><i class="fa fa-dashboard fa-fw"></i> Quotation Request</a>
-                        </li>
-                        <li>
-                            <a href="{{ url('company/jobs') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Jobs</a>
-                        </li>
+                        <?php
+                        if( isset( $companyDetails ) && count( $companyDetails ) > 0 && $companyDetails->company_category_id != '4' )
+                        {
+	                        ?>
+	                        	<li>
+	                        	    <a href="{{ url('company/quotationrequest') }}"><i class="fa fa-dashboard fa-fw"></i> Quotation Request</a>
+	                        	</li>
+	                        	<li>
+	                        	    <a href="{{ url('company/jobs') }}"><i class="fa fa-tasks" aria-hidden="true"></i> Jobs</a>
+	                        	</li>
+	                        <?php
+                        }
+                        ?>
                         <li>
                             <a href="{{ url('company/review') }}"><i class="fa fa-comments" aria-hidden="true"></i> Review</a>
                         </li>
-                        <li>
-                            <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
-                        </li>
+                        <?php
+                        if( isset( $companyDetails ) && count( $companyDetails ) > 0 && $companyDetails->company_category_id != '4' )
+                        {
+	                        ?>
+	                        	<li>
+	                        	    <a href="{{ url('company/paymentplan') }}"><i class="fa fa-credit-card" aria-hidden="true"></i> Payment Plan</a>
+	                        	</li>
+	                        <?php
+                        }
+                        ?>
                         <!-- <li>
                             <a href="{{ url('company/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
                         </li> -->

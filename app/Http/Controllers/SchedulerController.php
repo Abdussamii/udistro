@@ -105,8 +105,124 @@ class SchedulerController extends Controller
     		}
     	}
     }
+
+    public function sendCompanyQuotationResponseEmail()
+	{
+		/*// Working hours in Canada: 07:00 to 17:00
+		$workingHourStartTime 	= '00:00:00';
+		$workingHourEndTime 	= '24:00:00';
+
+		// Get the current time of the server
+		$currentDate = date('Y-m-d');
+		$currentTime = date('H:i:s');
+
+		// If the current time is between the working hours then get the scheduled email listing
+		if( $currentTime >= $workingHourStartTime && $currentTime <= $workingHourEndTime )
+		{
+    		$homeCleaningServiceRequest = HomeCleaningServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1']) 
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'company_id As companyId', 'updated_at As responseDate')
+										->first();
+			
+			// Check for the `moving_item_service_requests` email not sent scheduled for today's date
+    		$movingItemServiceRequest = MovingItemServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1'])
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'mover_company_id As companyId', 'updated_at As responseDate')
+										->first();
+			
+			// Check for the `tech_concierge_service_requests` email not sent scheduled for today's date
+    		$techConciergeServiceRequest = TechConciergeServiceRequest::where(['email_sent_status' => '0', 'company_response' => '1'])
+										->select('id As serviceRequestId', 'agent_client_id', 'invitation_id', 'company_id As companyId', 'updated_at As responseDate')
+										->first();
+
+			if( count( $homeCleaningServiceRequest ) > 0 )
+			{
+				// Send a common email
+				$agentClient = AgentClient::findOrFail($homeCleaningServiceRequest->agent_client_id);
+
+				$clientId 		= $agentClient->id;
+				$clientEmail	= $agentClient->email;
+				$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+				$invitationId 	= $homeCleaningServiceRequest->invitation_id;
+
+				$emailData = array(
+					'name' 		=> $clientName,
+					'subject' 	=> 'Quotation Response',
+					'email' 	=> $clientEmail,
+					'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+				);
+
+				if( app()->env != 'local' )
+				{
+					Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+					    $m->from('info@udistro.ca', 'Udistro');
+					    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+					});
+
+					// Update the email_sent_status to '1'
+					HomeCleaningServiceRequest::where(['id' => $homeCleaningServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+				}
+			}
+
+			if( count( $movingItemServiceRequest ) > 0 )
+			{
+				// Send a common email
+				$agentClient = AgentClient::findOrFail($movingItemServiceRequest->agent_client_id);
+
+				$clientId 		= $agentClient->id;
+				$clientEmail	= $agentClient->email;
+				$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+				$invitationId 	= $movingItemServiceRequest->invitation_id;
+
+				$emailData = array(
+					'name' 		=> $clientName,
+					'subject' 	=> 'Quotation Response',
+					'email' 	=> $clientEmail,
+					'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+				);
+
+				if( app()->env != 'local' )
+				{
+					Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+					    $m->from('info@udistro.ca', 'Udistro');
+					    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+					});
+
+					// Update the email_sent_status to '1'
+					MovingItemServiceRequest::where(['id' => $movingItemServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+				}
+			}
+
+			if( count( $techConciergeServiceRequest ) > 0 )
+			{
+				// Send a common email
+				$agentClient = AgentClient::findOrFail($techConciergeServiceRequest->agent_client_id);
+
+				$clientId 		= $agentClient->id;
+				$clientEmail	= $agentClient->email;
+				$clientName 	= ucwords( $agentClient->lname . ' ' . $agentClient->fname . ' ' .$agentClient->oname );
+				$invitationId 	= $techConciergeServiceRequest->invitation_id;
+
+				$emailData = array(
+					'name' 		=> $clientName,
+					'subject' 	=> 'Quotation Response',
+					'email' 	=> $clientEmail,
+					'url'		=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+				);
+
+				if( app()->env != 'local' )
+				{
+					Mail::send('emails.moverQuotationResponseNotification', ['emailData' => $emailData], function ($m) use ($emailData) {
+					    $m->from('info@udistro.ca', 'Udistro');
+					    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+					});
+
+					// Update the email_sent_status to '1'
+					TechConciergeServiceRequest::where(['id' => $techConciergeServiceRequest['serviceRequestId']])->update(['email_sent_status' => '1']);
+				}
+			}
+		}*/
+	}
 	
-	public function sendCompanyQuotationResponseEmail()
+	/*public function sendCompanyQuotationResponseEmail()
 	{
 		// For testing purpose
 		Log::useDailyFiles(storage_path().'/logs/cron.log');
@@ -353,7 +469,7 @@ class SchedulerController extends Controller
     			}
     		}
 		}
-    }
+    }*/
 
     public function sendCompanyNotificationEmail()
 	{
@@ -367,7 +483,7 @@ class SchedulerController extends Controller
 						->select('t3.email', 't3.fname', 't3.lname')
 						->first();
 
-		if( count( $agentDetails ) > 0 )
+		if( count( $agentDetails ) > 0 && count( $notificationEmail ) > 0 )
 		{
 			$agentName = ucwords( strtolower( $agentDetails->lname . ' ' . $agentDetails->fname ) );
 			$agentEmail= $agentDetails->email;
@@ -405,7 +521,7 @@ class SchedulerController extends Controller
 		// Get the first entry from the table
 		$emailDetails = ShareAnnouncementEmail::where(['status' => '0'])->first();
 
-		if( count( $emailDetails ) >= 0 )
+		if( count( $emailDetails ) > 0 )
 		{
 			// Send the email
 			$emailData = array(

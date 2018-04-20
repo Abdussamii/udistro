@@ -216,7 +216,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Success');
+		    			$('#service_response').find('.modal-body').html(response.errMsg);
+		    			$('#service_response').modal('show');
 
 			    		// Redirect the view
                         setTimeout(function(){
@@ -225,7 +228,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Alert');
+		    			$('#service_response').find('.modal-body').html(response.errMsg);
+		    			$('#service_response').modal('show');
 			    	}
 			    }
     		});
@@ -236,6 +242,25 @@ $(document).ready(function(){
 </head>
 
 <body>
+
+	<!-- Server Response -->
+	<div class="modal fade" id="service_response" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	            	
+	            </div>
+	            <div class="modal-body">
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" href="javascript:void(0);" data-dismiss="modal">OK</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<!-- Server Response -->
+
 <div class="backColor">
  <div class="container">
   <div class="classlogo_part"> <img src="{{ url('images/udistro-logo.png') }}" alt=""> </div>

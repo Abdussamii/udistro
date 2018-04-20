@@ -313,6 +313,24 @@
 
 <body>
 
+	<!-- Server Response -->
+	<div class="modal fade" id="service_response" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	            	
+	            </div>
+	            <div class="modal-body">
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" href="javascript:void(0);" data-dismiss="modal">OK</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<!-- Server Response -->
+
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -546,9 +564,15 @@
 																<td style="padding:20px;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 																	<div class="editable" style="text-align: justify;">
-																		This is {{ ucwords( strtolower( $agentDetails->fname ) ) }}, your real estate agent. I know moving is tough. So I am happy to share uDistro with you. This application will help you to move everything you want to move including your mail and utility services. 
-																		Just click the get started button to claim your invitation and begin checking things of your recommended moving lists.
-																		Plus this is completely free. It is part of my contribution to your move.
+																		<div style="margin-bottom: 20px;">
+																			This is {{ ucwords( strtolower( $agentDetails->fname ) ) }}, your real estate agent. I know moving is tough. So I am happy to share uDistro with you. This application will help you to move everything you want to move including your mail and utility services. 
+																		</div>
+																		<div style="margin-bottom: 20px;">
+																			Just click the get started button to claim your invitation and begin checking things of your recommended moving lists.
+																		</div>
+																		<div style="margin-bottom: 20px;">
+																			Plus this is completely free. It is part of my contribution to your move.
+																		</div>
 																	</div>
 																</td>
 																<!-- <td style="padding:20px; width: 50%;">
@@ -809,7 +833,10 @@ $(document).ready(function(){
     	        }
     	        else
     	        {
-    	            alertify.error( response.errMsg );
+    	            // alertify.error( response.errMsg );
+    	            $('#service_response').find('.modal-header').html('Alert');
+    	            $('#service_response').find('.modal-body').html(response.errMsg);
+    	            $('#service_response').modal('show');
     	        }
     	    }
     	});
@@ -854,7 +881,11 @@ $(document).ready(function(){
 
     	if( recipientEmails == null )
     	{
-    		alertify.error('Please select atleast one email recipient');
+    		// alertify.error('Please select atleast one email recipient');
+    		$('#service_response').find('.modal-header').html('Alert');
+    		$('#service_response').find('.modal-body').html('Please select atleast one email recipient');
+    		$('#service_response').modal('show');
+
     		$('#recipient_email').focus();
 
     		return false;
@@ -898,11 +929,17 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
-		    		alertify.success( response.errMsg );	
+		    		// alertify.success( response.errMsg );
+		    		$('#service_response').find('.modal-header').html('Success');
+		    		$('#service_response').find('.modal-body').html(response.errMsg);
+		    		$('#service_response').modal('show');
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#service_response').find('.modal-header').html('Alert');
+		    		$('#service_response').find('.modal-body').html(response.errMsg);
+		    		$('#service_response').modal('show');
 		    	}
 		    }
 		});
@@ -961,20 +998,29 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 
 			    		$('#email_template_name').val('');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 			    	}
 			    }
     		});
     	}
     	else
     	{
-    		alertify.error('Please provide email template name');
+    		// alertify.error('Please provide email template name');
+    		$('#service_response').find('.modal-header').html('Alert');
+    		$('#service_response').find('.modal-body').html('Please provide email template name');
+    		$('#service_response').modal('show');
 
     		$('#email_template_name').focus();
 

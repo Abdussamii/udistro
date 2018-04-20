@@ -85,7 +85,7 @@ class PaymentController extends Controller
     	}
 
     	// Step 2: POST IPN data back to PayPal to validate
-    	// $ch = curl_init('https://ipnpb.paypal.com/cgi-bin/webscr');			// Production URL
+    	// $ch = curl_init('https://ipnpb.paypal.com/cgi-bin/webscr');					// Production URL
     	$ch = curl_init('https://ipnpb.sandbox.paypal.com/cgi-bin/webscr');		// Sandbox URL
     	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     	curl_setopt($ch, CURLOPT_POST, 1);

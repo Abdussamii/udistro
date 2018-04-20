@@ -1010,6 +1010,10 @@
 							<label for="payment_amount">Amount</label>
 							<input type="text" name="payment_amount" id="payment_amount" class="form-control" placeholder="Amount" disabled="true">
 						</div>
+						<div class="form-group">
+							<label for="payment_mode">Debit/Credit Card <input type="radio" name="payment_mode" class="payment_mode" value="1" checked=""></label>
+							<label for="payment_mode">Paypal <input type="radio" name="payment_mode" class="payment_mode" value="2"></label>
+						</div>
 
 					    <!-- Prepopulate the PayPal checkout page with customer details -->
 					    <div class="form-group" style="display: none;">
@@ -1019,7 +1023,13 @@
 						    <input type="text" name="address1" id="address1" value="">
 						    <input type="text" name="address2" id="address2" value="">
 						    <input type="text" name="city" id="city" value="">
-						    <input type="text" name="zip" id="zip" value="">
+						   	<input type="text" name="zip" id="zip" value="">
+							
+							<input type="hidden" name="state" id="state" value="">
+
+						    <!-- For country Canada -->
+						    <input type="hidden" name="country" value="CA">
+						    
 						    <input type="text" name="day_phone_a" id="day_phone_a" value="">
 						    <input type="text" name="day_phone_b" id="day_phone_b" value="">
 					    </div>
@@ -1059,7 +1069,7 @@
 					    <input type="text" name="notify_url" value="{{ url('/paypal/paymentstatus') }}" style="display: none;" />
 
 					    <!-- Redirect the user to the billing page instead of paypal payment page -->
-					    <!-- <input type="hidden" name="landing_page" value="billing"> -->
+					    <input type="hidden" name="landing_page" id="landing_page" value="billing">
 					</div>
 					<div class="modal-footer">
 						<!-- For production -->
@@ -1183,7 +1193,23 @@
                 { 'bSortable' : false },
                 { 'bSortable' : false },
                 { 'bSortable' : false }
-            ]
+            ],
+            "language": {
+              "emptyTable": "You don't have response yet, please check back within the next 24 hours"
+            }
+        });
+
+        // To toggle the paypal payment from credit card and login
+        $('.payment_mode').click(function(){
+        	if( $(this).val() == '1' )
+        	{
+        		$('#landing_page').remove();
+        		$('#paypal').append('<input type="hidden" name="landing_page" id="landing_page" value="billing">');
+        	}
+        	else
+        	{
+        		$('#landing_page').remove();
+        	}
         });
     });
 </script>

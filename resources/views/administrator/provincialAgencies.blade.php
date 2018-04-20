@@ -73,7 +73,7 @@
 											 	<label><input type="radio" name="agency_type" value="1" checked="true">Provincial Agencies</label>
 											</div>
 											<div class="radio">
-											 	<label><input type="radio" name="agency_type" value="2">Provincial Utility</label>
+											 	<label><input type="radio" name="agency_type" value="2">Federal Agency</label>
 											</div>
 										</div>
 									</div>
