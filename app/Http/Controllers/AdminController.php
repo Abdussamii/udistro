@@ -5523,7 +5523,7 @@ class AdminController extends Controller
             						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
             						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
             						->where(['t1.id' => $jobDetail->service_request_response_id])
-            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount', 't1.insurance_amount')
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount', 't1.insurance_amount', 't1.date_of_working')
             						->first();
 
             		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
