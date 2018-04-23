@@ -230,7 +230,7 @@
 		<input type="hidden" name="mover_id" id="mover_id" value="{{ $moverId }}">
 		<input type="hidden" name="response_id" id="response_id" value="{{ $responseId }}">
 		<input type="hidden" name="transaction_id" id="transaction_id" value="{{ $transactionId }}">
-		<a href="javascript:void(0);" id="btn_save_rating">
+		<a href="javascript:void(0);" id="btn_save_rating" style="text-align: center;">
 			confirm
 		</a>
 	</div>

@@ -93,6 +93,7 @@
 											<label id="province-error" class="error" for="province"></label>
 											<select name="province" id="province" class="form-control">
 												<option value="">Select</option>
+												<option value="0">All</option>
 												<?php
 												if( isset( $provinces ) && count( $provinces ) > 0 )
 												{
@@ -187,56 +188,56 @@
 								<div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="heading1">Heading 1</label>
-											<input type="text" name="heading1" id="heading1" class="form-control" placeholder="Heading 1">
+											<label for="heading1">Opening Hour Heading 1</label>
+											<input type="text" name="heading1" id="heading1" class="form-control" placeholder="Opening Hour Heading 1">
 										</div>
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="detail1">Detail 1</label>
-											<input type="text" name="detail1" id="detail1" class="form-control" placeholder="Detail 1">
-										</div>
-									</div>
-								</div>
-								<div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="heading2">Heading 2</label>
-											<input type="text" name="heading2" id="heading2" class="form-control" placeholder="Heading 2">
-										</div>
-									</div>
-									<div class="col-lg-6">
-										<div class="form-group">
-											<label for="detail2">Detail 2</label>
-											<input type="text" name="detail2" id="detail2" class="form-control" placeholder="Detail 2">
+											<label for="detail1">Opening Hour Detail 1</label>
+											<input type="text" name="detail1" id="detail1" class="form-control" placeholder="Opening Hour Detail 1">
 										</div>
 									</div>
 								</div>
 								<div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="heading3">Heading 3</label>
-											<input type="text" name="heading3" id="heading3" class="form-control" placeholder="Heading 3">
+											<label for="heading2">Opening Hour Heading 2</label>
+											<input type="text" name="heading2" id="heading2" class="form-control" placeholder="Opening Hour Heading 2">
 										</div>
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="detail3">Detail 3</label>
-											<input type="text" name="detail3" id="detail3" class="form-control" placeholder="Detail 3">
+											<label for="detail2">Opening Hour Detail 2</label>
+											<input type="text" name="detail2" id="detail2" class="form-control" placeholder="Opening Hour Detail 2">
 										</div>
 									</div>
 								</div>
 								<div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="heading4">Heading 4</label>
-											<input type="text" name="heading4" id="heading4" class="form-control" placeholder="Heading 4">
+											<label for="heading3">Opening Hour Heading 3</label>
+											<input type="text" name="heading3" id="heading3" class="form-control" placeholder="Opening Hour Heading 3">
 										</div>
 									</div>
 									<div class="col-lg-6">
 										<div class="form-group">
-											<label for="detail4">Detail 4</label>
-											<input type="text" name="detail4" id="detail4" class="form-control" placeholder="Detail 4">
+											<label for="detail3">Opening Hour Detail 3</label>
+											<input type="text" name="detail3" id="detail3" class="form-control" placeholder="Opening Hour Detail 3">
+										</div>
+									</div>
+								</div>
+								<div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="heading4">Opening Hour Heading 4</label>
+											<input type="text" name="heading4" id="heading4" class="form-control" placeholder="Opening Hour Heading 4">
+										</div>
+									</div>
+									<div class="col-lg-6">
+										<div class="form-group">
+											<label for="detail4">Opening Hour Detail 4</label>
+											<input type="text" name="detail4" id="detail4" class="form-control" placeholder="Opening Hour Detail 4">
 										</div>
 									</div>
 								</div>

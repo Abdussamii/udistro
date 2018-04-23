@@ -202,13 +202,31 @@
 			.company-response-data {
 			    margin-bottom: 80px;
 			}
+			.loader-wrapper {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				background: #fff;
+				z-index: 999;
+			}
+			.preload {
+			    position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    transform: translate(-50%, -40%);
+			    -webkit-transform: translate(-50%, -40%);
+			}
         </style>
 
     </head>
 
     <body>
 
-<!-- Navbar -->
+    <div class="loader-wrapper">
+    	<div class="preload">Loading...</div>
+    </div>
+
+	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	 <div class="container-fluid">
 	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
@@ -267,16 +285,16 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <td style="width: 30%;">Moving from</td>
-                                                            <td id="moving_from_address"></td>
+                                                            <td style="width: 30%;" class="table-heading-new">Moving from</td>
+                                                            <td id="moving_from_address" class="table-heading-new"></td>
                                                         </tr>
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <td style="width: 30%;">Moving to</td>
-                                                            <td id="moving_to_address"></td>
+                                                            <td style="width: 30%;" class="table-heading-new">Moving to</td>
+                                                            <td id="moving_to_address" class="table-heading-new"></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -328,8 +346,8 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Items</th>
-                                                                <th>User Input</th>
+                                                                <th class="table-heading-new">Items</th>
+                                                                <th class="table-heading-new">User Input</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_tech_concierge_other_details">
@@ -342,11 +360,11 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 30%">Items</th>
-                                                                <th style="width: 40%">User Input</th>
-                                                                <th style="width: 10%">Quantity</th>
-                                                                <th style="width: 10%">Time Estimate</th>
-                                                                <th style="width: 10%">Budget Estimate</th>
+                                                                <th style="width: 30%" class="table-heading-new">Items</th>
+                                                                <th style="width: 40%" class="table-heading-new">User Input</th>
+                                                                <th style="width: 10%" class="table-heading-new">Quantity</th>
+                                                                <th style="width: 10%" class="table-heading-new">Time Estimate</th>
+                                                                <th style="width: 10%" class="table-heading-new">Budget Estimate</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_tech_concierge_services">
@@ -411,7 +429,12 @@
                         </div>
                     </div>
 
-                    
+                    <style type="text/css">
+                    	.table-heading-new {
+                    	    background: #00bcea !important;
+                    	    color: #fff;
+                    	}
+                    </style>
 
                     <!-- Modal to Home Cleaning Service Request -->
                     <div id="modal_home_cleaning_service_request" class="modal fade" role="dialog">
@@ -425,7 +448,7 @@
 
                                 <div class="modal-body" style="height: 800px; overflow-y: auto;">
                                     <form id="frm_home_cleaning_services" name="frm_home_cleaning_services">
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
                                                 <tr>
                                                     <td style="width: 30%;">Moving from</td>
@@ -440,13 +463,13 @@
                                                     <td id="moving_to_address"></td>
                                                 </tr>
                                             </table>
-                                        </div>
+                                        </div> -->
 
                                         <div class="clearfix"></div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
-                                                <tr>
+                                                <tr class="table-heading-new">
                                                     <th style="width:70%">Items</th>
                                                     <th>User Input</th>
                                                 </tr>
@@ -498,7 +521,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
-                                                <tr>
+                                                <tr class="table-heading-new">
                                                     <th style="width:70%">Items</th>
                                                     <th>User Input</th>
                                                 </tr>
@@ -536,7 +559,7 @@
                                         <div class="col-lg-12 col-md-12 col-sm-12">
                                             <table class="table table-striped">
                                                 <thead>
-                                                    <tr>
+                                                    <tr class="table-heading-new">
                                                         <th style="width: 30%">Items</th>
                                                         <th style="width: 40%">User Input</th>
                                                         <th style="width: 10%">Quantity</th>
@@ -622,7 +645,7 @@
                                             <form id="frm_home_moving_companies" name="frm_home_moving_companies" autocomplete="off">
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
-                                                        <tr>
+                                                        <tr class="table-heading-new">
                                                             <td style="width: 30%;">Moving from</td>
                                                             <td id="moving_from_address"></td>
                                                         </tr>
@@ -630,7 +653,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
-                                                        <tr>
+                                                        <tr class="table-heading-new">
                                                             <td style="width: 30%;">Moving to</td>
                                                             <td id="moving_to_address"></td>
                                                         </tr>
@@ -642,8 +665,8 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <th style="width:70%">Items</th>
-                                                            <th>User Input</th>
+                                                            <th style="width:70%" class="table-heading-new">Items</th>
+                                                            <th class="table-heading-new">User Input</th>
                                                         </tr>
                                                         <tr>
                                                             <td>Moving from house type</td>
@@ -682,8 +705,8 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <th style="width:70%">Items</th>
-                                                            <th>User Input</th>
+                                                            <th style="width:70%" class="table-heading-new">Items</th>
+                                                            <th class="table-heading-new">User Input</th>
                                                         </tr>
                                                         <tr>
                                                             <td>Moving date</td>
@@ -704,8 +727,8 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Items</th>
-                                                                <th>User Input</th>
+                                                                <th class="table-heading-new">Items</th>
+                                                                <th class="table-heading-new">User Input</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_moving_other_services">
@@ -718,11 +741,11 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 30%">Items</th>
-                                                                <th style="width: 40%">User Input</th>
-                                                                <th style="width: 10%">Quantity/Weight</th>
-                                                                <th style="width: 10%">Time Estimate</th>
-                                                                <th style="width: 10%">Budget Estimate</th>
+                                                                <th style="width: 30%" class="table-heading-new">Items</th>
+                                                                <th style="width: 40%" class="table-heading-new">User Input</th>
+                                                                <th style="width: 10%" class="table-heading-new">Quantity/Weight</th>
+                                                                <th style="width: 10%" class="table-heading-new">Time Estimate</th>
+                                                                <th style="width: 10%" class="table-heading-new">Budget Estimate</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_moving_services">
@@ -1182,6 +1205,10 @@
                     d.invitationId = $('#invitation_id').val();
                 }
             },
+	        // Hide the loader when datatable is rendered
+			"initComplete": function(settings, json) {
+				$('.loader-wrapper').hide();
+			},
             "columnDefs": [
                 { "className": "dt-center", "targets": [ 0, 3, 4, 5, 6 ] }
             ],

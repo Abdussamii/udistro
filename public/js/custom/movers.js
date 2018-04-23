@@ -756,6 +756,9 @@ $(document).ready(function(){
     		}
     	});
 
+    	// Reset the "Mark as completed" checkbox
+    	$('.utility_service_check_complete').prop('checked', false);
+
     	if( movingFromCompanyId == '' && movingToCompanyId == '' )
     	{
     		$('#service_response').find('.modal-header').html('Error');
@@ -1991,6 +1994,8 @@ $(document).ready(function(){
 			    	if( response.errCode == 0 )
 			    	{
 			    		// alertify.success( response.errMsg );
+			    		$('#share_announcement_modal').modal('hide');
+
 			    		$('#service_response').find('.modal-header').html('Success');
 			    		$('#service_response').find('.modal-body').html(response.errMsg);
 			    		$('#service_response').modal('show');

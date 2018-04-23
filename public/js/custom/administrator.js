@@ -5404,10 +5404,36 @@ $(document).ready(function(){
 	    ]
 	});
 
+	// Form validation
+	$('#frm_release_payment').submit(function(e){
+	    e.preventDefault();
+	});
+	$('#frm_release_payment').validate({
+		rules: {
+			transaction_id: {
+				required: true
+			}
+		},
+		messages: {
+			transaction_id: {
+				required: 'Please enter transaction id'
+			}
+		}
+	});
+
 	// Admin release payment
 	$(document).on('click', '.release_payment', function(){
 
-    	let transactionId = $(this).attr('id');
+		let transactionId = $(this).attr('id');
+		$('#frm_release_payment #txn_id').val(transactionId);
+		$('#modal_interact_transaction').modal('show');
+    	
+	});
+
+	$('#btn_release_payment').click(function(){
+
+		let transactionId = $('#frm_release_payment #txn_id').val();
+		let interactTransactionId = $('#frm_release_payment #transaction_id').val();
 
     	if( transactionId != '' )
     	{
@@ -5415,7 +5441,8 @@ $(document).ready(function(){
     			url: $('meta[name="route"]').attr('content') + '/administrator/releasepayment',
     			method: 'post',
     			data: {
-    				transactionId: transactionId
+    				transactionId: transactionId,
+    				interactTransactionId: interactTransactionId
     			},
     			headers: {
 			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -5423,6 +5450,8 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
+			    		$('#modal_interact_transaction').modal('hide');
+
 			    		// alertify.success( response.errMsg );
 			    		$('#alert_box_modal').find('.modal-header').html('Success');
     					$('#alert_box_modal').find('.modal-body').html(response.errMsg);
@@ -5441,7 +5470,6 @@ $(document).ready(function(){
 			    }
     		});
     	}
-    	
 	});
 
 });

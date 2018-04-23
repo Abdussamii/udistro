@@ -494,7 +494,7 @@ function calculateRoute(from, to) {
 							<div class="col-sm-12">
 								<div class="get_started_LB">
 									<a href="javascript:void(0);" id="forward_mail_method1" style="width: 250px; text-align: center;">Do it here online</a>
-									<a href="javascript:void(0);" id="forward_mail_method2" style="width: 250px; text-align: center;">Do it at Canada post office</a>
+									<a href="javascript:void(0);" id="forward_mail_method2" style="width: 250px; text-align: center;">Call Canada Post</a>
 								</div>
 							</div>
 						</div>
@@ -518,7 +518,7 @@ function calculateRoute(from, to) {
 						<div>
 							<form name="frm_forward_mail_search_postoffices" id="frm_forward_mail_search_postoffices" autocomplete="off">
 								<div class="col-sm-9 col-md-9 col-lg-9 row">
-									<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office" value="{{ $clientMovingFromProvince->name }}">
+									<input type="text" name="forward_mail_search_postoffices_address" id="forward_mail_search_postoffices_address" class="form-control" placeholder="Search for Canada post office" value="{{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}">
 								</div>
 								<div class="col-sm-3 col-md-3 col-lg-3 row"> 
 									<!-- <input type="button" name="" id="" class="btn" value="Go"> --> 
@@ -576,12 +576,12 @@ function calculateRoute(from, to) {
 	       		<h2>Update Address</h2>
 	      	</div>
 	      		<div class="col-sm-12 box-H-250 box-P-100">
-				  <div class="panel-group provincial_health_agencies" id="provincial_health_agencies2">
+				  <div class="panel-group provincial_health_agencies" id="federal_agencies">
 				  	<?php
 				  	$step = 1;
-				  	if( isset( $provincialAgencyDetails ) && count( $provincialAgencyDetails ) > 0 )
+				  	if( isset( $federalAgencyDetails ) && count( $federalAgencyDetails ) > 0 )
 				  	{
-				  		foreach ($provincialAgencyDetails as $provincialAgency)
+				  		foreach ($federalAgencyDetails as $provincialAgency)
 				  		{
 				  			if( $provincialAgency->agency_type == '2' )
 				  			{
@@ -589,7 +589,7 @@ function calculateRoute(from, to) {
 					  			<div class="panel panel-default">
 					  			  <div class="panel-heading">
 					  			    <h4 class="panel-title">
-					  			      <a data-toggle="collapse" data-parent="#provincial_health_agencies2" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
+					  			      <a data-toggle="collapse" data-parent="#federal_agencies" href="#collapse{{ $step }}">{{ ucwords( strtolower( $provincialAgency->agency_name ) ) }}</a>
 					  			    </h4>
 					  			  </div>
 					  			  <div id="collapse{{ $step }}" class="panel-collapse collapse {{ ( $step == 1 ) ? '' : '' }}">
@@ -2572,7 +2572,7 @@ function calculateRoute(from, to) {
 	      							<td>Hi friends</td>
 	      						</tr>
 	      						<tr class="content_editable">
-	      							<td>we are moving from South to North.</td>
+	      							<td>we are moving to {{ $clientMovingToAddress->address1 . ', ' . $clientMovingToProvince->name }}</td>
 	      						</tr>
 	      						<tr class="content_editable">
 	      							<td>Stop by Saturday night for a housewarming party!</td>

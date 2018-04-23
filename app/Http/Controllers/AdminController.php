@@ -2613,13 +2613,16 @@ class AdminController extends Controller
         {
             foreach ($provincialAgencies as $provincialAgency)
             {
-            	$province = Province::find($provincialAgency->province_id);
+            	if( $provincialAgency->province_id != 0 )
+            	{
+            		$province = Province::find($provincialAgency->province_id);
+            	}
 
                 $response['aaData'][$k] = array(
                     0 => $provincialAgency->id,
                     1 => ucfirst(strtolower($provincialAgency->agency_name)),
                     2 => ( $provincialAgency->agency_type == 1 ) ? 'Provincial Agencies' : 'Federal Agencies',
-                    3 => ucwords( strtolower( $province->name ) ),
+                    3 => ( $provincialAgency->province_id != 0 ) ? ucwords( strtolower( $province->name ) ) : 'All',
                     4 => '<a href="javascript:void(0);" id="'. $provincialAgency->id .'" class="edit_provincial_agency_details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
@@ -5594,6 +5597,7 @@ class AdminController extends Controller
     public function releasepayment()
     {
     	$transactionId = Input::get('transactionId');
+    	$interactTransactionId = Input::get('interactTransactionId');
 
     	$response = array();
     	if( $transactionId != '' )
@@ -5607,7 +5611,7 @@ class AdminController extends Controller
     			if( $transactionDetails->mover_payment_released == '1' )
     			{
 					// Update the company_payment_released to 1
-					if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+					if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1', 'payment_interact_txn_id' => $interactTransactionId]) )	// 1 : payment released
 					{
 						$response['errCode']    = 0;
 			    		$response['errMsg']     = 'Payment released successfully';
@@ -5628,7 +5632,7 @@ class AdminController extends Controller
     				if( $currTime >= $releaseTime )
     				{
 						// Update the company_payment_released to 1
-						if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+						if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1', 'payment_interact_txn_id' => $interactTransactionId]) )	// 1 : payment released
 						{
 							$response['errCode']    = 0;
 				    		$response['errMsg']     = 'Payment request saved successfully';

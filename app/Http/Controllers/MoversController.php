@@ -416,7 +416,10 @@ class MoversController extends Controller
     	$homeCleaningAdditionalService = HomeCleaningAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();
 
     	// Get the provincial health agency data
-    	$provincialAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id])->get();
+    	$provincialAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id, 'agency_type' => '1'])->get();
+
+    	// Get the federal agency data
+    	$federalAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => '0', 'agency_type' => '2'])->get();
 
     	// Get the Utility Details
     	$utilities = Utility::where(['status' => '1'])->select('id', 'utility_name')->get();
@@ -480,6 +483,7 @@ class MoversController extends Controller
 
     			// Provincial health agency data for the province in which mover is moving to
     			'provincialAgencyDetails' 	=> $provincialAgencyDetails,
+    			'federalAgencyDetails'		=> $federalAgencyDetails,
 
     			// Utilities
     			'utilities' 			=> $utilities,
@@ -1012,7 +1016,7 @@ class MoversController extends Controller
     		'province' => $clientMovingFromProvince->name,
     		'city' => $clientMovingFromCity->name,
     		'postal_code' => $clientMovingFrom->postal_code,
-    		'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+    		//'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
     		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
     		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
     		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
@@ -1026,10 +1030,10 @@ class MoversController extends Controller
     		'province' => $clientMovingToProvince->name,
     		'city' => $clientMovingToCity->name,
     		'postal_code' => $clientMovingTo->postal_code,
-    		'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
-    		'moving_from_floor' => $clientMovingTo->moving_from_floor,
-    		'moving_from_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
-    		'moving_from_property_type' => $clientMovingTo->moving_from_property_type
+    		//'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+    		'moving_to_floor' => $clientMovingTo->moving_from_floor,
+    		'moving_to_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+    		'moving_to_property_type' => $clientMovingTo->moving_from_property_type
     	);
 
     	// Company category 
@@ -1496,7 +1500,7 @@ class MoversController extends Controller
     		'province' => $clientMovingFromProvince->name,
     		'city' => $clientMovingFromCity->name,
     		'postal_code' => $clientMovingFrom->postal_code,
-    		'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+    		//'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
     		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
     		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
     		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
@@ -1510,10 +1514,10 @@ class MoversController extends Controller
     		'province' => $clientMovingToProvince->name,
     		'city' => $clientMovingToCity->name,
     		'postal_code' => $clientMovingTo->postal_code,
-    		'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
-    		'moving_from_floor' => $clientMovingTo->moving_from_floor,
-    		'moving_from_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
-    		'moving_from_property_type' => $clientMovingTo->moving_from_property_type
+    		//'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+    		'moving_to_floor' => $clientMovingTo->moving_from_floor,
+    		'moving_to_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+    		'moving_to_property_type' => $clientMovingTo->moving_from_property_type
     	);
 
     	// Required services list
@@ -2282,7 +2286,7 @@ class MoversController extends Controller
     		'province' => $clientMovingFromProvince->name,
     		'city' => $clientMovingFromCity->name,
     		'postal_code' => $clientMovingFrom->postal_code,
-    		'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+    		//'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
     		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
     		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
     		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
@@ -2296,10 +2300,10 @@ class MoversController extends Controller
     		'province' => $clientMovingToProvince->name,
     		'city' => $clientMovingToCity->name,
     		'postal_code' => $clientMovingTo->postal_code,
-    		'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
-    		'moving_from_floor' => $clientMovingTo->moving_from_floor,
-    		'moving_from_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
-    		'moving_from_property_type' => $clientMovingTo->moving_from_property_type
+    		//'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+    		'moving_to_floor' => $clientMovingTo->moving_from_floor,
+    		'moving_to_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+    		'moving_to_property_type' => $clientMovingTo->moving_from_property_type
     	);
 
 		$filteredCompanies = $this->getFilteredHomeCleaningCompaniesList($clientId, $companyCategory);
@@ -2619,8 +2623,7 @@ class MoversController extends Controller
         );
 
         $k=0;
-
-        if ( count( $digitalArray ) > 0 )
+        /*if ( count( $digitalArray ) > 0 )
         {
             foreach ($digitalArray as $Array)
             {
@@ -2712,22 +2715,25 @@ class MoversController extends Controller
                 );
                 $k++;
             }
-        }
+        }*/
 
         if ( count( $techConciergeArray ) > 0 )
         {
         	foreach ($techConciergeArray as $Array)
             {
             	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	$reviews = (int)DB::table('ratings')->where(['company_id' => $Array->company_id, 'status' => '1'])->avg('rating');
+            	$reviewCount = '';
+            	if( $reviews > 0 )
             	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
+	            	for( $i=1; $i<=$reviews; $i++ )
+	            	{
+	            		$reviewCount .= '<i class="fa fa-star-o"></i>';
+	            	}
+            	}
+            	else
+            	{
+            		$reviewCount = 'NA';
             	}
 
             	// Calculate response time
@@ -2813,15 +2819,18 @@ class MoversController extends Controller
             foreach ($homeCleaningArray as $Array)
             {
             	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	$reviews = (int)DB::table('ratings')->where(['company_id' => $Array->company_id, 'status' => '1'])->avg('rating');
+            	$reviewCount = '';
+            	if( $reviews > 0 )
             	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
+	            	for( $i=1; $i<=$reviews; $i++ )
+	            	{
+	            		$reviewCount .= '<i class="fa fa-star-o"></i>';
+	            	}
+            	}
+            	else
+            	{
+            		$reviewCount = 'NA';
             	}
 
             	// Calculate response time
@@ -2916,15 +2925,18 @@ class MoversController extends Controller
             foreach ($movingItemArray as $Array)
             {
             	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	$reviews = (int)DB::table('ratings')->where(['company_id' => $Array->company_id, 'status' => '1'])->avg('rating');
+            	$reviewCount = '';
+            	if( $reviews > 0 )
             	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
+	            	for( $i=1; $i<=$reviews; $i++ )
+	            	{
+	            		$reviewCount .= '<i class="fa fa-star-o"></i>';
+	            	}
+            	}
+            	else
+            	{
+            		$reviewCount = 'NA';
             	}
 
             	// Calculate response time

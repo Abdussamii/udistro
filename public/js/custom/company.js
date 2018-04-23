@@ -116,14 +116,20 @@ $(document).ready(function(){
             {
                 if( response.errCode == 0 )
                 {
-                    alertify.success( response.errMsg );
+                    // alertify.success( response.errMsg );
+                    $('#service_response').find('.modal-header').html('Success');
+                    $('#service_response').find('.modal-body').html(response.errMsg);
+                    $('#service_response').modal('show');
 
                     // Refresh the form and close the modal
                     $('#frm_forgot_password')[0].reset();
                 }
                 else
                 {
-                    alertify.error( response.errMsg );
+                    // alertify.error( response.errMsg );
+                    $('#service_response').find('.modal-header').html('Alert');
+                    $('#service_response').find('.modal-body').html(response.errMsg);
+                    $('#service_response').modal('show');
                 }
             }
         });
