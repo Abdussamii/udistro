@@ -299,7 +299,7 @@
 										<td id="cleaning_behind_refrigerator_and_stove"></td>
 									</tr>
 									<tr>
-										<td>Would you like baseboard to be washed</td>
+										<td>Would you like wall to be washed</td>
 										<td id="baseboard_to_be_washed"></td>
 									</tr>
 									<tr>

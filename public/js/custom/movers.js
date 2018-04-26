@@ -186,6 +186,9 @@ $(document).ready(function(){
         var companyId = array[0];
         var homeServiceId = array[1];
 
+        let refer 	= $(this);
+		let prevHtml= $(this).html();
+
         if( homeServiceId != '' )
         {
             // Get the details of selected payment plan
@@ -194,6 +197,12 @@ $(document).ready(function(){
                 method: 'get',
                 data: {
                     homeServiceId: homeServiceId, companyId: companyId
+                },
+                beforeSend: function(){
+                	$(refer).html('<i class="fa fa-spinner"></i>');
+                },
+                complete: function() {
+                	$(refer).html(prevHtml);
                 },
                 success: function(response){
 
@@ -266,6 +275,9 @@ $(document).ready(function(){
         var companyId = array[0];
         var techConciergeId = array[1];
 
+        let refer 	= $(this);
+        let prevHtml= $(this).html();
+
         if( techConciergeId != '' )
         {
             // Get the details of selected payment plan
@@ -274,6 +286,12 @@ $(document).ready(function(){
                 method: 'get',
                 data: {
                     techConciergeId: techConciergeId, companyId: companyId
+                },
+                beforeSend: function(){
+                	$(refer).html('<i class="fa fa-spinner"></i>');
+                },
+                complete: function() {
+                	$(refer).html('<i class="fa fa-spinner"></i>');
                 },
                 success: function(response){
    
@@ -421,6 +439,9 @@ $(document).ready(function(){
         var companyId = array[0];
         var movingCompaniesId = array[1];
 
+        let refer 	= $(this);
+        let prevHtml= $(this).html();
+
         if( movingCompaniesId != '' )
         {
             // Get the details of selected payment plan
@@ -431,13 +452,12 @@ $(document).ready(function(){
                     movingCompaniesId: movingCompaniesId, companyId: companyId
                 },
                 beforeSend: function(){
-                	// Show loader
-                	$('.loading').show();
-                },
+					$(refer).html('<i class="fa fa-spinner"></i>');
+				},
+				complete: function() {
+					$(refer).html(prevHtml);
+				},
                 success: function(response){
-
-                	// Show loader
-                	$('.loading').hide();
    
                     // Auto-fill the form
                     $('#frm_home_moving_companies #moving_service_request_id').val(movingCompaniesId);

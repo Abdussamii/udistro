@@ -1428,22 +1428,7 @@ function calculateRoute(from, to) {
 						                        </div>
 
 						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Steaming carpet cleaning</div>
-						                        	<?php
-						                        	if( isset( $homeCleaningSteamingServices ) && count( $homeCleaningSteamingServices ) > 0 )
-						                        	{
-						                        		foreach ($homeCleaningSteamingServices as $service)
-						                        		{
-						                        		?>
-						                        			<label class="form-group  accord-radio"><input type="checkbox" name="home_cleaning_steaming_services[]" value="{{ $service->id }}"> {{ ucwords( strtolower( $service->steaming_service_for ) ) }}</label>
-						                        		<?php
-						                        		}
-						                        	}
-						                        	?>
-						                        </div>
-
-						                        <div class="form-group panel-Box">
-						                        	<div class="accord-title">Other places to clean</div>
+						                        	<div class="accord-title">Places to clean</div>
 						                        	<?php
 						                        	if( isset( $homeCleaningOtherPlaces ) && count( $homeCleaningOtherPlaces ) > 0 )
 						                        	{
@@ -1491,7 +1476,22 @@ function calculateRoute(from, to) {
 						                    		}
 						                    	}
 						                    	?>
-						                        		</div>
+						                        </div>
+
+						                        <div class="form-group panel-Box">
+						                        	<div class="accord-title">Steaming carpet cleaning</div>
+						                        	<?php
+						                        	if( isset( $homeCleaningSteamingServices ) && count( $homeCleaningSteamingServices ) > 0 )
+						                        	{
+						                        		foreach ($homeCleaningSteamingServices as $service)
+						                        		{
+						                        		?>
+						                        			<label class="form-group  accord-radio"><input type="checkbox" name="home_cleaning_steaming_services[]" value="{{ $service->id }}"> {{ ucwords( strtolower( $service->steaming_service_for ) ) }}</label>
+						                        		<?php
+						                        		}
+						                        	}
+						                        	?>
+						                        </div>
 
 						                    	<div class="form-group panel-Box">
 							                        <div class="accord-title">Cleaning behind the refrigerator and stove?</div>
@@ -1499,7 +1499,7 @@ function calculateRoute(from, to) {
 							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_behind_refrigerator_stove" value="0">No</label>
 							                    </div>
 							                    <div class="form-group panel-Box">
-							                        <div class="accord-title">Would you like baseboard to be washed?</div>
+							                        <div class="accord-title">Would You Like Wall To Be Washed?</div>
 							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_baseboard" value="1">Yes</label>
 							                        <label class="form-group accord-radio"><input type="radio" name="home_cleaning_baseboard" value="0">No</label>
 							                    </div>

@@ -282,7 +282,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <form id="frm_tech_concierge" name="frm_tech_concierge">
-                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
                                                             <td style="width: 30%;" class="table-heading-new">Moving from</td>
@@ -340,9 +340,9 @@
                                                             <td id="additional_information"></td>
                                                         </tr>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <!-- <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
@@ -354,7 +354,7 @@
                                                             
                                                         </tbody>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
@@ -446,7 +446,7 @@
                                     <h4 class="modal-title">Home Cleaning Services Request</h4>
                                 </div>
 
-                                <div class="modal-body" style="height: 800px; overflow-y: auto;">
+                                <div class="modal-body">
                                     <form id="frm_home_cleaning_services" name="frm_home_cleaning_services">
                                         <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
@@ -465,9 +465,9 @@
                                             </table>
                                         </div> -->
 
-                                        <div class="clearfix"></div>
+                                        <!-- <div class="clearfix"></div> -->
 
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
                                                 <tr class="table-heading-new">
                                                     <th style="width:70%">Items</th>
@@ -518,8 +518,8 @@
                                                     <td id="home_cleaning_level"></td>
                                                 </tr>
                                             </table>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        </div> -->
+                                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
                                                 <tr class="table-heading-new">
                                                     <th style="width:70%">Items</th>
@@ -554,7 +554,7 @@
                                                     <td id="additional_information"></td>
                                                 </tr>
                                             </table>
-                                        </div>
+                                        </div> -->
 
                                         <div class="col-lg-12 col-md-12 col-sm-12">
                                             <table class="table table-striped">
@@ -643,7 +643,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <form id="frm_home_moving_companies" name="frm_home_moving_companies" autocomplete="off">
-                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr class="table-heading-new">
                                                             <td style="width: 30%;">Moving from</td>
@@ -721,9 +721,9 @@
                                                             <td id="additional_information"></td>
                                                         </tr>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <!-- <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
@@ -735,7 +735,7 @@
                                                             
                                                         </tbody>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
@@ -1022,8 +1022,8 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="myModalLabel">Make Payment</h4>
 				</div>
-				<!-- <form action="https://secure.paypal.com/uk/cgi-bin/webscr" method="post" name="paypal" id="paypal"> -->
-				<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" name="paypal" id="paypal">
+				<form action="https://secure.paypal.com/uk/cgi-bin/webscr" method="post" name="paypal" id="paypal">
+				<!-- <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" name="paypal" id="paypal"> -->
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="payment_against">Payment Against</label>
@@ -1064,10 +1064,10 @@
 						    <input type="text" name="cmd" value="_xclick" />
 
 						    <!-- Production -->
-						    <!-- <input type="text" name="business" value="info@udistro.ca" /> -->
+						    <input type="text" name="business" value="info@udistro.ca" />
 						    
 						    <!-- Sandbox -->
-						    <input type="text" name="business" value="sandboxbussiness@udistro.ca" />
+						    <!-- <input type="text" name="business" value="sandboxbussiness@udistro.ca" /> -->
 						    <input type="text" name="cbt" value="Return to Udistro" />
 						    <input type="text" name="currency_code" value="CAD" />
 						</div>
@@ -1096,12 +1096,12 @@
 					</div>
 					<div class="modal-footer">
 						<!-- For production -->
-						<!-- <input type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online"> 
-						<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >  -->
+						<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online"> 
+						<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" > 
 
 						<!-- For development -->
-						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
- 						<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+						<!-- <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+ 						<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
 					</div>
 				</form>
 			</div>

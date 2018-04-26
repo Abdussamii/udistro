@@ -410,7 +410,7 @@ class MoversController extends Controller
     	$homeCleaningSteamingServices = HomeCleaningSteamingService::where(['status' => '1'])->select('id', 'steaming_service_for')->get();
 
     	// Get the list of home cleaning other places to clean
-    	$homeCleaningOtherPlaces = HomeCleaningOtherPlace::where(['status' => '1'])->select('id', 'other_places')->get();
+    	$homeCleaningOtherPlaces = HomeCleaningOtherPlace::where(['status' => '1'])->orderBy('id', 'desc')->select('id', 'other_places')->get();
 
     	// Get the list of home cleaning additional services
     	$homeCleaningAdditionalService = HomeCleaningAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();

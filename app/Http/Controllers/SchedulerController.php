@@ -473,6 +473,8 @@ class SchedulerController extends Controller
 
     public function sendCompanyNotificationEmail()
 	{
+		Log::useDailyFiles(storage_path().'/logs/cron.log');
+
 		// Check if there is any entry available to send email
 		$notificationEmail = CompanyRequestEmail::where(['email_send_status' => '0'])->first();
 
@@ -501,6 +503,8 @@ class SchedulerController extends Controller
 			    
 			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
 			});
+
+			Log::info('Scheduled email with id '. $notificationEmail->id .' send successfully');
 
 			// Update the email_send_status to 1, so that it can take next record
 			CompanyRequestEmail::where(['id' => $notificationEmail->id])->update(['email_send_status' => '1']);

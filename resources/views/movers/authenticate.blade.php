@@ -68,7 +68,7 @@ $(function(){
 .error { color: red; font-size: 14px; text-align: left; width: 100%; font-weight: normal; }
 html,
 body { height: 100%; min-height: 100%; }
-.backColor { background: #f7f7f7; padding: 20px 0; height: 100%; min-height: 100%; }
+.backColor { background: #f7f7f7; padding: 20px 0;/* height: 100%; min-height: 100%;*/ }
 .backColor { background: #f7f7f7; padding: 20px 0; }
 .backColor .classlogo_part { margin-bottom: 20px; text-align: center; }
 .field-section {
@@ -123,6 +123,18 @@ body { height: 100%; min-height: 100%; }
 	display: block;
 	font-size: 18px;
 	padding: 10px;
+}
+.field-section.autentication {
+    width: 800px;
+    margin: auto;
+}
+.autentication .panel-collapse {
+    padding: 15px;
+}
+@media screen and (max-width: 800px) {
+	.field-section.autentication {
+	    width: 100%;
+	}	
 }
 </style>
 <script type="text/javascript">
