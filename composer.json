@@ -9,7 +9,8 @@
         "barryvdh/laravel-dompdf": "^0.8.1",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "santigarcor/laratrust": "5.0.*"
+        "santigarcor/laratrust": "5.0.*",
+        "twilio/sdk": "^5.17"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
