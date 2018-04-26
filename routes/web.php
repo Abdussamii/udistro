@@ -39,6 +39,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 // To test laratrust permission module
 // Route::get('/laratrust', 'ACLController@checkRolePermission');
 
+Route::get('/clearcache', function () {
+    shell_exec('php artisan config:cache');
+});
+
 // uDistro home
 Route::get('/', function () {
     return view('landingPage1');
@@ -752,7 +756,12 @@ Route::group(['prefix' => 'movers'], function() {
 
 	// To save the share announcement email and message
 	Route::post('/saveannouncementemail', 'MoversController@saveAnnouncementEmail');
-	
+
+	// To fetch the utility services for the selected company
+	Route::get('/getcompanyservices', 'MoversController@getCompanyServices');
+
+	// To save the completed utility
+	Route::post('/updateutilityservicelog', 'MoversController@updateUtilityServiceLog');
 });
 
 /* ---------- Movers related functionality ---------- */
@@ -927,3 +936,11 @@ Route::get('/images/{entity}/{filename}', function ($entity, $filename)
 
 // To fetch quotation for agent Partner
 Route::get('/agentPartner/dashboard/{id}', 'AgentPartnerController@fetchQuotationRequest');
+
+/* For Twilio */
+Route::get('/twiliodemo', 'TwilioController@twilioDemo');
+Route::post('/call', 'TwilioController@call');
+Route::get('/outbound/{salesPhone}', 'TwilioController@outbound');
+
+/* Twilio Callback */
+Route::get('/outbound', 'TwilioController@twilioResponse');

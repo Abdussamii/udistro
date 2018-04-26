@@ -139,6 +139,25 @@
 		    transform: translate(-50%, -55%);
 		    -webkit-transform: translate(-50%, -55%);
 		}
+		button.btn_build_quote {
+		    border: 1px solid #00bcea;
+		    background: #fff;
+		    color: #00bcea;
+		    font-size: 18px;
+		    padding: 10px 15px;
+		    margin-bottom: 20px;
+		}
+		button.btn_build_quote:hover {
+		    border: 1px solid #00bcea;
+		    background: #00bcea;
+		    color: #fff;
+		    font-size: 18px;
+		    padding: 10px 15px;
+		}
+		.table-heading-new {
+		    background: #00bcea !important;
+		    color: #fff;
+		}
 	</style>
 
 	<!-- Loader -->
@@ -184,9 +203,9 @@
 						<h4 class="modal-title">Home Cleaning Services Request</h4>
 					</div>
 
-					<div class="modal-body" style="height: 800px; overflow-y: auto;">
+					<div class="modal-body" style="height: 610px; overflow-y: auto;">
 						<form id="frm_home_cleaning_services" name="frm_home_cleaning_services" autocomplete="off">
-							<div class="col-lg-6 col-md-6 col-sm-6">
+							<!-- <div class="col-lg-6 col-md-6 col-sm-6">
 								<table class="table table-striped">
 									<tr>
 										<td style="width: 30%;">Moving from</td>
@@ -201,13 +220,13 @@
 										<td id="moving_to_address"></td>
 									</tr>
 								</table>
-							</div>
+							</div> -->
 
 							<div class="clearfix"></div>
 
 							<div class="col-lg-6 col-md-6 col-sm-6">
 								<table class="table table-striped">
-									<tr>
+									<tr class="table-heading-new">
 										<th style="width:70%">Items</th>
 										<th>User Input</th>
 									</tr>
@@ -244,10 +263,6 @@
 										<td id="moving_to_property_type"></td>
 									</tr>
 									<tr>
-										<td>Moving from address</td>
-										<td id="distance"></td>
-									</tr>
-									<tr>
 										<td>Home Condition</td>
 										<td id="home_condition"></td>
 									</tr>
@@ -259,7 +274,7 @@
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6">
 								<table class="table table-striped">
-									<tr>
+									<tr class="table-heading-new">
 										<th style="width:70%">Items</th>
 										<th>User Input</th>
 									</tr>
@@ -284,7 +299,7 @@
 										<td id="cleaning_behind_refrigerator_and_stove"></td>
 									</tr>
 									<tr>
-										<td>Would you like baseboard to be washed</td>
+										<td>Would you like wall to be washed</td>
 										<td id="baseboard_to_be_washed"></td>
 									</tr>
 									<tr>
@@ -298,81 +313,87 @@
 								</table>
 							</div>
 
-							<div class="col-lg-12 col-md-12 col-sm-12">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th style="width: 30%">Items</th>
-											<th style="width: 40%">User Input</th>
-											<th style="width: 10%">Quantity</th>
-											<th style="width: 10%">Time Estimate</th>
-											<th style="width: 10%">Budget Estimate</th>
-										</tr>
-									</thead>
-									<tbody id="user_requested_home_cleaning_services">
-										
-									</tbody>
-								</table>
-							</div>
+							<div class="clearfix"></div>
 
-							<div class="col-lg-12 col-md-12 col-sm-12">
-								<table class="table table-striped" id="home_cleaning_calculations">
-									<thead>
-										<tr>
-											<td colspan="4" style="width: 80%;">Discount</td>
-											<td>
-												<input type="text" name="discount" id="discount"  class="form-control home_cleaning_discount">
-											</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">Sub Total</td>
-											<td id="subtotal">$0</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
-											<td id="gst_amount">$0</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
-											<td id="hst_amount">$0</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
-											<td id="pst_amount">$0</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
-											<td id="service_charge_amount">$0</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">Total</td>
-											<td id="total">$0</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;">Total Remittance</td>
-											<td id="total_remittance">$0</td>
-										</tr>
-										<tr>
-											<td>Availability</td>
-											<td>
-												<select name="availability" id="availability" class="form-control"></select>
-											</td>
-										</tr>
-										<tr>
-											<td>Comment</td>
-											<td>
-												<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
-											</td>
-										</tr>
-										<tr>
-											<td colspan="4" style="width: 80%;"></td>
-											<td>
-												<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
-												<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
-											</td>
-										</tr>
-									</thead>
-								</table>
+							<!-- User Inputs -->
+							<div style="margin-left: 15px;">
+								<button type="button" class="btn btn_build_quote" id="btn_home_cleaning_build_quote">Build Quote <i class="fa fa-minus-square"></i></button>
+								<div class="home_cleaning_quote_details" style="display: none;">
+									<table class="table table-striped">
+										<thead>
+											<tr class="table-heading-new">
+												<th style="width: 30%">Items</th>
+												<th style="width: 40%">User Input</th>
+												<th style="width: 10%">Quantity</th>
+												<th style="width: 10%">Time Estimate</th>
+												<th style="width: 10%">Budget Estimate</th>
+											</tr>
+										</thead>
+										<tbody id="user_requested_home_cleaning_services">
+											
+										</tbody>
+									</table>
+								</div>
+
+								<div class="home_cleaning_quote_details" style="display: none;">
+									<table class="table table-striped" id="home_cleaning_calculations">
+										<thead>
+											<tr>
+												<td colspan="4" style="width: 80%;">Discount</td>
+												<td>
+													<input type="text" name="discount" id="discount"  class="form-control home_cleaning_discount">
+												</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">Sub Total</td>
+												<td id="subtotal">$0</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+												<td id="gst_amount">$0</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+												<td id="hst_amount">$0</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+												<td id="pst_amount">$0</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+												<td id="service_charge_amount">$0</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">Total</td>
+												<td id="total">$0</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;">Total Remittance</td>
+												<td id="total_remittance">$0</td>
+											</tr>
+											<tr>
+												<td>Availability</td>
+												<td>
+													<select name="availability" id="availability" class="form-control"></select>
+												</td>
+											</tr>
+											<tr>
+												<td>Comment</td>
+												<td>
+													<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="4" style="width: 80%;"></td>
+												<td>
+													<input type="hidden" name="home_cleaning_service_request_id" id="home_cleaning_service_request_id">
+													<input type="button" name="btn_update_home_cleaning_service_request" id="btn_update_home_cleaning_service_request" value="Submit" class="btn btn-info">
+												</td>
+											</tr>
+										</thead>
+									</table>
+								</div>
 							</div>
 
 							<div class="clearfix"></div>
@@ -606,7 +627,7 @@
 								<form id="frm_tech_concierge" name="frm_tech_concierge" autocomplete="off">
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
-											<tr>
+											<tr class="table-heading-new">
 												<td style="width: 30%;">Moving from</td>
 												<td id="moving_from_address"></td>
 											</tr>
@@ -614,7 +635,7 @@
 									</div>
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
-											<tr>
+											<tr class="table-heading-new">
 												<td style="width: 30%;">Moving to</td>
 												<td id="moving_to_address"></td>
 											</tr>
@@ -625,6 +646,10 @@
 
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
+											<tr class="table-heading-new">
+												<th style="width:70%">Items</th>
+												<th>User Input</th>
+											</tr>
 											<tr>
 												<td>Moving to house type</td>
 												<td id="moving_to_house_type"></td>
@@ -645,6 +670,10 @@
 									</div>
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
+											<tr class="table-heading-new">
+												<th style="width:70%">Items</th>
+												<th>User Input</th>
+											</tr>
 											<tr>
 												<td>Additional Information</td>
 												<td id="additional_information"></td>
@@ -652,95 +681,101 @@
 										</table>
 									</div>
 
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
-											<thead>
-												<tr>
-													<th>Items</th>
-													<th>User Input</th>
-												</tr>
-											</thead>
-											<tbody id="user_requested_tech_concierge_other_details">
-												
-											</tbody>
-										</table>
-									</div>
+									<div class="clearfix"></div>
 
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
-											<thead>
-												<tr>
-													<th style="width: 30%">Items</th>
-													<th style="width: 40%">User Input</th>
-													<th style="width: 10%">Quantity</th>
-													<th style="width: 10%">Time Estimate</th>
-													<th style="width: 10%">Budget Estimate</th>
-												</tr>
-											</thead>
-											<tbody id="user_requested_tech_concierge_services">
-												
-											</tbody>
-										</table>
-									</div>
+									<!-- User Inputs -->
+									<div style="margin-left: 15px;">
+										<button type="button" class="btn btn_build_quote" id="btn_tech_concierge_build_quote">Build Quote <i class="fa fa-minus-square"></i></button>
+										<div class="tech_concierge_quote_details" style="display: none;">
+											<table class="table table-striped">
+												<thead>
+													<tr class="table-heading-new">
+														<th>Items</th>
+														<th>User Input</th>
+													</tr>
+												</thead>
+												<tbody id="user_requested_tech_concierge_other_details">
+													
+												</tbody>
+											</table>
+										</div>
 
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped" id="tech_concierge_calculations">
-											<thead>
-												<tr>
-													<td colspan="4" style="width: 80%;">Discount</td>
-													<td>
-														<input type="text" name="discount" id="discount"  class="form-control tech_concierge_discount">
-													</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">Sub Total</td>
-													<td id="subtotal">$0</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
-													<td id="gst_amount">$0</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
-													<td id="hst_amount">$0</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
-													<td id="pst_amount">$0</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
-													<td id="service_charge_amount">$0</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">Total</td>
-													<td id="total">$0</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;">Total Remittance</td>
-													<td id="total_remittance">$0</td>
-												</tr>
-												<tr>
-													<td>Availability</td>
-													<td>
-														<select name="availability" id="availability" class="form-control"></select>
-													</td>
-												</tr>
-												<tr>
-													<td>Comment</td>
-													<td>
-														<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
-													</td>
-												</tr>
-												<tr>
-													<td colspan="4" style="width: 80%;"></td>
-													<td>
-														<input type="hidden" name="tech_concierge_service_request_id" id="tech_concierge_service_request_id">
-														<input type="button" name="btn_update_tech_concierge_service_request" id="btn_update_tech_concierge_service_request" value="Submit" class="btn btn-info">
-													</td>
-												</tr>
-											</thead>
-										</table>
+										<div class="tech_concierge_quote_details" style="display: none;">
+											<table class="table table-striped">
+												<thead>
+													<tr class="table-heading-new">
+														<th style="width: 30%">Items</th>
+														<th style="width: 40%">User Input</th>
+														<th style="width: 10%">Quantity</th>
+														<th style="width: 10%">Time Estimate</th>
+														<th style="width: 10%">Budget Estimate</th>
+													</tr>
+												</thead>
+												<tbody id="user_requested_tech_concierge_services">
+													
+												</tbody>
+											</table>
+										</div>
+
+										<div class="tech_concierge_quote_details" style="display: none;">
+											<table class="table table-striped" id="tech_concierge_calculations">
+												<thead>
+													<tr>
+														<td colspan="4" style="width: 80%;">Discount</td>
+														<td>
+															<input type="text" name="discount" id="discount"  class="form-control tech_concierge_discount">
+														</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">Sub Total</td>
+														<td id="subtotal">$0</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">GST (<span id="gst_percentage"></span>)</td>
+														<td id="gst_amount">$0</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">HST (<span id="hst_percentage"></span>)</td>
+														<td id="hst_amount">$0</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">PST (<span id="pst_percenateg"></span>)</td>
+														<td id="pst_amount">$0</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">Service Charge (<span id="service_charge_percetage"></span>)</td>
+														<td id="service_charge_amount">$0</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">Total</td>
+														<td id="total">$0</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;">Total Remittance</td>
+														<td id="total_remittance">$0</td>
+													</tr>
+													<tr>
+														<td>Availability</td>
+														<td>
+															<select name="availability" id="availability" class="form-control"></select>
+														</td>
+													</tr>
+													<tr>
+														<td>Comment</td>
+														<td>
+															<textarea class="form-control" name="comment" id="comment" style="resize: vertical;"></textarea>
+														</td>
+													</tr>
+													<tr>
+														<td colspan="4" style="width: 80%;"></td>
+														<td>
+															<input type="hidden" name="tech_concierge_service_request_id" id="tech_concierge_service_request_id">
+															<input type="button" name="btn_update_tech_concierge_service_request" id="btn_update_tech_concierge_service_request" value="Submit" class="btn btn-info">
+														</td>
+													</tr>
+												</thead>
+											</table>
+										</div>
 									</div>
 
 									<div class="clearfix"></div>
@@ -770,7 +805,7 @@
 								<form id="frm_home_moving_companies" name="frm_home_moving_companies" autocomplete="off">
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
-											<tr>
+											<tr class="table-heading-new">
 												<td style="width: 30%;">Moving from</td>
 												<td id="moving_from_address"></td>
 											</tr>
@@ -778,7 +813,7 @@
 									</div>
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
-											<tr>
+											<tr class="table-heading-new">
 												<td style="width: 30%;">Moving to</td>
 												<td id="moving_to_address"></td>
 											</tr>
@@ -789,7 +824,7 @@
 
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
-											<tr>
+											<tr class="table-heading-new">
 												<th style="width:70%">Items</th>
 												<th>User Input</th>
 											</tr>
@@ -829,7 +864,7 @@
 									</div>
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<table class="table table-striped">
-											<tr>
+											<tr class="table-heading-new">
 												<th style="width:70%">Items</th>
 												<th>User Input</th>
 											</tr>
@@ -848,38 +883,44 @@
 										</table>
 									</div>
 
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
-											<thead>
-												<tr>
-													<th>Items</th>
-													<th>User Input</th>
-												</tr>
-											</thead>
-											<tbody id="user_requested_moving_other_services">
-												
-											</tbody>
-										</table>
+									<div class="clearfix"></div>
+
+									<!-- User Inputs -->
+									<div style="margin-left: 15px;">
+										<button type="button" class="btn btn_build_quote" id="btn_moving_build_quote">Build Quote <i class="fa fa-minus-square"></i></button>
+										<div class="col-lg-12 col-md-12 col-sm-12 moving_quote_details" style="display: none;">
+											<table class="table table-striped">
+												<thead>
+													<tr class="table-heading-new">
+														<th>Items</th>
+														<th>User Input</th>
+													</tr>
+												</thead>
+												<tbody id="user_requested_moving_other_services">
+													
+												</tbody>
+											</table>
+										</div>
+
+										<div class="col-lg-12 col-md-12 col-sm-12 moving_quote_details" style="display: none;">
+											<table class="table table-striped">
+												<thead>
+													<tr class="table-heading-new">
+														<th style="width: 30%">Items</th>
+														<th style="width: 40%">User Input</th>
+														<th style="width: 10%">Quantity/Weight</th>
+														<th style="width: 10%">Time Estimate</th>
+														<th style="width: 10%">Budget Estimate</th>
+													</tr>
+												</thead>
+												<tbody id="user_requested_moving_services">
+													
+												</tbody>
+											</table>
+										</div>
 									</div>
 
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<table class="table table-striped">
-											<thead>
-												<tr>
-													<th style="width: 30%">Items</th>
-													<th style="width: 40%">User Input</th>
-													<th style="width: 10%">Quantity/Weight</th>
-													<th style="width: 10%">Time Estimate</th>
-													<th style="width: 10%">Budget Estimate</th>
-												</tr>
-											</thead>
-											<tbody id="user_requested_moving_services">
-												
-											</tbody>
-										</table>
-									</div>
-
-									<div class="col-lg-12 col-md-12 col-sm-12">
+									<div class="col-lg-12 col-md-12 col-sm-12 moving_quote_details" style="display: none;">
 										<table class="table table-striped" id="moving_service_calculations">
 											<thead>
 												<tr id="user_requested_insurance_services">

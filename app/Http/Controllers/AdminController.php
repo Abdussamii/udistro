@@ -2613,13 +2613,16 @@ class AdminController extends Controller
         {
             foreach ($provincialAgencies as $provincialAgency)
             {
-            	$province = Province::find($provincialAgency->province_id);
+            	if( $provincialAgency->province_id != 0 )
+            	{
+            		$province = Province::find($provincialAgency->province_id);
+            	}
 
                 $response['aaData'][$k] = array(
                     0 => $provincialAgency->id,
                     1 => ucfirst(strtolower($provincialAgency->agency_name)),
-                    2 => ( $provincialAgency->agency_type == 1 ) ? 'Provincial Agencies' : 'Provincial Utility',
-                    3 => ucwords( strtolower( $province->name ) ),
+                    2 => ( $provincialAgency->agency_type == 1 ) ? 'Provincial Agencies' : 'Federal Agencies',
+                    3 => ( $provincialAgency->province_id != 0 ) ? ucwords( strtolower( $province->name ) ) : 'All',
                     4 => '<a href="javascript:void(0);" id="'. $provincialAgency->id .'" class="edit_provincial_agency_details"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
                 );
                 $k++;
@@ -5520,7 +5523,7 @@ class AdminController extends Controller
             						->leftJoin('agent_client_moving_to_addresses as t5', 't5.agent_client_id', '=', 't2.id')
             						->leftJoin('provinces as t6', 't5.province_id', '=', 't6.id')
             						->where(['t1.id' => $jobDetail->service_request_response_id])
-            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount', 't1.insurance_amount')
+            						->select('t1.id', 't2.fname', 't2.oname', 't2.contact_number', 't3.company_name', 't4.category as order_detail', 't6.pst', 't6.gst', 't6.hst', 't6.service_charge', 't1.discount', 't1.insurance_amount', 't1.date_of_working')
             						->first();
 
             		$totalAmount = Helper::calculateReceivableAmount($jobDetail->service_request_response_id, $jobDetail->company_category_id);
@@ -5564,7 +5567,7 @@ class AdminController extends Controller
             	else if( $jobDetail->company_payment_released == '2' )
             	{
             		$paymentStatus = 'Requested';
-            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="release_payment">Release</a>';
+            		$option = '<a href="javascript:void(0);" id="'. $jobDetail->id .'" class="release_payment">Release</a> | <a href="https://www6.memberdirect.net/brand/mb_crosstowncivic/OnlineBanking/Accounts/" target="_blank">Make Payment</a>';
             	}
 
             	$response['aaData'][$k] = array(
@@ -5594,6 +5597,7 @@ class AdminController extends Controller
     public function releasepayment()
     {
     	$transactionId = Input::get('transactionId');
+    	$interactTransactionId = Input::get('interactTransactionId');
 
     	$response = array();
     	if( $transactionId != '' )
@@ -5607,10 +5611,10 @@ class AdminController extends Controller
     			if( $transactionDetails->mover_payment_released == '1' )
     			{
 					// Update the company_payment_released to 1
-					if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+					if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1', 'payment_interact_txn_id' => $interactTransactionId]) )	// 1 : payment released
 					{
 						$response['errCode']    = 0;
-			    		$response['errMsg']     = 'Payment request saved successfully';
+			    		$response['errMsg']     = 'Payment released successfully';
 					}
 					else
 					{
@@ -5628,7 +5632,7 @@ class AdminController extends Controller
     				if( $currTime >= $releaseTime )
     				{
 						// Update the company_payment_released to 1
-						if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1']) )	// 1 : payment released
+						if( DB::table('payment_transaction_details')->where(['id' => $transactionId])->update(['company_payment_released' => '1', 'payment_interact_txn_id' => $interactTransactionId]) )	// 1 : payment released
 						{
 							$response['errCode']    = 0;
 				    		$response['errMsg']     = 'Payment request saved successfully';

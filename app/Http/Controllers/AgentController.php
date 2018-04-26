@@ -527,7 +527,7 @@ class AgentController extends Controller
 	        	$emailTemplatePreview = str_replace('[firstname]', ucwords( strtolower( $clientDetails->fname ) ), $emailTemplatePreview);
 
 	        	// Replace the get_started_link https://www.udistro.ca/ link with javascript:void(0) so that it can't be clickable
-				$emailTemplatePreview = str_replace('https://www.udistro.ca/', 'javascript:void(0);', $emailTemplatePreview);
+				$emailTemplatePreview = str_replace('<a id="get_started_link" href="https://www.udistro.ca/">', '<a id="get_started_link" href="javascript:void(0);">', $emailTemplatePreview);
 	        }
 
 	        $response['errCode'] 	= 0;
@@ -646,7 +646,7 @@ class AgentController extends Controller
 
 					$agentClient->agent_id 			= $userId;
 					$agentClient->fname 			= $clientData['client_fname'];
-					$agentClient->oname 			= $clientData['client_mname'];
+					$agentClient->oname 			= '';
 					$agentClient->lname 			= $clientData['client_lname'];
 					$agentClient->email 			= $clientData['client_email'];
 					$agentClient->contact_number 	= $clientData['client_number'];
@@ -697,10 +697,11 @@ class AgentController extends Controller
 					{
 						$agentClient->agent_id 			= $userId;
 						$agentClient->fname 			= $clientData['client_fname'];
-						$agentClient->lname 			= $clientData['client_mname'];
-						$agentClient->oname 			= $clientData['client_lname'];
+						$agentClient->lname 			= $clientData['client_lname'];
+						$agentClient->oname 			= '';
 						$agentClient->email 			= $clientData['client_email'];
 						$agentClient->contact_number 	= $clientData['client_number'];
+						$agentClient->possession_date 	= date('Y-m-d', strtotime( $clientData['client_possession_date'] ));
 						$agentClient->status 			= $clientData['client_status'];
 						$agentClient->updated_by 		= $userId;
 
@@ -784,13 +785,20 @@ class AgentController extends Controller
         {
             foreach ($agentClients as $agentClient)
             {
-            	// Show the posession date in red color
-            	$criticalZone 	= date('d-m-Y', strtotime('+45 days'));
-            	$possessionDate = date('d-m-Y', strtotime( $agentClient->possession_date ));
-            	$style = '';
-            	if( $criticalZone >= $possessionDate )
+            	if( $agentClient->possession_date != '0000-00-00' )
             	{
-            		$style = 'style="color: red"';
+	            	// Show the posession date in red color
+	            	$criticalZone 	= date('d-m-Y', strtotime('+45 days'));
+	            	$possessionDate = date('d-m-Y', strtotime( $agentClient->possession_date ));
+	            	$style = '';
+	            	if( $criticalZone >= $possessionDate )
+	            	{
+	            		$style = 'style="color: red"';
+	            	}
+            	}
+            	else
+            	{
+            		$possessionDate = 'NA';
             	}
  
             	$response['aaData'][$k] = array(
@@ -988,9 +996,12 @@ class AgentController extends Controller
 			    $response['errMsg']     = 'Success';
 			    $response['details']   	= array(
 			    	'fname' 	=> $clientDetails->fname,
-			    	'mname' 	=> $clientDetails->oname,
+			    	// 'mname' 	=> $clientDetails->oname,
 			    	'lname' 	=> $clientDetails->lname,
 			    	'email' 	=> $clientDetails->email,
+
+			    	'possession_date' => ( $clientDetails->possession_date != '0000-00-00' ) ? date('d-m-Y', strtotime($clientDetails->possession_date)) : '',
+			    	
 			    	'contact_no'=> $clientDetails->contact_number,
 			    	'status' 	=> $clientDetails->status
 			    );
@@ -1885,10 +1896,12 @@ class AgentController extends Controller
     	// Get the logged in agent id
     	$userId = Auth::user()->id;
 
+    	$agentDetails = User::find($userId);
+
     	// Get the client name and their email list
     	$clients = agentClient::where(['agent_id' => $userId])->select('id', 'fname', 'lname', 'email')->orderBy('fname', 'asc')->get();
 
-        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories, 'clients' => $clients]);
+        return view('agent/emailTemplates', ['emailTemplateCategories' => $emailTemplateCategories, 'clients' => $clients, 'agentDetails' => $agentDetails]);
     }
 
     /**
@@ -2351,7 +2364,7 @@ class AgentController extends Controller
 				}
 				else
 				{
-					$emailLink = config('constants.SERVER_APP_URL') . '/movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
+					$emailLink = config('constants.SERVER_APP_URL') . 'movers/authenticate?agent_id='. base64_encode($userId) .'&client_id='. base64_encode($inviteDetails['client_id']) .'&invitation_id=' . base64_encode($agentClientInvite->id);
 				}
 
 				// Update the email link

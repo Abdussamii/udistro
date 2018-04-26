@@ -27,6 +27,27 @@
 		<div class="preload">Loading...</div>
 	</div>
 
+	<!-- Modal to enter the interact transaction id -->
+	<div class="modal fade" id="modal_interact_transaction" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	            	Enter Transaction Id
+	            </div>
+	            <div class="modal-body">
+	            	<form name="frm_release_payment" id="frm_release_payment" autocomplete="off">
+	            		<div class="form-group">
+	            			<label for="transaction_id">Transaction Id <span class="error">*</span></label>
+	            			<input type="text" name="transaction_id" id="transaction_id" class="form-control" placeholder="Transaction Id">
+	            			<input type="hidden" name="txn_id" id="txn_id">
+	            		</div>
+	            		<button type="submit" id="btn_release_payment" name="btn_release_payment" class="btn btn-primary">Submit</button>
+	            	</form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
 	<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Job Payment</h1>

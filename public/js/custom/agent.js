@@ -63,7 +63,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -127,7 +130,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
 
                         // Refresh the form and close the modal
                         $('#frm_change_password')[0].reset();
@@ -135,7 +141,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -174,14 +183,20 @@ $(document).ready(function(){
             {
                 if( response.errCode == 0 )
                 {
-                    alertify.success( response.errMsg );
+                    // alertify.success( response.errMsg );
+                    $('#alert_box_modal').find('.modal-header').html('Success');
+                	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                	$('#alert_box_modal').modal('show');
 
                     // Refresh the form and close the modal
                     $('#frm_forgot_password')[0].reset();
                 }
                 else
                 {
-                    alertify.error( response.errMsg );
+                    // alertify.error( response.errMsg );
+                    $('#alert_box_modal').find('.modal-header').html('Alert');
+                	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                	$('#alert_box_modal').modal('show');
                 }
             }
         });
@@ -260,7 +275,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_client')[0].reset();
@@ -272,7 +290,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -416,14 +437,20 @@ $(document).ready(function(){
     	    success: function(response){
     	        if( response.errCode == 0 )
     	        {
-    	            alertify.success( response.errMsg );
+    	            // alertify.success( response.errMsg );
+    	            $('#alert_box_modal').find('.modal-header').html('Success');
+	            	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	            	$('#alert_box_modal').modal('show');
 
     	            // Refresh the datatable
     	            $('#datatable_invites').DataTable().ajax.reload();                       
     	        }
     	        else
     	        {
-    	            alertify.error( response.errMsg );
+    	            // alertify.error( response.errMsg );
+    	            $('#alert_box_modal').find('.modal-header').html('Alert');
+	            	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	            	$('#alert_box_modal').modal('show');
     	        }
     	    }
     	});
@@ -452,9 +479,10 @@ $(document).ready(function(){
 				    	$('#frm_add_client #client_id').val(clientId);
 
 				    	$('#frm_add_client #client_fname').val(response.details.fname);
-				    	$('#frm_add_client #client_mname').val(response.details.mname);
+				    	// $('#frm_add_client #client_mname').val(response.details.mname);
 				    	$('#frm_add_client #client_lname').val(response.details.lname);
 				    	$('#frm_add_client #client_email').val(response.details.email);
+				    	$('#frm_add_client #client_possession_date').val(response.details.possession_date);
 				    	$('#frm_add_client #client_number').val(response.details.contact_no);
 				    	
 				    	$('#frm_add_client input[name="client_status"][value="'+ response.details.status +'"]').prop('checked', true);
@@ -464,7 +492,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -522,11 +553,17 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );                        
+                        // alertify.success( response.errMsg );                        
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -600,11 +637,17 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );                        
+                        // alertify.success( response.errMsg );                        
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -682,11 +725,17 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );                        
+                        // alertify.success( response.errMsg );                        
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -719,11 +768,17 @@ $(document).ready(function(){
             success: function(response){
                 if( response.errCode == 0 )
                 {
-                    alertify.success( response.errMsg );                        
+                    // alertify.success( response.errMsg );                        
+                    $('#alert_box_modal').find('.modal-header').html('Success');
+                	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                	$('#alert_box_modal').modal('show');
                 }
                 else
                 {
-                    alertify.error( response.errMsg );
+                    // alertify.error( response.errMsg );
+                    $('#alert_box_modal').find('.modal-header').html('Alert');
+                	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                	$('#alert_box_modal').modal('show');
                 }
             }
         });
@@ -815,11 +870,17 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );                        
+                        // alertify.success( response.errMsg );                        
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -896,14 +957,20 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
     	}
     	else
     	{
-    		alertify.error('Missing client id');
+    		// alertify.error('Missing client id');
+    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			$('#alert_box_modal').modal('show');
     	}
     });
 
@@ -940,11 +1007,17 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -977,7 +1050,10 @@ $(document).ready(function(){
 	                }
 	                else
 	                {
-	                    alertify.error( response.errMsg );
+	                    // alertify.error( response.errMsg );
+	                    $('#alert_box_modal').find('.modal-header').html('Alert');
+	                    $('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	                    $('#alert_box_modal').modal('show');
 	                }
 	            }
 	        });
@@ -1012,7 +1088,10 @@ $(document).ready(function(){
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    		$('#alert_box_modal').modal('show');
 		    	}
 		    }
 		});
@@ -1051,11 +1130,17 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});	
@@ -1116,11 +1201,17 @@ $(document).ready(function(){
 			    		// Show the uploaded image
 			    		$('#frm_agent_image #agent_profile_image').attr('src', response.imgPath);
 
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
                 }
             });
@@ -1171,11 +1262,17 @@ $(document).ready(function(){
 			    		// Show the uploaded image
 			    		$('#frm_company_image #agent_profile_image').attr('src', response.imgPath);
 
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
                 }
             });
@@ -1322,7 +1419,10 @@ $(document).ready(function(){
     		        }
     		        else
     		        {
-    		            alertify.error( response.errMsg );
+    		            // alertify.error( response.errMsg );
+    		            $('#alert_box_modal').find('.modal-header').html('Alert');
+    		            $('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    		            $('#alert_box_modal').modal('show');
     		        }
     		    }
     		});
@@ -1417,7 +1517,10 @@ $(document).ready(function(){
 
             if($.trim(pageContentTxt) == '')
             {
-                alertify.error('Please enter some content');
+                // alertify.error('Please enter some content');
+                $('#alert_box_modal').find('.modal-header').html('Alert');
+                $('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                $('#alert_box_modal').modal('show');
             }
             else
             {
@@ -1448,7 +1551,10 @@ $(document).ready(function(){
                     success: function(response){
                         if( response.errCode == 0 )
                         {
-                            alertify.success( response.errMsg );
+                            // alertify.success( response.errMsg );
+                            $('#alert_box_modal').find('.modal-header').html('Success');
+                        	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                        	$('#alert_box_modal').modal('show');
                             
                             // Refresh the form and close the modal
                             $('#frm_email_template')[0].reset();
@@ -1460,7 +1566,10 @@ $(document).ready(function(){
                         }
                         else
                         {
-                            alertify.error( response.errMsg );
+                            // alertify.error( response.errMsg );
+                            $('#alert_box_modal').find('.modal-header').html('Alert');
+                        	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                        	$('#alert_box_modal').modal('show');
                         }
                     }
                 });
@@ -1569,7 +1678,10 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 
 			    		// Refresh the form and close the modal
 			    		$('#frm_add_partner')[0].reset();
@@ -1581,7 +1693,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -1650,7 +1765,10 @@ $(document).ready(function(){
     	}
 		else
         {
-            alertify.error('Missing Partner id');
+            // alertify.error('Missing Partner id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+            $('#alert_box_modal').find('.modal-body').html(response.errMsg);
+            $('#alert_box_modal').modal('show');
         }
     });
 	//agent partner code end here
@@ -1718,7 +1836,10 @@ $(document).ready(function(){
     	    	}
     	    	else
     	    	{
-    	    		alertify.error( response.errMsg );
+    	    		// alertify.error( response.errMsg );
+    	    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    	    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    	    		$('#alert_box_modal').modal('show');
     	    	}
     	    }
     	});

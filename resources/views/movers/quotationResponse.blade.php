@@ -202,13 +202,31 @@
 			.company-response-data {
 			    margin-bottom: 80px;
 			}
+			.loader-wrapper {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				background: #fff;
+				z-index: 999;
+			}
+			.preload {
+			    position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    transform: translate(-50%, -40%);
+			    -webkit-transform: translate(-50%, -40%);
+			}
         </style>
 
     </head>
 
     <body>
 
-<!-- Navbar -->
+    <div class="loader-wrapper">
+    	<div class="preload">Loading...</div>
+    </div>
+
+	<!-- Navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	 <div class="container-fluid">
 	  <div class="navbar-header logo"> <a href="{{ url('/') }}"><img src="{{ url('/images/logo.png') }}" alt="Udistro" /></a> </div>
@@ -264,19 +282,19 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <form id="frm_tech_concierge" name="frm_tech_concierge">
-                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <td style="width: 30%;">Moving from</td>
-                                                            <td id="moving_from_address"></td>
+                                                            <td style="width: 30%;" class="table-heading-new">Moving from</td>
+                                                            <td id="moving_from_address" class="table-heading-new"></td>
                                                         </tr>
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <td style="width: 30%;">Moving to</td>
-                                                            <td id="moving_to_address"></td>
+                                                            <td style="width: 30%;" class="table-heading-new">Moving to</td>
+                                                            <td id="moving_to_address" class="table-heading-new"></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -322,31 +340,31 @@
                                                             <td id="additional_information"></td>
                                                         </tr>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <!-- <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Items</th>
-                                                                <th>User Input</th>
+                                                                <th class="table-heading-new">Items</th>
+                                                                <th class="table-heading-new">User Input</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_tech_concierge_other_details">
                                                             
                                                         </tbody>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 30%">Items</th>
-                                                                <th style="width: 40%">User Input</th>
-                                                                <th style="width: 10%">Quantity</th>
-                                                                <th style="width: 10%">Time Estimate</th>
-                                                                <th style="width: 10%">Budget Estimate</th>
+                                                                <th style="width: 30%" class="table-heading-new">Items</th>
+                                                                <th style="width: 40%" class="table-heading-new">User Input</th>
+                                                                <th style="width: 10%" class="table-heading-new">Quantity</th>
+                                                                <th style="width: 10%" class="table-heading-new">Time Estimate</th>
+                                                                <th style="width: 10%" class="table-heading-new">Budget Estimate</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_tech_concierge_services">
@@ -411,7 +429,12 @@
                         </div>
                     </div>
 
-                    
+                    <style type="text/css">
+                    	.table-heading-new {
+                    	    background: #00bcea !important;
+                    	    color: #fff;
+                    	}
+                    </style>
 
                     <!-- Modal to Home Cleaning Service Request -->
                     <div id="modal_home_cleaning_service_request" class="modal fade" role="dialog">
@@ -423,9 +446,9 @@
                                     <h4 class="modal-title">Home Cleaning Services Request</h4>
                                 </div>
 
-                                <div class="modal-body" style="height: 800px; overflow-y: auto;">
+                                <div class="modal-body">
                                     <form id="frm_home_cleaning_services" name="frm_home_cleaning_services">
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
                                                 <tr>
                                                     <td style="width: 30%;">Moving from</td>
@@ -440,13 +463,13 @@
                                                     <td id="moving_to_address"></td>
                                                 </tr>
                                             </table>
-                                        </div>
+                                        </div> -->
 
-                                        <div class="clearfix"></div>
+                                        <!-- <div class="clearfix"></div> -->
 
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
-                                                <tr>
+                                                <tr class="table-heading-new">
                                                     <th style="width:70%">Items</th>
                                                     <th>User Input</th>
                                                 </tr>
@@ -495,10 +518,10 @@
                                                     <td id="home_cleaning_level"></td>
                                                 </tr>
                                             </table>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        </div> -->
+                                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                             <table class="table table-striped">
-                                                <tr>
+                                                <tr class="table-heading-new">
                                                     <th style="width:70%">Items</th>
                                                     <th>User Input</th>
                                                 </tr>
@@ -531,12 +554,12 @@
                                                     <td id="additional_information"></td>
                                                 </tr>
                                             </table>
-                                        </div>
+                                        </div> -->
 
                                         <div class="col-lg-12 col-md-12 col-sm-12">
                                             <table class="table table-striped">
                                                 <thead>
-                                                    <tr>
+                                                    <tr class="table-heading-new">
                                                         <th style="width: 30%">Items</th>
                                                         <th style="width: 40%">User Input</th>
                                                         <th style="width: 10%">Quantity</th>
@@ -620,9 +643,9 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <form id="frm_home_moving_companies" name="frm_home_moving_companies" autocomplete="off">
-                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
-                                                        <tr>
+                                                        <tr class="table-heading-new">
                                                             <td style="width: 30%;">Moving from</td>
                                                             <td id="moving_from_address"></td>
                                                         </tr>
@@ -630,7 +653,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
-                                                        <tr>
+                                                        <tr class="table-heading-new">
                                                             <td style="width: 30%;">Moving to</td>
                                                             <td id="moving_to_address"></td>
                                                         </tr>
@@ -642,8 +665,8 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <th style="width:70%">Items</th>
-                                                            <th>User Input</th>
+                                                            <th style="width:70%" class="table-heading-new">Items</th>
+                                                            <th class="table-heading-new">User Input</th>
                                                         </tr>
                                                         <tr>
                                                             <td>Moving from house type</td>
@@ -682,8 +705,8 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <th style="width:70%">Items</th>
-                                                            <th>User Input</th>
+                                                            <th style="width:70%" class="table-heading-new">Items</th>
+                                                            <th class="table-heading-new">User Input</th>
                                                         </tr>
                                                         <tr>
                                                             <td>Moving date</td>
@@ -698,31 +721,31 @@
                                                             <td id="additional_information"></td>
                                                         </tr>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
-                                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <!-- <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th>Items</th>
-                                                                <th>User Input</th>
+                                                                <th class="table-heading-new">Items</th>
+                                                                <th class="table-heading-new">User Input</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_moving_other_services">
                                                             
                                                         </tbody>
                                                     </table>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 30%">Items</th>
-                                                                <th style="width: 40%">User Input</th>
-                                                                <th style="width: 10%">Quantity/Weight</th>
-                                                                <th style="width: 10%">Time Estimate</th>
-                                                                <th style="width: 10%">Budget Estimate</th>
+                                                                <th style="width: 30%" class="table-heading-new">Items</th>
+                                                                <th style="width: 40%" class="table-heading-new">User Input</th>
+                                                                <th style="width: 10%" class="table-heading-new">Quantity/Weight</th>
+                                                                <th style="width: 10%" class="table-heading-new">Time Estimate</th>
+                                                                <th style="width: 10%" class="table-heading-new">Budget Estimate</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_moving_services">
@@ -999,8 +1022,8 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="myModalLabel">Make Payment</h4>
 				</div>
-				<!-- <form action="https://secure.paypal.com/uk/cgi-bin/webscr" method="post" name="paypal" id="paypal"> -->
-				<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" name="paypal" id="paypal">
+				<form action="https://secure.paypal.com/uk/cgi-bin/webscr" method="post" name="paypal" id="paypal">
+				<!-- <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" name="paypal" id="paypal"> -->
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="payment_against">Payment Against</label>
@@ -1009,6 +1032,10 @@
 						<div class="form-group">
 							<label for="payment_amount">Amount</label>
 							<input type="text" name="payment_amount" id="payment_amount" class="form-control" placeholder="Amount" disabled="true">
+						</div>
+						<div class="form-group">
+							<label for="payment_mode">Debit/Credit Card <input type="radio" name="payment_mode" class="payment_mode" value="1" checked=""></label>
+							<label for="payment_mode">Paypal <input type="radio" name="payment_mode" class="payment_mode" value="2"></label>
 						</div>
 
 					    <!-- Prepopulate the PayPal checkout page with customer details -->
@@ -1019,7 +1046,13 @@
 						    <input type="text" name="address1" id="address1" value="">
 						    <input type="text" name="address2" id="address2" value="">
 						    <input type="text" name="city" id="city" value="">
-						    <input type="text" name="zip" id="zip" value="">
+						   	<input type="text" name="zip" id="zip" value="">
+							
+							<input type="hidden" name="state" id="state" value="">
+
+						    <!-- For country Canada -->
+						    <input type="hidden" name="country" value="CA">
+						    
 						    <input type="text" name="day_phone_a" id="day_phone_a" value="">
 						    <input type="text" name="day_phone_b" id="day_phone_b" value="">
 					    </div>
@@ -1031,10 +1064,10 @@
 						    <input type="text" name="cmd" value="_xclick" />
 
 						    <!-- Production -->
-						    <!-- <input type="text" name="business" value="info@udistro.ca" /> -->
+						    <input type="text" name="business" value="info@udistro.ca" />
 						    
 						    <!-- Sandbox -->
-						    <input type="text" name="business" value="sandboxbussiness@udistro.ca" />
+						    <!-- <input type="text" name="business" value="sandboxbussiness@udistro.ca" /> -->
 						    <input type="text" name="cbt" value="Return to Udistro" />
 						    <input type="text" name="currency_code" value="CAD" />
 						</div>
@@ -1059,16 +1092,16 @@
 					    <input type="text" name="notify_url" value="{{ url('/paypal/paymentstatus') }}" style="display: none;" />
 
 					    <!-- Redirect the user to the billing page instead of paypal payment page -->
-					    <!-- <input type="hidden" name="landing_page" value="billing"> -->
+					    <input type="hidden" name="landing_page" id="landing_page" value="billing">
 					</div>
 					<div class="modal-footer">
 						<!-- For production -->
-						<!-- <input type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online"> 
-						<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >  -->
+						<input type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online"> 
+						<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" > 
 
 						<!-- For development -->
-						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
- 						<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+						<!-- <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+ 						<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
 					</div>
 				</form>
 			</div>
@@ -1172,6 +1205,10 @@
                     d.invitationId = $('#invitation_id').val();
                 }
             },
+	        // Hide the loader when datatable is rendered
+			"initComplete": function(settings, json) {
+				$('.loader-wrapper').hide();
+			},
             "columnDefs": [
                 { "className": "dt-center", "targets": [ 0, 3, 4, 5, 6 ] }
             ],
@@ -1183,7 +1220,23 @@
                 { 'bSortable' : false },
                 { 'bSortable' : false },
                 { 'bSortable' : false }
-            ]
+            ],
+            "language": {
+              "emptyTable": "You don't have response yet, please check back within the next 24 hours"
+            }
+        });
+
+        // To toggle the paypal payment from credit card and login
+        $('.payment_mode').click(function(){
+        	if( $(this).val() == '1' )
+        	{
+        		$('#landing_page').remove();
+        		$('#paypal').append('<input type="hidden" name="landing_page" id="landing_page" value="billing">');
+        	}
+        	else
+        	{
+        		$('#landing_page').remove();
+        	}
         });
     });
 </script>

@@ -186,6 +186,9 @@ $(document).ready(function(){
         var companyId = array[0];
         var homeServiceId = array[1];
 
+        let refer 	= $(this);
+		let prevHtml= $(this).html();
+
         if( homeServiceId != '' )
         {
             // Get the details of selected payment plan
@@ -194,6 +197,12 @@ $(document).ready(function(){
                 method: 'get',
                 data: {
                     homeServiceId: homeServiceId, companyId: companyId
+                },
+                beforeSend: function(){
+                	$(refer).html('<i class="fa fa-spinner"></i>');
+                },
+                complete: function() {
+                	$(refer).html(prevHtml);
                 },
                 success: function(response){
 
@@ -266,6 +275,9 @@ $(document).ready(function(){
         var companyId = array[0];
         var techConciergeId = array[1];
 
+        let refer 	= $(this);
+        let prevHtml= $(this).html();
+
         if( techConciergeId != '' )
         {
             // Get the details of selected payment plan
@@ -274,6 +286,12 @@ $(document).ready(function(){
                 method: 'get',
                 data: {
                     techConciergeId: techConciergeId, companyId: companyId
+                },
+                beforeSend: function(){
+                	$(refer).html('<i class="fa fa-spinner"></i>');
+                },
+                complete: function() {
+                	$(refer).html('<i class="fa fa-spinner"></i>');
                 },
                 success: function(response){
    
@@ -421,6 +439,9 @@ $(document).ready(function(){
         var companyId = array[0];
         var movingCompaniesId = array[1];
 
+        let refer 	= $(this);
+        let prevHtml= $(this).html();
+
         if( movingCompaniesId != '' )
         {
             // Get the details of selected payment plan
@@ -431,13 +452,12 @@ $(document).ready(function(){
                     movingCompaniesId: movingCompaniesId, companyId: companyId
                 },
                 beforeSend: function(){
-                	// Show loader
-                	$('.loading').show();
-                },
+					$(refer).html('<i class="fa fa-spinner"></i>');
+				},
+				complete: function() {
+					$(refer).html(prevHtml);
+				},
                 success: function(response){
-
-                	// Show loader
-                	$('.loading').hide();
    
                     // Auto-fill the form
                     $('#frm_home_moving_companies #moving_service_request_id').val(movingCompaniesId);
@@ -626,7 +646,7 @@ $(document).ready(function(){
 	});
 
 	// Connect Utilities
-	$('#connect_utility_agency1').click(function(){
+	/*$('#connect_utility_agency1').click(function(){
 		$('#connect_utilities_step1').hide();
 		$('#connect_utilities_step3').show();
 
@@ -660,6 +680,255 @@ $(document).ready(function(){
     		$('#connect_utilities_method_type_container1').hide();
     		$('#connect_utilities_method_type_container2').show();
     	}
+    });*/
+
+    // Fetch the utility services for the selected company
+    $('.moving_from_utility_companies').change(function(){
+    	let utilityCompanyId= $(this).val();
+    	let refer 			= $(this);
+
+    	if( utilityCompanyId != '' )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/getcompanyservices',
+    			method: 'get',
+    			data: {
+    				utilityCompanyId: utilityCompanyId
+    			},
+    		    beforeSend: function() {
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-spinner"></i>');
+    		    },
+    		    complete: function()
+    		    {
+    		        $(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-plus-circle"></i>');
+    		    },
+    		    success: function(response){
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').html(response);
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_from_utility_company_services').multipleSelect("refresh");
+    		    }
+    		});
+    	}
+    	else
+    	{
+    		$(this).closest('.connect_utilitiy').find('.moving_from_utility_company_services').html('<option value="">Select Service</option>');
+    	}
+    });
+    $('.moving_to_utility_companies').change(function(){
+    	let utilityCompanyId= $(this).val();
+    	let refer 			= $(this);
+
+    	if( utilityCompanyId != '' )
+    	{
+    		$.ajax({
+    			url: $('meta[name="route"]').attr('content') + '/movers/getcompanyservices',
+    			method: 'get',
+    			data: {
+    				utilityCompanyId: utilityCompanyId
+    			},
+    		    beforeSend: function() {
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-spinner"></i>');
+    		    },
+    		    complete: function()
+    		    {
+    		        $(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').next('.utilitie-company-add').html('<i class="fa fa-plus-circle"></i>');
+    		    },
+    		    success: function(response){
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').html(response);
+    		    	$(refer).closest('.connect_utilitiy').find('.moving_to_utility_company_services').multipleSelect("refresh");
+    		    }
+    		});
+    	}
+    	else
+    	{
+    		$(this).closest('.connect_utilitiy').find('.moving_to_utility_company_services').html('<option value="">Select Service</option>');
+    	}
+    });
+
+    // Utility Services next button functionality
+    $('.btn_next_utility_service').click(function(){
+    	// Get selected companies details
+    	let utilityId 			= $(this).attr('id');
+
+    	let movingFromCompanyId = $(this).closest('.utility_service_container').find('.moving_from_utility_companies').val();
+    	let movingToCompanyId 	= $(this).closest('.utility_service_container').find('.moving_to_utility_companies').val();
+    	
+    	let movingFromcompany 	= $(this).closest('.utility_service_container').find('.moving_from_utility_companies option:selected').text();
+    	let movingTocompany 	= $(this).closest('.utility_service_container').find('.moving_to_utility_companies option:selected').text();
+
+    	let movingFromContact	= $(this).closest('.utility_service_container').find('.moving_from_utility_companies option:selected').attr('data-contact');
+    	let movingFromUrl		= $(this).closest('.utility_service_container').find('.moving_from_utility_companies option:selected').attr('data-url');
+    	let movingToContact		= $(this).closest('.utility_service_container').find('.moving_to_utility_companies option:selected').attr('data-contact');
+    	let movingToUrl			= $(this).closest('.utility_service_container').find('.moving_to_utility_companies option:selected').attr('data-url');
+
+    	var movingFromCompanyServices = [];
+    	$( $(this).closest('.utility_service_container').find('.moving_from_utility_company_container').find('.ms-drop').find('ul').find('li') ).each(function(){
+    		if( $(this).hasClass('selected') && ( $(this).find('input').val() != 'on' ) )
+    		{
+    			movingFromCompanyServices.push( $(this).find('input').val() );
+    		}
+    	});
+
+    	var movingToCompanyServices = [];
+    	$( $(this).closest('.utility_service_container').find('.moving_to_utility_company_container').find('.ms-drop').find('ul').find('li') ).each(function(){
+    		if( $(this).hasClass('selected') && ( $(this).find('input').val() != 'on' ) )
+    		{
+    			movingToCompanyServices.push( $(this).find('input').val() );
+    		}
+    	});
+
+    	// Reset the "Mark as completed" checkbox
+    	$('.utility_service_check_complete').prop('checked', false);
+
+    	if( movingFromCompanyId == '' && movingToCompanyId == '' )
+    	{
+    		$('#service_response').find('.modal-header').html('Error');
+    		$('#service_response').find('.modal-body').html('Please select atleast one company and their services.');
+    		$('#service_response').modal('show');
+    	}
+    	else
+    	{
+    		if( movingFromCompanyId != '' && movingToCompanyId != '' ) 	// Show both the services
+    		{
+    			$('#utility_service_step_both #moving_from_company_name').text(movingFromcompany);
+    			$('#utility_service_step_both #moving_to_company_name').text(movingTocompany);
+
+    			$('#utility_service_step_both #btn_moving_from_arrange_disconnect_phone').attr('data-contact', movingFromContact);
+    			$('#utility_service_step_both #btn_moving_from_arrange_disconnect_online').attr('data-url', movingFromUrl);
+    			$('#utility_service_step_both #btn_moving_to_arrange_disconnect_phone').attr('data-contact', movingToContact);
+    			$('#utility_service_step_both #btn_moving_to_arrange_disconnect_online').attr('data-url', movingToUrl);
+
+    			$('#utility_service_step_both .utility_service_check_complete').attr('data-utility', utilityId);
+
+    			$('#utility_service_step_start').hide();
+    			$('#utility_service_step_moving_from').hide();
+    			$('#utility_service_step_moving_to').hide();
+    			$('#utility_service_step_both').show();
+    		}
+    		else if( movingFromCompanyId != '' )						// Show moving from service
+    		{
+    			$('#utility_service_step_moving_from #moving_from_company_name').text(movingFromcompany);
+    			$('#utility_service_step_moving_from #moving_to_company_name').text(movingTocompany);
+
+    			$('#utility_service_step_moving_from #btn_moving_from_arrange_disconnect_phone').attr('data-contact', movingFromContact);
+    			$('#utility_service_step_moving_from #btn_moving_from_arrange_disconnect_online').attr('data-url', movingFromUrl);
+
+    			$('#utility_service_step_moving_from .utility_service_check_complete').attr('data-utility', utilityId);
+
+    			$('#utility_service_step_start').hide();
+    			$('#utility_service_step_both').hide();
+    			$('#utility_service_step_moving_to').hide();
+    			$('#utility_service_step_moving_from').show();
+    		}
+    		else if( movingToCompanyId != '' )							// Show moving to service
+    		{
+    			$('#utility_service_step_moving_to #moving_from_company_name').text(movingFromcompany);
+    			$('#utility_service_step_moving_to #moving_to_company_name').text(movingTocompany);
+
+    			$('#utility_service_step_moving_to #btn_moving_to_arrange_disconnect_phone').attr('data-contact', movingToContact);
+    			$('#utility_service_step_moving_to #btn_moving_to_arrange_disconnect_online').attr('data-url', movingToUrl);
+
+    			$('#utility_service_step_moving_to .utility_service_check_complete').attr('data-utility', utilityId);
+
+    			$('#utility_service_step_start').hide();
+    			$('#utility_service_step_both').hide();
+    			$('#utility_service_step_moving_from').hide();
+    			$('#utility_service_step_moving_to').show();
+    		}
+    	}
+    });
+
+    // Utility Services previous button functionality
+    $('.btn_previous_utility_service').click(function(){
+    	$('#utility_service_step_start').show();
+    	$('#utility_service_step_both').hide();
+		$('#utility_service_step_moving_from').hide();
+		$('#utility_service_step_moving_to').hide();
+    });
+
+    // Online option - open the web page
+    $('.btn_connect_utilitiy_online').click(function(){
+    	let webURL = $(this).attr('data-url');
+    	window.open(webURL, "_blank", "location=yes,height=800,width=1000,scrollbars=yes,status=yes");
+    });
+
+    // Calling option - Initiate the call
+    $('.btn_connect_utilitiy_call').click(function(){
+    	let contactNumber = $(this).attr('data-contact');
+
+    	// Initiate the call
+        $.ajax({
+            url: $('meta[name="route"]').attr('content') + '/call',
+            method: 'POST',
+            dataType: 'json',
+			headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    beforeSend: function() {
+		        // Show the calling button
+		        $('#calling_modal').modal('show');
+		    },
+            data: {
+                userPhone: contactNumber
+            }
+        }).done(function(data) {
+            // The JSON sent back from the server will contain a success message
+            // alert(data.message);
+            // Hide the calling button
+            $('#calling_modal').modal('hide');
+            console.log( data.message );
+        }).fail(function(error) {
+            // alert(JSON.stringify(error));
+            // Hide the calling button
+            $('#calling_modal').modal('hide');
+            console.log( JSON.stringify(error) );
+        });
+    });
+
+    // Save the completed utility
+    $('.utility_service_check_complete').change(function(){
+    	// Get the utility id
+    	let utilityId = $(this).attr('data-utility');
+    	// Get the service type
+    	let serviceType = $(this).attr('id');
+
+    	var status = false;
+    	if( $(this).is(':checked') )
+    	{
+    		status = true;
+    	}
+
+    	var serviceStatus = '0';	// No action
+    	if( serviceType == 'moving_to' )
+    	{
+    		serviceStatus = '1';	// disconnected
+    	}
+    	else if( serviceType == 'moving_from' )
+    	{
+    		serviceStatus = '2';	// connected
+    	}
+    	else if( serviceType == 'both' )
+    	{
+    		serviceStatus = '3';	// transfered
+    	}
+
+    	$.ajax({
+    		url: $('meta[name="route"]').attr('content') + '/movers/updateutilityservicelog',
+    		method: 'post',
+    		data: {
+    			utilityId: utilityId,
+    			serviceStatus: serviceStatus,
+    			status: status
+    		},
+    		headers: {
+    	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	    },
+    	    success: function(response){
+    	    	if( response.errCode == 0 )
+    		    {
+    		    	$('#connect_utilities_completed').html(response.count);
+    		    }
+    	    }
+    	});
     });
 
 	/* ---------- Connect Utilities functionality ends ---------- */
@@ -739,7 +1008,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#home_cleaning_services_modal').modal('hide');
@@ -839,12 +1108,10 @@ $(document).ready(function(){
 		ignore: "not:hidden",
 		rules: 
 		{	
-			moving_house_callback_option: { required: true },
 			moving_house_need_insurance: { required: true }
 		},
 		messages: 
 		{
-			moving_house_callback_option: { required: 'Please select callback option' },
 			moving_house_need_insurance: { required: 'Please select an insurance option' }
 		}
 	});
@@ -878,7 +1145,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#moving_companies_modal').modal('hide');
@@ -1015,7 +1282,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#tech_concierge_modal').modal('hide');
@@ -1198,7 +1465,7 @@ $(document).ready(function(){
 				    {
 				    	// alertify.success(response.errMsg);
 				    	$('#service_response').find('.modal-header').html('Congratulations');
-				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your mail after 24 hours.');
+				    	$('#service_response').find('.modal-body').html('Your project request has been submitted, please check your email for further details.');
 				    	$('#service_response').modal('show');
 
 				    	$('#cable_internet_services_modal').modal('hide');
@@ -1515,10 +1782,13 @@ $(document).ready(function(){
 				// Get the label text for the activity which is incomplete
 				var labelTxt = $(this).closest('.boxes').find('.box-title').find('h3').html();
 
-				if( !$(this).closest('ul').find('li').first().find('a').hasClass('share_announcement') )	// Share announcement is not a mandatory activity
+				if( !$(this).closest('ul').find('li').first().find('a').hasClass('share_announcement') && !$(this).closest('ul').find('li').first().find('a').hasClass('special_offer') )	// Share announcement, Special Offer is not a mandatory activity
 				{
 					// Show the alert message
-					alertify.error(labelTxt + ' activity is still incomplete');
+					// alertify.error(labelTxt + ' activity is still incomplete');
+					$('#service_response').find('.modal-header').html('Alert');
+			    	$('#service_response').find('.modal-body').html(labelTxt + ' activity is still incomplete');
+			    	$('#service_response').modal('show');
 
 					activitiesCheck = false;
 
@@ -1543,14 +1813,24 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success(response.errMsg);
+			    		// alertify.success(response.errMsg);
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 
 			    		// Update the rating average count
 			    		$('#agent_average_rating').html('( ' + response.agentRating + ' Rating )');
+
+			    		setTimeout(function(){
+			    			window.location.href = $('meta[name="route"]').attr('content')
+			    		}, 2000);
 			    	}
 			    	else
 			    	{
-			    		alertify.error(response.errMsg);
+			    		// alertify.error(response.errMsg);
+			    		$('#service_response').find('.modal-header').html('Alert');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 			    	}
 			    }
 			});
@@ -1584,7 +1864,11 @@ $(document).ready(function(){
 
 			if( $('.done_activity, .discard_activity').index(this) > 1 )
 			{
-				alertify.error('You are not following the correct sequence');
+				// alertify.error('You are not following the correct sequence');
+
+				$('#service_response').find('.modal-header').html('Alert');
+				$('#service_response').find('.modal-body').html('You are not following the correct sequence');
+				$('#service_response').modal('show');
 			}
 		}
 	});
@@ -1631,6 +1915,7 @@ $(document).ready(function(){
 		    		$('#paypal #address1').val( response.details.address1 );
 		    		$('#paypal #address2').val( response.details.address2 );
 		    		$('#paypal #city').val( response.details.city );
+		    		$('#paypal #state').val( response.details.province );
 		    		$('#paypal #zip').val( response.details.postal_code );
 		    		$('#paypal #day_phone_a').val( response.details.contactNumber );
 		    		$('#paypal #day_phone_b').val( response.details.contactNumber );
@@ -1642,7 +1927,10 @@ $(document).ready(function(){
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#service_response').find('.modal-header').html('Alert');
+			    	$('#service_response').find('.modal-body').html(response.errMsg);
+			    	$('#service_response').modal('show');
 		    	}
 		    }
 		});
@@ -1725,7 +2013,12 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#share_announcement_modal').modal('hide');
+
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 
 			    		// Reset the form
 			    		$('#frm_announcement_email')[0].reset();
@@ -1735,7 +2028,10 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Alert');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 			    	}
 			    }
     		});
@@ -1760,11 +2056,17 @@ function userActivityFeedback(activity, feedback)
 	    success: function(response){
 	    	if( response.errCode == 0 )
 		    {
-		    	alertify.success(response.errMsg);
+		    	// alertify.success(response.errMsg);
+		    	$('#service_response').find('.modal-header').html('Success');
+		    	$('#service_response').find('.modal-body').html(response.errMsg);
+		    	$('#service_response').modal('show');
 		    }
 		    else
 		    {
-		    	alertify.error(response.errMsg);	
+		    	// alertify.error(response.errMsg);
+		    	$('#service_response').find('.modal-header').html('Alert');
+		    	$('#service_response').find('.modal-body').html(response.errMsg);
+		    	$('#service_response').modal('show');
 		    }
 	    }
 	});

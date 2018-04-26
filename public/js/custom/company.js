@@ -63,7 +63,10 @@ $(document).ready(function(){
                 success: function(response){
                     if( response.errCode == 0 )
                     {
-                        alertify.success( response.errMsg );
+                        // alertify.success( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Success');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
 
                         // Refresh the form and close the modal
                         $('#frm_change_password')[0].reset();
@@ -71,7 +74,10 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        alertify.error( response.errMsg );
+                        // alertify.error( response.errMsg );
+                        $('#alert_box_modal').find('.modal-header').html('Alert');
+                    	$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+                    	$('#alert_box_modal').modal('show');
                     }
                 }
             });
@@ -110,14 +116,20 @@ $(document).ready(function(){
             {
                 if( response.errCode == 0 )
                 {
-                    alertify.success( response.errMsg );
+                    // alertify.success( response.errMsg );
+                    $('#service_response').find('.modal-header').html('Success');
+                    $('#service_response').find('.modal-body').html(response.errMsg);
+                    $('#service_response').modal('show');
 
                     // Refresh the form and close the modal
                     $('#frm_forgot_password')[0].reset();
                 }
                 else
                 {
-                    alertify.error( response.errMsg );
+                    // alertify.error( response.errMsg );
+                    $('#service_response').find('.modal-header').html('Alert');
+                    $('#service_response').find('.modal-body').html(response.errMsg);
+                    $('#service_response').modal('show');
                 }
             }
         });
@@ -184,11 +196,17 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -253,7 +271,20 @@ $(document).ready(function(){
 					$('#frm_home_cleaning_services #user_requested_home_cleaning_services').html(response.request_services_details);
 
 					// Availability
-                    $('#frm_home_cleaning_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
+                    // $('#frm_home_cleaning_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option><option value="'+ response.availability2 +'">'+ response.availability2 +'</option><option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');               
+
+                    // Availability
+                    $('#frm_home_cleaning_services #availability').html('<option value="'+ response.availability1 +'">'+ response.availability1 +'</option>');
+                    
+                    if( response.availability2 != '' && response.availability2 != ' ' )
+                    {
+                    	$('#frm_home_cleaning_services #availability').append('<option value="'+ response.availability2 +'">'+ response.availability2 +'</option>');
+                    }
+
+                    if( response.availability3 != '' && response.availability3 != ' ' )
+                    {
+                    	$('#frm_home_cleaning_services #availability').append('<option value="'+ response.availability3 +'">'+ response.availability3 +'</option>');
+                    }
 
                     // Elevator availability
                     $('#frm_home_cleaning_services #elevator_availability').html(response.elevator_availability);
@@ -280,16 +311,32 @@ $(document).ready(function(){
                     }
 
                     // Show the modal
-                    $('#modal_home_cleaning_service_request').modal('show');
+                    $('#modal_home_cleaning_service_request').modal({backdrop: 'static', keyboard: false});
                 }
             });
         }
         else
         {
-            alertify.error('Missing category id');
+            // alertify.error('Missing category id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+            $('#alert_box_modal').find('.modal-body').html('Missing category id');
+            $('#alert_box_modal').modal('show');
         }
     });
 
+	// Home cleaning build quote
+	$('#btn_home_cleaning_build_quote').click(function(){
+		if( $(this).find('i').hasClass('fa fa-minus-square') )
+		{
+			$(this).find('i').removeClass('fa fa-minus-square').addClass('fa fa-plus-square');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-plus-square').addClass('fa fa-minus-square');
+		}
+
+		$('.home_cleaning_quote_details').toggle();
+	});
 
     $(document).on('click', '.edit_cable_internet_service', function(){
         var cableInternetId = $(this).attr('id');
@@ -374,7 +421,10 @@ $(document).ready(function(){
         }
         else
         {
-            alertify.error('Missing id');
+            // alertify.error('Missing id');
+            $('#alert_box_modal').find('.modal-header').html('Success');
+            $('#alert_box_modal').find('.modal-body').html('Missing id');
+            $('#alert_box_modal').modal('show');
         }
     });
 
@@ -460,15 +510,32 @@ $(document).ready(function(){
                     }
 
                     // Show the modal
-                    $('#modal_tech_concierge_service_request').modal('show');
+                    $('#modal_tech_concierge_service_request').modal({backdrop: 'static', keyboard: false});
                 }
             });
         }
         else
         {
-            alertify.error('Missing id');
+            // alertify.error('Missing id');
+            $('#alert_box_modal').find('.modal-header').html('Success');
+            $('#alert_box_modal').find('.modal-body').html('Missing id');
+            $('#alert_box_modal').modal('show');
         }
     });
+
+	// Tech concierge build quote
+	$('#btn_tech_concierge_build_quote').click(function(){
+		if( $(this).find('i').hasClass('fa fa-minus-square') )
+		{
+			$(this).find('i').removeClass('fa fa-minus-square').addClass('fa fa-plus-square');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-plus-square').addClass('fa fa-minus-square');
+		}
+
+		$('.tech_concierge_quote_details').toggle();
+	});
 
 
     $(document).on('click', '.edit_moving_item_service', function()
@@ -555,15 +622,32 @@ $(document).ready(function(){
 					}
 
                     // Show the modal
-                    $('#modal_moving_companies_service_request').modal('show');
+                    $('#modal_moving_companies_service_request').modal({backdrop: 'static', keyboard: false});
                 }
             });
         }
         else
         {
-            alertify.error('Missing id');
+            // alertify.error('Missing id');
+            $('#alert_box_modal').find('.modal-header').html('Alert');
+            $('#alert_box_modal').find('.modal-body').html('Missing id');
+            $('#alert_box_modal').modal('show');
         }
     });
+
+	// Home cleaning build quote
+	$('#btn_moving_build_quote').click(function(){
+		if( $(this).find('i').hasClass('fa fa-minus-square') )
+		{
+			$(this).find('i').removeClass('fa fa-minus-square').addClass('fa fa-plus-square');
+		}
+		else
+		{
+			$(this).find('i').removeClass('fa fa-plus-square').addClass('fa fa-minus-square');
+		}
+
+		$('.moving_quote_details').toggle();
+	});
 
     // Company Address Details form validation
     $('#frm_company_address_details').submit(function(e){
@@ -622,11 +706,17 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+			    		$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+			    		$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -650,11 +740,17 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
-		    		alertify.success( response.errMsg );
+		    		// alertify.success( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Success');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 		    	}
 		    }
 		});
@@ -755,11 +851,17 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});
@@ -805,11 +907,17 @@ $(document).ready(function(){
     		    success: function(response){
     		    	if( response.errCode == 0 )
     		    	{
-    		    		alertify.success( response.errMsg );
+    		    		// alertify.success( response.errMsg );
+    		    		$('#alert_box_modal').find('.modal-header').html('Success');
+    		            $('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    		            $('#alert_box_modal').modal('show');
     		    	}
     		    	else
     		    	{
-    		    		alertify.error( response.errMsg );
+    		    		// alertify.error( response.errMsg );
+    		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+    		            $('#alert_box_modal').find('.modal-body').html(response.errMsg);
+    		            $('#alert_box_modal').modal('show');
     		    	}
     		    }
     		});
@@ -834,11 +942,17 @@ $(document).ready(function(){
     	    success: function(response){
     	    	if( response.errCode == 0 )
     	    	{
-    	    		alertify.success( response.errMsg );
+    	    		// alertify.success( response.errMsg );
+    	    		$('#alert_box_modal').find('.modal-header').html('Success');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
     	    	}
     	    	else
     	    	{
-    	    		alertify.error( response.errMsg );
+    	    		// alertify.error( response.errMsg );
+    	    		$('#alert_box_modal').find('.modal-header').html('Alert');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
     	    	}
     	    }
     	});
@@ -902,14 +1016,20 @@ $(document).ready(function(){
 		    	{
 		    		$('#modal_home_cleaning_service_request').modal('hide');
 		    		
-		    		alertify.success( response.errMsg );
+		    		// alertify.success( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Success');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 
 		    		// Refresh the datatable
 		    		$('#datatable_quotation_request').DataTable().ajax.reload();
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 		    	}
 		    }
 		});
@@ -947,14 +1067,20 @@ $(document).ready(function(){
 		    	{
 		    		$('#modal_moving_companies_service_request').modal('hide');
 
-		    		alertify.success( response.errMsg );
+		    		// alertify.success( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Success');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 
 		    		// Refresh the datatable
 		    		$('#datatable_quotation_request').DataTable().ajax.reload();
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 		    	}
 		    }
 		});
@@ -990,7 +1116,10 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
-		    		alertify.success( response.errMsg );
+		    		// alertify.success( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Success');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 
 		    		$('#modal_tech_concierge_service_request').modal('hide');
 
@@ -999,7 +1128,10 @@ $(document).ready(function(){
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 		    	}
 		    }
 		});
@@ -1035,7 +1167,10 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
-		    		alertify.success( response.errMsg );
+		    		// alertify.success( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Success');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 
 		    		$('#modal_cable_internet_service_request').modal('hide');
 
@@ -1044,7 +1179,10 @@ $(document).ready(function(){
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#alert_box_modal').find('.modal-header').html('Alert');
+	    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+	    			$('#alert_box_modal').modal('show');
 		    	}
 		    }
 		});
@@ -1261,7 +1399,7 @@ $(document).ready(function(){
 
 		    	discount = ( $('.moving_service_discount').val() != '' ) ? parseFloat( $('.moving_service_discount').val() ) : 0;
 
-		    	insurance = ( $('.moving_service_insurance').val() != '' ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
+		    	insurance = ( $('.moving_service_insurance').val() != '' && $('.moving_service_insurance').val() != null ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
 
 		    	if( serviceTotal > 0 )
 		    	{
@@ -1474,14 +1612,20 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Success');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 
 			    		// Refresh the datatable
 			    		$('#datatable_jobs').DataTable().ajax.reload();
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#alert_box_modal').find('.modal-header').html('Alert');
+		    			$('#alert_box_modal').find('.modal-body').html(response.errMsg);
+		    			$('#alert_box_modal').modal('show');
 			    	}
 			    }
     		});

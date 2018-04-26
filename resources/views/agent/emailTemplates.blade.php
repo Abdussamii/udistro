@@ -14,6 +14,8 @@
 
     <title>Udistro | Email Templates</title>
 
+    <link rel="icon" type="image/png" href="{{ url('images/udistro-fav.png') }}" sizes="32x32" />
+
     <!-- Bootstrap Core CSS -->
     <!-- <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.min.css') }}" />
@@ -126,6 +128,14 @@
 
 		// To make the table column resizable
 		// $("table tr th, table tr td").resizable({handles: 'e'});
+
+		$('.dropdown-toggle').click(function(){
+			$('.dropdown-menu_logout').toggle();
+		});
+
+		/*$('body').click(function(){
+			$('.dropdown-menu_logout').toggle();
+		});*/
     });
     </script>
 
@@ -273,18 +283,53 @@
 		    right: 0;
 		    width: 110px;
 		}
-		li.dropdown_logout:hover ul.dropdown-menu_logout {
+/*		li.dropdown_logout:hover ul.dropdown-menu_logout {
 			display: block;
-		}
+		}*/
 
 		/* To make the initial text normal instead of bold */
 		.editable-unsaved {
 			font-weight: normal;
 		}
+
+		ul.dropdown-menu_logout li a {
+		    color: #000;
+		    text-decoration: none;
+		    display: block;
+		    padding: 4px 0;
+		}
+
+		ul.dropdown-menu_logout {
+		    display: block;
+		    min-width: 180px;
+		}
+
+		ul.dropdown-menu_logout li a i {
+		    color: #000;
+		    margin-right: 10px;
+		}
 	</style>
 </head>
 
 <body>
+
+	<!-- Server Response -->
+	<div class="modal fade" id="service_response" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	            	
+	            </div>
+	            <div class="modal-body">
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <a style="width: 80px;" id="bt-modal-cancel" class="btn btn-success" href="javascript:void(0);" data-dismiss="modal">OK</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<!-- Server Response -->
 
     <div id="wrapper">
 
@@ -307,9 +352,9 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
 
-				    <ul class="dropdown-menu_logout">
+				    <ul class="dropdown-menu_logout" style="display: none;">
 				        <li>
-	                        <a href="{{ url('agent/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+	                        <a href="{{ url('agent/profile') }}"><i class="fa fa-user fa-fw" aria-hidden="true"></i> Profile</a>
 	                    </li>
 	                    <li>
 	                        <a href="{{ url('agent/changepassword') }}"><i class="fa fa-dashboard fa-fw"></i> Change Password</a>
@@ -516,7 +561,21 @@
 														</table>
 														<table>
 															<tr>
-																<td style="padding:20px; width: 50%;">
+																<td style="padding:20px;">
+																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
+																	<div class="editable" style="text-align: justify;">
+																		<div style="margin-bottom: 20px;">
+																			This is {{ ucwords( strtolower( $agentDetails->fname ) ) }}, your real estate agent. I know moving is tough. So I am happy to share uDistro with you. This application will help you to move everything you want to move including your mail and utility services. 
+																		</div>
+																		<div style="margin-bottom: 20px;">
+																			Just click the get started button to claim your invitation and begin checking things of your recommended moving lists.
+																		</div>
+																		<div style="margin-bottom: 20px;">
+																			Plus this is completely free. It is part of my contribution to your move.
+																		</div>
+																	</div>
+																</td>
+																<!-- <td style="padding:20px; width: 50%;">
 																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
 																	<div class="editable" style="text-align: justify;">
 																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -526,24 +585,13 @@
 																		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 																	</div>
-																</td>
-																<td style="padding:20px; width: 50%;">
-																	<span style="float: right;"><a href="javascript:void(0);" class="remove_editable">X</a></span>
-																	<div class="editable" style="text-align: justify;">
-																		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-																		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-																		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-																		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-																		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-																		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-																	</div>
-																</td>
+																</td> -->
 															</tr>
 														</table>
 													</td>
 												</tr>
 
-												<tr>
+												<!-- <tr>
 													<td>
 														<table>
 															<tr>
@@ -572,7 +620,7 @@
 															</tr>
 														</table>
 													</td>
-												</tr>  					
+												</tr> -->  					
 											</table>
 											<table border="0" cellspacing="0" cellpadding="0" width="100%" style="margin:20px 0;">
 												<tr>
@@ -785,7 +833,10 @@ $(document).ready(function(){
     	        }
     	        else
     	        {
-    	            alertify.error( response.errMsg );
+    	            // alertify.error( response.errMsg );
+    	            $('#service_response').find('.modal-header').html('Alert');
+    	            $('#service_response').find('.modal-body').html(response.errMsg);
+    	            $('#service_response').modal('show');
     	        }
     	    }
     	});
@@ -830,7 +881,11 @@ $(document).ready(function(){
 
     	if( recipientEmails == null )
     	{
-    		alertify.error('Please select atleast one email recipient');
+    		// alertify.error('Please select atleast one email recipient');
+    		$('#service_response').find('.modal-header').html('Alert');
+    		$('#service_response').find('.modal-body').html('Please select atleast one email recipient');
+    		$('#service_response').modal('show');
+
     		$('#recipient_email').focus();
 
     		return false;
@@ -850,8 +905,9 @@ $(document).ready(function(){
     			$(this).remove();
     		}
 
-    		// Add max-width: 800 to all images
-    		$(this).css('max-width', '800px');
+    		// Add max-width: 200px, max-height: 200px to all images
+			$(this).css('max-width', '200px');
+			$(this).css('max-height', '200px');
     	});
 
     	// Remove the "Click here to get started link" as display none will not work on the email server
@@ -873,11 +929,17 @@ $(document).ready(function(){
 		    success: function(response){
 		    	if( response.errCode == 0 )
 		    	{
-		    		alertify.success( response.errMsg );	
+		    		// alertify.success( response.errMsg );
+		    		$('#service_response').find('.modal-header').html('Success');
+		    		$('#service_response').find('.modal-body').html(response.errMsg);
+		    		$('#service_response').modal('show');
 		    	}
 		    	else
 		    	{
-		    		alertify.error( response.errMsg );
+		    		// alertify.error( response.errMsg );
+		    		$('#service_response').find('.modal-header').html('Alert');
+		    		$('#service_response').find('.modal-body').html(response.errMsg);
+		    		$('#service_response').modal('show');
 		    	}
 		    }
 		});
@@ -910,9 +972,9 @@ $(document).ready(function(){
     				$(this).remove();
     			}
 
-    			// Add max-width: 250px, max-height: 250px to all images
-    			$(this).css('max-width', '250px');
-    			$(this).css('max-height', '250px');
+    			// Add max-width: 150px, max-height: 150px to all images
+    			$(this).css('max-width', '150px');
+    			$(this).css('max-height', '150px');
     		});
 
     		// Show the get started button
@@ -936,20 +998,29 @@ $(document).ready(function(){
 			    success: function(response){
 			    	if( response.errCode == 0 )
 			    	{
-			    		alertify.success( response.errMsg );
+			    		// alertify.success( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 
 			    		$('#email_template_name').val('');
 			    	}
 			    	else
 			    	{
-			    		alertify.error( response.errMsg );
+			    		// alertify.error( response.errMsg );
+			    		$('#service_response').find('.modal-header').html('Success');
+			    		$('#service_response').find('.modal-body').html(response.errMsg);
+			    		$('#service_response').modal('show');
 			    	}
 			    }
     		});
     	}
     	else
     	{
-    		alertify.error('Please provide email template name');
+    		// alertify.error('Please provide email template name');
+    		$('#service_response').find('.modal-header').html('Alert');
+    		$('#service_response').find('.modal-body').html('Please provide email template name');
+    		$('#service_response').modal('show');
 
     		$('#email_template_name').focus();
 

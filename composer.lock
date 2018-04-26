@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "af6e21f1125b012b82699faf226bae55",
+=======
+    "content-hash": "95289f80fc9cbeba389120c8a31b8e86",
+>>>>>>> 530ea12040eeb4447c16a909841f543053d1331b
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2257,6 +2261,7 @@
         },
         {
             "name": "twilio/sdk",
+<<<<<<< HEAD
             "version": "5.17.1",
             "source": {
                 "type": "git",
@@ -2267,6 +2272,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twilio/twilio-php/zipball/ae3477ccf88a0efb5bbe8928274c4a2046aec0c1",
                 "reference": "ae3477ccf88a0efb5bbe8928274c4a2046aec0c1",
+=======
+            "version": "5.16.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twilio/twilio-php.git",
+                "reference": "41f96d9839afb584737f26103cfecded2d9fee50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/41f96d9839afb584737f26103cfecded2d9fee50",
+                "reference": "41f96d9839afb584737f26103cfecded2d9fee50",
+>>>>>>> 530ea12040eeb4447c16a909841f543053d1331b
                 "shasum": ""
             },
             "require": {
@@ -2299,7 +2316,11 @@
                 "sms",
                 "twilio"
             ],
+<<<<<<< HEAD
             "time": "2018-04-20T23:40:08+00:00"
+=======
+            "time": "2018-03-22T23:41:51+00:00"
+>>>>>>> 530ea12040eeb4447c16a909841f543053d1331b
         },
         {
             "name": "vlucas/phpdotenv",

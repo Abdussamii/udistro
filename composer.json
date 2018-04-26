@@ -10,7 +10,11 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "santigarcor/laratrust": "5.0.*",
+<<<<<<< HEAD
         "twilio/sdk": "^5.17"
+=======
+        "twilio/sdk": "^5.16"
+>>>>>>> 530ea12040eeb4447c16a909841f543053d1331b
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

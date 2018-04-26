@@ -57,6 +57,14 @@ use App\ProvincialAgencyDetail;
 use App\ServiceRequestResponse;
 use App\PaymentTransactionDetail;
 use App\ShareAnnouncementEmail;
+use App\Rating;
+use App\Province;
+use App\City;
+
+use App\Utility;
+use App\UtilityCompany;
+use App\UtilityCompanyService;
+use App\MoverUtilityActionLog;
 
 use Validator;
 use Helper;
@@ -402,17 +410,33 @@ class MoversController extends Controller
     	$homeCleaningSteamingServices = HomeCleaningSteamingService::where(['status' => '1'])->select('id', 'steaming_service_for')->get();
 
     	// Get the list of home cleaning other places to clean
-    	$homeCleaningOtherPlaces = HomeCleaningOtherPlace::where(['status' => '1'])->select('id', 'other_places')->get();
+    	$homeCleaningOtherPlaces = HomeCleaningOtherPlace::where(['status' => '1'])->orderBy('id', 'desc')->select('id', 'other_places')->get();
 
     	// Get the list of home cleaning additional services
     	$homeCleaningAdditionalService = HomeCleaningAdditionalService::where(['status' => '1'])->select('id', 'additional_service')->get();
 
     	// Get the provincial health agency data
-    	$provincialAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id])->get();
+    	$provincialAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => $clientMovingToAddress->province_id, 'agency_type' => '1'])->get();
 
-    	// echo '<pre>';
-    	// print_r( $provincialAgencyDetails->toArray() );
-    	// exit;
+    	// Get the federal agency data
+    	$federalAgencyDetails = ProvincialAgencyDetail::where(['status' => '1', 'province_id' => '0', 'agency_type' => '2'])->get();
+
+    	// Get the Utility Details
+    	$utilities = Utility::where(['status' => '1'])->select('id', 'utility_name')->get();
+
+    	// Get the Utility Company Details
+    	$utilityCompanies = UtilityCompany::where(['province_id' => $clientMovingToAddress->province_id, 'status' => '1'])->get();
+
+    	$agentId 		= base64_decode(Input::get('agent_id'));
+    	$clientId 		= base64_decode(Input::get('client_id'));
+    	$invitationId 	= base64_decode(Input::get('invitation_id'));
+
+    	// Get the completed utility count
+    	$utilityCompletedCount = MoverUtilityActionLog::where(['client_id' => $clientId, 'invitation_id' => $invitationId])->count();
+
+    	/*echo '<pre>';
+    	print_r( $utilityCompanyServices->toArray() );
+    	exit;*/
 
     	return view('movers/myMove', 
     		[
@@ -458,7 +482,13 @@ class MoversController extends Controller
     			'homeCleaningAdditionalService' => $homeCleaningAdditionalService,
 
     			// Provincial health agency data for the province in which mover is moving to
-    			'provincialAgencyDetails' 	=> $provincialAgencyDetails
+    			'provincialAgencyDetails' 	=> $provincialAgencyDetails,
+    			'federalAgencyDetails'		=> $federalAgencyDetails,
+
+    			// Utilities
+    			'utilities' 			=> $utilities,
+    			'utilityCompanies' 		=> $utilityCompanies,
+    			'utilityCompletedCount' => $utilityCompletedCount
     		]
     	);
     }
@@ -557,7 +587,7 @@ class MoversController extends Controller
     	$response = array();
     	if( $agentId != '' && $clientId != '' && $invitationId != '' )
     	{
-    		// Check if rating already exist
+	    	// Check if rating already exist
     		$rating = AgentClientRating::where(['invitation_id' => $invitationId, 'agent_id' => $agentId, 'client_id' => $clientId])->first();
 
     		if( count( $rating ) == 0 )
@@ -575,6 +605,186 @@ class MoversController extends Controller
 	    		{
 	    			// Fetch the updated rating percentage
     				$agentRating = AgentClientRating::where(['agent_id' => $agentId])->avg('rating');
+
+	    	    	/** 
+	    	    	 * To send the email fetch the required data
+	    			 * The required details include the Mover's details and the moving from and moving to address
+	    			 * The work related information include the companies details which received the quotation
+	    	    	 */
+
+	    	    	$clientDetails = AgentClient::find($clientId);
+
+	    	    	$clientMovingFrom 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->first();
+	    	    	$clientMovingTo 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->first();
+
+	    	    	$clientMovingFromProvince 	= Province::where(['id' => $clientMovingFrom->province_id, 'status' => '1'])->select('id', 'name')->first();
+	    	    	$clientMovingFromCity 		= City::where(['id' => $clientMovingFrom->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+	    	    	$clientMovingFromAddress= array(
+	    	    		'address1' => $clientMovingFrom->address1,
+	    	    		'province' => $clientMovingFromProvince->name,
+	    	    		'city' => $clientMovingFromCity->name,
+	    	    		'postal_code' => $clientMovingFrom->postal_code,
+	    	    		'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+	    	    		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
+	    	    		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
+	    	    		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
+	    	    	);
+
+	    	    	$clientMovingToProvince 	= Province::where(['id' => $clientMovingTo->province_id, 'status' => '1'])->select('id', 'name')->first();
+	    	    	$clientMovingToCity 		= City::where(['id' => $clientMovingTo->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+	    	    	$clientMovingToAddress 	= array(
+	    	    		'address1' => $clientMovingTo->address1,
+	    	    		'province' => $clientMovingToProvince->name,
+	    	    		'city' => $clientMovingToCity->name,
+	    	    		'postal_code' => $clientMovingTo->postal_code,
+	    	    		'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+	    	    		'moving_from_floor' => $clientMovingTo->moving_from_floor,
+	    	    		'moving_from_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+	    	    		'moving_from_property_type' => $clientMovingTo->moving_from_property_type
+	    	    	);
+
+	    	    	// Digital service
+	    	    	$digitalServiceRequest = DB::table('digital_service_requests as t1')
+	    	    							->join('companies as t2', 't1.digital_service_company_id', '=', 't2.id')
+	    	    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    	    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    	    							->get();
+
+	    	    	// Home Cleaning service
+	    	    	$homeCleaningServiceRequest = DB::table('home_cleaning_service_requests as t1')
+	    		    							->join('companies as t2', 't1.company_id', '=', 't2.id')
+	    		    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    		    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    		    							->get();
+
+	    	    	// Moving service
+	    	    	$movingServiceRequest = DB::table('moving_item_service_requests as t1')
+	    	    							->join('companies as t2', 't1.mover_company_id', '=', 't2.id')
+	    	    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    	    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    	    							->get();
+
+	    	    	// Tech Concierge service
+	    	    	$techConciergeServiceRequest = DB::table('tech_concierge_service_requests as t1')
+	    		    							->join('companies as t2', 't1.company_id', '=', 't2.id')
+	    		    							->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId])
+	    		    							->select('t2.id', 't2.company_name', 't2.profile', 't2.guarantee_policy', 't2.created_at')
+	    		    							->get();
+
+	    		   	$companiesList = array();
+
+	    		   	if( count( $digitalServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $digitalServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    					$interval = $createdAt->diff($currentdate);
+	    					$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	if( count( $homeCleaningServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $homeCleaningServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    		   			$interval = $createdAt->diff($currentdate);
+	    		   			$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	if( count( $movingServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $movingServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    		   			$interval = $createdAt->diff($currentdate);
+	    		   			$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	if( count( $techConciergeServiceRequest ) > 0 )
+	    		   	{
+	    		   		foreach( $techConciergeServiceRequest as $serviceRequest )
+	    		   		{
+	    		   			// Get the rating
+	    		   			$rating = Rating::where(['company_id' => $serviceRequest->id])->avg('rating');
+
+	    		   			$createdAt = new \DateTime(date('Y-m-d', strtotime($serviceRequest->created_at)));
+	    		   			$currentdate = new \DateTime(date('Y-m-d'));
+	    		   			$interval = $createdAt->diff($currentdate);
+	    		   			$memberSince = $interval->format('%y years %m months');
+
+	    		   			$companiesList[] = array(
+	    		   				'company_name' 		=> $serviceRequest->company_name,
+	    		   				'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+	    		   				'profile'			=> $serviceRequest->profile,
+	    		   				'member_since' 		=> $memberSince,
+	    		   				'guarantee_policy' 	=> $serviceRequest->guarantee_policy
+	    		   			);
+	    		   		}
+	    		   	}
+
+	    		   	// Hold it for now
+	    		   	/*$emailData = array(
+	    		   		'fname' 		=> ucwords( strtolower( $clientDetails['fname'] ) ),
+	    		   		'fname' 		=> ucwords( strtolower( $clientDetails['lname'] ) ),
+	    		   		'name'			=> ucwords( strtolower( $clientDetails['fname'] . ' ' . $clientDetails['lname'] ) ),
+	    		   		'subject' 		=> 'Feedback Response',
+	    		   		'email' 		=> $clientDetails['email'],
+	    		   		'contact_number'=> $clientDetails['contact_number'],
+
+	    		   		'moving_from'	=> $clientMovingFromAddress,
+	    		   		'moving_to'		=> $clientMovingToAddress,
+	    		   		'companies' 	=> $companiesList
+	    		   	);
+
+	    		   	// Send email
+	    		   	if( app()->env != 'local' )
+	    		   	{
+		    		   	Mail::send('emails.projectRequestFeedback', ['emailData' => $emailData], function ($m) use ($emailData) {
+		    		   	    $m->from('info@udistro.ca', 'Udistro');
+		    		   	    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+		    		   	});
+	    		   	}*/
 
 	    			$response['errCode'] 	= 0;
 		    		$response['errMsg'] 	= 'Thanks for the feedback!';
@@ -790,6 +1000,42 @@ class MoversController extends Controller
     	$clientId 		= Session::get('clientId', '');
     	$invitationId 	= Session::get('invitationId', '');
 
+    	$clientDetails = AgentClient::find($clientId);
+
+    	// For feedback resposne email
+    	$clientDetails = AgentClient::find($clientId);
+
+    	$clientMovingFrom 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->first();
+    	$clientMovingTo 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->first();
+
+    	$clientMovingFromProvince 	= Province::where(['id' => $clientMovingFrom->province_id, 'status' => '1'])->select('id', 'name')->first();
+    	$clientMovingFromCity 		= City::where(['id' => $clientMovingFrom->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+    	$clientMovingFromAddress= array(
+    		'address1' => $clientMovingFrom->address1,
+    		'province' => $clientMovingFromProvince->name,
+    		'city' => $clientMovingFromCity->name,
+    		'postal_code' => $clientMovingFrom->postal_code,
+    		//'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+    		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
+    		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
+    		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
+    	);
+
+    	$clientMovingToProvince 	= Province::where(['id' => $clientMovingTo->province_id, 'status' => '1'])->select('id', 'name')->first();
+    	$clientMovingToCity 		= City::where(['id' => $clientMovingTo->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+    	$clientMovingToAddress 	= array(
+    		'address1' => $clientMovingTo->address1,
+    		'province' => $clientMovingToProvince->name,
+    		'city' => $clientMovingToCity->name,
+    		'postal_code' => $clientMovingTo->postal_code,
+    		//'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+    		'moving_to_floor' => $clientMovingTo->moving_from_floor,
+    		'moving_to_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+    		'moving_to_property_type' => $clientMovingTo->moving_from_property_type
+    	);
+
     	// Company category 
     	$companyCategory= 3;	// Moving company category
 
@@ -807,11 +1053,11 @@ class MoversController extends Controller
     	$movingHouseVehicleType = array();
     	$response = array();
     	
-    	// if( count( $movingRequest ) == 0 )	// Hold it for now
-    	if( 1 )
+    	if( count( $movingRequest ) == 0 )
+    	// if( 1 )
     	{
     		// Check how many services request are raised
-    		if( isset( $details['moving_house_additional_service'][6] ) && $details['moving_house_additional_service'][6] == 1 )
+    		/*if( isset( $details['moving_house_additional_service'][6] ) && $details['moving_house_additional_service'][6] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_additional_service_1');
     		}
@@ -834,7 +1080,14 @@ class MoversController extends Controller
     		if( isset( $details['moving_house_vehicle_type'] ) && $details['moving_house_vehicle_type'] == 1 )
     		{
     			array_push($requiredServices, 'moving_house_vehicle_type');
-    		}
+    		}*/
+
+    		array_push($requiredServices, 'moving_house_additional_service_1');
+    		array_push($requiredServices, 'moving_house_additional_service_2');
+    		array_push($requiredServices, 'moving_house_additional_service_3');
+    		array_push($requiredServices, 'moving_house_additional_service_4');
+    		array_push($requiredServices, 'moving_house_additional_service_5');
+    		array_push($requiredServices, 'moving_house_vehicle_type');
 
     		$filteredCompanies = $this->getFilteredMoverCompaniesList($clientId, $companyCategory, $requiredServices);
 
@@ -866,8 +1119,8 @@ class MoversController extends Controller
 				    	$movingServiceRequest->moving_from_bedroom_count = $details['moving_house_from_bedroom_count'];
 				    	$movingServiceRequest->moving_from_property_type = $details['moving_house_from_property_type'];
 
-				    	$movingServiceRequest->callback_option 	= isset( $details['moving_house_callback_option'] ) ? $details['moving_house_callback_option'] : 0;
-				    	$movingServiceRequest->callback_time 	= isset( $details['moving_house_callback_time'] ) ? $details['moving_house_callback_time'] : null;
+				    	$movingServiceRequest->callback_option 	= 0;
+				    	$movingServiceRequest->callback_time 	= null;
 
 				    	$movingServiceRequest->transportation_vehicle_type = isset( $details['moving_house_vehicle_type'] ) ? $details['moving_house_vehicle_type'] : null;
 
@@ -892,19 +1145,22 @@ class MoversController extends Controller
 		    										->update(['remaining_qouta' => DB::raw('remaining_qouta - 1')]);
 
 				    		// Get the items quantities
-				    		foreach( $details['item_quantity'] as $itemKey => $itemValue )
-				    		{
-				    			if( $itemValue != '' && $itemValue > 0 )
-				    			{
-				    				$itemsQuantities[] = array(
-				    					'moving_items_service_id' => $movingServiceRequest->id,
-				    					'moving_items_details_id' => $itemKey,
-				    					'quantity' => $itemValue,
-				    					'created_at' => date('Y-m-d H:i:s'),
-				    					'created_by' => $clientId
-				    				);
-				    			}
-				    		}
+		    				if( isset( $details['item_quantity'] ) && count( isset( $details['item_quantity'] ) ) > 0 )
+		    				{
+					    		foreach( $details['item_quantity'] as $itemKey => $itemValue )
+					    		{
+					    			if( $itemValue != '' && $itemValue > 0 )
+					    			{
+					    				$itemsQuantities[] = array(
+					    					'moving_items_service_id' => $movingServiceRequest->id,
+					    					'moving_items_details_id' => $itemKey,
+					    					'quantity' => $itemValue,
+					    					'created_at' => date('Y-m-d H:i:s'),
+					    					'created_by' => $clientId
+					    				);
+					    			}
+					    		}
+		    				}
 
 				    		// Get the data for moving_other_item_service_requests
 				    		if( isset( $details['moving_house_special_instruction'] ) && count( $details['moving_house_special_instruction'] ) > 0 )
@@ -936,6 +1192,26 @@ class MoversController extends Controller
 			    		$createdAt = date('Y-m-d H:i:s');
 			    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
     				}
+
+    				// Get the rating
+    				$rating = Rating::where(['company_id' => $filterCompany->company_id])->avg('rating');
+
+    				// Get the company account creation date
+    				$companyDetails = Company::find($filterCompany->company_id);
+
+    				$createdAt = new \DateTime(date('Y-m-d', strtotime($companyDetails->created_at)));
+    				$currentdate = new \DateTime(date('Y-m-d'));
+    				$interval = $createdAt->diff($currentdate);
+    				$memberSince = $interval->format('%y years %m months');
+
+    				$companiesList[] = array(
+    					'company_name' 		=> $companyDetails->company_name,
+    					'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+    					'profile'			=> $companyDetails->profile,
+    					'member_since' 		=> $memberSince,
+    					'guarantee_policy' 	=> $companyDetails->guarantee_policy
+    				);
+
     			}
     		}
 
@@ -964,6 +1240,28 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+
+	    		$emailData = array(
+	    			'fname' 		=> ucwords( strtolower( $clientDetails['fname'] ) ),
+	    			'lname' 		=> ucwords( strtolower( $clientDetails['lname'] ) ),
+	    			'name'			=> ucwords( strtolower( $clientDetails['fname'] . ' ' . $clientDetails['lname'] ) ),
+	    			'subject' 		=> 'Feedback Response',
+	    			'email' 		=> $clientDetails['email'],
+	    			'contact_number'=> $clientDetails['contact_number'],
+	    			'url'			=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+	    			'moving_from'	=> $clientMovingFromAddress,
+	    			'moving_to'		=> $clientMovingToAddress,
+	    			'companies' 	=> $companiesList
+	    		);
+
+	    		// Send email
+	    		if( app()->env != 'local' )
+	    		{
+	    			Mail::send('emails.projectRequestFeedback', ['emailData' => $emailData], function ($m) use ($emailData) {
+	    			    $m->from('info@udistro.ca', 'Udistro');
+	    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+	    			});
+	    		}
 				
 				//get company deatil
 				$companyDetail = Company::findOrFail($filterCompany->company_id);
@@ -1186,6 +1484,42 @@ class MoversController extends Controller
     	$clientId 		= Session::get('clientId', '');
     	$invitationId 	= Session::get('invitationId', '');
 
+    	$clientDetails = AgentClient::find($clientId);
+
+    	// For feedback resposne email
+    	$clientDetails = AgentClient::find($clientId);
+
+    	$clientMovingFrom 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->first();
+    	$clientMovingTo 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->first();
+
+    	$clientMovingFromProvince 	= Province::where(['id' => $clientMovingFrom->province_id, 'status' => '1'])->select('id', 'name')->first();
+    	$clientMovingFromCity 		= City::where(['id' => $clientMovingFrom->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+    	$clientMovingFromAddress= array(
+    		'address1' => $clientMovingFrom->address1,
+    		'province' => $clientMovingFromProvince->name,
+    		'city' => $clientMovingFromCity->name,
+    		'postal_code' => $clientMovingFrom->postal_code,
+    		//'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+    		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
+    		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
+    		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
+    	);
+
+    	$clientMovingToProvince 	= Province::where(['id' => $clientMovingTo->province_id, 'status' => '1'])->select('id', 'name')->first();
+    	$clientMovingToCity 		= City::where(['id' => $clientMovingTo->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+    	$clientMovingToAddress 	= array(
+    		'address1' => $clientMovingTo->address1,
+    		'province' => $clientMovingToProvince->name,
+    		'city' => $clientMovingToCity->name,
+    		'postal_code' => $clientMovingTo->postal_code,
+    		//'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+    		'moving_to_floor' => $clientMovingTo->moving_from_floor,
+    		'moving_to_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+    		'moving_to_property_type' => $clientMovingTo->moving_from_property_type
+    	);
+
     	// Required services list
     	$requiredServices = array('installer', 'plumbing', 'painting');
 
@@ -1310,6 +1644,26 @@ class MoversController extends Controller
 		    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
 
 				}
+
+				// Get the rating
+				$rating = Rating::where(['company_id' => $filterCompany->company_id])->avg('rating');
+
+				// Get the company account creation date
+				$companyDetails = Company::find($filterCompany->company_id);
+
+				$createdAt = new \DateTime(date('Y-m-d', strtotime($companyDetails->created_at)));
+				$currentdate = new \DateTime(date('Y-m-d'));
+				$interval = $createdAt->diff($currentdate);
+				$memberSince = $interval->format('%y years %m months');
+
+				$companiesList[] = array(
+					'company_name' 		=> $companyDetails->company_name,
+					'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+					'profile'			=> $companyDetails->profile,
+					'member_since' 		=> $memberSince,
+					'guarantee_policy' 	=> $companyDetails->guarantee_policy
+				);
+
 			}
 
 			if( $successCount > 0 )
@@ -1322,6 +1676,28 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+
+	    		$emailData = array(
+	    			'fname' 		=> ucwords( strtolower( $clientDetails['fname'] ) ),
+	    			'lname' 		=> ucwords( strtolower( $clientDetails['lname'] ) ),
+	    			'name'			=> ucwords( strtolower( $clientDetails['fname'] . ' ' . $clientDetails['lname'] ) ),
+	    			'subject' 		=> 'Feedback Response',
+	    			'email' 		=> $clientDetails['email'],
+	    			'contact_number'=> $clientDetails['contact_number'],
+	    			'url'			=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+	    			'moving_from'	=> $clientMovingFromAddress,
+	    			'moving_to'		=> $clientMovingToAddress,
+	    			'companies' 	=> $companiesList
+	    		);
+
+	    		// Send email
+	    		if( app()->env != 'local' )
+	    		{
+	    			Mail::send('emails.projectRequestFeedback', ['emailData' => $emailData], function ($m) use ($emailData) {
+	    			    $m->from('info@udistro.ca', 'Udistro');
+	    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+	    			});
+	    		}
 				
 				//get company deatil
 				$companyDetail = Company::findOrFail($filterCompany->company_id);
@@ -1896,6 +2272,40 @@ class MoversController extends Controller
     	$clientId 		= Session::get('clientId', '');
     	$invitationId 	= Session::get('invitationId', '');
 
+    	// For feedback resposne email
+    	$clientDetails = AgentClient::find($clientId);
+
+    	$clientMovingFrom 	= AgentClientMovingFromAddress::where(['agent_client_id' => $clientId])->first();
+    	$clientMovingTo 	= AgentClientMovingToAddress::where(['agent_client_id' => $clientId])->first();
+
+    	$clientMovingFromProvince 	= Province::where(['id' => $clientMovingFrom->province_id, 'status' => '1'])->select('id', 'name')->first();
+    	$clientMovingFromCity 		= City::where(['id' => $clientMovingFrom->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+    	$clientMovingFromAddress= array(
+    		'address1' => $clientMovingFrom->address1,
+    		'province' => $clientMovingFromProvince->name,
+    		'city' => $clientMovingFromCity->name,
+    		'postal_code' => $clientMovingFrom->postal_code,
+    		//'moving_from_house_type' => $clientMovingFrom->moving_from_house_type,
+    		'moving_from_floor' => $clientMovingFrom->moving_from_floor,
+    		'moving_from_bedroom_count' => $clientMovingFrom->moving_from_bedroom_count,
+    		'moving_from_property_type' => $clientMovingFrom->moving_from_property_type
+    	);
+
+    	$clientMovingToProvince 	= Province::where(['id' => $clientMovingTo->province_id, 'status' => '1'])->select('id', 'name')->first();
+    	$clientMovingToCity 		= City::where(['id' => $clientMovingTo->city_id, 'status' => '1'])->select('id', 'name')->first();
+
+    	$clientMovingToAddress 	= array(
+    		'address1' => $clientMovingTo->address1,
+    		'province' => $clientMovingToProvince->name,
+    		'city' => $clientMovingToCity->name,
+    		'postal_code' => $clientMovingTo->postal_code,
+    		//'moving_from_house_type' => $clientMovingTo->moving_from_house_type,
+    		'moving_to_floor' => $clientMovingTo->moving_from_floor,
+    		'moving_to_bedroom_count' => $clientMovingTo->moving_from_bedroom_count,
+    		'moving_to_property_type' => $clientMovingTo->moving_from_property_type
+    	);
+
 		$filteredCompanies = $this->getFilteredHomeCleaningCompaniesList($clientId, $companyCategory);
 
      	// Transaction start
@@ -1907,6 +2317,7 @@ class MoversController extends Controller
  		$otherPlacesToClean = array();
  		$additionalServices = array();
  		$steamServices  	= array();
+ 		$companiesList 		= array();
  		if( count( $filteredCompanies ) > 0 )
  		{
  			foreach ($filteredCompanies as $filterCompany)
@@ -1949,12 +2360,20 @@ class MoversController extends Controller
  					// $homeCleaningServiceRequest->primary_no = $homeCleaningDetails['home_cleaning_callback_primary_no'];
  					// $homeCleaningServiceRequest->secondary_no = $homeCleaningDetails['home_cleaning_callback_secondary_no'];
 					
-					$homeCleaningServiceRequest->availability_date1 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
-					$homeCleaningServiceRequest->availability_time1		 	= $homeCleaningDetails['availability_time_upto1'];
-					$homeCleaningServiceRequest->availability_date2 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date5']));
-					$homeCleaningServiceRequest->availability_time2 		= $homeCleaningDetails['availability_time_upto2'];
-					$homeCleaningServiceRequest->availability_date3 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date6']));
-					$homeCleaningServiceRequest->availability_time3		 	= $homeCleaningDetails['availability_time_upto3'];
+					// $homeCleaningServiceRequest->availability_date1 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
+					// $homeCleaningServiceRequest->availability_time1		 	= $homeCleaningDetails['availability_time_upto1'];
+					// $homeCleaningServiceRequest->availability_date2 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date5']));
+					// $homeCleaningServiceRequest->availability_time2 		= $homeCleaningDetails['availability_time_upto2'];
+					// $homeCleaningServiceRequest->availability_date3 		= date('Y-m-d', strtotime($homeCleaningDetails['availability_date6']));
+					// $homeCleaningServiceRequest->availability_time3		 	= $homeCleaningDetails['availability_time_upto3'];
+
+					$homeCleaningServiceRequest->availability_date1 	= date('Y-m-d', strtotime($homeCleaningDetails['availability_date4']));
+					$homeCleaningServiceRequest->availability_date2 	= ( $homeCleaningDetails['availability_date5'] != '' ) ? date('Y-m-d', strtotime($homeCleaningDetails['availability_date5'])) : null;
+					$homeCleaningServiceRequest->availability_date3 	= ( $homeCleaningDetails['availability_date6'] != '' ) ? date('Y-m-d', strtotime($homeCleaningDetails['availability_date6'])) : null;
+
+					$homeCleaningServiceRequest->availability_time1 	= $homeCleaningDetails['availability_time_upto1'];
+					$homeCleaningServiceRequest->availability_time2 	= ( $homeCleaningDetails['availability_time_upto2'] != '' ) ? $homeCleaningDetails['availability_time_upto2'] : null;
+					$homeCleaningServiceRequest->availability_time3 	= ( $homeCleaningDetails['availability_time_upto3'] != '' ) ? $homeCleaningDetails['availability_time_upto3'] : null;
 
  					$homeCleaningServiceRequest->additional_information = $homeCleaningDetails['home_cleaning_additional_information'];
  					$homeCleaningServiceRequest->status = '1';
@@ -2041,6 +2460,25 @@ class MoversController extends Controller
 		    		$createdAt = date('Y-m-d H:i:s');
 		    		DB::table('company_request_emails')->insert(['comapny_id' => $filterCompany->company_id, 'client_id' => $clientId, 'invitation_id' => $invitationId, 'email_send_status' => '0', 'created_at' => $createdAt]);
  				}
+
+ 				// Get the rating
+ 				$rating = Rating::where(['company_id' => $filterCompany->company_id])->avg('rating');
+
+ 				// Get the company account creation date
+ 				$companyDetails = Company::find($filterCompany->company_id);
+
+ 				$createdAt = new \DateTime(date('Y-m-d', strtotime($companyDetails->created_at)));
+ 				$currentdate = new \DateTime(date('Y-m-d'));
+ 				$interval = $createdAt->diff($currentdate);
+ 				$memberSince = $interval->format('%y years %m months');
+
+ 				$companiesList[] = array(
+ 					'company_name' 		=> $companyDetails->company_name,
+ 					'rating'			=> ( !is_null( $rating ) ) ? $rating : 0,
+ 					'profile'			=> $companyDetails->profile,
+ 					'member_since' 		=> $memberSince,
+ 					'guarantee_policy' 	=> $companyDetails->guarantee_policy
+ 				);
  			}
 
 			if( $successCount > 0 )
@@ -2053,6 +2491,28 @@ class MoversController extends Controller
 
 	    		$response['errCode'] 	= 0;
 	    		$response['errMsg'] 	= 'Request added successfully';
+
+	    		$emailData = array(
+	    			'fname' 		=> ucwords( strtolower( $clientDetails['fname'] ) ),
+	    			'lname' 		=> ucwords( strtolower( $clientDetails['lname'] ) ),
+	    			'name'			=> ucwords( strtolower( $clientDetails['fname'] . ' ' . $clientDetails['lname'] ) ),
+	    			'subject' 		=> 'Feedback Response',
+	    			'email' 		=> $clientDetails['email'],
+	    			'contact_number'=> $clientDetails['contact_number'],
+	    			'url'			=> 'https://www.udistro.ca/movers/quotationresponse?client_id='. base64_encode( $clientId ) .'&invitation_id=' . base64_encode( $invitationId ),
+	    			'moving_from'	=> $clientMovingFromAddress,
+	    			'moving_to'		=> $clientMovingToAddress,
+	    			'companies' 	=> $companiesList
+	    		);
+
+	    		// Send email
+	    		if( app()->env != 'local' )
+	    		{
+	    			Mail::send('emails.projectRequestFeedback', ['emailData' => $emailData], function ($m) use ($emailData) {
+	    			    $m->from('info@udistro.ca', 'Udistro');
+	    			    $m->to($emailData['email'], $emailData['name'])->subject($emailData['subject']);
+	    			});
+	    		}
 				
 				//get company deatil
 				$companyDetail = Company::findOrFail($filterCompany->company_id);
@@ -2163,8 +2623,7 @@ class MoversController extends Controller
         );
 
         $k=0;
-
-        if ( count( $digitalArray ) > 0 )
+        /*if ( count( $digitalArray ) > 0 )
         {
             foreach ($digitalArray as $Array)
             {
@@ -2256,22 +2715,25 @@ class MoversController extends Controller
                 );
                 $k++;
             }
-        }
+        }*/
 
         if ( count( $techConciergeArray ) > 0 )
         {
         	foreach ($techConciergeArray as $Array)
             {
             	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	$reviews = (int)DB::table('ratings')->where(['company_id' => $Array->company_id, 'status' => '1'])->avg('rating');
+            	$reviewCount = '';
+            	if( $reviews > 0 )
             	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
+	            	for( $i=1; $i<=$reviews; $i++ )
+	            	{
+	            		$reviewCount .= '<i class="fa fa-star-o"></i>';
+	            	}
+            	}
+            	else
+            	{
+            		$reviewCount = 'NA';
             	}
 
             	// Calculate response time
@@ -2357,15 +2819,18 @@ class MoversController extends Controller
             foreach ($homeCleaningArray as $Array)
             {
             	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	$reviews = (int)DB::table('ratings')->where(['company_id' => $Array->company_id, 'status' => '1'])->avg('rating');
+            	$reviewCount = '';
+            	if( $reviews > 0 )
             	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
+	            	for( $i=1; $i<=$reviews; $i++ )
+	            	{
+	            		$reviewCount .= '<i class="fa fa-star-o"></i>';
+	            	}
+            	}
+            	else
+            	{
+            		$reviewCount = 'NA';
             	}
 
             	// Calculate response time
@@ -2460,15 +2925,18 @@ class MoversController extends Controller
             foreach ($movingItemArray as $Array)
             {
             	// Get the review count
-            	$reviews = DB::select(DB::raw("SELECT t3.rating from companies as t1 LEFT JOIN company_user as t2 ON t1.id = t2.company_id LEFT JOIN agent_client_ratings as t3 ON t3.agent_id = t2.user_id WHERE t1.id = " . $Array->company_id));
-
-            	$reviewCount = 0;
-            	if( isset( $reviews ) && count( $reviews ) > 0 )
+            	$reviews = (int)DB::table('ratings')->where(['company_id' => $Array->company_id, 'status' => '1'])->avg('rating');
+            	$reviewCount = '';
+            	if( $reviews > 0 )
             	{
-            		foreach ($reviews as $review)
-            		{
-            			$reviewCount += $review->rating;
-            		}
+	            	for( $i=1; $i<=$reviews; $i++ )
+	            	{
+	            		$reviewCount .= '<i class="fa fa-star-o"></i>';
+	            	}
+            	}
+            	else
+            	{
+            		$reviewCount = 'NA';
             	}
 
             	// Calculate response time
@@ -3632,8 +4100,9 @@ class MoversController extends Controller
     						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
+    						->leftJoin('provinces as t6', 't4.province_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city', 't6.abbreviation as province')
     						->first();
 
     		}
@@ -3646,8 +4115,9 @@ class MoversController extends Controller
     						->leftJoin('companies as t3', 't1.company_id', '=', 't3.id')
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
+    						->leftJoin('provinces as t6', 't4.province_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city', 't6.abbreviation as province')
     						->first();
     		}
     		else if( $serviceType == 'moving_service' )
@@ -3659,11 +4129,12 @@ class MoversController extends Controller
     						->leftJoin('companies as t3', 't1.mover_company_id', '=', 't3.id')
     						->leftJoin('agent_client_moving_to_addresses as t4', 't2.id', '=', 't4.agent_client_id')
     						->leftJoin('cities as t5', 't4.city_id', '=', 't5.id')
+    						->leftJoin('provinces as t6', 't4.province_id', '=', 't6.id')
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
-    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.mover_company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
+    						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.mover_company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city', 't6.abbreviation as province')
     						->first();
     		}
-    		else if( $serviceType == 'cable_internet_service' )
+    		/*else if( $serviceType == 'cable_internet_service' )
     		{
     			$paymentAgainst = 'Cable Internet Service';
 
@@ -3675,7 +4146,7 @@ class MoversController extends Controller
     						->where(['t1.id' => $requestId, 't4.status' => '1'])
     						->select('t1.id as service_request_response_id', 't3.company_category_id', 't1.digital_service_company_id as company_id', 't2.id as clientId', 't2.fname', 't2.lname', 't2.email', 't2.contact_number', 't4.address1', 't4.address2', 't4.postal_code', 't5.name as city')
     						->first();
-    		}
+    		}*/
 
     		if( isset( $details ) && count( $details ) > 0 )
     		{
@@ -3706,6 +4177,7 @@ class MoversController extends Controller
 	    				'address1' 		=> $details->address1,
 	    				'address2' 		=> $details->address2,
 	    				'postal_code' 	=> $details->postal_code,
+	    				'province' 		=> $details->province,
 	    				'city' 			=> $details->city,
 	    				'invoiceNo' 	=> $invoiceNo
 	    			);
@@ -3780,6 +4252,85 @@ class MoversController extends Controller
     	{
     		$response['errCode'] 	= 3;
     		$response['errMsg'] 	= 'Missing email id or email content';
+    	}
+
+    	return response()->json($response);
+    }
+
+    /**
+     * Function to fetch the utility services for the selected company
+     * @param void
+     * @return array
+     */
+    public function getCompanyServices()
+    {
+    	$utilityCompanyId = Input::get('utilityCompanyId');
+
+    	$utilityCompanyServices = UtilityCompanyService::where(['utility_company_id' => $utilityCompanyId, 'status' => '1'])->select('id', 'utility_company_service_name')->get();
+
+    	$response = '';
+    	if( count( $utilityCompanyServices ) > 0 )
+    	{
+    		foreach( $utilityCompanyServices as $utilityCompanyService )
+    		{
+    			$response .= '<option value="'. $utilityCompanyService->id .'">'. $utilityCompanyService->utility_company_service_name .'</option>';
+    		}
+    	}
+
+    	return $response;
+    }
+
+    /**
+     * Function to save the completed utility
+     * @param void
+     * @return array
+     */
+    public function updateUtilityServiceLog()
+    {
+    	$utilityId 		= Input::get('utilityId');
+    	$serviceStatus 	= Input::get('serviceStatus');
+    	$status 		= Input::get('status');
+
+    	$clientId 		= Session::get('clientId');
+    	$invitationId 	= Session::get('invitationId');
+
+    	if( $status == 'true' )
+    	{
+    		$moverUtilityActionLog = new MoverUtilityActionLog;
+
+    		$moverUtilityActionLog->utility_id 		= $utilityId;
+    		$moverUtilityActionLog->client_id 		= $clientId;
+    		$moverUtilityActionLog->invitation_id 	= $invitationId;
+    		$moverUtilityActionLog->action_status 	= $serviceStatus;
+    		$moverUtilityActionLog->created_at 		= date('Y-m-d H:i:s');
+
+    		if( $moverUtilityActionLog->save() )
+    		{
+    			$response['errCode'] 	= 0;
+				$response['errMsg'] 	= 'Success';
+				$response['count'] 		= MoverUtilityActionLog::where(['client_id' => $clientId, 'invitation_id' => $invitationId])->count();
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 1;
+				$response['errMsg'] 	= 'Some issue';
+    		}
+    	}
+    	else
+    	{
+    		$moverUtilityActionLog = MoverUtilityActionLog::where(['utility_id' => $utilityId, 'client_id' => $clientId, 'invitation_id' => $invitationId])->first();
+
+    		if( $moverUtilityActionLog->delete() )
+    		{
+    			$response['errCode'] 	= 0;
+				$response['errMsg'] 	= 'Success';
+				$response['count'] 		= MoverUtilityActionLog::where(['client_id' => $clientId, 'invitation_id' => $invitationId])->count();
+    		}
+    		else
+    		{
+    			$response['errCode'] 	= 1;
+				$response['errMsg'] 	= 'Some issue';
+    		}
     	}
 
     	return response()->json($response);
