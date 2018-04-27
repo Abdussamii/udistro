@@ -37,7 +37,7 @@
 							NP: During your selection process, it is recommended that you check ratings, company profile & qualifications and guarantee policies of the companies. 
 						</p>
 						<p>
-							For privacy reasons, we do not allow them to send you bunch of email. Instead we have listed all the responses on your accounts related with the email mayankpandey@virtualemployee.com below and you can review each of the response, accept and make payment through the following link below:
+							For privacy reasons, we do not allow them to send you bunch of email. Instead we have listed all the responses on your accounts related with the email {{ $emailData['email'] }} below and you can review each of the response, accept and make payment through the following link below:
 						</p>
 						<p>
 							Quotation Response: <a href="{{ $emailData['url'] }}">Click here to see response from companies</a>
