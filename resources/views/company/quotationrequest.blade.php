@@ -906,11 +906,13 @@
 											<table class="table table-striped">
 												<thead>
 													<tr class="table-heading-new">
-														<th style="width: 30%">Items</th>
-														<th style="width: 40%">User Input</th>
+														<th style="width: 40%">Items</th>
+														<th style="width: 50%">User Input</th>
 														<th style="width: 10%">Quantity/Weight</th>
+														<!--
 														<th style="width: 10%">Time Estimate</th>
 														<th style="width: 10%">Budget Estimate</th>
+														-->
 													</tr>
 												</thead>
 												<tbody id="user_requested_moving_services">
@@ -928,6 +930,12 @@
 													<td>
 														<input type="text" name="insurance" id="insurance"  class="form-control moving_service_insurance">
 													</td> -->
+												</tr>
+												<tr>
+													<td colspan="4" style="width: 80%;">Total Amount</td>
+													<td>
+														<input type="text" name="total_amount" id="total_amount"  class="form-control moving_service_total_amount">
+													</td>
 												</tr>
 												<tr>
 													<td colspan="4" style="width: 80%;">Discount</td>

@@ -563,7 +563,8 @@ class AgentController extends Controller
     	$streetTypes = StreetType::where(['status' => '1'])->select('id', 'type')->orderBy('type', 'asc')->get();
 
     	// Get the email template lists
-    	$emailTemplates = EmailTemplate::where(['category_id' => 1, 'status' => '1'])->select('id', 'template_name')->orderBy('template_name', 'asc')->get();
+		$userId = Auth::id();
+    	$emailTemplates = EmailTemplate::where(['category_id' => 1, 'status' => '1', 'created_by' => $userId])->select('id', 'template_name')->orderBy('template_name', 'asc')->get();
 
 		return view('agent/clients', ['countries' => $countries, 'provinces' => $provinces, 'cities' => $cities, 'streetTypes' => $streetTypes, 'emailTemplates' => $emailTemplates]);
     }

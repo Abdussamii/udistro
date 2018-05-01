@@ -741,11 +741,13 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th style="width: 30%" class="table-heading-new">Items</th>
-                                                                <th style="width: 40%" class="table-heading-new">User Input</th>
+                                                                <th style="width: 40%" class="table-heading-new">Items</th>
+                                                                <th style="width: 50%" class="table-heading-new">User Input</th>
                                                                 <th style="width: 10%" class="table-heading-new">Quantity/Weight</th>
+																<!--
                                                                 <th style="width: 10%" class="table-heading-new">Time Estimate</th>
                                                                 <th style="width: 10%" class="table-heading-new">Budget Estimate</th>
+																-->
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user_requested_moving_services">
@@ -757,6 +759,13 @@
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <table class="table table-striped" id="moving_service_calculations">
                                                         <thead>
+															<tr>
+                                                                <td colspan="4" style="width: 80%;">Service Total Amount</td>
+                                                                <td id="service_amount">
+                                                                    
+                                                                </td>
+                                                            </tr>
+															
                                                             <tr>
                                                                 <td colspan="4" style="width: 80%;">Insurance</td>
                                                                 <td id="insurance">

@@ -604,6 +604,10 @@ $(document).ready(function(){
 					{
 						$('#frm_home_moving_companies #discount').val(response.discount).blur();
 					}
+					if( response.total_amount != null )
+					{
+						$('#frm_home_moving_companies #total_amount').val(response.total_amount).blur();
+					}
 					if( response.date_of_working != null )
 					{
 						$('#frm_home_moving_companies #availability').val(response.date_of_working);
@@ -1360,7 +1364,7 @@ $(document).ready(function(){
     });
 
     // Home moving request amount calculation
-    $('#frm_home_moving_companies').on('blur', '.moving_service_amount, .moving_service_discount, .moving_service_insurance', function() {
+    $('#frm_home_moving_companies').on('blur', '.moving_service_amount, .moving_service_discount, .moving_service_total_amount, .moving_service_insurance', function() {
 
     	// Ajax call to get the pst, gst, hst, service charge values
     	let serviceRequestId = $('#moving_service_request_id').val();
@@ -1389,6 +1393,7 @@ $(document).ready(function(){
 		    	var hstAmount 		= 0;
 		    	var pstAmount 		= 0;
 		    	var serviceCharge 	= 0;
+				var totalAmount 	= 0;
 
 		    	$('.moving_service_amount').each(function(){
 		    		if( $(this).val() != '' )
@@ -1396,15 +1401,18 @@ $(document).ready(function(){
 		    			serviceTotal += parseFloat( $(this).val() );
 		    		}
 		    	});
-
+				
+				totalAmount = ( $('.moving_service_total_amount').val() != '' ) ? parseFloat( $('.moving_service_total_amount').val() ) : 0;
+				
 		    	discount = ( $('.moving_service_discount').val() != '' ) ? parseFloat( $('.moving_service_discount').val() ) : 0;
 
 		    	insurance = ( $('.moving_service_insurance').val() != '' && $('.moving_service_insurance').val() != null ) ? parseFloat( $('.moving_service_insurance').val() ) : 0;
 
-		    	if( serviceTotal > 0 )
+		    	
+				if( totalAmount > 0 )
 		    	{
 			    	// Subtotal value
-			    	subtotal = ( serviceTotal + insurance ) - discount;
+			    	subtotal = ( totalAmount + insurance ) - discount;
 
 			    	// GST value
 			    	if( response.gst != 0 )

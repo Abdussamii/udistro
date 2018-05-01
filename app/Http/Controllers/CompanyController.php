@@ -1735,8 +1735,8 @@ class CompanyController extends Controller
     	        		$html .= '<td>Detail job description</td>';
     	        		$html .= '<td>'. ucwords( strtolower( $itemDetail->item_name ) ) .'</td>';
     	        		$html .= '<td>'. $itemDetail->item_weight .'</td>';
-    	        		$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate form-control" style="width: 100px;" value="'. $itemDetail->move_hours .'"></td>';
-    	        		$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate form-control moving_service_amount" style="width: 100px;" value="'. $itemDetail->amount .'"></td>';
+    	        		//$html .= '<td><input name="detail_job_time_estimate['. $itemDetail->service_id .']" class="detail_job_time_estimate form-control" style="width: 100px;" value="'. $itemDetail->move_hours .'"></td>';
+    	        		//$html .= '<td><input name="detail_job_budget_estimate['. $itemDetail->service_id .']" class="detail_job_budget_estimate form-control moving_service_amount" style="width: 100px;" value="'. $itemDetail->amount .'"></td>';
 
     	        		$html .= '</tr>';
     	        	}
@@ -1759,8 +1759,8 @@ class CompanyController extends Controller
 	    	        		$html .= '<td>'. $movingTransportation->transportation_type .'</td>';
 	    	        		$html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
 	    	        		$html .= '<td>NA</td>';
-	    	        		$html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;" value="'. number_format( $movingTransportationDetails->hour_to_complete ) .'"></td>';
-	    	        		$html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;" value="'. $movingTransportationDetails->amount .'"></td>';
+	    	        		//$html .= '<td><input name="transportation_vehicle_time_estimate['. $movingTransportation->id .']" class="transportation_vehicle_type form-control" style="width: 100px;" value="'. number_format( $movingTransportationDetails->hour_to_complete ) .'"></td>';
+	    	        		//$html .= '<td><input name="transportation_vehicle_budget_estimate['. $movingTransportation->id .']" class="transportation_vehicle_budget_estimate form-control moving_service_amount" style="width: 100px;" value="'. $movingTransportationDetails->amount .'"></td>';
 
 	    	        		$html .= '</tr>';
 	    	        	}
@@ -1847,7 +1847,8 @@ class CompanyController extends Controller
 
     	        $response['distance'] = round($distance, 2) . 'KM';
 
-    	        // Get the already entered discount, availibility, comment, insurance
+    	        // Get the already entered discount, availibility, comment, insurance, total_amount
+				$response['total_amount'] = $movingCompaniesArray->total_amount;
     	        $response['insurance_amount'] = $movingCompaniesArray->insurance_amount;
     	        $response['discount'] = $movingCompaniesArray->discount;
     	        $response['date_of_working'] = $movingCompaniesArray->date_of_working;
@@ -4084,6 +4085,7 @@ class CompanyController extends Controller
 		    DB::beginTransaction();
 
 		    // Update the moving_item_detail_service_requests request
+			/*
 		    if( is_array( $movingDetails['detail_job_budget_estimate'] ) && count( $movingDetails['detail_job_budget_estimate'] ) )
 		    {
 		    	foreach( $movingDetails['detail_job_budget_estimate'] as $applianceId => $amount )
@@ -4099,7 +4101,7 @@ class CompanyController extends Controller
 		    		]);
 		    	}
 		    }
-
+			
 		    	// Update the moving_transportation_type_requests request
 		    if( $movingDetails['transportation_vehicle_budget_estimate'] != '' && $movingDetails['transportation_vehicle_budget_estimate'] != 0 )
 		    {
@@ -4116,10 +4118,11 @@ class CompanyController extends Controller
 		    		]);
 		    	}
 		    }
-
+			*/
+			
 		    $insuranceAmount = isset($movingDetails['insurance']) ? $movingDetails['insurance'] : null;
 		    // Update the moving_item_service_requests company_response column to 1
-		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $insuranceAmount, 'date_of_working' => $movingDetails['availability']]);
+		    MovingItemServiceRequest::where(['id' => $movingDetails['moving_service_request_id']])->update(['company_response' => '1', 'comment' => $movingDetails['comment'], 'discount' => $movingDetails['discount'], 'insurance_amount' => $insuranceAmount, 'date_of_working' => $movingDetails['availability'], 'total_amount' => $movingDetails['total_amount']]);
 		    	
 		    // Commit the transaction
 			DB::commit();
@@ -4464,10 +4467,23 @@ class CompanyController extends Controller
         {
             foreach ($reviews as $review)
             {
+				$reviewCount = '';
+				if( $review->rating > 0 )
+				{
+				 for( $i=1; $i<=$review->rating; $i++ )
+				 {
+				  $reviewCount .= '<i class="fa fa-star-o"></i>';
+				 }
+				}
+				else
+				{
+				 $reviewCount = 'NA';
+				}
+				
             	$response['aaData'][$k] = array(
                     0 => $review->id,
                     1 => ucwords( strtolower( $review->fname ) ),
-                    2 => $review->rating,
+                    2 => $reviewCount,
                     3 => $review->comments,
                     4 => $review->created_at,
                 );

@@ -2602,7 +2602,7 @@ class MoversController extends Controller
                                 // ->where('t1.agent_client_id', '=', $clientId)
                                 // ->where('t1.invitation_id', '=', $invitationId)
                                 ->where(['t1.agent_client_id' => $clientId, 't1.invitation_id' => $invitationId, 'company_response' => '1'])
-                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at', 't1.updated_at', 't1.discount', 't1.insurance_amount')
+                                ->select('t1.id', 't2.company_name', 't2.id as company_id', 't1.id as request_id', 't1.created_at', 't1.updated_at', 't1.discount', 't1.insurance_amount', 't1.total_amount')
                                 ->get();
 
         $digitalArray = DB::table('digital_service_requests as t1')
@@ -2948,10 +2948,12 @@ class MoversController extends Controller
             	$responseTime = $interval->format('%i');
 
             	// Get all the values and calculate the total amount
+				/*
             	$movingItemDetailServiceRequests 	= MovingItemDetailServiceRequest::where(['moving_items_service_id' => $Array->id])->select('amount')->get();
             	$movingOtherItemServiceRequests 	= MovingOtherItemServiceRequest::where(['moving_items_service_id' => $Array->id])->select('amount')->get();
             	$movingTransportationTypeRequests 	= MovingTransportationTypeRequest::where(['moving_items_services_id' => $Array->id])->select('amount')->get();
-
+				*/
+				
             	$totalAmount= 0;
             	$discount 	= 0;
             	$gst = 0;
@@ -2960,6 +2962,7 @@ class MoversController extends Controller
             	$serviceCharge = 0;
             	if( count( $clientProvinceCharges ) > 0 )
             	{
+					/*
             		if( count( $movingItemDetailServiceRequests ) > 0 )
             		{
             			foreach( $movingItemDetailServiceRequests as $movingItemDetailServiceRequest )
@@ -2992,7 +2995,12 @@ class MoversController extends Controller
             				}
             			}
             		}
-
+					
+					*/
+					
+					// Get total amount
+            		$totalAmount = $Array->total_amount;
+					
             		// Add the amount value as well
             		$insuranceAmount = 0;
             		if( $Array->insurance_amount != '' && !is_null( $Array->insurance_amount ) )
@@ -3766,8 +3774,8 @@ class MoversController extends Controller
                         $html .= '<td>Detail job description</td>';
                         $html .= '<td>'. ucwords( strtolower( $itemDetail->item_name ) ) .'</td>';
                         $html .= '<td>'. $itemDetail->item_weight .'</td>';
-                        $html .= '<td>'. ucwords( strtolower( $itemDetail->move_hours ) ) .'</td>';
-                        $html .= '<td>'. ucwords( strtolower( $itemDetail->amount ) ) .'</td>';
+                        //$html .= '<td>'. ucwords( strtolower( $itemDetail->move_hours ) ) .'</td>';
+                        //$html .= '<td>'. ucwords( strtolower( $itemDetail->amount ) ) .'</td>';
 
                         $html .= '</tr>';
                     }
@@ -3793,8 +3801,8 @@ class MoversController extends Controller
                             $html .= '<td>'. $movingTransportation->transportation_type .'</td>';
                             $html .= '<td>'. ucwords( strtolower( $response['transportation_vehicle_type'] ) ) .'</td>';
                             $html .= '<td>NA</td>';
-                            $html .= '<td>'. $movingTransportation->hour_to_complete .'</td>';
-                            $html .= '<td>'. $movingTransportation->amount .'</td>';
+                            //$html .= '<td>'. $movingTransportation->hour_to_complete .'</td>';
+                            //$html .= '<td>'. $movingTransportation->amount .'</td>';
 
                             $html .= '</tr>';
                         }
@@ -3896,10 +3904,12 @@ class MoversController extends Controller
                 }*/
 
                 // Get all the values and calculate the total amount
+				/*
                 $movingItemDetailServiceRequests 	= MovingItemDetailServiceRequest::where(['moving_items_service_id' => $movingCompaniesArray->id])->select('amount')->get();
                 $movingOtherItemServiceRequests 	= MovingOtherItemServiceRequest::where(['moving_items_service_id' => $movingCompaniesArray->id])->select('amount')->get();
                 $movingTransportationTypeRequests 	= MovingTransportationTypeRequest::where(['moving_items_services_id' => $movingCompaniesArray->id])->select('amount')->get();
-
+				*/
+				
                 $totalAmount= 0;
                 $discount 	= 0;
                 $gst = 0;
@@ -3907,6 +3917,7 @@ class MoversController extends Controller
                 $pst = 0;
                 $serviceCharge = 0;
                 
+				/*
                 if( count( $movingItemDetailServiceRequests ) > 0 )
             	{
             		foreach( $movingItemDetailServiceRequests as $movingItemDetailServiceRequest )
@@ -3930,7 +3941,11 @@ class MoversController extends Controller
             			$totalAmount += $movingTransportationTypeRequest->amount;
             		}
             	}
-
+				*/
+				
+				// Get total amount
+            	$totalAmount = number_format($movingCompaniesArray->total_amount, 2, '.', '');
+				
             	// Add the amount value as well
         		$insuranceAmount = 0;
         		if( $movingCompaniesArray->insurance_amount != '' && !is_null( $movingCompaniesArray->insurance_amount ) )
@@ -3959,6 +3974,10 @@ class MoversController extends Controller
             	$serviceCharge = number_format( ( $totalAmount / 100 ) * $clientMovingToAddress->service_charge, 2, '.', '');
 
             	$totalAmount = number_format( $totalAmount + $gst + $hst + $pst + $serviceCharge, 2, '.', '');
+				
+				// Get total service amount
+				$serviceAmount = 0;
+            	$serviceAmount = number_format($movingCompaniesArray->total_amount, 2, '.', '');
 
 
         	    $response['subtotal']     			= $subtotal;
@@ -3969,6 +3988,7 @@ class MoversController extends Controller
         	    $response['total_amount']   		= $totalAmount;
         	    $response['discount']       		= $discount;
         	    $response['insurance'] 				= $insuranceAmount;
+				$response['service_amount'] 		= $serviceAmount;
         	    $response['comment']       			= ucfirst( strtolower( $movingCompaniesArray->comment ) );
 
 
